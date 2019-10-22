@@ -1,0 +1,42 @@
+{
+  "versjon" : "0.0.1",
+  "mottatt_dato" : "2019-10-20T07:15:36.124Z",
+  "soker" : {
+    "norsk_identitetsnummer" : "12345678901",
+    "spraak_valg" : "nb"
+  },
+  "medsoker" : {
+    "norsk_identitetsnummer" : "12345678902"
+  },
+  "periode" : {
+    "fra_og_med" : "2018-12-30",
+    "til_og_med" : "2019-10-20"
+  },
+  "relasjon_til_barnet" : "Mor",
+  "barn" : { },
+  "medlemskap" : {
+    "opphold" : [ {
+      "periode" : {
+        "fra_og_med" : "2018-12-30",
+        "til_og_med" : "2019-10-10"
+      },
+      "land" : "SWE"
+    }, {
+      "periode" : {
+        "fra_og_med" : "2018-10-10",
+        "til_og_med" : "2019-10-19"
+      },
+      "land" : "NOR"
+    } ],
+    "har_bodd_i_utlandet_siste_12_mnd" : true,
+    "skal_bo_i_utlandet_neste_12_mnd" : true
+  },
+  "beredskap" : {
+    "svar" : true,
+    "tilleggsinformasjon" : "Beredskapsforklaring: Lorem ipsum æÆøØåÅ."
+  },
+  "nattevaak" : {
+    "svar" : true,
+    "tilleggsinformasjon" : "Nattevåksforklaring: Lorem ipsum æÆøØåÅ."
+  }
+}
