@@ -16,7 +16,10 @@ public class PleiepengerBarnSoknad {
     private Soker soker;
 
     private Medsoker medsoker;
+
+    @JsonProperty(required = true)
     private Periode periode;
+
     private String relasjonTilBarnet;
 
     @JsonProperty(required = true)
@@ -35,6 +38,7 @@ public class PleiepengerBarnSoknad {
     public PleiepengerBarnSoknad() {
         this.periode = new Periode();
         this.soker = new Soker();
+        this.periode = new Periode();
         this.barn = new Barn();
         this.medlemskap = new Medlemskap();
         this.beredskap = new Beredskap();
@@ -73,6 +77,9 @@ public class PleiepengerBarnSoknad {
     }
 
     public void setPeriode(Periode periode) {
+        if (periode == null) {
+            throw new IllegalArgumentException("periode == null");
+        }
         this.periode = periode;
     }
 

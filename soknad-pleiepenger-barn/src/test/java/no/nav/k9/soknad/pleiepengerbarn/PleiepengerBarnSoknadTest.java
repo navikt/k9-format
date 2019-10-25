@@ -3,17 +3,13 @@ package no.nav.k9.soknad.pleiepengerbarn;
 import no.nav.k9.soknad.JsonUtils;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 public class PleiepengerBarnSoknadTest {
 
     @Test
-    public void nyePaakrevdeFeltSkalHaStandardverdi() throws Exception {
+    public void nyePaakrevdeFeltSkalHaStandardverdi() {
         final PleiepengerBarnSoknad soknadFraTomJson = JsonUtils.fromString("{}", PleiepengerBarnSoknad.class);
         final String reserialisertJson = JsonUtils.toString(soknadFraTomJson);
 
@@ -26,15 +22,15 @@ public class PleiepengerBarnSoknadTest {
     }
 
     @Test
-    public void sjekkAtKomplettSoknadKanReserialiseres() throws Exception {
-        final String json = jsonFromFile("komplett-soknad.json");
+    public void sjekkAtKomplettSoknadKanReserialiseres() {
+        final String json = TestUtils.jsonForKomplettSoknad();
         final PleiepengerBarnSoknad soknad = JsonUtils.fromString(json, PleiepengerBarnSoknad.class);
         final String jsonReserialisert = JsonUtils.toString(soknad);
         assertThat(jsonReserialisert, is(json));
     }
 
     @Test
-    public void verifiserAtMinimalSoknadKanReserialiseres() throws Exception {
+    public void verifiserAtMinimalSoknadKanReserialiseres() {
         final PleiepengerBarnSoknad soknad = new PleiepengerBarnSoknad();
         final String json = JsonUtils.toString(soknad);
 
@@ -45,7 +41,5 @@ public class PleiepengerBarnSoknadTest {
     }
 
 
-    private static final String jsonFromFile(String filename) throws IOException {
-        return Files.readString(Path.of("src/test/resources/" + filename));
-    }
+
 }
