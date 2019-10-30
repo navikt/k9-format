@@ -2,6 +2,8 @@ package no.nav.k9.soknad;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.util.DefaultIndenter;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
@@ -21,7 +23,7 @@ public final class JsonUtils {
 
     public static final String toString(Object object) {
         try {
-            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+            return objectMapper.writer(new PlatformIndependentPrettyPrinter()).writeValueAsString(object);
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Feil ved serialisering av objekt.", e);
         }
@@ -55,5 +57,16 @@ public final class JsonUtils {
                 ;
 
         return objectMapper;
+    }
+
+    private static final class PlatformIndependentPrettyPrinter extends DefaultPrettyPrinter {
+        PlatformIndependentPrettyPrinter() {
+            this._objectIndenter = new DefaultIndenter("  ", "\n");
+        }
+
+        @Override
+        public DefaultPrettyPrinter createInstance() {
+            return new DefaultPrettyPrinter(this);
+        }
     }
 }
