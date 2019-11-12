@@ -7,10 +7,10 @@ version=$(./scripts/get-version.sh)
 
 deploy() {
     if [ "$1" == "pom" ]; then
-        pomFile=pom.xml
+        pomFile=.flattened
         file=pom.xml
     else
-        pomFile=$2/pom.xml
+        pomFile=$2/.flattened
         file=$2/target/$2-$version.$1
     fi
 
