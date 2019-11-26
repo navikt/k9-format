@@ -1,13 +1,24 @@
 package no.nav.k9.soknad.felles;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class Spraak {
 
+    private static final Map<String, Spraak> values = new HashMap<>();
+
     public static final Spraak NORSK_BOKMAAL = new Spraak("nb");
     public static final Spraak NORSK_NYNORSK = new Spraak("nn");
+
+    static {
+        values.put(NORSK_BOKMAAL.getKode(), NORSK_BOKMAAL);
+        values.put(NORSK_NYNORSK.getKode(), NORSK_NYNORSK);
+    }
+
 
     @JsonValue
     private final String kode;
@@ -31,5 +42,18 @@ public class Spraak {
     @Override
     public int hashCode() {
         return Objects.hash(kode);
+    }
+
+    @JsonCreator
+    public static Spraak from(String spraakKode) {
+        if (spraakKode == null) {
+            return null;
+        }
+
+        final Spraak spraak = values.get(spraakKode);
+        if (spraak == null) {
+            throw new IllegalArgumentException("spraakKode '" + spraakKode + "' er ikke støttet.");
+        }
+        return spraak;
     }
 }
