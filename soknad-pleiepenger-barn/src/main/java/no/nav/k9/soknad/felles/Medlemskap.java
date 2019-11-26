@@ -3,6 +3,7 @@ package no.nav.k9.soknad.felles;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Medlemskap {
@@ -14,7 +15,7 @@ public class Medlemskap {
     private Boolean skalBoIUtlandetNeste12mnd;
 
     @JsonProperty(required = true)
-    private List<Opphold> opphold = new ArrayList<>();
+    private List<Opphold> opphold = Collections.emptyList();
 
 
     public void setHarBoddIUtlandetSiste12mnd(Boolean harBoddIUtlandetSiste12mnd) {
@@ -37,10 +38,13 @@ public class Medlemskap {
         if (opphold == null) {
             throw new IllegalArgumentException("opphold == null");
         }
-        this.opphold = opphold;
+        if (opphold.contains(null)) {
+            throw new IllegalArgumentException("opphold inneholder en null-verdi");
+        }
+        this.opphold = Collections.unmodifiableList(opphold);
     }
 
     public List<Opphold> getOpphold() {
-        return opphold;
+        return Collections.unmodifiableList(opphold);
     }
 }

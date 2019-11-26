@@ -1,10 +1,16 @@
 package no.nav.k9.soknad.pleiepengerbarn;
 
 import no.nav.k9.soknad.JsonUtils;
+import no.nav.k9.soknad.felles.Opphold;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 public class PleiepengerBarnSoknadTest {
 
@@ -40,6 +46,16 @@ public class PleiepengerBarnSoknadTest {
         assertThat(reserialisertJson, is(json));
     }
 
+    @Test
+    public void sjekkAtOppholdIkkeKanVaereNull() {
+        final PleiepengerBarnSoknad soknad = TestUtils.komplettSoknad();
+        try {
+            final List<Opphold> opphold = new ArrayList<>();
+            opphold.add(null);
+            soknad.getMedlemskap().setOpphold(opphold);
+            fail("Forventet IllegalArgumentException");
+        } catch (IllegalArgumentException e) {}
+    }
 
 
 }
