@@ -25,4 +25,13 @@ public class Feil {
     public String getFeilmelding() {
         return feilmelding;
     }
+
+    @Override
+    public String toString() {
+        return "Feil{" +
+                "felt='" + felt + '\'' +
+                ", feilkode='" + feilkode + '\'' +
+                ", feilmelding='" + feilmelding + '\'' +
+                '}';
+    }
 }
