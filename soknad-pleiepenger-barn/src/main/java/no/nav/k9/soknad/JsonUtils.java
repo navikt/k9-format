@@ -39,6 +39,10 @@ public final class JsonUtils {
         }
     }
 
+    public static final ObjectMapper getObjectMapper() {
+        return objectMapper;
+    }
+
     static final ObjectNode toObjectNode(Object object) {
         return (ObjectNode) objectMapper.valueToTree(object);
     }
