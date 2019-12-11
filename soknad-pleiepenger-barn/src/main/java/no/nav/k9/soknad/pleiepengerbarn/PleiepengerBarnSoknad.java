@@ -7,7 +7,7 @@ import java.time.ZonedDateTime;
 public class PleiepengerBarnSoknad {
 
     @JsonProperty(required = true)
-    private String versjon = "0.1.0";
+    private String versjon = "0.1.1";
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
     private ZonedDateTime mottattDato;
@@ -36,7 +36,6 @@ public class PleiepengerBarnSoknad {
 
 
     public PleiepengerBarnSoknad() {
-        this.periode = new Periode();
         this.soker = new Soker();
         this.periode = new Periode();
         this.barn = new Barn();
