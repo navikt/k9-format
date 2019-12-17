@@ -2,15 +2,17 @@ package no.nav.k9.soknad.pleiepengerbarn;
 
 import no.nav.k9.soknad.JsonUtils;
 import no.nav.k9.soknad.felles.Opphold;
+import org.json.JSONException;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+
+import org.skyscreamer.jsonassert.JSONAssert;
 
 public class PleiepengerBarnSoknadTest {
 
@@ -28,11 +30,12 @@ public class PleiepengerBarnSoknadTest {
     }
 
     @Test
-    public void sjekkAtKomplettSoknadKanReserialiseres() {
+    public void sjekkAtKomplettSoknadKanReserialiseres() throws JSONException {
         final String json = TestUtils.jsonForKomplettSoknad();
         final PleiepengerBarnSoknad soknad = JsonUtils.fromString(json, PleiepengerBarnSoknad.class);
         final String jsonReserialisert = JsonUtils.toString(soknad);
-        assertThat(jsonReserialisert, is(json));
+        JSONAssert.assertEquals(jsonReserialisert, json, true);
+        //assertThat(jsonReserialisert, is(json));
     }
 
     @Test

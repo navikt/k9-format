@@ -40,10 +40,10 @@ public class InnsendingValidatorTest {
     public void sokerNorskIdentitetsnummerPaakrevd() {
         final PleiepengerBarnSoknad soknad = TestUtils.komplettSoknad();
 
-        soknad.getSoker().setNorskIdentitetsnummer(null);
+        soknad.setSoker(Soker.builder().build());
         verifyHarFeil(soknad);
 
-        soknad.getSoker().setNorskIdentitetsnummer(new NorskIdentitetsnummer("11111111111"));
+        soknad.setSoker(Soker.builder().norskIdentitetsnummer(new NorskIdentitetsnummer("11111111111")).build());
         verifyIngenFeil(soknad);
     }
 

@@ -34,11 +34,13 @@ public class PleiepengerBarnSoknad {
     @JsonProperty(required = true)
     private Nattevaak nattevaak;
 
+    @JsonProperty(required = true)
+    private Spraak spraak;
 
     public PleiepengerBarnSoknad() {
-        this.soker = new Soker();
+        this.soker = Soker.builder().build();
         this.periode = new Periode();
-        this.barn = new Barn();
+        this.barn = Barn.builder().build();
         this.medlemskap = new Medlemskap();
         this.beredskap = new Beredskap();
         this.nattevaak = new Nattevaak();
@@ -144,5 +146,13 @@ public class PleiepengerBarnSoknad {
 
     public Nattevaak getNattevaak() {
         return nattevaak;
+    }
+
+    public Spraak getSpraak() {
+        return spraak;
+    }
+
+    public void setSpraak(Spraak spraak) {
+        this.spraak = spraak;
     }
 }

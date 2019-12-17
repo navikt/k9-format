@@ -1,9 +1,9 @@
 {
   "versjon" : "0.0.1",
   "mottatt_dato" : "2019-10-20T07:15:36.124Z",
+  "spraak": "nb",
   "soker" : {
-    "norsk_identitetsnummer" : "12345678901",
-    "spraak_valg" : "nb"
+    "norsk_identitetsnummer" : "12345678901"
   },
   "medsoker" : {
     "norsk_identitetsnummer" : "12345678902"
