@@ -3,13 +3,10 @@ package no.nav.k9.soknad.omsorgspenger;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import no.nav.k9.soknad.ValideringsFeil;
 import no.nav.k9.soknad.felles.Barn;
-import no.nav.k9.soknad.felles.Feil;
 import no.nav.k9.soknad.felles.Soker;
 
 import java.time.ZonedDateTime;
-import java.util.List;
 
 public class OmsorgspengerSoknad {
 
@@ -74,9 +71,8 @@ public class OmsorgspengerSoknad {
                     soker,
                     barn
             );
-            List<Feil> feil = validator.valider(soknad);
-            if (feil.isEmpty()) return soknad;
-            throw new ValideringsFeil(feil);
+            validator.forsikreValidert(soknad);
+            return soknad;
         }
     }
 }
