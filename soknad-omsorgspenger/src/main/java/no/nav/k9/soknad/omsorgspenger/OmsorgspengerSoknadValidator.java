@@ -1,5 +1,6 @@
 package no.nav.k9.soknad.omsorgspenger;
 
+import no.nav.k9.soknad.SoknadValidator;
 import no.nav.k9.soknad.felles.Barn;
 import no.nav.k9.soknad.felles.Feil;
 import no.nav.k9.soknad.felles.NorskIdentitetsnummer;
@@ -8,8 +9,9 @@ import no.nav.k9.soknad.felles.Soker;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OmsorgspengerSoknadValidator {
+public class OmsorgspengerSoknadValidator extends SoknadValidator<OmsorgspengerSoknad> {
 
+    @Override
     public List<Feil> valider(OmsorgspengerSoknad soknad) {
         List<Feil> feil = new ArrayList<>();
         validerSoker(soknad.soker, feil);
