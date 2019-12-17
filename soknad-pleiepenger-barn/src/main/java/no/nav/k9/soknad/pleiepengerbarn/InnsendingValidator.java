@@ -29,7 +29,7 @@ public class InnsendingValidator {
     }
 
     private static void sokerNorskIdentitetsnummerPaakrevd(PleiepengerBarnSoknad soknad, List<Feil> resultat) {
-        if (soknad.getSoker().getNorskIdentitetsnummer() == null) {
+        if (soknad.getSoker().norskIdentitetsnummer == null) {
             resultat.add(new Feil("soker.norsk_identitetsnummer", "sokerNorskIdentitetsnummerPaakrevd", "Fødsels-/D-nummer for søker må fylles ut."));
         }
     }

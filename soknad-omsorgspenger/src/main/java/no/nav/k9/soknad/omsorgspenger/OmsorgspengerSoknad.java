@@ -1,58 +1,51 @@
 package no.nav.k9.soknad.omsorgspenger;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import no.nav.k9.soknad.ValideringsFeil;
 import no.nav.k9.soknad.felles.Barn;
+import no.nav.k9.soknad.felles.Feil;
 import no.nav.k9.soknad.felles.Soker;
 
 import java.time.ZonedDateTime;
-import java.util.Objects;
+import java.util.List;
 
 public class OmsorgspengerSoknad {
 
-    private final String versjon = "0.1.1";
+    public final String versjon;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
-    private ZonedDateTime mottattDato;
+    public final ZonedDateTime mottattDato;
 
-    @JsonProperty(required = true)
-    private Soker soker;
+    public final Soker soker;
 
-    @JsonProperty(required = true)
-    private Barn barn;
+    public final Barn barn;
 
-    private OmsorgspengerSoknad() {}
-
+    @JsonCreator
     private OmsorgspengerSoknad(
+            @JsonProperty("versjon")
+            String versjon,
+            @JsonProperty("mottatt_dato")
+            @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
             ZonedDateTime mottattDato,
+            @JsonProperty("soker")
             Soker soker,
+            @JsonProperty("barn")
             Barn barn) {
+        this.versjon = versjon;
         this.mottattDato = mottattDato;
         this.soker = soker;
         this.barn = barn;
     }
 
-    public String getVersjon() {
-        return versjon;
-    }
-
-    public ZonedDateTime getMottattDato() {
-        return mottattDato;
-    }
-
-    public Soker getSoker() {
-        return soker;
-    }
-
-    public Barn getBarn() {
-        return barn;
-    }
-
-    private static Builder builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
     public static final class Builder {
+        private final static OmsorgspengerSoknadValidator validator = new OmsorgspengerSoknadValidator();
+        private final static String versjon = "0.0.1";
+
         private ZonedDateTime mottattDato;
         private Soker soker;
         private Barn barn;
@@ -75,14 +68,15 @@ public class OmsorgspengerSoknad {
         }
 
         public OmsorgspengerSoknad build() {
-            Objects.requireNonNull(mottattDato);
-            Objects.requireNonNull(barn);
-            Objects.requireNonNull(soker);
-            return new OmsorgspengerSoknad(
+            OmsorgspengerSoknad soknad = new OmsorgspengerSoknad(
+                    versjon,
                     mottattDato,
                     soker,
                     barn
             );
+            List<Feil> feil = validator.valider(soknad);
+            if (feil.isEmpty()) return soknad;
+            throw new ValideringsFeil(feil);
         }
     }
 }

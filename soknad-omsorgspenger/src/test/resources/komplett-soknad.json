@@ -1,0 +1,9 @@
+{
+  "versjon": "0.1.0",
+  "soker": {
+    "norsk_identitetsnummer": "11111111111"
+  },
+  "barn": {
+    "foedselsdato": "2015-01-01"
+  }
+}
