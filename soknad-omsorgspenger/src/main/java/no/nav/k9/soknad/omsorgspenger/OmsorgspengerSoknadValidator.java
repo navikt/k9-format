@@ -3,6 +3,8 @@ package no.nav.k9.soknad.omsorgspenger;
 import no.nav.k9.soknad.SoknadValidator;
 import no.nav.k9.soknad.felles.*;
 
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +14,7 @@ public class OmsorgspengerSoknadValidator extends SoknadValidator<OmsorgspengerS
     public List<Feil> valider(OmsorgspengerSoknad soknad) {
         List<Feil> feil = new ArrayList<>();
         validerSoknadId(soknad.soknadId, feil);
+        validerMottattDato(soknad.mottattDato, feil);
         validerSoker(soknad.soker, feil);
         validerBarn(soknad.barn, feil);
         return feil;
@@ -20,6 +23,12 @@ public class OmsorgspengerSoknadValidator extends SoknadValidator<OmsorgspengerS
     private static void validerSoknadId(SoknadId soknadId, List<Feil> feil) {
         if (soknadId == null || soknadId.id == null || soknadId.id.isBlank()) {
             feil.add(new Feil("soknad_id", "paakrevd", "ID må settes i søknaden."));
+        }
+    }
+
+    private static void validerMottattDato(ZonedDateTime mottatDato, List<Feil> feil) {
+        if (mottatDato == null) {
+            feil.add(new Feil("mottatt_dato", "paakrevd", "Mottatt dato må settes i søknaden."));
         }
     }
 
