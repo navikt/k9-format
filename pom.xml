@@ -146,6 +146,13 @@
                 </configuration>
             </plugin>
         </plugins>
-
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub navikt Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/navikt/k9-format</url>
+        </repository>
+    </distributionManagement>
 </project>
