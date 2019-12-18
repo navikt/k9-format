@@ -3,7 +3,9 @@ package no.nav.k9.soknad.omsorgspenger;
 import no.nav.k9.soknad.JsonUtils;
 import no.nav.k9.soknad.ValideringsFeil;
 import no.nav.k9.soknad.felles.*;
+import org.json.JSONException;
 import org.junit.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -52,6 +54,35 @@ public class OmsorgspengerSoknadValidatorTest {
     public void komplettSoknadFraJson() {
         OmsorgspengerSoknad soknad = JsonUtils.fromString(kompletFraJson(), OmsorgspengerSoknad.class);
         verifyIngenFeil(soknad);
+    }
+
+    @Test
+    public void serialiseringAvJsonOgBrukAvBuilderGirSammeResultat() throws JSONException {
+        String json = kompletFraJson();
+        OmsorgspengerSoknad fraJson = JsonUtils.fromString(json, OmsorgspengerSoknad.class);
+        OmsorgspengerSoknad fraBuilder = OmsorgspengerSoknad
+                .builder()
+                .barn(Barn
+                        .builder()
+                        .foedselsdato(fraJson.barn.foedselsdato)
+                        .build()
+                )
+                .soker(Soker
+                        .builder()
+                        .norskIdentitetsnummer(fraJson.soker.norskIdentitetsnummer)
+                        .build()
+                )
+                .mottattDato(fraJson.mottattDato)
+                .soknadId(fraJson.soknadId)
+                .build();
+        JSONAssert.assertEquals(json, JsonUtils.toString(fraBuilder), true);
+    }
+
+    @Test
+    public void reserialisering() throws JSONException {
+        String json = kompletFraJson();
+        OmsorgspengerSoknad soknad = JsonUtils.fromString(json, OmsorgspengerSoknad.class);
+        JSONAssert.assertEquals(json, JsonUtils.toString(soknad), true);
     }
 
     private List<Feil> valider(OmsorgspengerSoknad.Builder builder) {

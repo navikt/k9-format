@@ -1,7 +1,7 @@
 {
   "soknad_id": "123-123-123",
   "mottatt_dato": "2019-10-20T07:15:36.124Z",
-  "versjon": "0.1.0",
+  "versjon": "0.0.1",
   "soker": {
     "norsk_identitetsnummer": "11111111111"
   },

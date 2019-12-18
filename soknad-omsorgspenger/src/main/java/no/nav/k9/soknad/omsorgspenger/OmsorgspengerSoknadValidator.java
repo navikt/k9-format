@@ -3,7 +3,6 @@ package no.nav.k9.soknad.omsorgspenger;
 import no.nav.k9.soknad.SoknadValidator;
 import no.nav.k9.soknad.felles.*;
 
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;

@@ -15,6 +15,7 @@ public class OmsorgspengerSoknad {
 
     public final String versjon;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
     public final ZonedDateTime mottattDato;
 
     public final Soker soker;
@@ -28,7 +29,6 @@ public class OmsorgspengerSoknad {
             @JsonProperty("versjon")
             String versjon,
             @JsonProperty("mottatt_dato")
-            @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
             ZonedDateTime mottattDato,
             @JsonProperty("soker")
             Soker soker,

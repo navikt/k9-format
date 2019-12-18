@@ -35,7 +35,6 @@ public class PleiepengerBarnSoknadTest {
         final PleiepengerBarnSoknad soknad = JsonUtils.fromString(json, PleiepengerBarnSoknad.class);
         final String jsonReserialisert = JsonUtils.toString(soknad);
         JSONAssert.assertEquals(jsonReserialisert, json, true);
-        //assertThat(jsonReserialisert, is(json));
     }
 
     @Test
