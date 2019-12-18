@@ -1,10 +1,7 @@
 package no.nav.k9.soknad.omsorgspenger;
 
 import no.nav.k9.soknad.SoknadValidator;
-import no.nav.k9.soknad.felles.Barn;
-import no.nav.k9.soknad.felles.Feil;
-import no.nav.k9.soknad.felles.NorskIdentitetsnummer;
-import no.nav.k9.soknad.felles.Soker;
+import no.nav.k9.soknad.felles.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +11,16 @@ public class OmsorgspengerSoknadValidator extends SoknadValidator<OmsorgspengerS
     @Override
     public List<Feil> valider(OmsorgspengerSoknad soknad) {
         List<Feil> feil = new ArrayList<>();
+        validerSoknadId(soknad.soknadId, feil);
         validerSoker(soknad.soker, feil);
         validerBarn(soknad.barn, feil);
         return feil;
+    }
+
+    private static void validerSoknadId(SoknadId soknadId, List<Feil> feil) {
+        if (soknadId == null || soknadId.id == null || soknadId.id.isBlank()) {
+            feil.add(new Feil("soknad_id", "paakrevd", "ID må settes i søknaden."));
+        }
     }
 
     private static void validerSoker(Soker soker, List<Feil> feil) {

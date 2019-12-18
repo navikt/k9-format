@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ValideringsFeil extends RuntimeException {
     private final List<Feil> feil;
-    public ValideringsFeil(List<Feil> feil) {
+    ValideringsFeil(List<Feil> feil) {
         super(feil.toString());
         this.feil = feil;
     }
