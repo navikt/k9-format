@@ -23,6 +23,12 @@
             <artifactId>soknad-felles</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.skyscreamer</groupId>
+            <artifactId>jsonassert</artifactId>
+            <version>1.5.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>
