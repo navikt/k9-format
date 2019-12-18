@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -81,6 +82,7 @@ public class OmsorgspengerSoknadValidatorTest {
         return OmsorgspengerSoknad
                 .builder()
                 .soknadId(SoknadId.of("123"))
+                .mottattDato(ZonedDateTime.now())
                 .soker(Soker
                         .builder()
                         .norskIdentitetsnummer(new NorskIdentitetsnummer("11111111111"))
