@@ -2,36 +2,32 @@ package no.nav.k9.soknad.felles;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Medlemskap {
 
-    @JsonProperty("har_bodd_i_utlandet_siste_12_mnd")
-    private Boolean harBoddIUtlandetSiste12mnd;
+    private Boolean harBoddIUtlandetSiste12Mnd;
 
-    @JsonProperty("skal_bo_i_utlandet_neste_12_mnd")
-    private Boolean skalBoIUtlandetNeste12mnd;
+    private Boolean skalBoIUtlandetNeste12Mnd;
 
     @JsonProperty(required = true)
     private List<Opphold> opphold = Collections.emptyList();
 
-
-    public void setHarBoddIUtlandetSiste12mnd(Boolean harBoddIUtlandetSiste12mnd) {
-        this.harBoddIUtlandetSiste12mnd = harBoddIUtlandetSiste12mnd;
+    public Boolean getHarBoddIUtlandetSiste12Mnd() {
+        return harBoddIUtlandetSiste12Mnd;
     }
 
-    public Boolean getHarBoddIUtlandetSiste12mnd() {
-        return harBoddIUtlandetSiste12mnd;
+    public void setHarBoddIUtlandetSiste12Mnd(Boolean harBoddIUtlandetSiste12Mnd) {
+        this.harBoddIUtlandetSiste12Mnd = harBoddIUtlandetSiste12Mnd;
     }
 
-    public void setSkalBoIUtlandetNeste12mnd(Boolean skalBoIUtlandetNeste12mnd) {
-        this.skalBoIUtlandetNeste12mnd = skalBoIUtlandetNeste12mnd;
+    public Boolean getSkalBoIUtlandetNeste12Mnd() {
+        return skalBoIUtlandetNeste12Mnd;
     }
 
-    public Boolean getSkalBoIUtlandetNeste12mnd() {
-        return skalBoIUtlandetNeste12mnd;
+    public void setSkalBoIUtlandetNeste12Mnd(Boolean skalBoIUtlandetNeste12Mnd) {
+        this.skalBoIUtlandetNeste12Mnd = skalBoIUtlandetNeste12Mnd;
     }
 
     public void setOpphold(List<Opphold> opphold) {
@@ -48,3 +44,5 @@ public class Medlemskap {
         return Collections.unmodifiableList(opphold);
     }
 }
+
+

@@ -1,9 +1,9 @@
 {
-  "soknad_id": "123-123-123",
-  "mottatt_dato": "2019-10-20T07:15:36.124Z",
+  "soknadId": "123-123-123",
+  "mottattDato": "2019-10-20T07:15:36.124Z",
   "versjon": "0.0.1",
   "soker": {
-    "norsk_identitetsnummer": "11111111111"
+    "norskIdentitetsnummer": "11111111111"
   },
   "barn": {
     "foedselsdato": "2015-01-01"

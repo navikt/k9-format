@@ -24,11 +24,11 @@ public class OmsorgspengerSoknad {
 
     @JsonCreator
     private OmsorgspengerSoknad(
-            @JsonProperty("soknad_id")
+            @JsonProperty("soknadId")
             SoknadId soknadId,
             @JsonProperty("versjon")
             String versjon,
-            @JsonProperty("mottatt_dato")
+            @JsonProperty("mottattDato")
             ZonedDateTime mottattDato,
             @JsonProperty("soker")
             Soker soker,
