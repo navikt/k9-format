@@ -24,26 +24,26 @@ public class InnsendingValidator {
 
     private static void mottattDatoErPaakrevd(PleiepengerBarnSoknad soknad, List<Feil> resultat) {
         if (soknad.getMottattDato() == null) {
-            resultat.add(new Feil("mottatt_dato", "mottattDatoPaakrevd", "Dato for mottak av søknaden må fylles ut."));
+            resultat.add(new Feil("mottattDato", "mottattDatoPaakrevd", "Dato for mottak av søknaden må fylles ut."));
         }
     }
 
     private static void sokerNorskIdentitetsnummerPaakrevd(PleiepengerBarnSoknad soknad, List<Feil> resultat) {
         if (soknad.getSoker().norskIdentitetsnummer == null) {
-            resultat.add(new Feil("soker.norsk_identitetsnummer", "sokerNorskIdentitetsnummerPaakrevd", "Fødsels-/D-nummer for søker må fylles ut."));
+            resultat.add(new Feil("soker.norskIdentitetsnummer", "sokerNorskIdentitetsnummerPaakrevd", "Fødsels-/D-nummer for søker må fylles ut."));
         }
     }
 
     private static void validateSoknadsperiode(PleiepengerBarnSoknad soknad, List<Feil> resultat) {
         final Periode periode = soknad.getPeriode();
         if (periode.getFraOgMed() == null) {
-            resultat.add(new Feil("periode.fra_og_med", "periodeFraOgMedPaakrevd", "Fra og med (dato) for perioden det søkes om må fylles ut."));
+            resultat.add(new Feil("periode.fraOgMed", "periodeFraOgMedPaakrevd", "Fra og med (dato) for perioden det søkes om må fylles ut."));
         }
         if (periode.getTilOgMed() == null) {
-            resultat.add(new Feil("periode.til_og_med", "periodeTilOgMedPaakrevd", "Til og med (dato) for perioden det søkes om må fylles ut."));
+            resultat.add(new Feil("periode.tilOgMed", "periodeTilOgMedPaakrevd", "Til og med (dato) for perioden det søkes om må fylles ut."));
         }
         if (periode.getFraOgMed() != null && periode.getTilOgMed() != null && periode.getFraOgMed().isAfter(periode.getTilOgMed())) {
-            resultat.add(new Feil("periode.til_og_med", "periodeTilOgMedMaaVaereEtterFraOgMed", "Til og med (dato) må være etter fra og med (dato)."));
+            resultat.add(new Feil("periode.tilOgMed", "periodeTilOgMedMaaVaereEtterFraOgMed", "Til og med (dato) må være etter fra og med (dato)."));
         }
     }
 
@@ -71,7 +71,7 @@ public class InnsendingValidator {
             resultat.add(new Feil("medlemskap.opphold[" + index + "].periode", "oppholdPeriodeFraOgMedPaakrevd", "Perioden må ha satt fra og med (dato) og/eller til og med (dato)."));
         }
         if (periode.getFraOgMed() != null && periode.getTilOgMed() != null && periode.getFraOgMed().isAfter(periode.getTilOgMed())) {
-            resultat.add(new Feil("medlemskap.opphold[" + index + "].periode.til_og_med", "periodeTilOgMedMaaVaereEtterFraOgMed", "Til og med (dato) må være etter fra og med (dato)."));
+            resultat.add(new Feil("medlemskap.opphold[" + index + "].periode.tilOgMed", "periodeTilOgMedMaaVaereEtterFraOgMed", "Til og med (dato) må være etter fra og med (dato)."));
         }
     }
 
