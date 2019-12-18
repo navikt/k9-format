@@ -21,13 +21,13 @@ public class OmsorgspengerSoknadValidator extends SoknadValidator<OmsorgspengerS
 
     private static void validerSoknadId(SoknadId soknadId, List<Feil> feil) {
         if (soknadId == null || soknadId.id == null || soknadId.id.isBlank()) {
-            feil.add(new Feil("soknad_id", "paakrevd", "ID må settes i søknaden."));
+            feil.add(new Feil("soknadId", "paakrevd", "ID må settes i søknaden."));
         }
     }
 
     private static void validerMottattDato(ZonedDateTime mottatDato, List<Feil> feil) {
         if (mottatDato == null) {
-            feil.add(new Feil("mottatt_dato", "paakrevd", "Mottatt dato må settes i søknaden."));
+            feil.add(new Feil("mottattDato", "paakrevd", "Mottatt dato må settes i søknaden."));
         }
     }
 
@@ -35,7 +35,7 @@ public class OmsorgspengerSoknadValidator extends SoknadValidator<OmsorgspengerS
         if (soker == null) {
             feil.add(new Feil("soker", "paakrevd", "Søker må settes i søknaden."));
         } else if (erNull(soker.norskIdentitetsnummer)) {
-            feil.add(new Feil("soker.norsk_identitetsnummer", "paakrevd", "Søkers Personnummer/D-nummer må settes i søknaden."));
+            feil.add(new Feil("soker.norskIdentitetsnummer", "paakrevd", "Søkers Personnummer/D-nummer må settes i søknaden."));
         }
     }
 
