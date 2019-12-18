@@ -3,13 +3,8 @@ package no.nav.k9.soknad.omsorgspenger;
 import no.nav.k9.soknad.JsonUtils;
 import no.nav.k9.soknad.ValideringsFeil;
 import no.nav.k9.soknad.felles.*;
-import org.json.JSONException;
 import org.junit.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Collections;
@@ -18,6 +13,8 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
+
+import static no.nav.k9.soknad.omsorgspenger.TestUtils.kompletFraJson;
 
 public class OmsorgspengerSoknadValidatorTest {
     private static final OmsorgspengerSoknadValidator validator = new OmsorgspengerSoknadValidator();
@@ -56,35 +53,6 @@ public class OmsorgspengerSoknadValidatorTest {
         verifyIngenFeil(soknad);
     }
 
-    @Test
-    public void serialiseringAvJsonOgBrukAvBuilderGirSammeResultat() throws JSONException {
-        String json = kompletFraJson();
-        OmsorgspengerSoknad fraJson = JsonUtils.fromString(json, OmsorgspengerSoknad.class);
-        OmsorgspengerSoknad fraBuilder = OmsorgspengerSoknad
-                .builder()
-                .barn(Barn
-                        .builder()
-                        .foedselsdato(fraJson.barn.foedselsdato)
-                        .build()
-                )
-                .soker(Soker
-                        .builder()
-                        .norskIdentitetsnummer(fraJson.soker.norskIdentitetsnummer)
-                        .build()
-                )
-                .mottattDato(fraJson.mottattDato)
-                .soknadId(fraJson.soknadId)
-                .build();
-        JSONAssert.assertEquals(json, JsonUtils.toString(fraBuilder), true);
-    }
-
-    @Test
-    public void reserialisering() throws JSONException {
-        String json = kompletFraJson();
-        OmsorgspengerSoknad soknad = JsonUtils.fromString(json, OmsorgspengerSoknad.class);
-        JSONAssert.assertEquals(json, JsonUtils.toString(soknad), true);
-    }
-
     private List<Feil> valider(OmsorgspengerSoknad.Builder builder) {
         try {
             builder.build();
@@ -119,13 +87,5 @@ public class OmsorgspengerSoknadValidatorTest {
                         .norskIdentitetsnummer(new NorskIdentitetsnummer("11111111111"))
                         .build()
                 );
-    }
-
-    private static String kompletFraJson() {
-        try {
-            return Files.readString(Path.of("src/test/resources/komplett-soknad.json"));
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
     }
 }
