@@ -5,10 +5,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.soknad.felles.Barn;
 import no.nav.k9.soknad.felles.Soker;
+import no.nav.k9.soknad.felles.SoknadId;
 
 import java.time.ZonedDateTime;
 
 public class OmsorgspengerSoknad {
+
+    public final SoknadId soknadId;
 
     public final String versjon;
 
@@ -20,6 +23,8 @@ public class OmsorgspengerSoknad {
 
     @JsonCreator
     private OmsorgspengerSoknad(
+            @JsonProperty("soknad_id")
+            SoknadId soknadId,
             @JsonProperty("versjon")
             String versjon,
             @JsonProperty("mottatt_dato")
@@ -29,6 +34,7 @@ public class OmsorgspengerSoknad {
             Soker soker,
             @JsonProperty("barn")
             Barn barn) {
+        this.soknadId = soknadId;
         this.versjon = versjon;
         this.mottattDato = mottattDato;
         this.soker = soker;
@@ -43,11 +49,17 @@ public class OmsorgspengerSoknad {
         private final static OmsorgspengerSoknadValidator validator = new OmsorgspengerSoknadValidator();
         private final static String versjon = "0.0.1";
 
+        private SoknadId soknadId;
         private ZonedDateTime mottattDato;
         private Soker soker;
         private Barn barn;
 
         private Builder() {}
+
+        public Builder soknadId(SoknadId soknadId) {
+            this.soknadId = soknadId;
+            return this;
+        }
 
         public Builder mottattDato(ZonedDateTime mottattDato) {
             this.mottattDato = mottattDato;
@@ -66,6 +78,7 @@ public class OmsorgspengerSoknad {
 
         public OmsorgspengerSoknad build() {
             OmsorgspengerSoknad soknad = new OmsorgspengerSoknad(
+                    soknadId,
                     versjon,
                     mottattDato,
                     soker,

@@ -2,10 +2,7 @@ package no.nav.k9.soknad.omsorgspenger;
 
 import no.nav.k9.soknad.JsonUtils;
 import no.nav.k9.soknad.ValideringsFeil;
-import no.nav.k9.soknad.felles.Barn;
-import no.nav.k9.soknad.felles.Feil;
-import no.nav.k9.soknad.felles.NorskIdentitetsnummer;
-import no.nav.k9.soknad.felles.Soker;
+import no.nav.k9.soknad.felles.*;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -83,6 +80,7 @@ public class OmsorgspengerSoknadValidatorTest {
     private OmsorgspengerSoknad.Builder medSoker() {
         return OmsorgspengerSoknad
                 .builder()
+                .soknadId(SoknadId.of("123"))
                 .soker(Soker
                         .builder()
                         .norskIdentitetsnummer(new NorskIdentitetsnummer("11111111111"))
