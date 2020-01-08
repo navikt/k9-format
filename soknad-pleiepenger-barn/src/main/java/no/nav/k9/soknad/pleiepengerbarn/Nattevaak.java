@@ -1,8 +1,10 @@
-package no.nav.k9.soknad.felles;
+package no.nav.k9.soknad.pleiepengerbarn;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import no.nav.k9.soknad.felles.Periode;
+import no.nav.k9.soknad.felles.Periodisert;
 
 public class Nattevaak implements Periodisert {
     public final Periode periode;
