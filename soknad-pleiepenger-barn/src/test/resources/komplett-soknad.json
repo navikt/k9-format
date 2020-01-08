@@ -65,6 +65,7 @@
       "tilleggsinformasjon": "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
     }
   ],
+  "iTilsynsordning": "ja",
   "tilsynsordning": [
     {
       "periode" : {
@@ -76,6 +77,17 @@
       "onsdag": "PT7H25M",
       "torsdag": null,
       "fredag": "PT0S"
+    },
+    {
+      "periode" : {
+        "fraOgMed" : "2020-01-01",
+        "tilOgMed" : "2020-01-30"
+      },
+      "mandag": "PT7H30M",
+      "tirsdag": null,
+      "onsdag": "PT7H25M",
+      "torsdag": null,
+      "fredag": null
     }
   ]
 }

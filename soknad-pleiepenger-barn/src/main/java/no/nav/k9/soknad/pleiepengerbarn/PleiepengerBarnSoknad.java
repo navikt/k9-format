@@ -34,6 +34,8 @@ public class PleiepengerBarnSoknad {
 
     public final List<Nattevaak> nattevaak;
 
+    public final TilsynsordningSvar iTilsynsordning;
+
     public final List<Tilsynsordning> tilsynsordning;
 
     @JsonCreator
@@ -58,6 +60,8 @@ public class PleiepengerBarnSoknad {
             List<Beredskap> beredskap,
             @JsonProperty("nattevaak")
             List<Nattevaak> nattevaak,
+            @JsonProperty("iTilsynsordning")
+            TilsynsordningSvar iTilsynsordning,
             @JsonProperty("tilsynsordning")
             List<Tilsynsordning> tilsynsordning) {
         this.soknadId = soknadId;
@@ -70,7 +74,8 @@ public class PleiepengerBarnSoknad {
         this.utland = utland;
         this.beredskap = beredskap;
         this.nattevaak = nattevaak;
-        this.tilsynsordning = tilsynsordning;
+        this.iTilsynsordning = iTilsynsordning;
+        this.tilsynsordning = tilsynsordning != null ? tilsynsordning : Collections.emptyList();
     }
 
     public static Builder builder() {
@@ -90,6 +95,7 @@ public class PleiepengerBarnSoknad {
         private Utland utland;
         private List<Beredskap> beredskap;
         private List<Nattevaak> nattevaak;
+        private TilsynsordningSvar iTilsynsordning;
         private List<Tilsynsordning> tilsynsordning;
 
         private Builder() {
@@ -153,6 +159,11 @@ public class PleiepengerBarnSoknad {
             return this;
         }
 
+        public Builder iTilsynsordning(TilsynsordningSvar iTilsynsordning) {
+            this.iTilsynsordning = iTilsynsordning;
+            return this;
+        }
+
         public Builder tilsynsordning(List<Tilsynsordning> tilsynsordning) {
             this.tilsynsordning.addAll(tilsynsordning);
             return this;
@@ -175,6 +186,7 @@ public class PleiepengerBarnSoknad {
                     utland,
                     Collections.unmodifiableList(beredskap),
                     Collections.unmodifiableList(nattevaak),
+                    iTilsynsordning,
                     Collections.unmodifiableList(tilsynsordning)
             );
             validator.forsikreValidert(soknad);

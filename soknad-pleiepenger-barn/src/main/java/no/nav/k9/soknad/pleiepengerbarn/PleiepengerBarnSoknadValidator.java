@@ -28,7 +28,7 @@ public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerB
         validerUtland(soknad.utland, feil);
         validerBerdskap(soknad.beredskap, feil);
         validerNattebaak(soknad.nattevaak, feil);
-        validerTilsynsordning(soknad.tilsynsordning, feil);
+        validerTilsynsordning(soknad.iTilsynsordning, soknad.tilsynsordning, feil);
 
         return feil;
     }
@@ -97,10 +97,11 @@ public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerB
         }
     }
 
-    private void validerTilsynsordning(List<Tilsynsordning> tilsynsordning, List<Feil> feil) {
-        // TODO: Tilsysnordning svar JA/NEI/VET_IKKE
-        if (tilsynsordning == null) return;
-        feil.addAll(periodeValidator.validerIkkeTillattOverlapp(tilsynsordning, "tilsynsordning"));
-
+    private void validerTilsynsordning(TilsynsordningSvar tilsynsordningSvar, List<Tilsynsordning> tilsynsordning, List<Feil> feil) {
+        if (tilsynsordningSvar == null) {
+            feil.add(new Feil("tilsynsordningSvar", "paakrevd", "Må oppgi svar om barnet skal være i tilsynsordning."));
+        } else if (TilsynsordningSvar.JA == tilsynsordningSvar) {
+            feil.addAll(periodeValidator.validerIkkeTillattOverlapp(tilsynsordning, "tilsynsordning"));
+        }
     }
 }
