@@ -1,3 +1,4 @@
+/*
 package no.nav.k9.soknad.pleiepengerbarn;
 
 import no.nav.k9.soknad.JsonUtils;
@@ -61,3 +62,4 @@ public class PleiepengerBarnSoknadTest {
 
 
 }
+*/

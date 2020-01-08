@@ -15,13 +15,9 @@ public final class JsonUtils {
 
     private static final ObjectMapper objectMapper = createObjectMapper();
 
+    private JsonUtils() { }
 
-    private JsonUtils() {
-
-    }
-
-
-    public static final String toString(Object object) {
+    public static String toString(Object object) {
         try {
             return objectMapper.writer(new PlatformIndependentPrettyPrinter()).writeValueAsString(object);
         } catch (JsonProcessingException e) {
@@ -29,11 +25,9 @@ public final class JsonUtils {
         }
     }
 
-    public static final <T> T fromString(String s, Class<T> clazz) {
+    public static <T> T fromString(String s, Class<T> clazz) {
         try {
             return objectMapper.readValue(s, clazz);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -43,7 +37,7 @@ public final class JsonUtils {
         return objectMapper;
     }
 
-    static final ObjectNode toObjectNode(Object object) {
+    static ObjectNode toObjectNode(Object object) {
         return (ObjectNode) objectMapper.valueToTree(object);
     }
 

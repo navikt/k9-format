@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.soknad.felles.Barn;
 import no.nav.k9.soknad.felles.Soker;
 import no.nav.k9.soknad.felles.SoknadId;
+import no.nav.k9.soknad.felles.Versjon;
 
 import java.time.ZonedDateTime;
 
@@ -13,7 +14,7 @@ public class OmsorgspengerSoknad {
 
     public final SoknadId soknadId;
 
-    public final String versjon;
+    public final Versjon versjon;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
     public final ZonedDateTime mottattDato;
@@ -27,7 +28,7 @@ public class OmsorgspengerSoknad {
             @JsonProperty("soknadId")
             SoknadId soknadId,
             @JsonProperty("versjon")
-            String versjon,
+            Versjon versjon,
             @JsonProperty("mottattDato")
             ZonedDateTime mottattDato,
             @JsonProperty("soker")
@@ -47,7 +48,7 @@ public class OmsorgspengerSoknad {
 
     public static final class Builder {
         private final static OmsorgspengerSoknadValidator validator = new OmsorgspengerSoknadValidator();
-        private final static String versjon = "0.0.1";
+        private final static Versjon versjon = Versjon.of("0.0.1");
 
         private SoknadId soknadId;
         private ZonedDateTime mottattDato;

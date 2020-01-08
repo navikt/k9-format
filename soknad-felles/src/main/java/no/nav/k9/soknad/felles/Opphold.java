@@ -1,34 +1,55 @@
 package no.nav.k9.soknad.felles;
 
-public class Opphold {
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    private Periode periode;
-    private Landkode land;
+public class Opphold implements Periodisert {
+    public final Periode periode;
 
+    public final Landkode land;
 
-    public Opphold() {
-
-    }
-
-    public Opphold(Periode periode, Landkode land) {
+    @JsonCreator
+    private Opphold(
+            @JsonProperty("periode")
+            Periode periode,
+            @JsonProperty("land")
+            Landkode land) {
         this.periode = periode;
         this.land = land;
     }
 
-
-    public void setPeriode(Periode periode) {
-        this.periode = periode;
+    public static Builder builder() {
+        return new Builder();
     }
 
+    @Override
+    @JsonIgnore
     public Periode getPeriode() {
         return periode;
     }
 
-    public void setLand(Landkode land) {
-        this.land = land;
-    }
+    public static final class Builder {
+        private Periode periode;
+        private Landkode land;
 
-    public Landkode getLand() {
-        return land;
+        private Builder() {}
+
+        public Builder land(Landkode land) {
+            this.land = land;
+            return this;
+        }
+
+        public Builder periode(Periode periode) {
+            this.periode = periode;
+            return this;
+        }
+
+        public Opphold build() {
+            return new Opphold(
+                    periode,
+                    land
+            );
+        }
     }
 }

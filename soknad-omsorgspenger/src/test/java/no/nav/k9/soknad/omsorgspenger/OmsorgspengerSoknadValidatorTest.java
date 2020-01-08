@@ -22,7 +22,10 @@ public class OmsorgspengerSoknadValidatorTest {
     @Test
     public void soknadUtenNoeSatt() {
         OmsorgspengerSoknad.Builder builder = OmsorgspengerSoknad.builder();
-        verifyHarFeil(builder);
+        OmsorgspengerSoknad soknad = JsonUtils.fromString("{\"versjon\":\"0.0.1\"}", OmsorgspengerSoknad.class);
+        List<Feil> builderFeil = verifyHarFeil(builder);
+        List<Feil> jsonFeil = verifyHarFeil(soknad);
+        assertThat(builderFeil, is(jsonFeil));
     }
 
     @Test
@@ -41,7 +44,7 @@ public class OmsorgspengerSoknadValidatorTest {
         OmsorgspengerSoknad.Builder builder = medSoker()
                 .barn(Barn
                         .builder()
-                        .norskIdentitetsnummer(new NorskIdentitetsnummer("11111111111"))
+                        .norskIdentitetsnummer(NorskIdentitetsnummer.of("11111111111"))
                         .build()
                 );
         verifyIngenFeil(builder);
@@ -61,15 +64,20 @@ public class OmsorgspengerSoknadValidatorTest {
             return ex.getFeil();
         }
     }
+    private List<Feil> verifyHarFeil(OmsorgspengerSoknad.Builder builder) {
+        final List<Feil> feil = valider(builder);
+        assertThat(feil, is(not(Collections.emptyList())));
+        return feil;
+    }
+    private List<Feil> verifyHarFeil(OmsorgspengerSoknad soknad) {
+        final List<Feil> feil = validator.valider(soknad);
+        assertThat(feil, is(not(Collections.emptyList())));
+        return feil;
+    }
 
     private void verifyIngenFeil(OmsorgspengerSoknad.Builder builder) {
         final List<Feil> feil = valider(builder);
         assertThat(feil, is(Collections.emptyList()));
-    }
-
-    private void verifyHarFeil(OmsorgspengerSoknad.Builder builder) {
-        final List<Feil> feil = valider(builder);
-        assertThat(feil, is(not(Collections.emptyList())));
     }
 
     private void verifyIngenFeil(OmsorgspengerSoknad soknad) {
@@ -84,7 +92,7 @@ public class OmsorgspengerSoknadValidatorTest {
                 .mottattDato(ZonedDateTime.now())
                 .soker(Soker
                         .builder()
-                        .norskIdentitetsnummer(new NorskIdentitetsnummer("11111111111"))
+                        .norskIdentitetsnummer(NorskIdentitetsnummer.of("11111111111"))
                         .build()
                 );
     }

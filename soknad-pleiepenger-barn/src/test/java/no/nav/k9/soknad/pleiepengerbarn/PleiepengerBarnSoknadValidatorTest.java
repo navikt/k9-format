@@ -1,18 +1,65 @@
+
 package no.nav.k9.soknad.pleiepengerbarn;
 
+import no.nav.k9.soknad.JsonUtils;
+import no.nav.k9.soknad.ValideringsFeil;
 import no.nav.k9.soknad.felles.*;
 import org.junit.Test;
 
-import java.time.LocalDate;
-import java.time.ZonedDateTime;
 import java.util.*;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
-public class InnsendingValidatorTest {
+public class PleiepengerBarnSoknadValidatorTest {
+    private static final PleiepengerBarnSoknadValidator validator = new PleiepengerBarnSoknadValidator();
 
+    @Test
+    public void soknadUtenNoeSatt() {
+        PleiepengerBarnSoknad.Builder builder = PleiepengerBarnSoknad.builder();
+        PleiepengerBarnSoknad soknad = JsonUtils.fromString("{\"versjon\":\"0.0.1\"}", PleiepengerBarnSoknad.class);
+        List<Feil> builderFeil = verifyHarFeil(builder);
+        List<Feil> jsonFeil = verifyHarFeil(soknad);
+        assertThat(builderFeil, is(jsonFeil));
+    }
+
+    @Test
+    public void komplettSoknadSkalIkkeHaValideringsfeil() {
+        final PleiepengerBarnSoknad soknad = TestUtils.komplettSoknad();
+        verifyIngenFeil(soknad);
+    }
+
+    private List<Feil> verifyHarFeil(PleiepengerBarnSoknad.Builder builder) {
+        final List<Feil> feil = valider(builder);
+        assertThat(feil, is(not(Collections.emptyList())));
+        return feil;
+    }
+    private List<Feil> verifyHarFeil(PleiepengerBarnSoknad soknad) {
+        final List<Feil> feil = validator.valider(soknad);
+        assertThat(feil, is(not(Collections.emptyList())));
+        return feil;
+    }
+    private void verifyIngenFeil(PleiepengerBarnSoknad.Builder builder) {
+        final List<Feil> feil = valider(builder);
+        assertThat(feil, is(Collections.emptyList()));
+    }
+    private void verifyIngenFeil(PleiepengerBarnSoknad soknad) {
+        final List<Feil> feil = validator.valider(soknad);
+        assertThat(feil, is(Collections.emptyList()));
+    }
+
+    private List<Feil> valider(PleiepengerBarnSoknad.Builder builder) {
+        try {
+            builder.build();
+            return Collections.emptyList();
+        } catch (ValideringsFeil ex) {
+            return ex.getFeil();
+        }
+    }
+}
+
+    /*
     @Test
     public void tomSoknadSkalFeile() {
         final PleiepengerBarnSoknad soknad = new PleiepengerBarnSoknad();
@@ -120,64 +167,17 @@ public class InnsendingValidatorTest {
         verifyHarFeil(soknad);
     }
 
-    @Test
-    public void oppholdsperiodeSkalIkkeOverlappe() {
-        final PleiepengerBarnSoknad soknad = TestUtils.komplettSoknad();
-        soknad.getMedlemskap().setOpphold(new ArrayList<>());
-
-        final LocalDate now = LocalDate.now();
-
-        final Opphold opphold1 = new Opphold();
-        opphold1.setLand(Landkode.from("NOR"));
-        opphold1.setPeriode(new Periode(now, null));
-
-        final Opphold opphold2 = new Opphold();
-        opphold2.setLand(Landkode.from("SWE"));
-        opphold2.setPeriode(new Periode(null, now.minusDays(1)));
-
-        soknad.getMedlemskap().setOpphold(Arrays.asList(opphold1, opphold2));
-
-        verifyIngenFeil(soknad);
-
-        opphold1.setPeriode(new Periode(now, null));
-        opphold2.setPeriode(new Periode(null, now));
-        verifyHarFeil(soknad);
-
-        opphold1.setPeriode(new Periode(null, now));
-        opphold2.setPeriode(new Periode(now, null));
-        verifyHarFeil(soknad);
-
-        opphold1.setPeriode(new Periode(now, now.plusDays(10)));
-        opphold2.setPeriode(new Periode(null, now.minusDays(1)));
-        verifyIngenFeil(soknad);
-
-        opphold1.setPeriode(new Periode(now, now.plusDays(10)));
-        opphold2.setPeriode(new Periode(null, now.minusDays(1)));
-        verifyIngenFeil(soknad);
-
-        opphold1.setPeriode(new Periode(null, now.minusDays(1)));
-        opphold2.setPeriode(new Periode(now, now.plusDays(10)));
-        verifyIngenFeil(soknad);
-
-        opphold1.setPeriode(new Periode(now.minusDays(10), now.minusDays(1)));
-        opphold2.setPeriode(new Periode(now, now.plusDays(10)));
-        verifyIngenFeil(soknad);
-
-        opphold1.setPeriode(new Periode(now.minusDays(10), now.plusDays(1)));
-        opphold2.setPeriode(new Periode(now, now.plusDays(1)));
-        verifyHarFeil(soknad);
-    }
-
 
     private void verifyIngenFeil(PleiepengerBarnSoknad soknad) {
-        final InnsendingValidator validator = new InnsendingValidator();
-        final List<Feil> resultat = validator.validate(soknad);
+        final PleiepengerBarnSoknadValidator validator = new PleiepengerBarnSoknadValidator();
+        final List<Feil> resultat = validator.valider(soknad);
         assertThat(resultat, is(Collections.emptyList()));
     }
 
     private void verifyHarFeil(PleiepengerBarnSoknad soknad) {
-        final InnsendingValidator validator = new InnsendingValidator();
-        final List<Feil> resultat = validator.validate(soknad);
+        final PleiepengerBarnSoknadValidator validator = new PleiepengerBarnSoknadValidator();
+        final List<Feil> resultat = validator.valider(soknad);
         assertThat(resultat, is(not(Collections.emptyList())));
     }
 }
+*/

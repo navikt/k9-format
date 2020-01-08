@@ -9,6 +9,7 @@ import java.time.LocalDate;
 public class Barn {
 
     public final NorskIdentitetsnummer norskIdentitetsnummer;
+
     public final LocalDate foedselsdato;
 
     public static Builder builder() {

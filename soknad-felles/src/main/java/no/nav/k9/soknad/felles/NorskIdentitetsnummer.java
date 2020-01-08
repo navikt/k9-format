@@ -8,23 +8,24 @@ import java.util.Objects;
 public class NorskIdentitetsnummer {
 
     @JsonValue
-    private final String verdi;
+    public final String verdi;
 
     @JsonCreator
-    public NorskIdentitetsnummer(String verdi) {
-        if (verdi == null) {
-            throw new IllegalArgumentException("verdi == null");
-        }
+    private NorskIdentitetsnummer(String verdi) {
         this.verdi = verdi;
     }
 
-    public String getVerdi() {
-        return verdi;
+    public static NorskIdentitetsnummer of(String verdi) {
+        return new NorskIdentitetsnummer(verdi);
+    }
+
+    public static boolean erNull(NorskIdentitetsnummer norskIdentitetsnummer) {
+        return norskIdentitetsnummer == null || norskIdentitetsnummer.verdi == null || norskIdentitetsnummer.verdi.isBlank();
     }
 
     @Override
     public String toString() {
-        return getVerdi();
+        return verdi;
     }
 
     @Override

@@ -1,42 +1,81 @@
 {
   "versjon" : "0.0.1",
+  "soknadId": "1",
   "mottattDato" : "2019-10-20T07:15:36.124Z",
   "spraak": "nb",
   "soker" : {
     "norskIdentitetsnummer" : "12345678901"
   },
-  "medsoker" : {
-    "norskIdentitetsnummer" : "12345678902"
-  },
   "periode" : {
     "fraOgMed" : "2018-12-30",
     "tilOgMed" : "2019-10-20"
   },
-  "relasjonTilBarnet" : "Mor",
-  "barn" : { },
-  "medlemskap" : {
-    "opphold" : [ {
-      "periode" : {
-        "fraOgMed" : "2018-12-30",
-        "tilOgMed" : "2019-10-10"
+  "barn" : {
+    "foedselsdato": "2010-01-01"
+  },
+  "utland" : {
+    "opphold": [
+      {
+        "periode": {
+          "fraOgMed": "2018-12-30",
+          "tilOgMed": "2019-10-10"
+        },
+        "land": "SWE"
       },
-      "land" : "SWE"
-    }, {
+      {
+        "periode": {
+          "fraOgMed": "2018-10-10",
+          "tilOgMed": "2018-12-29"
+        },
+        "land": "NOR"
+      }
+    ],
+    "harBoddIUtlandetSiste12Mnd": true,
+    "skalBoIUtlandetNeste12Mnd": true
+  },
+  "beredskap": [
+    {
       "periode" : {
         "fraOgMed" : "2018-10-10",
         "tilOgMed" : "2018-12-29"
       },
-      "land" : "NOR"
-    } ],
-    "harBoddIUtlandetSiste12Mnd" : true,
-    "skalBoIUtlandetNeste12Mnd" : true
-  },
-  "beredskap" : {
-    "svar" : true,
-    "tilleggsinformasjon" : "Beredskapsforklaring: Lorem ipsum æÆøØåÅ."
-  },
-  "nattevaak" : {
-    "svar" : true,
-    "tilleggsinformasjon" : "Nattevåksforklaring: Lorem ipsum æÆøØåÅ."
-  }
+      "tilleggsinformasjon": "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
+    },
+    {
+      "periode" : {
+        "fraOgMed" : "2019-01-01",
+        "tilOgMed" : "2019-01-30"
+      },
+      "tilleggsinformasjon": "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
+    }
+  ],
+  "nattevaak": [
+    {
+      "periode" : {
+        "fraOgMed" : "2018-10-10",
+        "tilOgMed" : "2018-12-29"
+      },
+      "tilleggsinformasjon": "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
+    },
+    {
+      "periode" : {
+        "fraOgMed" : "2019-01-01",
+        "tilOgMed" : "2019-01-30"
+      },
+      "tilleggsinformasjon": "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
+    }
+  ],
+  "tilsynsordning": [
+    {
+      "periode" : {
+        "fraOgMed" : "2019-01-01",
+        "tilOgMed" : "2019-01-30"
+      },
+      "mandag": "PT7H30M",
+      "tirsdag": null,
+      "onsdag": "PT7H25M",
+      "torsdag": null,
+      "fredag": "PT0S"
+    }
+  ]
 }

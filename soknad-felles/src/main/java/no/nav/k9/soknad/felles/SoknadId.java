@@ -16,4 +16,8 @@ public class SoknadId {
     public static SoknadId of(String id) {
         return new SoknadId(id);
     }
+
+    public static boolean erNull(SoknadId soknadId) {
+        return soknadId == null || soknadId.id == null || soknadId.id.isBlank();
+    }
 }

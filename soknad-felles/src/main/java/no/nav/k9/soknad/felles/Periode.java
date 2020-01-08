@@ -1,41 +1,49 @@
 package no.nav.k9.soknad.felles;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
 
 public class Periode {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Oslo")
-    private LocalDate fraOgMed;
+    public final LocalDate fraOgMed;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Oslo")
-    private LocalDate tilOgMed;
+    public final LocalDate tilOgMed;
 
-
-    public Periode() {
-
-    }
-
-    public Periode(LocalDate fraOgMed, LocalDate tilOgMed) {
+    private Periode(
+            @JsonProperty("fraOgMed")
+            LocalDate fraOgMed,
+            @JsonProperty("tilOgMed")
+            LocalDate tilOgMed) {
         this.fraOgMed = fraOgMed;
         this.tilOgMed = tilOgMed;
     }
 
-
-    public void setFraOgMed(LocalDate fraOgMed) {
-        this.fraOgMed = fraOgMed;
+    public static Builder builder() {
+        return new Builder();
     }
 
-    public LocalDate getFraOgMed() {
-        return fraOgMed;
-    }
+    public static final class Builder {
+        private LocalDate fraOgMed;
+        private LocalDate tilOgMed;
 
-    public void setTilOgMed(LocalDate tilOgMed) {
-        this.tilOgMed = tilOgMed;
-    }
+        private Builder() {}
 
-    public LocalDate getTilOgMed() {
-        return tilOgMed;
+        public Builder fraOgMed(LocalDate fraOgMed) {
+            this.fraOgMed = fraOgMed;
+            return this;
+        }
+
+        public Builder tilOgMed(LocalDate tilOgMed) {
+            this.tilOgMed = tilOgMed;
+            return this;
+        }
+
+        public Periode build() {
+            return new Periode(fraOgMed, tilOgMed);
+        }
     }
 }
