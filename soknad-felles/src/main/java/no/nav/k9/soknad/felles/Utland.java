@@ -11,7 +11,7 @@ public class Utland {
 
     public final Boolean skalBoIUtlandetNeste12Mnd;
 
-    public final Map<Periode, Opphold> opphold;
+    public final Map<Periode, UtlandOpphold> opphold;
 
     @JsonCreator
     private Utland(
@@ -20,7 +20,7 @@ public class Utland {
             @JsonProperty("skalBoIUtlandetNeste12Mnd")
             Boolean skalBoIUtlandetNeste12Mnd,
             @JsonProperty("opphold")
-            Map<Periode, Opphold> opphold) {
+            Map<Periode, UtlandOpphold> opphold) {
         this.harBoddIUtlandetSiste12Mnd = harBoddIUtlandetSiste12Mnd;
         this.skalBoIUtlandetNeste12Mnd = skalBoIUtlandetNeste12Mnd;
         this.opphold = Collections.unmodifiableMap(opphold);
@@ -33,7 +33,7 @@ public class Utland {
     public static final class Builder {
         private Boolean harBoddIUtlandetSiste12Mnd;
         private Boolean skalBoIUtlandetNeste12Mnd;
-        private Map<Periode, Opphold> opphold;
+        private Map<Periode, UtlandOpphold> opphold;
 
         private Builder() {
             opphold = new HashMap<>();
@@ -49,12 +49,12 @@ public class Utland {
             return this;
         }
 
-        public Builder opphold(Map<Periode, Opphold> opphold) {
+        public Builder opphold(Map<Periode, UtlandOpphold> opphold) {
             this.opphold.putAll(opphold);
             return this;
         }
 
-        public Builder opphold(Periode periode, Opphold opphold) {
+        public Builder opphold(Periode periode, UtlandOpphold opphold) {
             this.opphold.put(periode, opphold);
             return this;
         }
