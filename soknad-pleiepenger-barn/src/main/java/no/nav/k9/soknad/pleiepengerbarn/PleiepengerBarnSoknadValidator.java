@@ -21,6 +21,7 @@ public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerB
 
         validerSoknadId(soknad.soknadId, feil);
         validerVersjon(soknad.versjon, feil);
+        validerPeriode(soknad, feil);
         validerMottattDato(soknad.mottattDato, feil);
         validerSpraak(soknad.spraak, feil);
         validerSoker(soknad.soker, feil);
@@ -31,6 +32,14 @@ public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerB
         validerTilsynsordning(soknad.iTilsynsordning, soknad.tilsynsordning, feil);
 
         return feil;
+    }
+
+    private void validerPeriode(Periodisert periode, List<Feil> feil) {
+        if (periode.getPeriode() == null) {
+            feil.add(new Feil("periode", "paakrevd", "Må settes en periode for søknaden."));
+        } else {
+            feil.addAll(periodeValidator.valider(periode, "periode"));
+        }
     }
 
 

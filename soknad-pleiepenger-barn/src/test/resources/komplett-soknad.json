@@ -11,7 +11,8 @@
     "tilOgMed" : "2019-10-20"
   },
   "barn" : {
-    "foedselsdato": "2010-01-01"
+    "foedselsdato": "2010-01-01",
+    "norskIdentitetsnummer" : "12345678902"
   },
   "utland" : {
     "opphold": [

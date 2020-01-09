@@ -6,6 +6,8 @@ import no.nav.k9.soknad.ValideringsFeil;
 import no.nav.k9.soknad.felles.*;
 import org.junit.Test;
 
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -28,6 +30,39 @@ public class PleiepengerBarnSoknadValidatorTest {
     public void komplettSoknadSkalIkkeHaValideringsfeil() {
         final PleiepengerBarnSoknad soknad = TestUtils.komplettSoknad();
         verifyIngenFeil(soknad);
+    }
+
+    @Test
+    public void mottattDatoErPaakrevd() {
+        final PleiepengerBarnSoknad.Builder builder = TestUtils.komplettBuilder();
+
+        builder.mottattDato(null);
+        verifyHarFeil(builder);
+
+        builder.mottattDato(ZonedDateTime.now());
+        verifyIngenFeil(builder);
+    }
+
+    @Test
+    public void sokerNorskIdentitetsnummerPaakrevd() {
+        final PleiepengerBarnSoknad.Builder builder = TestUtils.komplettBuilder();
+
+        builder.soker(Soker.builder().build());
+        verifyHarFeil(builder);
+
+        builder.soker(Soker.builder().norskIdentitetsnummer(NorskIdentitetsnummer.of("123")).build());
+        verifyIngenFeil(builder);
+    }
+
+    @Test
+    public void soknadsperiodeErPaakrevd() {
+        final PleiepengerBarnSoknad.Builder builder = TestUtils.komplettBuilder();
+
+        builder.periode(null);
+        verifyHarFeil(builder);
+
+        builder.periode(Periode.builder().fraOgMed(LocalDate.now()).tilOgMed(LocalDate.now().plusDays(1)).build());
+        verifyIngenFeil(builder);
     }
 
     private List<Feil> verifyHarFeil(PleiepengerBarnSoknad.Builder builder) {
@@ -58,126 +93,3 @@ public class PleiepengerBarnSoknadValidatorTest {
         }
     }
 }
-
-    /*
-    @Test
-    public void tomSoknadSkalFeile() {
-        final PleiepengerBarnSoknad soknad = new PleiepengerBarnSoknad();
-        verifyHarFeil(soknad);
-    }
-
-    @Test
-    public void komplettSoknadSkalIkkeHaValideringsfeil() {
-        final PleiepengerBarnSoknad soknad = TestUtils.komplettSoknad();
-        verifyIngenFeil(soknad);
-    }
-
-    @Test
-    public void mottattDatoErPaakrevd() {
-        final PleiepengerBarnSoknad soknad = TestUtils.komplettSoknad();
-
-        soknad.setMottattDato(null);
-        verifyHarFeil(soknad);
-
-        soknad.setMottattDato(ZonedDateTime.now());
-        verifyIngenFeil(soknad);
-    }
-
-    @Test
-    public void sokerNorskIdentitetsnummerPaakrevd() {
-        final PleiepengerBarnSoknad soknad = TestUtils.komplettSoknad();
-
-        soknad.setSoker(Soker.builder().build());
-        verifyHarFeil(soknad);
-
-        soknad.setSoker(Soker.builder().norskIdentitetsnummer(new NorskIdentitetsnummer("11111111111")).build());
-        verifyIngenFeil(soknad);
-    }
-
-    @Test
-    public void soknadsperiodeErPaakrevd() {
-        final PleiepengerBarnSoknad soknad = TestUtils.komplettSoknad();
-
-        soknad.setPeriode(new Periode());
-        verifyHarFeil(soknad);
-
-        soknad.setPeriode(new Periode(LocalDate.now().minusDays(10), LocalDate.now()));
-        verifyIngenFeil(soknad);
-    }
-
-    @Test
-    public void soknadsperiodeTomDatoSkalVaereEtterFomDato() {
-        final PleiepengerBarnSoknad soknad = TestUtils.komplettSoknad();
-
-        soknad.setPeriode(new Periode(LocalDate.now(), LocalDate.now().plusDays(1)));
-        verifyIngenFeil(soknad);
-
-        soknad.setPeriode(new Periode(LocalDate.now(), LocalDate.now()));
-        verifyIngenFeil(soknad);
-
-        soknad.setPeriode(new Periode(LocalDate.now().plusDays(1), LocalDate.now()));
-        verifyHarFeil(soknad);
-    }
-
-    @Test
-    public void oppholdslandSkalVaerePaakrevd() {
-        final PleiepengerBarnSoknad soknad = TestUtils.komplettSoknad();
-        soknad.getMedlemskap().setOpphold(new ArrayList<>());
-
-        final Opphold opphold = new Opphold();
-        opphold.setPeriode(new Periode(LocalDate.now(), null));
-        soknad.getMedlemskap().setOpphold(Collections.singletonList(opphold));
-        verifyHarFeil(soknad);
-
-        opphold.setLand(Landkode.from("NOR"));
-        verifyIngenFeil(soknad);
-    }
-
-    @Test
-    public void oppholdsperiodeSkalVaerePaakrevd() {
-        final PleiepengerBarnSoknad soknad = TestUtils.komplettSoknad();
-        soknad.getMedlemskap().setOpphold(new ArrayList<>());
-
-        final Opphold opphold = new Opphold();
-        opphold.setLand(Landkode.from("NOR"));
-        soknad.getMedlemskap().setOpphold(Collections.singletonList(opphold));
-        verifyHarFeil(soknad);
-
-        opphold.setPeriode(new Periode(LocalDate.now(), null));
-        verifyIngenFeil(soknad);
-    }
-
-    @Test
-    public void oppholdsperiodeSkalHaFomOgEllerTom() {
-        final PleiepengerBarnSoknad soknad = TestUtils.komplettSoknad();
-        soknad.getMedlemskap().setOpphold(new ArrayList<>());
-
-        final Opphold opphold = new Opphold();
-        opphold.setLand(Landkode.from("NOR"));
-        opphold.setPeriode(new Periode(null, null));
-        soknad.getMedlemskap().setOpphold(Collections.singletonList(opphold));
-
-        opphold.setPeriode(new Periode(LocalDate.now(), null));
-        verifyIngenFeil(soknad);
-
-        opphold.setPeriode(new Periode(null, LocalDate.now()));
-        verifyIngenFeil(soknad);
-
-        opphold.setPeriode(new Periode(null, null));
-        verifyHarFeil(soknad);
-    }
-
-
-    private void verifyIngenFeil(PleiepengerBarnSoknad soknad) {
-        final PleiepengerBarnSoknadValidator validator = new PleiepengerBarnSoknadValidator();
-        final List<Feil> resultat = validator.valider(soknad);
-        assertThat(resultat, is(Collections.emptyList()));
-    }
-
-    private void verifyHarFeil(PleiepengerBarnSoknad soknad) {
-        final PleiepengerBarnSoknadValidator validator = new PleiepengerBarnSoknadValidator();
-        final List<Feil> resultat = validator.valider(soknad);
-        assertThat(resultat, is(not(Collections.emptyList())));
-    }
-}
-*/

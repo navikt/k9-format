@@ -6,6 +6,7 @@
     "norskIdentitetsnummer": "11111111111"
   },
   "barn": {
-    "foedselsdato": "2015-01-01"
+    "foedselsdato": "2015-01-01",
+    "norskIdentitetsnummer" : "12345678902"
   }
 }

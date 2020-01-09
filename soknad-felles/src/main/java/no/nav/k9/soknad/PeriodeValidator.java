@@ -21,6 +21,14 @@ public class PeriodeValidator {
         return valider(perioder, felt, false);
     }
 
+    public List<Feil> valider(
+            Periodisert periode,
+            String felt) {
+        List<Feil> feil = new ArrayList<>();
+        validerGyldigPeriode(periode, felt, feil);
+        return feil;
+    }
+
     private static List<Feil> valider(
             List<? extends Periodisert> perioder,
             String felt,
@@ -39,17 +47,23 @@ public class PeriodeValidator {
             List<Feil> feil) {
         int index = 0;
         for (Periodisert periodisert : perioder) {
-            if (periodisert == null || periodisert.getPeriode() == null) {
-                feil.add(new Feil(felt(felt, index), "paakrevd", "Perioden må være satt."));
-            } else {
-                if (periodisert.getPeriode().fraOgMed == null) {
-                    feil.add(new Feil(felt(felt, index, "fraOgMed"), "paakrevd", "Fra og med (FOM) må være satt."));
-                }
-                if (periodisert.getPeriode().fraOgMed != null && periodisert.getPeriode().tilOgMed != null && periodisert.getPeriode().tilOgMed.isBefore(periodisert.getPeriode().fraOgMed)) {
-                    feil.add(new Feil(felt(felt, index), "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM)."));
-                }
+            validerGyldigPeriode(periodisert, felt(felt, index++), feil);
+        }
+    }
+
+    private static void validerGyldigPeriode(
+            Periodisert periodisert,
+            String felt,
+            List<Feil> feil) {
+        if (periodisert == null || periodisert.getPeriode() == null) {
+            feil.add(new Feil(felt, "paakrevd", "Perioden må være satt."));
+        } else {
+            if (periodisert.getPeriode().fraOgMed == null) {
+                feil.add(new Feil(felt, "paakrevd", "Fra og med (FOM) må være satt."));
             }
-            index++;
+            if (periodisert.getPeriode().fraOgMed != null && periodisert.getPeriode().tilOgMed != null && periodisert.getPeriode().tilOgMed.isBefore(periodisert.getPeriode().fraOgMed)) {
+                feil.add(new Feil(felt, "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM)."));
+            }
         }
     }
 

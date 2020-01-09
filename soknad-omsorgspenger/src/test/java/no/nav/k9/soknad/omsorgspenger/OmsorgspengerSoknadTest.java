@@ -16,16 +16,8 @@ public class OmsorgspengerSoknadTest {
         OmsorgspengerSoknad fraJson = JsonUtils.fromString(json, OmsorgspengerSoknad.class);
         OmsorgspengerSoknad fraBuilder = OmsorgspengerSoknad
                 .builder()
-                .barn(Barn
-                        .builder()
-                        .foedselsdato(fraJson.barn.foedselsdato)
-                        .build()
-                )
-                .soker(Soker
-                        .builder()
-                        .norskIdentitetsnummer(fraJson.soker.norskIdentitetsnummer)
-                        .build()
-                )
+                .barn(fraJson.barn)
+                .soker(fraJson.soker)
                 .mottattDato(fraJson.mottattDato)
                 .soknadId(fraJson.soknadId)
                 .build();
