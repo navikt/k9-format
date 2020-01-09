@@ -2,27 +2,27 @@ package no.nav.k9.soknad;
 
 import no.nav.k9.soknad.felles.Feil;
 import no.nav.k9.soknad.felles.Periode;
-import no.nav.k9.soknad.felles.Periodisert;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class PeriodeValidator {
 
     public List<Feil> validerTillattOverlapp(
-            List<? extends Periodisert> perioder,
+            Map<Periode, ?> perioder,
             String felt) {
         return valider(perioder, felt, true);
     }
 
     public List<Feil> validerIkkeTillattOverlapp(
-            List<? extends Periodisert> perioder,
+            Map<Periode, ?> perioder,
             String felt) {
         return valider(perioder, felt, false);
     }
 
     public List<Feil> valider(
-            Periodisert periode,
+            Periode periode,
             String felt) {
         List<Feil> feil = new ArrayList<>();
         validerGyldigPeriode(periode, felt, feil);
@@ -30,7 +30,7 @@ public class PeriodeValidator {
     }
 
     private static List<Feil> valider(
-            List<? extends Periodisert> perioder,
+            Map<Periode, ?> perioder,
             String felt,
             Boolean tillattOverlapp) {
         List<Feil> feil = new ArrayList<>();
@@ -42,53 +42,43 @@ public class PeriodeValidator {
     }
 
     private static void validerGyldigePerioder(
-            List<? extends Periodisert> perioder,
+            Map<Periode, ?> perioder,
             String felt,
             List<Feil> feil) {
-        int index = 0;
-        for (Periodisert periodisert : perioder) {
-            validerGyldigPeriode(periodisert, felt(felt, index++), feil);
-        }
+        perioder.forEach((periode, value) -> validerGyldigPeriode(periode, felt(felt, periode), feil));
     }
 
     private static void validerGyldigPeriode(
-            Periodisert periodisert,
+            Periode periode,
             String felt,
             List<Feil> feil) {
-        if (periodisert == null || periodisert.getPeriode() == null) {
+        if (periode == null) {
             feil.add(new Feil(felt, "paakrevd", "Perioden må være satt."));
         } else {
-            if (periodisert.getPeriode().fraOgMed == null) {
+            if (periode.fraOgMed == null) {
                 feil.add(new Feil(felt, "paakrevd", "Fra og med (FOM) må være satt."));
             }
-            if (periodisert.getPeriode().fraOgMed != null && periodisert.getPeriode().tilOgMed != null && periodisert.getPeriode().tilOgMed.isBefore(periodisert.getPeriode().fraOgMed)) {
+            if (periode.fraOgMed != null && periode.tilOgMed != null && periode.tilOgMed.isBefore(periode.fraOgMed)) {
                 feil.add(new Feil(felt, "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM)."));
             }
         }
     }
 
     private static void validerOverlappendePerioder(
-            List<? extends Periodisert> perioder,
+            Map<Periode, ?> perioder,
             String felt,
             List<Feil> feil) {
-        for (int i = 0; i < perioder.size(); i++) {
-            Periode sjekkPeriode = perioder.get(i) != null ? perioder.get(i).getPeriode() : null;
-            for (int j = 0; j < perioder.size(); j++) {
-                if (i == j) break;
-                if (overlapper(sjekkPeriode, perioder.get(j) != null ? perioder.get(j).getPeriode() : null)) {
-                    feil.add(new Feil(felt(felt, i), "overlappendePerioder", "Perioden overlapper andre perioder som er angitt."));
-                    return;
+        perioder.forEach((sjekkPeriode, sjekkPerideValue) -> {
+            perioder.forEach((periode, periodeValue) -> {
+                if (!sjekkPeriode.equals(periode) && overlapper(sjekkPeriode, periode)) {
+                    feil.add(new Feil(felt(felt, sjekkPeriode), "overlappendePerioder", "Perioden overlapper perioden '" + periode.iso8601 + "'."));
                 }
-            }
-        }
+            });
+        });
     }
 
-    private static String felt(String felt, int index) {
-        return felt + "[" + index + "]";
-    }
-
-    private static String felt(String felt, int index, String underfelt){
-        return felt(felt,index) + "." + underfelt;
+    private static String felt(String felt, Periode periode) {
+        return felt + "[" + periode.iso8601 + "]";
     }
 
     private static boolean overlapper(Periode periode1, Periode periode2) {

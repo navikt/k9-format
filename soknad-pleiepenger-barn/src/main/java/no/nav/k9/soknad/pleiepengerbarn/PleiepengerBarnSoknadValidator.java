@@ -7,6 +7,7 @@ import no.nav.k9.soknad.felles.*;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerBarnSoknad> {
     private final PeriodeValidator periodeValidator;
@@ -21,7 +22,7 @@ public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerB
 
         validerSoknadId(soknad.soknadId, feil);
         validerVersjon(soknad.versjon, feil);
-        validerPeriode(soknad, feil);
+        validerPeriode(soknad.periode, feil);
         validerMottattDato(soknad.mottattDato, feil);
         validerSpraak(soknad.spraak, feil);
         validerSoker(soknad.soker, feil);
@@ -29,13 +30,13 @@ public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerB
         validerUtland(soknad.utland, feil);
         validerBerdskap(soknad.beredskap, feil);
         validerNattebaak(soknad.nattevaak, feil);
-        validerTilsynsordning(soknad.iTilsynsordning, soknad.tilsynsordning, feil);
+        validerTilsynsordning(soknad.tilsynsordning, feil);
 
         return feil;
     }
 
-    private void validerPeriode(Periodisert periode, List<Feil> feil) {
-        if (periode.getPeriode() == null) {
+    private void validerPeriode(Periode periode, List<Feil> feil) {
+        if (periode == null) {
             feil.add(new Feil("periode", "paakrevd", "Må settes en periode for søknaden."));
         } else {
             feil.addAll(periodeValidator.valider(periode, "periode"));
@@ -69,12 +70,12 @@ public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerB
         }
     }
 
-    private void validerBerdskap(List<Beredskap> beredskap, List<Feil> feil) {
+    private void validerBerdskap(Map<Periode, Beredskap> beredskap, List<Feil> feil) {
         if (beredskap == null) return;
         feil.addAll(periodeValidator.validerTillattOverlapp(beredskap,"beredskap"));
     }
 
-    private void validerNattebaak(List<Nattevaak> nattevaak, List<Feil> feil) {
+    private void validerNattebaak(Map<Periode, Nattevaak> nattevaak, List<Feil> feil) {
         if (nattevaak == null) return;
         feil.addAll(periodeValidator.validerTillattOverlapp(nattevaak, "nattevaak"));
     }
@@ -106,11 +107,11 @@ public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerB
         }
     }
 
-    private void validerTilsynsordning(TilsynsordningSvar tilsynsordningSvar, List<Tilsynsordning> tilsynsordning, List<Feil> feil) {
-        if (tilsynsordningSvar == null) {
-            feil.add(new Feil("tilsynsordningSvar", "paakrevd", "Må oppgi svar om barnet skal være i tilsynsordning."));
-        } else if (TilsynsordningSvar.JA == tilsynsordningSvar) {
-            feil.addAll(periodeValidator.validerIkkeTillattOverlapp(tilsynsordning, "tilsynsordning"));
+    private void validerTilsynsordning(Tilsynsordning tilsynsordning, List<Feil> feil) {
+        if (tilsynsordning == null || tilsynsordning.iTilsynsordning == null) {
+            feil.add(new Feil("tilsynsordning", "paakrevd", "Må oppgi svar om barnet skal være i tilsynsordning."));
+        } else if (TilsynsordningSvar.JA == tilsynsordning.iTilsynsordning) {
+            feil.addAll(periodeValidator.validerIkkeTillattOverlapp(tilsynsordning.opphold, "tilsynsordning.opphold"));
         }
     }
 }

@@ -1,8 +1,6 @@
 package no.nav.k9.soknad.omsorgspenger;
 
 import no.nav.k9.soknad.JsonUtils;
-import no.nav.k9.soknad.felles.Barn;
-import no.nav.k9.soknad.felles.Soker;
 import org.json.JSONException;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;

@@ -6,13 +6,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.soknad.felles.*;
 
-
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-public class PleiepengerBarnSoknad implements Periodisert {
+public class PleiepengerBarnSoknad {
 
     public final SoknadId soknadId;
 
@@ -31,13 +28,11 @@ public class PleiepengerBarnSoknad implements Periodisert {
 
     public final Utland utland;
 
-    public final List<Beredskap> beredskap;
+    public final Map<Periode, Beredskap> beredskap;
 
-    public final List<Nattevaak> nattevaak;
+    public final Map<Periode, Nattevaak> nattevaak;
 
-    public final TilsynsordningSvar iTilsynsordning;
-
-    public final List<Tilsynsordning> tilsynsordning;
+    public final Tilsynsordning tilsynsordning;
 
     @JsonCreator
     private PleiepengerBarnSoknad(
@@ -58,13 +53,11 @@ public class PleiepengerBarnSoknad implements Periodisert {
             @JsonProperty("utland")
             Utland utland,
             @JsonProperty("beredskap")
-            List<Beredskap> beredskap,
+            Map<Periode, Beredskap> beredskap,
             @JsonProperty("nattevaak")
-            List<Nattevaak> nattevaak,
-            @JsonProperty("iTilsynsordning")
-            TilsynsordningSvar iTilsynsordning,
+            Map<Periode, Nattevaak> nattevaak,
             @JsonProperty("tilsynsordning")
-            List<Tilsynsordning> tilsynsordning) {
+            Tilsynsordning tilsynsordning) {
         this.soknadId = soknadId;
         this.versjon = versjon;
         this.periode = periode;
@@ -75,18 +68,11 @@ public class PleiepengerBarnSoknad implements Periodisert {
         this.utland = utland;
         this.beredskap = beredskap;
         this.nattevaak = nattevaak;
-        this.iTilsynsordning = iTilsynsordning;
-        this.tilsynsordning = tilsynsordning != null ? tilsynsordning : Collections.emptyList();
+        this.tilsynsordning = tilsynsordning;
     }
 
     public static Builder builder() {
         return new Builder();
-    }
-
-    @Override
-    @JsonIgnore
-    public Periode getPeriode() {
-        return periode;
     }
 
     public static final class Builder {
@@ -100,15 +86,13 @@ public class PleiepengerBarnSoknad implements Periodisert {
         private Soker soker;
         private Barn barn;
         private Utland utland;
-        private List<Beredskap> beredskap;
-        private List<Nattevaak> nattevaak;
-        private TilsynsordningSvar iTilsynsordning;
-        private List<Tilsynsordning> tilsynsordning;
+        private Map<Periode, Beredskap> beredskap;
+        private Map<Periode, Nattevaak> nattevaak;
+        private Tilsynsordning tilsynsordning;
 
         private Builder() {
-            beredskap = new ArrayList<>();
-            nattevaak = new ArrayList<>();
-            tilsynsordning = new ArrayList<>();
+            beredskap = new HashMap<>();
+            nattevaak = new HashMap<>();
         }
 
         public Builder soknadId(SoknadId soknadId) {
@@ -146,38 +130,28 @@ public class PleiepengerBarnSoknad implements Periodisert {
             return this;
         }
 
-        public Builder beredskap(List<Beredskap> beredskap) {
-            this.beredskap.addAll(beredskap);
+        public Builder beredskap(Map<Periode, Beredskap> beredskap) {
+            this.beredskap.putAll(beredskap);
             return this;
         }
 
-        public Builder beredskap(Beredskap beredskap) {
-            this.beredskap.add(beredskap);
+        public Builder beredskap(Periode periode, Beredskap beredskap) {
+            this.beredskap.put(periode, beredskap);
             return this;
         }
 
-        public Builder nattevaak(List<Nattevaak> nattevaak) {
-            this.nattevaak.addAll(nattevaak);
+        public Builder nattevaak(Map<Periode, Nattevaak> nattevaak) {
+            this.nattevaak.putAll(nattevaak);
             return this;
         }
 
-        public Builder nattevaak(Nattevaak nattevaak) {
-            this.nattevaak.add(nattevaak);
-            return this;
-        }
-
-        public Builder iTilsynsordning(TilsynsordningSvar iTilsynsordning) {
-            this.iTilsynsordning = iTilsynsordning;
-            return this;
-        }
-
-        public Builder tilsynsordning(List<Tilsynsordning> tilsynsordning) {
-            this.tilsynsordning.addAll(tilsynsordning);
+        public Builder nattevaak(Periode periode, Nattevaak nattevaak) {
+            this.nattevaak.put(periode, nattevaak);
             return this;
         }
 
         public Builder tilsynsordning(Tilsynsordning tilsynsordning) {
-            this.tilsynsordning.add(tilsynsordning);
+            this.tilsynsordning = tilsynsordning;
             return this;
         }
 
@@ -191,10 +165,9 @@ public class PleiepengerBarnSoknad implements Periodisert {
                     soker,
                     barn,
                     utland,
-                    Collections.unmodifiableList(beredskap),
-                    Collections.unmodifiableList(nattevaak),
-                    iTilsynsordning,
-                    Collections.unmodifiableList(tilsynsordning)
+                    Collections.unmodifiableMap(beredskap),
+                    Collections.unmodifiableMap(nattevaak),
+                    tilsynsordning
             );
             validator.forsikreValidert(soknad);
             return soknad;

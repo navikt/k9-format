@@ -3,10 +3,7 @@ package no.nav.k9.soknad.felles;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Utland {
 
@@ -14,7 +11,7 @@ public class Utland {
 
     public final Boolean skalBoIUtlandetNeste12Mnd;
 
-    public final List<Opphold> opphold;
+    public final Map<Periode, Opphold> opphold;
 
     @JsonCreator
     private Utland(
@@ -23,11 +20,10 @@ public class Utland {
             @JsonProperty("skalBoIUtlandetNeste12Mnd")
             Boolean skalBoIUtlandetNeste12Mnd,
             @JsonProperty("opphold")
-            List<Opphold> opphold) {
+            Map<Periode, Opphold> opphold) {
         this.harBoddIUtlandetSiste12Mnd = harBoddIUtlandetSiste12Mnd;
         this.skalBoIUtlandetNeste12Mnd = skalBoIUtlandetNeste12Mnd;
-        opphold.removeIf(Objects::isNull);
-        this.opphold = Collections.unmodifiableList(opphold);
+        this.opphold = Collections.unmodifiableMap(opphold);
     }
 
     public static Builder builder() {
@@ -37,10 +33,10 @@ public class Utland {
     public static final class Builder {
         private Boolean harBoddIUtlandetSiste12Mnd;
         private Boolean skalBoIUtlandetNeste12Mnd;
-        private List<Opphold> opphold;
+        private Map<Periode, Opphold> opphold;
 
         private Builder() {
-            opphold = new ArrayList<>();
+            opphold = new HashMap<>();
         }
 
         public Builder harBoddIUtlandetSiste12Mnd(Boolean harBoddIUtlandetSiste12Mnd) {
@@ -53,13 +49,13 @@ public class Utland {
             return this;
         }
 
-        public Builder opphold(List<Opphold> opphold) {
-            this.opphold.addAll(opphold);
+        public Builder opphold(Map<Periode, Opphold> opphold) {
+            this.opphold.putAll(opphold);
             return this;
         }
 
-        public Builder opphold(Opphold opphold) {
-            this.opphold.add(opphold);
+        public Builder opphold(Periode periode, Opphold opphold) {
+            this.opphold.put(periode, opphold);
             return this;
         }
 

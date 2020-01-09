@@ -41,35 +41,6 @@ final class TestUtils {
                 .utland(soknad.utland)
                 .beredskap(soknad.beredskap)
                 .nattevaak(soknad.nattevaak)
-                .iTilsynsordning(soknad.iTilsynsordning)
                 .tilsynsordning(soknad.tilsynsordning);
     }
-
-    /*
-        public final SoknadId soknadId;
-
-    public final Versjon versjon;
-
-    public final Periode periode;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
-    public final ZonedDateTime mottattDato;
-
-    public final Spraak spraak;
-
-    public final Soker soker;
-
-    public final Barn barn;
-
-    public final Utland utland;
-
-    public final List<Beredskap> beredskap;
-
-    public final List<Nattevaak> nattevaak;
-
-    public final TilsynsordningSvar iTilsynsordning;
-
-    public final List<Tilsynsordning> tilsynsordning;
-     */
-
 }

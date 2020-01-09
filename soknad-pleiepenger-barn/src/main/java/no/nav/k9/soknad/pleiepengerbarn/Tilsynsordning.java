@@ -1,103 +1,58 @@
 package no.nav.k9.soknad.pleiepengerbarn;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.soknad.felles.Periode;
-import no.nav.k9.soknad.felles.Periodisert;
 
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
-public class Tilsynsordning implements Periodisert {
+public class Tilsynsordning {
 
-    public final Periode periode;
-    public final Duration mandag;
-    public final Duration tirsdag;
-    public final Duration onsdag;
-    public final Duration torsdag;
-    public final Duration fredag;
+    public final TilsynsordningSvar iTilsynsordning;
+    public final Map<Periode, Duration> opphold;
 
     @JsonCreator
     private Tilsynsordning(
-            @JsonProperty("periode")
-            Periode periode,
-            @JsonProperty("mandag")
-            Duration mandag,
-            @JsonProperty("tirsdag")
-            Duration tirsdag,
-            @JsonProperty("onsdag")
-            Duration onsdag,
-            @JsonProperty("torsdag")
-            Duration torsdag,
-            @JsonProperty("fredag")
-            Duration fredag) {
-        this.periode = periode;
-        this.mandag = mandag;
-        this.tirsdag = tirsdag;
-        this.onsdag = onsdag;
-        this.torsdag = torsdag;
-        this.fredag = fredag;
+            @JsonProperty("iTilsynsordning")
+            TilsynsordningSvar iTilsynsordning,
+            @JsonProperty("opphold")
+            Map<Periode, Duration> opphold) {
+        this.iTilsynsordning = iTilsynsordning;
+        this.opphold = opphold;
     }
 
     public static Builder builder() {
         return new Builder();
     }
-
-    @Override
-    @JsonIgnore
-    public Periode getPeriode() {
-        return periode;
-    }
-
-
     public static final class Builder {
-        private Periode periode;
-        private Duration mandag;
-        private Duration tirsdag;
-        private Duration onsdag;
-        private Duration torsdag;
-        private Duration fredag;
+        private TilsynsordningSvar iTilsynsordning;
+        private Map<Periode, Duration> opphold;
 
-        private Builder() { }
+        private Builder() {
+            opphold = new HashMap<>();
+        }
 
-        public Builder periode(Periode periode) {
-            this.periode = periode;
+        public Builder iTilsynsordning(TilsynsordningSvar iTilsynsordning) {
+            this.iTilsynsordning = iTilsynsordning;
             return this;
         }
 
-        public Builder mandag(Duration mandag) {
-            this.mandag = mandag;
+        public Builder opphold(Map<Periode, Duration> opphold) {
+            this.opphold.putAll(opphold);
             return this;
         }
 
-        public Builder tirsdag(Duration tirsdag) {
-            this.tirsdag = tirsdag;
-            return this;
-        }
-
-        public Builder onsdag(Duration onsdag) {
-            this.onsdag = onsdag;
-            return this;
-        }
-
-        public Builder torsdag(Duration torsdag) {
-            this.torsdag = torsdag;
-            return this;
-        }
-
-        public Builder fredag(Duration fredag) {
-            this.fredag = fredag;
+        public Builder opphold(Periode periode, Duration duration) {
+            this.opphold.put(periode, duration);
             return this;
         }
 
         public Tilsynsordning build() {
             return new Tilsynsordning(
-                    periode,
-                    mandag,
-                    tirsdag,
-                    onsdag,
-                    torsdag,
-                    fredag
+                    iTilsynsordning,
+                    opphold
             );
         }
     }

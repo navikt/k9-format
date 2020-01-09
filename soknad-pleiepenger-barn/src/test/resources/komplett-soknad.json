@@ -6,89 +6,45 @@
   "soker" : {
     "norskIdentitetsnummer" : "12345678901"
   },
-  "periode" : {
-    "fraOgMed" : "2018-12-30",
-    "tilOgMed" : "2019-10-20"
-  },
+  "periode" : "2018-12-30/2019-10-20",
   "barn" : {
     "foedselsdato": "2010-01-01",
     "norskIdentitetsnummer" : "12345678902"
   },
   "utland" : {
-    "opphold": [
-      {
-        "periode": {
-          "fraOgMed": "2018-12-30",
-          "tilOgMed": "2019-10-10"
-        },
+    "harBoddIUtlandetSiste12Mnd": true,
+    "skalBoIUtlandetNeste12Mnd": true,
+    "opphold": {
+      "2018-12-30/2019-10-10" : {
         "land": "SWE"
       },
-      {
-        "periode": {
-          "fraOgMed": "2018-10-10",
-          "tilOgMed": "2018-12-29"
-        },
+      "2018-10-10/2018-12-29" : {
         "land": "NOR"
       }
-    ],
-    "harBoddIUtlandetSiste12Mnd": true,
-    "skalBoIUtlandetNeste12Mnd": true
+    }
   },
-  "beredskap": [
-    {
-      "periode" : {
-        "fraOgMed" : "2018-10-10",
-        "tilOgMed" : "2018-12-29"
-      },
+  "beredskap": {
+    "2018-10-10/2018-12-29": {
       "tilleggsinformasjon": "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
     },
-    {
-      "periode" : {
-        "fraOgMed" : "2019-01-01",
-        "tilOgMed" : "2019-01-30"
-      },
+    "2019-01-01/2019-01-30": {
       "tilleggsinformasjon": "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
+
     }
-  ],
-  "nattevaak": [
-    {
-      "periode" : {
-        "fraOgMed" : "2018-10-10",
-        "tilOgMed" : "2018-12-29"
-      },
+  },
+  "nattevaak": {
+    "2018-10-10/2018-12-29" : {
       "tilleggsinformasjon": "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
     },
-    {
-      "periode" : {
-        "fraOgMed" : "2019-01-01",
-        "tilOgMed" : "2019-01-30"
-      },
+    "2019-01-01/2019-01-30": {
       "tilleggsinformasjon": "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
     }
-  ],
-  "iTilsynsordning": "ja",
-  "tilsynsordning": [
-    {
-      "periode" : {
-        "fraOgMed" : "2019-01-01",
-        "tilOgMed" : "2019-01-30"
-      },
-      "mandag": "PT7H30M",
-      "tirsdag": null,
-      "onsdag": "PT7H25M",
-      "torsdag": null,
-      "fredag": "PT0S"
-    },
-    {
-      "periode" : {
-        "fraOgMed" : "2020-01-01",
-        "tilOgMed" : "2020-01-30"
-      },
-      "mandag": "PT7H30M",
-      "tirsdag": null,
-      "onsdag": "PT7H25M",
-      "torsdag": null,
-      "fredag": null
+  },
+  "tilsynsordning": {
+    "iTilsynsordning": "ja",
+    "opphold": {
+      "2019-01-01/2019-01-30": "PT7H30M",
+      "2020-01-01/2020-01-30": "PT7H25M"
     }
-  ]
+  }
 }
