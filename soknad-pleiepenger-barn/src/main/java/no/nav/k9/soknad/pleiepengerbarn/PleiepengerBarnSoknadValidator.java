@@ -4,12 +4,14 @@ import no.nav.k9.soknad.PeriodeValidator;
 import no.nav.k9.soknad.SoknadValidator;
 import no.nav.k9.soknad.felles.*;
 
+import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerBarnSoknad> {
+    private static final Duration ET_DØGN = Duration.ofHours(24);
     private final PeriodeValidator periodeValidator;
 
     PleiepengerBarnSoknadValidator() {
@@ -110,8 +112,14 @@ public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerB
     private void validerTilsynsordning(Tilsynsordning tilsynsordning, List<Feil> feil) {
         if (tilsynsordning == null || tilsynsordning.iTilsynsordning == null) {
             feil.add(new Feil("tilsynsordning", "paakrevd", "Må oppgi svar om barnet skal være i tilsynsordning."));
-        } else if (TilsynsordningSvar.JA == tilsynsordning.iTilsynsordning) {
-            feil.addAll(periodeValidator.validerIkkeTillattOverlapp(tilsynsordning.opphold, "tilsynsordning.opphold"));
+        } else if (TilsynsordningSvar.JA == tilsynsordning.iTilsynsordning && tilsynsordning.opphold != null) {
+            tilsynsordning.opphold.forEach((dato, opphold) -> {
+                if (opphold.lengde == null) {
+                    feil.add(new Feil("opphold[" + dato.toString() + "].lengde", "paakrevd", "Lengde på opphold i tilynsordning må settes."));
+                } else if(opphold.lengde.compareTo(ET_DØGN) > 0) {
+                    feil.add(new Feil("opphold[" + dato.toString() + "].lengde", "ugyldigLengdePåOpphold", "Lengden på oppholdet er over 24 timer."));
+                }
+            });
         }
     }
 }

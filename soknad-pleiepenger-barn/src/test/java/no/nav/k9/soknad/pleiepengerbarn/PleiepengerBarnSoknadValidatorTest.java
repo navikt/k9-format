@@ -6,6 +6,7 @@ import no.nav.k9.soknad.ValideringsFeil;
 import no.nav.k9.soknad.felles.*;
 import org.junit.Test;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -63,6 +64,23 @@ public class PleiepengerBarnSoknadValidatorTest {
 
         builder.periode(Periode.builder().fraOgMed(LocalDate.now()).tilOgMed(LocalDate.now().plusDays(1)).build());
         verifyIngenFeil(builder);
+    }
+
+    @Test
+    public void soknadMedTilsynsordningOppholdPåOverEttDøgn() {
+        final PleiepengerBarnSoknad.Builder builder = TestUtils.komplettBuilder();
+        Tilsynsordning tilsynsordning = Tilsynsordning.builder()
+                .iTilsynsordning(TilsynsordningSvar.JA)
+                .opphold(LocalDate.now(), TilsynsordningOpphold
+                        .builder()
+                        .lengde(Duration.ofDays(2))
+                        .build())
+                .build();
+
+        builder.tilsynsordning(tilsynsordning);
+
+        verifyHarFeil(builder);
+
     }
 
     private List<Feil> verifyHarFeil(PleiepengerBarnSoknad.Builder builder) {

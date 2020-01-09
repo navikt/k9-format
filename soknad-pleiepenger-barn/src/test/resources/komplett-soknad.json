@@ -46,10 +46,10 @@
   "tilsynsordning": {
     "iTilsynsordning": "ja",
     "opphold": {
-      "2019-01-01/2019-01-30": {
+      "2019-01-01": {
         "lengde": "PT7H30M"
       },
-      "2020-01-01/2020-01-30": {
+      "2020-01-02": {
         "lengde": "PT7H25M"
       }
     }
