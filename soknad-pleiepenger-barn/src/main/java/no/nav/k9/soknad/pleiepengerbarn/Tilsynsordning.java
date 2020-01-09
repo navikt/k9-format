@@ -2,6 +2,7 @@ package no.nav.k9.soknad.pleiepengerbarn;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import no.nav.k9.soknad.PeriodeValidator;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ public class Tilsynsordning {
         return new Builder();
     }
     public static final class Builder {
+        private static final PeriodeValidator periodeValidator = new PeriodeValidator();
         private TilsynsordningSvar iTilsynsordning;
         private Map<LocalDate, TilsynsordningOpphold> opphold;
 
@@ -46,6 +48,10 @@ public class Tilsynsordning {
         public Builder opphold(LocalDate dato, TilsynsordningOpphold duration) {
             this.opphold.put(dato, duration);
             return this;
+        }
+
+        public Builder uke(TilsynsordningUke uke) {
+            return opphold(uke.opphold);
         }
 
         public Tilsynsordning build() {
