@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TilsynsordningUke {
-    final Map<LocalDate, TilsynsordningOpphold> opphold;
+    final Map<Periode, TilsynsordningOpphold> opphold;
 
     private TilsynsordningUke(
             Periode periode,
@@ -18,7 +18,7 @@ public class TilsynsordningUke {
             Duration onsdag,
             Duration torsdag,
             Duration fredag) {
-        Map<LocalDate, TilsynsordningOpphold> opphold = new HashMap<>();
+        Map<Periode, TilsynsordningOpphold> opphold = new HashMap<>();
         LocalDate dato = periode.fraOgMed;
         do {
             Duration duration;
@@ -46,7 +46,7 @@ public class TilsynsordningUke {
                         .builder()
                         .lengde(duration)
                         .build();
-                opphold.put(dato, tilsynsordningOpphold);
+                opphold.put(Periode.builder().enkeltDag(dato).build(), tilsynsordningOpphold);
             }
             dato = dato.plusDays(1);
         } while (dato.isBefore(periode.tilOgMed) || dato.equals(periode.tilOgMed));

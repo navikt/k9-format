@@ -73,6 +73,12 @@ public class Periode {
             return this;
         }
 
+        public Builder enkeltDag(LocalDate enkeltDag) {
+            this.fraOgMed = enkeltDag;
+            this.tilOgMed = enkeltDag;
+            return this;
+        }
+
         private String toIso8601(LocalDate dato) {
             if (dato == null) return Periode.ÅPEN;
             else return dato.toString();

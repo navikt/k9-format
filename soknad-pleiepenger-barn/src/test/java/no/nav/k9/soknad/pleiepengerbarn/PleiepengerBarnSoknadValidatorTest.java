@@ -67,11 +67,11 @@ public class PleiepengerBarnSoknadValidatorTest {
     }
 
     @Test
-    public void soknadMedTilsynsordningOppholdPåOverEttDøgn() {
+    public void soknadMedTilsynsordningOppholdLengreEnnPerioden() {
         final PleiepengerBarnSoknad.Builder builder = TestUtils.komplettBuilder();
         Tilsynsordning tilsynsordning = Tilsynsordning.builder()
                 .iTilsynsordning(TilsynsordningSvar.JA)
-                .opphold(LocalDate.now(), TilsynsordningOpphold
+                .opphold(Periode.builder().enkeltDag(LocalDate.now()).build(), TilsynsordningOpphold
                         .builder()
                         .lengde(Duration.ofDays(2))
                         .build())

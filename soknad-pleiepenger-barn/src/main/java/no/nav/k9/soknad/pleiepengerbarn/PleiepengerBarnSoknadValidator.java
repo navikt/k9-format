@@ -5,13 +5,13 @@ import no.nav.k9.soknad.SoknadValidator;
 import no.nav.k9.soknad.felles.*;
 
 import java.time.Duration;
+import java.time.Period;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerBarnSoknad> {
-    private static final Duration ET_DØGN = Duration.ofHours(24);
     private final PeriodeValidator periodeValidator;
 
     PleiepengerBarnSoknadValidator() {
@@ -113,13 +113,25 @@ public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerB
         if (tilsynsordning == null || tilsynsordning.iTilsynsordning == null) {
             feil.add(new Feil("tilsynsordning", "paakrevd", "Må oppgi svar om barnet skal være i tilsynsordning."));
         } else if (TilsynsordningSvar.JA == tilsynsordning.iTilsynsordning && tilsynsordning.opphold != null) {
-            tilsynsordning.opphold.forEach((dato, opphold) -> {
+            feil.addAll(periodeValidator.validerIkkeTillattOverlapp(tilsynsordning.opphold, "tilsynsordning.opphold"));
+            tilsynsordning.opphold.forEach((periode, opphold) -> {
                 if (opphold.lengde == null) {
-                    feil.add(new Feil("opphold[" + dato.toString() + "].lengde", "paakrevd", "Lengde på opphold i tilynsordning må settes."));
-                } else if(opphold.lengde.compareTo(ET_DØGN) > 0) {
-                    feil.add(new Feil("opphold[" + dato.toString() + "].lengde", "ugyldigLengdePåOpphold", "Lengden på oppholdet er over 24 timer."));
+                    feil.add(new Feil("tilsynsordning.opphold[" + periode.iso8601 + "].lengde", "paakrevd", "Lengde på opphold i tilynsordning må settes."));
+                } else {
+                    Duration maks = maksInnenforPeriode(periode);
+                    if (maks != null && opphold.lengde.compareTo(maks) > 0) {
+                        feil.add(new Feil("tilsynsordning.opphold[" + periode.iso8601 + "].lengde", "ugyldigLengdePåOpphold", "Lengden på oppholdet overskrider tiden i perioden."));
+                    }
                 }
             });
+        }
+    }
+
+    private Duration maksInnenforPeriode(Periode periode) {
+        if (periode.fraOgMed == null || periode.tilOgMed == null) return null;
+        else {
+            Period period = Period.between(periode.fraOgMed, periode.tilOgMed.plusDays(1));
+            return Duration.ofDays(period.getDays()).abs();
         }
     }
 }
