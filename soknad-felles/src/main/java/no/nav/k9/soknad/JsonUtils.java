@@ -48,6 +48,7 @@ public final class JsonUtils {
                 .setTimeZone(TimeZone.getTimeZone("Europe/Oslo"))
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .disable(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS)
+                .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
                 .enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY)
                 .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                 ;

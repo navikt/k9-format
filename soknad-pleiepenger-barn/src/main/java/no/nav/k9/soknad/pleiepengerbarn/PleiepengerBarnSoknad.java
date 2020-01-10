@@ -2,7 +2,6 @@ package no.nav.k9.soknad.pleiepengerbarn;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.soknad.felles.*;
 
@@ -34,6 +33,8 @@ public class PleiepengerBarnSoknad {
 
     public final Tilsynsordning tilsynsordning;
 
+    public final Arbeidsgivere arbeidsgivere;
+
     @JsonCreator
     private PleiepengerBarnSoknad(
             @JsonProperty("soknadId")
@@ -57,7 +58,9 @@ public class PleiepengerBarnSoknad {
             @JsonProperty("nattevaak")
             Map<Periode, Nattevaak> nattevaak,
             @JsonProperty("tilsynsordning")
-            Tilsynsordning tilsynsordning) {
+            Tilsynsordning tilsynsordning,
+            @JsonProperty("arbeidsgivere")
+            Arbeidsgivere arbeidsgivere) {
         this.soknadId = soknadId;
         this.versjon = versjon;
         this.periode = periode;
@@ -69,6 +72,7 @@ public class PleiepengerBarnSoknad {
         this.beredskap = beredskap;
         this.nattevaak = nattevaak;
         this.tilsynsordning = tilsynsordning;
+        this.arbeidsgivere = arbeidsgivere;
     }
 
     public static Builder builder() {
@@ -89,6 +93,7 @@ public class PleiepengerBarnSoknad {
         private Map<Periode, Beredskap> beredskap;
         private Map<Periode, Nattevaak> nattevaak;
         private Tilsynsordning tilsynsordning;
+        private Arbeidsgivere arbeidsgivere;
 
         private Builder() {
             beredskap = new HashMap<>();
@@ -155,6 +160,11 @@ public class PleiepengerBarnSoknad {
             return this;
         }
 
+        public Builder arbeidsgivere(Arbeidsgivere arbeidsgivere) {
+            this.arbeidsgivere = arbeidsgivere;
+            return this;
+        }
+
         public PleiepengerBarnSoknad build() {
             PleiepengerBarnSoknad soknad = new PleiepengerBarnSoknad(
                     soknadId,
@@ -167,7 +177,8 @@ public class PleiepengerBarnSoknad {
                     utland,
                     Collections.unmodifiableMap(beredskap),
                     Collections.unmodifiableMap(nattevaak),
-                    tilsynsordning
+                    tilsynsordning,
+                    arbeidsgivere
             );
             validator.forsikreValidert(soknad);
             return soknad;

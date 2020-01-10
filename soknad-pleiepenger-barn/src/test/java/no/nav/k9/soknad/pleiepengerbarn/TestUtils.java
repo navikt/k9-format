@@ -41,6 +41,7 @@ final class TestUtils {
                 .utland(soknad.utland)
                 .beredskap(soknad.beredskap)
                 .nattevaak(soknad.nattevaak)
-                .tilsynsordning(soknad.tilsynsordning);
+                .tilsynsordning(soknad.tilsynsordning)
+                .arbeidsgivere(soknad.arbeidsgivere);
     }
 }

@@ -53,5 +53,25 @@
         "lengde": "PT7H25M"
       }
     }
+  },
+  "arbeidsgivere": {
+    "arbeidstaker": [{
+      "organisasjonsnummer": "999999999",
+      "arbeidsforhold" : {
+        "2018-10-10/2018-12-29": {
+          "skalJobbeProsent": 50.25
+        }
+      }
+    }],
+    "selvstendigNæringsdrivende": [{
+      "arbeidsforhold" : {
+        "2018-11-11/2018-11-30": {}
+      }
+    }],
+    "frilanser": [{
+      "arbeidsforhold" : {
+        "2019-10-10/2019-12-29": {}
+      }
+    }]
   }
 }
