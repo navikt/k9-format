@@ -27,7 +27,7 @@ public class Utland {
             Map<Periode, UtlandOpphold> opphold) {
         this.harBoddIUtlandetSiste12Mnd = harBoddIUtlandetSiste12Mnd;
         this.skalBoIUtlandetNeste12Mnd = skalBoIUtlandetNeste12Mnd;
-        this.opphold = opphold == null ? emptyMap() : unmodifiableMap(opphold);
+        this.opphold = (opphold == null) ? emptyMap() : unmodifiableMap(opphold);
     }
 
     public static Builder builder() {

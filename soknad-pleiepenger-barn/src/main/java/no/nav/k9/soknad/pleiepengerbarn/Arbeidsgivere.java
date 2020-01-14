@@ -22,9 +22,9 @@ public class Arbeidsgivere {
             List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende,
             @JsonProperty("frilanser")
             List<Frilanser> frilanser) {
-        this.arbeidstaker = arbeidstaker == null ? emptyList() : unmodifiableList(arbeidstaker);
-        this.selvstendigNæringsdrivende = selvstendigNæringsdrivende == null ? emptyList() : unmodifiableList(selvstendigNæringsdrivende);
-        this.frilanser = frilanser == null ? emptyList() : unmodifiableList(frilanser);
+        this.arbeidstaker = (arbeidstaker == null) ? emptyList() : unmodifiableList(arbeidstaker);
+        this.selvstendigNæringsdrivende = (selvstendigNæringsdrivende == null) ? emptyList() : unmodifiableList(selvstendigNæringsdrivende);
+        this.frilanser = (frilanser == null) ? emptyList() : unmodifiableList(frilanser);
     }
 
     public static Builder builder() {

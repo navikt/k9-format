@@ -18,7 +18,7 @@ public class SelvstendigNæringsdrivende {
     private SelvstendigNæringsdrivende(
             @JsonProperty("perioder")
             Map<Periode, ArbeidsforholdPeriode> perioder) {
-        this.perioder = perioder == null ? emptyMap() : unmodifiableMap(perioder);
+        this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
     }
 
     public static Builder builder() {

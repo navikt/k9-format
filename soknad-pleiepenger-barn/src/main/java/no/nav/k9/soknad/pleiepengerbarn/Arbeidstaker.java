@@ -27,7 +27,7 @@ public class Arbeidstaker {
             Map<Periode, ArbeidstakerPeriode> perioder) {
         this.norskIdentitetsnummer = norskIdentitetsnummer;
         this.organisasjonsnummer = organisasjonsnummer;
-        this.perioder = perioder == null ? emptyMap() : unmodifiableMap(perioder);
+        this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
     }
 
     public static Builder builder() {

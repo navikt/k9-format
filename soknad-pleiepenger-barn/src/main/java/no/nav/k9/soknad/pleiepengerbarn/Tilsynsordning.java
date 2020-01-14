@@ -22,7 +22,7 @@ public class Tilsynsordning {
             @JsonProperty("opphold")
             Map<Periode, TilsynsordningOpphold> opphold) {
         this.iTilsynsordning = iTilsynsordning;
-        this.opphold = opphold == null ? emptyMap() : unmodifiableMap(opphold);
+        this.opphold = (opphold == null) ? emptyMap() : unmodifiableMap(opphold);
     }
 
     public static Builder builder() {
