@@ -32,7 +32,7 @@ public class PleiepengerBarnSoknad {
 
     public final Tilsynsordning tilsynsordning;
 
-    public final Arbeidsgivere arbeidsgivere;
+    public final Arbeid arbeid;
 
     @JsonCreator
     private PleiepengerBarnSoknad(
@@ -58,8 +58,8 @@ public class PleiepengerBarnSoknad {
             Nattevaak nattevaak,
             @JsonProperty("tilsynsordning")
             Tilsynsordning tilsynsordning,
-            @JsonProperty("arbeidsgivere")
-            Arbeidsgivere arbeidsgivere) {
+            @JsonProperty("arbeid")
+            Arbeid arbeid) {
         this.soknadId = soknadId;
         this.versjon = versjon;
         this.periode = periode;
@@ -71,7 +71,7 @@ public class PleiepengerBarnSoknad {
         this.beredskap = beredskap;
         this.nattevaak = nattevaak;
         this.tilsynsordning = tilsynsordning;
-        this.arbeidsgivere = arbeidsgivere;
+        this.arbeid = arbeid;
     }
 
     public static Builder builder() {
@@ -92,7 +92,7 @@ public class PleiepengerBarnSoknad {
         private Beredskap beredskap;
         private Nattevaak nattevaak;
         private Tilsynsordning tilsynsordning;
-        private Arbeidsgivere arbeidsgivere;
+        private Arbeid arbeid;
 
         private Builder() {}
 
@@ -146,8 +146,8 @@ public class PleiepengerBarnSoknad {
             return this;
         }
 
-        public Builder arbeidsgivere(Arbeidsgivere arbeidsgivere) {
-            this.arbeidsgivere = arbeidsgivere;
+        public Builder arbeid(Arbeid arbeid) {
+            this.arbeid = arbeid;
             return this;
         }
 
@@ -164,7 +164,7 @@ public class PleiepengerBarnSoknad {
                     beredskap,
                     nattevaak,
                     tilsynsordning,
-                    arbeidsgivere
+                    arbeid
             );
             validator.forsikreValidert(soknad);
             return soknad;

@@ -64,10 +64,10 @@ final class TestUtils {
                         .iTilsynsordning(TilsynsordningSvar.of(soknad.tilsynsordning.iTilsynsordning.dto))
                         .opphold(rekonstruerTilsynsordningOpphold(soknad.tilsynsordning.opphold))
                         .build())
-                .arbeidsgivere(Arbeidsgivere.builder()
-                        .arbeidstaker(rekonstruerArbeidstaker(soknad.arbeidsgivere.arbeidstaker))
-                        .selvstendigNæringsdrivende(rekonstruerSelvstendigNæringsdrivende(soknad.arbeidsgivere.selvstendigNæringsdrivende))
-                        .frilanser(rekonstruerFrilanser(soknad.arbeidsgivere.frilanser))
+                .arbeid(Arbeid.builder()
+                        .arbeidstaker(rekonstruerArbeidstaker(soknad.arbeid.arbeidstaker))
+                        .selvstendigNæringsdrivende(rekonstruerSelvstendigNæringsdrivende(soknad.arbeid.selvstendigNæringsdrivende))
+                        .frilanser(rekonstruerFrilanser(soknad.arbeid.frilanser))
                         .build());
     }
 

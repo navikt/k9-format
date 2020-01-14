@@ -94,9 +94,9 @@ public class PleiepengerBarnSoknadValidatorTest {
     }
 
     @Test
-    public void soknadMedUgyldigInfoOmArbeidsgiver() {
+    public void soknadMedUgyldigInfoOmArbeid() {
         final PleiepengerBarnSoknad.Builder builder = TestUtils.komplettBuilder();
-        Arbeidsgivere arbeidsgivere = Arbeidsgivere
+        Arbeid arbeid = Arbeid
                 .builder()
                 .arbeidstaker(Arbeidstaker
                         .builder()
@@ -107,10 +107,10 @@ public class PleiepengerBarnSoknadValidatorTest {
                         ).build()
                 ).build();
 
-        builder.arbeidsgivere(arbeidsgivere);
+        builder.arbeid(arbeid);
         verifyHarFeil(builder);
 
-        arbeidsgivere = Arbeidsgivere
+        arbeid = Arbeid
                 .builder()
                 .arbeidstaker(Arbeidstaker
                         .builder()
@@ -121,10 +121,10 @@ public class PleiepengerBarnSoknadValidatorTest {
                                 Arbeidstaker.ArbeidstakerInfo.builder().skalJobbeProsent(100.00).build()
                         ).build()
                 ).build();
-        builder.arbeidsgivere(arbeidsgivere);
+        builder.arbeid(arbeid);
         verifyHarFeil(builder);
 
-        arbeidsgivere = Arbeidsgivere
+        arbeid = Arbeid
                 .builder()
                 .arbeidstaker(Arbeidstaker
                         .builder()
@@ -136,10 +136,10 @@ public class PleiepengerBarnSoknadValidatorTest {
                         ).build()
                 ).build();
 
-        builder.arbeidsgivere(arbeidsgivere);
+        builder.arbeid(arbeid);
         verifyHarFeil(builder);
 
-        arbeidsgivere = Arbeidsgivere
+        arbeid = Arbeid
                 .builder()
                 .arbeidstaker(Arbeidstaker
                         .builder()
@@ -149,7 +149,7 @@ public class PleiepengerBarnSoknadValidatorTest {
                         ).build()
                 ).build();
 
-        builder.arbeidsgivere(arbeidsgivere);
+        builder.arbeid(arbeid);
         verifyHarFeil(builder);
     }
 

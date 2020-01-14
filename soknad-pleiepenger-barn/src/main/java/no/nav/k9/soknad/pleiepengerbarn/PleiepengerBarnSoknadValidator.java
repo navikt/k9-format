@@ -33,7 +33,7 @@ public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerB
         validerBerdskap(soknad.beredskap, feil);
         validerNattebaak(soknad.nattevaak, feil);
         validerTilsynsordning(soknad.tilsynsordning, feil);
-        validerArbeidsgivere(soknad.arbeidsgivere, feil);
+        validerArbeid(soknad.arbeid, feil);
 
         return feil;
     }
@@ -112,38 +112,38 @@ public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerB
         }
     }
 
-    private void validerArbeidsgivere(Arbeidsgivere arbeidsgivere, List<Feil> feil) {
-        if (arbeidsgivere == null) return;
+    private void validerArbeid(Arbeid arbeid, List<Feil> feil) {
+        if (arbeid == null) return;
 
         int i = 0;
-        for (Arbeidstaker arbeidstaker : arbeidsgivere.arbeidstaker) {
+        for (Arbeidstaker arbeidstaker : arbeid.arbeidstaker) {
             if (arbeidstaker.norskIdentitetsnummer != null && arbeidstaker.organisasjonsnummer != null) {
-                feil.add(new Feil("arbeidsgivere.arbeidstaker[" + i + "]","ikkeEntydigIdPåArbeidsgiver", "Må oppgi en av norskIdentitetsnummer eller organisasjonsnummer."));
+                feil.add(new Feil("arbeid.arbeidstaker[" + i + "]","ikkeEntydigIdPåArbeidsgiver", "Må oppgi en av norskIdentitetsnummer eller organisasjonsnummer."));
             } else if (arbeidstaker.norskIdentitetsnummer == null && arbeidstaker.organisasjonsnummer == null) {
-                feil.add(new Feil("arbeidsgivere.arbeidstaker[" + i + "]","idPåArbeidsgiverPåkrevd", "Må oppgi en av norskIdentitetsnummer eller organisasjonsnummer."));
+                feil.add(new Feil("arbeid.arbeidstaker[" + i + "]","idPåArbeidsgiverPåkrevd", "Må oppgi en av norskIdentitetsnummer eller organisasjonsnummer."));
             }
             feil.addAll(
-                    periodeValidator.validerTillattOverlapp(arbeidstaker.perioder, "arbeidsgivere.arbeidstaker[" + i + "].perioder")
+                    periodeValidator.validerTillattOverlapp(arbeidstaker.perioder, "arbeid.arbeidstaker[" + i + "].perioder")
             );
             for (Map.Entry<Periode, Arbeidstaker.ArbeidstakerInfo> perioder : arbeidstaker.perioder.entrySet()) {
                 Double skalJobbeProsent = perioder.getValue().skalJobbeProsent;
                 if (skalJobbeProsent == null || skalJobbeProsent < 0 || skalJobbeProsent > 100) {
-                    feil.add(new Feil("arbeidsgivere.arbeidstaker[" + i + "].perioder[" + perioder.getKey().iso8601 + "].skalJobbeProsent", "ugylidigProsent", "Skal jobbe prosent må være mellom 0 og 100"));
+                    feil.add(new Feil("arbeid.arbeidstaker[" + i + "].perioder[" + perioder.getKey().iso8601 + "].skalJobbeProsent", "ugylidigProsent", "Skal jobbe prosent må være mellom 0 og 100"));
                 }
             }
             i++;
         }
 
         i = 0;
-        for (Frilanser frilanser : arbeidsgivere.frilanser) {
+        for (Frilanser frilanser : arbeid.frilanser) {
             feil.addAll(
-                    periodeValidator.validerTillattOverlapp(frilanser.perioder, "arbeidsgivere.frilanser[" + i++ + "].perioder")
+                    periodeValidator.validerTillattOverlapp(frilanser.perioder, "arbeid.frilanser[" + i++ + "].perioder")
             );
         }
         i = 0;
-        for (SelvstendigNæringsdrivende selvstendigNæringsdrivende : arbeidsgivere.selvstendigNæringsdrivende) {
+        for (SelvstendigNæringsdrivende selvstendigNæringsdrivende : arbeid.selvstendigNæringsdrivende) {
             feil.addAll(
-                    periodeValidator.validerTillattOverlapp(selvstendigNæringsdrivende.perioder, "arbeidsgivere.selvstendigNæringsdrivende[" + i++ + "].perioder")
+                    periodeValidator.validerTillattOverlapp(selvstendigNæringsdrivende.perioder, "arbeid.selvstendigNæringsdrivende[" + i++ + "].perioder")
             );
         }
     }

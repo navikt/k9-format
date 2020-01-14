@@ -9,13 +9,13 @@ import java.util.List;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 
-public class Arbeidsgivere {
+public class Arbeid {
     public final List<Arbeidstaker> arbeidstaker;
     public final List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende;
     public final List<Frilanser> frilanser;
 
     @JsonCreator
-    private Arbeidsgivere(
+    private Arbeid(
             @JsonProperty("arbeidstaker")
             List<Arbeidstaker> arbeidstaker,
             @JsonProperty("selvstendigNæringsdrivende")
@@ -72,8 +72,8 @@ public class Arbeidsgivere {
             return this;
         }
 
-        public Arbeidsgivere build() {
-            return new Arbeidsgivere(
+        public Arbeid build() {
+            return new Arbeid(
                     arbeidstaker,
                     selvstendigNæringsdrivende,
                     frilanser
