@@ -73,9 +73,9 @@ public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerB
         }
     }
 
-    private void validerBerdskap(Map<Periode, Beredskap> beredskap, List<Feil> feil) {
+    private void validerBerdskap(Beredskap beredskap, List<Feil> feil) {
         if (beredskap == null) return;
-        feil.addAll(periodeValidator.validerTillattOverlapp(beredskap,"beredskap"));
+        feil.addAll(periodeValidator.validerTillattOverlapp(beredskap.perioder,"beredskap.perioder"));
     }
 
     private void validerNattebaak(Map<Periode, Nattevaak> nattevaak, List<Feil> feil) {

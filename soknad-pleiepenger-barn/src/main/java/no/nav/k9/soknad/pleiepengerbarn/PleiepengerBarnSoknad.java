@@ -9,9 +9,6 @@ import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.unmodifiableMap;
-
 public class PleiepengerBarnSoknad {
 
     public final SoknadId soknadId;
@@ -31,7 +28,7 @@ public class PleiepengerBarnSoknad {
 
     public final Utland utland;
 
-    public final Map<Periode, Beredskap> beredskap;
+    public final Beredskap beredskap;
 
     public final Map<Periode, Nattevaak> nattevaak;
 
@@ -58,7 +55,7 @@ public class PleiepengerBarnSoknad {
             @JsonProperty("utland")
             Utland utland,
             @JsonProperty("beredskap")
-            Map<Periode, Beredskap> beredskap,
+            Beredskap beredskap,
             @JsonProperty("nattevaak")
             Map<Periode, Nattevaak> nattevaak,
             @JsonProperty("tilsynsordning")
@@ -73,8 +70,8 @@ public class PleiepengerBarnSoknad {
         this.soker = soker;
         this.barn = barn;
         this.utland = utland;
-        this.beredskap = beredskap == null ? emptyMap() : unmodifiableMap(beredskap);
-        this.nattevaak = nattevaak == null ? emptyMap() : unmodifiableMap(nattevaak);
+        this.beredskap = beredskap;
+        this.nattevaak = nattevaak;
         this.tilsynsordning = tilsynsordning;
         this.arbeidsgivere = arbeidsgivere;
     }
@@ -94,13 +91,12 @@ public class PleiepengerBarnSoknad {
         private Soker soker;
         private Barn barn;
         private Utland utland;
-        private Map<Periode, Beredskap> beredskap;
+        private Beredskap beredskap;
         private Map<Periode, Nattevaak> nattevaak;
         private Tilsynsordning tilsynsordning;
         private Arbeidsgivere arbeidsgivere;
 
         private Builder() {
-            beredskap = new HashMap<>();
             nattevaak = new HashMap<>();
         }
 
@@ -139,13 +135,8 @@ public class PleiepengerBarnSoknad {
             return this;
         }
 
-        public Builder beredskap(Map<Periode, Beredskap> beredskap) {
-            this.beredskap.putAll(beredskap);
-            return this;
-        }
-
-        public Builder beredskap(Periode periode, Beredskap beredskap) {
-            this.beredskap.put(periode, beredskap);
+        public Builder beredskap(Beredskap beredskap) {
+            this.beredskap = beredskap;
             return this;
         }
 

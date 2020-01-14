@@ -27,12 +27,13 @@
     }
   },
   "beredskap": {
-    "2018-10-10/2018-12-29": {
-      "tilleggsinformasjon": "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
-    },
-    "2019-01-01/2019-01-30": {
-      "tilleggsinformasjon": "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
-
+    "perioder": {
+      "2018-10-10/2018-12-29": {
+        "tilleggsinformasjon": "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
+      },
+      "2019-01-01/2019-01-30": {
+        "tilleggsinformasjon": "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
+      }
     }
   },
   "nattevaak": {
