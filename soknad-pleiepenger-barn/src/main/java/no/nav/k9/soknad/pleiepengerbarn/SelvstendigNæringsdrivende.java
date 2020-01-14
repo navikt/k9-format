@@ -12,12 +12,12 @@ import static java.util.Collections.unmodifiableMap;
 
 public class SelvstendigNæringsdrivende {
 
-    public final Map<Periode, ArbeidsforholdPeriode> perioder;
+    public final Map<Periode, SelvstendigNæringsdrivendeInfo> perioder;
 
     @JsonCreator
     private SelvstendigNæringsdrivende(
             @JsonProperty("perioder")
-            Map<Periode, ArbeidsforholdPeriode> perioder) {
+            Map<Periode, SelvstendigNæringsdrivendeInfo> perioder) {
         this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
     }
 
@@ -26,19 +26,19 @@ public class SelvstendigNæringsdrivende {
     }
 
     public static final class Builder {
-        private Map<Periode, ArbeidsforholdPeriode> perioder;
+        private Map<Periode, SelvstendigNæringsdrivendeInfo> perioder;
 
         private Builder() {
             perioder = new HashMap<>();
         }
 
-        public Builder perioder(Map<Periode, ArbeidsforholdPeriode> perioder) {
+        public Builder perioder(Map<Periode, SelvstendigNæringsdrivendeInfo> perioder) {
             this.perioder.putAll(perioder);
             return this;
         }
 
-        public Builder periode(Periode periode, ArbeidsforholdPeriode arbeidsforholdPeriode) {
-            this.perioder.put(periode, arbeidsforholdPeriode);
+        public Builder periode(Periode periode, SelvstendigNæringsdrivendeInfo selvstendigNæringsdrivendeInfo) {
+            this.perioder.put(periode, selvstendigNæringsdrivendeInfo);
             return this;
         }
 
@@ -49,7 +49,7 @@ public class SelvstendigNæringsdrivende {
         }
     }
 
-    public static final class ArbeidsforholdPeriode {
+    public static final class SelvstendigNæringsdrivendeInfo {
 
         public static Builder builder() {
             return new Builder();
@@ -58,8 +58,8 @@ public class SelvstendigNæringsdrivende {
         public static final class Builder {
             private Builder() {}
 
-            public ArbeidsforholdPeriode build() {
-                return new ArbeidsforholdPeriode();
+            public SelvstendigNæringsdrivendeInfo build() {
+                return new SelvstendigNæringsdrivendeInfo();
             }
         }
 

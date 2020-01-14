@@ -15,7 +15,7 @@ import static java.util.Collections.unmodifiableMap;
 public class Arbeidstaker {
     public final NorskIdentitetsnummer norskIdentitetsnummer;
     public final Organisasjonsnummer organisasjonsnummer;
-    public final Map<Periode, ArbeidstakerPeriode> perioder;
+    public final Map<Periode, ArbeidstakerInfo> perioder;
 
     @JsonCreator
     private Arbeidstaker(
@@ -24,7 +24,7 @@ public class Arbeidstaker {
             @JsonProperty("organisasjonsnummer")
             Organisasjonsnummer organisasjonsnummer,
             @JsonProperty("perioder")
-            Map<Periode, ArbeidstakerPeriode> perioder) {
+            Map<Periode, ArbeidstakerInfo> perioder) {
         this.norskIdentitetsnummer = norskIdentitetsnummer;
         this.organisasjonsnummer = organisasjonsnummer;
         this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
@@ -37,7 +37,7 @@ public class Arbeidstaker {
     public static final class Builder {
         private NorskIdentitetsnummer norskIdentitetsnummer;
         private Organisasjonsnummer organisasjonsnummer;
-        private Map<Periode, ArbeidstakerPeriode> perioder;
+        private Map<Periode, ArbeidstakerInfo> perioder;
 
         private Builder() {
             perioder = new HashMap<>();
@@ -48,13 +48,13 @@ public class Arbeidstaker {
             return this;
         }
 
-        public Builder perioder(Map<Periode, ArbeidstakerPeriode> perioder) {
+        public Builder perioder(Map<Periode, ArbeidstakerInfo> perioder) {
             this.perioder.putAll(perioder);
             return this;
         }
 
-        public Builder periode(Periode periode, ArbeidstakerPeriode arbeidstakerPeriode) {
-            this.perioder.put(periode, arbeidstakerPeriode);
+        public Builder periode(Periode periode, ArbeidstakerInfo arbeidstakerInfo) {
+            this.perioder.put(periode, arbeidstakerInfo);
             return this;
         }
 
@@ -72,10 +72,10 @@ public class Arbeidstaker {
         }
     }
 
-    public static final class ArbeidstakerPeriode {
+    public static final class ArbeidstakerInfo {
         public final Double skalJobbeProsent;
 
-        private ArbeidstakerPeriode(
+        private ArbeidstakerInfo(
                 @JsonProperty("skalJobbeProsent")
                 Double skalJobbeProsent) {
             this.skalJobbeProsent = skalJobbeProsent;
@@ -95,8 +95,8 @@ public class Arbeidstaker {
                 return this;
             }
 
-            public ArbeidstakerPeriode build() {
-                return new ArbeidstakerPeriode(
+            public ArbeidstakerInfo build() {
+                return new ArbeidstakerInfo(
                         skalJobbeProsent
                 );
             }

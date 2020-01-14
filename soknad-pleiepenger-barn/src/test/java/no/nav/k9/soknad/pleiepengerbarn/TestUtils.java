@@ -46,7 +46,7 @@ final class TestUtils {
                         .norskIdentitetsnummer(NorskIdentitetsnummer.of(soknad.soker.norskIdentitetsnummer.verdi))
                         .build())
                 .barn(Barn.builder()
-                        .norskIdentitetsnummer(NorskIdentitetsnummer.of(soknad.barn.norskIdentitetsnummer.verdi))
+                        .norskIdentitetsnummer(NorskIdentitetsnummer.of((soknad.barn.norskIdentitetsnummer == null) ? null : soknad.barn.norskIdentitetsnummer.verdi))
                         .foedselsdato(soknad.barn.foedselsdato)
                         .build())
                 .utland(Utland.builder()
@@ -122,7 +122,7 @@ final class TestUtils {
             builder.norskIdentitetsnummer(NorskIdentitetsnummer.of(norskIdentitetsnummer));
             a.perioder.forEach((periode, info) -> builder.periode(
                     Periode.builder().fraOgMed(periode.fraOgMed).tilOgMed(periode.tilOgMed).build(),
-                    Arbeidstaker.ArbeidstakerPeriode.builder().skalJobbeProsent(info.skalJobbeProsent).build()
+                    Arbeidstaker.ArbeidstakerInfo.builder().skalJobbeProsent(info.skalJobbeProsent).build()
             ));
             fraBuilder.add(builder.build());
         });
@@ -136,7 +136,7 @@ final class TestUtils {
             SelvstendigNæringsdrivende.Builder builder = SelvstendigNæringsdrivende.builder();
             s.perioder.forEach((periode, info) -> builder.periode(
                     Periode.builder().fraOgMed(periode.fraOgMed).tilOgMed(periode.tilOgMed).build(),
-                    SelvstendigNæringsdrivende.ArbeidsforholdPeriode.builder().build()
+                    SelvstendigNæringsdrivende.SelvstendigNæringsdrivendeInfo.builder().build()
             ));
             fraBuilder.add(builder.build());
         });
@@ -150,7 +150,7 @@ final class TestUtils {
             Frilanser.Builder builder = Frilanser.builder();
             f.perioder.forEach((periode, info) -> builder.periode(
                     Periode.builder().fraOgMed(periode.fraOgMed).tilOgMed(periode.tilOgMed).build(),
-                    Frilanser.FrilanserPeriode.builder().build()
+                    Frilanser.FrilanserInfo.builder().build()
             ));
             fraBuilder.add(builder.build());
         });

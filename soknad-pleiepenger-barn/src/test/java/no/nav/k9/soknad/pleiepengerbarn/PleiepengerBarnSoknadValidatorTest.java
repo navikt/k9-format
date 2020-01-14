@@ -92,7 +92,7 @@ public class PleiepengerBarnSoknadValidatorTest {
                         .organisasjonsnummer(Organisasjonsnummer.of("88888888"))
                         .periode(
                             Periode.builder().fraOgMed(LocalDate.now()).tilOgMed(LocalDate.now().plusDays(3)).build(),
-                            Arbeidstaker.ArbeidstakerPeriode.builder().skalJobbeProsent(120.00).build()
+                            Arbeidstaker.ArbeidstakerInfo.builder().skalJobbeProsent(120.00).build()
                         ).build()
                 ).build();
 
@@ -107,7 +107,7 @@ public class PleiepengerBarnSoknadValidatorTest {
                         .norskIdentitetsnummer(NorskIdentitetsnummer.of("29099012345"))
                         .periode(
                                 Periode.builder().fraOgMed(LocalDate.now()).tilOgMed(LocalDate.now().plusDays(3)).build(),
-                                Arbeidstaker.ArbeidstakerPeriode.builder().skalJobbeProsent(100.00).build()
+                                Arbeidstaker.ArbeidstakerInfo.builder().skalJobbeProsent(100.00).build()
                         ).build()
                 ).build();
         builder.arbeidsgivere(arbeidsgivere);
@@ -121,7 +121,7 @@ public class PleiepengerBarnSoknadValidatorTest {
                         .norskIdentitetsnummer(NorskIdentitetsnummer.of("29099012345"))
                         .periode(
                                 Periode.builder().fraOgMed(LocalDate.now()).tilOgMed(LocalDate.now().plusDays(3)).build(),
-                                Arbeidstaker.ArbeidstakerPeriode.builder().skalJobbeProsent(-20.00).build()
+                                Arbeidstaker.ArbeidstakerInfo.builder().skalJobbeProsent(-20.00).build()
                         ).build()
                 ).build();
 
@@ -134,7 +134,7 @@ public class PleiepengerBarnSoknadValidatorTest {
                         .builder()
                         .periode(
                                 Periode.builder().fraOgMed(LocalDate.now()).tilOgMed(LocalDate.now().plusDays(3)).build(),
-                                Arbeidstaker.ArbeidstakerPeriode.builder().skalJobbeProsent(20.00).build()
+                                Arbeidstaker.ArbeidstakerInfo.builder().skalJobbeProsent(20.00).build()
                         ).build()
                 ).build();
 

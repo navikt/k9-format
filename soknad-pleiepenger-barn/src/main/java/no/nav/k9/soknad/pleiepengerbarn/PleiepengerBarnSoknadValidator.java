@@ -123,7 +123,7 @@ public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerB
             feil.addAll(
                     periodeValidator.validerTillattOverlapp(arbeidstaker.perioder, "arbeidsgivere.arbeidstaker[" + i + "].perioder")
             );
-            for (Map.Entry<Periode, Arbeidstaker.ArbeidstakerPeriode> perioder : arbeidstaker.perioder.entrySet()) {
+            for (Map.Entry<Periode, Arbeidstaker.ArbeidstakerInfo> perioder : arbeidstaker.perioder.entrySet()) {
                 Double skalJobbeProsent = perioder.getValue().skalJobbeProsent;
                 if (skalJobbeProsent == null || skalJobbeProsent < 0 || skalJobbeProsent > 100) {
                     feil.add(new Feil("arbeidsgivere.arbeidstaker[" + i + "].perioder[" + perioder.getKey().iso8601 + "].skalJobbeProsent", "ugylidigProsent", "Skal jobbe prosent må være mellom 0 og 100"));
