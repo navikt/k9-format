@@ -12,13 +12,13 @@ import static java.util.Collections.unmodifiableMap;
 
 public class SelvstendigNæringsdrivende {
 
-    public final Map<Periode, Arbeidsforhold> arbeidsforhold;
+    public final Map<Periode, ArbeidsforholdPeriode> perioder;
 
     @JsonCreator
     private SelvstendigNæringsdrivende(
-            @JsonProperty("arbeidsforhold")
-            Map<Periode, Arbeidsforhold> arbeidsforhold) {
-        this.arbeidsforhold = arbeidsforhold == null ? emptyMap() : unmodifiableMap(arbeidsforhold);
+            @JsonProperty("perioder")
+            Map<Periode, ArbeidsforholdPeriode> perioder) {
+        this.perioder = perioder == null ? emptyMap() : unmodifiableMap(perioder);
     }
 
     public static Builder builder() {
@@ -26,30 +26,30 @@ public class SelvstendigNæringsdrivende {
     }
 
     public static final class Builder {
-        private Map<Periode, Arbeidsforhold> arbeidsforhold;
+        private Map<Periode, ArbeidsforholdPeriode> perioder;
 
         private Builder() {
-            arbeidsforhold = new HashMap<>();
+            perioder = new HashMap<>();
         }
 
-        public Builder arbeidsforhold(Map<Periode, Arbeidsforhold> arbeidsforhold) {
-            this.arbeidsforhold.putAll(arbeidsforhold);
+        public Builder perioder(Map<Periode, ArbeidsforholdPeriode> perioder) {
+            this.perioder.putAll(perioder);
             return this;
         }
 
-        public Builder arbeidsforhold(Periode periode, Arbeidsforhold arbeidsforhold) {
-            this.arbeidsforhold.put(periode, arbeidsforhold);
+        public Builder periode(Periode periode, ArbeidsforholdPeriode arbeidsforholdPeriode) {
+            this.perioder.put(periode, arbeidsforholdPeriode);
             return this;
         }
 
         public SelvstendigNæringsdrivende build() {
             return new SelvstendigNæringsdrivende(
-                    arbeidsforhold
+                    perioder
             );
         }
     }
 
-    public static final class Arbeidsforhold {
+    public static final class ArbeidsforholdPeriode {
 
         public static Builder builder() {
             return new Builder();
@@ -58,8 +58,8 @@ public class SelvstendigNæringsdrivende {
         public static final class Builder {
             private Builder() {}
 
-            public Arbeidsforhold build() {
-                return new Arbeidsforhold();
+            public ArbeidsforholdPeriode build() {
+                return new ArbeidsforholdPeriode();
             }
         }
 

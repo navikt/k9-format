@@ -121,12 +121,12 @@ public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerB
                 feil.add(new Feil("arbeidsgivere.arbeidstaker[" + i + "]","idPåArbeidsgiverPåkrevd", "Må oppgi en av norskIdentitetsnummer eller organisasjonsnummer."));
             }
             feil.addAll(
-                    periodeValidator.validerTillattOverlapp(arbeidstaker.arbeidsforhold, "arbeidsgivere.arbeidstaker[" + i + "].arbeidsforhold")
+                    periodeValidator.validerTillattOverlapp(arbeidstaker.perioder, "arbeidsgivere.arbeidstaker[" + i + "].perioder")
             );
-            for (Map.Entry<Periode, Arbeidstaker.Arbeidsforhold> arbeidsforhold : arbeidstaker.arbeidsforhold.entrySet()) {
-                Double skalJobbeProsent = arbeidsforhold.getValue().skalJobbeProsent;
+            for (Map.Entry<Periode, Arbeidstaker.ArbeidstakerPeriode> perioder : arbeidstaker.perioder.entrySet()) {
+                Double skalJobbeProsent = perioder.getValue().skalJobbeProsent;
                 if (skalJobbeProsent == null || skalJobbeProsent < 0 || skalJobbeProsent > 100) {
-                    feil.add(new Feil("arbeidsgivere.arbeidstaker[" + i + "].skalJobbeProsent", "ugylidigProsent", "Skal jobbe prosent må være mellom 0 og 100"));
+                    feil.add(new Feil("arbeidsgivere.arbeidstaker[" + i + "].perioder[" + perioder.getKey().iso8601 + "].skalJobbeProsent", "ugylidigProsent", "Skal jobbe prosent må være mellom 0 og 100"));
                 }
             }
             i++;
@@ -135,13 +135,13 @@ public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerB
         i = 0;
         for (Frilanser frilanser : arbeidsgivere.frilanser) {
             feil.addAll(
-                    periodeValidator.validerTillattOverlapp(frilanser.arbeidsforhold, "arbeidsgivere.frilanser[" + i++ + "].arbeidsforhold")
+                    periodeValidator.validerTillattOverlapp(frilanser.perioder, "arbeidsgivere.frilanser[" + i++ + "].perioder")
             );
         }
         i = 0;
         for (SelvstendigNæringsdrivende selvstendigNæringsdrivende : arbeidsgivere.selvstendigNæringsdrivende) {
             feil.addAll(
-                    periodeValidator.validerTillattOverlapp(selvstendigNæringsdrivende.arbeidsforhold, "arbeidsgivere.selvstendigNæringsdrivende[" + i++ + "].arbeidsforhold")
+                    periodeValidator.validerTillattOverlapp(selvstendigNæringsdrivende.perioder, "arbeidsgivere.selvstendigNæringsdrivende[" + i++ + "].perioder")
             );
         }
     }

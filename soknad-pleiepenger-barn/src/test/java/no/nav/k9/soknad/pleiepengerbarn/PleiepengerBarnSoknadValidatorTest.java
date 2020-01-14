@@ -90,9 +90,9 @@ public class PleiepengerBarnSoknadValidatorTest {
                 .arbeidstaker(Arbeidstaker
                         .builder()
                         .organisasjonsnummer(Organisasjonsnummer.of("88888888"))
-                        .arbeidsforhold(
+                        .periode(
                             Periode.builder().fraOgMed(LocalDate.now()).tilOgMed(LocalDate.now().plusDays(3)).build(),
-                            Arbeidstaker.Arbeidsforhold.builder().skalJobbeProsent(120.00).build()
+                            Arbeidstaker.ArbeidstakerPeriode.builder().skalJobbeProsent(120.00).build()
                         ).build()
                 ).build();
 
@@ -105,9 +105,9 @@ public class PleiepengerBarnSoknadValidatorTest {
                         .builder()
                         .organisasjonsnummer(Organisasjonsnummer.of("88888888"))
                         .norskIdentitetsnummer(NorskIdentitetsnummer.of("29099012345"))
-                        .arbeidsforhold(
+                        .periode(
                                 Periode.builder().fraOgMed(LocalDate.now()).tilOgMed(LocalDate.now().plusDays(3)).build(),
-                                Arbeidstaker.Arbeidsforhold.builder().skalJobbeProsent(100.00).build()
+                                Arbeidstaker.ArbeidstakerPeriode.builder().skalJobbeProsent(100.00).build()
                         ).build()
                 ).build();
         builder.arbeidsgivere(arbeidsgivere);
@@ -119,9 +119,9 @@ public class PleiepengerBarnSoknadValidatorTest {
                         .builder()
                         .organisasjonsnummer(Organisasjonsnummer.of("88888888"))
                         .norskIdentitetsnummer(NorskIdentitetsnummer.of("29099012345"))
-                        .arbeidsforhold(
+                        .periode(
                                 Periode.builder().fraOgMed(LocalDate.now()).tilOgMed(LocalDate.now().plusDays(3)).build(),
-                                Arbeidstaker.Arbeidsforhold.builder().skalJobbeProsent(-20.00).build()
+                                Arbeidstaker.ArbeidstakerPeriode.builder().skalJobbeProsent(-20.00).build()
                         ).build()
                 ).build();
 
@@ -132,9 +132,9 @@ public class PleiepengerBarnSoknadValidatorTest {
                 .builder()
                 .arbeidstaker(Arbeidstaker
                         .builder()
-                        .arbeidsforhold(
+                        .periode(
                                 Periode.builder().fraOgMed(LocalDate.now()).tilOgMed(LocalDate.now().plusDays(3)).build(),
-                                Arbeidstaker.Arbeidsforhold.builder().skalJobbeProsent(20.00).build()
+                                Arbeidstaker.ArbeidstakerPeriode.builder().skalJobbeProsent(20.00).build()
                         ).build()
                 ).build();
 

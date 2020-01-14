@@ -15,7 +15,7 @@ import static java.util.Collections.unmodifiableMap;
 public class Arbeidstaker {
     public final NorskIdentitetsnummer norskIdentitetsnummer;
     public final Organisasjonsnummer organisasjonsnummer;
-    public final Map<Periode, Arbeidsforhold> arbeidsforhold;
+    public final Map<Periode, ArbeidstakerPeriode> perioder;
 
     @JsonCreator
     private Arbeidstaker(
@@ -23,11 +23,11 @@ public class Arbeidstaker {
             NorskIdentitetsnummer norskIdentitetsnummer,
             @JsonProperty("organisasjonsnummer")
             Organisasjonsnummer organisasjonsnummer,
-            @JsonProperty("arbeidsforhold")
-            Map<Periode, Arbeidsforhold> arbeidsforhold) {
+            @JsonProperty("perioder")
+            Map<Periode, ArbeidstakerPeriode> perioder) {
         this.norskIdentitetsnummer = norskIdentitetsnummer;
         this.organisasjonsnummer = organisasjonsnummer;
-        this.arbeidsforhold = arbeidsforhold == null ? emptyMap() : unmodifiableMap(arbeidsforhold);
+        this.perioder = perioder == null ? emptyMap() : unmodifiableMap(perioder);
     }
 
     public static Builder builder() {
@@ -37,10 +37,10 @@ public class Arbeidstaker {
     public static final class Builder {
         private NorskIdentitetsnummer norskIdentitetsnummer;
         private Organisasjonsnummer organisasjonsnummer;
-        private Map<Periode, Arbeidsforhold> arbeidsforhold;
+        private Map<Periode, ArbeidstakerPeriode> perioder;
 
         private Builder() {
-            arbeidsforhold = new HashMap<>();
+            perioder = new HashMap<>();
         }
 
         public Builder organisasjonsnummer(Organisasjonsnummer organisasjonsnummer) {
@@ -48,13 +48,13 @@ public class Arbeidstaker {
             return this;
         }
 
-        public Builder arbeidsforhold(Map<Periode, Arbeidsforhold> arbeidsforhold) {
-            this.arbeidsforhold.putAll(arbeidsforhold);
+        public Builder perioder(Map<Periode, ArbeidstakerPeriode> perioder) {
+            this.perioder.putAll(perioder);
             return this;
         }
 
-        public Builder arbeidsforhold(Periode periode, Arbeidsforhold arbeidsforhold) {
-            this.arbeidsforhold.put(periode, arbeidsforhold);
+        public Builder periode(Periode periode, ArbeidstakerPeriode arbeidstakerPeriode) {
+            this.perioder.put(periode, arbeidstakerPeriode);
             return this;
         }
 
@@ -67,15 +67,15 @@ public class Arbeidstaker {
             return new Arbeidstaker(
                     norskIdentitetsnummer,
                     organisasjonsnummer,
-                    arbeidsforhold
+                    perioder
             );
         }
     }
 
-    public static final class Arbeidsforhold {
+    public static final class ArbeidstakerPeriode {
         public final Double skalJobbeProsent;
 
-        private Arbeidsforhold(
+        private ArbeidstakerPeriode(
                 @JsonProperty("skalJobbeProsent")
                 Double skalJobbeProsent) {
             this.skalJobbeProsent = skalJobbeProsent;
@@ -95,8 +95,8 @@ public class Arbeidstaker {
                 return this;
             }
 
-            public Arbeidsforhold build() {
-                return new Arbeidsforhold(
+            public ArbeidstakerPeriode build() {
+                return new ArbeidstakerPeriode(
                         skalJobbeProsent
                 );
             }
