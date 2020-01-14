@@ -84,15 +84,18 @@ public class PeriodeValidator {
     private static boolean overlapper(Periode periode1, Periode periode2) {
         // Ugyldige perioder
         if (periode1 == null || periode2 == null || periode1.fraOgMed == null || periode2.fraOgMed == null) {
-            return false;
+            throw new IllegalStateException("Ugyldige perioder");
         }
 
         // Hele dager; Kan ikke føre opp fler perioder samme dag
-        if ((periode2.fraOgMed.equals(periode1.tilOgMed)) || (periode1.fraOgMed.equals(periode2.fraOgMed))) return true;
+        if ((periode2.fraOgMed.equals(periode1.tilOgMed)) || (periode1.fraOgMed.equals(periode2.fraOgMed))) {
+            return true;
+        }
 
-        // Om ingen av periodene har en tilOgMed kan de ikke overlappe
-        if (periode1.tilOgMed == null && periode2.tilOgMed == null) return false;
-
+        // Om ingen av periodene har en tilOgMed (Flere åpne perioder) vil de alltid overlappe
+        if (periode1.tilOgMed == null && periode2.tilOgMed == null) {
+            return true;
+        }
 
         return (periode1.tilOgMed == null || !periode1.tilOgMed.isBefore(periode2.fraOgMed)) && (periode2.tilOgMed == null || !periode1.fraOgMed.isAfter(periode2.tilOgMed));
     }

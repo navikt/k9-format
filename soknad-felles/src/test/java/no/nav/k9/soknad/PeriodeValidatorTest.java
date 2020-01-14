@@ -67,7 +67,7 @@ public class PeriodeValidatorTest {
                 Periode.builder().fraOgMed(LocalDate.now().plusDays(5)).build(), true
         );
 
-        assertThat(validator.validerIkkeTillattOverlapp(toÅpnePerioder, felt), is(Collections.emptyList()));
+        assertThat(validator.validerIkkeTillattOverlapp(toÅpnePerioder, felt), is(not(Collections.emptyList())));
     }
 
     @Test
