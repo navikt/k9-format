@@ -8,7 +8,7 @@ import java.util.Objects;
 public class Landkode {
 
     @JsonValue
-    private final String landkode;
+    public final String landkode;
 
     private Landkode(String landkode) {
         if (landkode == null) {
@@ -18,12 +18,8 @@ public class Landkode {
     }
 
     @JsonCreator
-    public static Landkode from(String landkode) {
+    public static Landkode of(String landkode) {
         return new Landkode(landkode);
-    }
-
-    public String getKode() {
-        return landkode;
     }
 
     @Override

@@ -10,12 +10,15 @@ public class NorskIdentitetsnummer {
     @JsonValue
     public final String verdi;
 
-    @JsonCreator
     private NorskIdentitetsnummer(String verdi) {
         this.verdi = verdi;
     }
 
+    @JsonCreator
     public static NorskIdentitetsnummer of(String verdi) {
+        if (verdi == null || verdi.isBlank()) {
+            return null;
+        }
         return new NorskIdentitetsnummer(verdi);
     }
 

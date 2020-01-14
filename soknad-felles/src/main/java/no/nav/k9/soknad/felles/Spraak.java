@@ -11,8 +11,20 @@ public enum Spraak {
     @JsonValue
     public final String dto;
 
-    @JsonCreator
     Spraak(String dto) {
         this.dto = dto;
+    }
+
+    @JsonCreator
+    public static Spraak of(String value) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+        for (Spraak språk : values()) {
+            if (språk.dto.equals(value)) {
+                return språk;
+            }
+        }
+        throw new IllegalStateException("Ikke støttet språk '" + value + "'");
     }
 }

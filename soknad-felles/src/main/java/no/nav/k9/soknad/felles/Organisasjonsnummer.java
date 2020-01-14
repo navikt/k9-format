@@ -7,12 +7,15 @@ public class Organisasjonsnummer {
     @JsonValue
     public final String verdi;
 
-    @JsonCreator
     private Organisasjonsnummer(String verdi) {
         this.verdi = verdi;
     }
 
+    @JsonCreator
     public static Organisasjonsnummer of(String verdi) {
+        if (verdi == null || verdi.isBlank()) {
+            return null;
+        }
         return new Organisasjonsnummer(verdi);
     }
 

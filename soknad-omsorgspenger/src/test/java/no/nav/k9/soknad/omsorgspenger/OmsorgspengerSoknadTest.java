@@ -1,6 +1,10 @@
 package no.nav.k9.soknad.omsorgspenger;
 
 import no.nav.k9.soknad.JsonUtils;
+import no.nav.k9.soknad.felles.Barn;
+import no.nav.k9.soknad.felles.NorskIdentitetsnummer;
+import no.nav.k9.soknad.felles.Soker;
+import no.nav.k9.soknad.felles.SoknadId;
 import org.json.JSONException;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -14,10 +18,15 @@ public class OmsorgspengerSoknadTest {
         OmsorgspengerSoknad fraJson = JsonUtils.fromString(json, OmsorgspengerSoknad.class);
         OmsorgspengerSoknad fraBuilder = OmsorgspengerSoknad
                 .builder()
-                .barn(fraJson.barn)
-                .soker(fraJson.soker)
+                .barn(Barn.builder()
+                        .foedselsdato(fraJson.barn.foedselsdato)
+                        .norskIdentitetsnummer(NorskIdentitetsnummer.of(fraJson.barn.norskIdentitetsnummer.verdi))
+                        .build())
+                .soker(Soker.builder()
+                        .norskIdentitetsnummer(NorskIdentitetsnummer.of(fraJson.soker.norskIdentitetsnummer.verdi))
+                        .build())
                 .mottattDato(fraJson.mottattDato)
-                .soknadId(fraJson.soknadId)
+                .soknadId(SoknadId.of(fraJson.soknadId.id))
                 .build();
         JSONAssert.assertEquals(json, JsonUtils.toString(fraBuilder), true);
     }

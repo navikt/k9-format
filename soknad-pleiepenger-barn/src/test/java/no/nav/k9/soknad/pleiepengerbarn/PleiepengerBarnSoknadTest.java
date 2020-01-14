@@ -12,7 +12,6 @@ public class PleiepengerBarnSoknadTest {
         String json = TestUtils.jsonForKomplettSoknad();
         PleiepengerBarnSoknad fraBuilder = TestUtils.komplettBuilder().build();
         JSONAssert.assertEquals(json, JsonUtils.toString(fraBuilder), true);
-
     }
 
     @Test
