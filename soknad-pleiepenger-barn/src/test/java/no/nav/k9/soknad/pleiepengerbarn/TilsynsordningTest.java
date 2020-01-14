@@ -1,24 +1,28 @@
 package no.nav.k9.soknad.pleiepengerbarn;
 
 import no.nav.k9.soknad.felles.Periode;
-import org.junit.Assert;
 import org.junit.Test;
 
+import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
 
 public class TilsynsordningTest {
     @Test
     public void fraTilsynsordningUke() {
         LocalDate fraOgMed = LocalDate.parse("2020-01-01");
         LocalDate tilOgMed = LocalDate.parse("2020-04-01");
-        int mandager = 13;
-        int tirsdager = 13;
-        int onsdager = 14;
-        int torsdag = 13;
-        int fredag = 13;
-        int antallDager = mandager + tirsdager + onsdager + torsdag + fredag;
+        Duration mandagLengde = Duration.ofHours(7);
+        Duration tirsdagLengde = Duration.ofHours(6);
+        Duration onsdagLengde = Duration.ofHours(5);
+        Duration torsdagLengde = Duration.ofHours(4);
+        Duration fredagLengde = Duration.ofHours(3);
+        int antallDager = 66;
 
 
         Periode periode = Periode
@@ -30,11 +34,11 @@ public class TilsynsordningTest {
         TilsynsordningUke uke = TilsynsordningUke
                 .builder()
                 .periode(periode)
-                .mandag(Duration.ofHours(7))
-                .tirsdag(Duration.ofHours(6))
-                .onsdag(Duration.ofHours(5))
-                .torsdag(Duration.ofHours(4))
-                .fredag(Duration.ofHours(3))
+                .mandag(mandagLengde)
+                .tirsdag(tirsdagLengde)
+                .onsdag(onsdagLengde)
+                .torsdag(torsdagLengde)
+                .fredag(fredagLengde)
                 .build();
 
         Tilsynsordning tilsynsordning = Tilsynsordning
@@ -43,7 +47,13 @@ public class TilsynsordningTest {
                 .uke(uke)
                 .build();
 
-        Assert.assertEquals(antallDager, tilsynsordning.opphold.size());
+        assertEquals(antallDager, tilsynsordning.opphold.size());
+
+        hentForUkeDag(tilsynsordning.opphold, DayOfWeek.MONDAY).forEach(opphold -> assertEquals(mandagLengde, opphold.lengde));
+        hentForUkeDag(tilsynsordning.opphold, DayOfWeek.TUESDAY).forEach(opphold -> assertEquals(tirsdagLengde, opphold.lengde));
+        hentForUkeDag(tilsynsordning.opphold, DayOfWeek.WEDNESDAY).forEach(opphold -> assertEquals(onsdagLengde, opphold.lengde));
+        hentForUkeDag(tilsynsordning.opphold, DayOfWeek.THURSDAY).forEach(opphold -> assertEquals(torsdagLengde, opphold.lengde));
+        hentForUkeDag(tilsynsordning.opphold, DayOfWeek.FRIDAY).forEach(opphold -> assertEquals(fredagLengde, opphold.lengde));
     }
 
     @Test
@@ -68,7 +78,7 @@ public class TilsynsordningTest {
                 .uke(uke)
                 .build();
 
-        Assert.assertEquals(1, tilsynsordning.opphold.size());
+        assertEquals(1, tilsynsordning.opphold.size());
     }
 
     @Test
@@ -96,6 +106,19 @@ public class TilsynsordningTest {
                 .uke(uke)
                 .build();
 
-        Assert.assertEquals(0, tilsynsordning.opphold.size());
+        assertEquals(0, tilsynsordning.opphold.size());
+    }
+
+    private List<TilsynsordningOpphold> hentForUkeDag(
+            Map<Periode, TilsynsordningOpphold> opphold,
+            DayOfWeek dag) {
+        List<TilsynsordningOpphold> tilsynsordningOpphold = new ArrayList<>();
+        opphold
+            .entrySet()
+            .stream()
+            .filter(entry -> entry.getKey().fraOgMed != null)
+            .filter(entry -> dag == entry.getKey().fraOgMed.getDayOfWeek())
+            .forEach(entry -> tilsynsordningOpphold.add(entry.getValue()));
+        return tilsynsordningOpphold;
     }
 }
