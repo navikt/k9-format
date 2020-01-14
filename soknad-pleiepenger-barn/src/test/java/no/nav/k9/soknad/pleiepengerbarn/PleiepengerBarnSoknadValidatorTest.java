@@ -83,6 +83,17 @@ public class PleiepengerBarnSoknadValidatorTest {
     }
 
     @Test
+    public void barnMedBådeFødselsdatoOgNorskIdentitetsnummer() {
+        final PleiepengerBarnSoknad.Builder builder = TestUtils.komplettBuilder();
+        final Barn barn = Barn.builder()
+                .foedselsdato(LocalDate.now())
+                .norskIdentitetsnummer(NorskIdentitetsnummer.of("29099012345"))
+                .build();
+        builder.barn(barn);
+        verifyHarFeil(builder);
+    }
+
+    @Test
     public void soknadMedUgyldigInfoOmArbeidsgiver() {
         final PleiepengerBarnSoknad.Builder builder = TestUtils.komplettBuilder();
         Arbeidsgivere arbeidsgivere = Arbeidsgivere

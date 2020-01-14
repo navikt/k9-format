@@ -7,6 +7,6 @@
   },
   "barn": {
     "foedselsdato": "2015-01-01",
-    "norskIdentitetsnummer" : "12345678902"
+    "norskIdentitetsnummer" : null
   }
 }

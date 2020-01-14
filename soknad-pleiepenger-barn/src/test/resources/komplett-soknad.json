@@ -8,7 +8,7 @@
   },
   "periode" : "2018-12-30/2019-10-20",
   "barn" : {
-    "foedselsdato": "2010-01-01",
+    "foedselsdato": null,
     "norskIdentitetsnummer" : "12345678902"
   },
   "utland" : {

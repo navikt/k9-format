@@ -55,6 +55,8 @@ public class OmsorgspengerSoknadValidator extends SoknadValidator<OmsorgspengerS
             feil.add(new Feil("barn", "paakrevd", "Barn må settes i søknaden."));
         } else if (barn.norskIdentitetsnummer == null && barn.foedselsdato == null) {
             feil.add(new Feil("barn", "norskIdentitetsnummerEllerFoedselsdatoPaakrevd", "Må sette enten Personnummer/D-nummer på barn, eller fødselsdato."));
+        } else if (barn.norskIdentitetsnummer != null && barn.foedselsdato != null) {
+            feil.add(new Feil("barn", "ikkeEntydigIdPåBarnet", "Må sette enten Personnummer/D-nummer på barn, eller fødselsdato."));
         }
     }
 }
