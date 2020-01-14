@@ -18,9 +18,4 @@ public class Organisasjonsnummer {
         }
         return new Organisasjonsnummer(verdi);
     }
-
-    public static boolean erNull(Organisasjonsnummer organisasjonsnummer) {
-        return organisasjonsnummer == null || organisasjonsnummer.verdi == null || organisasjonsnummer.verdi.isBlank();
-    }
-
 }

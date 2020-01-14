@@ -11,22 +11,20 @@ public class Versjon {
     @JsonValue
     public final String verdi;
 
-    @JsonCreator
     private Versjon(String verdi) {
         this.verdi = verdi;
     }
 
+    @JsonCreator
     public static Versjon of(String verdi) {
+        if (verdi == null || verdi.isBlank()) {
+            return null;
+        }
         return new Versjon(verdi);
-    }
-
-    public static boolean erNull(Versjon versjon) {
-        return versjon == null || versjon.verdi == null || versjon.verdi.isBlank();
     }
 
     @JsonIgnore
     public boolean erGyldig() {
         return verdi.matches(SEMVER_REGEX);
     }
-
 }

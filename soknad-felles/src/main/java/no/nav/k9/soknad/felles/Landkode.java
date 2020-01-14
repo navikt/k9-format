@@ -11,14 +11,14 @@ public class Landkode {
     public final String landkode;
 
     private Landkode(String landkode) {
-        if (landkode == null) {
-            throw new IllegalArgumentException("landkode == null");
-        }
         this.landkode = landkode;
     }
 
     @JsonCreator
     public static Landkode of(String landkode) {
+        if (landkode == null || landkode.isBlank()) {
+            return null;
+        }
         return new Landkode(landkode);
     }
 

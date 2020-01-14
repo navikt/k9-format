@@ -19,8 +19,4 @@ public class SoknadId {
         }
         return new SoknadId(id);
     }
-
-    public static boolean erNull(SoknadId soknadId) {
-        return soknadId == null || soknadId.id == null || soknadId.id.isBlank();
-    }
 }

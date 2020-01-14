@@ -9,7 +9,7 @@ public class Soker {
 
     @JsonCreator
     private Soker(
-            @JsonProperty("norsk_identitetsnummer")
+            @JsonProperty("norskIdentitetsnummer")
             NorskIdentitetsnummer norskIdentitetsnummer) {
         this.norskIdentitetsnummer = norskIdentitetsnummer;
     }

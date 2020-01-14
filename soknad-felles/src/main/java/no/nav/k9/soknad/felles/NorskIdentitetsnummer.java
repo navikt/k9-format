@@ -22,10 +22,6 @@ public class NorskIdentitetsnummer {
         return new NorskIdentitetsnummer(verdi);
     }
 
-    public static boolean erNull(NorskIdentitetsnummer norskIdentitetsnummer) {
-        return norskIdentitetsnummer == null || norskIdentitetsnummer.verdi == null || norskIdentitetsnummer.verdi.isBlank();
-    }
-
     @Override
     public String toString() {
         return verdi;
