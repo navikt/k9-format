@@ -6,8 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.soknad.felles.*;
 
 import java.time.ZonedDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 public class PleiepengerBarnSoknad {
 
@@ -30,7 +28,7 @@ public class PleiepengerBarnSoknad {
 
     public final Beredskap beredskap;
 
-    public final Map<Periode, Nattevaak> nattevaak;
+    public final Nattevaak nattevaak;
 
     public final Tilsynsordning tilsynsordning;
 
@@ -57,7 +55,7 @@ public class PleiepengerBarnSoknad {
             @JsonProperty("beredskap")
             Beredskap beredskap,
             @JsonProperty("nattevaak")
-            Map<Periode, Nattevaak> nattevaak,
+            Nattevaak nattevaak,
             @JsonProperty("tilsynsordning")
             Tilsynsordning tilsynsordning,
             @JsonProperty("arbeidsgivere")
@@ -92,13 +90,11 @@ public class PleiepengerBarnSoknad {
         private Barn barn;
         private Utland utland;
         private Beredskap beredskap;
-        private Map<Periode, Nattevaak> nattevaak;
+        private Nattevaak nattevaak;
         private Tilsynsordning tilsynsordning;
         private Arbeidsgivere arbeidsgivere;
 
-        private Builder() {
-            nattevaak = new HashMap<>();
-        }
+        private Builder() {}
 
         public Builder soknadId(SoknadId soknadId) {
             this.soknadId = soknadId;
@@ -140,13 +136,8 @@ public class PleiepengerBarnSoknad {
             return this;
         }
 
-        public Builder nattevaak(Map<Periode, Nattevaak> nattevaak) {
-            this.nattevaak.putAll(nattevaak);
-            return this;
-        }
-
-        public Builder nattevaak(Periode periode, Nattevaak nattevaak) {
-            this.nattevaak.put(periode, nattevaak);
+        public Builder nattevaak(Nattevaak nattevaak) {
+            this.nattevaak = nattevaak;
             return this;
         }
 

@@ -20,6 +20,10 @@ public class Beredskap {
         this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public static final class Builder {
         private Map<Periode, BeredskapInfo> perioder;
 
