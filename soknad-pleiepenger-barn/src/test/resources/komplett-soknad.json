@@ -60,9 +60,18 @@
   "arbeidsgivere": {
     "arbeidstaker": [{
       "organisasjonsnummer": "999999999",
+      "norskIdentitetsnummer": null,
       "arbeidsforhold" : {
         "2018-10-10/2018-12-29": {
           "skalJobbeProsent": 50.25
+        }
+      }
+    },{
+      "organisasjonsnummer": null,
+      "norskIdentitetsnummer": "29099012345",
+      "arbeidsforhold" : {
+        "2018-11-10/2018-12-29": {
+          "skalJobbeProsent": 20.00
         }
       }
     }],

@@ -80,7 +80,66 @@ public class PleiepengerBarnSoknadValidatorTest {
         builder.tilsynsordning(tilsynsordning);
 
         verifyHarFeil(builder);
+    }
 
+    @Test
+    public void soknadMedUgyldigInfoOmArbeidsgiver() {
+        final PleiepengerBarnSoknad.Builder builder = TestUtils.komplettBuilder();
+        Arbeidsgivere arbeidsgivere = Arbeidsgivere
+                .builder()
+                .arbeidstaker(Arbeidstaker
+                        .builder()
+                        .organisasjonsnummer(Organisasjonsnummer.of("88888888"))
+                        .arbeidsforhold(
+                            Periode.builder().fraOgMed(LocalDate.now()).tilOgMed(LocalDate.now().plusDays(3)).build(),
+                            Arbeidstaker.Arbeidsforhold.builder().skalJobbeProsent(120.00).build()
+                        ).build()
+                ).build();
+
+        builder.arbeidsgivere(arbeidsgivere);
+        verifyHarFeil(builder);
+
+        arbeidsgivere = Arbeidsgivere
+                .builder()
+                .arbeidstaker(Arbeidstaker
+                        .builder()
+                        .organisasjonsnummer(Organisasjonsnummer.of("88888888"))
+                        .norskIdentitetsnummer(NorskIdentitetsnummer.of("29099012345"))
+                        .arbeidsforhold(
+                                Periode.builder().fraOgMed(LocalDate.now()).tilOgMed(LocalDate.now().plusDays(3)).build(),
+                                Arbeidstaker.Arbeidsforhold.builder().skalJobbeProsent(100.00).build()
+                        ).build()
+                ).build();
+        builder.arbeidsgivere(arbeidsgivere);
+        verifyHarFeil(builder);
+
+        arbeidsgivere = Arbeidsgivere
+                .builder()
+                .arbeidstaker(Arbeidstaker
+                        .builder()
+                        .organisasjonsnummer(Organisasjonsnummer.of("88888888"))
+                        .norskIdentitetsnummer(NorskIdentitetsnummer.of("29099012345"))
+                        .arbeidsforhold(
+                                Periode.builder().fraOgMed(LocalDate.now()).tilOgMed(LocalDate.now().plusDays(3)).build(),
+                                Arbeidstaker.Arbeidsforhold.builder().skalJobbeProsent(-20.00).build()
+                        ).build()
+                ).build();
+
+        builder.arbeidsgivere(arbeidsgivere);
+        verifyHarFeil(builder);
+
+        arbeidsgivere = Arbeidsgivere
+                .builder()
+                .arbeidstaker(Arbeidstaker
+                        .builder()
+                        .arbeidsforhold(
+                                Periode.builder().fraOgMed(LocalDate.now()).tilOgMed(LocalDate.now().plusDays(3)).build(),
+                                Arbeidstaker.Arbeidsforhold.builder().skalJobbeProsent(20.00).build()
+                        ).build()
+                ).build();
+
+        builder.arbeidsgivere(arbeidsgivere);
+        verifyHarFeil(builder);
     }
 
     private List<Feil> verifyHarFeil(PleiepengerBarnSoknad.Builder builder) {

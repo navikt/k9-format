@@ -33,6 +33,7 @@ public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerB
         validerBerdskap(soknad.beredskap, feil);
         validerNattebaak(soknad.nattevaak, feil);
         validerTilsynsordning(soknad.tilsynsordning, feil);
+        validerArbeidsgivere(soknad.arbeidsgivere, feil);
 
         return feil;
     }
@@ -106,6 +107,46 @@ public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerB
             feil.add(new Feil("barn", "paakrevd", "Barn må settes i søknaden."));
         } else if (NorskIdentitetsnummer.erNull(barn.norskIdentitetsnummer) && barn.foedselsdato == null) {
             feil.add(new Feil("barn", "norskIdentitetsnummerEllerFoedselsdatoPaakrevd", "Må sette enten Personnummer/D-nummer på barn, eller fødselsdato."));
+        }
+    }
+
+    private void validerArbeidsgivere(Arbeidsgivere arbeidsgivere, List<Feil> feil) {
+        if (arbeidsgivere == null) return;
+        if (arbeidsgivere.arbeidstaker != null) {
+            int i = 0;
+            for (Arbeidstaker arbeidstaker : arbeidsgivere.arbeidstaker) {
+                if (arbeidstaker.norskIdentitetsnummer != null && arbeidstaker.organisasjonsnummer != null) {
+                    feil.add(new Feil("arbeidsgivere.arbeidstaker[" + i + "]","ikkeEntydigIdPåArbeidsgiver", "Må oppgi en av norskIdentitetsnummer eller organisasjonsnummer."));
+                } else if (NorskIdentitetsnummer.erNull(arbeidstaker.norskIdentitetsnummer) && Organisasjonsnummer.erNull(arbeidstaker.organisasjonsnummer)) {
+                    feil.add(new Feil("arbeidsgivere.arbeidstaker[" + i + "]","idPåArbeidsgiverPåkrevd", "Må oppgi en av norskIdentitetsnummer eller organisasjonsnummer."));
+                }
+                feil.addAll(
+                        periodeValidator.validerTillattOverlapp(arbeidstaker.arbeidsforhold, "arbeidsgivere.arbeidstaker[" + i + "].arbeidsforhold")
+                );
+                for (Map.Entry<Periode, Arbeidstaker.Arbeidsforhold> arbeidsforhold : arbeidstaker.arbeidsforhold.entrySet()) {
+                    Double skalJobbeProsent = arbeidsforhold.getValue().skalJobbeProsent;
+                    if (skalJobbeProsent == null || skalJobbeProsent < 0 || skalJobbeProsent > 100) {
+                        feil.add(new Feil("arbeidsgivere.arbeidstaker[" + i + "].skalJobbeProsent", "ugylidigProsent", "Skal jobbe prosent må være mellom 0 og 100"));
+                    }
+                }
+                i++;
+            }
+        }
+        if (arbeidsgivere.frilanser != null) {
+            int i = 0;
+            for (Frilanser frilanser : arbeidsgivere.frilanser) {
+                feil.addAll(
+                        periodeValidator.validerTillattOverlapp(frilanser.arbeidsforhold, "arbeidsgivere.frilanser[" + i++ + "].arbeidsforhold")
+                );
+            }
+        }
+        if (arbeidsgivere.selvstendigNæringsdrivende != null) {
+            int i = 0;
+            for (SelvstendigNæringsdrivende selvstendigNæringsdrivende : arbeidsgivere.selvstendigNæringsdrivende) {
+                feil.addAll(
+                        periodeValidator.validerTillattOverlapp(selvstendigNæringsdrivende.arbeidsforhold, "arbeidsgivere.selvstendigNæringsdrivende[" + i++ + "].arbeidsforhold")
+                );
+            }
         }
     }
 
