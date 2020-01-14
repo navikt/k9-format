@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.soknad.felles.Periode;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.unmodifiableMap;
 
 public class Frilanser {
 
@@ -16,7 +18,7 @@ public class Frilanser {
     private Frilanser(
             @JsonProperty("arbeidsforhold")
             Map<Periode, Arbeidsforhold> arbeidsforhold) {
-        this.arbeidsforhold = arbeidsforhold;
+        this.arbeidsforhold = arbeidsforhold == null ? emptyMap() : unmodifiableMap(arbeidsforhold);
     }
 
     public static Builder builder() {
@@ -42,7 +44,7 @@ public class Frilanser {
 
         public Frilanser build() {
             return new Frilanser(
-                    Collections.unmodifiableMap(arbeidsforhold)
+                    arbeidsforhold
             );
         }
     }

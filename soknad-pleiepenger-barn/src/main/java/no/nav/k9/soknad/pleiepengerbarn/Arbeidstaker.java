@@ -6,7 +6,6 @@ import no.nav.k9.soknad.felles.NorskIdentitetsnummer;
 import no.nav.k9.soknad.felles.Organisasjonsnummer;
 import no.nav.k9.soknad.felles.Periode;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,7 +67,7 @@ public class Arbeidstaker {
             return new Arbeidstaker(
                     norskIdentitetsnummer,
                     organisasjonsnummer,
-                    Collections.unmodifiableMap(arbeidsforhold)
+                    arbeidsforhold
             );
         }
     }

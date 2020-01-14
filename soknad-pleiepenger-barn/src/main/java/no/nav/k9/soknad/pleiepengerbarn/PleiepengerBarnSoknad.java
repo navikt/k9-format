@@ -6,7 +6,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.soknad.felles.*;
 
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.unmodifiableMap;
 
 public class PleiepengerBarnSoknad {
 
@@ -69,8 +73,8 @@ public class PleiepengerBarnSoknad {
         this.soker = soker;
         this.barn = barn;
         this.utland = utland;
-        this.beredskap = beredskap;
-        this.nattevaak = nattevaak;
+        this.beredskap = beredskap == null ? emptyMap() : unmodifiableMap(beredskap);
+        this.nattevaak = nattevaak == null ? emptyMap() : unmodifiableMap(nattevaak);
         this.tilsynsordning = tilsynsordning;
         this.arbeidsgivere = arbeidsgivere;
     }
@@ -175,8 +179,8 @@ public class PleiepengerBarnSoknad {
                     soker,
                     barn,
                     utland,
-                    Collections.unmodifiableMap(beredskap),
-                    Collections.unmodifiableMap(nattevaak),
+                    beredskap,
+                    nattevaak,
                     tilsynsordning,
                     arbeidsgivere
             );

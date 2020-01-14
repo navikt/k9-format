@@ -3,7 +3,11 @@ package no.nav.k9.soknad.felles;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.unmodifiableMap;
 
 public class Utland {
 
@@ -23,7 +27,7 @@ public class Utland {
             Map<Periode, UtlandOpphold> opphold) {
         this.harBoddIUtlandetSiste12Mnd = harBoddIUtlandetSiste12Mnd;
         this.skalBoIUtlandetNeste12Mnd = skalBoIUtlandetNeste12Mnd;
-        this.opphold = Collections.unmodifiableMap(opphold);
+        this.opphold = opphold == null ? emptyMap() : unmodifiableMap(opphold);
     }
 
     public static Builder builder() {
