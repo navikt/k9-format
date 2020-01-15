@@ -14,7 +14,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
-import static no.nav.k9.soknad.omsorgspenger.TestUtils.kompletFraJson;
+import static no.nav.k9.soknad.omsorgspenger.TestUtils.jsonForKomplettSoknad;
 
 public class OmsorgspengerSoknadValidatorTest {
     private static final OmsorgspengerSoknadValidator validator = new OmsorgspengerSoknadValidator();
@@ -52,7 +52,7 @@ public class OmsorgspengerSoknadValidatorTest {
 
     @Test
     public void komplettSoknadFraJson() {
-        OmsorgspengerSoknad soknad = JsonUtils.fromString(kompletFraJson(), OmsorgspengerSoknad.class);
+        OmsorgspengerSoknad soknad = JsonUtils.fromString(jsonForKomplettSoknad(), OmsorgspengerSoknad.class);
         verifyIngenFeil(soknad);
     }
 

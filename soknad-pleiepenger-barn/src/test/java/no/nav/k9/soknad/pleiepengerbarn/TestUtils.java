@@ -6,16 +6,15 @@ import no.nav.k9.soknad.felles.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 
 final class TestUtils {
 
     private TestUtils() {}
 
-    static String jsonFromFile(String filename) {
+    private static String jsonFromFile(String filename) {
         try {
             return Files.readString(Path.of("src/test/resources/" + filename));
         } catch (IOException e) {
@@ -33,127 +32,84 @@ final class TestUtils {
     }
 
     static PleiepengerBarnSoknad.Builder komplettBuilder() {
-        PleiepengerBarnSoknad soknad = komplettSoknad();
         return PleiepengerBarnSoknad.builder()
-                .soknadId(SoknadId.of(soknad.soknadId.id))
+                .soknadId(SoknadId.of("1"))
                 .periode(Periode.builder()
-                        .fraOgMed(soknad.periode.fraOgMed)
-                        .tilOgMed(soknad.periode.tilOgMed)
+                        .fraOgMed(LocalDate.parse("2018-12-30"))
+                        .tilOgMed(LocalDate.parse("2019-10-20"))
                         .build())
-                .mottattDato(soknad.mottattDato)
-                .spraak(Spraak.of(soknad.spraak.dto))
+                .mottattDato(ZonedDateTime.parse("2019-10-20T07:15:36.124Z"))
+                .spraak(Spraak.of("nb"))
                 .soker(Soker.builder()
-                        .norskIdentitetsnummer(NorskIdentitetsnummer.of(soknad.soker.norskIdentitetsnummer.verdi))
+                        .norskIdentitetsnummer(NorskIdentitetsnummer.of("12345678901"))
                         .build())
                 .barn(Barn.builder()
-                        .norskIdentitetsnummer(NorskIdentitetsnummer.of((soknad.barn.norskIdentitetsnummer == null) ? null : soknad.barn.norskIdentitetsnummer.verdi))
-                        .foedselsdato(soknad.barn.foedselsdato)
+                        .norskIdentitetsnummer(NorskIdentitetsnummer.of("12345678902"))
                         .build())
                 .utland(Utland.builder()
-                        .harBoddIUtlandetSiste12Mnd(soknad.utland.harBoddIUtlandetSiste12Mnd)
-                        .skalBoIUtlandetNeste12Mnd(soknad.utland.skalBoIUtlandetNeste12Mnd)
-                        .opphold(rekonstruerUtlandOpphold(soknad.utland.opphold))
+                        .harBoddIUtlandetSiste12Mnd(true)
+                        .skalBoIUtlandetNeste12Mnd(true)
+                        .opphold(
+                                Periode.builder().fraOgMed(LocalDate.parse("2018-12-30")).tilOgMed(LocalDate.parse("2019-10-10")).build(),
+                                UtlandOpphold.builder().land(Landkode.of("SWE")).build())
+                        .opphold(
+                                Periode.builder().fraOgMed(LocalDate.parse("2018-10-10")).tilOgMed(LocalDate.parse("2018-10-30")).build(),
+                                UtlandOpphold.builder().land(Landkode.of("NOR")).build())
+                        .opphold(
+                                Periode.builder().fraOgMed(LocalDate.parse("2021-10-10")).build(),
+                                UtlandOpphold.builder().land(Landkode.of("DEN")).build())
                         .build())
                 .beredskap(Beredskap.builder()
-                        .perioder(rekonstruerBeredskapPerioder(soknad.beredskap.perioder))
+                        .periode(
+                                Periode.builder().fraOgMed(LocalDate.parse("2018-10-10")).tilOgMed(LocalDate.parse("2018-12-29")).build(),
+                                Beredskap.BeredskapPeriodeInfo.builder().tilleggsinformasjon("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.").build())
+                        .periode(
+                                Periode.builder().fraOgMed(LocalDate.parse("2019-01-01")).tilOgMed(LocalDate.parse("2019-01-30")).build(),
+                                Beredskap.BeredskapPeriodeInfo.builder().tilleggsinformasjon("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.").build())
                         .build())
                 .nattevaak(Nattevaak.builder()
-                        .perioder(rekonstruerNattevaakPerioder(soknad.nattevaak.perioder))
+                        .periode(
+                                Periode.builder().fraOgMed(LocalDate.parse("2018-10-10")).tilOgMed(LocalDate.parse("2018-12-29")).build(),
+                                Nattevaak.NattevaakPeriodeInfo.builder().tilleggsinformasjon("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.").build())
+                        .periode(
+                                Periode.builder().fraOgMed(LocalDate.parse("2019-01-01")).tilOgMed(LocalDate.parse("2019-01-30")).build(),
+                                Nattevaak.NattevaakPeriodeInfo.builder().tilleggsinformasjon("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.").build())
                         .build())
                 .tilsynsordning(Tilsynsordning.builder()
-                        .iTilsynsordning(TilsynsordningSvar.of(soknad.tilsynsordning.iTilsynsordning.dto))
-                        .opphold(rekonstruerTilsynsordningOpphold(soknad.tilsynsordning.opphold))
+                        .iTilsynsordning(TilsynsordningSvar.of("ja"))
+                        .opphold(
+                                Periode.builder().fraOgMed(LocalDate.parse("2019-01-01")).tilOgMed(LocalDate.parse("2019-01-01")).build(),
+                                TilsynsordningOpphold.builder().lengde(Duration.parse("PT7H30M")).build())
+                        .opphold(
+                                Periode.builder().fraOgMed(LocalDate.parse("2020-01-02")).tilOgMed(LocalDate.parse("2020-01-02")).build(),
+                                TilsynsordningOpphold.builder().lengde(Duration.parse("PT7H25M")).build())
+                        .opphold(
+                                Periode.builder().fraOgMed(LocalDate.parse("2020-01-03")).tilOgMed(LocalDate.parse("2020-01-09")).build(),
+                                TilsynsordningOpphold.builder().lengde(Duration.parse("PT168H")).build())
                         .build())
                 .arbeid(Arbeid.builder()
-                        .arbeidstaker(rekonstruerArbeidstaker(soknad.arbeid.arbeidstaker))
-                        .selvstendigNæringsdrivende(rekonstruerSelvstendigNæringsdrivende(soknad.arbeid.selvstendigNæringsdrivende))
-                        .frilanser(rekonstruerFrilanser(soknad.arbeid.frilanser))
+                        .arbeidstaker(Arbeidstaker.builder()
+                                .organisasjonsnummer(Organisasjonsnummer.of("999999999"))
+                                .periode(
+                                        Periode.builder().fraOgMed(LocalDate.parse("2018-10-10")).tilOgMed(LocalDate.parse("2018-12-29")).build(),
+                                        Arbeidstaker.ArbeidstakerPeriodeInfo.builder().skalJobbeProsent(50.25).build())
+                                .build())
+                        .arbeidstaker(Arbeidstaker.builder()
+                                .norskIdentitetsnummer(NorskIdentitetsnummer.of("29099012345"))
+                                .periode(
+                                        Periode.builder().fraOgMed(LocalDate.parse("2018-11-10")).tilOgMed(LocalDate.parse("2018-12-29")).build(),
+                                        Arbeidstaker.ArbeidstakerPeriodeInfo.builder().skalJobbeProsent(20.00).build())
+                                .build())
+                        .selvstendigNæringsdrivende(SelvstendigNæringsdrivende.builder()
+                                .periode(
+                                        Periode.builder().fraOgMed(LocalDate.parse("2018-11-11")).tilOgMed(LocalDate.parse("2018-11-30")).build(),
+                                        SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder().build())
+                                .build())
+                        .frilanser(Frilanser.builder()
+                                .periode(
+                                        Periode.builder().fraOgMed(LocalDate.parse("2019-10-10")).tilOgMed(LocalDate.parse("2019-12-29")).build(),
+                                        Frilanser.FrilanserPeriodeInfo.builder().build())
+                                .build())
                         .build());
-    }
-
-    private static Map<Periode, UtlandOpphold> rekonstruerUtlandOpphold(
-            Map<Periode, UtlandOpphold> opphold) {
-        Map<Periode, UtlandOpphold> fraBuilder = new HashMap<>();
-        opphold.forEach((periode, info) -> fraBuilder.put(
-                Periode.builder().fraOgMed(periode.fraOgMed).tilOgMed(periode.tilOgMed).build(),
-                UtlandOpphold.builder().land(Landkode.of(info.land.landkode)).build()
-        ));
-        return fraBuilder;
-    }
-
-    private static Map<Periode, Beredskap.BeredskapPeriodeInfo> rekonstruerBeredskapPerioder(
-            Map<Periode, Beredskap.BeredskapPeriodeInfo> perioder) {
-        Map<Periode, Beredskap.BeredskapPeriodeInfo> fraBuilder = new HashMap<>();
-        perioder.forEach((periode, info) -> fraBuilder.put(
-                Periode.builder().fraOgMed(periode.fraOgMed).tilOgMed(periode.tilOgMed).build(),
-                Beredskap.BeredskapPeriodeInfo.builder().tilleggsinformasjon(info.tilleggsinformasjon).build()
-        ));
-        return fraBuilder;
-    }
-
-    private static Map<Periode, Nattevaak.NattevaakPeriodeInfo> rekonstruerNattevaakPerioder(
-            Map<Periode, Nattevaak.NattevaakPeriodeInfo> perioder) {
-        Map<Periode, Nattevaak.NattevaakPeriodeInfo> fraBuilder = new HashMap<>();
-        perioder.forEach((periode, info) -> fraBuilder.put(
-                Periode.builder().fraOgMed(periode.fraOgMed).tilOgMed(periode.tilOgMed).build(),
-                Nattevaak.NattevaakPeriodeInfo.builder().tilleggsinformasjon(info.tilleggsinformasjon).build()
-        ));
-        return fraBuilder;
-    }
-
-    private static Map<Periode, TilsynsordningOpphold> rekonstruerTilsynsordningOpphold(
-            Map<Periode, TilsynsordningOpphold> opphold) {
-        Map<Periode, TilsynsordningOpphold> fraBuilder = new HashMap<>();
-        opphold.forEach((periode, info) -> fraBuilder.put(
-                Periode.builder().fraOgMed(periode.fraOgMed).tilOgMed(periode.tilOgMed).build(),
-                TilsynsordningOpphold.builder().lengde(info.lengde).build()
-        ));
-        return fraBuilder;
-    }
-
-    private static List<Arbeidstaker> rekonstruerArbeidstaker(
-            List<Arbeidstaker> arbeidstaker) {
-        List<Arbeidstaker> fraBuilder = new ArrayList<>();
-        arbeidstaker.forEach(a -> {
-            Arbeidstaker.Builder builder = Arbeidstaker.builder();
-            String organisasjonsnummer = (a.organisasjonsnummer == null) ? null : a.organisasjonsnummer.verdi;
-            builder.organisasjonsnummer(Organisasjonsnummer.of(organisasjonsnummer));
-            String norskIdentitetsnummer = (a.norskIdentitetsnummer == null) ? null : a.norskIdentitetsnummer.verdi;
-            builder.norskIdentitetsnummer(NorskIdentitetsnummer.of(norskIdentitetsnummer));
-            a.perioder.forEach((periode, info) -> builder.periode(
-                    Periode.builder().fraOgMed(periode.fraOgMed).tilOgMed(periode.tilOgMed).build(),
-                    Arbeidstaker.ArbeidstakerPeriodeInfo.builder().skalJobbeProsent(info.skalJobbeProsent).build()
-            ));
-            fraBuilder.add(builder.build());
-        });
-        return fraBuilder;
-    }
-
-    private static List<SelvstendigNæringsdrivende> rekonstruerSelvstendigNæringsdrivende(
-            List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende) {
-        List<SelvstendigNæringsdrivende> fraBuilder = new ArrayList<>();
-        selvstendigNæringsdrivende.forEach(s -> {
-            SelvstendigNæringsdrivende.Builder builder = SelvstendigNæringsdrivende.builder();
-            s.perioder.forEach((periode, info) -> builder.periode(
-                    Periode.builder().fraOgMed(periode.fraOgMed).tilOgMed(periode.tilOgMed).build(),
-                    SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder().build()
-            ));
-            fraBuilder.add(builder.build());
-        });
-        return fraBuilder;
-    }
-
-    private static List<Frilanser> rekonstruerFrilanser(
-            List<Frilanser> frilanser) {
-        List<Frilanser> fraBuilder = new ArrayList<>();
-        frilanser.forEach(f -> {
-            Frilanser.Builder builder = Frilanser.builder();
-            f.perioder.forEach((periode, info) -> builder.periode(
-                    Periode.builder().fraOgMed(periode.fraOgMed).tilOgMed(periode.tilOgMed).build(),
-                    Frilanser.FrilanserPeriodeInfo.builder().build()
-            ));
-            fraBuilder.add(builder.build());
-        });
-        return fraBuilder;
     }
 }
