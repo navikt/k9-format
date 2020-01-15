@@ -81,22 +81,22 @@ final class TestUtils {
         return fraBuilder;
     }
 
-    private static Map<Periode, Beredskap.BeredskapInfo> rekonstruerBeredskapPerioder(
-            Map<Periode, Beredskap.BeredskapInfo> perioder) {
-        Map<Periode, Beredskap.BeredskapInfo> fraBuilder = new HashMap<>();
+    private static Map<Periode, Beredskap.BeredskapPeriodeInfo> rekonstruerBeredskapPerioder(
+            Map<Periode, Beredskap.BeredskapPeriodeInfo> perioder) {
+        Map<Periode, Beredskap.BeredskapPeriodeInfo> fraBuilder = new HashMap<>();
         perioder.forEach((periode, info) -> fraBuilder.put(
                 Periode.builder().fraOgMed(periode.fraOgMed).tilOgMed(periode.tilOgMed).build(),
-                Beredskap.BeredskapInfo.builder().tilleggsinformasjon(info.tilleggsinformasjon).build()
+                Beredskap.BeredskapPeriodeInfo.builder().tilleggsinformasjon(info.tilleggsinformasjon).build()
         ));
         return fraBuilder;
     }
 
-    private static Map<Periode, Nattevaak.NattevaakInfo> rekonstruerNattevaakPerioder(
-            Map<Periode, Nattevaak.NattevaakInfo> perioder) {
-        Map<Periode, Nattevaak.NattevaakInfo> fraBuilder = new HashMap<>();
+    private static Map<Periode, Nattevaak.NattevaakPeriodeInfo> rekonstruerNattevaakPerioder(
+            Map<Periode, Nattevaak.NattevaakPeriodeInfo> perioder) {
+        Map<Periode, Nattevaak.NattevaakPeriodeInfo> fraBuilder = new HashMap<>();
         perioder.forEach((periode, info) -> fraBuilder.put(
                 Periode.builder().fraOgMed(periode.fraOgMed).tilOgMed(periode.tilOgMed).build(),
-                Nattevaak.NattevaakInfo.builder().tilleggsinformasjon(info.tilleggsinformasjon).build()
+                Nattevaak.NattevaakPeriodeInfo.builder().tilleggsinformasjon(info.tilleggsinformasjon).build()
         ));
         return fraBuilder;
     }
@@ -122,7 +122,7 @@ final class TestUtils {
             builder.norskIdentitetsnummer(NorskIdentitetsnummer.of(norskIdentitetsnummer));
             a.perioder.forEach((periode, info) -> builder.periode(
                     Periode.builder().fraOgMed(periode.fraOgMed).tilOgMed(periode.tilOgMed).build(),
-                    Arbeidstaker.ArbeidstakerInfo.builder().skalJobbeProsent(info.skalJobbeProsent).build()
+                    Arbeidstaker.ArbeidstakerPeriodeInfo.builder().skalJobbeProsent(info.skalJobbeProsent).build()
             ));
             fraBuilder.add(builder.build());
         });
@@ -136,7 +136,7 @@ final class TestUtils {
             SelvstendigNæringsdrivende.Builder builder = SelvstendigNæringsdrivende.builder();
             s.perioder.forEach((periode, info) -> builder.periode(
                     Periode.builder().fraOgMed(periode.fraOgMed).tilOgMed(periode.tilOgMed).build(),
-                    SelvstendigNæringsdrivende.SelvstendigNæringsdrivendeInfo.builder().build()
+                    SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder().build()
             ));
             fraBuilder.add(builder.build());
         });
@@ -150,7 +150,7 @@ final class TestUtils {
             Frilanser.Builder builder = Frilanser.builder();
             f.perioder.forEach((periode, info) -> builder.periode(
                     Periode.builder().fraOgMed(periode.fraOgMed).tilOgMed(periode.tilOgMed).build(),
-                    Frilanser.FrilanserInfo.builder().build()
+                    Frilanser.FrilanserPeriodeInfo.builder().build()
             ));
             fraBuilder.add(builder.build());
         });

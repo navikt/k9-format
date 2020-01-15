@@ -12,12 +12,12 @@ import static java.util.Collections.unmodifiableMap;
 
 public class SelvstendigNæringsdrivende {
 
-    public final Map<Periode, SelvstendigNæringsdrivendeInfo> perioder;
+    public final Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> perioder;
 
     @JsonCreator
     private SelvstendigNæringsdrivende(
             @JsonProperty("perioder")
-            Map<Periode, SelvstendigNæringsdrivendeInfo> perioder) {
+            Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> perioder) {
         this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
     }
 
@@ -26,19 +26,19 @@ public class SelvstendigNæringsdrivende {
     }
 
     public static final class Builder {
-        private Map<Periode, SelvstendigNæringsdrivendeInfo> perioder;
+        private Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> perioder;
 
         private Builder() {
             perioder = new HashMap<>();
         }
 
-        public Builder perioder(Map<Periode, SelvstendigNæringsdrivendeInfo> perioder) {
+        public Builder perioder(Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> perioder) {
             this.perioder.putAll(perioder);
             return this;
         }
 
-        public Builder periode(Periode periode, SelvstendigNæringsdrivendeInfo selvstendigNæringsdrivendeInfo) {
-            this.perioder.put(periode, selvstendigNæringsdrivendeInfo);
+        public Builder periode(Periode periode, SelvstendigNæringsdrivendePeriodeInfo selvstendigNæringsdrivendePeriodeInfo) {
+            this.perioder.put(periode, selvstendigNæringsdrivendePeriodeInfo);
             return this;
         }
 
@@ -49,7 +49,7 @@ public class SelvstendigNæringsdrivende {
         }
     }
 
-    public static final class SelvstendigNæringsdrivendeInfo {
+    public static final class SelvstendigNæringsdrivendePeriodeInfo {
 
         public static Builder builder() {
             return new Builder();
@@ -58,8 +58,8 @@ public class SelvstendigNæringsdrivende {
         public static final class Builder {
             private Builder() {}
 
-            public SelvstendigNæringsdrivendeInfo build() {
-                return new SelvstendigNæringsdrivendeInfo();
+            public SelvstendigNæringsdrivendePeriodeInfo build() {
+                return new SelvstendigNæringsdrivendePeriodeInfo();
             }
         }
 

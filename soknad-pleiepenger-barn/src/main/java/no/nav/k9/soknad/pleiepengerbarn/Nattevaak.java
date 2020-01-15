@@ -11,12 +11,12 @@ import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableMap;
 
 public class Nattevaak {
-    public final Map<Periode, NattevaakInfo> perioder;
+    public final Map<Periode, NattevaakPeriodeInfo> perioder;
 
     @JsonCreator
     private Nattevaak(
             @JsonProperty("perioder")
-            Map<Periode, NattevaakInfo> perioder) {
+            Map<Periode, NattevaakPeriodeInfo> perioder) {
         this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
     }
 
@@ -25,19 +25,19 @@ public class Nattevaak {
     }
 
     public static final class Builder {
-        private Map<Periode, NattevaakInfo> perioder;
+        private Map<Periode, NattevaakPeriodeInfo> perioder;
 
         private Builder() {
             perioder = new HashMap<>();
         }
 
-        public Builder perioder(Map<Periode, NattevaakInfo> perioder) {
+        public Builder perioder(Map<Periode, NattevaakPeriodeInfo> perioder) {
             this.perioder.putAll(perioder);
             return this;
         }
 
-        public Builder periode(Periode periode, NattevaakInfo nattevaakInfo) {
-            this.perioder.put(periode, nattevaakInfo);
+        public Builder periode(Periode periode, NattevaakPeriodeInfo nattevaakPeriodeInfo) {
+            this.perioder.put(periode, nattevaakPeriodeInfo);
             return this;
         }
 
@@ -48,11 +48,11 @@ public class Nattevaak {
         }
     }
 
-    public static final class NattevaakInfo {
+    public static final class NattevaakPeriodeInfo {
         public final String tilleggsinformasjon;
 
         @JsonCreator
-        private NattevaakInfo(
+        private NattevaakPeriodeInfo(
                 @JsonProperty("tilleggsinformasjon")
                 String tilleggsinformasjon) {
             this.tilleggsinformasjon = tilleggsinformasjon;
@@ -72,8 +72,8 @@ public class Nattevaak {
                 return this;
             }
 
-            public NattevaakInfo build() {
-                return new NattevaakInfo(
+            public NattevaakPeriodeInfo build() {
+                return new NattevaakPeriodeInfo(
                         tilleggsinformasjon
                 );
             }

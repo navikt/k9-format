@@ -11,12 +11,12 @@ import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableMap;
 
 public class Beredskap {
-    public final Map<Periode, BeredskapInfo> perioder;
+    public final Map<Periode, BeredskapPeriodeInfo> perioder;
 
     @JsonCreator
     private Beredskap(
             @JsonProperty("perioder")
-            Map<Periode, BeredskapInfo> perioder) {
+            Map<Periode, BeredskapPeriodeInfo> perioder) {
         this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
     }
 
@@ -25,19 +25,19 @@ public class Beredskap {
     }
 
     public static final class Builder {
-        private Map<Periode, BeredskapInfo> perioder;
+        private Map<Periode, BeredskapPeriodeInfo> perioder;
 
         private Builder() {
             perioder = new HashMap<>();
         }
 
-        public Builder perioder(Map<Periode, BeredskapInfo> perioder) {
+        public Builder perioder(Map<Periode, BeredskapPeriodeInfo> perioder) {
             this.perioder.putAll(perioder);
             return this;
         }
 
-        public Builder periode(Periode periode, BeredskapInfo beredskapInfo) {
-            this.perioder.put(periode, beredskapInfo);
+        public Builder periode(Periode periode, BeredskapPeriodeInfo beredskapPeriodeInfo) {
+            this.perioder.put(periode, beredskapPeriodeInfo);
             return this;
         }
 
@@ -48,11 +48,11 @@ public class Beredskap {
         }
     }
 
-    public static final class BeredskapInfo {
+    public static final class BeredskapPeriodeInfo {
         public final String tilleggsinformasjon;
 
         @JsonCreator
-        private BeredskapInfo(
+        private BeredskapPeriodeInfo(
                 @JsonProperty("tilleggsinformasjon")
                 String tilleggsinformasjon) {
             this.tilleggsinformasjon = tilleggsinformasjon;
@@ -72,8 +72,8 @@ public class Beredskap {
                 return this;
             }
 
-            public BeredskapInfo build() {
-                return new BeredskapInfo(
+            public BeredskapPeriodeInfo build() {
+                return new BeredskapPeriodeInfo(
                         tilleggsinformasjon
                 );
             }
