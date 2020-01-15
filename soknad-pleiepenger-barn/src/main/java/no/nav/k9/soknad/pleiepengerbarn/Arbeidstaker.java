@@ -81,7 +81,7 @@ public class Arbeidstaker {
          * - Om man har en stillingsprosent på 40%, men i perioden kan dekke en 20% stilling skal "skalJobbeProsent" være 50%.
          * - Om man normalt jobber 30 timer i uken, men nå får jobbet 10 timer skal "skalJobbeProsent" være 33.33%.
          * - Gitt at pleiepengene blir avkortet mot arbeid (ikke gradert mot tilsyn) vil "skalJobbeProsent" brukes ved
-         * håndtering av inntektsmelding fra den aktuelle arbeidsgiveren for å regne ut av inntektstapet i perioden.
+         * håndtering av inntektsmelding fra den aktuelle arbeidsgiveren for å regne ut inntektstapet i perioden.
          */
         public final Double skalJobbeProsent;
 
