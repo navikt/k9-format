@@ -73,6 +73,16 @@ public class Arbeidstaker {
     }
 
     public static final class ArbeidstakerPeriodeInfo {
+        /**
+         * En prosent mellom 0 og 100 som sier hvor mye søkeren kan jobbe (for en arbeidsgiver i en periode)
+         * i forhold til hva den normalt ville gjort (om den ikke hadde hatt behov for pleiepenger).
+         * - Ved avkorting mot arbeid er det tap av inntekt som skal dekkes. Hvilken stillingsprosent
+         * eller hvor mange timer man jobber er ikke relevant, men er faktorer som kan brukes til å utlede "skalJobbeProsent".
+         * - Om man har en stillingsprosent på 40%, men i perioden kan dekke en 20% stilling skal "skalJobbeProsent" være 50%.
+         * - Om man normalt jobber 30 timer i uken, men nå får jobbet 10 timer skal "skalJobbeProsent" være 33.33%.
+         * - Gitt at pleiepengene blir avkortet mot arbeid (ikke gradert mot tilsyn) vil "skalJobbeProsent" brukes ved
+         * håndtering av inntektsmelding fra den aktuelle arbeidsgiveren for å regne ut av inntektstapet i perioden.
+         */
         public final Double skalJobbeProsent;
 
         private ArbeidstakerPeriodeInfo(
