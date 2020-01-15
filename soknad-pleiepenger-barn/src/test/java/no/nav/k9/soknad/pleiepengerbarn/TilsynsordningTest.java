@@ -22,7 +22,7 @@ public class TilsynsordningTest {
         Duration onsdagLengde = Duration.ofHours(5);
         Duration torsdagLengde = Duration.ofHours(4);
         Duration fredagLengde = Duration.ofHours(3);
-        int antallDager = 66;
+        int expectedAntallDagerIPerioden = 66;
 
 
         Periode periode = Periode
@@ -47,7 +47,7 @@ public class TilsynsordningTest {
                 .uke(uke)
                 .build();
 
-        assertEquals(antallDager, tilsynsordning.opphold.size());
+        assertEquals(expectedAntallDagerIPerioden, tilsynsordning.opphold.size());
 
         hentForUkeDag(tilsynsordning.opphold, DayOfWeek.MONDAY).forEach(opphold -> assertEquals(mandagLengde, opphold.lengde));
         hentForUkeDag(tilsynsordning.opphold, DayOfWeek.TUESDAY).forEach(opphold -> assertEquals(tirsdagLengde, opphold.lengde));
