@@ -78,15 +78,15 @@ public class OmsorgspengerSøknad {
         }
 
         public OmsorgspengerSøknad build() {
-            OmsorgspengerSøknad soknad = new OmsorgspengerSøknad(
+            OmsorgspengerSøknad søknad = new OmsorgspengerSøknad(
                     søknadId,
                     versjon,
                     mottattDato,
                     søker,
                     barn
             );
-            validator.forsikreValidert(soknad);
-            return soknad;
+            validator.forsikreValidert(søknad);
+            return søknad;
         }
     }
 }

@@ -20,21 +20,21 @@ public class PleiepengerBarnSøknadValidator extends SøknadValidator<Pleiepenge
     }
 
     @Override
-    public List<Feil> valider(PleiepengerBarnSøknad soknad) {
+    public List<Feil> valider(PleiepengerBarnSøknad søknad) {
         final List<Feil> feil = new ArrayList<>();
 
-        validerSøknadId(soknad.søknadId, feil);
-        validerVersjon(soknad.versjon, feil);
-        validerPeriode(soknad.periode, feil);
-        validerMottattDato(soknad.mottattDato, feil);
-        validerSpråk(soknad.språk, feil);
-        validerSoker(soknad.søker, feil);
-        validerBarn(soknad.barn, feil);
-        validerUtland(soknad.utland, feil);
-        validerBerdskap(soknad.beredskap, feil);
-        validerNattevåk(soknad.nattevåk, feil);
-        validerTilsynsordning(soknad.tilsynsordning, feil);
-        validerArbeid(soknad.arbeid, feil);
+        validerSøknadId(søknad.søknadId, feil);
+        validerVersjon(søknad.versjon, feil);
+        validerPeriode(søknad.periode, feil);
+        validerMottattDato(søknad.mottattDato, feil);
+        validerSpråk(søknad.språk, feil);
+        validerSøker(søknad.søker, feil);
+        validerBarn(søknad.barn, feil);
+        validerUtland(søknad.utland, feil);
+        validerBerdskap(søknad.beredskap, feil);
+        validerNattevåk(søknad.nattevåk, feil);
+        validerTilsynsordning(søknad.tilsynsordning, feil);
+        validerArbeid(søknad.arbeid, feil);
 
         return feil;
     }
@@ -95,7 +95,7 @@ public class PleiepengerBarnSøknadValidator extends SøknadValidator<Pleiepenge
         feil.addAll(periodeValidator.validerIkkeTillattOverlapp(utland.opphold,"utland.opphold"));
     }
 
-    private static void validerSoker(Søker søker, List<Feil> feil) {
+    private static void validerSøker(Søker søker, List<Feil> feil) {
         if (søker == null) {
             feil.add(new Feil("søker", PÅKREVD, "Søker må settes i søknaden."));
         } else if (søker.norskIdentitetsnummer == null) {

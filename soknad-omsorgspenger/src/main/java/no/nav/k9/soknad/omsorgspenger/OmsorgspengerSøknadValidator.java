@@ -10,14 +10,14 @@ import java.util.List;
 public class OmsorgspengerSøknadValidator extends SøknadValidator<OmsorgspengerSøknad> {
 
     @Override
-    public List<Feil> valider(OmsorgspengerSøknad soknad) {
+    public List<Feil> valider(OmsorgspengerSøknad søknad) {
         List<Feil> feil = new ArrayList<>();
 
-        validerSøknadId(soknad.søknadId, feil);
-        validerVersjon(soknad.versjon, feil);
-        validerMottattDato(soknad.mottattDato, feil);
-        validerSøker(soknad.søker, feil);
-        validerBarn(soknad.barn, feil);
+        validerSøknadId(søknad.søknadId, feil);
+        validerVersjon(søknad.versjon, feil);
+        validerMottattDato(søknad.mottattDato, feil);
+        validerSøker(søknad.søker, feil);
+        validerBarn(søknad.barn, feil);
 
         return feil;
     }

@@ -52,8 +52,8 @@ public class OmsorgspengerSøknadValidatorTest {
 
     @Test
     public void komplettSøknadFraJson() {
-        OmsorgspengerSøknad soknad = JsonUtils.fromString(jsonForKomplettSøknad(), OmsorgspengerSøknad.class);
-        verifyIngenFeil(soknad);
+        OmsorgspengerSøknad søknad = JsonUtils.fromString(jsonForKomplettSøknad(), OmsorgspengerSøknad.class);
+        verifyIngenFeil(søknad);
     }
 
     private List<Feil> valider(OmsorgspengerSøknad.Builder builder) {

@@ -96,7 +96,7 @@ public class PleiepengerBarnSøknad {
 
         private Builder() {}
 
-        public Builder soknadId(SøknadId søknadId) {
+        public Builder søknadId(SøknadId søknadId) {
             this.søknadId = søknadId;
             return this;
         }
@@ -152,7 +152,7 @@ public class PleiepengerBarnSøknad {
         }
 
         public PleiepengerBarnSøknad build() {
-            PleiepengerBarnSøknad soknad = new PleiepengerBarnSøknad(
+            PleiepengerBarnSøknad søknad = new PleiepengerBarnSøknad(
                     søknadId,
                     versjon,
                     periode,
@@ -166,8 +166,8 @@ public class PleiepengerBarnSøknad {
                     tilsynsordning,
                     arbeid
             );
-            validator.forsikreValidert(soknad);
-            return soknad;
+            validator.forsikreValidert(søknad);
+            return søknad;
         }
     }
 }

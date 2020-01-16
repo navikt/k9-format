@@ -34,7 +34,7 @@ final class TestUtils {
 
     static PleiepengerBarnSøknad.Builder komplettBuilder() {
         return PleiepengerBarnSøknad.builder()
-                .soknadId(SøknadId.of("1"))
+                .søknadId(SøknadId.of("1"))
                 .periode(Periode.builder()
                         .fraOgMed(LocalDate.parse("2018-12-30"))
                         .tilOgMed(LocalDate.parse("2019-10-20"))
