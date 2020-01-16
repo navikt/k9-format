@@ -16,8 +16,8 @@ import static org.junit.Assert.assertThat;
 
 import static no.nav.k9.soknad.omsorgspenger.TestUtils.jsonForKomplettSoknad;
 
-public class OmsorgspengerSoknadValidatorTest {
-    private static final OmsorgspengerSoknadValidator validator = new OmsorgspengerSoknadValidator();
+public class OmsorgspengerSøknadValidatorTest {
+    private static final OmsorgspengerSøknadValidator validator = new OmsorgspengerSøknadValidator();
 
     @Test
     public void soknadUtenNoeSatt() {
@@ -33,7 +33,7 @@ public class OmsorgspengerSoknadValidatorTest {
         OmsorgspengerSoknad.Builder builder = medSoker()
                 .barn(Barn
                         .builder()
-                        .foedselsdato(LocalDate.now())
+                        .fødselsdato(LocalDate.now())
                         .build()
                 );
         verifyIngenFeil(builder);
@@ -88,9 +88,9 @@ public class OmsorgspengerSoknadValidatorTest {
     private OmsorgspengerSoknad.Builder medSoker() {
         return OmsorgspengerSoknad
                 .builder()
-                .soknadId(SoknadId.of("123"))
+                .søknadId(SøknadId.of("123"))
                 .mottattDato(ZonedDateTime.now())
-                .soker(Soker
+                .søker(Søker
                         .builder()
                         .norskIdentitetsnummer(NorskIdentitetsnummer.of("11111111111"))
                         .build()

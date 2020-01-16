@@ -10,7 +10,7 @@ public class Barn {
 
     public final NorskIdentitetsnummer norskIdentitetsnummer;
 
-    public final LocalDate foedselsdato;
+    public final LocalDate fødselsdato;
 
     public static Builder builder() {
         return new Builder();
@@ -20,11 +20,11 @@ public class Barn {
     private Barn(
             @JsonProperty("norskIdentitetsnummer")
             NorskIdentitetsnummer norskIdentitetsnummer,
-            @JsonProperty("foedselsdato")
+            @JsonProperty("fødselsdato")
             @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Oslo")
-            LocalDate foedselsdato) {
+            LocalDate fødselsdato) {
         this.norskIdentitetsnummer = norskIdentitetsnummer;
-        this.foedselsdato = foedselsdato;
+        this.fødselsdato = fødselsdato;
     }
 
     public static final class Builder {
@@ -39,7 +39,7 @@ public class Barn {
             return this;
         }
 
-        public Builder foedselsdato(LocalDate foedselsdato) {
+        public Builder fødselsdato(LocalDate foedselsdato) {
             this.foedselsdato = foedselsdato;
             return this;
         }

@@ -3,28 +3,28 @@ package no.nav.k9.soknad.felles;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum Spraak {
+public enum Språk {
 
-    NORSK_BOKMAAL("nb"),
+    NORSK_BOKMÅL("nb"),
     NORSK_NYNORSK("nn");
 
     @JsonValue
     public final String dto;
 
-    Spraak(String dto) {
+    Språk(String dto) {
         this.dto = dto;
     }
 
     @JsonCreator
-    public static Spraak of(String value) {
+    public static Språk of(String value) {
         if (value == null || value.isBlank()) {
             return null;
         }
-        for (Spraak språk : values()) {
+        for (Språk språk : values()) {
             if (språk.dto.equals(value)) {
                 return språk;
             }
         }
-        throw new IllegalStateException("Ikke støttet språk '" + value + "'");
+        throw new IllegalArgumentException("Ikke støttet språk '" + value + "'");
     }
 }

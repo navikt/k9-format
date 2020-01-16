@@ -9,7 +9,7 @@ import java.time.ZonedDateTime;
 
 public class PleiepengerBarnSoknad {
 
-    public final SoknadId soknadId;
+    public final SøknadId søknadId;
 
     public final Versjon versjon;
 
@@ -18,9 +18,9 @@ public class PleiepengerBarnSoknad {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
     public final ZonedDateTime mottattDato;
 
-    public final Spraak spraak;
+    public final Språk språk;
 
-    public final Soker soker;
+    public final Søker søker;
 
     public final Barn barn;
 
@@ -28,7 +28,7 @@ public class PleiepengerBarnSoknad {
 
     public final Beredskap beredskap;
 
-    public final Nattevaak nattevaak;
+    public final Nattevåk nattevåk;
 
     public final Tilsynsordning tilsynsordning;
 
@@ -36,40 +36,40 @@ public class PleiepengerBarnSoknad {
 
     @JsonCreator
     private PleiepengerBarnSoknad(
-            @JsonProperty("soknadId")
-            SoknadId soknadId,
+            @JsonProperty("søknadId")
+            SøknadId søknadId,
             @JsonProperty("versjon")
             Versjon versjon,
             @JsonProperty("periode")
             Periode periode,
             @JsonProperty("mottattDato")
             ZonedDateTime mottattDato,
-            @JsonProperty("spraak")
-            Spraak spraak,
-            @JsonProperty("soker")
-            Soker soker,
+            @JsonProperty("språk")
+            Språk språk,
+            @JsonProperty("søker")
+            Søker søker,
             @JsonProperty("barn")
             Barn barn,
             @JsonProperty("utland")
             Utland utland,
             @JsonProperty("beredskap")
             Beredskap beredskap,
-            @JsonProperty("nattevaak")
-            Nattevaak nattevaak,
+            @JsonProperty("nattevåk")
+            Nattevåk nattevåk,
             @JsonProperty("tilsynsordning")
             Tilsynsordning tilsynsordning,
             @JsonProperty("arbeid")
             Arbeid arbeid) {
-        this.soknadId = soknadId;
+        this.søknadId = søknadId;
         this.versjon = versjon;
         this.periode = periode;
         this.mottattDato = mottattDato;
-        this.spraak = spraak;
-        this.soker = soker;
+        this.språk = språk;
+        this.søker = søker;
         this.barn = barn;
         this.utland = utland;
         this.beredskap = beredskap;
-        this.nattevaak = nattevaak;
+        this.nattevåk = nattevåk;
         this.tilsynsordning = tilsynsordning;
         this.arbeid = arbeid;
     }
@@ -79,25 +79,25 @@ public class PleiepengerBarnSoknad {
     }
 
     public static final class Builder {
-        private static final PleiepengerBarnSoknadValidator validator = new PleiepengerBarnSoknadValidator();
+        private static final PleiepengerBarnSøknadValidator validator = new PleiepengerBarnSøknadValidator();
         private static final Versjon versjon = Versjon.of("0.0.1");
 
-        private SoknadId soknadId;
+        private SøknadId søknadId;
         private ZonedDateTime mottattDato;
         private Periode periode;
-        private Spraak spraak;
-        private Soker soker;
+        private Språk språk;
+        private Søker søker;
         private Barn barn;
         private Utland utland;
         private Beredskap beredskap;
-        private Nattevaak nattevaak;
+        private Nattevåk nattevåk;
         private Tilsynsordning tilsynsordning;
         private Arbeid arbeid;
 
         private Builder() {}
 
-        public Builder soknadId(SoknadId soknadId) {
-            this.soknadId = soknadId;
+        public Builder soknadId(SøknadId søknadId) {
+            this.søknadId = søknadId;
             return this;
         }
 
@@ -111,13 +111,13 @@ public class PleiepengerBarnSoknad {
             return this;
         }
 
-        public Builder spraak(Spraak spraak) {
-            this.spraak = spraak;
+        public Builder språk(Språk språk) {
+            this.språk = språk;
             return this;
         }
 
-        public Builder soker(Soker soker) {
-            this.soker = soker;
+        public Builder søker(Søker søker) {
+            this.søker = søker;
             return this;
         }
 
@@ -136,8 +136,8 @@ public class PleiepengerBarnSoknad {
             return this;
         }
 
-        public Builder nattevaak(Nattevaak nattevaak) {
-            this.nattevaak = nattevaak;
+        public Builder nattevåk(Nattevåk nattevåk) {
+            this.nattevåk = nattevåk;
             return this;
         }
 
@@ -153,16 +153,16 @@ public class PleiepengerBarnSoknad {
 
         public PleiepengerBarnSoknad build() {
             PleiepengerBarnSoknad soknad = new PleiepengerBarnSoknad(
-                    soknadId,
+                    søknadId,
                     versjon,
                     periode,
                     mottattDato,
-                    spraak,
-                    soker,
+                    språk,
+                    søker,
                     barn,
                     utland,
                     beredskap,
-                    nattevaak,
+                    nattevåk,
                     tilsynsordning,
                     arbeid
             );

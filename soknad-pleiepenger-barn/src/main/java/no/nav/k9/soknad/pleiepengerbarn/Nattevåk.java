@@ -10,13 +10,13 @@ import java.util.Map;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableMap;
 
-public class Nattevaak {
-    public final Map<Periode, NattevaakPeriodeInfo> perioder;
+public class Nattevåk {
+    public final Map<Periode, NattevåkPeriodeInfo> perioder;
 
     @JsonCreator
-    private Nattevaak(
+    private Nattevåk(
             @JsonProperty("perioder")
-            Map<Periode, NattevaakPeriodeInfo> perioder) {
+            Map<Periode, NattevåkPeriodeInfo> perioder) {
         this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
     }
 
@@ -25,34 +25,34 @@ public class Nattevaak {
     }
 
     public static final class Builder {
-        private Map<Periode, NattevaakPeriodeInfo> perioder;
+        private Map<Periode, NattevåkPeriodeInfo> perioder;
 
         private Builder() {
             perioder = new HashMap<>();
         }
 
-        public Builder perioder(Map<Periode, NattevaakPeriodeInfo> perioder) {
+        public Builder perioder(Map<Periode, NattevåkPeriodeInfo> perioder) {
             this.perioder.putAll(perioder);
             return this;
         }
 
-        public Builder periode(Periode periode, NattevaakPeriodeInfo nattevaakPeriodeInfo) {
-            this.perioder.put(periode, nattevaakPeriodeInfo);
+        public Builder periode(Periode periode, NattevåkPeriodeInfo nattevåkPeriodeInfo) {
+            this.perioder.put(periode, nattevåkPeriodeInfo);
             return this;
         }
 
-        public Nattevaak build() {
-            return new Nattevaak(
+        public Nattevåk build() {
+            return new Nattevåk(
                     perioder
             );
         }
     }
 
-    public static final class NattevaakPeriodeInfo {
+    public static final class NattevåkPeriodeInfo {
         public final String tilleggsinformasjon;
 
         @JsonCreator
-        private NattevaakPeriodeInfo(
+        private NattevåkPeriodeInfo(
                 @JsonProperty("tilleggsinformasjon")
                 String tilleggsinformasjon) {
             this.tilleggsinformasjon = tilleggsinformasjon;
@@ -72,8 +72,8 @@ public class Nattevaak {
                 return this;
             }
 
-            public NattevaakPeriodeInfo build() {
-                return new NattevaakPeriodeInfo(
+            public NattevåkPeriodeInfo build() {
+                return new NattevåkPeriodeInfo(
                         tilleggsinformasjon
                 );
             }

@@ -4,41 +4,41 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.soknad.felles.Barn;
-import no.nav.k9.soknad.felles.Soker;
-import no.nav.k9.soknad.felles.SoknadId;
+import no.nav.k9.soknad.felles.Søker;
+import no.nav.k9.soknad.felles.SøknadId;
 import no.nav.k9.soknad.felles.Versjon;
 
 import java.time.ZonedDateTime;
 
 public class OmsorgspengerSoknad {
 
-    public final SoknadId soknadId;
+    public final SøknadId søknadId;
 
     public final Versjon versjon;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
     public final ZonedDateTime mottattDato;
 
-    public final Soker soker;
+    public final Søker søker;
 
     public final Barn barn;
 
     @JsonCreator
     private OmsorgspengerSoknad(
-            @JsonProperty("soknadId")
-            SoknadId soknadId,
+            @JsonProperty("søknadId")
+            SøknadId søknadId,
             @JsonProperty("versjon")
             Versjon versjon,
             @JsonProperty("mottattDato")
             ZonedDateTime mottattDato,
-            @JsonProperty("soker")
-            Soker soker,
+            @JsonProperty("søker")
+            Søker søker,
             @JsonProperty("barn")
             Barn barn) {
-        this.soknadId = soknadId;
+        this.søknadId = søknadId;
         this.versjon = versjon;
         this.mottattDato = mottattDato;
-        this.soker = soker;
+        this.søker = søker;
         this.barn = barn;
     }
 
@@ -47,18 +47,18 @@ public class OmsorgspengerSoknad {
     }
 
     public static final class Builder {
-        private final static OmsorgspengerSoknadValidator validator = new OmsorgspengerSoknadValidator();
+        private final static OmsorgspengerSøknadValidator validator = new OmsorgspengerSøknadValidator();
         private final static Versjon versjon = Versjon.of("0.0.1");
 
-        private SoknadId soknadId;
+        private SøknadId søknadId;
         private ZonedDateTime mottattDato;
-        private Soker soker;
+        private Søker søker;
         private Barn barn;
 
         private Builder() {}
 
-        public Builder soknadId(SoknadId soknadId) {
-            this.soknadId = soknadId;
+        public Builder søknadId(SøknadId søknadId) {
+            this.søknadId = søknadId;
             return this;
         }
 
@@ -67,8 +67,8 @@ public class OmsorgspengerSoknad {
             return this;
         }
 
-        public Builder soker(Soker soker) {
-            this.soker = soker;
+        public Builder søker(Søker søker) {
+            this.søker = søker;
             return this;
         }
 
@@ -79,10 +79,10 @@ public class OmsorgspengerSoknad {
 
         public OmsorgspengerSoknad build() {
             OmsorgspengerSoknad soknad = new OmsorgspengerSoknad(
-                    soknadId,
+                    søknadId,
                     versjon,
                     mottattDato,
-                    soker,
+                    søker,
                     barn
             );
             validator.forsikreValidert(soknad);

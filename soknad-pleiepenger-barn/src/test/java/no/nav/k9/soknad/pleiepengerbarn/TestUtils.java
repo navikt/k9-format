@@ -34,14 +34,14 @@ final class TestUtils {
 
     static PleiepengerBarnSoknad.Builder komplettBuilder() {
         return PleiepengerBarnSoknad.builder()
-                .soknadId(SoknadId.of("1"))
+                .soknadId(SøknadId.of("1"))
                 .periode(Periode.builder()
                         .fraOgMed(LocalDate.parse("2018-12-30"))
                         .tilOgMed(LocalDate.parse("2019-10-20"))
                         .build())
                 .mottattDato(ZonedDateTime.parse("2019-10-20T07:15:36.124Z"))
-                .spraak(Spraak.of("nb"))
-                .soker(Soker.builder()
+                .språk(Språk.of("nb"))
+                .søker(Søker.builder()
                         .norskIdentitetsnummer(NorskIdentitetsnummer.of("12345678901"))
                         .build())
                 .barn(Barn.builder()
@@ -68,13 +68,13 @@ final class TestUtils {
                                 Periode.builder().fraOgMed(LocalDate.parse("2019-01-01")).tilOgMed(LocalDate.parse("2019-01-30")).build(),
                                 Beredskap.BeredskapPeriodeInfo.builder().tilleggsinformasjon("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.").build())
                         .build())
-                .nattevaak(Nattevaak.builder()
+                .nattevåk(Nattevåk.builder()
                         .periode(
                                 Periode.builder().fraOgMed(LocalDate.parse("2018-10-10")).tilOgMed(LocalDate.parse("2018-12-29")).build(),
-                                Nattevaak.NattevaakPeriodeInfo.builder().tilleggsinformasjon("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.").build())
+                                Nattevåk.NattevåkPeriodeInfo.builder().tilleggsinformasjon("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.").build())
                         .periode(
                                 Periode.builder().fraOgMed(LocalDate.parse("2019-01-01")).tilOgMed(LocalDate.parse("2019-01-30")).build(),
-                                Nattevaak.NattevaakPeriodeInfo.builder().tilleggsinformasjon("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.").build())
+                                Nattevåk.NattevåkPeriodeInfo.builder().tilleggsinformasjon("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.").build())
                         .build())
                 .tilsynsordning(Tilsynsordning.builder()
                         .iTilsynsordning(TilsynsordningSvar.of("ja"))

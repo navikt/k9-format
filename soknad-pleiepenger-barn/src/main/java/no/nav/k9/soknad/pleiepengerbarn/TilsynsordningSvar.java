@@ -25,6 +25,6 @@ public enum TilsynsordningSvar {
                 return svar;
             }
         }
-        throw new IllegalStateException("Ikke støttet svar '" + value + "'");
+        throw new IllegalArgumentException("Ikke støttet svar '" + value + "'");
     }
 }

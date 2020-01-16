@@ -53,10 +53,10 @@ public class PeriodeValidator {
             String felt,
             List<Feil> feil) {
         if (periode == null) {
-            feil.add(new Feil(felt, "paakrevd", "Perioden må være satt."));
+            feil.add(new Feil(felt, "påkrevd", "Perioden må være satt."));
         } else {
             if (periode.fraOgMed == null) {
-                feil.add(new Feil(felt, "paakrevd", "Fra og med (FOM) må være satt."));
+                feil.add(new Feil(felt, "påkrevd", "Fra og med (FOM) må være satt."));
             }
             if (periode.fraOgMed != null && periode.tilOgMed != null && periode.tilOgMed.isBefore(periode.fraOgMed)) {
                 feil.add(new Feil(felt, "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM)."));
@@ -84,7 +84,7 @@ public class PeriodeValidator {
     private static boolean overlapper(Periode periode1, Periode periode2) {
         // Ugyldige perioder
         if (periode1 == null || periode2 == null || periode1.fraOgMed == null || periode2.fraOgMed == null) {
-            throw new IllegalStateException("Ugyldige perioder");
+            throw new IllegalArgumentException("Ugyldige perioder");
         }
 
         // Hele dager; Kan ikke føre opp fler perioder samme dag

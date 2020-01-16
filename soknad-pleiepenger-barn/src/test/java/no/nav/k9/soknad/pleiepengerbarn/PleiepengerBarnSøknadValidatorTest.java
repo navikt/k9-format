@@ -16,8 +16,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
-public class PleiepengerBarnSoknadValidatorTest {
-    private static final PleiepengerBarnSoknadValidator validator = new PleiepengerBarnSoknadValidator();
+public class PleiepengerBarnSøknadValidatorTest {
+    private static final PleiepengerBarnSøknadValidator validator = new PleiepengerBarnSøknadValidator();
 
     @Test
     public void soknadUtenNoeSatt() {
@@ -49,10 +49,10 @@ public class PleiepengerBarnSoknadValidatorTest {
     public void sokerNorskIdentitetsnummerPaakrevd() {
         final PleiepengerBarnSoknad.Builder builder = TestUtils.komplettBuilder();
 
-        builder.soker(Soker.builder().build());
+        builder.søker(Søker.builder().build());
         verifyHarFeil(builder);
 
-        builder.soker(Soker.builder().norskIdentitetsnummer(NorskIdentitetsnummer.of("123")).build());
+        builder.søker(Søker.builder().norskIdentitetsnummer(NorskIdentitetsnummer.of("123")).build());
         verifyIngenFeil(builder);
     }
 
@@ -87,7 +87,7 @@ public class PleiepengerBarnSoknadValidatorTest {
     public void barnMedBådeFødselsdatoOgNorskIdentitetsnummer() {
         final PleiepengerBarnSoknad.Builder builder = TestUtils.komplettBuilder();
         final Barn barn = Barn.builder()
-                .foedselsdato(LocalDate.now())
+                .fødselsdato(LocalDate.now())
                 .norskIdentitetsnummer(NorskIdentitetsnummer.of("29099012345"))
                 .build();
         builder.barn(barn);

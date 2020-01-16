@@ -3,12 +3,12 @@ package no.nav.k9.soknad.felles;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Soker {
+public class Søker {
 
     public final NorskIdentitetsnummer norskIdentitetsnummer;
 
     @JsonCreator
-    private Soker(
+    private Søker(
             @JsonProperty("norskIdentitetsnummer")
             NorskIdentitetsnummer norskIdentitetsnummer) {
         this.norskIdentitetsnummer = norskIdentitetsnummer;
@@ -28,8 +28,8 @@ public class Soker {
             return this;
         }
 
-        public Soker build() {
-            return new Soker(norskIdentitetsnummer);
+        public Søker build() {
+            return new Søker(norskIdentitetsnummer);
         }
     }
 }

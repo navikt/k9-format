@@ -1,7 +1,7 @@
 package no.nav.k9.soknad.pleiepengerbarn;
 
 import no.nav.k9.soknad.PeriodeValidator;
-import no.nav.k9.soknad.SoknadValidator;
+import no.nav.k9.soknad.SøknadValidator;
 import no.nav.k9.soknad.felles.*;
 
 import java.math.BigDecimal;
@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerBarnSoknad> {
+public class PleiepengerBarnSøknadValidator extends SøknadValidator<PleiepengerBarnSoknad> {
     private final PeriodeValidator periodeValidator;
 
-    PleiepengerBarnSoknadValidator() {
+    PleiepengerBarnSøknadValidator() {
         this.periodeValidator = new PeriodeValidator();
     }
 
@@ -23,16 +23,16 @@ public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerB
     public List<Feil> valider(PleiepengerBarnSoknad soknad) {
         final List<Feil> feil = new ArrayList<>();
 
-        validerSoknadId(soknad.soknadId, feil);
+        validerSøknadId(soknad.søknadId, feil);
         validerVersjon(soknad.versjon, feil);
         validerPeriode(soknad.periode, feil);
         validerMottattDato(soknad.mottattDato, feil);
-        validerSpraak(soknad.spraak, feil);
-        validerSoker(soknad.soker, feil);
+        validerSpråk(soknad.språk, feil);
+        validerSoker(soknad.søker, feil);
         validerBarn(soknad.barn, feil);
         validerUtland(soknad.utland, feil);
         validerBerdskap(soknad.beredskap, feil);
-        validerNattebaak(soknad.nattevaak, feil);
+        validerNattevåk(soknad.nattevåk, feil);
         validerTilsynsordning(soknad.tilsynsordning, feil);
         validerArbeid(soknad.arbeid, feil);
 
@@ -41,7 +41,7 @@ public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerB
 
     private void validerPeriode(Periode periode, List<Feil> feil) {
         if (periode == null) {
-            feil.add(new Feil("periode", "paakrevd", "Må settes en periode for søknaden."));
+            feil.add(new Feil("periode", PÅKREVD, "Må settes en periode for søknaden."));
         } else {
             feil.addAll(periodeValidator.valider(periode, "periode"));
         }
@@ -50,27 +50,27 @@ public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerB
 
     private static void validerVersjon(Versjon versjon, List<Feil> feil) {
         if (versjon == null) {
-            feil.add(new Feil("versjon", "paakrevd", "Versjon må settes i søknaden."));
+            feil.add(new Feil("versjon", PÅKREVD, "Versjon må settes i søknaden."));
         } else if (!versjon.erGyldig()){
             feil.add(new Feil("versjon", "ugyldigVersjon", "Versjonen er på ugyldig format."));
         }
     }
 
-    private static void validerSpraak(Spraak spraak, List<Feil> feil) {
-        if (spraak == null) {
-            feil.add(new Feil("spraak", "paakrevd", "Språk må settes i søknaden."));
+    private static void validerSpråk(Språk språk, List<Feil> feil) {
+        if (språk == null) {
+            feil.add(new Feil("språk", PÅKREVD, "Språk må settes i søknaden."));
         }
     }
 
-    private static void validerSoknadId(SoknadId soknadId, List<Feil> feil) {
-        if (soknadId == null) {
-            feil.add(new Feil("soknadId", "paakrevd", "ID må settes i søknaden."));
+    private static void validerSøknadId(SøknadId søknadId, List<Feil> feil) {
+        if (søknadId == null) {
+            feil.add(new Feil("søknadId", PÅKREVD, "ID må settes i søknaden."));
         }
     }
 
     private static void validerMottattDato(ZonedDateTime mottatDato, List<Feil> feil) {
         if (mottatDato == null) {
-            feil.add(new Feil("mottattDato", "paakrevd", "Mottatt dato må settes i søknaden."));
+            feil.add(new Feil("mottattDato", PÅKREVD, "Mottatt dato må settes i søknaden."));
         }
     }
 
@@ -79,36 +79,36 @@ public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerB
         feil.addAll(periodeValidator.validerTillattOverlapp(beredskap.perioder,"beredskap.perioder"));
     }
 
-    private void validerNattebaak(Nattevaak nattevaak, List<Feil> feil) {
-        if (nattevaak == null) return;
-        feil.addAll(periodeValidator.validerTillattOverlapp(nattevaak.perioder, "nattevaak.perioder"));
+    private void validerNattevåk(Nattevåk nattevåk, List<Feil> feil) {
+        if (nattevåk == null) return;
+        feil.addAll(periodeValidator.validerTillattOverlapp(nattevåk.perioder, "nattevåk.perioder"));
     }
 
     private void validerUtland(Utland utland, List<Feil> feil) {
         if (utland == null) return;
         if (utland.harBoddIUtlandetSiste12Mnd == null) {
-            feil.add(new Feil("utland.harBoddIUtlandetSiste12Mnd", "paakrevd", "Må besvares om man har bodd i utlandet de siste 12 månededene."));
+            feil.add(new Feil("utland.harBoddIUtlandetSiste12Mnd", PÅKREVD, "Må besvares om man har bodd i utlandet de siste 12 månededene."));
         }
         if (utland.skalBoIUtlandetNeste12Mnd == null) {
-            feil.add(new Feil("utland.skalBoIUtlandetNeste12Mnd", "paakrevd", "Må besvares om man skal bo i utlandet de neste 12 månededene."));
+            feil.add(new Feil("utland.skalBoIUtlandetNeste12Mnd", PÅKREVD, "Må besvares om man skal bo i utlandet de neste 12 månededene."));
         }
         feil.addAll(periodeValidator.validerIkkeTillattOverlapp(utland.opphold,"utland.opphold"));
     }
 
-    private static void validerSoker(Soker soker, List<Feil> feil) {
-        if (soker == null) {
-            feil.add(new Feil("soker", "paakrevd", "Søker må settes i søknaden."));
-        } else if (soker.norskIdentitetsnummer == null) {
-            feil.add(new Feil("soker.norskIdentitetsnummer", "paakrevd", "Søkers Personnummer/D-nummer må settes i søknaden."));
+    private static void validerSoker(Søker søker, List<Feil> feil) {
+        if (søker == null) {
+            feil.add(new Feil("søker", PÅKREVD, "Søker må settes i søknaden."));
+        } else if (søker.norskIdentitetsnummer == null) {
+            feil.add(new Feil("søker.norskIdentitetsnummer", PÅKREVD, "Søkers Personnummer/D-nummer må settes i søknaden."));
         }
     }
 
     private static void validerBarn(Barn barn, List<Feil> feil) {
         if (barn == null) {
-            feil.add(new Feil("barn", "paakrevd", "Barn må settes i søknaden."));
-        } else if (barn.norskIdentitetsnummer == null && barn.foedselsdato == null) {
-            feil.add(new Feil("barn", "norskIdentitetsnummerEllerFoedselsdatoPaakrevd", "Må sette enten Personnummer/D-nummer på barn, eller fødselsdato."));
-        } else if (barn.norskIdentitetsnummer != null && barn.foedselsdato != null) {
+            feil.add(new Feil("barn", PÅKREVD, "Barn må settes i søknaden."));
+        } else if (barn.norskIdentitetsnummer == null && barn.fødselsdato == null) {
+            feil.add(new Feil("barn", "norskIdentitetsnummerEllerFødselsdatoPåkrevd", "Må sette enten Personnummer/D-nummer på barn, eller fødselsdato."));
+        } else if (barn.norskIdentitetsnummer != null && barn.fødselsdato != null) {
             feil.add(new Feil("barn", "ikkeEntydigIdPåBarnet", "Må sette enten Personnummer/D-nummer på barn, eller fødselsdato."));
         }
     }
@@ -151,12 +151,12 @@ public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerB
 
     private void validerTilsynsordning(Tilsynsordning tilsynsordning, List<Feil> feil) {
         if (tilsynsordning == null || tilsynsordning.iTilsynsordning == null) {
-            feil.add(new Feil("tilsynsordning", "paakrevd", "Må oppgi svar om barnet skal være i tilsynsordning."));
+            feil.add(new Feil("tilsynsordning", PÅKREVD, "Må oppgi svar om barnet skal være i tilsynsordning."));
         } else if (TilsynsordningSvar.JA == tilsynsordning.iTilsynsordning && tilsynsordning.opphold != null) {
             feil.addAll(periodeValidator.validerIkkeTillattOverlapp(tilsynsordning.opphold, "tilsynsordning.opphold"));
             tilsynsordning.opphold.forEach((periode, opphold) -> {
                 if (opphold.lengde == null) {
-                    feil.add(new Feil("tilsynsordning.opphold[" + periode.iso8601 + "].lengde", "paakrevd", "Lengde på opphold i tilynsordning må settes."));
+                    feil.add(new Feil("tilsynsordning.opphold[" + periode.iso8601 + "].lengde", PÅKREVD, "Lengde på opphold i tilynsordning må settes."));
                 } else {
                     Duration maks = maksInnenforPeriode(periode);
                     if (maks != null && opphold.lengde.compareTo(maks) > 0) {
