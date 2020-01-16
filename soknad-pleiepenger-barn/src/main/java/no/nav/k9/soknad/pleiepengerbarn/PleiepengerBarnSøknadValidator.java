@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class PleiepengerBarnSøknadValidator extends SøknadValidator<PleiepengerBarnSoknad> {
+public class PleiepengerBarnSøknadValidator extends SøknadValidator<PleiepengerBarnSøknad> {
     private final PeriodeValidator periodeValidator;
 
     PleiepengerBarnSøknadValidator() {
@@ -20,7 +20,7 @@ public class PleiepengerBarnSøknadValidator extends SøknadValidator<Pleiepenge
     }
 
     @Override
-    public List<Feil> valider(PleiepengerBarnSoknad soknad) {
+    public List<Feil> valider(PleiepengerBarnSøknad soknad) {
         final List<Feil> feil = new ArrayList<>();
 
         validerSøknadId(soknad.søknadId, feil);

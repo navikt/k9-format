@@ -10,7 +10,7 @@ import no.nav.k9.soknad.felles.Versjon;
 
 import java.time.ZonedDateTime;
 
-public class OmsorgspengerSoknad {
+public class OmsorgspengerSøknad {
 
     public final SøknadId søknadId;
 
@@ -24,7 +24,7 @@ public class OmsorgspengerSoknad {
     public final Barn barn;
 
     @JsonCreator
-    private OmsorgspengerSoknad(
+    private OmsorgspengerSøknad(
             @JsonProperty("søknadId")
             SøknadId søknadId,
             @JsonProperty("versjon")
@@ -77,8 +77,8 @@ public class OmsorgspengerSoknad {
             return this;
         }
 
-        public OmsorgspengerSoknad build() {
-            OmsorgspengerSoknad soknad = new OmsorgspengerSoknad(
+        public OmsorgspengerSøknad build() {
+            OmsorgspengerSøknad soknad = new OmsorgspengerSøknad(
                     søknadId,
                     versjon,
                     mottattDato,

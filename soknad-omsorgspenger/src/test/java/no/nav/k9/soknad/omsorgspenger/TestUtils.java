@@ -13,16 +13,16 @@ import java.time.ZonedDateTime;
 
 class TestUtils {
 
-    static String jsonForKomplettSoknad() {
+    static String jsonForKomplettSøknad() {
         try {
-            return Files.readString(Path.of("src/test/resources/komplett-soknad.json"));
+            return Files.readString(Path.of("src/test/resources/komplett-søknad.json"));
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
     }
 
-    static OmsorgspengerSoknad.Builder komplettBuilder() {
-        return OmsorgspengerSoknad
+    static OmsorgspengerSøknad.Builder komplettBuilder() {
+        return OmsorgspengerSøknad
                 .builder()
                 .barn(Barn.builder()
                         .fødselsdato(LocalDate.parse("2015-01-01"))

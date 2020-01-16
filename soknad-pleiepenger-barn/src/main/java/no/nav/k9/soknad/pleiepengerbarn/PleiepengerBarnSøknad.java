@@ -7,7 +7,7 @@ import no.nav.k9.soknad.felles.*;
 
 import java.time.ZonedDateTime;
 
-public class PleiepengerBarnSoknad {
+public class PleiepengerBarnSøknad {
 
     public final SøknadId søknadId;
 
@@ -35,7 +35,7 @@ public class PleiepengerBarnSoknad {
     public final Arbeid arbeid;
 
     @JsonCreator
-    private PleiepengerBarnSoknad(
+    private PleiepengerBarnSøknad(
             @JsonProperty("søknadId")
             SøknadId søknadId,
             @JsonProperty("versjon")
@@ -151,8 +151,8 @@ public class PleiepengerBarnSoknad {
             return this;
         }
 
-        public PleiepengerBarnSoknad build() {
-            PleiepengerBarnSoknad soknad = new PleiepengerBarnSoknad(
+        public PleiepengerBarnSøknad build() {
+            PleiepengerBarnSøknad soknad = new PleiepengerBarnSøknad(
                     søknadId,
                     versjon,
                     periode,

@@ -6,18 +6,18 @@ import org.junit.Test;
 
 import org.skyscreamer.jsonassert.JSONAssert;
 
-public class PleiepengerBarnSoknadTest {
+public class PleiepengerBarnSøknadTest {
     @Test
     public void serialiseringAvJsonOgBrukAvBuilderGirSammeResultat() throws JSONException {
-        String json = TestUtils.jsonForKomplettSoknad();
-        PleiepengerBarnSoknad fraBuilder = TestUtils.komplettBuilder().build();
+        String json = TestUtils.jsonForKomplettSøknad();
+        PleiepengerBarnSøknad fraBuilder = TestUtils.komplettBuilder().build();
         JSONAssert.assertEquals(json, JsonUtils.toString(fraBuilder), true);
     }
 
     @Test
     public void reserialisering() throws JSONException {
-        String json = TestUtils.jsonForKomplettSoknad();
-        PleiepengerBarnSoknad soknad = JsonUtils.fromString(json, PleiepengerBarnSoknad.class);
-        JSONAssert.assertEquals(json, JsonUtils.toString(soknad), true);
+        String json = TestUtils.jsonForKomplettSøknad();
+        PleiepengerBarnSøknad søknad = JsonUtils.fromString(json, PleiepengerBarnSøknad.class);
+        JSONAssert.assertEquals(json, JsonUtils.toString(søknad), true);
     }
 }

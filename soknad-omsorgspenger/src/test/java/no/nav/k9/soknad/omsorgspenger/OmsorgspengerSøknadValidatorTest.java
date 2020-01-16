@@ -14,23 +14,23 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
-import static no.nav.k9.soknad.omsorgspenger.TestUtils.jsonForKomplettSoknad;
+import static no.nav.k9.soknad.omsorgspenger.TestUtils.jsonForKomplettSøknad;
 
 public class OmsorgspengerSøknadValidatorTest {
     private static final OmsorgspengerSøknadValidator validator = new OmsorgspengerSøknadValidator();
 
     @Test
-    public void soknadUtenNoeSatt() {
-        OmsorgspengerSoknad.Builder builder = OmsorgspengerSoknad.builder();
-        OmsorgspengerSoknad soknad = JsonUtils.fromString("{\"versjon\":\"0.0.1\"}", OmsorgspengerSoknad.class);
+    public void søknadUtenNoeSatt() {
+        OmsorgspengerSøknad.Builder builder = OmsorgspengerSøknad.builder();
+        OmsorgspengerSøknad søknad = JsonUtils.fromString("{\"versjon\":\"0.0.1\"}", OmsorgspengerSøknad.class);
         List<Feil> builderFeil = verifyHarFeil(builder);
-        List<Feil> jsonFeil = verifyHarFeil(soknad);
+        List<Feil> jsonFeil = verifyHarFeil(søknad);
         assertThat(builderFeil, is(jsonFeil));
     }
 
     @Test
-    public void soknadMedFoedselsdatoSattPaaBarn() {
-        OmsorgspengerSoknad.Builder builder = medSoker()
+    public void søknadMedFødselsdatoSattPåBarn() {
+        OmsorgspengerSøknad.Builder builder = medSøker()
                 .barn(Barn
                         .builder()
                         .fødselsdato(LocalDate.now())
@@ -40,8 +40,8 @@ public class OmsorgspengerSøknadValidatorTest {
     }
 
     @Test
-    public void soknadMedIdentSattPaaBarn() {
-        OmsorgspengerSoknad.Builder builder = medSoker()
+    public void søknadMedIdentSattPåBarn() {
+        OmsorgspengerSøknad.Builder builder = medSøker()
                 .barn(Barn
                         .builder()
                         .norskIdentitetsnummer(NorskIdentitetsnummer.of("11111111111"))
@@ -51,12 +51,12 @@ public class OmsorgspengerSøknadValidatorTest {
     }
 
     @Test
-    public void komplettSoknadFraJson() {
-        OmsorgspengerSoknad soknad = JsonUtils.fromString(jsonForKomplettSoknad(), OmsorgspengerSoknad.class);
+    public void komplettSøknadFraJson() {
+        OmsorgspengerSøknad soknad = JsonUtils.fromString(jsonForKomplettSøknad(), OmsorgspengerSøknad.class);
         verifyIngenFeil(soknad);
     }
 
-    private List<Feil> valider(OmsorgspengerSoknad.Builder builder) {
+    private List<Feil> valider(OmsorgspengerSøknad.Builder builder) {
         try {
             builder.build();
             return Collections.emptyList();
@@ -64,29 +64,29 @@ public class OmsorgspengerSøknadValidatorTest {
             return ex.getFeil();
         }
     }
-    private List<Feil> verifyHarFeil(OmsorgspengerSoknad.Builder builder) {
+    private List<Feil> verifyHarFeil(OmsorgspengerSøknad.Builder builder) {
         final List<Feil> feil = valider(builder);
         assertThat(feil, is(not(Collections.emptyList())));
         return feil;
     }
-    private List<Feil> verifyHarFeil(OmsorgspengerSoknad soknad) {
-        final List<Feil> feil = validator.valider(soknad);
+    private List<Feil> verifyHarFeil(OmsorgspengerSøknad søknad) {
+        final List<Feil> feil = validator.valider(søknad);
         assertThat(feil, is(not(Collections.emptyList())));
         return feil;
     }
 
-    private void verifyIngenFeil(OmsorgspengerSoknad.Builder builder) {
+    private void verifyIngenFeil(OmsorgspengerSøknad.Builder builder) {
         final List<Feil> feil = valider(builder);
         assertThat(feil, is(Collections.emptyList()));
     }
 
-    private void verifyIngenFeil(OmsorgspengerSoknad soknad) {
-        final List<Feil> feil = validator.valider(soknad);
+    private void verifyIngenFeil(OmsorgspengerSøknad søknad) {
+        final List<Feil> feil = validator.valider(søknad);
         assertThat(feil, is(Collections.emptyList()));
     }
 
-    private OmsorgspengerSoknad.Builder medSoker() {
-        return OmsorgspengerSoknad
+    private OmsorgspengerSøknad.Builder medSøker() {
+        return OmsorgspengerSøknad
                 .builder()
                 .søknadId(SøknadId.of("123"))
                 .mottattDato(ZonedDateTime.now())

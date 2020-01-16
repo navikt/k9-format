@@ -23,17 +23,17 @@ final class TestUtils {
         }
     }
 
-    static String jsonForKomplettSoknad() {
-        return jsonFromFile("komplett-soknad.json");
+    static String jsonForKomplettSøknad() {
+        return jsonFromFile("komplett-søknad.json");
     }
 
-    static PleiepengerBarnSoknad komplettSoknad() {
-        final PleiepengerBarnSoknad soknad = JsonUtils.fromString(jsonForKomplettSoknad(), PleiepengerBarnSoknad.class);
-        return soknad;
+    static PleiepengerBarnSøknad komplettSøknad() {
+        final PleiepengerBarnSøknad søknad = JsonUtils.fromString(jsonForKomplettSøknad(), PleiepengerBarnSøknad.class);
+        return søknad;
     }
 
-    static PleiepengerBarnSoknad.Builder komplettBuilder() {
-        return PleiepengerBarnSoknad.builder()
+    static PleiepengerBarnSøknad.Builder komplettBuilder() {
+        return PleiepengerBarnSøknad.builder()
                 .soknadId(SøknadId.of("1"))
                 .periode(Periode.builder()
                         .fraOgMed(LocalDate.parse("2018-12-30"))

@@ -29,7 +29,7 @@ public class Barn {
 
     public static final class Builder {
         private NorskIdentitetsnummer norskIdentitetsnummer;
-        private LocalDate foedselsdato;
+        private LocalDate fødselsdato;
 
         private Builder() {
         }
@@ -39,13 +39,13 @@ public class Barn {
             return this;
         }
 
-        public Builder fødselsdato(LocalDate foedselsdato) {
-            this.foedselsdato = foedselsdato;
+        public Builder fødselsdato(LocalDate fødselsdato) {
+            this.fødselsdato = fødselsdato;
             return this;
         }
 
         public Barn build() {
-            return new Barn(norskIdentitetsnummer, foedselsdato);
+            return new Barn(norskIdentitetsnummer, fødselsdato);
         }
     }
 }

@@ -7,10 +7,10 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OmsorgspengerSøknadValidator extends SøknadValidator<OmsorgspengerSoknad> {
+public class OmsorgspengerSøknadValidator extends SøknadValidator<OmsorgspengerSøknad> {
 
     @Override
-    public List<Feil> valider(OmsorgspengerSoknad soknad) {
+    public List<Feil> valider(OmsorgspengerSøknad soknad) {
         List<Feil> feil = new ArrayList<>();
 
         validerSøknadId(soknad.søknadId, feil);

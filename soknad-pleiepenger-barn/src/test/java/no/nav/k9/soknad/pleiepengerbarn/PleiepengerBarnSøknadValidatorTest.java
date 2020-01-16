@@ -20,23 +20,23 @@ public class PleiepengerBarnSøknadValidatorTest {
     private static final PleiepengerBarnSøknadValidator validator = new PleiepengerBarnSøknadValidator();
 
     @Test
-    public void soknadUtenNoeSatt() {
-        PleiepengerBarnSoknad.Builder builder = PleiepengerBarnSoknad.builder();
-        PleiepengerBarnSoknad soknad = JsonUtils.fromString("{\"versjon\":\"0.0.1\"}", PleiepengerBarnSoknad.class);
+    public void søknadUtenNoeSatt() {
+        PleiepengerBarnSøknad.Builder builder = PleiepengerBarnSøknad.builder();
+        PleiepengerBarnSøknad søknad = JsonUtils.fromString("{\"versjon\":\"0.0.1\"}", PleiepengerBarnSøknad.class);
         List<Feil> builderFeil = verifyHarFeil(builder);
-        List<Feil> jsonFeil = verifyHarFeil(soknad);
+        List<Feil> jsonFeil = verifyHarFeil(søknad);
         assertThat(builderFeil, is(jsonFeil));
     }
 
     @Test
-    public void komplettSoknadSkalIkkeHaValideringsfeil() {
-        final PleiepengerBarnSoknad soknad = TestUtils.komplettSoknad();
-        verifyIngenFeil(soknad);
+    public void komplettSøknadSkalIkkeHaValideringsfeil() {
+        final PleiepengerBarnSøknad søknad = TestUtils.komplettSøknad();
+        verifyIngenFeil(søknad);
     }
 
     @Test
-    public void mottattDatoErPaakrevd() {
-        final PleiepengerBarnSoknad.Builder builder = TestUtils.komplettBuilder();
+    public void mottattDatoErPåkrevd() {
+        final PleiepengerBarnSøknad.Builder builder = TestUtils.komplettBuilder();
 
         builder.mottattDato(null);
         verifyHarFeil(builder);
@@ -46,8 +46,8 @@ public class PleiepengerBarnSøknadValidatorTest {
     }
 
     @Test
-    public void sokerNorskIdentitetsnummerPaakrevd() {
-        final PleiepengerBarnSoknad.Builder builder = TestUtils.komplettBuilder();
+    public void søkerNorskIdentitetsnummerPåkrevd() {
+        final PleiepengerBarnSøknad.Builder builder = TestUtils.komplettBuilder();
 
         builder.søker(Søker.builder().build());
         verifyHarFeil(builder);
@@ -57,8 +57,8 @@ public class PleiepengerBarnSøknadValidatorTest {
     }
 
     @Test
-    public void soknadsperiodeErPaakrevd() {
-        final PleiepengerBarnSoknad.Builder builder = TestUtils.komplettBuilder();
+    public void søknadsperiodeErPåkrevd() {
+        final PleiepengerBarnSøknad.Builder builder = TestUtils.komplettBuilder();
 
         builder.periode(null);
         verifyHarFeil(builder);
@@ -68,8 +68,8 @@ public class PleiepengerBarnSøknadValidatorTest {
     }
 
     @Test
-    public void soknadMedTilsynsordningOppholdLengreEnnPerioden() {
-        final PleiepengerBarnSoknad.Builder builder = TestUtils.komplettBuilder();
+    public void søknadMedTilsynsordningOppholdLengreEnnPerioden() {
+        final PleiepengerBarnSøknad.Builder builder = TestUtils.komplettBuilder();
         Tilsynsordning tilsynsordning = Tilsynsordning.builder()
                 .iTilsynsordning(TilsynsordningSvar.JA)
                 .opphold(Periode.builder().enkeltDag(LocalDate.now()).build(), TilsynsordningOpphold
@@ -85,7 +85,7 @@ public class PleiepengerBarnSøknadValidatorTest {
 
     @Test
     public void barnMedBådeFødselsdatoOgNorskIdentitetsnummer() {
-        final PleiepengerBarnSoknad.Builder builder = TestUtils.komplettBuilder();
+        final PleiepengerBarnSøknad.Builder builder = TestUtils.komplettBuilder();
         final Barn barn = Barn.builder()
                 .fødselsdato(LocalDate.now())
                 .norskIdentitetsnummer(NorskIdentitetsnummer.of("29099012345"))
@@ -95,8 +95,8 @@ public class PleiepengerBarnSøknadValidatorTest {
     }
 
     @Test
-    public void soknadMedUgyldigInfoOmArbeid() {
-        final PleiepengerBarnSoknad.Builder builder = TestUtils.komplettBuilder();
+    public void søknadMedUgyldigInfoOmArbeid() {
+        final PleiepengerBarnSøknad.Builder builder = TestUtils.komplettBuilder();
         Arbeid arbeid = Arbeid
                 .builder()
                 .arbeidstaker(Arbeidstaker
@@ -154,26 +154,26 @@ public class PleiepengerBarnSøknadValidatorTest {
         verifyHarFeil(builder);
     }
 
-    private List<Feil> verifyHarFeil(PleiepengerBarnSoknad.Builder builder) {
+    private List<Feil> verifyHarFeil(PleiepengerBarnSøknad.Builder builder) {
         final List<Feil> feil = valider(builder);
         assertThat(feil, is(not(Collections.emptyList())));
         return feil;
     }
-    private List<Feil> verifyHarFeil(PleiepengerBarnSoknad soknad) {
-        final List<Feil> feil = validator.valider(soknad);
+    private List<Feil> verifyHarFeil(PleiepengerBarnSøknad søknad) {
+        final List<Feil> feil = validator.valider(søknad);
         assertThat(feil, is(not(Collections.emptyList())));
         return feil;
     }
-    private void verifyIngenFeil(PleiepengerBarnSoknad.Builder builder) {
+    private void verifyIngenFeil(PleiepengerBarnSøknad.Builder builder) {
         final List<Feil> feil = valider(builder);
         assertThat(feil, is(Collections.emptyList()));
     }
-    private void verifyIngenFeil(PleiepengerBarnSoknad soknad) {
-        final List<Feil> feil = validator.valider(soknad);
+    private void verifyIngenFeil(PleiepengerBarnSøknad søknad) {
+        final List<Feil> feil = validator.valider(søknad);
         assertThat(feil, is(Collections.emptyList()));
     }
 
-    private List<Feil> valider(PleiepengerBarnSoknad.Builder builder) {
+    private List<Feil> valider(PleiepengerBarnSøknad.Builder builder) {
         try {
             builder.build();
             return Collections.emptyList();
