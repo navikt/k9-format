@@ -1,10 +1,12 @@
 package no.nav.k9.soknad.felles;
 
+import java.util.Objects;
+
 public class Feil {
 
-    private String felt;
-    private String feilkode;
-    private String feilmelding;
+    public final String felt;
+    public final String feilkode;
+    public final String feilmelding;
 
 
     public Feil(String felt, String feilkode, String feilmelding) {
@@ -12,18 +14,17 @@ public class Feil {
         this.feilkode = feilkode;
         this.feilmelding = feilmelding;
     }
-    
 
-    public String getFelt() {
-        return felt;
-    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-    public String getFeilkode() {
-        return feilkode;
-    }
+        Feil feil = (Feil) o;
 
-    public String getFeilmelding() {
-        return feilmelding;
+        if (!Objects.equals(felt, feil.felt)) return false;
+        if (!Objects.equals(feilkode, feil.feilkode)) return false;
+        return Objects.equals(feilmelding, feil.feilmelding);
     }
 
     @Override

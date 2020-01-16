@@ -8,12 +8,15 @@ public class SoknadId {
     @JsonValue
     public final String id;
 
-    @JsonCreator
     private SoknadId(String id) {
         this.id = id;
     }
 
+    @JsonCreator
     public static SoknadId of(String id) {
+        if (id == null || id.isBlank()) {
+            return null;
+        }
         return new SoknadId(id);
     }
 }

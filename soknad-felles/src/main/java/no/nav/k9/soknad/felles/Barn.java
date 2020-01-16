@@ -9,6 +9,7 @@ import java.time.LocalDate;
 public class Barn {
 
     public final NorskIdentitetsnummer norskIdentitetsnummer;
+
     public final LocalDate foedselsdato;
 
     public static Builder builder() {
@@ -17,7 +18,7 @@ public class Barn {
 
     @JsonCreator
     private Barn(
-            @JsonProperty("norsk_identitetsnummer")
+            @JsonProperty("norskIdentitetsnummer")
             NorskIdentitetsnummer norskIdentitetsnummer,
             @JsonProperty("foedselsdato")
             @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Oslo")

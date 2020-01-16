@@ -1,6 +1,5 @@
 package no.nav.k9.soknad;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
@@ -15,13 +14,9 @@ public final class JsonUtils {
 
     private static final ObjectMapper objectMapper = createObjectMapper();
 
+    private JsonUtils() { }
 
-    private JsonUtils() {
-
-    }
-
-
-    public static final String toString(Object object) {
+    public static String toString(Object object) {
         try {
             return objectMapper.writer(new PlatformIndependentPrettyPrinter()).writeValueAsString(object);
         } catch (JsonProcessingException e) {
@@ -29,11 +24,9 @@ public final class JsonUtils {
         }
     }
 
-    public static final <T> T fromString(String s, Class<T> clazz) {
+    public static <T> T fromString(String s, Class<T> clazz) {
         try {
             return objectMapper.readValue(s, clazz);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -43,7 +36,7 @@ public final class JsonUtils {
         return objectMapper;
     }
 
-    static final ObjectNode toObjectNode(Object object) {
+    static ObjectNode toObjectNode(Object object) {
         return (ObjectNode) objectMapper.valueToTree(object);
     }
 
@@ -52,10 +45,10 @@ public final class JsonUtils {
                 .registerModule(new Jdk8Module())
                 .registerModule(new JavaTimeModule())
                 .setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE)
-                .setSerializationInclusion(JsonInclude.Include.NON_NULL)
                 .setTimeZone(TimeZone.getTimeZone("Europe/Oslo"))
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .disable(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS)
+                .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
                 .enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY)
                 .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                 ;

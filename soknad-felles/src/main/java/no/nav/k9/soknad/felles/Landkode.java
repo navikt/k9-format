@@ -8,22 +8,18 @@ import java.util.Objects;
 public class Landkode {
 
     @JsonValue
-    private final String landkode;
+    public final String landkode;
 
     private Landkode(String landkode) {
-        if (landkode == null) {
-            throw new IllegalArgumentException("landkode == null");
-        }
         this.landkode = landkode;
     }
 
     @JsonCreator
-    public static Landkode from(String landkode) {
+    public static Landkode of(String landkode) {
+        if (landkode == null || landkode.isBlank()) {
+            return null;
+        }
         return new Landkode(landkode);
-    }
-
-    public String getKode() {
-        return landkode;
     }
 
     @Override
