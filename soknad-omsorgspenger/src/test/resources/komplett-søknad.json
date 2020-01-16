@@ -1,0 +1,12 @@
+{
+  "søknadId": "123-123-123",
+  "mottattDato": "2019-10-20T07:15:36.124Z",
+  "versjon": "0.0.1",
+  "søker": {
+    "norskIdentitetsnummer": "11111111111"
+  },
+  "barn": {
+    "fødselsdato": "2015-01-01",
+    "norskIdentitetsnummer" : null
+  }
+}
