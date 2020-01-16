@@ -4,6 +4,7 @@ import no.nav.k9.soknad.PeriodeValidator;
 import no.nav.k9.soknad.SoknadValidator;
 import no.nav.k9.soknad.felles.*;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Period;
 import java.time.ZonedDateTime;
@@ -126,8 +127,8 @@ public class PleiepengerBarnSoknadValidator extends SoknadValidator<PleiepengerB
                     periodeValidator.validerTillattOverlapp(arbeidstaker.perioder, "arbeid.arbeidstaker[" + i + "].perioder")
             );
             for (Map.Entry<Periode, Arbeidstaker.ArbeidstakerPeriodeInfo> perioder : arbeidstaker.perioder.entrySet()) {
-                Double skalJobbeProsent = perioder.getValue().skalJobbeProsent;
-                if (skalJobbeProsent == null || skalJobbeProsent < 0 || skalJobbeProsent > 100) {
+                BigDecimal skalJobbeProsent = perioder.getValue().skalJobbeProsent;
+                if (skalJobbeProsent == null || skalJobbeProsent.doubleValue() < 0 || skalJobbeProsent.doubleValue() > 100) {
                     feil.add(new Feil("arbeid.arbeidstaker[" + i + "].perioder[" + perioder.getKey().iso8601 + "].skalJobbeProsent", "ugylidigProsent", "Skal jobbe prosent må være mellom 0 og 100"));
                 }
             }

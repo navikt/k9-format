@@ -4,6 +4,7 @@ import no.nav.k9.soknad.JsonUtils;
 import no.nav.k9.soknad.felles.*;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -92,13 +93,13 @@ final class TestUtils {
                                 .organisasjonsnummer(Organisasjonsnummer.of("999999999"))
                                 .periode(
                                         Periode.builder().fraOgMed(LocalDate.parse("2018-10-10")).tilOgMed(LocalDate.parse("2018-12-29")).build(),
-                                        Arbeidstaker.ArbeidstakerPeriodeInfo.builder().skalJobbeProsent(50.25).build())
+                                        Arbeidstaker.ArbeidstakerPeriodeInfo.builder().skalJobbeProsent(BigDecimal.valueOf(50.25)).build())
                                 .build())
                         .arbeidstaker(Arbeidstaker.builder()
                                 .norskIdentitetsnummer(NorskIdentitetsnummer.of("29099012345"))
                                 .periode(
                                         Periode.builder().fraOgMed(LocalDate.parse("2018-11-10")).tilOgMed(LocalDate.parse("2018-12-29")).build(),
-                                        Arbeidstaker.ArbeidstakerPeriodeInfo.builder().skalJobbeProsent(20.00).build())
+                                        Arbeidstaker.ArbeidstakerPeriodeInfo.builder().skalJobbeProsent(BigDecimal.valueOf(20.00)).build())
                                 .build())
                         .selvstendigNæringsdrivende(SelvstendigNæringsdrivende.builder()
                                 .periode(

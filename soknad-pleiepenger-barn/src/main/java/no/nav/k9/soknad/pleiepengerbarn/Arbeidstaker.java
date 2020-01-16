@@ -6,6 +6,8 @@ import no.nav.k9.soknad.felles.NorskIdentitetsnummer;
 import no.nav.k9.soknad.felles.Organisasjonsnummer;
 import no.nav.k9.soknad.felles.Periode;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -83,12 +85,12 @@ public class Arbeidstaker {
          * - Gitt at pleiepengene blir avkortet mot arbeid (ikke gradert mot tilsyn) vil "skalJobbeProsent" brukes ved
          * håndtering av inntektsmelding fra den aktuelle arbeidsgiveren for å regne ut inntektstapet i perioden.
          */
-        public final Double skalJobbeProsent;
+        public final BigDecimal skalJobbeProsent;
 
         private ArbeidstakerPeriodeInfo(
                 @JsonProperty("skalJobbeProsent")
-                Double skalJobbeProsent) {
-            this.skalJobbeProsent = skalJobbeProsent;
+                BigDecimal skalJobbeProsent) {
+            this.skalJobbeProsent = (skalJobbeProsent == null) ? null : skalJobbeProsent.setScale(2, RoundingMode.HALF_UP);
         }
 
         public static Builder builder() {
@@ -96,11 +98,11 @@ public class Arbeidstaker {
         }
 
         public static final class Builder {
-            private Double skalJobbeProsent;
+            private BigDecimal skalJobbeProsent;
 
             private Builder() {}
 
-            public Builder skalJobbeProsent(Double skalJobbeProsent) {
+            public Builder skalJobbeProsent(BigDecimal skalJobbeProsent) {
                 this.skalJobbeProsent = skalJobbeProsent;
                 return this;
             }

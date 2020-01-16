@@ -6,6 +6,7 @@ import no.nav.k9.soknad.ValideringsFeil;
 import no.nav.k9.soknad.felles.*;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
@@ -103,7 +104,7 @@ public class PleiepengerBarnSoknadValidatorTest {
                         .organisasjonsnummer(Organisasjonsnummer.of("88888888"))
                         .periode(
                             Periode.builder().fraOgMed(LocalDate.now()).tilOgMed(LocalDate.now().plusDays(3)).build(),
-                            Arbeidstaker.ArbeidstakerPeriodeInfo.builder().skalJobbeProsent(120.00).build()
+                            Arbeidstaker.ArbeidstakerPeriodeInfo.builder().skalJobbeProsent(BigDecimal.valueOf(120.00)).build()
                         ).build()
                 ).build();
 
@@ -118,7 +119,7 @@ public class PleiepengerBarnSoknadValidatorTest {
                         .norskIdentitetsnummer(NorskIdentitetsnummer.of("29099012345"))
                         .periode(
                                 Periode.builder().fraOgMed(LocalDate.now()).tilOgMed(LocalDate.now().plusDays(3)).build(),
-                                Arbeidstaker.ArbeidstakerPeriodeInfo.builder().skalJobbeProsent(100.00).build()
+                                Arbeidstaker.ArbeidstakerPeriodeInfo.builder().skalJobbeProsent(BigDecimal.valueOf(100.00)).build()
                         ).build()
                 ).build();
         builder.arbeid(arbeid);
@@ -132,7 +133,7 @@ public class PleiepengerBarnSoknadValidatorTest {
                         .norskIdentitetsnummer(NorskIdentitetsnummer.of("29099012345"))
                         .periode(
                                 Periode.builder().fraOgMed(LocalDate.now()).tilOgMed(LocalDate.now().plusDays(3)).build(),
-                                Arbeidstaker.ArbeidstakerPeriodeInfo.builder().skalJobbeProsent(-20.00).build()
+                                Arbeidstaker.ArbeidstakerPeriodeInfo.builder().skalJobbeProsent(BigDecimal.valueOf(-20.00)).build()
                         ).build()
                 ).build();
 
@@ -145,7 +146,7 @@ public class PleiepengerBarnSoknadValidatorTest {
                         .builder()
                         .periode(
                                 Periode.builder().fraOgMed(LocalDate.now()).tilOgMed(LocalDate.now().plusDays(3)).build(),
-                                Arbeidstaker.ArbeidstakerPeriodeInfo.builder().skalJobbeProsent(20.00).build()
+                                Arbeidstaker.ArbeidstakerPeriodeInfo.builder().skalJobbeProsent(BigDecimal.valueOf(20.00)).build()
                         ).build()
                 ).build();
 
