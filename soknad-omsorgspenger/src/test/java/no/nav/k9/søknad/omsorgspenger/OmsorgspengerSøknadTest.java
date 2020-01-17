@@ -8,7 +8,6 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import static no.nav.k9.søknad.omsorgspenger.TestUtils.jsonForKomplettSøknad;
 import static no.nav.k9.søknad.omsorgspenger.TestUtils.komplettBuilder;
 
-
 public class OmsorgspengerSøknadTest {
     @Test
     public void serialiseringAvJsonOgBrukAvBuilderGirSammeResultat() throws JSONException {

@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import static no.nav.k9.søknad.omsorgspenger.TestUtils.jsonForKomplettSøknad;
 
