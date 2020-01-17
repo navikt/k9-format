@@ -20,7 +20,7 @@
     "opphold": {
       "2018-12-30/2019-10-10" : {
         "land": "SWE",
-        "årsak": "erInnlagtIHelseinstitusjonForNorskOffentligRegning"
+        "årsak": "barnetInnlagtIHelseinstitusjonForNorskOffentligRegning"
       },
       "2018-10-10/2018-10-30" : {
         "land": "NOR",
@@ -28,7 +28,7 @@
       },
       "2021-10-10/.." : {
         "land": "DEN",
-        "årsak": "fårOppholdetDekketEtterAvtaleMedEtAnnetLandOmTrygd"
+        "årsak": "barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd"
       }
     }
   },

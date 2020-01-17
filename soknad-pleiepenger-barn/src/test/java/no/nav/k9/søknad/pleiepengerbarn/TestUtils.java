@@ -53,13 +53,13 @@ final class TestUtils {
                                 UtlandBosted.builder().land(Landkode.of("POL")).build())
                         .opphold(
                                 Periode.builder().fraOgMed(LocalDate.parse("2018-12-30")).tilOgMed(LocalDate.parse("2019-10-10")).build(),
-                                UtlandOpphold.builder().land(Landkode.of("SWE")).årsak(UtlandOpphold.UtlandOppholdÅrsak.of("erInnlagtIHelseinstitusjonForNorskOffentligRegning")).build())
+                                UtlandOpphold.builder().land(Landkode.of("SWE")).årsak(UtlandOpphold.UtlandOppholdÅrsak.of("barnetInnlagtIHelseinstitusjonForNorskOffentligRegning")).build())
                         .opphold(
                                 Periode.builder().fraOgMed(LocalDate.parse("2018-10-10")).tilOgMed(LocalDate.parse("2018-10-30")).build(),
                                 UtlandOpphold.builder().land(Landkode.of("NOR")).build())
                         .opphold(
                                 Periode.builder().fraOgMed(LocalDate.parse("2021-10-10")).build(),
-                                UtlandOpphold.builder().land(Landkode.of("DEN")).årsak(UtlandOpphold.UtlandOppholdÅrsak.of("fårOppholdetDekketEtterAvtaleMedEtAnnetLandOmTrygd")).build())
+                                UtlandOpphold.builder().land(Landkode.of("DEN")).årsak(UtlandOpphold.UtlandOppholdÅrsak.of("barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd")).build())
                         .build())
                 .beredskap(Beredskap.builder()
                         .periode(
