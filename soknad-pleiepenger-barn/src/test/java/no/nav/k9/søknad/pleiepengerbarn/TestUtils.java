@@ -58,7 +58,7 @@ final class TestUtils {
                                 Periode.builder().fraOgMed(LocalDate.parse("2018-10-10")).tilOgMed(LocalDate.parse("2018-10-30")).build(),
                                 UtlandOpphold.builder().land(Landkode.of("NOR")).build())
                         .opphold(
-                                Periode.builder().fraOgMed(LocalDate.parse("2021-10-10")).build(),
+                                Periode.builder().fraOgMed(LocalDate.parse("2021-10-10")).tilOgMed(LocalDate.parse("2050-01-05")).build(),
                                 UtlandOpphold.builder().land(Landkode.of("DEN")).årsak(UtlandOpphold.UtlandOppholdÅrsak.of("barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd")).build())
                         .build())
                 .beredskap(Beredskap.builder()

@@ -54,23 +54,6 @@ public class PeriodeValidatorTest {
     }
 
     @Test
-    public void overlappendeÅpnePerioder() {
-        Map<Periode, Boolean> enLukketOgEnÅpenPeriode = Map.of(
-                Periode.builder().fraOgMed(LocalDate.now()).tilOgMed(LocalDate.now().plusDays(10)).build(), true,
-                Periode.builder().fraOgMed(LocalDate.now().plusDays(5)).build(), true
-        );
-
-        assertThat(validator.validerIkkeTillattOverlapp(enLukketOgEnÅpenPeriode, felt), is(not(Collections.emptyList())));
-
-        Map<Periode, Boolean> toÅpnePerioder = Map.of(
-                Periode.builder().fraOgMed(LocalDate.now().plusDays(10)).build(), true,
-                Periode.builder().fraOgMed(LocalDate.now().plusDays(5)).build(), true
-        );
-
-        assertThat(validator.validerIkkeTillattOverlapp(toÅpnePerioder, felt), is(not(Collections.emptyList())));
-    }
-
-    @Test
     public void tilOgMedFørFraOgmed() {
         Map<Periode, Boolean> perioder = Map.of(
                 Periode.builder().fraOgMed(LocalDate.now()).tilOgMed(LocalDate.now().minusDays(5)).build(), true
@@ -91,7 +74,7 @@ public class PeriodeValidatorTest {
         Map<Periode, Boolean> perioder = Map.of(
                 Periode.builder().fraOgMed(LocalDate.now()).build(), true
         );
-        assertThat(validator.validerIkkeTillattOverlapp(perioder, felt), is(Collections.emptyList()));
+        assertThat(validator.validerIkkeTillattOverlapp(perioder, felt), is(not(Collections.emptyList())));
     }
 
     @Test

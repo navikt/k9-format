@@ -12,30 +12,31 @@ public class PeriodeValidator {
     public List<Feil> validerTillattOverlapp(
             Map<Periode, ?> perioder,
             String felt) {
-        return valider(perioder, felt, true);
+        return valider(perioder, felt, true, false);
     }
 
     public List<Feil> validerIkkeTillattOverlapp(
             Map<Periode, ?> perioder,
             String felt) {
-        return valider(perioder, felt, false);
+        return valider(perioder, felt, false, false);
     }
 
     public List<Feil> valider(
             Periode periode,
             String felt) {
         List<Feil> feil = new ArrayList<>();
-        validerGyldigPeriode(periode, felt, feil);
+        validerGyldigPeriode(periode, felt, false, feil);
         return feil;
     }
 
     private static List<Feil> valider(
             Map<Periode, ?> perioder,
             String felt,
-            Boolean tillattOverlapp) {
+            Boolean tillatOverlapp,
+            Boolean tillatÅpnePerioder) {
         List<Feil> feil = new ArrayList<>();
-        validerGyldigePerioder(perioder, felt, feil);
-        if (!tillattOverlapp) {
+        validerGyldigePerioder(perioder, felt, tillatÅpnePerioder, feil);
+        if (!tillatOverlapp) {
             validerOverlappendePerioder(perioder, felt, feil);
         }
         return feil;
@@ -44,17 +45,22 @@ public class PeriodeValidator {
     private static void validerGyldigePerioder(
             Map<Periode, ?> perioder,
             String felt,
+            Boolean tillatÅpnePerioder,
             List<Feil> feil) {
-        perioder.forEach((periode, value) -> validerGyldigPeriode(periode, felt(felt, periode), feil));
+        perioder.forEach((periode, value) -> validerGyldigPeriode(periode, felt(felt, periode), tillatÅpnePerioder, feil));
     }
 
     private static void validerGyldigPeriode(
             Periode periode,
             String felt,
+            Boolean tillatÅpnePerioder,
             List<Feil> feil) {
         if (periode == null) {
             feil.add(new Feil(felt, "påkrevd", "Perioden må være satt."));
         } else {
+            if (!tillatÅpnePerioder && periode.tilOgMed == null) {
+                feil.add(new Feil(felt, "påkrevd", "Til og med (TOM) må være satt."));
+            }
             if (periode.fraOgMed == null) {
                 feil.add(new Feil(felt, "påkrevd", "Fra og med (FOM) må være satt."));
             }
