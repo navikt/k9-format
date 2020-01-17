@@ -86,12 +86,7 @@ public class PleiepengerBarnSøknadValidator extends SøknadValidator<Pleiepenge
 
     private void validerUtland(Utland utland, List<Feil> feil) {
         if (utland == null) return;
-        if (utland.harBoddIUtlandetSiste12Mnd == null) {
-            feil.add(new Feil("utland.harBoddIUtlandetSiste12Mnd", PÅKREVD, "Må besvares om man har bodd i utlandet de siste 12 månededene."));
-        }
-        if (utland.skalBoIUtlandetNeste12Mnd == null) {
-            feil.add(new Feil("utland.skalBoIUtlandetNeste12Mnd", PÅKREVD, "Må besvares om man skal bo i utlandet de neste 12 månededene."));
-        }
+        feil.addAll(periodeValidator.validerIkkeTillattOverlapp(utland.bosteder, "utland.bosteder"));
         feil.addAll(periodeValidator.validerIkkeTillattOverlapp(utland.opphold,"utland.opphold"));
     }
 

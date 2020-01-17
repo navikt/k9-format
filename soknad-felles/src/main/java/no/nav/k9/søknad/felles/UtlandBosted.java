@@ -3,12 +3,12 @@ package no.nav.k9.søknad.felles;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class UtlandOpphold {
+public class UtlandBosted {
 
     public final Landkode land;
 
     @JsonCreator
-    private UtlandOpphold(
+    private UtlandBosted(
             @JsonProperty("land")
             Landkode land) {
         this.land = land;
@@ -28,8 +28,8 @@ public class UtlandOpphold {
             return this;
         }
 
-        public UtlandOpphold build() {
-            return new UtlandOpphold(
+        public UtlandBosted build() {
+            return new UtlandBosted(
                     land
             );
         }
