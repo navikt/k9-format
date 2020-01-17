@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class PleiepengerBarnSøknadValidator extends SøknadValidator<PleiepengerBarnSøknad> {
+class PleiepengerBarnSøknadValidator extends SøknadValidator<PleiepengerBarnSøknad> {
     private final PeriodeValidator periodeValidator;
 
     PleiepengerBarnSøknadValidator() {

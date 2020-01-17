@@ -3,6 +3,7 @@ package no.nav.k9.søknad.pleiepengerbarn;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.felles.*;
 
 import java.time.ZonedDateTime;
@@ -82,6 +83,7 @@ public class PleiepengerBarnSøknad {
         private static final PleiepengerBarnSøknadValidator validator = new PleiepengerBarnSøknadValidator();
         private static final Versjon versjon = Versjon.of("0.0.1");
 
+        private String json;
         private SøknadId søknadId;
         private ZonedDateTime mottattDato;
         private Periode periode;
@@ -151,8 +153,13 @@ public class PleiepengerBarnSøknad {
             return this;
         }
 
+        public Builder json(String json) {
+            this.json = json;
+            return this;
+        }
+
         public PleiepengerBarnSøknad build() {
-            PleiepengerBarnSøknad søknad = new PleiepengerBarnSøknad(
+            PleiepengerBarnSøknad søknad = (json == null) ? new PleiepengerBarnSøknad(
                     søknadId,
                     versjon,
                     periode,
@@ -165,7 +172,7 @@ public class PleiepengerBarnSøknad {
                     nattevåk,
                     tilsynsordning,
                     arbeid
-            );
+            ) : JsonUtils.fromString(json, PleiepengerBarnSøknad.class);
             validator.forsikreValidert(søknad);
             return søknad;
         }

@@ -7,7 +7,9 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OmsorgspengerSøknadValidator extends SøknadValidator<OmsorgspengerSøknad> {
+class OmsorgspengerSøknadValidator extends SøknadValidator<OmsorgspengerSøknad> {
+
+    OmsorgspengerSøknadValidator() {}
 
     @Override
     public List<Feil> valider(OmsorgspengerSøknad søknad) {
