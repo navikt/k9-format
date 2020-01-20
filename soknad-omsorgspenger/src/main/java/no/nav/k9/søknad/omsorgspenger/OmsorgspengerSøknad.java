@@ -3,6 +3,7 @@ package no.nav.k9.søknad.omsorgspenger;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.felles.Barn;
 import no.nav.k9.søknad.felles.Søker;
 import no.nav.k9.søknad.felles.SøknadId;
@@ -50,6 +51,7 @@ public class OmsorgspengerSøknad {
         private final static OmsorgspengerSøknadValidator validator = new OmsorgspengerSøknadValidator();
         private final static Versjon versjon = Versjon.of("0.0.1");
 
+        private String json;
         private SøknadId søknadId;
         private ZonedDateTime mottattDato;
         private Søker søker;
@@ -77,14 +79,19 @@ public class OmsorgspengerSøknad {
             return this;
         }
 
+        public Builder json(String json) {
+            this.json = json;
+            return this;
+        }
+
         public OmsorgspengerSøknad build() {
-            OmsorgspengerSøknad søknad = new OmsorgspengerSøknad(
+            OmsorgspengerSøknad søknad = (json == null) ? new OmsorgspengerSøknad(
                     søknadId,
                     versjon,
                     mottattDato,
                     søker,
                     barn
-            );
+            ) : JsonUtils.fromString(json, OmsorgspengerSøknad.class);
             validator.forsikreValidert(søknad);
             return søknad;
         }

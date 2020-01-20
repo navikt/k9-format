@@ -27,12 +27,14 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <jackson.version>2.10.2</jackson.version>
+        <junit.version>4.13</junit.version>
+        <hamcrest.version>2.2</hamcrest.version>
     </properties>
 
     <scm>
-        <connection>scm:git:https://github.com/navikt/k9-soknad.git</connection>
-        <developerConnection>scm:git:https://github.com/navikt/k9-soknad.git</developerConnection>
-        <url>https://github.com/navikt/k9-soknad/</url>
+        <connection>scm:git:https://github.com/navikt/k9-format.git</connection>
+        <developerConnection>scm:git:https://github.com/navikt/k9-format.git</developerConnection>
+        <url>https://github.com/navikt/k9-format</url>
     </scm>
 
     <build>

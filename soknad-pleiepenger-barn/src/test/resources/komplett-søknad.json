@@ -12,17 +12,23 @@
     "norskIdentitetsnummer" : "12345678902"
   },
   "utland" : {
-    "harBoddIUtlandetSiste12Mnd": true,
-    "skalBoIUtlandetNeste12Mnd": true,
+    "bosteder": {
+      "2022-12-30/2023-10-10" : {
+        "land": "POL"
+      }
+    },
     "opphold": {
       "2018-12-30/2019-10-10" : {
-        "land": "SWE"
+        "land": "SWE",
+        "årsak": "barnetInnlagtIHelseinstitusjonForNorskOffentligRegning"
       },
       "2018-10-10/2018-10-30" : {
-        "land": "NOR"
+        "land": "NOR",
+        "årsak": null
       },
-      "2021-10-10/.." : {
-        "land": "DEN"
+      "2021-10-10/2050-01-05" : {
+        "land": "DEN",
+        "årsak": "barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd"
       }
     }
   },
