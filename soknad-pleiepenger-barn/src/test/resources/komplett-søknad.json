@@ -1,5 +1,5 @@
 {
-  "versjon" : "0.0.1",
+  "versjon" : "1.0.0",
   "søknadId": "1",
   "mottattDato" : "2019-10-20T07:15:36.124Z",
   "språk": "nb",
@@ -11,25 +11,23 @@
     "fødselsdato": null,
     "norskIdentitetsnummer" : "12345678902"
   },
-  "utland" : {
-    "bosteder": {
-      "2022-12-30/2023-10-10" : {
-        "land": "POL"
-      }
+  "bosteder": {
+    "2022-12-30/2023-10-10" : {
+      "land": "POL"
+    }
+  },
+  "utenlandsopphold": {
+    "2018-12-30/2019-10-10" : {
+      "land": "SWE",
+      "årsak": "barnetInnlagtIHelseinstitusjonForNorskOffentligRegning"
     },
-    "opphold": {
-      "2018-12-30/2019-10-10" : {
-        "land": "SWE",
-        "årsak": "barnetInnlagtIHelseinstitusjonForNorskOffentligRegning"
-      },
-      "2018-10-10/2018-10-30" : {
-        "land": "NOR",
-        "årsak": null
-      },
-      "2021-10-10/2050-01-05" : {
-        "land": "DEN",
-        "årsak": "barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd"
-      }
+    "2018-10-10/2018-10-30" : {
+      "land": "NOR",
+      "årsak": null
+    },
+    "2021-10-10/2050-01-05" : {
+      "land": "DEN",
+      "årsak": "barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd"
     }
   },
   "beredskap": {

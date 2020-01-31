@@ -47,20 +47,18 @@ final class TestUtils {
                 .barn(Barn.builder()
                         .norskIdentitetsnummer(NorskIdentitetsnummer.of("12345678902"))
                         .build())
-                .utland(Utland.builder()
-                        .bosted(
-                                Periode.builder().fraOgMed(LocalDate.parse("2022-12-30")).tilOgMed(LocalDate.parse("2023-10-10")).build(),
-                                UtlandBosted.builder().land(Landkode.of("POL")).build())
-                        .opphold(
-                                Periode.builder().fraOgMed(LocalDate.parse("2018-12-30")).tilOgMed(LocalDate.parse("2019-10-10")).build(),
-                                UtlandOpphold.builder().land(Landkode.of("SWE")).årsak(UtlandOpphold.UtlandOppholdÅrsak.of("barnetInnlagtIHelseinstitusjonForNorskOffentligRegning")).build())
-                        .opphold(
-                                Periode.builder().fraOgMed(LocalDate.parse("2018-10-10")).tilOgMed(LocalDate.parse("2018-10-30")).build(),
-                                UtlandOpphold.builder().land(Landkode.of("NOR")).build())
-                        .opphold(
-                                Periode.builder().fraOgMed(LocalDate.parse("2021-10-10")).tilOgMed(LocalDate.parse("2050-01-05")).build(),
-                                UtlandOpphold.builder().land(Landkode.of("DEN")).årsak(UtlandOpphold.UtlandOppholdÅrsak.of("barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd")).build())
-                        .build())
+                .bosted(
+                        Periode.builder().fraOgMed(LocalDate.parse("2022-12-30")).tilOgMed(LocalDate.parse("2023-10-10")).build(),
+                        Bosted.builder().land(Landkode.of("POL")).build())
+                .utenlandsopphold(
+                        Periode.builder().fraOgMed(LocalDate.parse("2018-12-30")).tilOgMed(LocalDate.parse("2019-10-10")).build(),
+                        Utenlandsopphold.builder().land(Landkode.of("SWE")).årsak(Utenlandsopphold.UtenlandsoppholdÅrsak.of("barnetInnlagtIHelseinstitusjonForNorskOffentligRegning")).build())
+                .utenlandsopphold(
+                        Periode.builder().fraOgMed(LocalDate.parse("2018-10-10")).tilOgMed(LocalDate.parse("2018-10-30")).build(),
+                        Utenlandsopphold.builder().land(Landkode.of("NOR")).build())
+                .utenlandsopphold(
+                        Periode.builder().fraOgMed(LocalDate.parse("2021-10-10")).tilOgMed(LocalDate.parse("2050-01-05")).build(),
+                        Utenlandsopphold.builder().land(Landkode.of("DEN")).årsak(Utenlandsopphold.UtenlandsoppholdÅrsak.of("barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd")).build())
                 .beredskap(Beredskap.builder()
                         .periode(
                                 Periode.builder().fraOgMed(LocalDate.parse("2018-10-10")).tilOgMed(LocalDate.parse("2018-12-29")).build(),

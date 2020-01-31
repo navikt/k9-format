@@ -7,6 +7,11 @@ import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.felles.*;
 
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.unmodifiableMap;
 
 public class PleiepengerBarnSøknad {
 
@@ -25,7 +30,9 @@ public class PleiepengerBarnSøknad {
 
     public final Barn barn;
 
-    public final Utland utland;
+    public final Map<Periode, Bosted> bosteder;
+
+    public final Map<Periode, Utenlandsopphold> utenlandsopphold;
 
     public final Beredskap beredskap;
 
@@ -51,8 +58,10 @@ public class PleiepengerBarnSøknad {
             Søker søker,
             @JsonProperty("barn")
             Barn barn,
-            @JsonProperty("utland")
-            Utland utland,
+            @JsonProperty("bosteder")
+            Map<Periode, Bosted> bosteder,
+            @JsonProperty("utenlandsopphold")
+            Map<Periode, Utenlandsopphold> utenlandsopphold,
             @JsonProperty("beredskap")
             Beredskap beredskap,
             @JsonProperty("nattevåk")
@@ -68,7 +77,8 @@ public class PleiepengerBarnSøknad {
         this.språk = språk;
         this.søker = søker;
         this.barn = barn;
-        this.utland = utland;
+        this.bosteder = (bosteder == null) ? emptyMap() : unmodifiableMap(bosteder);
+        this.utenlandsopphold = (utenlandsopphold == null) ? emptyMap() : unmodifiableMap(utenlandsopphold);
         this.beredskap = beredskap;
         this.nattevåk = nattevåk;
         this.tilsynsordning = tilsynsordning;
@@ -81,7 +91,7 @@ public class PleiepengerBarnSøknad {
 
     public static final class Builder {
         private static final PleiepengerBarnSøknadValidator validator = new PleiepengerBarnSøknadValidator();
-        private static final Versjon versjon = Versjon.of("0.0.1");
+        private static final Versjon versjon = Versjon.of("1.0.0");
 
         private String json;
         private SøknadId søknadId;
@@ -90,13 +100,17 @@ public class PleiepengerBarnSøknad {
         private Språk språk;
         private Søker søker;
         private Barn barn;
-        private Utland utland;
+        private Map<Periode, Utenlandsopphold> utenlandsopphold;
+        private Map<Periode, Bosted> bosteder;
         private Beredskap beredskap;
         private Nattevåk nattevåk;
         private Tilsynsordning tilsynsordning;
         private Arbeid arbeid;
 
-        private Builder() {}
+        private Builder() {
+            this.utenlandsopphold = new HashMap<>();
+            this.bosteder = new HashMap<>();
+        }
 
         public Builder søknadId(SøknadId søknadId) {
             this.søknadId = søknadId;
@@ -128,8 +142,23 @@ public class PleiepengerBarnSøknad {
             return this;
         }
 
-        public Builder utland(Utland utland) {
-            this.utland = utland;
+        public Builder bosted(Periode periode, Bosted bosted) {
+            this.bosteder.put(periode, bosted);
+            return this;
+        }
+
+        public Builder bosteder(Map<Periode, Bosted> bosteder) {
+            this.bosteder.putAll(bosteder);
+            return this;
+        }
+
+        public Builder utenlandsopphold(Periode periode, Utenlandsopphold utenlandsopphold) {
+            this.utenlandsopphold.put(periode, utenlandsopphold);
+            return this;
+        }
+
+        public Builder utenlandsopphold(Map<Periode, Utenlandsopphold> utenlandsopphold) {
+            this.utenlandsopphold.putAll(utenlandsopphold);
             return this;
         }
 
@@ -167,7 +196,8 @@ public class PleiepengerBarnSøknad {
                     språk,
                     søker,
                     barn,
-                    utland,
+                    bosteder,
+                    utenlandsopphold,
                     beredskap,
                     nattevåk,
                     tilsynsordning,

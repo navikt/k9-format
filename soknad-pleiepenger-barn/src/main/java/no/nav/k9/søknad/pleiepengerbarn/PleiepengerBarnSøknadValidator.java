@@ -30,7 +30,8 @@ class PleiepengerBarnSøknadValidator extends SøknadValidator<PleiepengerBarnS�
         validerSpråk(søknad.språk, feil);
         validerSøker(søknad.søker, feil);
         validerBarn(søknad.barn, feil);
-        validerUtland(søknad.utland, feil);
+        validerUtenlandsopphold(søknad.utenlandsopphold, feil);
+        validerBosteder(søknad.bosteder, feil);
         validerBerdskap(søknad.beredskap, feil);
         validerNattevåk(søknad.nattevåk, feil);
         validerTilsynsordning(søknad.tilsynsordning, feil);
@@ -84,10 +85,14 @@ class PleiepengerBarnSøknadValidator extends SøknadValidator<PleiepengerBarnS�
         feil.addAll(periodeValidator.validerTillattOverlapp(nattevåk.perioder, "nattevåk.perioder"));
     }
 
-    private void validerUtland(Utland utland, List<Feil> feil) {
-        if (utland == null) return;
-        feil.addAll(periodeValidator.validerIkkeTillattOverlapp(utland.bosteder, "utland.bosteder"));
-        feil.addAll(periodeValidator.validerIkkeTillattOverlapp(utland.opphold,"utland.opphold"));
+    private void validerUtenlandsopphold(Map<Periode, Utenlandsopphold> utenlandsopphold, List<Feil> feil) {
+        if (utenlandsopphold == null) return;
+        feil.addAll(periodeValidator.validerIkkeTillattOverlapp(utenlandsopphold, "utenlandsopphold"));
+    }
+
+    private void validerBosteder(Map<Periode, Bosted> bosteder, List<Feil> feil) {
+        if (bosteder == null) return;
+        feil.addAll(periodeValidator.validerIkkeTillattOverlapp(bosteder, "bosteder"));
     }
 
     private static void validerSøker(Søker søker, List<Feil> feil) {
