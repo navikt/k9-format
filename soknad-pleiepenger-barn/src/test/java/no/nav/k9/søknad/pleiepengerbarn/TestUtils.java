@@ -116,6 +116,11 @@ final class TestUtils {
                                         Periode.builder().fraOgMed(LocalDate.parse("2019-10-10")).tilOgMed(LocalDate.parse("2019-12-29")).build(),
                                         Frilanser.FrilanserPeriodeInfo.builder().build())
                                 .build())
+                        .build())
+                .lovbestemtFerie(LovbestemtFerie.builder()
+                        .periode(
+                                Periode.builder().fraOgMed(LocalDate.parse("2018-11-10")).tilOgMed(LocalDate.parse("2018-12-29")).build(),
+                                LovbestemtFerie.LovbestemtFeriePeriodeInfo.builder().build())
                         .build());
     }
 }

@@ -42,6 +42,8 @@ public class PleiepengerBarnSøknad {
 
     public final Arbeid arbeid;
 
+    public final LovbestemtFerie lovbestemtFerie;
+
     @JsonCreator
     private PleiepengerBarnSøknad(
             @JsonProperty("søknadId")
@@ -69,7 +71,9 @@ public class PleiepengerBarnSøknad {
             @JsonProperty("tilsynsordning")
             Tilsynsordning tilsynsordning,
             @JsonProperty("arbeid")
-            Arbeid arbeid) {
+            Arbeid arbeid,
+            @JsonProperty("lovbestemtFerie")
+            LovbestemtFerie lovbestemtFerie) {
         this.søknadId = søknadId;
         this.versjon = versjon;
         this.søknadsperioder = (søknadsperioder == null) ? emptyMap() : unmodifiableMap(søknadsperioder);
@@ -83,6 +87,7 @@ public class PleiepengerBarnSøknad {
         this.nattevåk = nattevåk;
         this.tilsynsordning = tilsynsordning;
         this.arbeid = arbeid;
+        this.lovbestemtFerie = lovbestemtFerie;
     }
 
     public static Builder builder() {
@@ -106,6 +111,7 @@ public class PleiepengerBarnSøknad {
         private Nattevåk nattevåk;
         private Tilsynsordning tilsynsordning;
         private Arbeid arbeid;
+        private LovbestemtFerie lovbestemtFerie;
 
         private Builder() {
             this.søknadsperioder = new HashMap<>();
@@ -177,6 +183,11 @@ public class PleiepengerBarnSøknad {
             return this;
         }
 
+        public Builder lovbestemtFerie(LovbestemtFerie lovbestemtFerie) {
+            this.lovbestemtFerie = lovbestemtFerie;
+            return this;
+        }
+
         public Builder json(String json) {
             this.json = json;
             return this;
@@ -196,7 +207,8 @@ public class PleiepengerBarnSøknad {
                     beredskap,
                     nattevåk,
                     tilsynsordning,
-                    arbeid
+                    arbeid,
+                    lovbestemtFerie
             ) : JsonUtils.fromString(json, PleiepengerBarnSøknad.class);
             validator.forsikreValidert(søknad);
             return søknad;

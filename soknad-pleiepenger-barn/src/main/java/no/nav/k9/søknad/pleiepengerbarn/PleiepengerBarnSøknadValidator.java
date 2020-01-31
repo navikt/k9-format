@@ -36,8 +36,15 @@ class PleiepengerBarnSøknadValidator extends SøknadValidator<PleiepengerBarnS�
         validerNattevåk(søknad.nattevåk, feil);
         validerTilsynsordning(søknad.tilsynsordning, feil);
         validerArbeid(søknad.arbeid, feil);
+        validerLovbestemtFerie(søknad.lovbestemtFerie, feil);
 
         return feil;
+    }
+
+    private void validerLovbestemtFerie(LovbestemtFerie lovbestemtFerie, List<Feil> feil) {
+        if (lovbestemtFerie != null) {
+            feil.addAll(periodeValidator.validerIkkeTillattOverlapp(lovbestemtFerie.perioder, "lovbestemtFerie"));
+        }
     }
 
     private void validerSøknadsperioder(Map<Periode, SøknadsperiodeInfo> søknadsperioder, List<Feil> feil) {
