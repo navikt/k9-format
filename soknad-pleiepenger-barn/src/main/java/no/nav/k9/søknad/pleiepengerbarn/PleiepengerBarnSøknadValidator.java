@@ -25,7 +25,7 @@ class PleiepengerBarnSøknadValidator extends SøknadValidator<PleiepengerBarnS�
 
         validerSøknadId(søknad.søknadId, feil);
         validerVersjon(søknad.versjon, feil);
-        validerPeriode(søknad.periode, feil);
+        validerSøknadsperioder(søknad.søknadsperioder, feil);
         validerMottattDato(søknad.mottattDato, feil);
         validerSpråk(søknad.språk, feil);
         validerSøker(søknad.søker, feil);
@@ -40,11 +40,11 @@ class PleiepengerBarnSøknadValidator extends SøknadValidator<PleiepengerBarnS�
         return feil;
     }
 
-    private void validerPeriode(Periode periode, List<Feil> feil) {
-        if (periode == null) {
-            feil.add(new Feil("periode", PÅKREVD, "Må settes en periode for søknaden."));
+    private void validerSøknadsperioder(Map<Periode, SøknadsperiodeInfo> søknadsperioder, List<Feil> feil) {
+        if (søknadsperioder == null || søknadsperioder.isEmpty()) {
+            feil.add(new Feil("søknadsperioder", PÅKREVD, "Må settes minst en periode for søknaden."));
         } else {
-            feil.addAll(periodeValidator.valider(periode, "periode"));
+            feil.addAll(periodeValidator.validerIkkeTillattOverlapp(søknadsperioder, "søknadsperioder"));
         }
     }
 
@@ -85,14 +85,14 @@ class PleiepengerBarnSøknadValidator extends SøknadValidator<PleiepengerBarnS�
         feil.addAll(periodeValidator.validerTillattOverlapp(nattevåk.perioder, "nattevåk.perioder"));
     }
 
-    private void validerUtenlandsopphold(Map<Periode, Utenlandsopphold> utenlandsopphold, List<Feil> feil) {
+    private void validerUtenlandsopphold(Utenlandsopphold utenlandsopphold, List<Feil> feil) {
         if (utenlandsopphold == null) return;
-        feil.addAll(periodeValidator.validerIkkeTillattOverlapp(utenlandsopphold, "utenlandsopphold"));
+        feil.addAll(periodeValidator.validerIkkeTillattOverlapp(utenlandsopphold.perioder, "utenlandsopphold.perioder"));
     }
 
-    private void validerBosteder(Map<Periode, Bosted> bosteder, List<Feil> feil) {
+    private void validerBosteder(Bosteder bosteder, List<Feil> feil) {
         if (bosteder == null) return;
-        feil.addAll(periodeValidator.validerIkkeTillattOverlapp(bosteder, "bosteder"));
+        feil.addAll(periodeValidator.validerIkkeTillattOverlapp(bosteder.perioder, "bosteder.perioder"));
     }
 
     private static void validerSøker(Søker søker, List<Feil> feil) {

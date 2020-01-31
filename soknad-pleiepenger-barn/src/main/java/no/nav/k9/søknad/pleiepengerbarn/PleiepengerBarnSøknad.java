@@ -19,7 +19,7 @@ public class PleiepengerBarnSøknad {
 
     public final Versjon versjon;
 
-    public final Periode periode;
+    public final Map<Periode, SøknadsperiodeInfo> søknadsperioder;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
     public final ZonedDateTime mottattDato;
@@ -30,9 +30,9 @@ public class PleiepengerBarnSøknad {
 
     public final Barn barn;
 
-    public final Map<Periode, Bosted> bosteder;
+    public final Bosteder bosteder;
 
-    public final Map<Periode, Utenlandsopphold> utenlandsopphold;
+    public final Utenlandsopphold utenlandsopphold;
 
     public final Beredskap beredskap;
 
@@ -48,8 +48,8 @@ public class PleiepengerBarnSøknad {
             SøknadId søknadId,
             @JsonProperty("versjon")
             Versjon versjon,
-            @JsonProperty("periode")
-            Periode periode,
+            @JsonProperty("søknadsperioder")
+            Map<Periode, SøknadsperiodeInfo> søknadsperioder,
             @JsonProperty("mottattDato")
             ZonedDateTime mottattDato,
             @JsonProperty("språk")
@@ -59,9 +59,9 @@ public class PleiepengerBarnSøknad {
             @JsonProperty("barn")
             Barn barn,
             @JsonProperty("bosteder")
-            Map<Periode, Bosted> bosteder,
+            Bosteder bosteder,
             @JsonProperty("utenlandsopphold")
-            Map<Periode, Utenlandsopphold> utenlandsopphold,
+            Utenlandsopphold utenlandsopphold,
             @JsonProperty("beredskap")
             Beredskap beredskap,
             @JsonProperty("nattevåk")
@@ -72,13 +72,13 @@ public class PleiepengerBarnSøknad {
             Arbeid arbeid) {
         this.søknadId = søknadId;
         this.versjon = versjon;
-        this.periode = periode;
+        this.søknadsperioder = (søknadsperioder == null) ? emptyMap() : unmodifiableMap(søknadsperioder);
         this.mottattDato = mottattDato;
         this.språk = språk;
         this.søker = søker;
         this.barn = barn;
-        this.bosteder = (bosteder == null) ? emptyMap() : unmodifiableMap(bosteder);
-        this.utenlandsopphold = (utenlandsopphold == null) ? emptyMap() : unmodifiableMap(utenlandsopphold);
+        this.bosteder = bosteder;
+        this.utenlandsopphold = utenlandsopphold;
         this.beredskap = beredskap;
         this.nattevåk = nattevåk;
         this.tilsynsordning = tilsynsordning;
@@ -96,20 +96,19 @@ public class PleiepengerBarnSøknad {
         private String json;
         private SøknadId søknadId;
         private ZonedDateTime mottattDato;
-        private Periode periode;
+        Map<Periode, SøknadsperiodeInfo> søknadsperioder;
         private Språk språk;
         private Søker søker;
         private Barn barn;
-        private Map<Periode, Utenlandsopphold> utenlandsopphold;
-        private Map<Periode, Bosted> bosteder;
+        private Utenlandsopphold utenlandsopphold;
+        private Bosteder bosteder;
         private Beredskap beredskap;
         private Nattevåk nattevåk;
         private Tilsynsordning tilsynsordning;
         private Arbeid arbeid;
 
         private Builder() {
-            this.utenlandsopphold = new HashMap<>();
-            this.bosteder = new HashMap<>();
+            this.søknadsperioder = new HashMap<>();
         }
 
         public Builder søknadId(SøknadId søknadId) {
@@ -122,8 +121,14 @@ public class PleiepengerBarnSøknad {
             return this;
         }
 
-        public Builder periode(Periode periode) {
-            this.periode = periode;
+
+        public Builder søknadsperiode(Periode periode, SøknadsperiodeInfo søknadsperiodeInfo) {
+            this.søknadsperioder.put(periode, søknadsperiodeInfo);
+            return this;
+        }
+
+        public Builder søknadsperioder(Map<Periode, SøknadsperiodeInfo> søknadsperioder) {
+            this.søknadsperioder.putAll(søknadsperioder);
             return this;
         }
 
@@ -142,23 +147,13 @@ public class PleiepengerBarnSøknad {
             return this;
         }
 
-        public Builder bosted(Periode periode, Bosted bosted) {
-            this.bosteder.put(periode, bosted);
+        public Builder bosteder(Bosteder bosteder) {
+            this.bosteder = bosteder;
             return this;
         }
 
-        public Builder bosteder(Map<Periode, Bosted> bosteder) {
-            this.bosteder.putAll(bosteder);
-            return this;
-        }
-
-        public Builder utenlandsopphold(Periode periode, Utenlandsopphold utenlandsopphold) {
-            this.utenlandsopphold.put(periode, utenlandsopphold);
-            return this;
-        }
-
-        public Builder utenlandsopphold(Map<Periode, Utenlandsopphold> utenlandsopphold) {
-            this.utenlandsopphold.putAll(utenlandsopphold);
+        public Builder utenlandsopphold(Utenlandsopphold utenlandsopphold) {
+            this.utenlandsopphold = utenlandsopphold;
             return this;
         }
 
@@ -191,7 +186,7 @@ public class PleiepengerBarnSøknad {
             PleiepengerBarnSøknad søknad = (json == null) ? new PleiepengerBarnSøknad(
                     søknadId,
                     versjon,
-                    periode,
+                    søknadsperioder,
                     mottattDato,
                     språk,
                     søker,

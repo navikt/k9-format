@@ -4,49 +4,97 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import no.nav.k9.søknad.felles.Landkode;
+import no.nav.k9.søknad.felles.Periode;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.unmodifiableMap;
+
 
 public class Utenlandsopphold {
-
-    public final Landkode land;
-
-    public final UtenlandsoppholdÅrsak årsak;
+    public final Map<Periode, UtenlandsoppholdPeriodeInfo> perioder;
 
     @JsonCreator
     private Utenlandsopphold(
-            @JsonProperty("land")
-            Landkode land,
-            @JsonProperty("årsak")
-            UtenlandsoppholdÅrsak årsak) {
-        this.land = land;
-        this.årsak = årsak;
+            @JsonProperty("perioder")
+            Map<Periode, UtenlandsoppholdPeriodeInfo> perioder) {
+        this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
     }
 
-    public static Builder builder() {
+    public static Utenlandsopphold.Builder builder() {
         return new Builder();
     }
 
     public static final class Builder {
-        private Landkode land;
-        private UtenlandsoppholdÅrsak årsak;
+        private Map<Periode, UtenlandsoppholdPeriodeInfo> perioder;
 
-        private Builder() {}
+        private Builder() {
+            perioder = new HashMap<>();
+        }
 
-        public Builder land(Landkode land) {
-            this.land = land;
+        public Builder perioder(Map<Periode, UtenlandsoppholdPeriodeInfo> perioder) {
+            this.perioder.putAll(perioder);
             return this;
         }
 
-
-        public Builder årsak(UtenlandsoppholdÅrsak årsak) {
-            this.årsak = årsak;
+        public Builder periode(Periode periode, UtenlandsoppholdPeriodeInfo utenlandsoppholdPeriodeInfo) {
+            this.perioder.put(periode, utenlandsoppholdPeriodeInfo);
             return this;
         }
 
         public Utenlandsopphold build() {
             return new Utenlandsopphold(
-                    land,
-                    årsak
+                    perioder
             );
+        }
+    }
+
+
+    public static class UtenlandsoppholdPeriodeInfo {
+
+        public final Landkode land;
+
+        public final UtenlandsoppholdÅrsak årsak;
+
+        @JsonCreator
+        private UtenlandsoppholdPeriodeInfo(
+                @JsonProperty("land")
+                Landkode land,
+                @JsonProperty("årsak")
+                UtenlandsoppholdÅrsak årsak) {
+            this.land = land;
+            this.årsak = årsak;
+        }
+
+        public static Builder builder() {
+            return new Builder();
+        }
+
+        public static final class Builder {
+            private Landkode land;
+            private UtenlandsoppholdÅrsak årsak;
+
+            private Builder() {}
+
+            public Builder land(Landkode land) {
+                this.land = land;
+                return this;
+            }
+
+
+            public Builder årsak(UtenlandsoppholdÅrsak årsak) {
+                this.årsak = årsak;
+                return this;
+            }
+
+            public UtenlandsoppholdPeriodeInfo build() {
+                return new UtenlandsoppholdPeriodeInfo(
+                        land,
+                        årsak
+                );
+            }
         }
     }
 
@@ -74,5 +122,5 @@ public class Utenlandsopphold {
             throw new IllegalArgumentException("Ikke støttet årsak '" + value + "'");
         }
     }
-
 }
+
