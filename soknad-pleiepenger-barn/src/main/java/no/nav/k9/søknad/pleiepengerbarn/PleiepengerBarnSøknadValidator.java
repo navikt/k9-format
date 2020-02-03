@@ -25,7 +25,7 @@ class PleiepengerBarnSøknadValidator extends SøknadValidator<PleiepengerBarnS�
 
         validerSøknadId(søknad.søknadId, feil);
         validerVersjon(søknad.versjon, feil);
-        validerSøknadsperioder(søknad.søknadsperioder, feil);
+        validerSøknadsperioder(søknad.perioder, feil);
         validerMottattDato(søknad.mottattDato, feil);
         validerSpråk(søknad.språk, feil);
         validerSøker(søknad.søker, feil);
@@ -49,9 +49,9 @@ class PleiepengerBarnSøknadValidator extends SøknadValidator<PleiepengerBarnS�
 
     private void validerSøknadsperioder(Map<Periode, SøknadsperiodeInfo> søknadsperioder, List<Feil> feil) {
         if (søknadsperioder == null || søknadsperioder.isEmpty()) {
-            feil.add(new Feil("søknadsperioder", PÅKREVD, "Må settes minst en periode for søknaden."));
+            feil.add(new Feil("perioder", PÅKREVD, "Må settes minst en periode for søknaden."));
         } else {
-            feil.addAll(periodeValidator.validerIkkeTillattOverlapp(søknadsperioder, "søknadsperioder"));
+            feil.addAll(periodeValidator.validerIkkeTillattOverlapp(søknadsperioder, "perioder"));
         }
     }
 

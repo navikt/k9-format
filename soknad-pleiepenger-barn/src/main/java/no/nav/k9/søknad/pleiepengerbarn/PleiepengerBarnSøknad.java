@@ -19,7 +19,7 @@ public class PleiepengerBarnSøknad {
 
     public final Versjon versjon;
 
-    public final Map<Periode, SøknadsperiodeInfo> søknadsperioder;
+    public final Map<Periode, SøknadsperiodeInfo> perioder;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
     public final ZonedDateTime mottattDato;
@@ -50,8 +50,8 @@ public class PleiepengerBarnSøknad {
             SøknadId søknadId,
             @JsonProperty("versjon")
             Versjon versjon,
-            @JsonProperty("søknadsperioder")
-            Map<Periode, SøknadsperiodeInfo> søknadsperioder,
+            @JsonProperty("perioder")
+            Map<Periode, SøknadsperiodeInfo> perioder,
             @JsonProperty("mottattDato")
             ZonedDateTime mottattDato,
             @JsonProperty("språk")
@@ -76,7 +76,7 @@ public class PleiepengerBarnSøknad {
             LovbestemtFerie lovbestemtFerie) {
         this.søknadId = søknadId;
         this.versjon = versjon;
-        this.søknadsperioder = (søknadsperioder == null) ? emptyMap() : unmodifiableMap(søknadsperioder);
+        this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
         this.mottattDato = mottattDato;
         this.språk = språk;
         this.søker = søker;
