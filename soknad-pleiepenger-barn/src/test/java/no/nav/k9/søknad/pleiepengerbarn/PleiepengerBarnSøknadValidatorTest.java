@@ -60,10 +60,16 @@ public class PleiepengerBarnSøknadValidatorTest {
     public void søknadsperiodeErPåkrevd() {
         final PleiepengerBarnSøknad.Builder builder = TestUtils.komplettBuilder();
 
-        builder.periode(null);
+        builder.søknadsperioder = new HashMap<>();
         verifyHarFeil(builder);
 
-        builder.periode(Periode.builder().fraOgMed(LocalDate.now()).tilOgMed(LocalDate.now().plusDays(1)).build());
+        builder.søknadsperiode(
+                Periode.builder()
+                        .fraOgMed(LocalDate.now())
+                        .tilOgMed(LocalDate.now().plusDays(1))
+                        .build(),
+                        SøknadsperiodeInfo.builder().build())
+                .build();
         verifyIngenFeil(builder);
     }
 

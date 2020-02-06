@@ -7,6 +7,11 @@ import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.felles.*;
 
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.unmodifiableMap;
 
 public class PleiepengerBarnSøknad {
 
@@ -14,7 +19,7 @@ public class PleiepengerBarnSøknad {
 
     public final Versjon versjon;
 
-    public final Periode periode;
+    public final Map<Periode, SøknadsperiodeInfo> perioder;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
     public final ZonedDateTime mottattDato;
@@ -25,7 +30,9 @@ public class PleiepengerBarnSøknad {
 
     public final Barn barn;
 
-    public final Utland utland;
+    public final Bosteder bosteder;
+
+    public final Utenlandsopphold utenlandsopphold;
 
     public final Beredskap beredskap;
 
@@ -35,14 +42,16 @@ public class PleiepengerBarnSøknad {
 
     public final Arbeid arbeid;
 
+    public final LovbestemtFerie lovbestemtFerie;
+
     @JsonCreator
     private PleiepengerBarnSøknad(
             @JsonProperty("søknadId")
             SøknadId søknadId,
             @JsonProperty("versjon")
             Versjon versjon,
-            @JsonProperty("periode")
-            Periode periode,
+            @JsonProperty("perioder")
+            Map<Periode, SøknadsperiodeInfo> perioder,
             @JsonProperty("mottattDato")
             ZonedDateTime mottattDato,
             @JsonProperty("språk")
@@ -51,8 +60,10 @@ public class PleiepengerBarnSøknad {
             Søker søker,
             @JsonProperty("barn")
             Barn barn,
-            @JsonProperty("utland")
-            Utland utland,
+            @JsonProperty("bosteder")
+            Bosteder bosteder,
+            @JsonProperty("utenlandsopphold")
+            Utenlandsopphold utenlandsopphold,
             @JsonProperty("beredskap")
             Beredskap beredskap,
             @JsonProperty("nattevåk")
@@ -60,19 +71,23 @@ public class PleiepengerBarnSøknad {
             @JsonProperty("tilsynsordning")
             Tilsynsordning tilsynsordning,
             @JsonProperty("arbeid")
-            Arbeid arbeid) {
+            Arbeid arbeid,
+            @JsonProperty("lovbestemtFerie")
+            LovbestemtFerie lovbestemtFerie) {
         this.søknadId = søknadId;
         this.versjon = versjon;
-        this.periode = periode;
+        this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
         this.mottattDato = mottattDato;
         this.språk = språk;
         this.søker = søker;
         this.barn = barn;
-        this.utland = utland;
+        this.bosteder = bosteder;
+        this.utenlandsopphold = utenlandsopphold;
         this.beredskap = beredskap;
         this.nattevåk = nattevåk;
         this.tilsynsordning = tilsynsordning;
         this.arbeid = arbeid;
+        this.lovbestemtFerie = lovbestemtFerie;
     }
 
     public static Builder builder() {
@@ -81,22 +96,26 @@ public class PleiepengerBarnSøknad {
 
     public static final class Builder {
         private static final PleiepengerBarnSøknadValidator validator = new PleiepengerBarnSøknadValidator();
-        private static final Versjon versjon = Versjon.of("0.0.1");
+        private static final Versjon versjon = Versjon.of("1.0.0");
 
         private String json;
         private SøknadId søknadId;
         private ZonedDateTime mottattDato;
-        private Periode periode;
+        Map<Periode, SøknadsperiodeInfo> søknadsperioder;
         private Språk språk;
         private Søker søker;
         private Barn barn;
-        private Utland utland;
+        private Utenlandsopphold utenlandsopphold;
+        private Bosteder bosteder;
         private Beredskap beredskap;
         private Nattevåk nattevåk;
         private Tilsynsordning tilsynsordning;
         private Arbeid arbeid;
+        private LovbestemtFerie lovbestemtFerie;
 
-        private Builder() {}
+        private Builder() {
+            this.søknadsperioder = new HashMap<>();
+        }
 
         public Builder søknadId(SøknadId søknadId) {
             this.søknadId = søknadId;
@@ -108,8 +127,14 @@ public class PleiepengerBarnSøknad {
             return this;
         }
 
-        public Builder periode(Periode periode) {
-            this.periode = periode;
+
+        public Builder søknadsperiode(Periode periode, SøknadsperiodeInfo søknadsperiodeInfo) {
+            this.søknadsperioder.put(periode, søknadsperiodeInfo);
+            return this;
+        }
+
+        public Builder søknadsperioder(Map<Periode, SøknadsperiodeInfo> søknadsperioder) {
+            this.søknadsperioder.putAll(søknadsperioder);
             return this;
         }
 
@@ -128,8 +153,13 @@ public class PleiepengerBarnSøknad {
             return this;
         }
 
-        public Builder utland(Utland utland) {
-            this.utland = utland;
+        public Builder bosteder(Bosteder bosteder) {
+            this.bosteder = bosteder;
+            return this;
+        }
+
+        public Builder utenlandsopphold(Utenlandsopphold utenlandsopphold) {
+            this.utenlandsopphold = utenlandsopphold;
             return this;
         }
 
@@ -153,6 +183,11 @@ public class PleiepengerBarnSøknad {
             return this;
         }
 
+        public Builder lovbestemtFerie(LovbestemtFerie lovbestemtFerie) {
+            this.lovbestemtFerie = lovbestemtFerie;
+            return this;
+        }
+
         public Builder json(String json) {
             this.json = json;
             return this;
@@ -162,16 +197,18 @@ public class PleiepengerBarnSøknad {
             PleiepengerBarnSøknad søknad = (json == null) ? new PleiepengerBarnSøknad(
                     søknadId,
                     versjon,
-                    periode,
+                    søknadsperioder,
                     mottattDato,
                     språk,
                     søker,
                     barn,
-                    utland,
+                    bosteder,
+                    utenlandsopphold,
                     beredskap,
                     nattevåk,
                     tilsynsordning,
-                    arbeid
+                    arbeid,
+                    lovbestemtFerie
             ) : JsonUtils.fromString(json, PleiepengerBarnSøknad.class);
             validator.forsikreValidert(søknad);
             return søknad;

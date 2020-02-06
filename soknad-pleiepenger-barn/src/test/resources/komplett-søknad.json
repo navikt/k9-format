@@ -1,23 +1,27 @@
 {
-  "versjon" : "0.0.1",
+  "versjon" : "1.0.0",
   "søknadId": "1",
   "mottattDato" : "2019-10-20T07:15:36.124Z",
   "språk": "nb",
   "søker" : {
     "norskIdentitetsnummer" : "12345678901"
   },
-  "periode" : "2018-12-30/2019-10-20",
+  "perioder" : {
+    "2018-12-30/2019-10-20": {}
+  },
   "barn" : {
     "fødselsdato": null,
     "norskIdentitetsnummer" : "12345678902"
   },
-  "utland" : {
-    "bosteder": {
+  "bosteder": {
+    "perioder": {
       "2022-12-30/2023-10-10" : {
         "land": "POL"
       }
-    },
-    "opphold": {
+    }
+  },
+  "utenlandsopphold": {
+    "perioder": {
       "2018-12-30/2019-10-10" : {
         "land": "SWE",
         "årsak": "barnetInnlagtIHelseinstitusjonForNorskOffentligRegning"
@@ -94,5 +98,10 @@
         "2019-10-10/2019-12-29": {}
       }
     }]
+  },
+  "lovbestemtFerie":  {
+    "perioder": {
+      "2018-11-10/2018-12-29": {}
+    }
   }
 }

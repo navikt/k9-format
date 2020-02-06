@@ -35,10 +35,9 @@ final class TestUtils {
     static PleiepengerBarnSøknad.Builder komplettBuilder() {
         return PleiepengerBarnSøknad.builder()
                 .søknadId(SøknadId.of("1"))
-                .periode(Periode.builder()
-                        .fraOgMed(LocalDate.parse("2018-12-30"))
-                        .tilOgMed(LocalDate.parse("2019-10-20"))
-                        .build())
+                .søknadsperiode(
+                        Periode.builder().fraOgMed(LocalDate.parse("2018-12-30")).tilOgMed(LocalDate.parse("2019-10-20")).build(),
+                        SøknadsperiodeInfo.builder().build())
                 .mottattDato(ZonedDateTime.parse("2019-10-20T07:15:36.124Z"))
                 .språk(Språk.of("nb"))
                 .søker(Søker.builder()
@@ -47,19 +46,24 @@ final class TestUtils {
                 .barn(Barn.builder()
                         .norskIdentitetsnummer(NorskIdentitetsnummer.of("12345678902"))
                         .build())
-                .utland(Utland.builder()
-                        .bosted(
+                .bosteder(Bosteder.builder()
+                        .periode(
                                 Periode.builder().fraOgMed(LocalDate.parse("2022-12-30")).tilOgMed(LocalDate.parse("2023-10-10")).build(),
-                                UtlandBosted.builder().land(Landkode.of("POL")).build())
-                        .opphold(
+                                Bosteder.BostedPeriodeInfo.builder()
+                                        .land(Landkode.of("POL"))
+                                        .build()
+                        )
+                        .build())
+                .utenlandsopphold(Utenlandsopphold.builder()
+                        .periode(
                                 Periode.builder().fraOgMed(LocalDate.parse("2018-12-30")).tilOgMed(LocalDate.parse("2019-10-10")).build(),
-                                UtlandOpphold.builder().land(Landkode.of("SWE")).årsak(UtlandOpphold.UtlandOppholdÅrsak.of("barnetInnlagtIHelseinstitusjonForNorskOffentligRegning")).build())
-                        .opphold(
+                                Utenlandsopphold.UtenlandsoppholdPeriodeInfo.builder().land(Landkode.of("SWE")).årsak(Utenlandsopphold.UtenlandsoppholdÅrsak.of("barnetInnlagtIHelseinstitusjonForNorskOffentligRegning")).build())
+                        .periode(
                                 Periode.builder().fraOgMed(LocalDate.parse("2018-10-10")).tilOgMed(LocalDate.parse("2018-10-30")).build(),
-                                UtlandOpphold.builder().land(Landkode.of("NOR")).build())
-                        .opphold(
+                                Utenlandsopphold.UtenlandsoppholdPeriodeInfo.builder().land(Landkode.of("NOR")).build())
+                        .periode(
                                 Periode.builder().fraOgMed(LocalDate.parse("2021-10-10")).tilOgMed(LocalDate.parse("2050-01-05")).build(),
-                                UtlandOpphold.builder().land(Landkode.of("DEN")).årsak(UtlandOpphold.UtlandOppholdÅrsak.of("barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd")).build())
+                                Utenlandsopphold.UtenlandsoppholdPeriodeInfo.builder().land(Landkode.of("DEN")).årsak(Utenlandsopphold.UtenlandsoppholdÅrsak.of("barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd")).build())
                         .build())
                 .beredskap(Beredskap.builder()
                         .periode(
@@ -112,6 +116,11 @@ final class TestUtils {
                                         Periode.builder().fraOgMed(LocalDate.parse("2019-10-10")).tilOgMed(LocalDate.parse("2019-12-29")).build(),
                                         Frilanser.FrilanserPeriodeInfo.builder().build())
                                 .build())
+                        .build())
+                .lovbestemtFerie(LovbestemtFerie.builder()
+                        .periode(
+                                Periode.builder().fraOgMed(LocalDate.parse("2018-11-10")).tilOgMed(LocalDate.parse("2018-12-29")).build(),
+                                LovbestemtFerie.LovbestemtFeriePeriodeInfo.builder().build())
                         .build());
     }
 }

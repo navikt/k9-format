@@ -25,25 +25,33 @@ class PleiepengerBarnSøknadValidator extends SøknadValidator<PleiepengerBarnS�
 
         validerSøknadId(søknad.søknadId, feil);
         validerVersjon(søknad.versjon, feil);
-        validerPeriode(søknad.periode, feil);
+        validerSøknadsperioder(søknad.perioder, feil);
         validerMottattDato(søknad.mottattDato, feil);
         validerSpråk(søknad.språk, feil);
         validerSøker(søknad.søker, feil);
         validerBarn(søknad.barn, feil);
-        validerUtland(søknad.utland, feil);
+        validerUtenlandsopphold(søknad.utenlandsopphold, feil);
+        validerBosteder(søknad.bosteder, feil);
         validerBerdskap(søknad.beredskap, feil);
         validerNattevåk(søknad.nattevåk, feil);
         validerTilsynsordning(søknad.tilsynsordning, feil);
         validerArbeid(søknad.arbeid, feil);
+        validerLovbestemtFerie(søknad.lovbestemtFerie, feil);
 
         return feil;
     }
 
-    private void validerPeriode(Periode periode, List<Feil> feil) {
-        if (periode == null) {
-            feil.add(new Feil("periode", PÅKREVD, "Må settes en periode for søknaden."));
+    private void validerLovbestemtFerie(LovbestemtFerie lovbestemtFerie, List<Feil> feil) {
+        if (lovbestemtFerie != null) {
+            feil.addAll(periodeValidator.validerIkkeTillattOverlapp(lovbestemtFerie.perioder, "lovbestemtFerie"));
+        }
+    }
+
+    private void validerSøknadsperioder(Map<Periode, SøknadsperiodeInfo> søknadsperioder, List<Feil> feil) {
+        if (søknadsperioder == null || søknadsperioder.isEmpty()) {
+            feil.add(new Feil("perioder", PÅKREVD, "Må settes minst en periode for søknaden."));
         } else {
-            feil.addAll(periodeValidator.valider(periode, "periode"));
+            feil.addAll(periodeValidator.validerIkkeTillattOverlapp(søknadsperioder, "perioder"));
         }
     }
 
@@ -84,10 +92,14 @@ class PleiepengerBarnSøknadValidator extends SøknadValidator<PleiepengerBarnS�
         feil.addAll(periodeValidator.validerTillattOverlapp(nattevåk.perioder, "nattevåk.perioder"));
     }
 
-    private void validerUtland(Utland utland, List<Feil> feil) {
-        if (utland == null) return;
-        feil.addAll(periodeValidator.validerIkkeTillattOverlapp(utland.bosteder, "utland.bosteder"));
-        feil.addAll(periodeValidator.validerIkkeTillattOverlapp(utland.opphold,"utland.opphold"));
+    private void validerUtenlandsopphold(Utenlandsopphold utenlandsopphold, List<Feil> feil) {
+        if (utenlandsopphold == null) return;
+        feil.addAll(periodeValidator.validerIkkeTillattOverlapp(utenlandsopphold.perioder, "utenlandsopphold.perioder"));
+    }
+
+    private void validerBosteder(Bosteder bosteder, List<Feil> feil) {
+        if (bosteder == null) return;
+        feil.addAll(periodeValidator.validerIkkeTillattOverlapp(bosteder.perioder, "bosteder.perioder"));
     }
 
     private static void validerSøker(Søker søker, List<Feil> feil) {
