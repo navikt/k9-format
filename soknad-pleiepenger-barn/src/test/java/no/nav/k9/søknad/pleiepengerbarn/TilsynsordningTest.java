@@ -39,7 +39,6 @@ public class TilsynsordningTest {
         int expectedAntallUkerIPerioden = 14;
         int expectedAntallHeleUkerIPerioden = 12;
 
-
         Periode periode = Periode
                 .builder()
                 .fraOgMed(fraOgMed)
@@ -61,10 +60,6 @@ public class TilsynsordningTest {
                 .iTilsynsordning(TilsynsordningSvar.JA)
                 .uke(uke)
                 .build();
-
-
-        // TODO: JA da må du sette minst ett opphold.
-
 
         assertEquals(expectedAntallUkerIPerioden, tilsynsordning.opphold.size());
 
@@ -145,5 +140,69 @@ public class TilsynsordningTest {
                 .build();
 
         assertEquals(0, tilsynsordning.opphold.size());
+    }
+
+    @Test
+    public void fraTilsynsordningUkeVedÅrsskifte() {
+        LocalDate fraOgMed = LocalDate.parse("2020-12-25"); // Fredag
+        LocalDate tilOgMed = LocalDate.parse("2021-01-11"); // Mandag
+        Duration mandagLengde = Duration.ofHours(10).plusMinutes(45);
+        Duration tirsdagLengde = Duration.ofHours(6);
+        Duration onsdagLengde = Duration.ZERO;
+        Duration torsdagLengde = Duration.ofHours(4);
+        Duration fredagLengde = null;
+
+        Periode periode = Periode
+                .builder()
+                .fraOgMed(fraOgMed)
+                .tilOgMed(tilOgMed)
+                .build();
+
+        TilsynsordningUke uke = TilsynsordningUke
+                .builder()
+                .periode(periode)
+                .mandag(mandagLengde)
+                .tirsdag(tirsdagLengde)
+                .onsdag(onsdagLengde)
+                .torsdag(torsdagLengde)
+                .fredag(fredagLengde)
+                .build();
+
+        Tilsynsordning tilsynsordning = Tilsynsordning
+                .builder()
+                .iTilsynsordning(TilsynsordningSvar.JA)
+                .uke(uke)
+                .build();
+
+        Duration summertHeleUker = TilsynsordningUke.MAX_LENGDE_PER_DAG // Ettersom mandag er over 7:30
+                .plus(tirsdagLengde)
+                .plus(onsdagLengde)
+                .plus(torsdagLengde);
+                // Fredaglengde er null
+
+        // Kun mandag som er over maks lengde
+        Duration summertSisteUke = TilsynsordningUke.MAX_LENGDE_PER_DAG;
+
+        // Første uke er kun fredag og fredag har ingen lengde -> Dermed blir ikke den uken ett opphold.
+        int expectedAntallUkerIPerioden = 3;
+        int expectedAntallHeleUkerIPerioden = 2;
+
+        assertEquals(expectedAntallUkerIPerioden, tilsynsordning.opphold.size());
+
+        AtomicInteger antallHeleUkerSjekket = new AtomicInteger();
+        AtomicBoolean sisteUkeSjekket = new AtomicBoolean(false);
+
+        tilsynsordning.opphold.forEach((p,opphold) -> {
+            if (p.tilOgMed.isEqual(tilOgMed)) {
+                sisteUkeSjekket.set(true);
+                assertEquals(summertSisteUke, opphold.lengde);
+            } else {
+                assertEquals(summertHeleUker, opphold.lengde);
+                antallHeleUkerSjekket.getAndIncrement();
+            }
+        });
+
+        assertEquals(expectedAntallHeleUkerIPerioden, antallHeleUkerSjekket.get());
+        assertTrue(sisteUkeSjekket.get());
     }
 }

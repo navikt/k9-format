@@ -20,7 +20,7 @@ import java.util.*;
     Håndterer også om start & slutt-uke ikke er hele uker eller om ukene går over i nytt kalenderår (uke 0/53).
  */
 public class TilsynsordningUke {
-    private static final Duration MAX_LENGDE_PER_DAG = Duration.ofHours(7).plusMinutes(30);
+    static final Duration MAX_LENGDE_PER_DAG = Duration.ofHours(7).plusMinutes(30);
     private static final WeekFields WEEK_FIELDS = WeekFields.of(Locale.forLanguageTag("no-NO"));
 
     final Map<Periode, TilsynsordningOpphold> opphold;
