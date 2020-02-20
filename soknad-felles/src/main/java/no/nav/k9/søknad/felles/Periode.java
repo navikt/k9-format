@@ -46,6 +46,11 @@ public class Periode {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return iso8601;
+    }
+
     private static void verifiserKanVæreGyldigPeriode(String iso8601) {
         if (iso8601 == null || iso8601.split(SKILLE).length != 2) {
             throw new IllegalArgumentException("Periode på ugylig format '" + iso8601 + "'.");

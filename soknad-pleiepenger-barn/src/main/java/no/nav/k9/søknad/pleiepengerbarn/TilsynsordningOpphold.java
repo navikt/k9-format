@@ -15,6 +15,11 @@ public class TilsynsordningOpphold {
         this.lengde = lengde;
     }
 
+    @Override
+    public String toString() {
+        return lengde.toString();
+    }
+
     public static Builder builder() {
         return new Builder();
     }
