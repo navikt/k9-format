@@ -1,6 +1,5 @@
 package no.nav.k9.søknad.omsorgspenger;
 
-import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.*;
 import org.junit.Test;
@@ -22,7 +21,7 @@ public class OmsorgspengerSøknadValidatorTest {
     @Test
     public void søknadUtenNoeSatt() {
         OmsorgspengerSøknad.Builder builder = OmsorgspengerSøknad.builder();
-        OmsorgspengerSøknad søknad = JsonUtils.fromString("{\"versjon\":\"0.0.1\"}", OmsorgspengerSøknad.class);
+        OmsorgspengerSøknad søknad = OmsorgspengerSøknad.SerDes.deserialize("{\"versjon\":\"0.0.1\"}");
         List<Feil> builderFeil = verifyHarFeil(builder);
         List<Feil> jsonFeil = verifyHarFeil(søknad);
         assertThat(builderFeil, is(jsonFeil));
@@ -52,7 +51,7 @@ public class OmsorgspengerSøknadValidatorTest {
 
     @Test
     public void komplettSøknadFraJson() {
-        OmsorgspengerSøknad søknad = JsonUtils.fromString(jsonForKomplettSøknad(), OmsorgspengerSøknad.class);
+        OmsorgspengerSøknad søknad = OmsorgspengerSøknad.SerDes.deserialize(jsonForKomplettSøknad());
         verifyIngenFeil(søknad);
     }
 

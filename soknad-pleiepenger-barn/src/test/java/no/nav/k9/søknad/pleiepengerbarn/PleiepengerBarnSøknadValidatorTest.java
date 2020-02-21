@@ -1,7 +1,6 @@
 
 package no.nav.k9.søknad.pleiepengerbarn;
 
-import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.*;
 import org.junit.Test;
@@ -22,7 +21,7 @@ public class PleiepengerBarnSøknadValidatorTest {
     @Test
     public void søknadUtenNoeSatt() {
         PleiepengerBarnSøknad.Builder builder = PleiepengerBarnSøknad.builder();
-        PleiepengerBarnSøknad søknad = JsonUtils.fromString("{\"versjon\":\"0.0.1\"}", PleiepengerBarnSøknad.class);
+        PleiepengerBarnSøknad søknad = PleiepengerBarnSøknad.SerDes.deserialize("{\"versjon\":\"0.0.1\"}");
         List<Feil> builderFeil = verifyHarFeil(builder);
         List<Feil> jsonFeil = verifyHarFeil(søknad);
         assertThat(builderFeil, is(jsonFeil));

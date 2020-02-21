@@ -94,6 +94,16 @@ public class PleiepengerBarnSøknad {
         return new Builder();
     }
 
+    public static final class SerDes {
+        private SerDes() {}
+        public static String serialize(PleiepengerBarnSøknad søknad) {
+            return JsonUtils.toString(søknad);
+        }
+        public static PleiepengerBarnSøknad deserialize(String søknad) {
+            return JsonUtils.fromString(søknad, PleiepengerBarnSøknad.class);
+        }
+    }
+
     public static final class Builder {
         private static final PleiepengerBarnSøknadValidator validator = new PleiepengerBarnSøknadValidator();
         private static final Versjon versjon = Versjon.of("1.0.0");
@@ -209,7 +219,7 @@ public class PleiepengerBarnSøknad {
                     tilsynsordning,
                     arbeid,
                     lovbestemtFerie
-            ) : JsonUtils.fromString(json, PleiepengerBarnSøknad.class);
+            ) : SerDes.deserialize(json);
             validator.forsikreValidert(søknad);
             return søknad;
         }

@@ -1,6 +1,5 @@
 package no.nav.k9.søknad.pleiepengerbarn;
 
-import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.felles.*;
 
 import java.io.IOException;
@@ -28,8 +27,7 @@ final class TestUtils {
     }
 
     static PleiepengerBarnSøknad komplettSøknad() {
-        final PleiepengerBarnSøknad søknad = JsonUtils.fromString(jsonForKomplettSøknad(), PleiepengerBarnSøknad.class);
-        return søknad;
+        return PleiepengerBarnSøknad.SerDes.deserialize(jsonForKomplettSøknad());
     }
 
     static PleiepengerBarnSøknad.Builder komplettBuilder() {

@@ -47,6 +47,16 @@ public class OmsorgspengerSøknad {
         return new Builder();
     }
 
+    public static final class SerDes {
+        private SerDes() {}
+        public static String serialize(OmsorgspengerSøknad søknad) {
+            return JsonUtils.toString(søknad);
+        }
+        public static OmsorgspengerSøknad deserialize(String søknad) {
+            return JsonUtils.fromString(søknad, OmsorgspengerSøknad.class);
+        }
+    }
+
     public static final class Builder {
         private final static OmsorgspengerSøknadValidator validator = new OmsorgspengerSøknadValidator();
         private final static Versjon versjon = Versjon.of("0.0.1");
@@ -91,7 +101,7 @@ public class OmsorgspengerSøknad {
                     mottattDato,
                     søker,
                     barn
-            ) : JsonUtils.fromString(json, OmsorgspengerSøknad.class);
+            ) : SerDes.deserialize(json);
             validator.forsikreValidert(søknad);
             return søknad;
         }
