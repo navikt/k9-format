@@ -19,9 +19,13 @@ public class Periode {
     private Periode(String iso8601) {
         verifiserKanVæreGyldigPeriode(iso8601);
         String[] split = iso8601.split(SKILLE);
-        this.fraOgMed = parse(split[0]);
-        this.tilOgMed = parse(split[1]);
+        this.fraOgMed = parseLocalDate(split[0]);
+        this.tilOgMed = parseLocalDate(split[1]);
         this.iso8601 = iso8601;
+    }
+
+    public static Periode parse(String iso8601) {
+        return new Periode(iso8601);
     }
 
     public static Periode forsikreLukketPeriode(Periode periode, LocalDate fallbackTilOgMed) {
@@ -68,7 +72,7 @@ public class Periode {
         }
     }
 
-    private static LocalDate parse(String iso8601) {
+    private static LocalDate parseLocalDate(String iso8601) {
         if (ÅPEN.equals(iso8601)) return null;
         else return LocalDate.parse(iso8601);
     }
