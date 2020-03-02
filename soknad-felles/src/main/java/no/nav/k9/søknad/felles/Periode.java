@@ -3,7 +3,7 @@ package no.nav.k9.søknad.felles;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.time.LocalDate;
-import java.util.Objects;
+import java.util.*;
 
 public class Periode {
     static final String ÅPEN = "..";
@@ -91,6 +91,29 @@ public class Periode {
 
         public Periode build() {
             return new Periode(toIso8601(fraOgMed) + SKILLE + toIso8601(tilOgMed));
+        }
+    }
+
+    public static final class Utils {
+        private static final Comparator<Periode> tilOgMedComparator = Comparator.comparing(periode -> periode.tilOgMed);
+
+        public static LocalDate sisteTilOgMedTillatÅpnePerioder(Map<Periode, ?> periodeMap) {
+            return sisteTilOgMed(periodeMap);
+        }
+
+        public static LocalDate sisteTilOgMedBlantLukkedePerioder(Map<Periode, ?> periodeMap) {
+            LocalDate sisteTilOgMed = sisteTilOgMed(periodeMap);
+            if (sisteTilOgMed == null) throw new IllegalStateException("En eller fler av periodene er åpne (uten tilOgMed satt).");
+            return sisteTilOgMed;
+        }
+
+        private static LocalDate sisteTilOgMed(Map<Periode, ?> periodeMap) {
+            if (periodeMap.keySet().stream().anyMatch(periode -> periode.tilOgMed == null)) {
+                return null;
+            }
+            SortedSet<Periode> perioder = new TreeSet<>(tilOgMedComparator);
+            perioder.addAll(periodeMap.keySet());
+            return perioder.last().tilOgMed;
         }
     }
 }
