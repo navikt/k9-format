@@ -76,4 +76,14 @@ public class PeriodeTest {
         LocalDate sisteTilOgMed = Periode.Utils.sisteTilOgMedTillatÅpnePerioder(map);
         assertEquals(null, sisteTilOgMed);
     }
+
+    @Test(expected = IllegalStateException.class)
+    public void TestFinnSisteTilOgMedDatoMedTomtMap() {
+        Periode.Utils.sisteTilOgMedTillatÅpnePerioder(Map.of());
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void TestFinnSisteTilOgMedDatoMedNull() {
+        Periode.Utils.sisteTilOgMedTillatÅpnePerioder(null);
+    }
 }

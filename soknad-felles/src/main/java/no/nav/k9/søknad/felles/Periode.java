@@ -24,6 +24,17 @@ public class Periode {
         this.iso8601 = iso8601;
     }
 
+    public static Periode forsikreLukketPeriode(Periode periode, LocalDate fallbackTilOgMed) {
+        Objects.requireNonNull(periode);
+        Objects.requireNonNull(periode.fraOgMed);
+        Objects.requireNonNull(fallbackTilOgMed);
+        return Periode
+                .builder()
+                .fraOgMed(periode.fraOgMed)
+                .tilOgMed(periode.tilOgMed != null ? periode.tilOgMed : fallbackTilOgMed)
+                .build();
+    }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -108,6 +119,9 @@ public class Periode {
         }
 
         private static LocalDate sisteTilOgMed(Map<Periode, ?> periodeMap) {
+            if (periodeMap == null || periodeMap.isEmpty()) {
+                throw new IllegalStateException("Må være minst en periode for å finne siste tilOgMed");
+            }
             if (periodeMap.keySet().stream().anyMatch(periode -> periode.tilOgMed == null)) {
                 return null;
             }
