@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-class PleiepengerBarnSøknadValidator extends SøknadValidator<PleiepengerBarnSøknad> {
+public class PleiepengerBarnSøknadValidator extends SøknadValidator<PleiepengerBarnSøknad> {
     private final PeriodeValidator periodeValidator;
 
     PleiepengerBarnSøknadValidator() {
@@ -145,13 +145,13 @@ class PleiepengerBarnSøknadValidator extends SøknadValidator<PleiepengerBarnS�
         i = 0;
         for (Frilanser frilanser : arbeid.frilanser) {
             feil.addAll(
-                    periodeValidator.validerTillattOverlapp(frilanser.perioder, "arbeid.frilanser[" + i++ + "].perioder")
+                    periodeValidator.validerTillattOverlappOgÅpnePerioder(frilanser.perioder, "arbeid.frilanser[" + i++ + "].perioder")
             );
         }
         i = 0;
         for (SelvstendigNæringsdrivende selvstendigNæringsdrivende : arbeid.selvstendigNæringsdrivende) {
             feil.addAll(
-                    periodeValidator.validerTillattOverlapp(selvstendigNæringsdrivende.perioder, "arbeid.selvstendigNæringsdrivende[" + i++ + "].perioder")
+                    periodeValidator.validerTillattOverlappOgÅpnePerioder(selvstendigNæringsdrivende.perioder, "arbeid.selvstendigNæringsdrivende[" + i++ + "].perioder")
             );
         }
     }

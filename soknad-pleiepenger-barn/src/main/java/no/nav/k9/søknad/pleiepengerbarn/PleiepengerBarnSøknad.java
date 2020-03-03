@@ -2,10 +2,12 @@ package no.nav.k9.søknad.pleiepengerbarn;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.felles.*;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +22,9 @@ public class PleiepengerBarnSøknad {
     public final Versjon versjon;
 
     public final Map<Periode, SøknadsperiodeInfo> perioder;
+
+    @JsonIgnore
+    public final LocalDate sisteDagISistePeriode;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
     public final ZonedDateTime mottattDato;
@@ -88,6 +93,11 @@ public class PleiepengerBarnSøknad {
         this.tilsynsordning = tilsynsordning;
         this.arbeid = arbeid;
         this.lovbestemtFerie = lovbestemtFerie;
+        if (this.perioder.isEmpty()) {
+            this.sisteDagISistePeriode = null;
+        } else {
+            this.sisteDagISistePeriode = Periode.Utils.sisteTilOgMedBlantLukkedePerioder(perioder);
+        }
     }
 
     public static Builder builder() {

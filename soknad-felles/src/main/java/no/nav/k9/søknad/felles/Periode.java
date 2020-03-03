@@ -3,7 +3,7 @@ package no.nav.k9.søknad.felles;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.time.LocalDate;
-import java.util.Objects;
+import java.util.*;
 
 public class Periode {
     static final String ÅPEN = "..";
@@ -19,9 +19,24 @@ public class Periode {
     private Periode(String iso8601) {
         verifiserKanVæreGyldigPeriode(iso8601);
         String[] split = iso8601.split(SKILLE);
-        this.fraOgMed = parse(split[0]);
-        this.tilOgMed = parse(split[1]);
+        this.fraOgMed = parseLocalDate(split[0]);
+        this.tilOgMed = parseLocalDate(split[1]);
         this.iso8601 = iso8601;
+    }
+
+    public static Periode parse(String iso8601) {
+        return new Periode(iso8601);
+    }
+
+    public static Periode forsikreLukketPeriode(Periode periode, LocalDate fallbackTilOgMed) {
+        Objects.requireNonNull(periode);
+        Objects.requireNonNull(periode.fraOgMed);
+        Objects.requireNonNull(fallbackTilOgMed);
+        return Periode
+                .builder()
+                .fraOgMed(periode.fraOgMed)
+                .tilOgMed(periode.tilOgMed != null ? periode.tilOgMed : fallbackTilOgMed)
+                .build();
     }
 
     public static Builder builder() {
@@ -57,7 +72,7 @@ public class Periode {
         }
     }
 
-    private static LocalDate parse(String iso8601) {
+    private static LocalDate parseLocalDate(String iso8601) {
         if (ÅPEN.equals(iso8601)) return null;
         else return LocalDate.parse(iso8601);
     }
@@ -91,6 +106,32 @@ public class Periode {
 
         public Periode build() {
             return new Periode(toIso8601(fraOgMed) + SKILLE + toIso8601(tilOgMed));
+        }
+    }
+
+    public static final class Utils {
+        private static final Comparator<Periode> tilOgMedComparator = Comparator.comparing(periode -> periode.tilOgMed);
+
+        public static LocalDate sisteTilOgMedTillatÅpnePerioder(Map<Periode, ?> periodeMap) {
+            return sisteTilOgMed(periodeMap);
+        }
+
+        public static LocalDate sisteTilOgMedBlantLukkedePerioder(Map<Periode, ?> periodeMap) {
+            LocalDate sisteTilOgMed = sisteTilOgMed(periodeMap);
+            if (sisteTilOgMed == null) throw new IllegalStateException("En eller fler av periodene er åpne (uten tilOgMed satt).");
+            return sisteTilOgMed;
+        }
+
+        private static LocalDate sisteTilOgMed(Map<Periode, ?> periodeMap) {
+            if (periodeMap == null || periodeMap.isEmpty()) {
+                throw new IllegalStateException("Må være minst en periode for å finne siste tilOgMed");
+            }
+            if (periodeMap.keySet().stream().anyMatch(periode -> periode.tilOgMed == null)) {
+                return null;
+            }
+            SortedSet<Periode> perioder = new TreeSet<>(tilOgMedComparator);
+            perioder.addAll(periodeMap.keySet());
+            return perioder.last().tilOgMed;
         }
     }
 }

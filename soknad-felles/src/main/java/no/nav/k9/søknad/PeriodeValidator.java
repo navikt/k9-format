@@ -9,6 +9,12 @@ import java.util.Map;
 
 public class PeriodeValidator {
 
+    public List<Feil> validerTillattOverlappOgÅpnePerioder(
+            Map<Periode, ?> perioder,
+            String felt) {
+        return valider(perioder, felt, true, true);
+    }
+
     public List<Feil> validerTillattOverlapp(
             Map<Periode, ?> perioder,
             String felt) {

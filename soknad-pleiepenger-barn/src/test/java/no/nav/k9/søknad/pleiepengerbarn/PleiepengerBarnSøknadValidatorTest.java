@@ -159,6 +159,46 @@ public class PleiepengerBarnSøknadValidatorTest {
         verifyHarFeil(builder);
     }
 
+    @Test
+    public void ÅpneOgOverlappendePerioderForFrilanserOgSelvstendig() {
+        final PleiepengerBarnSøknad.Builder builder = TestUtils.komplettBuilder();
+        final Frilanser.FrilanserPeriodeInfo frilanser = Frilanser.FrilanserPeriodeInfo.builder().build();
+        final SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo selvstendig = SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder().build();
+
+        final Arbeid arbeid = Arbeid
+                .builder()
+                .frilanser(Frilanser
+                        .builder()
+                        .periode(
+                                Periode.parse("2020-01-01/2020-02-02"),
+                                frilanser)
+                        .periode(
+                                Periode.parse("2020-01-01/.."),
+                                frilanser)
+                        .periode(
+                                Periode.parse("2020-01-05/.."),
+                                frilanser)
+                        .build())
+                .selvstendigNæringsdrivende(SelvstendigNæringsdrivende
+                        .builder()
+                        .periode(
+                                Periode.parse("2020-01-01/2020-02-02"),
+                                selvstendig)
+                        .periode(
+                                Periode.parse("2020-01-05/2020-02-01"),
+                                selvstendig)
+                        .periode(
+                                Periode.parse("2020-01-01/.."),
+                                selvstendig)
+                        .periode(
+                                Periode.parse("2020-01-05/.."),
+                                selvstendig)
+                        .build()
+                )
+                .build();
+        verifyIngenFeil(builder.arbeid(arbeid));
+    }
+
     private List<Feil> verifyHarFeil(PleiepengerBarnSøknad.Builder builder) {
         final List<Feil> feil = valider(builder);
         assertThat(feil, is(not(Collections.emptyList())));
