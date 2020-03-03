@@ -86,4 +86,18 @@ public class PeriodeTest {
     public void TestFinnSisteTilOgMedDatoMedNull() {
         Periode.Utils.sisteTilOgMedTillatÅpnePerioder(null);
     }
+
+    @Test
+    public void TestForsikreLukketPeriode() {
+        String fraOgMedIso = "2020-01-01";
+        Periode åpnePeriode = Periode.parse(fraOgMedIso + "/..");
+        LocalDate tilOgMed = LocalDate.parse("2020-01-20");
+        Periode lukketPeriode = Periode.forsikreLukketPeriode(åpnePeriode, tilOgMed);
+        assertEquals(åpnePeriode.fraOgMed, lukketPeriode.fraOgMed);
+        assertEquals(tilOgMed, lukketPeriode.tilOgMed);
+
+        lukketPeriode = Periode.forsikreLukketPeriode(Periode.parse("2020-02-01/2020-02-03"), LocalDate.parse("2022-01-01"));
+        assertEquals(LocalDate.parse("2020-02-01"), lukketPeriode.fraOgMed);
+        assertEquals(LocalDate.parse("2020-02-03"), lukketPeriode.tilOgMed);
+    }
 }
