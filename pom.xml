@@ -147,6 +147,19 @@
                     <argLine>-Dfile.encoding=UTF-8 -Dlog.level.no.nav=WARN</argLine>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                     <execution>
+                         <?m2e ignore?>
+                         <id>attach-sources</id>
+                         <goals>
+                             <goal>jar</goal>
+                         </goals>
+                     </execution>
+                 </executions>
+            </plugin>
         </plugins>
     </build>
 
