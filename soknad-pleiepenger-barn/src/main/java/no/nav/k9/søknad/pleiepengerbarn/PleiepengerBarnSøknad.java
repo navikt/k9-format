@@ -114,9 +114,26 @@ public class PleiepengerBarnSøknad {
         }
     }
 
+    public static final class Utils {
+        private Utils() {}
+
+        public static boolean alleArbeidstakerPerioderInneholderJobberNormaltPerUke(
+                PleiepengerBarnSøknad søknad) {
+            return søknad.arbeid.arbeidstaker
+                    .stream()
+                    .noneMatch(arbeidstaker ->
+                            arbeidstaker.perioder.values()
+                                    .stream()
+                                    .anyMatch(periodeInfo ->
+                                            periodeInfo.jobberNormaltPerUke == null
+                                    )
+                    );
+        }
+    }
+
     public static final class Builder {
         private static final PleiepengerBarnSøknadValidator validator = new PleiepengerBarnSøknadValidator();
-        private static final Versjon versjon = Versjon.of("2.0.0");
+        private static final Versjon versjon = Versjon.of("1.1.0");
 
         private String json;
         private SøknadId søknadId;
