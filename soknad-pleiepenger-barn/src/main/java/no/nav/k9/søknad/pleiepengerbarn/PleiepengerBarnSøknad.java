@@ -116,7 +116,7 @@ public class PleiepengerBarnSøknad {
 
     public static final class Builder {
         private static final PleiepengerBarnSøknadValidator validator = new PleiepengerBarnSøknadValidator();
-        private static final Versjon versjon = Versjon.of("1.0.0");
+        private static final Versjon versjon = Versjon.of("2.0.0");
 
         private String json;
         private SøknadId søknadId;

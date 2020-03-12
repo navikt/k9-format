@@ -8,6 +8,7 @@ import no.nav.k9.søknad.felles.Periode;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -87,10 +88,15 @@ public class Arbeidstaker {
          */
         public final BigDecimal skalJobbeProsent;
 
+        public final Duration jobberNormaltPerUke;
+
         private ArbeidstakerPeriodeInfo(
                 @JsonProperty("skalJobbeProsent")
-                BigDecimal skalJobbeProsent) {
-            this.skalJobbeProsent = (skalJobbeProsent == null) ? null : skalJobbeProsent.setScale(2, RoundingMode.HALF_UP);
+                BigDecimal skalJobbeProsent,
+                @JsonProperty("jobberNormaltPerUke")
+                Duration jobberNormaltPerUke) {
+            this.skalJobbeProsent = skalJobbeProsent == null ? null : skalJobbeProsent.setScale(2, RoundingMode.HALF_UP);
+            this.jobberNormaltPerUke = jobberNormaltPerUke;
         }
 
         public static Builder builder() {
@@ -99,6 +105,7 @@ public class Arbeidstaker {
 
         public static final class Builder {
             private BigDecimal skalJobbeProsent;
+            private Duration jobberNormaltPerUke;
 
             private Builder() {}
 
@@ -107,9 +114,15 @@ public class Arbeidstaker {
                 return this;
             }
 
+            public Builder jobberNormaltPerUke(Duration jobberNormaltPerUke) {
+                this.jobberNormaltPerUke = jobberNormaltPerUke;
+                return this;
+            }
+
             public ArbeidstakerPeriodeInfo build() {
                 return new ArbeidstakerPeriodeInfo(
-                        skalJobbeProsent
+                        skalJobbeProsent,
+                        jobberNormaltPerUke
                 );
             }
         }
