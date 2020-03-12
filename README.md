@@ -1,3 +1,7 @@
+![](https://github.com/navikt/fp-felles/workflows/Bygg%20og%20deploy/badge.svg) 
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/navikt/k9-format)
+![GitHub](https://img.shields.io/github/license/navikt/k9-format)
+
 # Dataformater for "Kapittel 9"-ytelsene
 
 Dette prosjektet inneholder "kapittel 9"-ytelsenes dataformater for utveksling av informasjon mellom saksbehandling og brukerdialog.
