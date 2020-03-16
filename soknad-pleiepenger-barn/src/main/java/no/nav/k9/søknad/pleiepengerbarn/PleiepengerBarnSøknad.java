@@ -14,6 +14,8 @@ import java.util.Map;
 
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableMap;
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPeriode;
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPerioder;
 
 public class PleiepengerBarnSøknad {
 
@@ -149,12 +151,12 @@ public class PleiepengerBarnSøknad {
 
 
         public Builder søknadsperiode(Periode periode, SøknadsperiodeInfo søknadsperiodeInfo) {
-            this.søknadsperioder.put(periode, søknadsperiodeInfo);
+            leggTilPeriode(this.søknadsperioder, periode, søknadsperiodeInfo);
             return this;
         }
 
         public Builder søknadsperioder(Map<Periode, SøknadsperiodeInfo> søknadsperioder) {
-            this.søknadsperioder.putAll(søknadsperioder);
+            leggTilPerioder(this.søknadsperioder, søknadsperioder);
             return this;
         }
 

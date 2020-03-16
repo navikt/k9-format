@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Periode {
     static final String ÅPEN = "..";
@@ -110,7 +111,51 @@ public class Periode {
     }
 
     public static final class Utils {
+        private Utils() {}
+
         private static final Comparator<Periode> tilOgMedComparator = Comparator.comparing(periode -> periode.tilOgMed);
+
+        public static <PeriodeInfo> Map<Periode, PeriodeInfo> leggTilPeriode(
+                Map<Periode, PeriodeInfo> eksisterende,
+                Periode nyPeriode,
+                PeriodeInfo nyPeriodeInfo) {
+            Objects.requireNonNull(eksisterende);
+            Objects.requireNonNull(nyPeriode);
+            Objects.requireNonNull(nyPeriodeInfo);
+
+            if (eksisterende.containsKey(nyPeriode)) {
+                throw new IllegalArgumentException("Inneholder allerede " + nyPeriode.iso8601);
+            }
+
+            eksisterende.put(nyPeriode,  nyPeriodeInfo);
+            return eksisterende;
+        }
+
+        public static <PeriodeInfo> Map<Periode, PeriodeInfo> leggTilPerioder(
+                Map<Periode, PeriodeInfo> eksisterende,
+                Map<Periode, PeriodeInfo> nye) {
+            Objects.requireNonNull(eksisterende);
+            Objects.requireNonNull(nye);
+            var nyePerioder = nye.keySet();
+
+            var duplikater = eksisterende
+                    .keySet()
+                    .stream()
+                    .filter(nyePerioder::contains)
+                    .collect(Collectors.toSet());
+
+            if (!duplikater.isEmpty()) {
+                var duplikatePerioder = String.join(", ", duplikater
+                        .stream()
+                        .map(it-> it.iso8601)
+                        .collect(Collectors.toSet()));
+                throw new IllegalArgumentException("Inneholder allerede " + duplikatePerioder);
+            }
+
+            eksisterende.putAll(nye);
+            return eksisterende;
+        }
+
 
         public static LocalDate sisteTilOgMedTillatÅpnePerioder(Map<Periode, ?> periodeMap) {
             return sisteTilOgMed(periodeMap);
