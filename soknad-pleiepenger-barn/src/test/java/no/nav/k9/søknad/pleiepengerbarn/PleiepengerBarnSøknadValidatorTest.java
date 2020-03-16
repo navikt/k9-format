@@ -218,7 +218,7 @@ public class PleiepengerBarnSøknadValidatorTest {
                 ).build();
 
 
-        verifyIngenFeil(builder.arbeid(arbeid));
+        verifyHarFeil(builder.arbeid(arbeid));
     }
 
     @Test
