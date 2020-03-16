@@ -115,33 +115,32 @@ public class Periode {
 
         private static final Comparator<Periode> tilOgMedComparator = Comparator.comparing(periode -> periode.tilOgMed);
 
-        public static <PeriodeInfo> Map<Periode, PeriodeInfo> leggTilPeriode(
-                Map<Periode, PeriodeInfo> eksisterende,
+        public static <PeriodeInfo> void leggTilPeriode(
+                Map<Periode, PeriodeInfo> perioder,
                 Periode nyPeriode,
                 PeriodeInfo nyPeriodeInfo) {
-            Objects.requireNonNull(eksisterende);
+            Objects.requireNonNull(perioder);
             Objects.requireNonNull(nyPeriode);
             Objects.requireNonNull(nyPeriodeInfo);
 
-            if (eksisterende.containsKey(nyPeriode)) {
+            if (perioder.containsKey(nyPeriode)) {
                 throw new IllegalArgumentException("Inneholder allerede " + nyPeriode.iso8601);
             }
 
-            eksisterende.put(nyPeriode,  nyPeriodeInfo);
-            return eksisterende;
+            perioder.put(nyPeriode,  nyPeriodeInfo);
         }
 
-        public static <PeriodeInfo> Map<Periode, PeriodeInfo> leggTilPerioder(
-                Map<Periode, PeriodeInfo> eksisterende,
-                Map<Periode, PeriodeInfo> nye) {
-            Objects.requireNonNull(eksisterende);
-            Objects.requireNonNull(nye);
-            var nyePerioder = nye.keySet();
+        public static <PeriodeInfo> void leggTilPerioder(
+                Map<Periode, PeriodeInfo> perioder,
+                Map<Periode, PeriodeInfo> nyePerioder) {
+            Objects.requireNonNull(perioder);
+            Objects.requireNonNull(nyePerioder);
+            var nyeKeys = nyePerioder.keySet();
 
-            var duplikater = eksisterende
+            var duplikater = perioder
                     .keySet()
                     .stream()
-                    .filter(nyePerioder::contains)
+                    .filter(nyeKeys::contains)
                     .collect(Collectors.toSet());
 
             if (!duplikater.isEmpty()) {
@@ -152,8 +151,7 @@ public class Periode {
                 throw new IllegalArgumentException("Inneholder allerede " + duplikatePerioder);
             }
 
-            eksisterende.putAll(nye);
-            return eksisterende;
+            perioder.putAll(nyePerioder);
         }
 
 

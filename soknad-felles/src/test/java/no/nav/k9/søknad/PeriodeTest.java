@@ -111,16 +111,16 @@ public class PeriodeTest {
         var periode2 = Periode.parse("2020-04-04/..");
         var periode3 = Periode.parse("2020-05-05/2020-06-06");
 
-        var eksisterende = Map.of(
+        var perioder = Map.of(
                 periode1, true,
                 periode2, true
         );
-        var nytt = Map.of(
+        var nyePerioder = Map.of(
                 periode1, true,
                 periode2, true,
                 periode3, true
         );
-        leggTilPerioder(eksisterende, nytt);
+        leggTilPerioder(perioder, nyePerioder);
     }
 
     @Test
@@ -129,18 +129,17 @@ public class PeriodeTest {
         var periode2 = Periode.parse("2020-04-04/..");
         var periode3 = Periode.parse("2020-05-05/2020-06-06");
 
-        var eksisterende = new HashMap<>(Map.of(
+        var perioder = new HashMap<>(Map.of(
                 periode1, true,
                 periode2, true
         ));
-        var nytt = Map.of(
+        var nyePerioder = Map.of(
                 periode3, true
         );
 
-        var oppdatert = leggTilPerioder(eksisterende, nytt);
-        assertEquals(3, oppdatert.size());
-        assertTrue(oppdatert.keySet().containsAll(Set.of(periode1, periode2, periode3)));
-        assertEquals(eksisterende, oppdatert);
+        leggTilPerioder(perioder, nyePerioder);
+        assertEquals(3, perioder.size());
+        assertTrue(perioder.keySet().containsAll(Set.of(periode1, periode2, periode3)));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -148,12 +147,12 @@ public class PeriodeTest {
         var periode1 = Periode.parse("2020-01-01/2021-01-01");
         var periode2 = Periode.parse("2020-04-04/..");
 
-        var eksisterende = Map.of(
+        var perioder = Map.of(
                 periode1, true,
                 periode2, true
         );
 
-        leggTilPeriode(eksisterende, periode1, true);
+        leggTilPeriode(perioder, periode1, true);
     }
 
     @Test
@@ -161,13 +160,12 @@ public class PeriodeTest {
         var periode1 = Periode.parse("2020-01-01/2021-01-01");
         var periode2 = Periode.parse("2020-04-04/..");
 
-        var eksisterende = new HashMap<>(Map.of(
+        var perioder = new HashMap<>(Map.of(
                 periode1, true
         ));
 
-        var oppdatert = leggTilPeriode(eksisterende, periode2, true);
-        assertEquals(2, oppdatert.size());
-        assertTrue(oppdatert.keySet().containsAll(Set.of(periode1, periode2)));
-        assertEquals(eksisterende, oppdatert);
+        leggTilPeriode(perioder, periode2, true);
+        assertEquals(2, perioder.size());
+        assertTrue(perioder.keySet().containsAll(Set.of(periode1, periode2)));
     }
 }
