@@ -10,6 +10,9 @@ import java.util.Map;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableMap;
 
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPerioder;
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPeriode;
+
 public class Tilsynsordning {
 
     public final TilsynsordningSvar iTilsynsordning;
@@ -42,12 +45,12 @@ public class Tilsynsordning {
         }
 
         public Builder opphold(Map<Periode, TilsynsordningOpphold> opphold) {
-            this.opphold.putAll(opphold);
+            leggTilPerioder(this.opphold, opphold);
             return this;
         }
 
-        public Builder opphold(Periode periode, TilsynsordningOpphold duration) {
-            this.opphold.put(periode, duration);
+        public Builder opphold(Periode periode, TilsynsordningOpphold tilsynsordningOpphold) {
+            leggTilPeriode(this.opphold, periode, tilsynsordningOpphold);
             return this;
         }
 

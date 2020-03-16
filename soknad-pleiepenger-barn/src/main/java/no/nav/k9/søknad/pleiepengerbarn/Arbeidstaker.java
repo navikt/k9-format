@@ -15,6 +15,9 @@ import java.util.Map;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableMap;
 
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPeriode;
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPerioder;
+
 public class Arbeidstaker {
     public final NorskIdentitetsnummer norskIdentitetsnummer;
     public final Organisasjonsnummer organisasjonsnummer;
@@ -52,12 +55,12 @@ public class Arbeidstaker {
         }
 
         public Builder perioder(Map<Periode, ArbeidstakerPeriodeInfo> perioder) {
-            this.perioder.putAll(perioder);
+            leggTilPerioder(this.perioder, perioder);
             return this;
         }
 
         public Builder periode(Periode periode, ArbeidstakerPeriodeInfo arbeidstakerPeriodeInfo) {
-            this.perioder.put(periode, arbeidstakerPeriodeInfo);
+            leggTilPeriode(this.perioder, periode, arbeidstakerPeriodeInfo);
             return this;
         }
 

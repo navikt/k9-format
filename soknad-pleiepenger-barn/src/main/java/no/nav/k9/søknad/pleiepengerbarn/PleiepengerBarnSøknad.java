@@ -14,6 +14,7 @@ import java.util.Map;
 
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableMap;
+
 import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPeriode;
 import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPerioder;
 

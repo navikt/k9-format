@@ -10,6 +10,9 @@ import java.util.Map;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableMap;
 
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPeriode;
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPerioder;
+
 public class Frilanser {
 
     public final Map<Periode, FrilanserPeriodeInfo> perioder;
@@ -33,12 +36,12 @@ public class Frilanser {
         }
 
         public Builder perioder(Map<Periode, FrilanserPeriodeInfo> perioder) {
-            this.perioder.putAll(perioder);
+            leggTilPerioder(this.perioder, perioder);
             return this;
         }
 
         public Builder periode(Periode periode, FrilanserPeriodeInfo frilanserPeriodeInfo) {
-            this.perioder.put(periode, frilanserPeriodeInfo);
+            leggTilPeriode(this.perioder, periode, frilanserPeriodeInfo);
             return this;
         }
 

@@ -8,6 +8,8 @@ import java.util.Map;
 
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableMap;
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPeriode;
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPerioder;
 
 public class Bosteder {
     public final Map<Periode, BostedPeriodeInfo> perioder;
@@ -31,12 +33,12 @@ public class Bosteder {
         }
 
         public Builder perioder(Map<Periode, BostedPeriodeInfo> perioder) {
-            this.perioder.putAll(perioder);
+            leggTilPerioder(this.perioder, perioder);
             return this;
         }
 
         public Builder periode(Periode periode, BostedPeriodeInfo bostedPeriodeInfo) {
-            this.perioder.put(periode, bostedPeriodeInfo);
+            leggTilPeriode(this.perioder, periode, bostedPeriodeInfo);
             return this;
         }
 
