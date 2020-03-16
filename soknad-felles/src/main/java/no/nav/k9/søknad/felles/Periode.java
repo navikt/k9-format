@@ -115,10 +115,10 @@ public class Periode {
 
         private static final Comparator<Periode> tilOgMedComparator = Comparator.comparing(periode -> periode.tilOgMed);
 
-        public static <PeriodeInfo> void leggTilPeriode(
-                Map<Periode, PeriodeInfo> perioder,
+        public static <PERIODE_INFO> void leggTilPeriode(
+                Map<Periode, PERIODE_INFO> perioder,
                 Periode nyPeriode,
-                PeriodeInfo nyPeriodeInfo) {
+                PERIODE_INFO nyPeriodeInfo) {
             Objects.requireNonNull(perioder);
             Objects.requireNonNull(nyPeriode);
             Objects.requireNonNull(nyPeriodeInfo);
@@ -130,9 +130,9 @@ public class Periode {
             perioder.put(nyPeriode,  nyPeriodeInfo);
         }
 
-        public static <PeriodeInfo> void leggTilPerioder(
-                Map<Periode, PeriodeInfo> perioder,
-                Map<Periode, PeriodeInfo> nyePerioder) {
+        public static <PERIODE_INFO> void leggTilPerioder(
+                Map<Periode, PERIODE_INFO> perioder,
+                Map<Periode, PERIODE_INFO> nyePerioder) {
             Objects.requireNonNull(perioder);
             Objects.requireNonNull(nyePerioder);
             var nyeKeys = nyePerioder.keySet();
