@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Periode {
     static final String ÅPEN = "..";
@@ -110,7 +111,49 @@ public class Periode {
     }
 
     public static final class Utils {
+        private Utils() {}
+
         private static final Comparator<Periode> tilOgMedComparator = Comparator.comparing(periode -> periode.tilOgMed);
+
+        public static <PERIODE_INFO> void leggTilPeriode(
+                Map<Periode, PERIODE_INFO> perioder,
+                Periode nyPeriode,
+                PERIODE_INFO nyPeriodeInfo) {
+            Objects.requireNonNull(perioder);
+            Objects.requireNonNull(nyPeriode);
+            Objects.requireNonNull(nyPeriodeInfo);
+
+            if (perioder.containsKey(nyPeriode)) {
+                throw new IllegalArgumentException("Inneholder allerede " + nyPeriode.iso8601);
+            }
+
+            perioder.put(nyPeriode,  nyPeriodeInfo);
+        }
+
+        public static <PERIODE_INFO> void leggTilPerioder(
+                Map<Periode, PERIODE_INFO> perioder,
+                Map<Periode, PERIODE_INFO> nyePerioder) {
+            Objects.requireNonNull(perioder);
+            Objects.requireNonNull(nyePerioder);
+            var nyeKeys = nyePerioder.keySet();
+
+            var duplikater = perioder
+                    .keySet()
+                    .stream()
+                    .filter(nyeKeys::contains)
+                    .collect(Collectors.toSet());
+
+            if (!duplikater.isEmpty()) {
+                var duplikatePerioder = String.join(", ", duplikater
+                        .stream()
+                        .map(it-> it.iso8601)
+                        .collect(Collectors.toSet()));
+                throw new IllegalArgumentException("Inneholder allerede " + duplikatePerioder);
+            }
+
+            perioder.putAll(nyePerioder);
+        }
+
 
         public static LocalDate sisteTilOgMedTillatÅpnePerioder(Map<Periode, ?> periodeMap) {
             return sisteTilOgMed(periodeMap);

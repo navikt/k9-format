@@ -10,6 +10,9 @@ import java.util.Map;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableMap;
 
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPeriode;
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPerioder;
+
 public class SelvstendigNæringsdrivende {
 
     public final Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> perioder;
@@ -33,12 +36,12 @@ public class SelvstendigNæringsdrivende {
         }
 
         public Builder perioder(Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> perioder) {
-            this.perioder.putAll(perioder);
+            leggTilPerioder(this.perioder, perioder);
             return this;
         }
 
         public Builder periode(Periode periode, SelvstendigNæringsdrivendePeriodeInfo selvstendigNæringsdrivendePeriodeInfo) {
-            this.perioder.put(periode, selvstendigNæringsdrivendePeriodeInfo);
+            leggTilPeriode(this.perioder, periode, selvstendigNæringsdrivendePeriodeInfo);
             return this;
         }
 

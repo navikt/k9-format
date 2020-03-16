@@ -15,6 +15,9 @@ import java.util.Map;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableMap;
 
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPeriode;
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPerioder;
+
 public class PleiepengerBarnSøknad {
 
     public final SøknadId søknadId;
@@ -116,7 +119,7 @@ public class PleiepengerBarnSøknad {
 
     public static final class Builder {
         private static final PleiepengerBarnSøknadValidator validator = new PleiepengerBarnSøknadValidator();
-        private static final Versjon versjon = Versjon.of("1.0.0");
+        private static final Versjon versjon = Versjon.of("2.0.0");
 
         private String json;
         private SøknadId søknadId;
@@ -149,12 +152,12 @@ public class PleiepengerBarnSøknad {
 
 
         public Builder søknadsperiode(Periode periode, SøknadsperiodeInfo søknadsperiodeInfo) {
-            this.søknadsperioder.put(periode, søknadsperiodeInfo);
+            leggTilPeriode(this.søknadsperioder, periode, søknadsperiodeInfo);
             return this;
         }
 
         public Builder søknadsperioder(Map<Periode, SøknadsperiodeInfo> søknadsperioder) {
-            this.søknadsperioder.putAll(søknadsperioder);
+            leggTilPerioder(this.søknadsperioder, søknadsperioder);
             return this;
         }
 

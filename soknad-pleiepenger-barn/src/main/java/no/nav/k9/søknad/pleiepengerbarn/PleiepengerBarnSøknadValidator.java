@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 public class PleiepengerBarnSøknadValidator extends SøknadValidator<PleiepengerBarnSøknad> {
+    private static final Duration MAKS_INNENFOR_EN_UKE = Duration.ofDays(7);
+
     private final PeriodeValidator periodeValidator;
 
     PleiepengerBarnSøknadValidator() {
@@ -137,6 +139,12 @@ public class PleiepengerBarnSøknadValidator extends SøknadValidator<Pleiepenge
                 BigDecimal skalJobbeProsent = perioder.getValue().skalJobbeProsent;
                 if (skalJobbeProsent == null || skalJobbeProsent.doubleValue() < 0 || skalJobbeProsent.doubleValue() > 100) {
                     feil.add(new Feil("arbeid.arbeidstaker[" + i + "].perioder[" + perioder.getKey().iso8601 + "].skalJobbeProsent", "ugylidigProsent", "Skal jobbe prosent må være mellom 0 og 100"));
+                }
+                Duration jobberNormalPerUke = perioder.getValue().jobberNormaltPerUke;
+                if (jobberNormalPerUke == null || jobberNormalPerUke.isNegative()) {
+                    feil.add(new Feil("arbeid.arbeidstaker[" + i + "].perioder[" + perioder.getKey().iso8601 + "].jobberNormalPerUke", "ugyldigJobbperiode", "Jobber normalt per uke må settes til en gyldig verdi."));
+                } else if (jobberNormalPerUke.compareTo(MAKS_INNENFOR_EN_UKE) > 0) {
+                    feil.add(new Feil("arbeid.arbeidstaker[" + i + "].perioder[" + perioder.getKey().iso8601 + "].jobberNormalPerUke", "ugyldigJobbperiode", "Jobber normalt per uke kan ikke overstige en uke."));
                 }
             }
             i++;

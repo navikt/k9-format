@@ -12,6 +12,8 @@ import java.util.Map;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableMap;
 
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPerioder;
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPeriode;
 
 public class Utenlandsopphold {
     public final Map<Periode, UtenlandsoppholdPeriodeInfo> perioder;
@@ -35,12 +37,12 @@ public class Utenlandsopphold {
         }
 
         public Builder perioder(Map<Periode, UtenlandsoppholdPeriodeInfo> perioder) {
-            this.perioder.putAll(perioder);
+            leggTilPerioder(this.perioder, perioder);
             return this;
         }
 
         public Builder periode(Periode periode, UtenlandsoppholdPeriodeInfo utenlandsoppholdPeriodeInfo) {
-            this.perioder.put(periode, utenlandsoppholdPeriodeInfo);
+            leggTilPeriode(this.perioder, periode, utenlandsoppholdPeriodeInfo);
             return this;
         }
 

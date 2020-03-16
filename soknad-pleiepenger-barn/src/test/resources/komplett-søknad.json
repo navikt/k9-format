@@ -1,5 +1,5 @@
 {
-  "versjon" : "1.0.0",
+  "versjon" : "2.0.0",
   "søknadId": "1",
   "mottattDato" : "2019-10-20T07:15:36.124Z",
   "språk": "nb",
@@ -76,7 +76,8 @@
       "norskIdentitetsnummer": null,
       "perioder" : {
         "2018-10-10/2018-12-29": {
-          "skalJobbeProsent": 50.25
+          "skalJobbeProsent": 50.25,
+          "jobberNormaltPerUke": "PT37H30M"
         }
       }
     },{
@@ -84,7 +85,8 @@
       "norskIdentitetsnummer": "29099012345",
       "perioder" : {
         "2018-11-10/2018-12-29": {
-          "skalJobbeProsent": 20.00
+          "skalJobbeProsent": 20.00,
+          "jobberNormaltPerUke": "PT10H"
         }
       }
     }],

@@ -8,11 +8,15 @@ import no.nav.k9.søknad.felles.Periode;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableMap;
+
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPeriode;
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPerioder;
 
 public class Arbeidstaker {
     public final NorskIdentitetsnummer norskIdentitetsnummer;
@@ -51,12 +55,12 @@ public class Arbeidstaker {
         }
 
         public Builder perioder(Map<Periode, ArbeidstakerPeriodeInfo> perioder) {
-            this.perioder.putAll(perioder);
+            leggTilPerioder(this.perioder, perioder);
             return this;
         }
 
         public Builder periode(Periode periode, ArbeidstakerPeriodeInfo arbeidstakerPeriodeInfo) {
-            this.perioder.put(periode, arbeidstakerPeriodeInfo);
+            leggTilPeriode(this.perioder, periode, arbeidstakerPeriodeInfo);
             return this;
         }
 
@@ -87,10 +91,15 @@ public class Arbeidstaker {
          */
         public final BigDecimal skalJobbeProsent;
 
+        public final Duration jobberNormaltPerUke;
+
         private ArbeidstakerPeriodeInfo(
                 @JsonProperty("skalJobbeProsent")
-                BigDecimal skalJobbeProsent) {
-            this.skalJobbeProsent = (skalJobbeProsent == null) ? null : skalJobbeProsent.setScale(2, RoundingMode.HALF_UP);
+                BigDecimal skalJobbeProsent,
+                @JsonProperty("jobberNormaltPerUke")
+                Duration jobberNormaltPerUke) {
+            this.skalJobbeProsent = skalJobbeProsent == null ? null : skalJobbeProsent.setScale(2, RoundingMode.HALF_UP);
+            this.jobberNormaltPerUke = jobberNormaltPerUke;
         }
 
         public static Builder builder() {
@@ -99,6 +108,7 @@ public class Arbeidstaker {
 
         public static final class Builder {
             private BigDecimal skalJobbeProsent;
+            private Duration jobberNormaltPerUke;
 
             private Builder() {}
 
@@ -107,9 +117,15 @@ public class Arbeidstaker {
                 return this;
             }
 
+            public Builder jobberNormaltPerUke(Duration jobberNormaltPerUke) {
+                this.jobberNormaltPerUke = jobberNormaltPerUke;
+                return this;
+            }
+
             public ArbeidstakerPeriodeInfo build() {
                 return new ArbeidstakerPeriodeInfo(
-                        skalJobbeProsent
+                        skalJobbeProsent,
+                        jobberNormaltPerUke
                 );
             }
         }

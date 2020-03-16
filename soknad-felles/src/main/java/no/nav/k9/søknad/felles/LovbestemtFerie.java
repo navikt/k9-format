@@ -9,6 +9,9 @@ import java.util.Map;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableMap;
 
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPeriode;
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPerioder;
+
 public class LovbestemtFerie {
     public final Map<Periode, LovbestemtFeriePeriodeInfo> perioder;
 
@@ -31,12 +34,12 @@ public class LovbestemtFerie {
         }
 
         public Builder perioder(Map<Periode, LovbestemtFeriePeriodeInfo> perioder) {
-            this.perioder.putAll(perioder);
+            leggTilPerioder(this.perioder, perioder);
             return this;
         }
 
         public Builder periode(Periode periode, LovbestemtFeriePeriodeInfo lovbestemtFeriePeriodeInfo) {
-            this.perioder.put(periode, lovbestemtFeriePeriodeInfo);
+            leggTilPeriode(this.perioder, periode, lovbestemtFeriePeriodeInfo);
             return this;
         }
 

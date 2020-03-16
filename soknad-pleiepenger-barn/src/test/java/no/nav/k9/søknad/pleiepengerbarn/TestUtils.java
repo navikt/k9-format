@@ -96,13 +96,19 @@ final class TestUtils {
                                 .organisasjonsnummer(Organisasjonsnummer.of("999999999"))
                                 .periode(
                                         Periode.builder().fraOgMed(LocalDate.parse("2018-10-10")).tilOgMed(LocalDate.parse("2018-12-29")).build(),
-                                        Arbeidstaker.ArbeidstakerPeriodeInfo.builder().skalJobbeProsent(BigDecimal.valueOf(50.25)).build())
+                                        Arbeidstaker.ArbeidstakerPeriodeInfo.builder()
+                                                .skalJobbeProsent(BigDecimal.valueOf(50.25))
+                                                .jobberNormaltPerUke(Duration.parse("PT37H30M"))
+                                                .build())
                                 .build())
                         .arbeidstaker(Arbeidstaker.builder()
                                 .norskIdentitetsnummer(NorskIdentitetsnummer.of("29099012345"))
                                 .periode(
                                         Periode.builder().fraOgMed(LocalDate.parse("2018-11-10")).tilOgMed(LocalDate.parse("2018-12-29")).build(),
-                                        Arbeidstaker.ArbeidstakerPeriodeInfo.builder().skalJobbeProsent(BigDecimal.valueOf(20.00)).build())
+                                        Arbeidstaker.ArbeidstakerPeriodeInfo.builder()
+                                                .skalJobbeProsent(BigDecimal.valueOf(20.00))
+                                                .jobberNormaltPerUke(Duration.parse("PT10H"))
+                                                .build())
                                 .build())
                         .selvstendigNæringsdrivende(SelvstendigNæringsdrivende.builder()
                                 .periode(

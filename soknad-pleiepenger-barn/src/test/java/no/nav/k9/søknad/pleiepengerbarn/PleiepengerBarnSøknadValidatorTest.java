@@ -14,6 +14,7 @@ import java.util.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
 
 public class PleiepengerBarnSøknadValidatorTest {
     private static final PleiepengerBarnSøknadValidator validator = new PleiepengerBarnSøknadValidator();
@@ -197,6 +198,66 @@ public class PleiepengerBarnSøknadValidatorTest {
                 )
                 .build();
         verifyIngenFeil(builder.arbeid(arbeid));
+    }
+
+    @Test
+    public void ArbeidstakerInfoUtenJobberNormaltPerUke() {
+        final PleiepengerBarnSøknad.Builder builder = TestUtils.komplettBuilder();
+        Arbeid arbeid = Arbeid
+                .builder()
+                .arbeidstaker(Arbeidstaker
+                        .builder()
+                        .organisasjonsnummer(Organisasjonsnummer.of("88888888"))
+                        .periode(
+                                Periode.builder().fraOgMed(LocalDate.now()).tilOgMed(LocalDate.now().plusDays(3)).build(),
+                                Arbeidstaker.ArbeidstakerPeriodeInfo.builder()
+                                        .skalJobbeProsent(BigDecimal.valueOf(100.00))
+                                        .jobberNormaltPerUke(null)
+                                        .build()
+                        ).build()
+                ).build();
+
+        assertEquals(1,verifyHarFeil(builder.arbeid(arbeid)).size());
+    }
+
+    @Test
+    public void ArbeidstakerInfoMedJobberNormaltPerUkeOverEnUke() {
+        final PleiepengerBarnSøknad.Builder builder = TestUtils.komplettBuilder();
+        Arbeid arbeid = Arbeid
+                .builder()
+                .arbeidstaker(Arbeidstaker
+                        .builder()
+                        .organisasjonsnummer(Organisasjonsnummer.of("88888888"))
+                        .periode(
+                                Periode.builder().fraOgMed(LocalDate.now()).tilOgMed(LocalDate.now().plusDays(3)).build(),
+                                Arbeidstaker.ArbeidstakerPeriodeInfo.builder()
+                                        .skalJobbeProsent(BigDecimal.valueOf(100.00))
+                                        .jobberNormaltPerUke(Duration.ofDays(7).plusSeconds(1))
+                                        .build()
+                        ).build()
+                ).build();
+
+        assertEquals(1,verifyHarFeil(builder.arbeid(arbeid)).size());
+    }
+
+    @Test
+    public void ArbeidstakerInfoMedJobberNormaltPerUkeSattTilNegativVerdi() {
+        final PleiepengerBarnSøknad.Builder builder = TestUtils.komplettBuilder();
+        Arbeid arbeid = Arbeid
+                .builder()
+                .arbeidstaker(Arbeidstaker
+                        .builder()
+                        .organisasjonsnummer(Organisasjonsnummer.of("88888888"))
+                        .periode(
+                                Periode.builder().fraOgMed(LocalDate.now()).tilOgMed(LocalDate.now().plusDays(3)).build(),
+                                Arbeidstaker.ArbeidstakerPeriodeInfo.builder()
+                                        .skalJobbeProsent(BigDecimal.valueOf(100.00))
+                                        .jobberNormaltPerUke(Duration.ZERO.minusDays(1))
+                                        .build()
+                        ).build()
+                ).build();
+
+        assertEquals(1,verifyHarFeil(builder.arbeid(arbeid)).size());
     }
 
     private List<Feil> verifyHarFeil(PleiepengerBarnSøknad.Builder builder) {
