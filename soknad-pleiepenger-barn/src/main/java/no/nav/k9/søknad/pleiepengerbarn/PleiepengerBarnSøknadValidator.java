@@ -17,7 +17,7 @@ public class PleiepengerBarnSøknadValidator extends SøknadValidator<Pleiepenge
 
     private final PeriodeValidator periodeValidator;
 
-    PleiepengerBarnSøknadValidator() {
+    public PleiepengerBarnSøknadValidator() {
         this.periodeValidator = new PeriodeValidator();
     }
 
