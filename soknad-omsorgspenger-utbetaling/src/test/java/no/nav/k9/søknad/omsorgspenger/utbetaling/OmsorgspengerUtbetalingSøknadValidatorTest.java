@@ -4,7 +4,6 @@ import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.*;
 import org.junit.Test;
 
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -24,28 +23,6 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
         List<Feil> builderFeil = verifyHarFeil(builder);
         List<Feil> jsonFeil = verifyHarFeil(søknad);
         assertThat(builderFeil, is(jsonFeil));
-    }
-
-    @Test
-    public void søknadMedFødselsdatoSattPåBarn() {
-        OmsorgspengerUtbetalingSøknad.Builder builder = medSøker()
-                .barn(Barn
-                        .builder()
-                        .fødselsdato(LocalDate.now())
-                        .build()
-                );
-        verifyIngenFeil(builder);
-    }
-
-    @Test
-    public void søknadMedIdentSattPåBarn() {
-        OmsorgspengerUtbetalingSøknad.Builder builder = medSøker()
-                .barn(Barn
-                        .builder()
-                        .norskIdentitetsnummer(NorskIdentitetsnummer.of("11111111111"))
-                        .build()
-                );
-        verifyIngenFeil(builder);
     }
 
     @Test

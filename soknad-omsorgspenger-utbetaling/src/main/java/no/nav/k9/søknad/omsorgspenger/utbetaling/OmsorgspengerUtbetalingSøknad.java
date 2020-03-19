@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.søknad.JsonUtils;
-import no.nav.k9.søknad.felles.Barn;
 import no.nav.k9.søknad.felles.Søker;
 import no.nav.k9.søknad.felles.SøknadId;
 import no.nav.k9.søknad.felles.Versjon;
@@ -59,7 +58,6 @@ public class OmsorgspengerUtbetalingSøknad {
         private SøknadId søknadId;
         private ZonedDateTime mottattDato;
         private Søker søker;
-        private Barn barn;
 
         private Builder() {}
 
@@ -75,11 +73,6 @@ public class OmsorgspengerUtbetalingSøknad {
 
         public Builder søker(Søker søker) {
             this.søker = søker;
-            return this;
-        }
-
-        public Builder barn(Barn barn) {
-            this.barn = barn;
             return this;
         }
 
