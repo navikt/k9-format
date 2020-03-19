@@ -1,6 +1,5 @@
-package no.nav.k9.søknad.omsorgspenger;
+package no.nav.k9.søknad.omsorgspenger.utbetaling;
 
-import no.nav.k9.søknad.felles.Barn;
 import no.nav.k9.søknad.felles.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.Søker;
 import no.nav.k9.søknad.felles.SøknadId;
@@ -8,7 +7,6 @@ import no.nav.k9.søknad.felles.SøknadId;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
 
 class TestUtils {
@@ -21,12 +19,9 @@ class TestUtils {
         }
     }
 
-    static OmsorgspengerSøknad.Builder komplettBuilder() {
-        return OmsorgspengerSøknad
+    static OmsorgspengerUtbetalingSøknad.Builder komplettBuilder() {
+        return OmsorgspengerUtbetalingSøknad
                 .builder()
-                .barn(Barn.builder()
-                        .fødselsdato(LocalDate.parse("2015-01-01"))
-                        .build())
                 .søker(Søker.builder()
                         .norskIdentitetsnummer(NorskIdentitetsnummer.of("11111111111"))
                         .build())

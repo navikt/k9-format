@@ -13,6 +13,7 @@
         <module>soknad-pleiepenger-barn</module>
         <module>soknad-omsorgspenger</module>
         <module>soknad-felles</module>
+        <module>soknad-omsorgspenger-utbetaling</module>
     </modules>
 
     <properties>
