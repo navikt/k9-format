@@ -21,6 +21,7 @@ public class OmsorgspengerOverføringSøknadValidator extends SøknadValidator<O
         validerVersjon(søknad.versjon, feil);
         validerMottattDato(søknad.mottattDato, feil);
         validerSøker(søknad.søker, feil);
+        validerMottaker(søknad.mottaker, feil);
 
         return feil;
     }
@@ -50,6 +51,14 @@ public class OmsorgspengerOverføringSøknadValidator extends SøknadValidator<O
             feil.add(new Feil("søker", PÅKREVD, "Søker må settes i søknaden."));
         } else if (søker.norskIdentitetsnummer == null) {
             feil.add(new Feil("søker.norskIdentitetsnummer", PÅKREVD, "Søkers Personnummer/D-nummer må settes i søknaden."));
+        }
+    }
+
+    private static void validerMottaker(Mottaker mottaker, List<Feil> feil) {
+        if (mottaker == null) {
+            feil.add(new Feil("mottaker", PÅKREVD, "Mottaker må settes i søknaden."));
+        } else if (mottaker.norskIdentitetsnummer == null) {
+            feil.add(new Feil("mottaker.norskIdentitetsnummer", PÅKREVD, "Mottakers Personnummer/D-nummer må settes i søknaden."));
         }
     }
 }

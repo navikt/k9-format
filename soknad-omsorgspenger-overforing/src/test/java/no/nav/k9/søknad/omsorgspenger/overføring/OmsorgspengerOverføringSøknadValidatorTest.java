@@ -11,7 +11,9 @@ import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 
+import static junit.framework.TestCase.assertEquals;
 import static no.nav.k9.søknad.omsorgspenger.overføring.TestUtils.jsonForKomplettSøknad;
+import static no.nav.k9.søknad.omsorgspenger.overføring.TestUtils.komplettBuilder;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -32,6 +34,16 @@ public class OmsorgspengerOverføringSøknadValidatorTest {
     public void komplettSøknadFraJson() {
         OmsorgspengerOverføringSøknad søknad = OmsorgspengerOverføringSøknad.SerDes.deserialize(jsonForKomplettSøknad());
         verifyIngenFeil(søknad);
+    }
+
+    @Test
+    public void manglerMottaker() {
+        var builder = komplettBuilder().mottaker(null);
+        assertEquals(1,verifyHarFeil(builder).size());
+        builder = komplettBuilder().mottaker(Mottaker.builder().build());
+        assertEquals(1,verifyHarFeil(builder).size());
+        builder = komplettBuilder().mottaker(Mottaker.builder().norskIdentitetsnummer(NorskIdentitetsnummer.of("29099011111")).build());
+        verifyIngenFeil(builder);
     }
 
     private List<Feil> valider(OmsorgspengerOverføringSøknad.Builder builder) {

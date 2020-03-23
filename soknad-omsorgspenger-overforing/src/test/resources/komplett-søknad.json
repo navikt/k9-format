@@ -4,5 +4,8 @@
   "versjon": "0.0.1",
   "søker": {
     "norskIdentitetsnummer": "11111111111"
+  },
+  "mottaker": {
+    "norskIdentitetsnummer": "11111111112"
   }
 }

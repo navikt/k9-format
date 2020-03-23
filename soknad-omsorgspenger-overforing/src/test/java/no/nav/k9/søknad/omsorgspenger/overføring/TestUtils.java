@@ -25,6 +25,9 @@ class TestUtils {
                 .søker(Søker.builder()
                         .norskIdentitetsnummer(NorskIdentitetsnummer.of("11111111111"))
                         .build())
+                .mottaker(Mottaker.builder()
+                        .norskIdentitetsnummer(NorskIdentitetsnummer.of("11111111112"))
+                        .build())
                 .mottattDato(ZonedDateTime.parse("2019-10-20T07:15:36.124Z"))
                 .søknadId(SøknadId.of("123-123-123"));
     }
