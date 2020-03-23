@@ -20,6 +20,8 @@ public class OmsorgspengerOverføringSøknad {
 
     public final Søker søker;
 
+    public final Mottaker mottaker;
+
     @JsonCreator
     private OmsorgspengerOverføringSøknad(
             @JsonProperty("søknadId")
@@ -29,11 +31,14 @@ public class OmsorgspengerOverføringSøknad {
             @JsonProperty("mottattDato")
             ZonedDateTime mottattDato,
             @JsonProperty("søker")
-            Søker søker) {
+            Søker søker,
+            @JsonProperty("mottaker")
+            Mottaker mottaker) {
         this.søknadId = søknadId;
         this.versjon = versjon;
         this.mottattDato = mottattDato;
         this.søker = søker;
+        this.mottaker = mottaker;
     }
 
     public static Builder builder() {
@@ -58,6 +63,7 @@ public class OmsorgspengerOverføringSøknad {
         private SøknadId søknadId;
         private ZonedDateTime mottattDato;
         private Søker søker;
+        private Mottaker mottaker;
 
         private Builder() {}
 
@@ -76,6 +82,11 @@ public class OmsorgspengerOverføringSøknad {
             return this;
         }
 
+        public Builder mottaker(Mottaker mottaker) {
+            this.mottaker = mottaker;
+            return this;
+        }
+
         public Builder json(String json) {
             this.json = json;
             return this;
@@ -86,7 +97,8 @@ public class OmsorgspengerOverføringSøknad {
                     søknadId,
                     versjon,
                     mottattDato,
-                    søker
+                    søker,
+                    mottaker
             ) : SerDes.deserialize(json);
             validator.forsikreValidert(søknad);
             return søknad;
