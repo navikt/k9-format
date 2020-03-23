@@ -1,14 +1,12 @@
 package no.nav.k9.søknad.omsorgspenger.overføring;
 
 import no.nav.k9.søknad.SøknadValidator;
-import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.Søker;
-import no.nav.k9.søknad.felles.SøknadId;
-import no.nav.k9.søknad.felles.Versjon;
+import no.nav.k9.søknad.felles.*;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class OmsorgspengerOverføringSøknadValidator extends SøknadValidator<OmsorgspengerOverføringSøknad> {
     public OmsorgspengerOverføringSøknadValidator() {}
@@ -22,6 +20,7 @@ public class OmsorgspengerOverføringSøknadValidator extends SøknadValidator<O
         validerMottattDato(søknad.mottattDato, feil);
         validerSøker(søknad.søker, feil);
         validerMottaker(søknad.mottaker, feil);
+        validerBarn(søknad.barn, feil);
 
         return feil;
     }
@@ -59,6 +58,19 @@ public class OmsorgspengerOverføringSøknadValidator extends SøknadValidator<O
             feil.add(new Feil("mottaker", PÅKREVD, "Mottaker må settes i søknaden."));
         } else if (mottaker.norskIdentitetsnummer == null) {
             feil.add(new Feil("mottaker.norskIdentitetsnummer", PÅKREVD, "Mottakers Personnummer/D-nummer må settes i søknaden."));
+        }
+    }
+
+    private static void validerBarn(List<Barn> barn, List<Feil> feil) {
+        if (barn == null) return;
+        var index = 0;
+        for (Barn b : barn) {
+            if (b.norskIdentitetsnummer == null && b.fødselsdato == null) {
+                feil.add(new Feil("barn[" + index + "]", "norskIdentitetsnummerEllerFødselsdatoPåkrevd", "Må sette enten Personnummer/D-nummer på barn, eller fødselsdato."));
+            } else if (b.norskIdentitetsnummer != null && b.fødselsdato != null) {
+                feil.add(new Feil("barn[" + index + "]", "ikkeEntydigIdPåBarnet", "Må sette enten Personnummer/D-nummer på barn, eller fødselsdato."));
+            }
+            index++;
         }
     }
 }
