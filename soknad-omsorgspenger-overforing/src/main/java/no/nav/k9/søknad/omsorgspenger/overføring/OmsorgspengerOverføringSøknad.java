@@ -89,12 +89,12 @@ public class OmsorgspengerOverføringSøknad {
         }
 
         public Builder barn(Barn barn) {
-            this.barn.add(barn);
+            if (barn != null) this.barn.add(barn);
             return this;
         }
 
         public Builder barn(List<Barn> barn) {
-            this.barn.addAll(barn);
+            if (barn != null) this.barn.addAll(barn);
             return this;
         }
 

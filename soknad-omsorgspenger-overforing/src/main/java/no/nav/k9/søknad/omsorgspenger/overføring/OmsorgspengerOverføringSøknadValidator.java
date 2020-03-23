@@ -62,7 +62,7 @@ public class OmsorgspengerOverføringSøknadValidator extends SøknadValidator<O
     }
 
     private static void validerBarn(List<Barn> barn, List<Feil> feil) {
-        if (barn == null) return;
+        if (barn == null || barn.isEmpty()) return;
         var index = 0;
         for (Barn b : barn) {
             if (b.norskIdentitetsnummer == null && b.fødselsdato == null) {

@@ -4,11 +4,15 @@ import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.*;
 import org.junit.Test;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static junit.framework.TestCase.assertEquals;
 import static no.nav.k9.søknad.omsorgspenger.utbetaling.TestUtils.jsonForKomplettSøknad;
+import static no.nav.k9.søknad.omsorgspenger.utbetaling.TestUtils.komplettBuilder;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -29,6 +33,22 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
     public void komplettSøknadFraJson() {
         OmsorgspengerUtbetalingSøknad søknad = OmsorgspengerUtbetalingSøknad.SerDes.deserialize(jsonForKomplettSøknad());
         verifyIngenFeil(søknad);
+    }
+
+    @Test
+    public void barnISøknad() {
+        var builder = komplettBuilder();
+        builder.barn = new ArrayList<>();
+        verifyIngenFeil(builder);
+        builder.barn(Barn.builder().build());
+        assertEquals(1, verifyHarFeil(builder).size());
+        builder.barn = new ArrayList<>();
+        builder.barn(Barn.builder().fødselsdato(LocalDate.now()).norskIdentitetsnummer(NorskIdentitetsnummer.of("123")).build());
+        assertEquals(1, verifyHarFeil(builder).size());
+        builder.barn = new ArrayList<>();
+        builder.barn(Barn.builder().fødselsdato(LocalDate.now()).build());
+        builder.barn(Barn.builder().norskIdentitetsnummer(NorskIdentitetsnummer.of("123")).build());
+        verifyIngenFeil(builder);
     }
 
     private List<Feil> valider(OmsorgspengerUtbetalingSøknad.Builder builder) {

@@ -4,8 +4,8 @@ import org.json.JSONException;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
-import static no.nav.k9.søknad.omsorgspenger.utbetaling.TestUtils.jsonForKomplettSøknad;
-import static no.nav.k9.søknad.omsorgspenger.utbetaling.TestUtils.komplettBuilder;
+import static no.nav.k9.søknad.omsorgspenger.utbetaling.TestUtils.*;
+import static org.junit.Assert.assertEquals;
 
 public class OmsorgspengerUtbetalingSøknadTest {
     @Test
@@ -20,5 +20,12 @@ public class OmsorgspengerUtbetalingSøknadTest {
         String json = jsonForKomplettSøknad();
         OmsorgspengerUtbetalingSøknad søknad = OmsorgspengerUtbetalingSøknad.SerDes.deserialize(json);
         JSONAssert.assertEquals(json, OmsorgspengerUtbetalingSøknad.SerDes.serialize(søknad), true);
+    }
+
+    @Test
+    public void deserialisereSøknadUtenBarn() {
+        var json = jsonForSøknadUtenBarn();
+        var søknad = OmsorgspengerUtbetalingSøknad.SerDes.deserialize(json);
+        assertEquals(0, søknad.barn.size());
     }
 }
