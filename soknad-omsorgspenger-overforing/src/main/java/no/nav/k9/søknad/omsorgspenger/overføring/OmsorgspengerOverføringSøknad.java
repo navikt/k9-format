@@ -4,11 +4,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.søknad.JsonUtils;
+import no.nav.k9.søknad.felles.Barn;
 import no.nav.k9.søknad.felles.Søker;
 import no.nav.k9.søknad.felles.SøknadId;
 import no.nav.k9.søknad.felles.Versjon;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OmsorgspengerOverføringSøknad {
     public final SøknadId søknadId;
@@ -22,6 +25,8 @@ public class OmsorgspengerOverføringSøknad {
 
     public final Mottaker mottaker;
 
+    public final List<Barn> barn;
+
     @JsonCreator
     private OmsorgspengerOverføringSøknad(
             @JsonProperty("søknadId")
@@ -33,12 +38,15 @@ public class OmsorgspengerOverføringSøknad {
             @JsonProperty("søker")
             Søker søker,
             @JsonProperty("mottaker")
-            Mottaker mottaker) {
+            Mottaker mottaker,
+            @JsonProperty("barn")
+            List<Barn> barn) {
         this.søknadId = søknadId;
         this.versjon = versjon;
         this.mottattDato = mottattDato;
         this.søker = søker;
         this.mottaker = mottaker;
+        this.barn = (barn == null) ? List.of() : barn;
     }
 
     public static Builder builder() {
@@ -64,8 +72,11 @@ public class OmsorgspengerOverføringSøknad {
         private ZonedDateTime mottattDato;
         private Søker søker;
         private Mottaker mottaker;
+        List<Barn> barn;
 
-        private Builder() {}
+        private Builder() {
+            this.barn = new ArrayList<>();
+        }
 
         public Builder søknadId(SøknadId søknadId) {
             this.søknadId = søknadId;
@@ -74,6 +85,16 @@ public class OmsorgspengerOverføringSøknad {
 
         public Builder mottattDato(ZonedDateTime mottattDato) {
             this.mottattDato = mottattDato;
+            return this;
+        }
+
+        public Builder barn(Barn barn) {
+            if (barn != null) this.barn.add(barn);
+            return this;
+        }
+
+        public Builder barn(List<Barn> barn) {
+            if (barn != null) this.barn.addAll(barn);
             return this;
         }
 
@@ -98,7 +119,8 @@ public class OmsorgspengerOverføringSøknad {
                     versjon,
                     mottattDato,
                     søker,
-                    mottaker
+                    mottaker,
+                    barn
             ) : SerDes.deserialize(json);
             validator.forsikreValidert(søknad);
             return søknad;

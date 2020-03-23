@@ -18,6 +18,7 @@ public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<Om
         validerVersjon(søknad.versjon, feil);
         validerMottattDato(søknad.mottattDato, feil);
         validerSøker(søknad.søker, feil);
+        validerBarn(søknad.barn, feil);
 
         return feil;
     }
@@ -47,6 +48,19 @@ public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<Om
             feil.add(new Feil("søker", PÅKREVD, "Søker må settes i søknaden."));
         } else if (søker.norskIdentitetsnummer == null) {
             feil.add(new Feil("søker.norskIdentitetsnummer", PÅKREVD, "Søkers Personnummer/D-nummer må settes i søknaden."));
+        }
+    }
+
+    private static void validerBarn(List<Barn> barn, List<Feil> feil) {
+        if (barn == null || barn.isEmpty()) return;
+        var index = 0;
+        for (Barn b : barn) {
+            if (b.norskIdentitetsnummer == null && b.fødselsdato == null) {
+                feil.add(new Feil("barn[" + index + "]", "norskIdentitetsnummerEllerFødselsdatoPåkrevd", "Må sette enten Personnummer/D-nummer på barn, eller fødselsdato."));
+            } else if (b.norskIdentitetsnummer != null && b.fødselsdato != null) {
+                feil.add(new Feil("barn[" + index + "]", "ikkeEntydigIdPåBarnet", "Må sette enten Personnummer/D-nummer på barn, eller fødselsdato."));
+            }
+            index++;
         }
     }
 }

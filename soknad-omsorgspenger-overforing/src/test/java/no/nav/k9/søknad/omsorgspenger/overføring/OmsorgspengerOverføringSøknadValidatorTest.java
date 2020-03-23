@@ -1,13 +1,12 @@
 package no.nav.k9.søknad.omsorgspenger.overføring;
 
 import no.nav.k9.søknad.ValideringsFeil;
-import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.NorskIdentitetsnummer;
-import no.nav.k9.søknad.felles.Søker;
-import no.nav.k9.søknad.felles.SøknadId;
+import no.nav.k9.søknad.felles.*;
 import org.junit.Test;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -43,6 +42,22 @@ public class OmsorgspengerOverføringSøknadValidatorTest {
         builder = komplettBuilder().mottaker(Mottaker.builder().build());
         assertEquals(1,verifyHarFeil(builder).size());
         builder = komplettBuilder().mottaker(Mottaker.builder().norskIdentitetsnummer(NorskIdentitetsnummer.of("29099011111")).build());
+        verifyIngenFeil(builder);
+    }
+
+    @Test
+    public void barnISøknad() {
+        var builder = komplettBuilder();
+        builder.barn = new ArrayList<>();
+        verifyIngenFeil(builder);
+        builder.barn(Barn.builder().build());
+        assertEquals(1, verifyHarFeil(builder).size());
+        builder.barn = new ArrayList<>();
+        builder.barn(Barn.builder().fødselsdato(LocalDate.now()).norskIdentitetsnummer(NorskIdentitetsnummer.of("123")).build());
+        assertEquals(1, verifyHarFeil(builder).size());
+        builder.barn = new ArrayList<>();
+        builder.barn(Barn.builder().fødselsdato(LocalDate.now()).build());
+        builder.barn(Barn.builder().norskIdentitetsnummer(NorskIdentitetsnummer.of("123")).build());
         verifyIngenFeil(builder);
     }
 
