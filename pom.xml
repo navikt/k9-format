@@ -15,6 +15,7 @@
         <module>soknad-felles</module>
         <module>soknad-omsorgspenger-utbetaling</module>
         <module>soknad-omsorgspenger-overforing</module>
+        <module>ettersendelse</module>
     </modules>
 
     <properties>
