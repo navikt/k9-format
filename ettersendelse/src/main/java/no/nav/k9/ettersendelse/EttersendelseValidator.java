@@ -19,8 +19,15 @@ public class EttersendelseValidator extends SøknadValidator<Ettersendelse> {
         validerVersjon(ettersendelse.versjon, feil);
         validerMottattDato(ettersendelse.mottattDato, feil);
         validerSøker(ettersendelse.søker, feil);
+        validerYtelse(ettersendelse.ytelse, feil);
 
         return feil;
+    }
+
+    private static void validerYtelse(Ytelse ytelse, List<Feil> feil) {
+        if (ytelse == null) {
+            feil.add(new Feil("ytelse", PÅKREVD, "Ytelse må settes i ettersendelsen."));
+        }
     }
 
     private static void validerVersjon(Versjon versjon, List<Feil> feil) {

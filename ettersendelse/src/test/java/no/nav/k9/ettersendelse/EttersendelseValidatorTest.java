@@ -12,6 +12,7 @@ import static no.nav.k9.ettersendelse.TestUtils.komplettBuilder;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
 
 public class EttersendelseValidatorTest {
     private static final EttersendelseValidator validator = new EttersendelseValidator();
@@ -26,7 +27,7 @@ public class EttersendelseValidatorTest {
     }
 
     @Test
-    public void ettersendelseUtenettersendelseId() {
+    public void ettersendelseUtenSøknadId() {
         Ettersendelse.Builder builder = komplettBuilder().søknadId(null);
         verifyIngenFeil(builder);
     }
@@ -35,6 +36,12 @@ public class EttersendelseValidatorTest {
     public void ettersendelseForOmsorgspenger() {
         Ettersendelse.Builder builder = komplettBuilder().ytelse(Ytelse.OMSORGSPENGER);
         verifyIngenFeil(builder);
+    }
+
+    @Test
+    public void ettersendelseUtenYtelse() {
+        Ettersendelse.Builder builder = komplettBuilder().ytelse(null);
+        assertEquals(1, verifyHarFeil(builder).size());
     }
 
     @Test
