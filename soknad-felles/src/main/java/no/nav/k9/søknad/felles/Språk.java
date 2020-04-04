@@ -3,6 +3,11 @@ package no.nav.k9.søknad.felles;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+/**
+ * ISO 639-1 2 bokstav språk kode (sans landkode).
+ * 
+ * @see https://www.loc.gov/standards/iso639-2/php/code_list.php
+ */
 public enum Språk {
 
     NORSK_BOKMÅL("nb"),

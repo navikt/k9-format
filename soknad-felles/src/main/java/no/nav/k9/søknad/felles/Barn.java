@@ -1,15 +1,19 @@
 package no.nav.k9.søknad.felles;
 
+import java.time.LocalDate;
+
+import javax.validation.Valid;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.time.LocalDate;
-
 public class Barn {
 
+    @Valid
     public final NorskIdentitetsnummer norskIdentitetsnummer;
 
+    @Valid
     public final LocalDate fødselsdato;
 
     public static Builder builder() {

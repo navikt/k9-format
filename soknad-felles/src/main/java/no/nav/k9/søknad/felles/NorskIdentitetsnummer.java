@@ -1,13 +1,18 @@
 package no.nav.k9.søknad.felles;
 
+import java.util.Objects;
+
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-
-import java.util.Objects;
 
 public class NorskIdentitetsnummer {
 
     @JsonValue
+    @Size(max=11)
+    @Pattern(regexp = "^\\d+$", message = "'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     public final String verdi;
 
     private NorskIdentitetsnummer(String verdi) {

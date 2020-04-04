@@ -1,10 +1,14 @@
 package no.nav.k9.søknad.felles;
 
-import com.fasterxml.jackson.annotation.JsonValue;
-
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.Objects;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.annotation.JsonValue;
 
 public class Periode {
     static final String ÅPEN = "..";
@@ -17,12 +21,18 @@ public class Periode {
     @JsonValue
     public final String iso8601;
 
-    private Periode(String iso8601) {
+    public Periode(String iso8601) {
         verifiserKanVæreGyldigPeriode(iso8601);
         String[] split = iso8601.split(SKILLE);
         this.fraOgMed = parseLocalDate(split[0]);
         this.tilOgMed = parseLocalDate(split[1]);
         this.iso8601 = iso8601;
+    }
+
+    public Periode(LocalDate fraOgMed, LocalDate tilOgMed) {
+        this.fraOgMed = fraOgMed;
+        this.tilOgMed = tilOgMed;
+        this.iso8601 = toIso8601(fraOgMed) + SKILLE + toIso8601(tilOgMed);
     }
 
     public static Periode parse(String iso8601) {
@@ -34,10 +44,10 @@ public class Periode {
         Objects.requireNonNull(periode.fraOgMed);
         Objects.requireNonNull(fallbackTilOgMed);
         return Periode
-                .builder()
-                .fraOgMed(periode.fraOgMed)
-                .tilOgMed(periode.tilOgMed != null ? periode.tilOgMed : fallbackTilOgMed)
-                .build();
+            .builder()
+            .fraOgMed(periode.fraOgMed)
+            .tilOgMed(periode.tilOgMed != null ? periode.tilOgMed : fallbackTilOgMed)
+            .build();
     }
 
     public static Builder builder() {
@@ -46,20 +56,18 @@ public class Periode {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Periode periode = (Periode) o;
-
-        if (!Objects.equals(fraOgMed, periode.fraOgMed)) return false;
-        return Objects.equals(tilOgMed, periode.tilOgMed);
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        var periode = (Periode) o;
+        return Objects.equals(fraOgMed, periode.fraOgMed)
+            && Objects.equals(tilOgMed, periode.tilOgMed);
     }
 
     @Override
     public int hashCode() {
-        int result = fraOgMed != null ? fraOgMed.hashCode() : 0;
-        result = 31 * result + (tilOgMed != null ? tilOgMed.hashCode() : 0);
-        return result;
+        return Objects.hash(fraOgMed, tilOgMed);
     }
 
     @Override
@@ -74,15 +82,18 @@ public class Periode {
     }
 
     private static LocalDate parseLocalDate(String iso8601) {
-        if (ÅPEN.equals(iso8601)) return null;
-        else return LocalDate.parse(iso8601);
+        if (ÅPEN.equals(iso8601))
+            return null;
+        else
+            return LocalDate.parse(iso8601);
     }
 
     public static final class Builder {
         private LocalDate fraOgMed;
         private LocalDate tilOgMed;
 
-        private Builder() {}
+        private Builder() {
+        }
 
         public Builder fraOgMed(LocalDate fraOgMed) {
             this.fraOgMed = fraOgMed;
@@ -100,60 +111,55 @@ public class Periode {
             return this;
         }
 
-        private String toIso8601(LocalDate dato) {
-            if (dato == null) return Periode.ÅPEN;
-            else return dato.toString();
-        }
-
         public Periode build() {
-            return new Periode(toIso8601(fraOgMed) + SKILLE + toIso8601(tilOgMed));
+            return new Periode(fraOgMed, tilOgMed);
         }
     }
 
     public static final class Utils {
-        private Utils() {}
+        private Utils() {
+        }
 
         private static final Comparator<Periode> tilOgMedComparator = Comparator.comparing(periode -> periode.tilOgMed);
 
         public static <PERIODE_INFO> void leggTilPeriode(
-                Map<Periode, PERIODE_INFO> perioder,
-                Periode nyPeriode,
-                PERIODE_INFO nyPeriodeInfo) {
-            Objects.requireNonNull(perioder);
-            Objects.requireNonNull(nyPeriode);
-            Objects.requireNonNull(nyPeriodeInfo);
+                                                         Map<Periode, PERIODE_INFO> perioder,
+                                                         Periode nyPeriode,
+                                                         PERIODE_INFO nyPeriodeInfo) {
+            Objects.requireNonNull(perioder, "perioder");
+            Objects.requireNonNull(nyPeriode, "nyPeriode");
+            Objects.requireNonNull(nyPeriodeInfo, "nyPeriodeInfo");
 
             if (perioder.containsKey(nyPeriode)) {
                 throw new IllegalArgumentException("Inneholder allerede " + nyPeriode.iso8601);
             }
 
-            perioder.put(nyPeriode,  nyPeriodeInfo);
+            perioder.put(nyPeriode, nyPeriodeInfo);
         }
 
         public static <PERIODE_INFO> void leggTilPerioder(
-                Map<Periode, PERIODE_INFO> perioder,
-                Map<Periode, PERIODE_INFO> nyePerioder) {
+                                                          Map<Periode, PERIODE_INFO> perioder,
+                                                          Map<Periode, PERIODE_INFO> nyePerioder) {
             Objects.requireNonNull(perioder);
             Objects.requireNonNull(nyePerioder);
             var nyeKeys = nyePerioder.keySet();
 
             var duplikater = perioder
-                    .keySet()
-                    .stream()
-                    .filter(nyeKeys::contains)
-                    .collect(Collectors.toSet());
+                .keySet()
+                .stream()
+                .filter(nyeKeys::contains)
+                .collect(Collectors.toSet());
 
             if (!duplikater.isEmpty()) {
                 var duplikatePerioder = String.join(", ", duplikater
-                        .stream()
-                        .map(it-> it.iso8601)
-                        .collect(Collectors.toSet()));
+                    .stream()
+                    .map(it -> it.iso8601)
+                    .collect(Collectors.toSet()));
                 throw new IllegalArgumentException("Inneholder allerede " + duplikatePerioder);
             }
 
             perioder.putAll(nyePerioder);
         }
-
 
         public static LocalDate sisteTilOgMedTillatÅpnePerioder(Map<Periode, ?> periodeMap) {
             return sisteTilOgMed(periodeMap);
@@ -161,7 +167,8 @@ public class Periode {
 
         public static LocalDate sisteTilOgMedBlantLukkedePerioder(Map<Periode, ?> periodeMap) {
             LocalDate sisteTilOgMed = sisteTilOgMed(periodeMap);
-            if (sisteTilOgMed == null) throw new IllegalStateException("En eller fler av periodene er åpne (uten tilOgMed satt).");
+            if (sisteTilOgMed == null)
+                throw new IllegalStateException("En eller fler av periodene er åpne (uten tilOgMed satt).");
             return sisteTilOgMed;
         }
 
@@ -176,5 +183,12 @@ public class Periode {
             perioder.addAll(periodeMap.keySet());
             return perioder.last().tilOgMed;
         }
+    }
+    
+    private static String toIso8601(LocalDate dato) {
+        if (dato == null)
+            return Periode.ÅPEN;
+        else
+            return dato.toString();
     }
 }
