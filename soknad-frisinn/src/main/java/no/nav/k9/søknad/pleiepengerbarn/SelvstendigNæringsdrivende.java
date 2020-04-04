@@ -1,12 +1,14 @@
 package no.nav.k9.søknad.pleiepengerbarn;
 
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.unmodifiableMap;
+import static java.util.Collections.emptyNavigableMap;
+import static java.util.Collections.unmodifiableNavigableMap;
 
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.Objects;
+import java.util.TreeMap;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -38,12 +40,12 @@ public class SelvstendigNæringsdrivende {
     @JsonInclude(value = Include.NON_EMPTY)
     @JsonProperty(value = "inntekterFør")
     @Valid
-    private Map<Periode, PeriodeInntekt> inntekterFør;
+    private NavigableMap<Periode, PeriodeInntekt> inntekterFør;
 
     @JsonInclude(value = Include.ALWAYS)
     @JsonProperty(value = "inntekterEtter", required = true)
     @Valid
-    private Map<Periode, PeriodeInntekt> inntekterEtter;
+    private NavigableMap<Periode, PeriodeInntekt> inntekterEtter;
 
     @JsonProperty(value = "orgnummer", required = true)
     @Valid
@@ -57,8 +59,8 @@ public class SelvstendigNæringsdrivende {
                                        @JsonProperty(value = "inntekterEtter") Map<Periode, PeriodeInntekt> inntekterEtter) {
         this.orgnummer = Objects.requireNonNull(orgnummer, "orgnummer");
         this.inntektstapStartet = inntekstapStartet;
-        this.inntekterEtter = (inntekterEtter == null) ? emptyMap() : unmodifiableMap(inntekterEtter);
-        this.inntekterFør = (inntekterFør == null) ? emptyMap() : unmodifiableMap(inntekterFør);
+        this.inntekterEtter = (inntekterEtter == null) ? emptyNavigableMap() : unmodifiableNavigableMap(new TreeMap<>(inntekterEtter));
+        this.inntekterFør = (inntekterFør == null) ? emptyNavigableMap() : unmodifiableNavigableMap(new TreeMap<>(inntekterFør));
 
     }
 

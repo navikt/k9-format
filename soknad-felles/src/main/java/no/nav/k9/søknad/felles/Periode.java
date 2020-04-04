@@ -8,9 +8,10 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public class Periode {
+public class Periode implements Comparable<Periode> {
     static final String ÅPEN = "..";
     static final String SKILLE = "/";
 
@@ -21,6 +22,7 @@ public class Periode {
     @JsonValue
     public final String iso8601;
 
+    @JsonCreator
     public Periode(String iso8601) {
         verifiserKanVæreGyldigPeriode(iso8601);
         String[] split = iso8601.split(SKILLE);
@@ -52,6 +54,11 @@ public class Periode {
 
     public static Builder builder() {
         return new Builder();
+    }
+
+    @Override
+    public int compareTo(Periode o) {
+        return this.iso8601.compareTo(o.iso8601);
     }
 
     @Override
@@ -184,7 +191,7 @@ public class Periode {
             return perioder.last().tilOgMed;
         }
     }
-    
+
     private static String toIso8601(LocalDate dato) {
         if (dato == null)
             return Periode.ÅPEN;

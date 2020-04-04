@@ -1,11 +1,11 @@
 package no.nav.k9.søknad.pleiepengerbarn;
 
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.unmodifiableMap;
-
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.NavigableMap;
+import java.util.TreeMap;
 
 import javax.validation.Valid;
 
@@ -35,29 +35,30 @@ public class Frilanser {
     @JsonInclude(value = Include.NON_EMPTY)
     @JsonProperty(value = "inntekterFør")
     @Valid
-    private Map<Periode, PeriodeInntekt> inntekterFør;
+    private NavigableMap<Periode, PeriodeInntekt> inntekterFør;
 
     @JsonProperty(value = "inntekterEtter")
     @Valid
-    private Map<Periode, PeriodeInntekt> inntekterEtter;
+    private NavigableMap<Periode, PeriodeInntekt> inntekterEtter;
 
     @JsonCreator
     public Frilanser(@JsonProperty(value = "inntektstapStartet", required = true) LocalDate inntekstapStartet,
                       @JsonProperty(value = "inntekterFør") Map<Periode, PeriodeInntekt> inntekterFør,
                       @JsonProperty(value = "inntekterEtter") Map<Periode, PeriodeInntekt> inntekterEtter) {
         this.inntektstapStartet = inntekstapStartet;
-        this.inntekterEtter = (inntekterEtter == null) ? emptyMap() : unmodifiableMap(inntekterEtter);
-        this.inntekterFør = (inntekterFør == null) ? emptyMap() : unmodifiableMap(inntekterFør);
+        this.inntekterEtter = (inntekterEtter == null) ? Collections.emptyNavigableMap() : Collections.unmodifiableNavigableMap(new TreeMap<>(inntekterEtter));
+        this.inntekterFør = (inntekterFør == null) ? Collections.emptyNavigableMap() : Collections.unmodifiableNavigableMap(new TreeMap<>(inntekterFør));
 
     }
 
-    public Map<Periode, PeriodeInntekt> getInntekterEtter() {
+    public NavigableMap<Periode, PeriodeInntekt> getInntekterFør() {
+        return inntekterFør;
+    }
+
+    public NavigableMap<Periode, PeriodeInntekt> getInntekterEtter() {
         return inntekterEtter;
     }
 
-    public Map<Periode, PeriodeInntekt> getInntekterFør() {
-        return inntekterFør;
-    }
 
     public LocalDate getInntektstapStartet() {
         return inntektstapStartet;

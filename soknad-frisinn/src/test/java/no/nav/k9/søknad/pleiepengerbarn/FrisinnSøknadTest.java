@@ -21,10 +21,10 @@ public class FrisinnSøknadTest {
     @Test
     public void bygg_serialiser_og_deserialiser_roundtrip_søknad() throws Exception {
         var søknad = byggSøknad();
-        
+
         var json = FrisinnSøknad.SerDes.serialize(søknad);
         Assert.assertNotNull(json);
-
+        System.out.println(json);
         var søknadDeser = FrisinnSøknad.SerDes.deserialize(json);
         Assert.assertNotNull(søknadDeser);
         JSONAssert.assertEquals(json, FrisinnSøknad.SerDes.serialize(søknadDeser), true);
@@ -36,18 +36,23 @@ public class FrisinnSøknadTest {
         var periodeFør = new Periode(dato.minusDays(20), dato.minusDays(1));
         var periodeEtter = new Periode(dato.plusDays(1), dato.plusDays(20));
         var periodeInntekt = new PeriodeInntekt(beløp);
-        
+
         var frilanser = Frilanser.builder()
-                .inntektstapStartet(dato)
-                .inntekterFør(Map.of(periodeFør, periodeInntekt))
-                .inntekterEtter(Map.of(periodeEtter, periodeInntekt)).build();
-        
+            .inntektstapStartet(dato)
+            .inntekterFør(Map.of(periodeFør, periodeInntekt))
+            .inntekterEtter(Map.of(periodeEtter, periodeInntekt)).build();
+
         var selvstendig = SelvstendigNæringsdrivende.builder()
-                .orgnummer("123")
-                .inntektstapStartet(dato)
-                .inntekterFør(Map.of(periodeFør, periodeInntekt))
-                .inntekterEtter(Map.of(periodeEtter, periodeInntekt)).build();
-        
+            .orgnummer("123")
+            .inntektstapStartet(dato)
+            .inntekterFør(
+                Map.of(periodeFør, periodeInntekt, 
+                new Periode(null, dato.minusDays(21)), periodeInntekt))
+            .inntekterEtter(Map.of(
+                periodeEtter, periodeInntekt,
+                new Periode(dato.plusDays(21), null), periodeInntekt))
+            .build();
+
         var søknad = FrisinnSøknad.builder()
             .søknadId(SøknadId.of("100-abc"))
             .søknadsperiode("2020-03-01/2020-03-31")
