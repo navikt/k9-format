@@ -43,7 +43,7 @@ public class FrisinnSøknadTest {
             .inntekterEtter(Map.of(periodeEtter, periodeInntekt)).build();
 
         var selvstendig = SelvstendigNæringsdrivende.builder()
-            .orgnummer("123")
+            .organisasjonsnummer("123")
             .inntektstapStartet(dato)
             .inntekterFør(
                 Map.of(periodeFør, periodeInntekt, 
