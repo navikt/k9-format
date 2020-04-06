@@ -47,17 +47,17 @@ public class SelvstendigNæringsdrivende {
     @Valid
     private NavigableMap<Periode, PeriodeInntekt> inntekterEtter;
 
-    @JsonProperty(value = "orgnummer", required = true)
+    @JsonProperty(value = "organisasjonsnummer", required = true)
     @Valid
     @NotNull
-    private Organisasjonsnummer orgnummer;
+    private Organisasjonsnummer organisasjonsnummer;
 
     @JsonCreator
-    public SelvstendigNæringsdrivende(@JsonProperty(value = "orgnummer", required = true) Organisasjonsnummer orgnummer,
+    public SelvstendigNæringsdrivende(@JsonProperty(value = "organisasjonsnummer", required = true) Organisasjonsnummer organisasjonsnummer,
                                        @JsonProperty(value = "inntektstapStartet", required = true) LocalDate inntekstapStartet,
                                        @JsonProperty(value = "inntekterFør") Map<Periode, PeriodeInntekt> inntekterFør,
                                        @JsonProperty(value = "inntekterEtter") Map<Periode, PeriodeInntekt> inntekterEtter) {
-        this.orgnummer = Objects.requireNonNull(orgnummer, "orgnummer");
+        this.organisasjonsnummer = Objects.requireNonNull(organisasjonsnummer, "organisasjonsnummer");
         this.inntektstapStartet = inntekstapStartet;
         this.inntekterEtter = (inntekterEtter == null) ? emptyNavigableMap() : unmodifiableNavigableMap(new TreeMap<>(inntekterEtter));
         this.inntekterFør = (inntekterFør == null) ? emptyNavigableMap() : unmodifiableNavigableMap(new TreeMap<>(inntekterFør));
@@ -76,8 +76,8 @@ public class SelvstendigNæringsdrivende {
         return inntektstapStartet;
     }
 
-    public Organisasjonsnummer getOrgnummer() {
-        return orgnummer;
+    public Organisasjonsnummer getorganisasjonsnummer() {
+        return organisasjonsnummer;
     }
 
     public static Builder builder() {
@@ -88,7 +88,7 @@ public class SelvstendigNæringsdrivende {
         private Map<Periode, PeriodeInntekt> inntekterFør = new LinkedHashMap<>();
         private Map<Periode, PeriodeInntekt> inntekterEtter = new LinkedHashMap<>();
         private LocalDate inntektstapStartet;
-        private Organisasjonsnummer orgnummer;
+        private Organisasjonsnummer organisasjonsnummer;
 
         private Builder() {
         }
@@ -103,13 +103,13 @@ public class SelvstendigNæringsdrivende {
             return this;
         }
 
-        public Builder orgnummer(Organisasjonsnummer orgnummer) {
-            this.orgnummer = orgnummer;
+        public Builder organisasjonsnummer(Organisasjonsnummer organisasjonsnummer) {
+            this.organisasjonsnummer = organisasjonsnummer;
             return this;
         }
 
-        public Builder orgnummer(String orgnummer) {
-            this.orgnummer = Organisasjonsnummer.of(orgnummer);
+        public Builder organisasjonsnummer(String organisasjonsnummer) {
+            this.organisasjonsnummer = Organisasjonsnummer.of(organisasjonsnummer);
             return this;
         }
         
@@ -119,7 +119,7 @@ public class SelvstendigNæringsdrivende {
         }
 
         public SelvstendigNæringsdrivende build() {
-            return new SelvstendigNæringsdrivende(orgnummer, inntektstapStartet, inntekterFør, inntekterEtter);
+            return new SelvstendigNæringsdrivende(organisasjonsnummer, inntektstapStartet, inntekterFør, inntekterEtter);
         }
     }
 
