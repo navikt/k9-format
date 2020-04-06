@@ -18,7 +18,7 @@ public class Organisasjonsnummer {
     public final String verdi;
 
     private Organisasjonsnummer(String verdi) {
-        this.verdi = verdi;
+        this.verdi = Objects.requireNonNull(verdi, "organisasjonsnummer");
     }
 
     @JsonCreator

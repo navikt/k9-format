@@ -19,7 +19,7 @@ public class Bosteder {
     public final Map<Periode, BostedPeriodeInfo> perioder;
 
     @JsonCreator
-    private Bosteder(
+    public Bosteder(
             @JsonProperty("perioder")
             Map<Periode, BostedPeriodeInfo> perioder) {
         this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
