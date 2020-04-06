@@ -1,15 +1,21 @@
 package no.nav.k9.søknad.felles;
 
+import java.time.LocalDate;
+
+import javax.validation.Valid;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.time.LocalDate;
-
 public class Barn {
 
+    @JsonProperty(value = "norskIdentitetsnummer")
+    @Valid
     public final NorskIdentitetsnummer norskIdentitetsnummer;
 
+    @JsonProperty(value = "fødselsdato")
+    @Valid
     public final LocalDate fødselsdato;
 
     public static Builder builder() {
@@ -17,12 +23,9 @@ public class Barn {
     }
 
     @JsonCreator
-    private Barn(
-            @JsonProperty("norskIdentitetsnummer")
-            NorskIdentitetsnummer norskIdentitetsnummer,
-            @JsonProperty("fødselsdato")
-            @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Oslo")
-            LocalDate fødselsdato) {
+    public Barn(
+                @JsonProperty("norskIdentitetsnummer") NorskIdentitetsnummer norskIdentitetsnummer,
+                @JsonProperty("fødselsdato") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Oslo") LocalDate fødselsdato) {
         this.norskIdentitetsnummer = norskIdentitetsnummer;
         this.fødselsdato = fødselsdato;
     }

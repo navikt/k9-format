@@ -1,21 +1,25 @@
 package no.nav.k9.søknad.felles;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableMap;
 import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPeriode;
 import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPerioder;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.validation.Valid;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Bosteder {
+    
+    @Valid
     public final Map<Periode, BostedPeriodeInfo> perioder;
 
     @JsonCreator
-    private Bosteder(
+    public Bosteder(
             @JsonProperty("perioder")
             Map<Periode, BostedPeriodeInfo> perioder) {
         this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
@@ -54,9 +58,7 @@ public class Bosteder {
         public final Landkode land;
 
         @JsonCreator
-        private BostedPeriodeInfo(
-                @JsonProperty("land")
-                Landkode land) {
+        private BostedPeriodeInfo( @JsonProperty("land") Landkode land) {
             this.land = land;
         }
 

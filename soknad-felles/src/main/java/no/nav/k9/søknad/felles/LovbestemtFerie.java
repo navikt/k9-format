@@ -16,7 +16,7 @@ public class LovbestemtFerie {
     public final Map<Periode, LovbestemtFeriePeriodeInfo> perioder;
 
     @JsonCreator
-    private LovbestemtFerie(
+    public LovbestemtFerie(
             @JsonProperty("perioder")
             Map<Periode, LovbestemtFeriePeriodeInfo> perioder) {
         this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
