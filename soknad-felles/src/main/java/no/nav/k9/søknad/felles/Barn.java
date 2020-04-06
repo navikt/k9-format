@@ -26,9 +26,6 @@ public class Barn {
     public Barn(
                 @JsonProperty("norskIdentitetsnummer") NorskIdentitetsnummer norskIdentitetsnummer,
                 @JsonProperty("fødselsdato") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Oslo") LocalDate fødselsdato) {
-        if(norskIdentitetsnummer==null && fødselsdato==null) {
-            throw new IllegalArgumentException("Må enten sette norskIdentitetsnummer eller fødselsdato");
-        }
         this.norskIdentitetsnummer = norskIdentitetsnummer;
         this.fødselsdato = fødselsdato;
     }
