@@ -96,6 +96,10 @@ public class FrisinnSøknad {
     public Søker getSøker() {
         return søker;
     }
+    
+    public Inntekter getInntekter() {
+        return inntekter;
+    }
 
     @Override
     public String toString() {
