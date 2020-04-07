@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.pleiepengerbarn;
+package no.nav.k9.søknad.frisinn;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,6 +14,11 @@ import no.nav.k9.søknad.felles.Periode;
 import no.nav.k9.søknad.felles.Språk;
 import no.nav.k9.søknad.felles.Søker;
 import no.nav.k9.søknad.felles.SøknadId;
+import no.nav.k9.søknad.frisinn.Frilanser;
+import no.nav.k9.søknad.frisinn.FrisinnSøknad;
+import no.nav.k9.søknad.frisinn.Inntekter;
+import no.nav.k9.søknad.frisinn.PeriodeInntekt;
+import no.nav.k9.søknad.frisinn.SelvstendigNæringsdrivende;
 
 public class FrisinnSøknadTest {
 

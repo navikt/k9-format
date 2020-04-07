@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.pleiepengerbarn;
+package no.nav.k9.søknad.frisinn;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
