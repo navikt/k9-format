@@ -4,42 +4,42 @@
 
 ```
 {
-  "søknadId" : "10-abc-def",
-  "søknadsperiode" : "2020-03-01/2020-03-31",
+  "søknadId" : "100-abc",
+  "søknadsperiode" : "2020-04-01/2020-04-30",
+  "inntektstapStartet" : "2020-02-22",
   "versjon" : "1.0.0",
-  "mottattDato" : "2019-10-20T07:15:36.124Z",
+  "mottattDato" : "2020-04-20T07:15:36.124Z",
   "søker" : {
     "norskIdentitetsnummer" : "12345678901"
   },
   "inntekter" : {
     "frilanser" : {
-      "inntektstapStartet" : "2020-04-04",
-      "inntekterFør" : {
-        "2020-03-15/2020-04-03" : {
-          "beløp" : "1000000.00"
-        }
-      },
-      "inntekterEtter" : {
-        "2020-04-05/2020-04-24" : {
+      "inntekterSøknadsperiode" : {
+        "2020-03-14/2020-04-02" : {
           "beløp" : "1000000.00"
         }
       }
     },
-    "selvstendig" : [ {
-      "orgnummer" : "123",
-      "inntektstapStartet" : "2020-04-04",
+    "selvstendig" : {
       "inntekterFør" : {
-        "2020-03-15/2020-04-03" : {
+        "../2020-02-21" : {
+          "beløp" : "1000000.00"
+        },
+        "2020-02-22/2020-03-12" : {
           "beløp" : "1000000.00"
         }
       },
-      "inntekterEtter" : {
-        "2020-04-05/2020-04-24" : {
+      "inntekterSøknadsperiode" : {
+        "2020-03-14/2020-04-02" : {
+          "beløp" : "1000000.00"
+        },
+        "2020-04-03/.." : {
           "beløp" : "1000000.00"
         }
       }
-    } ]
+    }
   },
   "språk" : "nb"
 }
+
 ```

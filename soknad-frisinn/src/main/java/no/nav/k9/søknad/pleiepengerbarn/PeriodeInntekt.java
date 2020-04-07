@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class PeriodeInntekt {
 
     private static final String MIN = "0.00";
-    private static final String MAX = "1000000.00";
+    private static final String MAX = "10000000.00";
 
     private static final BigDecimal MAX_VAL = new BigDecimal(MAX);
 
