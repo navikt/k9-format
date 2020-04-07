@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.pleiepengerbarn;
+package no.nav.k9.søknad.frisinn;
 
 import java.math.BigDecimal;
 import java.util.Objects;
