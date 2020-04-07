@@ -51,6 +51,14 @@ public class Periode implements Comparable<Periode> {
             .tilOgMed(periode.tilOgMed != null ? periode.tilOgMed : fallbackTilOgMed)
             .build();
     }
+    
+    public LocalDate getFraOgMed() {
+        return fraOgMed;
+    }
+    
+    public LocalDate getTilOgMed() {
+        return tilOgMed;
+    }
 
     public static Builder builder() {
         return new Builder();

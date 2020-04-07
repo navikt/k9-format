@@ -1,8 +1,5 @@
 package no.nav.k9.søknad.pleiepengerbarn;
 
-import java.util.Collections;
-import java.util.List;
-
 import javax.validation.Valid;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -24,23 +21,23 @@ public class Inntekter {
     @JsonInclude(value = Include.NON_EMPTY)
     @JsonProperty(value = "selvstendig")
     @Valid
-    private List<SelvstendigNæringsdrivende> selvstendig;
+    private SelvstendigNæringsdrivende selvstendig;
 
     @JsonCreator
     public Inntekter(@JsonProperty(value = "frilanser") Frilanser frilanser,
-                     @JsonProperty(value = "selvstendig") List<SelvstendigNæringsdrivende> selvstendig) {
-        if (frilanser == null && (selvstendig == null || selvstendig.isEmpty())) {
+                     @JsonProperty(value = "selvstendig") SelvstendigNæringsdrivende selvstendig) {
+        if (frilanser == null && selvstendig == null) {
             throw new IllegalArgumentException("Må spesifisere enten frilanser eller selvstendig næringsdrivende");
         }
         this.frilanser = frilanser;
-        this.selvstendig = selvstendig == null ? null : Collections.unmodifiableList(selvstendig);
+        this.selvstendig = selvstendig;
     }
 
     public Frilanser getFrilanser() {
         return frilanser;
     }
 
-    public List<SelvstendigNæringsdrivende> getSelvstendig() {
+    public SelvstendigNæringsdrivende getSelvstendig() {
         return selvstendig;
     }
 }

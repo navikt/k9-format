@@ -7,35 +7,22 @@ import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.NavigableMap;
-import java.util.Objects;
 import java.util.TreeMap;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import no.nav.k9.søknad.felles.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.Periode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class SelvstendigNæringsdrivende {
-
-    /** dato inntektstap startet. Påkrevd kun første søknad. */
-    @JsonInclude(value = Include.NON_EMPTY)
-    @JsonAlias("skjæringstidspunkt")
-    @JsonProperty(value = "inntektstapStartet")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Oslo")
-    @Valid
-    private LocalDate inntektstapStartet;
 
     @JsonInclude(value = Include.NON_EMPTY)
     @JsonProperty(value = "inntekterFør")
@@ -43,41 +30,51 @@ public class SelvstendigNæringsdrivende {
     private NavigableMap<Periode, PeriodeInntekt> inntekterFør;
 
     @JsonInclude(value = Include.ALWAYS)
-    @JsonProperty(value = "inntekterEtter", required = true)
+    @JsonProperty(value = "inntekterSøknadsperiode", required = true)
     @Valid
-    private NavigableMap<Periode, PeriodeInntekt> inntekterEtter;
-
-    @JsonProperty(value = "organisasjonsnummer", required = true)
-    @Valid
-    @NotNull
-    private Organisasjonsnummer organisasjonsnummer;
+    private NavigableMap<Periode, PeriodeInntekt> inntekterSøknadsperiode;
 
     @JsonCreator
-    public SelvstendigNæringsdrivende(@JsonProperty(value = "organisasjonsnummer", required = true) Organisasjonsnummer organisasjonsnummer,
-                                       @JsonProperty(value = "inntektstapStartet", required = true) LocalDate inntekstapStartet,
-                                       @JsonProperty(value = "inntekterFør") Map<Periode, PeriodeInntekt> inntekterFør,
-                                       @JsonProperty(value = "inntekterEtter") Map<Periode, PeriodeInntekt> inntekterEtter) {
-        this.organisasjonsnummer = Objects.requireNonNull(organisasjonsnummer, "organisasjonsnummer");
-        this.inntektstapStartet = inntekstapStartet;
-        this.inntekterEtter = (inntekterEtter == null) ? emptyNavigableMap() : unmodifiableNavigableMap(new TreeMap<>(inntekterEtter));
+    public SelvstendigNæringsdrivende(@JsonProperty(value = "inntekterFør") Map<Periode, PeriodeInntekt> inntekterFør,
+                                      @JsonProperty(value = "inntekterSøknadsperiode") Map<Periode, PeriodeInntekt> inntekterSøknadsperiode) {
+        this.inntekterSøknadsperiode = (inntekterSøknadsperiode == null) ? emptyNavigableMap() : unmodifiableNavigableMap(new TreeMap<>(inntekterSøknadsperiode));
         this.inntekterFør = (inntekterFør == null) ? emptyNavigableMap() : unmodifiableNavigableMap(new TreeMap<>(inntekterFør));
-
+        validerPerioder(this.inntekterFør, this.inntekterSøknadsperiode);
     }
 
-    public Map<Periode, PeriodeInntekt> getInntekterEtter() {
-        return inntekterEtter;
+    private void validerPerioder(@Valid NavigableMap<Periode, PeriodeInntekt> inntekterFør,
+                                 @Valid NavigableMap<Periode, PeriodeInntekt> inntekterSøknadsperiode) {
+        if (!inntekterFør.isEmpty() && !inntekterSøknadsperiode.isEmpty()) {
+            LocalDate førTom = inntekterFør.lastKey().getTilOgMed();
+            LocalDate søkFom = inntekterSøknadsperiode.firstKey().getFraOgMed();
+            if (!førTom.isBefore(søkFom)) {
+                throw new IllegalArgumentException("inntekterFør må være tidligere enn inntekterSøknadsperiode: " + førTom + ">=" + søkFom);
+            }
+        }
+    }
+
+    public Periode getMaksSøknadsperiode() {
+        if (inntekterSøknadsperiode.isEmpty()) {
+            return null;
+        } else {
+            return new Periode(inntekterSøknadsperiode.firstKey().fraOgMed, inntekterSøknadsperiode.lastKey().tilOgMed);
+        }
+    }
+
+    public Periode getMaksPeriodeInntekterFør() {
+        if (inntekterFør.isEmpty()) {
+            return null;
+        } else {
+            return new Periode(inntekterFør.firstKey().fraOgMed, inntekterFør.lastKey().tilOgMed);
+        }
+    }
+
+    public Map<Periode, PeriodeInntekt> getInntekterSøknadsperiode() {
+        return inntekterSøknadsperiode;
     }
 
     public Map<Periode, PeriodeInntekt> getInntekterFør() {
         return inntekterFør;
-    }
-
-    public LocalDate getInntektstapStartet() {
-        return inntektstapStartet;
-    }
-
-    public Organisasjonsnummer getorganisasjonsnummer() {
-        return organisasjonsnummer;
     }
 
     public static Builder builder() {
@@ -86,9 +83,7 @@ public class SelvstendigNæringsdrivende {
 
     public static final class Builder {
         private Map<Periode, PeriodeInntekt> inntekterFør = new LinkedHashMap<>();
-        private Map<Periode, PeriodeInntekt> inntekterEtter = new LinkedHashMap<>();
-        private LocalDate inntektstapStartet;
-        private Organisasjonsnummer organisasjonsnummer;
+        private Map<Periode, PeriodeInntekt> inntekterSøknadsperiode = new LinkedHashMap<>();
 
         private Builder() {
         }
@@ -98,28 +93,13 @@ public class SelvstendigNæringsdrivende {
             return this;
         }
 
-        public Builder inntekterEtter(Map<Periode, PeriodeInntekt> inntekter) {
-            inntekterEtter.putAll(inntekter);
-            return this;
-        }
-
-        public Builder organisasjonsnummer(Organisasjonsnummer organisasjonsnummer) {
-            this.organisasjonsnummer = organisasjonsnummer;
-            return this;
-        }
-
-        public Builder organisasjonsnummer(String organisasjonsnummer) {
-            this.organisasjonsnummer = Organisasjonsnummer.of(organisasjonsnummer);
-            return this;
-        }
-        
-        public Builder inntektstapStartet(LocalDate dato) {
-            this.inntektstapStartet = dato;
+        public Builder inntekterSøknadsperiode(Map<Periode, PeriodeInntekt> inntekter) {
+            inntekterSøknadsperiode.putAll(inntekter);
             return this;
         }
 
         public SelvstendigNæringsdrivende build() {
-            return new SelvstendigNæringsdrivende(organisasjonsnummer, inntektstapStartet, inntekterFør, inntekterEtter);
+            return new SelvstendigNæringsdrivende(inntekterFør, inntekterSøknadsperiode);
         }
     }
 

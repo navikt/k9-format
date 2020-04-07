@@ -2,6 +2,7 @@ package no.nav.k9.søknad.felles;
 
 import java.util.Objects;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -15,8 +16,17 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public class Landkode {
 
+    public static final Landkode NORGE = new Landkode("NOR");
+    public static final Landkode DANMARK = new Landkode("DNK");
+    public static final Landkode SVERIGE = new Landkode("SWE");
+    public static final Landkode FINLAND = new Landkode("FIN");
+    public static final Landkode USA = new Landkode("USA");
+    public static final Landkode CANADA = new Landkode("CAN");
+    public static final Landkode SPANIA = new Landkode("ESP");
+
     @JsonValue
     @Size(max = 3)
+    @NotNull
     @Pattern(regexp = "^[A-Z]+$", message = "'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     public final String landkode;
 
