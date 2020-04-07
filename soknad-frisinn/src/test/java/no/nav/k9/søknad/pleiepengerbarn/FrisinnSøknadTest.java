@@ -31,9 +31,10 @@ public class FrisinnSøknadTest {
 
     private FrisinnSøknad byggSøknad() {
         var dato = LocalDate.of(2020, 03, 13);
+        var datoSøknad = LocalDate.of(2020, 04, 01);
         var beløp = new BigDecimal("1000000.00");
         var periodeFør = new Periode(dato.minusDays(20), dato.minusDays(1));
-        var periodeEtter = new Periode(dato.plusDays(1), dato.plusDays(20));
+        var periodeEtter = new Periode(datoSøknad, datoSøknad.plusDays(20));
         var periodeInntekt = new PeriodeInntekt(beløp);
 
         var frilanser = new Frilanser(Map.of(periodeEtter, periodeInntekt));
@@ -42,12 +43,12 @@ public class FrisinnSøknadTest {
             Map.of(periodeFør, periodeInntekt,
                 new Periode(null, dato.minusDays(21)), periodeInntekt),
             Map.of(periodeEtter, periodeInntekt,
-                new Periode(dato.plusDays(21), null), periodeInntekt));
+                new Periode(datoSøknad, null), periodeInntekt));
 
         var søknad = FrisinnSøknad.builder()
             .søknadId(SøknadId.of("100-abc"))
             .søknadsperiode("2020-04-01/2020-04-30")
-            .inntektstapStartet(dato.minusDays(20))
+            .inntektstapStartet(datoSøknad.minusDays(20))
             .mottattDato(ZonedDateTime.parse("2020-04-20T07:15:36.124Z"))
             .språk(Språk.of("nb"))
             .søker(Søker.builder()

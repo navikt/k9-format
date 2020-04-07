@@ -89,8 +89,8 @@ public class FrisinnSøknad {
         this.søker = søker;
 
         if (inntekstapStartet != null) {
-            if(!inntektstapStartet.isBefore(mottattDato.toLocalDate())) {
-                throw new IllegalArgumentException("Inntektstapstartet må være før mottattDato for søknad: " + inntekstapStartet +">=" + mottattDato);
+            if (!inntektstapStartet.isBefore(mottattDato.toLocalDate())) {
+                throw new IllegalArgumentException("Inntektstapstartet må være før mottattDato for søknad: " + inntekstapStartet + ">=" + mottattDato);
             }
             if (!inntektstapStartet.isBefore(søknadsperiode.getFraOgMed())) {
                 throw new IllegalArgumentException("Inntektstap startdato [" + inntektstapStartet + "] må starte før søknadsperiode: " + søknadsperiode);
@@ -109,7 +109,10 @@ public class FrisinnSøknad {
             return;
         } else if (!inntektstapStartet.isBefore(inntektPeriode.getFraOgMed())) {
             throw new IllegalArgumentException("Inntektstap startdato [" + inntektstapStartet + "] må starte før inntekter periode: " + inntektPeriode);
+        } else if (!søknadsperiode.inneholder(inntektPeriode)) {
+            throw new IllegalArgumentException("Inntektperiode [" + inntektPeriode + "] må være innenfor søknadsperiode [" + søknadsperiode + "]");
         }
+
     }
 
     public LocalDate getInntektstapStartet() {

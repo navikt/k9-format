@@ -51,11 +51,11 @@ public class Periode implements Comparable<Periode> {
             .tilOgMed(periode.tilOgMed != null ? periode.tilOgMed : fallbackTilOgMed)
             .build();
     }
-    
+
     public LocalDate getFraOgMed() {
         return fraOgMed;
     }
-    
+
     public LocalDate getTilOgMed() {
         return tilOgMed;
     }
@@ -88,6 +88,12 @@ public class Periode implements Comparable<Periode> {
     @Override
     public String toString() {
         return iso8601;
+    }
+
+    /** Sjekk om denne perioden inneholder (omslutter) angitt periode. */
+    public boolean inneholder(Periode periode) {
+        return (this.fraOgMed == null || (periode.fraOgMed != null && !this.fraOgMed.isAfter(periode.fraOgMed)))
+            && (this.tilOgMed == null || (periode.tilOgMed != null && !this.tilOgMed.isBefore(periode.tilOgMed)));
     }
 
     private static void verifiserKanVæreGyldigPeriode(String iso8601) {
@@ -206,4 +212,5 @@ public class Periode implements Comparable<Periode> {
         else
             return dato.toString();
     }
+
 }
