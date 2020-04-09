@@ -15,7 +15,7 @@ jobs:
           java-version: '11.x'
       - name: Build & Deploy
         run: |
-             mvn clean deploy --batch-mode --settings ./.github/settings.xml -Dmaven.wagon.http.pool=false --file pom.xml -Dsha1=".$(git rev-parse --short HEAD)" -Dchangelist=
+             mvn clean deploy --batch-mode --settings ./.github/settings.xml -Dmaven.wagon.http.pool=false --file pom.xml -Dsha1="$(git log -1 --pretty='%ad' --date=format:'%Y%m%d%H%M%S')-$(git rev-parse --short HEAD)" -Dchangelist=
              echo "::set-env name=MVN_VERSION::$(mvn help:evaluate --batch-mode --settings ./.github/settings.xml --file .flattened -Dexpression=project.version -q -DforceStdout)"
         env:
           GITHUB_USERNAME: x-access-token
