@@ -19,6 +19,7 @@ import no.nav.k9.søknad.felles.Periode;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Frilanser {
 
+    /** Inntekter i periode som skal kompenseres. Periode må være innenfor søknadsperiode. Hvis ingen inntekt i periode som kompenseres, sett inntekt = 0*/
     @JsonProperty(value = "inntekterSøknadsperiode")
     @Valid
     private NavigableMap<Periode, PeriodeInntekt> inntekterSøknadsperiode;
