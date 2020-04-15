@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.søknad.JsonUtils;
-import no.nav.k9.søknad.felles.Barn;
-import no.nav.k9.søknad.felles.Søker;
-import no.nav.k9.søknad.felles.SøknadId;
-import no.nav.k9.søknad.felles.Versjon;
+import no.nav.k9.søknad.felles.*;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -25,6 +22,8 @@ public class OmsorgspengerUtbetalingSøknad {
 
     public final List<Barn> barn;
 
+    public final List<SelvstendigNæringsdrivende> selvstendingNæringsdrivende;
+
     @JsonCreator
     private OmsorgspengerUtbetalingSøknad(
             @JsonProperty("søknadId")
@@ -36,12 +35,16 @@ public class OmsorgspengerUtbetalingSøknad {
             @JsonProperty("søker")
             Søker søker,
             @JsonProperty("barn")
-            List<Barn> barn) {
+            List<Barn> barn,
+            @JsonProperty("selvstendingNæringsdrivende")
+            List<SelvstendigNæringsdrivende> selvstendingNæringsdrivende
+    ) {
         this.søknadId = søknadId;
         this.versjon = versjon;
         this.mottattDato = mottattDato;
         this.søker = søker;
         this.barn = (barn == null) ? List.of() : barn;
+        this.selvstendingNæringsdrivende = selvstendingNæringsdrivende;
     }
 
     public static Builder builder() {
@@ -67,6 +70,7 @@ public class OmsorgspengerUtbetalingSøknad {
         private ZonedDateTime mottattDato;
         private Søker søker;
         List<Barn> barn;
+        private List<SelvstendigNæringsdrivende> selvstendingeVirksomheter;
 
         private Builder() {
             barn = new ArrayList<>();
@@ -97,6 +101,11 @@ public class OmsorgspengerUtbetalingSøknad {
             return this;
         }
 
+        public Builder selvstendigNæringsdrivende(List<SelvstendigNæringsdrivende> selvstendingeVirksomheter) {
+            this.selvstendingeVirksomheter = selvstendingeVirksomheter;
+            return this;
+        }
+
         public Builder json(String json) {
             this.json = json;
             return this;
@@ -108,7 +117,8 @@ public class OmsorgspengerUtbetalingSøknad {
                     versjon,
                     mottattDato,
                     søker,
-                    barn
+                    barn,
+                    selvstendingeVirksomheter
             ) : SerDes.deserialize(json);
             validator.forsikreValidert(søknad);
             return søknad;

@@ -1,5 +1,6 @@
 package no.nav.k9.søknad.omsorgspenger.utbetaling;
 
+import no.nav.k9.søknad.PeriodeValidator;
 import no.nav.k9.søknad.SøknadValidator;
 import no.nav.k9.søknad.felles.*;
 
@@ -8,7 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<OmsorgspengerUtbetalingSøknad> {
-    public OmsorgspengerUtbetalingSøknadValidator() {}
+    private final PeriodeValidator periodeValidator;
+
+    public OmsorgspengerUtbetalingSøknadValidator() {
+        this.periodeValidator = new PeriodeValidator();
+    }
 
     @Override
     public List<Feil> valider(OmsorgspengerUtbetalingSøknad søknad) {
@@ -19,6 +24,7 @@ public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<Om
         validerMottattDato(søknad.mottattDato, feil);
         validerSøker(søknad.søker, feil);
         validerBarn(søknad.barn, feil);
+        validerSelvstendingNæringsdrivende(søknad.selvstendingNæringsdrivende, feil);
 
         return feil;
     }
@@ -32,7 +38,7 @@ public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<Om
     private static void validerVersjon(Versjon versjon, List<Feil> feil) {
         if (versjon == null) {
             feil.add(new Feil("versjon", PÅKREVD, "Versjon må settes i søknaden."));
-        } else if (!versjon.erGyldig()){
+        } else if (!versjon.erGyldig()) {
             feil.add(new Feil("versjon", "ugyldigVersjon", "Versjonen er på ugyldig format."));
         }
     }
@@ -61,6 +67,32 @@ public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<Om
                 feil.add(new Feil("barn[" + index + "]", "ikkeEntydigIdPåBarnet", "Må sette enten Personnummer/D-nummer på barn, eller fødselsdato."));
             }
             index++;
+        }
+    }
+
+    private void validerSelvstendingNæringsdrivende(List<SelvstendigNæringsdrivende> selvstendigeVirksomheter, List<Feil> feil) {
+        if (selvstendigeVirksomheter == null || selvstendigeVirksomheter.isEmpty()) return;
+        var index = 0;
+        for (SelvstendigNæringsdrivende sn : selvstendigeVirksomheter) {
+            feil.addAll(
+                    this.periodeValidator.validerTillattOverlappOgÅpnePerioder(sn.perioder, "selvstendigNæringsdrivende[" + index++ + "].perioder")
+            );
+
+            sn.perioder.forEach((periode, snInfo) -> {
+                String periodeString = periode.fraOgMed + "-" + periode.tilOgMed;
+                String felt = "selvstendigNæringsdrivende.perioder{" + periodeString + "}";
+                if (snInfo.erVarigEndring != null) {
+                    if (snInfo.endringDato == null) {
+                        feil.add(new Feil(felt + ".endringsDato", PÅKREVD, "endringDato må være satt dersom erVarigEndring er true."));
+                    } else if (snInfo.endringBegrunnelse == null || snInfo.endringBegrunnelse.isBlank()) {
+                        feil.add(new Feil(felt + ".endringBegrunnelse", PÅKREVD, "endringBegrunnelse må være satt dersom erVarigEndring er true."));
+                    }
+                }
+
+               /* if (snInfo.bruttoInntekt == null) {
+                    feil.add(new Feil(felt + ".bruttoIntekt", PÅKREVD, "bruttoInntekt er påkrevd, og må være satt."))
+                } TODO: Burde være påkrevd? Er ikke påkrevd i brukerdialog...*/
+            });
         }
     }
 }
