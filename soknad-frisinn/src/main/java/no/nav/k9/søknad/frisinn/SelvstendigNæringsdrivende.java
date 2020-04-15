@@ -29,6 +29,7 @@ public class SelvstendigNæringsdrivende {
     @Valid
     private NavigableMap<Periode, PeriodeInntekt> inntekterFør;
 
+    /** Inntekter i periode som skal kompenseres. Periode må være innenfor søknadsperiode. Hvis ingen inntekt i periode som kompenseres, sett inntekt = 0*/
     @JsonInclude(value = Include.ALWAYS)
     @JsonProperty(value = "inntekterSøknadsperiode", required = true)
     @Valid

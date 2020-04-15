@@ -53,7 +53,6 @@ public class FrisinnSøknadTest {
         var søknad = FrisinnSøknad.builder()
             .søknadId(SøknadId.of("100-abc"))
             .søknadsperiode("2020-04-01/2020-04-30")
-            .inntektstapStartet(datoSøknad.minusDays(20))
             .mottattDato(ZonedDateTime.parse("2020-04-20T07:15:36.124Z"))
             .språk(Språk.of("nb"))
             .søker(Søker.builder()
