@@ -3,8 +3,11 @@ package no.nav.k9.søknad.felles;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.Valid;
 import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -18,9 +21,15 @@ import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPerioder;
 
 public class SelvstendigNæringsdrivende {
 
+    @JsonProperty("perioder")
+    @Valid
+    @NotNull
+    @NotEmpty
     public final Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> perioder;
-    public final Organisasjonsnummer organisasjonsnummer;
 
+    @JsonProperty("organisasjonsnummer")
+    @NotNull
+    public final Organisasjonsnummer organisasjonsnummer;
 
     public static SelvstendigNæringsdrivende.Builder builder() {
         return new SelvstendigNæringsdrivende.Builder();
@@ -65,34 +74,50 @@ public class SelvstendigNæringsdrivende {
 
     public static final class SelvstendigNæringsdrivendePeriodeInfo {
 
+        @JsonProperty("virksomhetstyper")
+        @NotNull
+        @NotEmpty
         public final List<VirksomhetType> virksomhetstyper;
+
+        @JsonProperty("regnskapsførerNavn")
         public final String regnskapsførerNavn;
+
+        @JsonProperty("regnskapsførerTlf")
         public final String regnskapsførerTlf;
+
+        @JsonProperty("virksomhetNavn")
+        @NotNull
+        @NotBlank
         public final String virksomhetNavn;
+
+        @JsonProperty("erVarigEndring")
         public final Boolean erVarigEndring;
+
+        @JsonProperty("endringDato")
         public final LocalDate endringDato;
+
+        @JsonProperty("endringBegrunnelse")
         public final String endringBegrunnelse;
+
+        @JsonProperty("bruttoInntekt")
+        @Valid
+        @NotNull // TODO: Burde være påkrevd? Er ikke påkrevd i brukerdialog
+        @DecimalMin(value = "0.00", message = "beløp '${validatedValue}' må være >= {value}")
         public final BigDecimal bruttoInntekt;
+
+        @JsonProperty("erNyoppstartet")
         public final Boolean erNyoppstartet;
 
         @JsonCreator
         private SelvstendigNæringsdrivendePeriodeInfo(
                 @JsonProperty("virksomhetstyper") List<VirksomhetType> virksomhetstyper,
                 @JsonProperty("regnskapsførerNavn") String regnskapsførerNavn,
-
-                @JsonProperty("regnskapsførerTlf")
-                @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message="'${validatedValue}' matcher ikke oppgitt pattern '{regexp}'")
-                String regnskapsførerTlf,
-
+                @JsonProperty("regnskapsførerTlf") String regnskapsførerTlf,
                 @JsonProperty("virksomhetNavn") String virksomhetNavn,
                 @JsonProperty("erVarigEndring") Boolean erVarigEndring,
                 @JsonProperty("endringDato") LocalDate endringDato,
                 @JsonProperty("endringBegrunnelse") String endringBegrunnelse,
-
-                @JsonProperty("bruttoInntekt")
-                @DecimalMin(value = "0.00", message = "beløp '${validatedValue}' må være >= {value}")
-                BigDecimal bruttoInntekt,
-
+                @JsonProperty("bruttoInntekt") BigDecimal bruttoInntekt,
                 @JsonProperty("erNyoppstartet") Boolean erNyoppstartet
         ) {
             this.virksomhetstyper = virksomhetstyper;

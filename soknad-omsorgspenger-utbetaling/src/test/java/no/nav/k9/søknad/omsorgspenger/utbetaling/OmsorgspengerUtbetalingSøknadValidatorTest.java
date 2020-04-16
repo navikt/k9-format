@@ -4,12 +4,14 @@ import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.*;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static java.util.List.of;
 import static junit.framework.TestCase.assertEquals;
 import static no.nav.k9.søknad.omsorgspenger.utbetaling.TestUtils.jsonForKomplettSøknad;
 import static no.nav.k9.søknad.omsorgspenger.utbetaling.TestUtils.komplettBuilder;
@@ -25,8 +27,10 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
         OmsorgspengerUtbetalingSøknad.Builder builder = OmsorgspengerUtbetalingSøknad.builder();
         OmsorgspengerUtbetalingSøknad søknad = OmsorgspengerUtbetalingSøknad.SerDes.deserialize("{\"versjon\":\"0.0.1\"}");
         List<Feil> builderFeil = verifyHarFeil(builder);
+        builderFeil = Collections.unmodifiableList(builderFeil);
         List<Feil> jsonFeil = verifyHarFeil(søknad);
-        assertThat(builderFeil, is(jsonFeil));
+        jsonFeil = Collections.unmodifiableList(jsonFeil);
+        assertThat(builderFeil.size(), is(jsonFeil.size()));
     }
 
     @Test
@@ -51,6 +55,66 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
         verifyIngenFeil(builder);
     }
 
+    @Test
+    public void selvstending_næringsdrivende_null_eller_tom() {
+        var builder = komplettBuilder();
+        builder.selvstendigNæringsdrivende(new ArrayList<>());
+        verifyIngenFeil(builder);
+    }
+
+    @Test
+    public void selvstending_næringsdrivende_mangler_organisajonsnummer_og_perioder() {
+        var builder = komplettBuilder();
+        List<SelvstendigNæringsdrivende> selvstendingeVirksomheter = of(
+                SelvstendigNæringsdrivende.builder()
+                        .build()
+        );
+        builder.selvstendigNæringsdrivende(selvstendingeVirksomheter);
+        assertEquals(2, verifyHarFeil(builder).size());
+    }
+
+    @Test
+    public void selvstending_næringsdrivende_mangler_påkrevde_felter() {
+        var builder = komplettBuilder();
+        List<SelvstendigNæringsdrivende> selvstendingeVirksomheter = of(
+                SelvstendigNæringsdrivende.builder()
+                        .organisasjonsnummer(Organisasjonsnummer.of("816338352"))
+                        .periode(
+                                Periode.builder().fraOgMed(LocalDate.now().minusMonths(2)).tilOgMed(LocalDate.now()).build(),
+                                SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder().build()
+                        ).build()
+        );
+        builder.selvstendigNæringsdrivende(selvstendingeVirksomheter);
+        assertEquals(5, verifyHarFeil(builder).size());
+    }
+
+    @Test
+    public void selvstending_næringsdrivende_har_varig_endring_uten_påkrevde_felter() {
+        var builder = komplettBuilder();
+        List<SelvstendigNæringsdrivende> selvstendingeVirksomheter = of(
+                SelvstendigNæringsdrivende.builder()
+                        .organisasjonsnummer(Organisasjonsnummer.of("816338352"))
+                        .periode(
+                                Periode.builder().fraOgMed(LocalDate.now().minusMonths(2)).tilOgMed(LocalDate.now()).build(),
+                                SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
+                                        .virksomhetNavn("ABC")
+                                        .bruttoInntekt(BigDecimal.valueOf(500_00))
+                                        .virksomhetstyper(of(VirksomhetType.JORDBRUK_SKOGBRUK))
+                                        .erVarigEndring(true)
+                                        .build()
+                        ).build()
+        );
+        builder.selvstendigNæringsdrivende(selvstendingeVirksomheter);
+        assertEquals(2, verifyHarFeil(builder).size());
+    }
+
+    @Test
+    public void frilanser_mangler_startdato() {
+        var builder = komplettBuilder();
+        builder.frilanser(Frilanser.builder().build());
+        assertEquals(1, verifyHarFeil(builder).size());
+    }
+
     private List<Feil> valider(OmsorgspengerUtbetalingSøknad.Builder builder) {
         try {
             builder.build();
@@ -59,11 +123,13 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
             return ex.getFeil();
         }
     }
+
     private List<Feil> verifyHarFeil(OmsorgspengerUtbetalingSøknad.Builder builder) {
         final List<Feil> feil = valider(builder);
         assertThat(feil, is(not(Collections.emptyList())));
         return feil;
     }
+
     private List<Feil> verifyHarFeil(OmsorgspengerUtbetalingSøknad søknad) {
         final List<Feil> feil = validator.valider(søknad);
         assertThat(feil, is(not(Collections.emptyList())));

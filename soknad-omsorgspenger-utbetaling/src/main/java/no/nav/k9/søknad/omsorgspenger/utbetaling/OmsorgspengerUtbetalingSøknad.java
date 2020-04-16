@@ -1,44 +1,61 @@
 package no.nav.k9.søknad.omsorgspenger.utbetaling;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.felles.*;
 
+import javax.validation.Valid;
+import javax.validation.Validation;
+import javax.validation.ValidatorFactory;
+import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class OmsorgspengerUtbetalingSøknad {
+
+    @JsonProperty("søknadId")
+    @Valid
+    @NotNull
     public final SøknadId søknadId;
 
+    @JsonProperty("versjon")
+    @Valid
+    @NotNull
     public final Versjon versjon;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
+    @JsonProperty("mottattDato")
+    @Valid
+    @NotNull
     public final ZonedDateTime mottattDato;
 
+    @JsonProperty("søker")
+    @Valid
+    @NotNull
     public final Søker søker;
 
+    @JsonProperty("barn")
     public final List<Barn> barn;
 
+    @JsonProperty("selvstendingNæringsdrivende")
+    @Valid
     public final List<SelvstendigNæringsdrivende> selvstendingNæringsdrivende;
+
+    @JsonProperty("frilanser")
+    @Valid
     public final Frilanser frilanser;
 
     @JsonCreator
     private OmsorgspengerUtbetalingSøknad(
-            @JsonProperty("søknadId")
-                    SøknadId søknadId,
-            @JsonProperty("versjon")
-                    Versjon versjon,
-            @JsonProperty("mottattDato")
-                    ZonedDateTime mottattDato,
-            @JsonProperty("søker")
-                    Søker søker,
-            @JsonProperty("barn")
-                    List<Barn> barn,
-            @JsonProperty("selvstendingNæringsdrivende")
-                    List<SelvstendigNæringsdrivende> selvstendingNæringsdrivende,
+            @JsonProperty("søknadId") SøknadId søknadId,
+            @JsonProperty("versjon") Versjon versjon,
+            @JsonProperty("mottattDato") ZonedDateTime mottattDato,
+            @JsonProperty("søker") Søker søker,
+            @JsonProperty("barn") List<Barn> barn,
+            @JsonProperty("selvstendingNæringsdrivende") List<SelvstendigNæringsdrivende> selvstendingNæringsdrivende,
             @JsonProperty("frilanser") Frilanser frilanser) {
         this.søknadId = søknadId;
         this.versjon = versjon;
@@ -67,6 +84,7 @@ public class OmsorgspengerUtbetalingSøknad {
     }
 
     public static final class Builder {
+        private static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
         private final static OmsorgspengerUtbetalingSøknadValidator validator = new OmsorgspengerUtbetalingSøknadValidator();
         private final static Versjon versjon = Versjon.of("0.0.1");
 
@@ -123,14 +141,16 @@ public class OmsorgspengerUtbetalingSøknad {
         }
 
         public OmsorgspengerUtbetalingSøknad build() {
-            OmsorgspengerUtbetalingSøknad søknad = (json == null) ? new OmsorgspengerUtbetalingSøknad(
+            OmsorgspengerUtbetalingSøknad søknad;
+            if (json == null) søknad = new OmsorgspengerUtbetalingSøknad(
                     søknadId,
                     versjon,
                     mottattDato,
                     søker,
                     barn,
                     selvstendingeVirksomheter,
-                    frilanser) : SerDes.deserialize(json);
+                    frilanser);
+            else søknad = SerDes.deserialize(json);
             validator.forsikreValidert(søknad);
             return søknad;
         }
