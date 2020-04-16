@@ -77,16 +77,20 @@ public class FrisinnSøknad {
         this.søker = søker;
 
         if (inntekter.getFrilanser() != null) {
-            validerSøknadInntektPeriode(inntekter.getFrilanser().getMaksSøknadsperiode());
+            validerSøknadInntektPeriode("frilanser", inntekter.getFrilanser().getMaksSøknadsperiode());
         }
         if (inntekter.getSelvstendig() != null) {
-            validerSøknadInntektPeriode(inntekter.getSelvstendig().getMaksSøknadsperiode());
+            validerSøknadInntektPeriode("selvstendig", inntekter.getSelvstendig().getMaksSøknadsperiode());
         }
     }
 
-    private void validerSøknadInntektPeriode(Periode inntektPeriode) {
+    private void validerSøknadInntektPeriode(String tekst, Periode inntektPeriode) {
+        if(inntektPeriode==null) {
+            throw new IllegalArgumentException("Mangler inntektperiode for " + tekst);
+        }
         if (!søknadsperiode.inneholder(inntektPeriode)) {
-            throw new IllegalArgumentException("Inntektperiode [" + inntektPeriode + "] må være innenfor søknadsperiode [" + søknadsperiode + "]");
+            throw new IllegalArgumentException(
+                "Inntektperiode [" + inntektPeriode + "] må være innenfor søknadsperiode [" + søknadsperiode + " for " + tekst + "]");
         }
     }
 
