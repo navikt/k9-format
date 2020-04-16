@@ -17,7 +17,8 @@
     "perioder": {
       "2018-11-11/2018-11-30": {
         "virksomhetNavn":  "Alibaba Expresstoget",
-        "virksomhetstyper":  ["DAGMAMMA", "ENK", "FISKE", "FRILANSER", "JORDBRUK_SKOGBRUK", "ANNEN", "-"],
+        "virksomhetstyper":  [
+          "DAGMAMMA", "ENK", "FISKE", "FRILANSER", "JORDBRUK_SKOGBRUK", "ANNEN", "-"],
         "regnskapsførerNavn": "Regnskapsfører Svensen",
         "regnskapsførerTlf":  "12345678",
         "erVarigEndring":  true,
@@ -27,5 +28,9 @@
         "erNyoppstartet": false
       }
     }
-  }]
+  }],
+  "frilanser": {
+    "startdato": "2019-01-01",
+    "jobberFortsattSomFrilans": false
+  }
 }

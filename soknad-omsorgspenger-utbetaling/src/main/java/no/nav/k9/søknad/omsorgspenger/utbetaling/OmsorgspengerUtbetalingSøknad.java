@@ -23,28 +23,30 @@ public class OmsorgspengerUtbetalingSøknad {
     public final List<Barn> barn;
 
     public final List<SelvstendigNæringsdrivende> selvstendingNæringsdrivende;
+    public final Frilanser frilanser;
 
     @JsonCreator
     private OmsorgspengerUtbetalingSøknad(
             @JsonProperty("søknadId")
-            SøknadId søknadId,
+                    SøknadId søknadId,
             @JsonProperty("versjon")
-            Versjon versjon,
+                    Versjon versjon,
             @JsonProperty("mottattDato")
-            ZonedDateTime mottattDato,
+                    ZonedDateTime mottattDato,
             @JsonProperty("søker")
-            Søker søker,
+                    Søker søker,
             @JsonProperty("barn")
-            List<Barn> barn,
+                    List<Barn> barn,
             @JsonProperty("selvstendingNæringsdrivende")
-            List<SelvstendigNæringsdrivende> selvstendingNæringsdrivende
-    ) {
+                    List<SelvstendigNæringsdrivende> selvstendingNæringsdrivende,
+            @JsonProperty("frilanser") Frilanser frilanser) {
         this.søknadId = søknadId;
         this.versjon = versjon;
         this.mottattDato = mottattDato;
         this.søker = søker;
         this.barn = (barn == null) ? List.of() : barn;
         this.selvstendingNæringsdrivende = selvstendingNæringsdrivende;
+        this.frilanser = frilanser;
     }
 
     public static Builder builder() {
@@ -52,10 +54,13 @@ public class OmsorgspengerUtbetalingSøknad {
     }
 
     public static final class SerDes {
-        private SerDes() {}
+        private SerDes() {
+        }
+
         public static String serialize(OmsorgspengerUtbetalingSøknad søknad) {
             return JsonUtils.toString(søknad);
         }
+
         public static OmsorgspengerUtbetalingSøknad deserialize(String søknad) {
             return JsonUtils.fromString(søknad, OmsorgspengerUtbetalingSøknad.class);
         }
@@ -71,6 +76,7 @@ public class OmsorgspengerUtbetalingSøknad {
         private Søker søker;
         List<Barn> barn;
         private List<SelvstendigNæringsdrivende> selvstendingeVirksomheter;
+        private Frilanser frilanser;
 
         private Builder() {
             barn = new ArrayList<>();
@@ -106,6 +112,11 @@ public class OmsorgspengerUtbetalingSøknad {
             return this;
         }
 
+        public Builder frilanser(Frilanser frilanser) {
+            this.frilanser = frilanser;
+            return this;
+        }
+
         public Builder json(String json) {
             this.json = json;
             return this;
@@ -118,8 +129,8 @@ public class OmsorgspengerUtbetalingSøknad {
                     mottattDato,
                     søker,
                     barn,
-                    selvstendingeVirksomheter
-            ) : SerDes.deserialize(json);
+                    selvstendingeVirksomheter,
+                    frilanser) : SerDes.deserialize(json);
             validator.forsikreValidert(søknad);
             return søknad;
         }
