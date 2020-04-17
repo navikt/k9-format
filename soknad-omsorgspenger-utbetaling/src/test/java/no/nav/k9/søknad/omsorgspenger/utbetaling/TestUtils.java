@@ -38,7 +38,7 @@ class TestUtils {
                         SelvstendigNæringsdrivende.builder()
                                 .organisasjonsnummer(Organisasjonsnummer.of("816338352"))
                                 .perioder(Collections.singletonMap(
-                                        Periode.builder().fraOgMed(LocalDate.parse("2018-11-11")).tilOgMed(LocalDate.parse("2018-11-30")).build(),
+                                        new Periode(LocalDate.parse("2018-11-11"), LocalDate.parse("2018-11-30")),
                                         SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
                                                 .virksomhetstyper(List.of(DAGMAMMA, ENKELTPERSONFORETAK, FISKE, FRILANSER, JORDBRUK_SKOGBRUK, ANNEN, UDEFINERT))
                                                 .bruttoInntekt(BigDecimal.valueOf(1_000_000))

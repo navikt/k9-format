@@ -80,7 +80,7 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
                 SelvstendigNæringsdrivende.builder()
                         .organisasjonsnummer(Organisasjonsnummer.of("816338352"))
                         .periode(
-                                Periode.builder().fraOgMed(LocalDate.now().minusMonths(2)).tilOgMed(LocalDate.now()).build(),
+                                new Periode(LocalDate.now().minusMonths(2), LocalDate.now()),
                                 SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder().build()
                         ).build()
         );
@@ -95,7 +95,7 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
                 SelvstendigNæringsdrivende.builder()
                         .organisasjonsnummer(Organisasjonsnummer.of("816338352"))
                         .periode(
-                                Periode.builder().fraOgMed(LocalDate.now().minusMonths(2)).tilOgMed(LocalDate.now()).build(),
+                                new Periode(LocalDate.now().minusMonths(2), LocalDate.now()),
                                 SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
                                         .virksomhetNavn("ABC")
                                         .bruttoInntekt(BigDecimal.valueOf(500_00))
