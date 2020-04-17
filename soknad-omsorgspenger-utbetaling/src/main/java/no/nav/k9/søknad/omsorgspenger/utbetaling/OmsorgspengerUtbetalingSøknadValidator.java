@@ -25,8 +25,8 @@ public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<Om
         validerVersjon(søknad.versjon, feil);
         validerSøker(søknad.søker, feil);
         validerBarn(søknad.barn, feil);
-        validerFrilanserOgSelvstendingNæringsdrivende(søknad.selvstendingNæringsdrivende, søknad.frilanser, feil);
-        validerSelvstendingNæringsdrivende(søknad.selvstendingNæringsdrivende, feil);
+        validerFrilanserOgSelvstendingNæringsdrivende(søknad.selvstendigNæringsdrivende, søknad.frilanser, feil);
+        validerSelvstendingNæringsdrivende(søknad.selvstendigNæringsdrivende, feil);
 
         return feil;
     }

@@ -40,9 +40,9 @@ public class OmsorgspengerUtbetalingSøknad {
     @JsonProperty("barn")
     public final List<Barn> barn;
 
-    @JsonProperty("selvstendingNæringsdrivende")
+    @JsonProperty("selvstendigNæringsdrivende")
     @Valid
-    public final List<SelvstendigNæringsdrivende> selvstendingNæringsdrivende;
+    public final List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende;
 
     @JsonProperty("frilanser")
     @Valid
@@ -55,14 +55,14 @@ public class OmsorgspengerUtbetalingSøknad {
             @JsonProperty("mottattDato") ZonedDateTime mottattDato,
             @JsonProperty("søker") Søker søker,
             @JsonProperty("barn") List<Barn> barn,
-            @JsonProperty("selvstendingNæringsdrivende") List<SelvstendigNæringsdrivende> selvstendingNæringsdrivende,
+            @JsonProperty("selvstendingNæringsdrivende") List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende,
             @JsonProperty("frilanser") Frilanser frilanser) {
         this.søknadId = søknadId;
         this.versjon = versjon;
         this.mottattDato = mottattDato;
         this.søker = søker;
         this.barn = (barn == null) ? List.of() : barn;
-        this.selvstendingNæringsdrivende = selvstendingNæringsdrivende;
+        this.selvstendigNæringsdrivende = selvstendigNæringsdrivende;
         this.frilanser = frilanser;
     }
 

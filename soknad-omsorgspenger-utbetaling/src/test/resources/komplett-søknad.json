@@ -12,7 +12,7 @@
     "norskIdentitetsnummer": null,
     "fødselsdato": "2000-01-01"
   }],
-  "selvstendingNæringsdrivende": [{
+  "selvstendigNæringsdrivende": [{
     "organisasjonsnummer":  "816338352",
     "perioder": {
       "2018-11-11/2018-11-30": {
