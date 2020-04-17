@@ -1,6 +1,7 @@
 package no.nav.k9.søknad.felles;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.Valid;
@@ -19,6 +20,7 @@ import static java.util.Collections.unmodifiableMap;
 import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPeriode;
 import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPerioder;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SelvstendigNæringsdrivende {
 
     @JsonProperty("perioder")
