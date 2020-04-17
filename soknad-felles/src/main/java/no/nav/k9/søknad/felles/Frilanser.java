@@ -10,7 +10,6 @@ public class Frilanser {
 
     @JsonProperty("startdato")
     @NotNull
-    @NotNull
     public final LocalDate startdato;
 
     @JsonProperty("jobberFortsattSomFrilans")
