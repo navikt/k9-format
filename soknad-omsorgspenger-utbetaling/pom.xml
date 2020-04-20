@@ -13,6 +13,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>jakarta.el</artifactId>
+        </dependency>
+        <dependency>
             <groupId>no.nav.k9</groupId>
             <artifactId>soknad-felles</artifactId>
             <version>${project.version}</version>
