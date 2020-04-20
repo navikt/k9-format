@@ -15,6 +15,12 @@ public class OmsorgspengerUtbetalingSøknadTest {
         OmsorgspengerUtbetalingSøknad fraBuilder = komplettBuilder().build();
         JSONAssert.assertEquals(json, OmsorgspengerUtbetalingSøknad.SerDes.serialize(fraBuilder), true);
     }
+    @Test
+    public void serialiseringAvJsonUtenNæringsinntektOgBrukAvBuilderGirSammeResultat() throws JSONException {
+        String json = jsonForKomplettSøknadUtenNæringsinntenkt();
+        OmsorgspengerUtbetalingSøknad fraBuilder = komplettBuilderUtenNæringsinntekt().build();
+        JSONAssert.assertEquals(json, OmsorgspengerUtbetalingSøknad.SerDes.serialize(fraBuilder), false);
+    }
 
     @Ignore
     @Test

@@ -85,7 +85,7 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
                         ).build()
         );
         builder.selvstendigNæringsdrivende(selvstendingeVirksomheter);
-        assertEquals(5, verifyHarFeil(builder).size());
+        assertEquals(4, verifyHarFeil(builder).size());
     }
 
     @Test

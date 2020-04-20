@@ -1,0 +1,35 @@
+{
+  "søknadId": "123-123-123",
+  "mottattDato": "2019-10-20T07:15:36.124Z",
+  "versjon": "0.0.1",
+  "søker": {
+    "norskIdentitetsnummer": "11111111111"
+  },
+  "fosterbarn": [{
+    "norskIdentitetsnummer": "11111111113",
+    "fødselsdato": null
+  }, {
+    "norskIdentitetsnummer": null,
+    "fødselsdato": "2000-01-01"
+  }],
+  "selvstendigNæringsdrivende": [{
+    "organisasjonsnummer":  "816338352",
+    "perioder": {
+      "2018-11-11/2018-11-30": {
+        "virksomhetNavn":  "Alibaba Expresstoget",
+        "virksomhetstyper":  [
+          "DAGMAMMA", "ENK", "FISKE", "FRILANSER", "JORDBRUK_SKOGBRUK", "ANNEN", "-"],
+        "regnskapsførerNavn": "Regnskapsfører Svensen",
+        "regnskapsførerTlf":  "12345678",
+        "erVarigEndring":  true,
+        "endringDato":  "2018-12-12",
+        "endringBegrunnelse":  "fordi",
+        "erNyoppstartet": false
+      }
+    }
+  }],
+  "frilanser": {
+    "startdato": "2019-01-01",
+    "jobberFortsattSomFrilans": false
+  }
+}

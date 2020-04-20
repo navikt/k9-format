@@ -103,8 +103,6 @@ public class SelvstendigNæringsdrivende {
 
         @JsonProperty("bruttoInntekt")
         @Valid
-        @NotNull // TODO: Burde være påkrevd? Er ikke påkrevd i brukerdialog
-        @DecimalMin(value = "0.00", message = "beløp '${validatedValue}' må være >= {value}")
         public final BigDecimal bruttoInntekt;
 
         @JsonProperty("erNyoppstartet")
