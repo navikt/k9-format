@@ -29,6 +29,12 @@ public class SelvstendigNæringsdrivende {
     @JsonProperty("organisasjonsnummer")
     public final Organisasjonsnummer organisasjonsnummer;
 
+    @JsonProperty("virksomhetNavn")
+    @NotNull
+    @NotBlank
+    @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message="'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
+    public final String virksomhetNavn;
+
     public static SelvstendigNæringsdrivende.Builder builder() {
         return new SelvstendigNæringsdrivende.Builder();
     }
@@ -36,15 +42,17 @@ public class SelvstendigNæringsdrivende {
     @JsonCreator
     public SelvstendigNæringsdrivende(
             @JsonProperty("perioder") Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> perioder,
-            @JsonProperty("organisasjonsnummer") Organisasjonsnummer organisasjonsnummer
-    ) {
+            @JsonProperty("organisasjonsnummer") Organisasjonsnummer organisasjonsnummer,
+            @JsonProperty("virksomhetNavn") String virksomhetNavn) {
         this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
         this.organisasjonsnummer = organisasjonsnummer;
+        this.virksomhetNavn = virksomhetNavn;
     }
 
     public static final class Builder {
         private Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> perioder;
         private Organisasjonsnummer organisasjonsnummer;
+        private String virksomhetNavn;
 
         private Builder() {
             perioder = new HashMap<>();
@@ -65,8 +73,13 @@ public class SelvstendigNæringsdrivende {
             return this;
         }
 
+        public SelvstendigNæringsdrivende.Builder virksomhetNavn(String virksomhetNavn) {
+            this.virksomhetNavn = virksomhetNavn;
+            return this;
+        }
+
         public SelvstendigNæringsdrivende build() {
-            return new SelvstendigNæringsdrivende(perioder, organisasjonsnummer);
+            return new SelvstendigNæringsdrivende(perioder, organisasjonsnummer, virksomhetNavn);
         }
     }
 
@@ -84,12 +97,6 @@ public class SelvstendigNæringsdrivende {
         @JsonProperty("regnskapsførerTlf")
         @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message="'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
         public final String regnskapsførerTlf;
-
-        @JsonProperty("virksomhetNavn")
-        @NotNull
-        @NotBlank
-        @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message="'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
-        public final String virksomhetNavn;
 
         @JsonProperty("erVarigEndring")
         public final Boolean erVarigEndring;
@@ -112,7 +119,6 @@ public class SelvstendigNæringsdrivende {
                 @JsonProperty("virksomhetstyper") List<VirksomhetType> virksomhetstyper,
                 @JsonProperty("regnskapsførerNavn") String regnskapsførerNavn,
                 @JsonProperty("regnskapsførerTlf") String regnskapsførerTlf,
-                @JsonProperty("virksomhetNavn") String virksomhetNavn,
                 @JsonProperty("erVarigEndring") Boolean erVarigEndring,
                 @JsonProperty("endringDato") LocalDate endringDato,
                 @JsonProperty("endringBegrunnelse") String endringBegrunnelse,
@@ -122,7 +128,6 @@ public class SelvstendigNæringsdrivende {
             this.virksomhetstyper = virksomhetstyper;
             this.regnskapsførerNavn = regnskapsførerNavn;
             this.regnskapsførerTlf = regnskapsførerTlf;
-            this.virksomhetNavn = virksomhetNavn;
             this.erVarigEndring = erVarigEndring;
             this.endringDato = endringDato;
             this.endringBegrunnelse = endringBegrunnelse;
@@ -138,7 +143,6 @@ public class SelvstendigNæringsdrivende {
             private List<VirksomhetType> virksomhetstyper;
             private String regnskapsførerNavn;
             private String regnskapsførerTelefon;
-            private String virksomhetNavn;
             private Boolean erVarigEndring;
             private LocalDate endringDato;
             private String endringBegrunnelse;
@@ -160,11 +164,6 @@ public class SelvstendigNæringsdrivende {
 
             public Builder regnskapsførerTelefon(String regnskapsførerTelefon) {
                 this.regnskapsførerTelefon = regnskapsførerTelefon;
-                return this;
-            }
-
-            public Builder virksomhetNavn(String virksomhetNavn) {
-                this.virksomhetNavn = virksomhetNavn;
                 return this;
             }
 

@@ -53,6 +53,7 @@ class TestUtils {
                 .selvstendigNæringsdrivende(Collections.singletonList(
                         SelvstendigNæringsdrivende.builder()
                                 .organisasjonsnummer(Organisasjonsnummer.of("816338352"))
+                                .virksomhetNavn("Alibaba Expresstoget")
                                 .perioder(Collections.singletonMap(
                                         new Periode(LocalDate.parse("2018-11-11"), LocalDate.parse("2018-11-30")),
                                         SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
@@ -64,7 +65,6 @@ class TestUtils {
                                                 .erVarigEndring(true)
                                                 .regnskapsførerNavn("Regnskapsfører Svensen")
                                                 .regnskapsførerTelefon("12345678")
-                                                .virksomhetNavn("Alibaba Expresstoget")
                                                 .build()
                                 )).build()
                 ))
@@ -87,6 +87,7 @@ class TestUtils {
                 .selvstendigNæringsdrivende(Collections.singletonList(
                         SelvstendigNæringsdrivende.builder()
                                 .organisasjonsnummer(Organisasjonsnummer.of("816338352"))
+                                .virksomhetNavn("Alibaba Expresstoget")
                                 .perioder(Collections.singletonMap(
                                         new Periode(LocalDate.parse("2018-11-11"), LocalDate.parse("2018-11-30")),
                                         SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
@@ -97,7 +98,6 @@ class TestUtils {
                                                 .erVarigEndring(true)
                                                 .regnskapsførerNavn("Regnskapsfører Svensen")
                                                 .regnskapsførerTelefon("12345678")
-                                                .virksomhetNavn("Alibaba Expresstoget")
                                                 .build()
                                 )).build()
                 ))
