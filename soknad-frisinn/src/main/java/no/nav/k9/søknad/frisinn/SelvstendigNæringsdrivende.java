@@ -29,18 +29,31 @@ public class SelvstendigNæringsdrivende {
     @Valid
     private NavigableMap<Periode, PeriodeInntekt> inntekterFør;
 
-    /** Inntekter i periode som skal kompenseres. Periode må være innenfor søknadsperiode. Hvis ingen inntekt i periode som kompenseres, sett inntekt = 0*/
+    /**
+     * Inntekter i periode som skal kompenseres. Periode må være innenfor søknadsperiode. Hvis ingen inntekt i periode som kompenseres, sett
+     * inntekt = 0
+     */
     @JsonInclude(value = Include.ALWAYS)
     @JsonProperty(value = "inntekterSøknadsperiode", required = true)
     @Valid
     private NavigableMap<Periode, PeriodeInntekt> inntekterSøknadsperiode;
 
+    /**
+     * Hvorvidt bruker ønsker inntekter i samme periode som angitt inntekter i søknadsperiode kompensert mot tidligere opptjent
+     * beregningsgrunnlag.
+     */
+    @JsonProperty(value = "søkerKompensasjon")
+    private final boolean søkerKompensasjon;
+
     @JsonCreator
     public SelvstendigNæringsdrivende(@JsonProperty(value = "inntekterFør") Map<Periode, PeriodeInntekt> inntekterFør,
-                                      @JsonProperty(value = "inntekterSøknadsperiode") Map<Periode, PeriodeInntekt> inntekterSøknadsperiode) {
-        this.inntekterSøknadsperiode = (inntekterSøknadsperiode == null) ? emptyNavigableMap() : unmodifiableNavigableMap(new TreeMap<>(inntekterSøknadsperiode));
+                                      @JsonProperty(value = "inntekterSøknadsperiode") Map<Periode, PeriodeInntekt> inntekterSøknadsperiode,
+                                      @JsonProperty(value = "søkerKompensasjon") Boolean søkerKompensasjon) {
+        this.inntekterSøknadsperiode = (inntekterSøknadsperiode == null) ? emptyNavigableMap()
+            : unmodifiableNavigableMap(new TreeMap<>(inntekterSøknadsperiode));
         this.inntekterFør = (inntekterFør == null) ? emptyNavigableMap() : unmodifiableNavigableMap(new TreeMap<>(inntekterFør));
         validerPerioder(this.inntekterFør, this.inntekterSøknadsperiode);
+        this.søkerKompensasjon = søkerKompensasjon == null ? true : søkerKompensasjon;
     }
 
     private void validerPerioder(@Valid NavigableMap<Periode, PeriodeInntekt> inntekterFør,
@@ -77,6 +90,10 @@ public class SelvstendigNæringsdrivende {
     public Map<Periode, PeriodeInntekt> getInntekterFør() {
         return inntekterFør;
     }
+    
+    public boolean getSøkerKompensasjon() {
+        return søkerKompensasjon;
+    }
 
     public static Builder builder() {
         return new Builder();
@@ -85,6 +102,7 @@ public class SelvstendigNæringsdrivende {
     public static final class Builder {
         private Map<Periode, PeriodeInntekt> inntekterFør = new LinkedHashMap<>();
         private Map<Periode, PeriodeInntekt> inntekterSøknadsperiode = new LinkedHashMap<>();
+        private boolean søkerKompensasjon = true;
 
         private Builder() {
         }
@@ -99,8 +117,13 @@ public class SelvstendigNæringsdrivende {
             return this;
         }
 
+        public Builder søkerKompensasjon(boolean søkerKompensasjon) {
+            this.søkerKompensasjon = søkerKompensasjon;
+            return this;
+        }
+
         public SelvstendigNæringsdrivende build() {
-            return new SelvstendigNæringsdrivende(inntekterFør, inntekterSøknadsperiode);
+            return new SelvstendigNæringsdrivende(inntekterFør, inntekterSøknadsperiode, søkerKompensasjon);
         }
     }
 
