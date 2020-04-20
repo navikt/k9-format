@@ -24,3 +24,4 @@ Spørsmål knyttet til koden eller prosjektet gjøres gjennom å opprette en Git
 ## For NAV-ansatte
 
 Interne henvendelser kan sendes via Slack i kanalen #sif_saksbehandling
+

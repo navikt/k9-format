@@ -30,6 +30,14 @@ public class OmsorgspengerUtbetalingSøknadTest {
         JSONAssert.assertEquals(json, OmsorgspengerUtbetalingSøknad.SerDes.serialize(fraBuilder), true);
     }
 
+    @Ignore
+    @Test
+    public void serialiseringAvJsonMedBarnOgBrukAvBuilderGirSammeResultat() throws JSONException {
+        String json = jsonForKomplettSøknadMedBarn();
+        OmsorgspengerUtbetalingSøknad fraBuilder = komplettBuilder().build();
+        JSONAssert.assertEquals(json, OmsorgspengerUtbetalingSøknad.SerDes.serialize(fraBuilder), true);
+    }
+
     @Test
     public void reserialisering() throws JSONException {
         String json = jsonForKomplettSøknad();
