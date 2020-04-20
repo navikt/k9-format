@@ -23,6 +23,14 @@ class TestUtils {
         }
     }
 
+    static String jsonForKomplettSøknadMedBarn() {
+        try {
+            return Files.readString(Path.of("src/test/resources/komplett-søknad-med-barn.json"));
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
     static String jsonForSøknadUtenBarn() {
         try {
             return Files.readString(Path.of("src/test/resources/uten-barn.json"));
@@ -59,8 +67,8 @@ class TestUtils {
                 .søker(Søker.builder()
                         .norskIdentitetsnummer(NorskIdentitetsnummer.of("11111111111"))
                         .build())
-                .barn(Barn.builder().norskIdentitetsnummer(NorskIdentitetsnummer.of("11111111113")).build())
-                .barn(Barn.builder().fødselsdato(LocalDate.parse("2000-01-01")).build())
+                .fosterbarn(Barn.builder().norskIdentitetsnummer(NorskIdentitetsnummer.of("11111111113")).build())
+                .fosterbarn(Barn.builder().fødselsdato(LocalDate.parse("2000-01-01")).build())
                 .mottattDato(ZonedDateTime.parse("2019-10-20T07:15:36.124Z"))
                 .søknadId(SøknadId.of("123-123-123"));
     }

@@ -5,8 +5,6 @@ import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.felles.*;
 
 import javax.validation.Valid;
-import javax.validation.Validation;
-import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -37,8 +35,9 @@ public class OmsorgspengerUtbetalingSøknad {
     @NotNull
     public final Søker søker;
 
-    @JsonProperty("barn")
-    public final List<Barn> barn;
+    @JsonProperty("fosterbarn")
+    @JsonAlias({"barn"}) //TODO: Fjern barn etter at avhengige prosjekter er prodsatt.
+    public final List<Barn> fosterbarn;
 
     @JsonProperty("selvstendigNæringsdrivende")
     @Valid
@@ -54,14 +53,14 @@ public class OmsorgspengerUtbetalingSøknad {
             @JsonProperty("versjon") Versjon versjon,
             @JsonProperty("mottattDato") ZonedDateTime mottattDato,
             @JsonProperty("søker") Søker søker,
-            @JsonProperty("barn") List<Barn> barn,
+            @JsonProperty("fosterbarn") @JsonAlias({"barn"}) List<Barn> fosterbarn, //TODO: Fjern barn etter at avhengige prosjekter er prodsatt.
             @JsonProperty("selvstendingNæringsdrivende") List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende,
             @JsonProperty("frilanser") Frilanser frilanser) {
         this.søknadId = søknadId;
         this.versjon = versjon;
         this.mottattDato = mottattDato;
         this.søker = søker;
-        this.barn = (barn == null) ? List.of() : barn;
+        this.fosterbarn = (fosterbarn == null) ? List.of() : fosterbarn;
         this.selvstendigNæringsdrivende = selvstendigNæringsdrivende;
         this.frilanser = frilanser;
     }
@@ -84,7 +83,6 @@ public class OmsorgspengerUtbetalingSøknad {
     }
 
     public static final class Builder {
-        private static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
         private final static OmsorgspengerUtbetalingSøknadValidator validator = new OmsorgspengerUtbetalingSøknadValidator();
         private final static Versjon versjon = Versjon.of("0.0.1");
 
@@ -115,13 +113,13 @@ public class OmsorgspengerUtbetalingSøknad {
             return this;
         }
 
-        public Builder barn(Barn barn) {
-            if (barn != null) this.barn.add(barn);
+        public Builder fosterbarn(Barn fosterbarn) {
+            if (fosterbarn != null) this.barn.add(fosterbarn);
             return this;
         }
 
-        public Builder barn(List<Barn> barn) {
-            if (barn != null) this.barn.addAll(barn);
+        public Builder fosterbarn(List<Barn> fosterbarn) {
+            if (fosterbarn != null) this.barn.addAll(fosterbarn);
             return this;
         }
 

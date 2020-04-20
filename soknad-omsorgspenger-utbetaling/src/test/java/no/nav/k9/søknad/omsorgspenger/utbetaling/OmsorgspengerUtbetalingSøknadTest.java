@@ -1,6 +1,7 @@
 package no.nav.k9.søknad.omsorgspenger.utbetaling;
 
 import org.json.JSONException;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
@@ -11,6 +12,14 @@ public class OmsorgspengerUtbetalingSøknadTest {
     @Test
     public void serialiseringAvJsonOgBrukAvBuilderGirSammeResultat() throws JSONException {
         String json = jsonForKomplettSøknad();
+        OmsorgspengerUtbetalingSøknad fraBuilder = komplettBuilder().build();
+        JSONAssert.assertEquals(json, OmsorgspengerUtbetalingSøknad.SerDes.serialize(fraBuilder), true);
+    }
+
+    @Ignore
+    @Test
+    public void serialiseringAvJsonMedBarnOgBrukAvBuilderGirSammeResultat() throws JSONException {
+        String json = jsonForKomplettSøknadMedBarn();
         OmsorgspengerUtbetalingSøknad fraBuilder = komplettBuilder().build();
         JSONAssert.assertEquals(json, OmsorgspengerUtbetalingSøknad.SerDes.serialize(fraBuilder), true);
     }
@@ -26,6 +35,6 @@ public class OmsorgspengerUtbetalingSøknadTest {
     public void deserialisereSøknadUtenBarn() {
         var json = jsonForSøknadUtenBarn();
         var søknad = OmsorgspengerUtbetalingSøknad.SerDes.deserialize(json);
-        assertEquals(0, søknad.barn.size());
+        assertEquals(0, søknad.fosterbarn.size());
     }
 }

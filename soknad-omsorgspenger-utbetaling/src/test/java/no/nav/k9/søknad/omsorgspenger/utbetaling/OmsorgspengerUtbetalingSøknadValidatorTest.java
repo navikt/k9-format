@@ -44,14 +44,14 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
         var builder = komplettBuilder();
         builder.barn = new ArrayList<>();
         verifyIngenFeil(builder);
-        builder.barn(Barn.builder().build());
+        builder.fosterbarn(Barn.builder().build());
         assertEquals(1, verifyHarFeil(builder).size());
         builder.barn = new ArrayList<>();
-        builder.barn(Barn.builder().fødselsdato(LocalDate.now()).norskIdentitetsnummer(NorskIdentitetsnummer.of("123")).build());
+        builder.fosterbarn(Barn.builder().fødselsdato(LocalDate.now()).norskIdentitetsnummer(NorskIdentitetsnummer.of("123")).build());
         assertEquals(1, verifyHarFeil(builder).size());
         builder.barn = new ArrayList<>();
-        builder.barn(Barn.builder().fødselsdato(LocalDate.now()).build());
-        builder.barn(Barn.builder().norskIdentitetsnummer(NorskIdentitetsnummer.of("123")).build());
+        builder.fosterbarn(Barn.builder().fødselsdato(LocalDate.now()).build());
+        builder.fosterbarn(Barn.builder().norskIdentitetsnummer(NorskIdentitetsnummer.of("123")).build());
         verifyIngenFeil(builder);
     }
 

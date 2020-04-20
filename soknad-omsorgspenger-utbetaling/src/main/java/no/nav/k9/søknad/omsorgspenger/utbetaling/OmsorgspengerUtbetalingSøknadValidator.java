@@ -24,7 +24,7 @@ public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<Om
         List<Feil> feil = validerSøknad(søknad);
         validerVersjon(søknad.versjon, feil);
         validerSøker(søknad.søker, feil);
-        validerBarn(søknad.barn, feil);
+        validerFosterbarn(søknad.fosterbarn, feil);
         validerFrilanserOgSelvstendingNæringsdrivende(søknad.selvstendigNæringsdrivende, søknad.frilanser, feil);
         validerSelvstendingNæringsdrivende(søknad.selvstendigNæringsdrivende, feil);
 
@@ -43,14 +43,14 @@ public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<Om
         }
     }
 
-    private static void validerBarn(List<Barn> barn, List<Feil> feil) {
+    private static void validerFosterbarn(List<Barn> barn, List<Feil> feil) {
         if (barn == null || barn.isEmpty()) return;
         var index = 0;
         for (Barn b : barn) {
             if (b.norskIdentitetsnummer == null && b.fødselsdato == null) {
-                feil.add(new Feil("barn[" + index + "]", "norskIdentitetsnummerEllerFødselsdatoPåkrevd", "Må sette enten Personnummer/D-nummer på barn, eller fødselsdato."));
+                feil.add(new Feil("fosterbarn[" + index + "]", "norskIdentitetsnummerEllerFødselsdatoPåkrevd", "Må sette enten Personnummer/D-nummer på fosterbarn, eller fødselsdato."));
             } else if (b.norskIdentitetsnummer != null && b.fødselsdato != null) {
-                feil.add(new Feil("barn[" + index + "]", "ikkeEntydigIdPåBarnet", "Må sette enten Personnummer/D-nummer på barn, eller fødselsdato."));
+                feil.add(new Feil("fosterbarn[" + index + "]", "ikkeEntydigIdPåBarnet", "Må sette enten Personnummer/D-nummer på fosterbarn, eller fødselsdato."));
             }
             index++;
         }

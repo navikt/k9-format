@@ -5,7 +5,7 @@
   "søker": {
     "norskIdentitetsnummer": "11111111111"
   },
-  "fosterbarn": [{
+  "barn": [{
     "norskIdentitetsnummer": "11111111113",
     "fødselsdato": null
   }, {
