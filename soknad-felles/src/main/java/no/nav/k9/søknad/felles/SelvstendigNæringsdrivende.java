@@ -27,7 +27,6 @@ public class SelvstendigNæringsdrivende {
     public final Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> perioder;
 
     @JsonProperty("organisasjonsnummer")
-    @NotNull
     public final Organisasjonsnummer organisasjonsnummer;
 
     public static SelvstendigNæringsdrivende.Builder builder() {
@@ -199,7 +198,6 @@ public class SelvstendigNæringsdrivende {
                         virksomhetstyper,
                         regnskapsførerNavn,
                         regnskapsførerTelefon,
-                        virksomhetNavn,
                         erVarigEndring,
                         endringDato,
                         endringBegrunnelse,
