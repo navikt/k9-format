@@ -114,6 +114,13 @@ public class SelvstendigNæringsdrivende {
         @JsonProperty("erNyoppstartet")
         public final Boolean erNyoppstartet;
 
+        @JsonProperty("registrertIUtlandet")
+        public final Boolean registrertIUtlandet;
+
+        @JsonProperty("landkode")
+        @Valid
+        public final Landkode landkode;
+
         @JsonCreator
         private SelvstendigNæringsdrivendePeriodeInfo(
                 @JsonProperty("virksomhetstyper") List<VirksomhetType> virksomhetstyper,
@@ -123,8 +130,9 @@ public class SelvstendigNæringsdrivende {
                 @JsonProperty("endringDato") LocalDate endringDato,
                 @JsonProperty("endringBegrunnelse") String endringBegrunnelse,
                 @JsonProperty("bruttoInntekt") BigDecimal bruttoInntekt,
-                @JsonProperty("erNyoppstartet") Boolean erNyoppstartet
-        ) {
+                @JsonProperty("erNyoppstartet") Boolean erNyoppstartet,
+                @JsonProperty("registrertIUtlandet") Boolean registrertIUtlandet,
+                @JsonProperty("landkode") Landkode landkode) {
             this.virksomhetstyper = virksomhetstyper;
             this.regnskapsførerNavn = regnskapsførerNavn;
             this.regnskapsførerTlf = regnskapsførerTlf;
@@ -133,6 +141,8 @@ public class SelvstendigNæringsdrivende {
             this.endringBegrunnelse = endringBegrunnelse;
             this.bruttoInntekt = bruttoInntekt;
             this.erNyoppstartet = erNyoppstartet;
+            this.registrertIUtlandet = registrertIUtlandet;
+            this.landkode = landkode;
         }
 
         public static Builder builder() {
@@ -148,6 +158,8 @@ public class SelvstendigNæringsdrivende {
             private String endringBegrunnelse;
             private BigDecimal bruttoInntekt;
             private Boolean erNyoppstartet;
+            private Boolean registrertIUtlandet;
+            private Landkode landkode;
 
             private Builder() {
             }
@@ -192,6 +204,16 @@ public class SelvstendigNæringsdrivende {
                 return this;
             }
 
+            public Builder registrertIUtlandet(Boolean registrertIUtlandet) {
+                this.registrertIUtlandet = registrertIUtlandet;
+                return this;
+            }
+
+            public Builder landkode(Landkode landkode) {
+                this.landkode = landkode;
+                return this;
+            }
+
             public SelvstendigNæringsdrivendePeriodeInfo build() {
                 return new SelvstendigNæringsdrivendePeriodeInfo(
                         virksomhetstyper,
@@ -201,8 +223,8 @@ public class SelvstendigNæringsdrivende {
                         endringDato,
                         endringBegrunnelse,
                         bruttoInntekt,
-                        erNyoppstartet
-                );
+                        erNyoppstartet,
+                        registrertIUtlandet, landkode);
             }
         }
     }

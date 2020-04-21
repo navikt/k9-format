@@ -25,7 +25,9 @@
         "endringDato":  "2018-12-12",
         "endringBegrunnelse":  "fordi",
         "bruttoInntekt":  1000000,
-        "erNyoppstartet": false
+        "erNyoppstartet": false,
+        "registrertIUtlandet":  true,
+        "landkode": "DEU"
       }
     }
   }],

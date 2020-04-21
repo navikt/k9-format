@@ -24,7 +24,9 @@
         "erVarigEndring":  true,
         "endringDato":  "2018-12-12",
         "endringBegrunnelse":  "fordi",
-        "erNyoppstartet": false
+        "erNyoppstartet": false,
+        "registrertIUtlandet":  true,
+        "landkode": "DEU"
       }
     }
   }],

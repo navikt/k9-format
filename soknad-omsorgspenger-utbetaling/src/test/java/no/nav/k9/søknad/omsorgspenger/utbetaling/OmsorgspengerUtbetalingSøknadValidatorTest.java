@@ -109,6 +109,68 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
     }
 
     @Test
+    public void selvstending_næringsdrivende_er_registrert_i_utlandet_uten_landkode() {
+        var builder = komplettBuilder();
+        List<SelvstendigNæringsdrivende> selvstendingeVirksomheter = of(
+                SelvstendigNæringsdrivende.builder()
+                        .organisasjonsnummer(Organisasjonsnummer.of("816338352"))
+                        .virksomhetNavn("ABC")
+                        .periode(
+                                new Periode(LocalDate.now().minusMonths(2), LocalDate.now()),
+                                SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
+                                        .bruttoInntekt(BigDecimal.valueOf(500_000))
+                                        .virksomhetstyper(of(VirksomhetType.JORDBRUK_SKOGBRUK))
+                                        .registrertIUtlandet(true)
+                                        .build()
+                        ).build()
+        );
+        builder.selvstendigNæringsdrivende(selvstendingeVirksomheter);
+        assertEquals(1, verifyHarFeil(builder).size());
+    }
+
+    @Test
+    public void selvstending_næringsdrivende_er_registrert_i_utlandet_med_lankode_blankt() {
+        var builder = komplettBuilder();
+        List<SelvstendigNæringsdrivende> selvstendingeVirksomheter = of(
+                SelvstendigNæringsdrivende.builder()
+                        .organisasjonsnummer(Organisasjonsnummer.of("816338352"))
+                        .virksomhetNavn("ABC")
+                        .periode(
+                                new Periode(LocalDate.now().minusMonths(2), LocalDate.now()),
+                                SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
+                                        .bruttoInntekt(BigDecimal.valueOf(500_000))
+                                        .virksomhetstyper(of(VirksomhetType.JORDBRUK_SKOGBRUK))
+                                        .registrertIUtlandet(true)
+                                        .landkode(Landkode.of(""))
+                                        .build()
+                        ).build()
+        );
+        builder.selvstendigNæringsdrivende(selvstendingeVirksomheter);
+        assertEquals(1, verifyHarFeil(builder).size());
+    }
+
+    @Test
+    public void selvstending_næringsdrivende_er_registrert_i_utlandet_med_ugyldig_landkode() {
+        var builder = komplettBuilder();
+        List<SelvstendigNæringsdrivende> selvstendingeVirksomheter = of(
+                SelvstendigNæringsdrivende.builder()
+                        .organisasjonsnummer(Organisasjonsnummer.of("816338352"))
+                        .virksomhetNavn("ABC")
+                        .periode(
+                                new Periode(LocalDate.now().minusMonths(2), LocalDate.now()),
+                                SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
+                                        .bruttoInntekt(BigDecimal.valueOf(500_000))
+                                        .virksomhetstyper(of(VirksomhetType.JORDBRUK_SKOGBRUK))
+                                        .registrertIUtlandet(true)
+                                        .landkode(Landkode.of("UKJENT"))
+                                        .build()
+                        ).build()
+        );
+        builder.selvstendigNæringsdrivende(selvstendingeVirksomheter);
+        assertEquals(1, verifyHarFeil(builder).size());
+    }
+
+    @Test
     public void frilanser_mangler_startdato() {
         var builder = komplettBuilder();
         builder.frilanser(Frilanser.builder().build());
