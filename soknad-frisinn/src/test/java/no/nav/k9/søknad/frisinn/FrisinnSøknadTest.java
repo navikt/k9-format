@@ -37,7 +37,7 @@ public class FrisinnSøknadTest {
         var periodeEtter = new Periode(datoSøknad, datoSøknad.plusDays(20));
         var periodeInntekt = new PeriodeInntekt(beløp);
 
-        var frilanser = new Frilanser(Map.of(periodeEtter, periodeInntekt), true);
+        var frilanser = new Frilanser(Map.of(periodeEtter, periodeInntekt), true, false);
 
         var selvstendig = new SelvstendigNæringsdrivende(
             Map.of(periodeFør, periodeInntekt,
