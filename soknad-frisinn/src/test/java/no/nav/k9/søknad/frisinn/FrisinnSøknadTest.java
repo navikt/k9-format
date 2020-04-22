@@ -44,7 +44,9 @@ public class FrisinnSøknadTest {
                 new Periode(null, dato.minusDays(21)), periodeInntekt),
             Map.of(periodeEtter, periodeInntekt,
                 new Periode(datoSøknad, null), periodeInntekt),
-            true);
+            true, 
+            null,
+            null);
 
         var søknad = FrisinnSøknad.builder()
             .søknadId(SøknadId.of("100-abc"))

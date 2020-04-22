@@ -1,27 +1,48 @@
 package no.nav.k9.søknad.omsorgspenger;
 
+import java.time.ZonedDateTime;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.felles.Barn;
 import no.nav.k9.søknad.felles.Søker;
 import no.nav.k9.søknad.felles.SøknadId;
 import no.nav.k9.søknad.felles.Versjon;
 
-import java.time.ZonedDateTime;
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class OmsorgspengerSøknad {
 
+    @JsonProperty(value = "søknadId", required = true)
+    @Valid
+    @NotNull
     public final SøknadId søknadId;
 
+    @JsonProperty(value = "versjon", required = true)
+    @Valid
+    @NotNull
     public final Versjon versjon;
 
+    @JsonProperty(value = "mottattDato", required = true)
+    @Valid
+    @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
     public final ZonedDateTime mottattDato;
 
+    @JsonProperty(value = "søker", required = true)
+    @Valid
+    @NotNull
     public final Søker søker;
 
+    @JsonAlias("barn")
+    @Valid
     public final Barn barn;
 
     @JsonCreator

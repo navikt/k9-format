@@ -36,16 +36,6 @@ public class OmsorgspengerOverføringSøknadValidatorTest {
     }
 
     @Test
-    public void manglerMottaker() {
-        var builder = komplettBuilder().mottaker(null);
-        assertEquals(1,verifyHarFeil(builder).size());
-        builder = komplettBuilder().mottaker(Mottaker.builder().build());
-        assertEquals(1,verifyHarFeil(builder).size());
-        builder = komplettBuilder().mottaker(Mottaker.builder().norskIdentitetsnummer(NorskIdentitetsnummer.of("29099011111")).build());
-        verifyIngenFeil(builder);
-    }
-
-    @Test
     public void barnISøknad() {
         var builder = komplettBuilder();
         builder.barn = new ArrayList<>();
