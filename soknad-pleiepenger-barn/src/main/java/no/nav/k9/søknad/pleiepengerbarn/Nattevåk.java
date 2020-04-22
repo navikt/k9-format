@@ -1,11 +1,17 @@
 package no.nav.k9.søknad.pleiepengerbarn;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import no.nav.k9.søknad.felles.Periode;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.validation.Valid;
 
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableMap;
@@ -13,8 +19,12 @@ import static java.util.Collections.unmodifiableMap;
 import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPeriode;
 import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPerioder;
 
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Nattevåk {
+    
+    @JsonProperty(value="perioder")
+    @JsonInclude(value = Include.NON_NULL)
+    @Valid
     public final Map<Periode, NattevåkPeriodeInfo> perioder;
 
     @JsonCreator
@@ -52,12 +62,16 @@ public class Nattevåk {
         }
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class NattevåkPeriodeInfo {
+        
+        @JsonProperty(value="tilleggsinformasjon")
+        @Valid
         public final String tilleggsinformasjon;
 
         @JsonCreator
         private NattevåkPeriodeInfo(
-                @JsonProperty("tilleggsinformasjon")
+                @JsonProperty(value="tilleggsinformasjon")
                 String tilleggsinformasjon) {
             this.tilleggsinformasjon = tilleggsinformasjon;
         }

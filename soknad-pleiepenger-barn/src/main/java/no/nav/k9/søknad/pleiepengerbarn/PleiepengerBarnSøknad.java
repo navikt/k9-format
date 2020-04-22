@@ -1,29 +1,52 @@
 package no.nav.k9.søknad.pleiepengerbarn;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import no.nav.k9.søknad.JsonUtils;
-import no.nav.k9.søknad.felles.*;
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.unmodifiableMap;
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPeriode;
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPerioder;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.unmodifiableMap;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
-import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPeriode;
-import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPerioder;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import no.nav.k9.søknad.JsonUtils;
+import no.nav.k9.søknad.felles.Barn;
+import no.nav.k9.søknad.felles.Bosteder;
+import no.nav.k9.søknad.felles.LovbestemtFerie;
+import no.nav.k9.søknad.felles.Periode;
+import no.nav.k9.søknad.felles.Språk;
+import no.nav.k9.søknad.felles.Søker;
+import no.nav.k9.søknad.felles.SøknadId;
+import no.nav.k9.søknad.felles.Versjon;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PleiepengerBarnSøknad {
 
+    @JsonProperty(value="søknadId", required = true)
+    @NotNull
+    @Valid
     public final SøknadId søknadId;
 
+    @JsonProperty(value="versjon", required = true)
+    @NotNull
+    @Valid
     public final Versjon versjon;
 
+    @JsonInclude(value = Include.NON_NULL)
+    @JsonProperty(value="perioder", required = true)
+    @Valid
     public final Map<Periode, SøknadsperiodeInfo> perioder;
 
     @JsonIgnore
@@ -32,24 +55,47 @@ public class PleiepengerBarnSøknad {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
     public final ZonedDateTime mottattDato;
 
+    @JsonProperty(value="språk")
+    @Valid
     public final Språk språk;
 
+    @JsonProperty(value="søker", required = true)
+    @NotNull
+    @Valid
     public final Søker søker;
 
+    @JsonProperty(value="barn", required = true)
+    @NotNull
+    @Valid
     public final Barn barn;
 
+    @JsonProperty(value="bosteder")
+    @Valid
     public final Bosteder bosteder;
 
+    @JsonProperty(value="utenlandsopphold")
+    @Valid
     public final Utenlandsopphold utenlandsopphold;
 
+    @JsonProperty(value="beredskap")
+    @Valid
     public final Beredskap beredskap;
 
+    @JsonProperty(value="nattevåk")
+    @Valid
     public final Nattevåk nattevåk;
 
+    @JsonProperty(value="tilsynsordning", required = true)
+    @NotNull
+    @Valid
     public final Tilsynsordning tilsynsordning;
 
+    @JsonProperty(value="arbeid")
+    @Valid
     public final Arbeid arbeid;
 
+    @JsonProperty(value="lovbestemtFerie")
+    @Valid
     public final LovbestemtFerie lovbestemtFerie;
 
     @JsonCreator

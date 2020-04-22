@@ -1,21 +1,28 @@
 package no.nav.k9.søknad.pleiepengerbarn;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-import no.nav.k9.søknad.felles.Landkode;
-import no.nav.k9.søknad.felles.Periode;
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.unmodifiableMap;
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPeriode;
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPerioder;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.unmodifiableMap;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 
-import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPerioder;
-import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPeriode;
+import no.nav.k9.søknad.felles.Landkode;
+import no.nav.k9.søknad.felles.Periode;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Utenlandsopphold {
+    
+    @JsonInclude(value = Include.ALWAYS)
+    @JsonProperty(value="perioder")
     public final Map<Periode, UtenlandsoppholdPeriodeInfo> perioder;
 
     @JsonCreator

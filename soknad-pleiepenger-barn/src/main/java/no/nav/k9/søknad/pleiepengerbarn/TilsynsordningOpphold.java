@@ -1,16 +1,23 @@
 package no.nav.k9.søknad.pleiepengerbarn;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.Duration;
 
+import javax.validation.constraints.NotNull;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TilsynsordningOpphold {
+    
+    @JsonProperty(value="lengde", required=true)
+    @NotNull
     public final Duration lengde;
 
     @JsonCreator
     private TilsynsordningOpphold(
-            @JsonProperty("lengde")
+            @JsonProperty(value="lengde", required=true)
             Duration lengde) {
         this.lengde = lengde;
     }
