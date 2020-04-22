@@ -104,6 +104,14 @@ public class SelvstendigNæringsdrivende {
     public Map<Periode, PeriodeInntekt> getInntekterFør() {
         return inntekterFør;
     }
+    
+    public String getRegnskapsførerNavn() {
+        return regnskapsførerNavn;
+    }
+    
+    public String getRegnskapsførerTlf() {
+        return regnskapsførerTlf;
+    }
 
     public boolean getSøkerKompensasjon() {
         return søkerKompensasjon;
