@@ -48,7 +48,7 @@ class TestUtils {
                                 .perioder(Collections.singletonMap(
                                         new Periode(LocalDate.parse("2018-11-11"), LocalDate.parse("2018-11-30")),
                                         SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
-                                                .virksomhetstyper(List.of(DAGMAMMA, ENKELTPERSONFORETAK, FISKE, FRILANSER, JORDBRUK_SKOGBRUK, ANNEN, UDEFINERT))
+                                                .virksomhetstyper(List.of(DAGMAMMA, FISKE, JORDBRUK_SKOGBRUK, ANNEN, UDEFINERT))
                                                 .bruttoInntekt(BigDecimal.valueOf(1_000_000))
                                                 .endringBegrunnelse("fordi")
                                                 .endringDato(LocalDate.parse("2018-12-12"))
