@@ -1,25 +1,17 @@
-package no.nav.k9.søknad.omsorgspenger.utbetaling;
+package no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker;
 
 import org.json.JSONException;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
-import static no.nav.k9.søknad.omsorgspenger.utbetaling.TestUtils.*;
+import static no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker.TestUtils.*;
 import static org.junit.Assert.assertEquals;
 
 public class OmsorgspengerUtbetalingSøknadTest {
     @Test
     public void serialiseringAvJsonOgBrukAvBuilderGirSammeResultat() throws JSONException {
         String json = jsonForKomplettSøknad();
-        OmsorgspengerUtbetalingSøknad fraBuilder = komplettBuilder().build();
-        JSONAssert.assertEquals(json, OmsorgspengerUtbetalingSøknad.SerDes.serialize(fraBuilder), true);
-    }
-
-    @Ignore
-    @Test
-    public void serialiseringAvJsonMedBarnOgBrukAvBuilderGirSammeResultat() throws JSONException {
-        String json = jsonForKomplettSøknadMedBarn();
         OmsorgspengerUtbetalingSøknad fraBuilder = komplettBuilder().build();
         JSONAssert.assertEquals(json, OmsorgspengerUtbetalingSøknad.SerDes.serialize(fraBuilder), true);
     }
