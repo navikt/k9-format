@@ -14,9 +14,9 @@
   }],
   "selvstendigNæringsdrivende": [{
     "organisasjonsnummer":  "816338352",
+    "virksomhetNavn":  "Alibaba Expresstoget",
     "perioder": {
       "2018-11-11/2018-11-30": {
-        "virksomhetNavn":  "Alibaba Expresstoget",
         "virksomhetstyper":  [
           "DAGMAMMA", "FISKE", "JORDBRUK_SKOGBRUK", "ANNEN", "-"],
         "regnskapsførerNavn": "Regnskapsfører Svensen",
@@ -25,7 +25,9 @@
         "endringDato":  "2018-12-12",
         "endringBegrunnelse":  "fordi",
         "bruttoInntekt":  1000000,
-        "erNyoppstartet": false
+        "erNyoppstartet": false,
+        "registrertIUtlandet":  true,
+        "landkode": "DEU"
       }
     }
   }],

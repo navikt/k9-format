@@ -5,7 +5,7 @@
   "søker": {
     "norskIdentitetsnummer": "11111111111"
   },
-  "barn": [{
+  "fosterbarn": [{
     "norskIdentitetsnummer": "11111111113",
     "fødselsdato": null
   }, {
@@ -18,13 +18,12 @@
     "perioder": {
       "2018-11-11/2018-11-30": {
         "virksomhetstyper":  [
-          "DAGMAMMA", "ENK", "FISKE", "FRILANSER", "JORDBRUK_SKOGBRUK", "ANNEN", "-"],
+          "DAGMAMMA", "FISKE", "JORDBRUK_SKOGBRUK", "ANNEN", "-"],
         "regnskapsførerNavn": "Regnskapsfører Svensen",
         "regnskapsførerTlf":  "12345678",
         "erVarigEndring":  true,
         "endringDato":  "2018-12-12",
         "endringBegrunnelse":  "fordi",
-        "bruttoInntekt":  1000000,
         "erNyoppstartet": false,
         "registrertIUtlandet":  true,
         "landkode": "DEU"
