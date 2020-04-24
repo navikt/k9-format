@@ -33,7 +33,7 @@ class TestUtils {
 
     static String jsonForKomplettSøknadUtenNæringsinntenkt() {
         try {
-            return Files.readString(Path.of("src/test/resources/komplett-søknad-uten-næringsinntekt.json"));
+            return Files.readString(Path.of("src/test/resources/snf/komplett-søknad-uten-næringsinntekt.json"));
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
@@ -93,7 +93,7 @@ class TestUtils {
                                 .perioder(Collections.singletonMap(
                                         new Periode(LocalDate.parse("2018-11-11"), LocalDate.parse("2018-11-30")),
                                         SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
-                                                .virksomhetstyper(List.of(DAGMAMMA, ENKELTPERSONFORETAK, FISKE, FRILANSER, JORDBRUK_SKOGBRUK, ANNEN, UDEFINERT))
+                                                .virksomhetstyper(List.of(DAGMAMMA, FISKE, JORDBRUK_SKOGBRUK, ANNEN, UDEFINERT))
                                                 .endringBegrunnelse("fordi")
                                                 .endringDato(LocalDate.parse("2018-12-12"))
                                                 .erNyoppstartet(false)
