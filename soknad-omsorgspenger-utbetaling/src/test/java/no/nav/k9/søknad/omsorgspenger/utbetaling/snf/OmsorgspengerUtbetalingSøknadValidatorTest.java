@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.omsorgspenger.utbetaling;
+package no.nav.k9.søknad.omsorgspenger.utbetaling.snf;
 
 import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.*;
@@ -13,8 +13,8 @@ import java.util.List;
 
 import static java.util.List.of;
 import static junit.framework.TestCase.assertEquals;
-import static no.nav.k9.søknad.omsorgspenger.utbetaling.TestUtils.jsonForKomplettSøknad;
-import static no.nav.k9.søknad.omsorgspenger.utbetaling.TestUtils.komplettBuilder;
+import static no.nav.k9.søknad.omsorgspenger.utbetaling.snf.TestUtils.jsonForKomplettSøknad;
+import static no.nav.k9.søknad.omsorgspenger.utbetaling.snf.TestUtils.komplettBuilder;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;

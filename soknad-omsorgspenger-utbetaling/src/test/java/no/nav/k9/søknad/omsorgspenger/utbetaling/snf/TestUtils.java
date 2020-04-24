@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.omsorgspenger.utbetaling;
+package no.nav.k9.søknad.omsorgspenger.utbetaling.snf;
 
 import no.nav.k9.søknad.felles.*;
 
