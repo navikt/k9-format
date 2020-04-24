@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.omsorgspenger.utbetaling;
+package no.nav.k9.søknad.omsorgspenger.utbetaling.snf;
 
 import no.nav.k9.søknad.felles.*;
 
@@ -17,7 +17,7 @@ class TestUtils {
 
     static String jsonForKomplettSøknad() {
         try {
-            return Files.readString(Path.of("src/test/resources/komplett-søknad.json"));
+            return Files.readString(Path.of("src/test/resources/snf/komplett-søknad.json"));
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
@@ -25,7 +25,7 @@ class TestUtils {
 
     static String jsonForKomplettSøknadMedBarn() {
         try {
-            return Files.readString(Path.of("src/test/resources/komplett-søknad-med-barn.json"));
+            return Files.readString(Path.of("src/test/resources/snf/komplett-søknad-med-barn.json"));
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
@@ -41,7 +41,7 @@ class TestUtils {
 
     static String jsonForSøknadUtenBarn() {
         try {
-            return Files.readString(Path.of("src/test/resources/uten-barn.json"));
+            return Files.readString(Path.of("src/test/resources/snf/uten-barn.json"));
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
@@ -57,7 +57,7 @@ class TestUtils {
                                 .perioder(Collections.singletonMap(
                                         new Periode(LocalDate.parse("2018-11-11"), LocalDate.parse("2018-11-30")),
                                         SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
-                                                .virksomhetstyper(List.of(DAGMAMMA, ENKELTPERSONFORETAK, FISKE, FRILANSER, JORDBRUK_SKOGBRUK, ANNEN, UDEFINERT))
+                                                .virksomhetstyper(List.of(DAGMAMMA, FISKE, JORDBRUK_SKOGBRUK, ANNEN, UDEFINERT))
                                                 .bruttoInntekt(BigDecimal.valueOf(1_000_000))
                                                 .endringBegrunnelse("fordi")
                                                 .endringDato(LocalDate.parse("2018-12-12"))

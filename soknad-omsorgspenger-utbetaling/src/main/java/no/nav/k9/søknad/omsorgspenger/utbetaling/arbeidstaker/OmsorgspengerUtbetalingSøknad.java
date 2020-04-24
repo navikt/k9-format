@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.omsorgspenger.utbetaling;
+package no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker;
 
 import com.fasterxml.jackson.annotation.*;
 import no.nav.k9.søknad.JsonUtils;
@@ -14,38 +14,29 @@ import java.util.List;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class OmsorgspengerUtbetalingSøknad {
 
-    @JsonProperty("søknadId")
+    @JsonProperty(value = "søknadId", required = true)
     @Valid
     @NotNull
     public final SøknadId søknadId;
 
-    @JsonProperty("versjon")
+    @JsonProperty(value = "versjon", required = true)
     @Valid
     @NotNull
     public final Versjon versjon;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
-    @JsonProperty("mottattDato")
+    @JsonProperty(value = "mottattDato", required = true)
     @Valid
     @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
     public final ZonedDateTime mottattDato;
 
-    @JsonProperty("søker")
+    @JsonProperty(value = "søker", required = true)
     @Valid
     @NotNull
     public final Søker søker;
 
     @JsonProperty("fosterbarn")
-    @JsonAlias({"barn"}) //TODO: Fjern barn etter at avhengige prosjekter er prodsatt.
     public final List<Barn> fosterbarn;
-
-    @JsonProperty("selvstendigNæringsdrivende")
-    @Valid
-    public final List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende;
-
-    @JsonProperty("frilanser")
-    @Valid
-    public final Frilanser frilanser;
 
     @JsonCreator
     private OmsorgspengerUtbetalingSøknad(
@@ -53,16 +44,14 @@ public class OmsorgspengerUtbetalingSøknad {
             @JsonProperty("versjon") Versjon versjon,
             @JsonProperty("mottattDato") ZonedDateTime mottattDato,
             @JsonProperty("søker") Søker søker,
-            @JsonProperty("fosterbarn") @JsonAlias({"barn"}) List<Barn> fosterbarn, //TODO: Fjern barn etter at avhengige prosjekter er prodsatt.
-            @JsonProperty("selvstendingNæringsdrivende") List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende,
-            @JsonProperty("frilanser") Frilanser frilanser) {
+            @JsonProperty("fosterbarn") List<Barn> fosterbarn
+    ) {
         this.søknadId = søknadId;
         this.versjon = versjon;
         this.mottattDato = mottattDato;
         this.søker = søker;
         this.fosterbarn = (fosterbarn == null) ? List.of() : fosterbarn;
-        this.selvstendigNæringsdrivende = selvstendigNæringsdrivende;
-        this.frilanser = frilanser;
+
     }
 
     public static Builder builder() {
@@ -91,8 +80,6 @@ public class OmsorgspengerUtbetalingSøknad {
         private ZonedDateTime mottattDato;
         private Søker søker;
         List<Barn> barn;
-        private List<SelvstendigNæringsdrivende> selvstendingeVirksomheter;
-        private Frilanser frilanser;
 
         private Builder() {
             barn = new ArrayList<>();
@@ -123,16 +110,6 @@ public class OmsorgspengerUtbetalingSøknad {
             return this;
         }
 
-        public Builder selvstendigNæringsdrivende(List<SelvstendigNæringsdrivende> selvstendingeVirksomheter) {
-            this.selvstendingeVirksomheter = selvstendingeVirksomheter;
-            return this;
-        }
-
-        public Builder frilanser(Frilanser frilanser) {
-            this.frilanser = frilanser;
-            return this;
-        }
-
         public Builder json(String json) {
             this.json = json;
             return this;
@@ -145,9 +122,7 @@ public class OmsorgspengerUtbetalingSøknad {
                     versjon,
                     mottattDato,
                     søker,
-                    barn,
-                    selvstendingeVirksomheter,
-                    frilanser);
+                    barn);
             else søknad = SerDes.deserialize(json);
             validator.forsikreValidert(søknad);
             return søknad;

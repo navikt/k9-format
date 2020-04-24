@@ -37,14 +37,16 @@ public class FrisinnSøknadTest {
         var periodeEtter = new Periode(datoSøknad, datoSøknad.plusDays(20));
         var periodeInntekt = new PeriodeInntekt(beløp);
 
-        var frilanser = new Frilanser(Map.of(periodeEtter, periodeInntekt), true);
+        var frilanser = new Frilanser(Map.of(periodeEtter, periodeInntekt), true, false);
 
         var selvstendig = new SelvstendigNæringsdrivende(
             Map.of(periodeFør, periodeInntekt,
                 new Periode(null, dato.minusDays(21)), periodeInntekt),
             Map.of(periodeEtter, periodeInntekt,
                 new Periode(datoSøknad, null), periodeInntekt),
-            true);
+            true, 
+            null,
+            null);
 
         var søknad = FrisinnSøknad.builder()
             .søknadId(SøknadId.of("100-abc"))

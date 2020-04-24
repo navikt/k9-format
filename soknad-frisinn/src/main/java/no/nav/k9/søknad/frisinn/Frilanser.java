@@ -34,12 +34,17 @@ public class Frilanser {
     @JsonProperty(value = "søkerKompensasjon")
     private final boolean søkerKompensasjon;
 
+    @JsonProperty(value= "erNyetablert")
+    private final boolean erNyetablert;
+    
     @JsonCreator
     public Frilanser(@JsonProperty(value = "inntekterSøknadsperiode") Map<Periode, PeriodeInntekt> inntekterSøknadsperiode,
-                     @JsonProperty(value = "søkerKompensasjon") Boolean søkerKompensasjon) {
+                     @JsonProperty(value = "søkerKompensasjon") Boolean søkerKompensasjon,
+                     @JsonProperty(value = "erNyetablert") Boolean erNyetablert) {
         this.inntekterSøknadsperiode = (inntekterSøknadsperiode == null) ? Collections.emptyNavigableMap()
             : Collections.unmodifiableNavigableMap(new TreeMap<>(inntekterSøknadsperiode));
         this.søkerKompensasjon = søkerKompensasjon == null ? true : søkerKompensasjon;
+        this.erNyetablert = erNyetablert == null ? false: erNyetablert;
 
     }
 
@@ -49,6 +54,10 @@ public class Frilanser {
 
     public boolean getSøkerKompensasjon() {
         return søkerKompensasjon;
+    }
+    
+    public boolean getErNyetablert() {
+        return this.erNyetablert;
     }
 
     public static Builder builder() {
@@ -62,11 +71,12 @@ public class Frilanser {
             return new Periode(inntekterSøknadsperiode.firstKey().fraOgMed, inntekterSøknadsperiode.lastKey().tilOgMed);
         }
     }
-
+    
     public static final class Builder {
         private Map<Periode, PeriodeInntekt> inntekterSøknadsperiode = new LinkedHashMap<>();
         private boolean søkerKompensasjon = true;
-
+        private boolean erNyetablert = false;
+        
         private Builder() {
         }
 
@@ -79,9 +89,14 @@ public class Frilanser {
             this.søkerKompensasjon = søkerKompensasjon;
             return this;
         }
+        
+        public Builder erNyetablert(boolean nyEtablert) {
+            this.erNyetablert = nyEtablert;
+            return this;
+        }
 
         public Frilanser build() {
-            return new Frilanser(inntekterSøknadsperiode, søkerKompensasjon);
+            return new Frilanser(inntekterSøknadsperiode, søkerKompensasjon, erNyetablert);
         }
     }
 

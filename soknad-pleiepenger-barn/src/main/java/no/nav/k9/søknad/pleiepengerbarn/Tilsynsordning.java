@@ -1,11 +1,18 @@
 package no.nav.k9.søknad.pleiepengerbarn;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import no.nav.k9.søknad.felles.Periode;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableMap;
@@ -13,9 +20,17 @@ import static java.util.Collections.unmodifiableMap;
 import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPerioder;
 import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPeriode;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Tilsynsordning {
 
+    @JsonProperty(value="iTilsynsordning", required=true)
+    @NotNull
+    @Valid
     public final TilsynsordningSvar iTilsynsordning;
+    
+    @JsonProperty(value="opphold")
+    @JsonInclude(value = Include.ALWAYS)
+    @Valid
     public final Map<Periode, TilsynsordningOpphold> opphold;
 
     @JsonCreator

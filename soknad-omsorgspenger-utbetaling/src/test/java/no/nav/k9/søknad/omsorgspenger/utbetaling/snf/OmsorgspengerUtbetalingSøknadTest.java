@@ -1,11 +1,11 @@
-package no.nav.k9.søknad.omsorgspenger.utbetaling;
+package no.nav.k9.søknad.omsorgspenger.utbetaling.snf;
 
 import org.json.JSONException;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
-import static no.nav.k9.søknad.omsorgspenger.utbetaling.TestUtils.*;
+import static no.nav.k9.søknad.omsorgspenger.utbetaling.snf.TestUtils.*;
 import static org.junit.Assert.assertEquals;
 
 public class OmsorgspengerUtbetalingSøknadTest {

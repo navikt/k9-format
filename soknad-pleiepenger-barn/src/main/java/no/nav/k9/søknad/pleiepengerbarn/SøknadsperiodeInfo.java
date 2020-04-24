@@ -1,6 +1,8 @@
 package no.nav.k9.søknad.pleiepengerbarn;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SøknadsperiodeInfo {
 
     public static Builder builder() {

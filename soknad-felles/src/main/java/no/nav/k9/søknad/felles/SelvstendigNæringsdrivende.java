@@ -1,21 +1,28 @@
 package no.nav.k9.søknad.felles;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.unmodifiableMap;
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPeriode;
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPerioder;
 
-import javax.validation.Valid;
-import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.unmodifiableMap;
-import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPeriode;
-import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPerioder;
+import javax.validation.Valid;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SelvstendigNæringsdrivende {
@@ -83,8 +90,10 @@ public class SelvstendigNæringsdrivende {
         }
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class SelvstendigNæringsdrivendePeriodeInfo {
 
+        @JsonInclude(value = Include.NON_NULL)
         @JsonProperty("virksomhetstyper")
         @NotNull
         @NotEmpty

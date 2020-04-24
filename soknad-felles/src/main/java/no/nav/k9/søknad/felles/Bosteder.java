@@ -11,11 +11,17 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Bosteder {
     
+    @JsonProperty(value="perioder")
     @Valid
+    @JsonInclude(value = Include.ALWAYS)
     public final Map<Periode, BostedPeriodeInfo> perioder;
 
     @JsonCreator

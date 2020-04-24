@@ -1,10 +1,9 @@
 package no.nav.k9.søknad.pleiepengerbarn;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import no.nav.k9.søknad.felles.NorskIdentitetsnummer;
-import no.nav.k9.søknad.felles.Organisasjonsnummer;
-import no.nav.k9.søknad.felles.Periode;
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.unmodifiableMap;
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPeriode;
+import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPerioder;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -12,24 +11,41 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.unmodifiableMap;
+import javax.validation.Valid;
 
-import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPeriode;
-import static no.nav.k9.søknad.felles.Periode.Utils.leggTilPerioder;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import no.nav.k9.søknad.felles.NorskIdentitetsnummer;
+import no.nav.k9.søknad.felles.Organisasjonsnummer;
+import no.nav.k9.søknad.felles.Periode;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Arbeidstaker {
+    
+    @JsonProperty(value="norskIdentitetsnummer")
+    @Valid
     public final NorskIdentitetsnummer norskIdentitetsnummer;
+    
+    @JsonProperty(value="organisasjonsnummer")
+    @Valid
     public final Organisasjonsnummer organisasjonsnummer;
+    
+    @JsonInclude(value = Include.NON_NULL)
+    @JsonProperty(value="perioder")
+    @Valid
     public final Map<Periode, ArbeidstakerPeriodeInfo> perioder;
 
     @JsonCreator
     private Arbeidstaker(
-            @JsonProperty("norskIdentitetsnummer")
+            @JsonProperty(value="norskIdentitetsnummer")
             NorskIdentitetsnummer norskIdentitetsnummer,
-            @JsonProperty("organisasjonsnummer")
+            @JsonProperty(value="organisasjonsnummer")
             Organisasjonsnummer organisasjonsnummer,
-            @JsonProperty("perioder")
+            @JsonProperty(value="perioder")
             Map<Periode, ArbeidstakerPeriodeInfo> perioder) {
         this.norskIdentitetsnummer = norskIdentitetsnummer;
         this.organisasjonsnummer = organisasjonsnummer;

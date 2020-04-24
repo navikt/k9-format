@@ -2,6 +2,7 @@ package no.nav.k9.søknad.omsorgspenger.overføring;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.felles.Barn;
@@ -13,33 +14,53 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class OmsorgspengerOverføringSøknad {
+    
+    @JsonProperty(value = "søknadId", required = true)
+    @Valid
+    @NotNull
     public final SøknadId søknadId;
 
+    @JsonProperty(value = "versjon", required = true)
+    @Valid
+    @NotNull
     public final Versjon versjon;
 
+    @JsonProperty(value = "mottattDato", required = true)
+    @Valid
+    @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
     public final ZonedDateTime mottattDato;
 
+    @JsonProperty(value = "søker", required = true)
+    @Valid
+    @NotNull
     public final Søker søker;
 
+    @JsonProperty(value = "mottaker", required = true)
+    @Valid
+    @NotNull
     public final Mottaker mottaker;
 
     public final List<Barn> barn;
 
     @JsonCreator
     private OmsorgspengerOverføringSøknad(
-            @JsonProperty("søknadId")
+            @JsonProperty(value="søknadId")
             SøknadId søknadId,
-            @JsonProperty("versjon")
+            @JsonProperty(value="versjon")
             Versjon versjon,
-            @JsonProperty("mottattDato")
+            @JsonProperty(value="mottattDato")
             ZonedDateTime mottattDato,
-            @JsonProperty("søker")
+            @JsonProperty(value="søker")
             Søker søker,
-            @JsonProperty("mottaker")
+            @JsonProperty(value="mottaker")
             Mottaker mottaker,
-            @JsonProperty("barn")
+            @JsonProperty(value="barn")
             List<Barn> barn) {
         this.søknadId = søknadId;
         this.versjon = versjon;

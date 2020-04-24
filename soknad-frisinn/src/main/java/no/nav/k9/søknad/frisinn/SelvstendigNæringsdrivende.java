@@ -10,6 +10,7 @@ import java.util.NavigableMap;
 import java.util.TreeMap;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -45,10 +46,23 @@ public class SelvstendigNæringsdrivende {
     @JsonProperty(value = "søkerKompensasjon")
     private final boolean søkerKompensasjon;
 
+    @JsonProperty("regnskapsførerNavn")
+    @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message = "'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
+    private String regnskapsførerNavn;
+
+    @JsonProperty("regnskapsførerTlf")
+    @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message = "'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
+    private String regnskapsførerTlf;
+
     @JsonCreator
     public SelvstendigNæringsdrivende(@JsonProperty(value = "inntekterFør") Map<Periode, PeriodeInntekt> inntekterFør,
                                       @JsonProperty(value = "inntekterSøknadsperiode") Map<Periode, PeriodeInntekt> inntekterSøknadsperiode,
-                                      @JsonProperty(value = "søkerKompensasjon") Boolean søkerKompensasjon) {
+                                      @JsonProperty(value = "søkerKompensasjon") Boolean søkerKompensasjon,
+                                      @JsonProperty(value = "regnskapsførerNavn") String regnskapsførerNavn,
+                                      @JsonProperty(value = "regnskapsførerTlf") String regnskapsførerTlf) {
+        this.regnskapsførerNavn = regnskapsførerNavn;
+        this.regnskapsførerTlf = regnskapsførerTlf;
+        
         this.inntekterSøknadsperiode = (inntekterSøknadsperiode == null) ? emptyNavigableMap()
             : unmodifiableNavigableMap(new TreeMap<>(inntekterSøknadsperiode));
         this.inntekterFør = (inntekterFør == null) ? emptyNavigableMap() : unmodifiableNavigableMap(new TreeMap<>(inntekterFør));
@@ -91,6 +105,14 @@ public class SelvstendigNæringsdrivende {
         return inntekterFør;
     }
     
+    public String getRegnskapsførerNavn() {
+        return regnskapsførerNavn;
+    }
+    
+    public String getRegnskapsførerTlf() {
+        return regnskapsførerTlf;
+    }
+
     public boolean getSøkerKompensasjon() {
         return søkerKompensasjon;
     }
@@ -103,7 +125,9 @@ public class SelvstendigNæringsdrivende {
         private Map<Periode, PeriodeInntekt> inntekterFør = new LinkedHashMap<>();
         private Map<Periode, PeriodeInntekt> inntekterSøknadsperiode = new LinkedHashMap<>();
         private boolean søkerKompensasjon = true;
-
+        private String regnskapsførerNavn;
+        private String regnskapsførerTlf;
+        
         private Builder() {
         }
 
@@ -121,9 +145,15 @@ public class SelvstendigNæringsdrivende {
             this.søkerKompensasjon = søkerKompensasjon;
             return this;
         }
+        
+        public Builder regnskapsfører(String navn, String tlf) {
+            this.regnskapsførerNavn = navn;
+            this.regnskapsførerTlf = tlf;
+            return this;
+        }
 
         public SelvstendigNæringsdrivende build() {
-            return new SelvstendigNæringsdrivende(inntekterFør, inntekterSøknadsperiode, søkerKompensasjon);
+            return new SelvstendigNæringsdrivende(inntekterFør, inntekterSøknadsperiode, søkerKompensasjon, regnskapsførerNavn, regnskapsførerTlf);
         }
     }
 
