@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.omsorgspenger.utbetaling;
+package no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker;
 
 import no.nav.k9.søknad.PeriodeValidator;
 import no.nav.k9.søknad.SøknadValidator;
@@ -25,9 +25,6 @@ public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<Om
         validerVersjon(søknad.versjon, feil);
         validerSøker(søknad.søker, feil);
         validerFosterbarn(søknad.fosterbarn, feil);
-        validerFrilanserOgSelvstendingNæringsdrivende(søknad.selvstendigNæringsdrivende, søknad.frilanser, feil);
-        validerSelvstendingNæringsdrivende(søknad.selvstendigNæringsdrivende, feil);
-
         return feil;
     }
 
@@ -52,37 +49,6 @@ public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<Om
             } else if (b.norskIdentitetsnummer != null && b.fødselsdato != null) {
                 feil.add(new Feil("fosterbarn[" + index + "]", "ikkeEntydigIdPåBarnet", "Må sette enten Personnummer/D-nummer på fosterbarn, eller fødselsdato."));
             }
-            index++;
-        }
-    }
-
-    private void validerFrilanserOgSelvstendingNæringsdrivende(List<SelvstendigNæringsdrivende> selvstendigeVirksomheter, Frilanser frilanser, List<Feil> feil) {
-        if (frilanser == null && (selvstendigeVirksomheter == null || selvstendigeVirksomheter.isEmpty())) {
-            feil.add(new Feil("frilanser & selvstendingNæringsdrivene", PÅKREVD, "Enten frilanser eller selvstendingNæringsdrivende må være satt i søknaden."));
-        }
-    }
-
-    private void validerSelvstendingNæringsdrivende(List<SelvstendigNæringsdrivende> selvstendigeVirksomheter, List<Feil> feil) {
-        if (selvstendigeVirksomheter == null || selvstendigeVirksomheter.isEmpty()) return;
-        var index = 0;
-        for (SelvstendigNæringsdrivende sn : selvstendigeVirksomheter) {
-            feil.addAll(
-                    this.periodeValidator.validerTillattOverlappOgÅpnePerioder(sn.perioder, "selvstendigNæringsdrivende[" + index + "].perioder")
-            );
-
-            sn.perioder.forEach((periode, snInfo) -> {
-                String periodeString = periode.fraOgMed + "-" + periode.tilOgMed;
-                String felt = "selvstendigNæringsdrivende.perioder{" + periodeString + "}";
-
-                if (snInfo.erVarigEndring != null) {
-                    if (snInfo.endringDato == null) {
-                        feil.add(new Feil(felt + ".endringsDato", PÅKREVD, "endringDato må være satt dersom erVarigEndring er true."));
-                    }
-                    if (snInfo.endringBegrunnelse == null || snInfo.endringBegrunnelse.isBlank()) {
-                        feil.add(new Feil(felt + ".endringBegrunnelse", PÅKREVD, "endringBegrunnelse må være satt dersom erVarigEndring er true."));
-                    }
-                }
-            });
             index++;
         }
     }
