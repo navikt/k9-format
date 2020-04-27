@@ -1,6 +1,13 @@
 name: Pull request bygg
 
-on: [pull_request]
+on: 
+  pull_request:
+    paths-ignore:
+      - '**.md'
+      - '**.MD'
+      - '.gitignore'
+      - 'LICENCE'
+      - 'CODEOWNERS'
 
 jobs:
   build:
