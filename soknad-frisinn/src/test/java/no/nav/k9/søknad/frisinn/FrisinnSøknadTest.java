@@ -1,19 +1,19 @@
 package no.nav.k9.søknad.frisinn;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Map;
 
+import no.nav.k9.søknad.felles.*;
 import org.junit.Assert;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
-import no.nav.k9.søknad.felles.NorskIdentitetsnummer;
-import no.nav.k9.søknad.felles.Periode;
-import no.nav.k9.søknad.felles.Språk;
-import no.nav.k9.søknad.felles.Søker;
-import no.nav.k9.søknad.felles.SøknadId;
+import static org.junit.Assert.*;
 
 public class FrisinnSøknadTest {
 
@@ -25,8 +25,22 @@ public class FrisinnSøknadTest {
         Assert.assertNotNull(json);
         System.out.println(json);
         var søknadDeser = FrisinnSøknad.SerDes.deserialize(json);
-        Assert.assertNotNull(søknadDeser);
+        assertNotNull(søknadDeser);
         JSONAssert.assertEquals(json, FrisinnSøknad.SerDes.serialize(søknadDeser), true);
+    }
+
+    @Test
+    public void deserilisere_og_validere_1_0_0_søknad() {
+        var søknad = FrisinnSøknad.builder().json(jsonFromFile("1.0.0")).build();
+        assertEquals(Versjon.of("1.0.0"), søknad.getVersjon());
+        assertNull(søknad.getInntekter().getArbeidstaker());
+    }
+
+    @Test
+    public void deserilisere_og_validere_2_0_0_søknad() {
+        var søknad = FrisinnSøknad.builder().json(jsonFromFile("2.0.0")).build();
+        assertEquals(Versjon.of("2.0.0"), søknad.getVersjon());
+        assertNotNull(søknad.getInntekter().getArbeidstaker());
     }
 
     private FrisinnSøknad byggSøknad() {
@@ -37,7 +51,7 @@ public class FrisinnSøknadTest {
         var periodeEtter = new Periode(datoSøknad, datoSøknad.plusDays(20));
         var periodeInntekt = new PeriodeInntekt(beløp);
 
-        var frilanser = new Frilanser(Map.of(periodeEtter, periodeInntekt), true, false);
+        var frilanser = new Frilanser(Map.of(periodeEtter, periodeInntekt), true);
 
         var selvstendig = new SelvstendigNæringsdrivende(
             Map.of(periodeFør, periodeInntekt,
@@ -48,6 +62,13 @@ public class FrisinnSøknadTest {
             null,
             null);
 
+        var arbeidstaker = new Arbeidstaker(
+                Map.of(
+                        Periode.parse("2020-04-01/2020-04-22"),
+                        new PeriodeInntekt(BigDecimal.valueOf(55555.50))
+                )
+        );
+
         var søknad = FrisinnSøknad.builder()
             .søknadId(SøknadId.of("100-abc"))
             .søknadsperiode("2020-04-01/2020-04-30")
@@ -56,8 +77,16 @@ public class FrisinnSøknadTest {
             .søker(Søker.builder()
                 .norskIdentitetsnummer(NorskIdentitetsnummer.of("12345678901"))
                 .build())
-            .inntekter(new Inntekter(frilanser, selvstendig))
+            .inntekter(new Inntekter(frilanser, selvstendig, arbeidstaker))
             .build();
         return søknad;
+    }
+
+    private static String jsonFromFile(String filename) {
+        try {
+            return Files.readString(Path.of("src/test/resources/" + filename + ".json"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

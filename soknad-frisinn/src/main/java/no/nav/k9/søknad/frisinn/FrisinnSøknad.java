@@ -82,15 +82,25 @@ public class FrisinnSøknad {
         if (inntekter.getSelvstendig() != null) {
             validerSøknadInntektPeriode("selvstendig", inntekter.getSelvstendig().getMaksSøknadsperiode());
         }
+        if (inntekter.getArbeidstaker() != null) {
+            var maks = inntekter.getArbeidstaker().getMaksSøknadsperiode();
+            if (maks != null) {
+                validerInnenforSøknadsperiode("arbeidstaker", maks);
+            }
+        }
     }
 
     private void validerSøknadInntektPeriode(String tekst, Periode inntektPeriode) {
         if(inntektPeriode==null) {
             throw new IllegalArgumentException("Mangler inntektperiode for " + tekst);
         }
+        validerInnenforSøknadsperiode(tekst, inntektPeriode);
+    }
+
+    private void validerInnenforSøknadsperiode(String tekst, Periode inntektPeriode) {
         if (!søknadsperiode.inneholder(inntektPeriode)) {
             throw new IllegalArgumentException(
-                "Inntektperiode [" + inntektPeriode + "] må være innenfor søknadsperiode [" + søknadsperiode + " for " + tekst + "]");
+                    "Inntektperiode [" + inntektPeriode + "] må være innenfor søknadsperiode [" + søknadsperiode + " for " + tekst + "]");
         }
     }
 
@@ -151,7 +161,7 @@ public class FrisinnSøknad {
     public static final class Builder {
         private static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
 
-        private static final Versjon versjon = Versjon.of("1.0.0");
+        private static final Versjon versjon = Versjon.of("2.0.0");
 
         private SøknadId søknadId;
 
