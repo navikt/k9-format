@@ -9,7 +9,6 @@ import java.time.ZonedDateTime;
 import java.util.Map;
 
 import no.nav.k9.søknad.felles.*;
-import org.junit.Assert;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
@@ -18,15 +17,29 @@ import static org.junit.Assert.*;
 public class FrisinnSøknadTest {
 
     @Test
-    public void bygg_serialiser_og_deserialiser_roundtrip_søknad() throws Exception {
-        var søknad = byggSøknad();
-
+    public void bygg_serialiser_og_deserialiser_roundtrip_førstegangssøknad() throws Exception {
+        var søknad = førstegangssøknad();
         var json = FrisinnSøknad.SerDes.serialize(søknad);
-        Assert.assertNotNull(json);
-        System.out.println(json);
-        var søknadDeser = FrisinnSøknad.SerDes.deserialize(json);
-        assertNotNull(søknadDeser);
-        JSONAssert.assertEquals(json, FrisinnSøknad.SerDes.serialize(søknadDeser), true);
+        assertNotNull(json);
+        var deserialisert = FrisinnSøknad.SerDes.deserialize(json);
+        assertNotNull(deserialisert);
+        assertFalse(deserialisert.getInntekter().getSelvstendig().getInntekterFør().isEmpty());
+        assertNotNull(deserialisert.getInntekter().getSelvstendig().getRegnskapsførerNavn());
+        assertNotNull(deserialisert.getInntekter().getSelvstendig().getRegnskapsførerTlf());
+        JSONAssert.assertEquals(json, FrisinnSøknad.SerDes.serialize(deserialisert), true);
+    }
+
+    @Test
+    public void bygg_serialiser_og_deserialiser_roundtrip_påfølgende_søknad() throws Exception {
+        var søknad = påfølgendeSøknad();
+        var json = FrisinnSøknad.SerDes.serialize(søknad);
+        assertNotNull(json);
+        var deserialisert = FrisinnSøknad.SerDes.deserialize(json);
+        assertNotNull(deserialisert);
+        assertTrue(deserialisert.getInntekter().getSelvstendig().getInntekterFør().isEmpty());
+        assertNull(deserialisert.getInntekter().getSelvstendig().getRegnskapsførerNavn());
+        assertNull(deserialisert.getInntekter().getSelvstendig().getRegnskapsførerTlf());
+        JSONAssert.assertEquals(json, FrisinnSøknad.SerDes.serialize(deserialisert), true);
     }
 
     @Test
@@ -43,7 +56,10 @@ public class FrisinnSøknadTest {
         assertNotNull(søknad.getInntekter().getArbeidstaker());
     }
 
-    private FrisinnSøknad byggSøknad() {
+    private FrisinnSøknad byggSøknad(
+            Boolean medInntektFørSelvstendig,
+            Boolean medRegnskapsførerNavn,
+            Boolean medRegnskapsførerTelefon) {
         var dato = LocalDate.of(2020, 03, 13);
         var datoSøknad = LocalDate.of(2020, 04, 01);
         var beløp = new BigDecimal("1000000.00");
@@ -54,13 +70,12 @@ public class FrisinnSøknadTest {
         var frilanser = new Frilanser(Map.of(periodeEtter, periodeInntekt), true);
 
         var selvstendig = new SelvstendigNæringsdrivende(
-            Map.of(periodeFør, periodeInntekt,
-                new Periode(null, dato.minusDays(21)), periodeInntekt),
-            Map.of(periodeEtter, periodeInntekt,
-                new Periode(datoSøknad, null), periodeInntekt),
+            medInntektFørSelvstendig ? Map.of(periodeFør, periodeInntekt, new Periode(null, dato.minusDays(21)), periodeInntekt)  : null,
+            Map.of(periodeEtter, periodeInntekt, new Periode(datoSøknad, null), periodeInntekt),
             true, 
-            null,
-            null);
+            medRegnskapsførerNavn ? "Ola" : null,
+            medRegnskapsførerTelefon ? "11111111" : null
+        );
 
         var arbeidstaker = new Arbeidstaker(
                 Map.of(
@@ -80,6 +95,14 @@ public class FrisinnSøknadTest {
             .inntekter(new Inntekter(frilanser, selvstendig, arbeidstaker))
             .build();
         return søknad;
+    }
+
+    private FrisinnSøknad førstegangssøknad() {
+        return byggSøknad(true, true, true);
+    }
+
+    private FrisinnSøknad påfølgendeSøknad() {
+        return byggSøknad(false, false, false);
     }
 
     private static String jsonFromFile(String filename) {
