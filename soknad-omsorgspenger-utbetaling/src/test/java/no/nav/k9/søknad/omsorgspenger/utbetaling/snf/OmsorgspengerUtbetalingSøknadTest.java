@@ -34,7 +34,8 @@ public class OmsorgspengerUtbetalingSøknadTest {
     public void reserialisering() throws JSONException {
         String json = jsonForKomplettSøknad();
         OmsorgspengerUtbetalingSøknad søknad = OmsorgspengerUtbetalingSøknad.SerDes.deserialize(json);
-        JSONAssert.assertEquals(json, OmsorgspengerUtbetalingSøknad.SerDes.serialize(søknad), true);
+        String jsonSerialized = OmsorgspengerUtbetalingSøknad.SerDes.serialize(søknad);
+        JSONAssert.assertEquals(json, jsonSerialized, true);
     }
 
     @Test

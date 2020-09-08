@@ -1,21 +1,23 @@
 package no.nav.k9.søknad.omsorgspenger.overføring;
 
-import no.nav.k9.søknad.ValideringsFeil;
-import no.nav.k9.søknad.felles.*;
-import org.junit.Test;
-
-import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import static junit.framework.TestCase.assertEquals;
 import static no.nav.k9.søknad.omsorgspenger.overføring.TestUtils.jsonForKomplettSøknad;
 import static no.nav.k9.søknad.omsorgspenger.overføring.TestUtils.komplettBuilder;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.junit.Test;
+
+import no.nav.k9.søknad.ValideringsFeil;
+import no.nav.k9.søknad.felles.Barn;
+import no.nav.k9.søknad.felles.Feil;
+import no.nav.k9.søknad.felles.NorskIdentitetsnummer;
 
 public class OmsorgspengerOverføringSøknadValidatorTest {
     private static final OmsorgspengerOverføringSøknadValidator validator = new OmsorgspengerOverføringSøknadValidator();
@@ -78,17 +80,5 @@ public class OmsorgspengerOverføringSøknadValidatorTest {
     private void verifyIngenFeil(OmsorgspengerOverføringSøknad søknad) {
         final List<Feil> feil = validator.valider(søknad);
         assertThat(feil, is(Collections.emptyList()));
-    }
-
-    private OmsorgspengerOverføringSøknad.Builder medSøker() {
-        return OmsorgspengerOverføringSøknad
-                .builder()
-                .søknadId(SøknadId.of("123"))
-                .mottattDato(ZonedDateTime.now())
-                .søker(Søker
-                        .builder()
-                        .norskIdentitetsnummer(NorskIdentitetsnummer.of("11111111111"))
-                        .build()
-                );
     }
 }
