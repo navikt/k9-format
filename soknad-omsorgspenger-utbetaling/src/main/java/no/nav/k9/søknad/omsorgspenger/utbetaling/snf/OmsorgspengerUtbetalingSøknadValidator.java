@@ -31,7 +31,7 @@ public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<Om
     }
 
     private static void validerVersjon(Versjon versjon, List<Feil> feil) {
-        if (versjon == null && !versjon.erGyldig()) {
+        if (versjon == null || !versjon.erGyldig()) {
             feil.add(new Feil("versjon", "ugyldigVersjon", "Versjonen er på ugyldig format."));
         }
     }

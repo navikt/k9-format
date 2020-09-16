@@ -7,6 +7,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.*;
+
 /*
     En "legacy"-uke som er blitt brukt i papirsøknad og videreført i digital søknad (per 20.02.2020)
     Tar imot èn uke og sier at det er slik alle ukene med tilsyn kommer til å se ut innenfor en periode
@@ -26,12 +27,12 @@ public class TilsynsordningUke {
     final Map<Periode, TilsynsordningOpphold> opphold;
 
     private TilsynsordningUke(
-            Periode periode,
-            Duration mandag,
-            Duration tirsdag,
-            Duration onsdag,
-            Duration torsdag,
-            Duration fredag) {
+                              Periode periode,
+                              Duration mandag,
+                              Duration tirsdag,
+                              Duration onsdag,
+                              Duration torsdag,
+                              Duration fredag) {
         Map<String, UkeInfo> uker = new HashMap<>();
         LocalDate dato = periode.fraOgMed;
         do {
@@ -54,6 +55,10 @@ public class TilsynsordningUke {
                 case FRIDAY:
                     ukeInfo.plussDag(dato, fredag);
                     break;
+                case SATURDAY:
+                case SUNDAY:
+                default:
+                    break;
             }
             if (!ukeInfo.summertLengde.isZero()) {
                 uker.put(ukeId, ukeInfo);
@@ -65,16 +70,15 @@ public class TilsynsordningUke {
         Map<Periode, TilsynsordningOpphold> opphold = new HashMap<>();
 
         uker.forEach((ukeId, ukeInfo) -> opphold.put(
-                Periode
-                        .builder()
-                        .fraOgMed(ukeInfo.førsteAktuelleDag)
-                        .tilOgMed(ukeInfo.sisteAktuelleDag)
-                        .build(),
-                TilsynsordningOpphold
-                        .builder()
-                        .lengde(ukeInfo.summertLengde)
-                        .build()
-        ));
+            Periode
+                .builder()
+                .fraOgMed(ukeInfo.førsteAktuelleDag)
+                .tilOgMed(ukeInfo.sisteAktuelleDag)
+                .build(),
+            TilsynsordningOpphold
+                .builder()
+                .lengde(ukeInfo.summertLengde)
+                .build()));
 
         this.opphold = Collections.unmodifiableMap(opphold);
     }
@@ -83,10 +87,9 @@ public class TilsynsordningUke {
         LocalDate førsteDag = dato.with(DayOfWeek.MONDAY);
         LocalDate sisteDag = førsteDag.plusDays(6);
         return String.format("%s-%s-Uke%s",
-                førsteDag.getYear(),
-                sisteDag.getYear(),
-                dato.get(WEEK_FIELDS.weekOfWeekBasedYear())
-        );
+            førsteDag.getYear(),
+            sisteDag.getYear(),
+            dato.get(WEEK_FIELDS.weekOfWeekBasedYear()));
     }
 
     private static class UkeInfo {
@@ -130,7 +133,8 @@ public class TilsynsordningUke {
         private Duration torsdag;
         private Duration fredag;
 
-        private Builder() {}
+        private Builder() {
+        }
 
         public Builder periode(Periode periode) {
             this.periode = periode;
@@ -163,9 +167,12 @@ public class TilsynsordningUke {
         }
 
         private static Duration håndter(Duration duration) {
-            if (duration == null || duration.isZero()) return null;
-            if (duration.isNegative()) return duration.abs();
-            else return duration;
+            if (duration == null || duration.isZero())
+                return null;
+            if (duration.isNegative())
+                return duration.abs();
+            else
+                return duration;
         }
 
         public TilsynsordningUke build() {
@@ -177,13 +184,12 @@ public class TilsynsordningUke {
                 throw new IllegalArgumentException("Perioden må ha fraOgMed før tilOgMed.");
             }
             return new TilsynsordningUke(
-                    periode,
-                    håndter(mandag),
-                    håndter(tirsdag),
-                    håndter(onsdag),
-                    håndter(torsdag),
-                    håndter(fredag)
-            );
+                periode,
+                håndter(mandag),
+                håndter(tirsdag),
+                håndter(onsdag),
+                håndter(torsdag),
+                håndter(fredag));
         }
     }
 }

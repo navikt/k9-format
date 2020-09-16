@@ -1,21 +1,23 @@
 package no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker;
 
-import no.nav.k9.søknad.ValideringsFeil;
-import no.nav.k9.søknad.felles.*;
-import org.junit.Test;
-
-import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import static junit.framework.TestCase.assertEquals;
 import static no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker.TestUtils.jsonForKomplettSøknad;
 import static no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker.TestUtils.komplettBuilder;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.junit.Test;
+
+import no.nav.k9.søknad.ValideringsFeil;
+import no.nav.k9.søknad.felles.Barn;
+import no.nav.k9.søknad.felles.Feil;
+import no.nav.k9.søknad.felles.NorskIdentitetsnummer;
 
 public class OmsorgspengerUtbetalingSøknadValidatorTest {
     private static final OmsorgspengerUtbetalingSøknadValidator validator = new OmsorgspengerUtbetalingSøknadValidator();
@@ -84,15 +86,4 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
         assertThat(feil, is(Collections.emptyList()));
     }
 
-    private OmsorgspengerUtbetalingSøknad.Builder medSøker() {
-        return OmsorgspengerUtbetalingSøknad
-                .builder()
-                .søknadId(SøknadId.of("123"))
-                .mottattDato(ZonedDateTime.now())
-                .søker(Søker
-                        .builder()
-                        .norskIdentitetsnummer(NorskIdentitetsnummer.of("11111111111"))
-                        .build()
-                );
-    }
 }

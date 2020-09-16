@@ -1,23 +1,20 @@
 package no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker;
 
-import no.nav.k9.søknad.PeriodeValidator;
-import no.nav.k9.søknad.SøknadValidator;
-import no.nav.k9.søknad.felles.*;
-
-import javax.validation.Validation;
-import javax.validation.ValidatorFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Validation;
+import javax.validation.ValidatorFactory;
+
+import no.nav.k9.søknad.SøknadValidator;
+import no.nav.k9.søknad.felles.Barn;
+import no.nav.k9.søknad.felles.Feil;
+import no.nav.k9.søknad.felles.Søker;
+import no.nav.k9.søknad.felles.Versjon;
+
 public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<OmsorgspengerUtbetalingSøknad> {
-    private final PeriodeValidator periodeValidator;
     private static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
-
-
-    public OmsorgspengerUtbetalingSøknadValidator() {
-        this.periodeValidator = new PeriodeValidator();
-    }
 
     @Override
     public List<Feil> valider(OmsorgspengerUtbetalingSøknad søknad) {
@@ -29,7 +26,7 @@ public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<Om
     }
 
     private static void validerVersjon(Versjon versjon, List<Feil> feil) {
-        if (versjon == null && !versjon.erGyldig()) {
+        if (versjon == null || !versjon.erGyldig()) {
             feil.add(new Feil("versjon", "ugyldigVersjon", "Versjonen er på ugyldig format."));
         }
     }
@@ -41,13 +38,16 @@ public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<Om
     }
 
     private static void validerFosterbarn(List<Barn> barn, List<Feil> feil) {
-        if (barn == null || barn.isEmpty()) return;
+        if (barn == null || barn.isEmpty())
+            return;
         var index = 0;
         for (Barn b : barn) {
             if (b.norskIdentitetsnummer == null && b.fødselsdato == null) {
-                feil.add(new Feil("fosterbarn[" + index + "]", "norskIdentitetsnummerEllerFødselsdatoPåkrevd", "Må sette enten Personnummer/D-nummer på fosterbarn, eller fødselsdato."));
+                feil.add(new Feil("fosterbarn[" + index + "]", "norskIdentitetsnummerEllerFødselsdatoPåkrevd",
+                    "Må sette enten Personnummer/D-nummer på fosterbarn, eller fødselsdato."));
             } else if (b.norskIdentitetsnummer != null && b.fødselsdato != null) {
-                feil.add(new Feil("fosterbarn[" + index + "]", "ikkeEntydigIdPåBarnet", "Må sette enten Personnummer/D-nummer på fosterbarn, eller fødselsdato."));
+                feil.add(
+                    new Feil("fosterbarn[" + index + "]", "ikkeEntydigIdPåBarnet", "Må sette enten Personnummer/D-nummer på fosterbarn, eller fødselsdato."));
             }
             index++;
         }
@@ -57,8 +57,9 @@ public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<Om
         var constraints = VALIDATOR_FACTORY.getValidator().validate(søknad);
         if (constraints != null && !constraints.isEmpty()) {
             return constraints.stream()
-                    .map((v) -> new Feil(v.getPropertyPath().toString(), PÅKREVD, v.getMessage()))
-                    .collect(Collectors.toList());
-        } else return new ArrayList<>();
+                .map((v) -> new Feil(v.getPropertyPath().toString(), PÅKREVD, v.getMessage()))
+                .collect(Collectors.toList());
+        } else
+            return new ArrayList<>();
     }
 }

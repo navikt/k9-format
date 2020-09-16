@@ -1,7 +1,6 @@
 package no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker;
 
 import org.json.JSONException;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 

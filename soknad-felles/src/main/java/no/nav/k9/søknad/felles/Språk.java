@@ -1,6 +1,5 @@
 package no.nav.k9.søknad.felles;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
@@ -13,20 +12,23 @@ public enum Språk {
     NORSK_BOKMÅL("nb"),
     NORSK_NYNORSK("nn");
 
-    @JsonValue
-    public final String dto;
+    public final String kode;
 
     Språk(String dto) {
-        this.dto = dto;
+        this.kode = dto;
+    }
+    
+    @JsonValue
+    public String getKode() {
+        return kode;
     }
 
-    @JsonCreator
     public static Språk of(String value) {
         if (value == null || value.isBlank()) {
             return null;
         }
         for (Språk språk : values()) {
-            if (språk.dto.equals(value)) {
+            if (språk.kode.equals(value)) {
                 return språk;
             }
         }

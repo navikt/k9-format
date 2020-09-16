@@ -6,7 +6,6 @@ import no.nav.k9.søknad.felles.*;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class OmsorgspengerOverføringSøknadValidator extends SøknadValidator<OmsorgspengerOverføringSøknad> {
     public OmsorgspengerOverføringSøknadValidator() {}
