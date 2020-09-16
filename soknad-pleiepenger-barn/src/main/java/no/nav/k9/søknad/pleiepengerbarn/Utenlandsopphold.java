@@ -112,10 +112,10 @@ public class Utenlandsopphold {
         BARNET_INNLAGT_I_HELSEINSTITUSJON_DEKKET_ETTER_AVTALE_MED_ET_ANNET_LAND_OM_TRYGD("barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd");
 
         @JsonValue
-        public final String kode;
+        public final String dto;
 
         UtenlandsoppholdÅrsak(String dto) {
-            this.kode = dto;
+            this.dto = dto;
         }
 
         @JsonCreator
@@ -124,7 +124,7 @@ public class Utenlandsopphold {
                 return null;
             }
             for (UtenlandsoppholdÅrsak årsak : values()) {
-                if (årsak.kode.equals(value)) {
+                if (årsak.dto.equals(value)) {
                     return årsak;
                 }
             }
