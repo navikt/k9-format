@@ -9,14 +9,14 @@ public enum TilsynsordningSvar {
     VET_IKKE("vetIkke");
 
     @JsonValue
-    public final String kode;
+    public final String dto;
 
     TilsynsordningSvar(String dto) {
-        this.kode = dto;
+        this.dto = dto;
     }
     
     public String getKode() {
-        return kode;
+        return dto;
     }
 
     @JsonCreator
@@ -25,7 +25,7 @@ public enum TilsynsordningSvar {
             return null;
         }
         for (TilsynsordningSvar svar : values()) {
-            if (svar.kode.equals(value)) {
+            if (svar.dto.equals(value)) {
                 return svar;
             }
         }

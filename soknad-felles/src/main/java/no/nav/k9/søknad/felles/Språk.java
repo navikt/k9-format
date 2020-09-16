@@ -12,15 +12,15 @@ public enum Språk {
     NORSK_BOKMÅL("nb"),
     NORSK_NYNORSK("nn");
 
-    public final String kode;
+    @JsonValue
+    public final String dto;
 
     Språk(String dto) {
-        this.kode = dto;
+        this.dto = dto;
     }
     
-    @JsonValue
     public String getKode() {
-        return kode;
+        return dto;
     }
 
     public static Språk of(String value) {
@@ -28,7 +28,7 @@ public enum Språk {
             return null;
         }
         for (Språk språk : values()) {
-            if (språk.kode.equals(value)) {
+            if (språk.dto.equals(value)) {
                 return språk;
             }
         }
