@@ -1,15 +1,16 @@
 package no.nav.k9.søknad.omsorgspenger.overføring;
 
-import no.nav.k9.søknad.felles.Barn;
-import no.nav.k9.søknad.felles.NorskIdentitetsnummer;
-import no.nav.k9.søknad.felles.Søker;
-import no.nav.k9.søknad.felles.SøknadId;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
+
+import no.nav.k9.søknad.felles.personopplysninger.Barn;
+import no.nav.k9.søknad.felles.personopplysninger.Søker;
+import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
+import no.nav.k9.søknad.felles.type.SøknadId;
 
 class TestUtils {
 

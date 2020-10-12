@@ -10,9 +10,8 @@
 	<name>k9-format</name>
 
 	<modules>
-		<module>soknad-pleiepenger-barn</module>
 		<module>soknad-omsorgspenger</module>
-		<module>soknad-felles</module>
+		<module>soknad</module>
 		<module>soknad-omsorgspenger-utbetaling</module>
 		<module>soknad-omsorgspenger-overforing</module>
 		<module>soknad-frisinn</module>
@@ -66,7 +65,7 @@
 			</dependency>
 			<dependency>
 				<groupId>no.nav.k9</groupId>
-				<artifactId>soknad-felles</artifactId>
+				<artifactId>soknad</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -75,9 +74,9 @@
 				<version>4.13</version>
 			</dependency>
 			<dependency>
-				<groupId>org.hamcrest</groupId>
-				<artifactId>hamcrest</artifactId>
-				<version>2.2</version>
+				<groupId>org.assertj</groupId>
+				<artifactId>assertj-core</artifactId>
+				<version>3.17.2</version>
 			</dependency>
 			<dependency>
 				<groupId>org.skyscreamer</groupId>

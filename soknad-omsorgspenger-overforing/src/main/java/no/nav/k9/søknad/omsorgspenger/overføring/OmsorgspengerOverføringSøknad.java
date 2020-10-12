@@ -5,10 +5,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.søknad.JsonUtils;
-import no.nav.k9.søknad.felles.Barn;
-import no.nav.k9.søknad.felles.Søker;
-import no.nav.k9.søknad.felles.SøknadId;
 import no.nav.k9.søknad.felles.Versjon;
+import no.nav.k9.søknad.felles.personopplysninger.Barn;
+import no.nav.k9.søknad.felles.personopplysninger.Søker;
+import no.nav.k9.søknad.felles.type.SøknadId;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OmsorgspengerOverføringSøknad {
-    
+
     @JsonProperty(value = "søknadId", required = true)
     @Valid
     @NotNull

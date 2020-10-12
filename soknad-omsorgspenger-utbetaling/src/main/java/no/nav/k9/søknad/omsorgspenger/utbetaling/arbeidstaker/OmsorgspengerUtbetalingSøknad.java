@@ -3,6 +3,9 @@ package no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker;
 import com.fasterxml.jackson.annotation.*;
 import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.felles.*;
+import no.nav.k9.søknad.felles.personopplysninger.Barn;
+import no.nav.k9.søknad.felles.personopplysninger.Søker;
+import no.nav.k9.søknad.felles.type.SøknadId;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

@@ -1,27 +1,20 @@
 package no.nav.k9.søknad.omsorgspenger;
 
-import no.nav.k9.søknad.SøknadValidator;
-import no.nav.k9.søknad.felles.*;
-
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import no.nav.k9.søknad.SøknadValidator;
+import no.nav.k9.søknad.Validator;
+import no.nav.k9.søknad.felles.Feil;
+import no.nav.k9.søknad.felles.Versjon;
+import no.nav.k9.søknad.felles.personopplysninger.Barn;
+import no.nav.k9.søknad.felles.personopplysninger.Søker;
+import no.nav.k9.søknad.felles.type.SøknadId;
+
 public class OmsorgspengerSøknadValidator extends SøknadValidator<OmsorgspengerSøknad> {
 
-    OmsorgspengerSøknadValidator() {}
-
-    @Override
-    public List<Feil> valider(OmsorgspengerSøknad søknad) {
-        List<Feil> feil = new ArrayList<>();
-
-        validerSøknadId(søknad.søknadId, feil);
-        validerVersjon(søknad.versjon, feil);
-        validerMottattDato(søknad.mottattDato, feil);
-        validerSøker(søknad.søker, feil);
-        validerBarn(søknad.barn, feil);
-
-        return feil;
+    OmsorgspengerSøknadValidator() {
     }
 
     private static void validerSøknadId(SøknadId søknadId, List<Feil> feil) {
@@ -33,7 +26,7 @@ public class OmsorgspengerSøknadValidator extends SøknadValidator<Omsorgspenge
     private static void validerVersjon(Versjon versjon, List<Feil> feil) {
         if (versjon == null) {
             feil.add(new Feil("versjon", PÅKREVD, "Versjon må settes i søknaden."));
-        } else if (!versjon.erGyldig()){
+        } else if (!versjon.erGyldig()) {
             feil.add(new Feil("versjon", "ugyldigVersjon", "Versjonen er på ugyldig format."));
         }
     }
@@ -60,5 +53,18 @@ public class OmsorgspengerSøknadValidator extends SøknadValidator<Omsorgspenge
         } else if (barn.norskIdentitetsnummer != null && barn.fødselsdato != null) {
             feil.add(new Feil("barn", "ikkeEntydigIdPåBarnet", "Må sette enten Personnummer/D-nummer på barn, eller fødselsdato."));
         }
+    }
+
+    @Override
+    public List<Feil> valider(OmsorgspengerSøknad søknad) {
+        List<Feil> feil = new ArrayList<>();
+
+        validerSøknadId(søknad.søknadId, feil);
+        validerVersjon(søknad.versjon, feil);
+        validerMottattDato(søknad.mottattDato, feil);
+        validerSøker(søknad.søker, feil);
+        validerBarn(søknad.barn, feil);
+
+        return feil;
     }
 }

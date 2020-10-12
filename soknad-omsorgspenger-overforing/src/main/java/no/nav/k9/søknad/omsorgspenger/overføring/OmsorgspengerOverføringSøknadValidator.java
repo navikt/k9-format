@@ -1,7 +1,11 @@
 package no.nav.k9.søknad.omsorgspenger.overføring;
 
 import no.nav.k9.søknad.SøknadValidator;
+import no.nav.k9.søknad.Validator;
 import no.nav.k9.søknad.felles.*;
+import no.nav.k9.søknad.felles.personopplysninger.Barn;
+import no.nav.k9.søknad.felles.personopplysninger.Søker;
+import no.nav.k9.søknad.felles.type.SøknadId;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;

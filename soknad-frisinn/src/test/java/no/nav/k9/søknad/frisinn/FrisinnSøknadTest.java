@@ -9,6 +9,12 @@ import java.time.ZonedDateTime;
 import java.util.Map;
 
 import no.nav.k9.søknad.felles.*;
+import no.nav.k9.søknad.felles.personopplysninger.Søker;
+import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
+import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.felles.type.Språk;
+import no.nav.k9.søknad.felles.type.SøknadId;
+
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
@@ -72,7 +78,7 @@ public class FrisinnSøknadTest {
         var selvstendig = new SelvstendigNæringsdrivende(
             medInntektFørSelvstendig ? Map.of(periodeFør, periodeInntekt, new Periode(null, dato.minusDays(21)), periodeInntekt)  : null,
             Map.of(periodeEtter, periodeInntekt, new Periode(datoSøknad, null), periodeInntekt),
-            true, 
+            true,
             medRegnskapsførerNavn ? "Ola" : null,
             medRegnskapsførerTelefon ? "11111111" : null
         );

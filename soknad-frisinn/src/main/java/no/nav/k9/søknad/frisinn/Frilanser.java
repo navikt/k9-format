@@ -13,12 +13,18 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import no.nav.k9.søknad.felles.Periode;
+import no.nav.k9.søknad.felles.type.Periode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Frilanser {
 
+    /**
+     * Hvorvidt bruker ønsker inntekter i samme periode som angitt inntekter i søknadsperiode kompensert mot tidligere opptjent
+     * beregningsgrunnlag.
+     */
+    @JsonProperty(value = "søkerKompensasjon")
+    private final boolean søkerKompensasjon;
     /**
      * Inntekter i periode som skal kompenseres. Periode må være innenfor søknadsperiode. Hvis ingen inntekt i periode som kompenseres, sett
      * inntekt = 0
@@ -27,19 +33,16 @@ public class Frilanser {
     @Valid
     private NavigableMap<Periode, PeriodeInntekt> inntekterSøknadsperiode;
 
-    /**
-     * Hvorvidt bruker ønsker inntekter i samme periode som angitt inntekter i søknadsperiode kompensert mot tidligere opptjent
-     * beregningsgrunnlag.
-     */
-    @JsonProperty(value = "søkerKompensasjon")
-    private final boolean søkerKompensasjon;
-    
     @JsonCreator
     public Frilanser(@JsonProperty(value = "inntekterSøknadsperiode") Map<Periode, PeriodeInntekt> inntekterSøknadsperiode,
                      @JsonProperty(value = "søkerKompensasjon") Boolean søkerKompensasjon) {
         this.inntekterSøknadsperiode = (inntekterSøknadsperiode == null) ? Collections.emptyNavigableMap()
-            : Collections.unmodifiableNavigableMap(new TreeMap<>(inntekterSøknadsperiode));
+                : Collections.unmodifiableNavigableMap(new TreeMap<>(inntekterSøknadsperiode));
         this.søkerKompensasjon = søkerKompensasjon == null ? true : søkerKompensasjon;
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     public NavigableMap<Periode, PeriodeInntekt> getInntekterSøknadsperiode() {
@@ -50,10 +53,6 @@ public class Frilanser {
         return søkerKompensasjon;
     }
 
-    public static Builder builder() {
-        return new Builder();
-    }
-
     public Periode getMaksSøknadsperiode() {
         if (inntekterSøknadsperiode.isEmpty()) {
             return null;
@@ -61,7 +60,7 @@ public class Frilanser {
             return new Periode(inntekterSøknadsperiode.firstKey().fraOgMed, inntekterSøknadsperiode.lastKey().tilOgMed);
         }
     }
-    
+
     public static final class Builder {
         private Map<Periode, PeriodeInntekt> inntekterSøknadsperiode = new LinkedHashMap<>();
         private boolean søkerKompensasjon = true;

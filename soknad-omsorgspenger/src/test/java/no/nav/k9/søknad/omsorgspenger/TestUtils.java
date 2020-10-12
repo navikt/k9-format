@@ -1,9 +1,9 @@
 package no.nav.k9.søknad.omsorgspenger;
 
-import no.nav.k9.søknad.felles.Barn;
-import no.nav.k9.søknad.felles.NorskIdentitetsnummer;
-import no.nav.k9.søknad.felles.Søker;
-import no.nav.k9.søknad.felles.SøknadId;
+import no.nav.k9.søknad.felles.personopplysninger.Barn;
+import no.nav.k9.søknad.felles.personopplysninger.Søker;
+import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
+import no.nav.k9.søknad.felles.type.SøknadId;
 
 import java.io.IOException;
 import java.nio.file.Files;

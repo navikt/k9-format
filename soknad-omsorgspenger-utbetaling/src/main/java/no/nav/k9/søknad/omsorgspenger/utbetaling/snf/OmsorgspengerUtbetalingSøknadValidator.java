@@ -2,7 +2,12 @@ package no.nav.k9.søknad.omsorgspenger.utbetaling.snf;
 
 import no.nav.k9.søknad.PeriodeValidator;
 import no.nav.k9.søknad.SøknadValidator;
+import no.nav.k9.søknad.Validator;
 import no.nav.k9.søknad.felles.*;
+import no.nav.k9.søknad.felles.opptjening.snf.Frilanser;
+import no.nav.k9.søknad.felles.opptjening.snf.SelvstendigNæringsdrivende;
+import no.nav.k9.søknad.felles.personopplysninger.Barn;
+import no.nav.k9.søknad.felles.personopplysninger.Søker;
 
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;

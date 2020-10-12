@@ -8,10 +8,10 @@ import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 
 import no.nav.k9.søknad.SøknadValidator;
-import no.nav.k9.søknad.felles.Barn;
 import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.Søker;
 import no.nav.k9.søknad.felles.Versjon;
+import no.nav.k9.søknad.felles.personopplysninger.Barn;
+import no.nav.k9.søknad.felles.personopplysninger.Søker;
 
 public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<OmsorgspengerUtbetalingSøknad> {
     private static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();

@@ -19,17 +19,22 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import no.nav.k9.søknad.felles.Periode;
+import no.nav.k9.søknad.felles.type.Periode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class SelvstendigNæringsdrivende {
 
+    /**
+     * Hvorvidt bruker ønsker inntekter i samme periode som angitt inntekter i søknadsperiode kompensert mot tidligere opptjent
+     * beregningsgrunnlag.
+     */
+    @JsonProperty(value = "søkerKompensasjon")
+    private final boolean søkerKompensasjon;
     @JsonInclude(value = Include.NON_EMPTY)
     @JsonProperty(value = "inntekterFør")
     @Valid
     private NavigableMap<Periode, PeriodeInntekt> inntekterFør;
-
     /**
      * Inntekter i periode som skal kompenseres. Periode må være innenfor søknadsperiode. Hvis ingen inntekt i periode som kompenseres, sett
      * inntekt = 0
@@ -38,14 +43,6 @@ public class SelvstendigNæringsdrivende {
     @JsonProperty(value = "inntekterSøknadsperiode", required = true)
     @Valid
     private NavigableMap<Periode, PeriodeInntekt> inntekterSøknadsperiode;
-
-    /**
-     * Hvorvidt bruker ønsker inntekter i samme periode som angitt inntekter i søknadsperiode kompensert mot tidligere opptjent
-     * beregningsgrunnlag.
-     */
-    @JsonProperty(value = "søkerKompensasjon")
-    private final boolean søkerKompensasjon;
-
     @JsonProperty("regnskapsførerNavn")
     @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message = "'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     private String regnskapsførerNavn;
@@ -62,12 +59,16 @@ public class SelvstendigNæringsdrivende {
                                       @JsonProperty(value = "regnskapsførerTlf") String regnskapsførerTlf) {
         this.regnskapsførerNavn = regnskapsførerNavn;
         this.regnskapsførerTlf = regnskapsførerTlf;
-        
+
         this.inntekterSøknadsperiode = (inntekterSøknadsperiode == null) ? emptyNavigableMap()
-            : unmodifiableNavigableMap(new TreeMap<>(inntekterSøknadsperiode));
+                : unmodifiableNavigableMap(new TreeMap<>(inntekterSøknadsperiode));
         this.inntekterFør = (inntekterFør == null) ? emptyNavigableMap() : unmodifiableNavigableMap(new TreeMap<>(inntekterFør));
         validerPerioder(this.inntekterFør, this.inntekterSøknadsperiode);
         this.søkerKompensasjon = søkerKompensasjon == null ? true : søkerKompensasjon;
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     private void validerPerioder(@Valid NavigableMap<Periode, PeriodeInntekt> inntekterFør,
@@ -104,11 +105,11 @@ public class SelvstendigNæringsdrivende {
     public Map<Periode, PeriodeInntekt> getInntekterFør() {
         return inntekterFør;
     }
-    
+
     public String getRegnskapsførerNavn() {
         return regnskapsførerNavn;
     }
-    
+
     public String getRegnskapsførerTlf() {
         return regnskapsførerTlf;
     }
@@ -117,17 +118,13 @@ public class SelvstendigNæringsdrivende {
         return søkerKompensasjon;
     }
 
-    public static Builder builder() {
-        return new Builder();
-    }
-
     public static final class Builder {
         private Map<Periode, PeriodeInntekt> inntekterFør = new LinkedHashMap<>();
         private Map<Periode, PeriodeInntekt> inntekterSøknadsperiode = new LinkedHashMap<>();
         private boolean søkerKompensasjon = true;
         private String regnskapsførerNavn;
         private String regnskapsførerTlf;
-        
+
         private Builder() {
         }
 
@@ -145,7 +142,7 @@ public class SelvstendigNæringsdrivende {
             this.søkerKompensasjon = søkerKompensasjon;
             return this;
         }
-        
+
         public Builder regnskapsfører(String navn, String tlf) {
             this.regnskapsførerNavn = navn;
             this.regnskapsførerTlf = tlf;
