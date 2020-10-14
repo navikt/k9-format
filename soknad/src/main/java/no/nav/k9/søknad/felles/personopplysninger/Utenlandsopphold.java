@@ -1,0 +1,135 @@
+package no.nav.k9.søknad.felles.personopplysninger;
+
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.unmodifiableMap;
+import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPeriode;
+import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPerioder;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+
+import no.nav.k9.søknad.felles.type.Landkode;
+import no.nav.k9.søknad.felles.type.Periode;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Utenlandsopphold {
+
+    @JsonInclude(value = Include.ALWAYS)
+    @JsonProperty(value="perioder")
+    public final Map<Periode, UtenlandsoppholdPeriodeInfo> perioder;
+
+    @JsonCreator
+    private Utenlandsopphold(
+            @JsonProperty("perioder")
+            Map<Periode, UtenlandsoppholdPeriodeInfo> perioder) {
+        this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
+    }
+
+    public static Utenlandsopphold.Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private Map<Periode, UtenlandsoppholdPeriodeInfo> perioder;
+
+        private Builder() {
+            perioder = new HashMap<>();
+        }
+
+        public Builder perioder(Map<Periode, UtenlandsoppholdPeriodeInfo> perioder) {
+            leggTilPerioder(this.perioder, perioder);
+            return this;
+        }
+
+        public Builder periode(Periode periode, UtenlandsoppholdPeriodeInfo utenlandsoppholdPeriodeInfo) {
+            leggTilPeriode(this.perioder, periode, utenlandsoppholdPeriodeInfo);
+            return this;
+        }
+
+        public Utenlandsopphold build() {
+            return new Utenlandsopphold(
+                    perioder
+            );
+        }
+    }
+
+
+    public static class UtenlandsoppholdPeriodeInfo {
+
+        public final Landkode land;
+
+        public final UtenlandsoppholdÅrsak årsak;
+
+        @JsonCreator
+        private UtenlandsoppholdPeriodeInfo(
+                @JsonProperty("land")
+                Landkode land,
+                @JsonProperty("årsak")
+                UtenlandsoppholdÅrsak årsak) {
+            this.land = land;
+            this.årsak = årsak;
+        }
+
+        public static Builder builder() {
+            return new Builder();
+        }
+
+        public static final class Builder {
+            private Landkode land;
+            private UtenlandsoppholdÅrsak årsak;
+
+            private Builder() {}
+
+            public Builder land(Landkode land) {
+                this.land = land;
+                return this;
+            }
+
+
+            public Builder årsak(UtenlandsoppholdÅrsak årsak) {
+                this.årsak = årsak;
+                return this;
+            }
+
+            public UtenlandsoppholdPeriodeInfo build() {
+                return new UtenlandsoppholdPeriodeInfo(
+                        land,
+                        årsak
+                );
+            }
+        }
+    }
+
+    public enum UtenlandsoppholdÅrsak {
+        BARNET_INNLAGT_I_HELSEINSTITUSJON_FOR_NORSK_OFFENTLIG_REGNING("barnetInnlagtIHelseinstitusjonForNorskOffentligRegning"),
+        BARNET_INNLAGT_I_HELSEINSTITUSJON_DEKKET_ETTER_AVTALE_MED_ET_ANNET_LAND_OM_TRYGD("barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd");
+
+        @JsonValue
+        public final String dto;
+
+        UtenlandsoppholdÅrsak(String dto) {
+            this.dto = dto;
+        }
+
+        @JsonCreator
+        public static UtenlandsoppholdÅrsak of(String value) {
+            if (value == null || value.isBlank()) {
+                return null;
+            }
+            for (UtenlandsoppholdÅrsak årsak : values()) {
+                if (årsak.dto.equals(value)) {
+                    return årsak;
+                }
+            }
+            throw new IllegalArgumentException("Ikke støttet årsak '" + value + "'");
+        }
+    }
+}
+

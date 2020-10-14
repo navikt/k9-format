@@ -2,6 +2,11 @@ package no.nav.k9.søknad.omsorgspenger;
 
 import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.*;
+import no.nav.k9.søknad.felles.personopplysninger.Barn;
+import no.nav.k9.søknad.felles.personopplysninger.Søker;
+import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
+import no.nav.k9.søknad.felles.type.SøknadId;
+
 import org.junit.Test;
 
 import java.time.LocalDate;
@@ -30,8 +35,7 @@ public class OmsorgspengerSøknadValidatorTest {
     @Test
     public void søknadMedFødselsdatoSattPåBarn() {
         OmsorgspengerSøknad.Builder builder = medSøker()
-                .barn(Barn
-                        .builder()
+                .barn(Barn.builder()
                         .fødselsdato(LocalDate.now())
                         .build()
                 );
@@ -89,8 +93,7 @@ public class OmsorgspengerSøknadValidatorTest {
                 .builder()
                 .søknadId(SøknadId.of("123"))
                 .mottattDato(ZonedDateTime.now())
-                .søker(Søker
-                        .builder()
+                .søker(Søker.builder()
                         .norskIdentitetsnummer(NorskIdentitetsnummer.of("11111111111"))
                         .build()
                 );

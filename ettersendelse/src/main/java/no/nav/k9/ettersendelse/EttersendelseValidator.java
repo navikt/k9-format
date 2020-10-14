@@ -2,8 +2,8 @@ package no.nav.k9.ettersendelse;
 
 import no.nav.k9.søknad.SøknadValidator;
 import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.Søker;
 import no.nav.k9.søknad.felles.Versjon;
+import no.nav.k9.søknad.felles.personopplysninger.Søker;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;

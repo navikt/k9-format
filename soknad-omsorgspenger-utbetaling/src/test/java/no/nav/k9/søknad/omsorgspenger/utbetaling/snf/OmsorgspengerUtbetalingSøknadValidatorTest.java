@@ -17,15 +17,15 @@ import java.util.List;
 import org.junit.Test;
 
 import no.nav.k9.søknad.ValideringsFeil;
-import no.nav.k9.søknad.felles.Barn;
 import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.Frilanser;
-import no.nav.k9.søknad.felles.Landkode;
-import no.nav.k9.søknad.felles.NorskIdentitetsnummer;
-import no.nav.k9.søknad.felles.Organisasjonsnummer;
-import no.nav.k9.søknad.felles.Periode;
-import no.nav.k9.søknad.felles.SelvstendigNæringsdrivende;
-import no.nav.k9.søknad.felles.VirksomhetType;
+import no.nav.k9.søknad.felles.opptjening.snf.Frilanser;
+import no.nav.k9.søknad.felles.opptjening.snf.SelvstendigNæringsdrivende;
+import no.nav.k9.søknad.felles.opptjening.snf.VirksomhetType;
+import no.nav.k9.søknad.felles.personopplysninger.Barn;
+import no.nav.k9.søknad.felles.type.Landkode;
+import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
+import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
+import no.nav.k9.søknad.felles.type.Periode;
 
 public class OmsorgspengerUtbetalingSøknadValidatorTest {
     private static final OmsorgspengerUtbetalingSøknadValidator validator = new OmsorgspengerUtbetalingSøknadValidator();
