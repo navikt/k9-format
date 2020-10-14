@@ -67,10 +67,8 @@ public class Validator {
 
     private void validerYtelse(Søknad søknad, List<Feil> feil) {
         var ytelse = søknad.getYtelse();
-        // TODO: Hent ut ytelse-validator
         var validator = ytelse.getValidator();
 
-        // TODO: validere
         var ytelseFeil = validator.valider(ytelse);
         feil.addAll(ytelseFeil);
     }
