@@ -1,0 +1,20 @@
+{
+  "søknadId": "123-123-123",
+  "id" : "123456789ABC",
+  "mottattDato": "2019-10-20T07:15:36.124Z",
+  "versjon": "0.0.1",
+  "søker": {
+    "norskIdentitetsnummer": "11111111111"
+  },
+  "arbeidssituasjon" : "ARBEIDSTAKER",
+  "antallBarn" : 2,
+  "annenForelder": {
+    "norskIdentitetsnummer" : "11111111111",
+    "navn" : "Navnesen",
+    "situasjon" : "FENGSEL",
+    "situasjonBeskrivelse" : "Forklaring",
+    "periodeOver6Måneder" : null,
+    "periodeFraOgMed" : null,
+    "periodeTilOgMed" : null
+  }
+}
