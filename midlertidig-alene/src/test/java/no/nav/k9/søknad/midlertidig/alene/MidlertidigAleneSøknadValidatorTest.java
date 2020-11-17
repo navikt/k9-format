@@ -51,11 +51,6 @@ public class MidlertidigAleneSøknadValidatorTest {
         return feil;
     }
 
-    private void verifyIngenFeil(MidlertidigAleneSøknad.Builder builder) {
-        final List<Feil> feil = valider(builder);
-        assertThat(feil, is(Collections.emptyList()));
-    }
-
     private void verifyIngenFeil(MidlertidigAleneSøknad søknad) {
         final List<Feil> feil = validator.valider(søknad);
         assertThat(feil, is(Collections.emptyList()));
