@@ -12,6 +12,7 @@ import no.nav.k9.søknad.felles.type.SøknadId;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MidlertidigAleneSøknad {
@@ -57,6 +58,16 @@ public class MidlertidigAleneSøknad {
     @NotNull
     public final int antallBarn;
 
+    @JsonProperty(value = "fødselsårBarn", required = true)
+    @Valid
+    @NotNull
+    public final List<Integer> fødselsårBarn;
+
+    @JsonProperty(value = "medlemskap", required = true)
+    @Valid
+    @NotNull
+    public final Medlemskap medlemskap;
+
     @JsonCreator
     private MidlertidigAleneSøknad(
             @JsonProperty(value="søknadId")
@@ -74,7 +85,11 @@ public class MidlertidigAleneSøknad {
             @JsonProperty(value = "arbeidssituasjon")
             Arbeidssituasjon arbeidssituasjon,
             @JsonProperty(value = "antallBarn")
-            int antallBarn) {
+            int antallBarn,
+            @JsonProperty(value = "fødselsårBarn")
+            List<Integer> fødselsårBarn,
+            @JsonProperty(value = "medlemskap")
+            Medlemskap medlemskap) {
         this.søknadId = søknadId;
         this.versjon = versjon;
         this.mottattDato = mottattDato;
@@ -83,6 +98,8 @@ public class MidlertidigAleneSøknad {
         this.id = id;
         this.arbeidssituasjon = arbeidssituasjon;
         this.antallBarn = antallBarn;
+        this.fødselsårBarn = fødselsårBarn;
+        this.medlemskap = medlemskap;
     }
 
     public static Builder builder() {
@@ -111,6 +128,8 @@ public class MidlertidigAleneSøknad {
         private String id;
         private Arbeidssituasjon arbeidssituasjon;
         private int antallBarn;
+        private List<Integer> fødselsårBarn;
+        private Medlemskap medlemskap;
 
         private Builder() {}
 
@@ -149,6 +168,16 @@ public class MidlertidigAleneSøknad {
             return this;
         }
 
+        public Builder fødselsårBarn(List<Integer> fødselsårBarn) {
+            this.fødselsårBarn = fødselsårBarn;
+            return this;
+        }
+
+        public Builder medlemskap(Medlemskap medlemskap) {
+            this.medlemskap = medlemskap;
+            return this;
+        }
+
         public Builder json(String json) {
             this.json = json;
             return this;
@@ -163,7 +192,9 @@ public class MidlertidigAleneSøknad {
                     annenForelder,
                     id,
                     arbeidssituasjon,
-                    antallBarn
+                    antallBarn,
+                    fødselsårBarn,
+                    medlemskap
             ) : SerDes.deserialize(json);
             validator.forsikreValidert(søknad);
             return søknad;

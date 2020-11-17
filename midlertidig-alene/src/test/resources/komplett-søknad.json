@@ -16,5 +16,21 @@
     "periodeOver6Måneder" : null,
     "periodeFraOgMed" : null,
     "periodeTilOgMed" : null
+  },
+  "fødselsårBarn" : [
+    2010,
+    2015
+  ],
+  "medlemskap": {
+    "harBoddIUtlandetSiste12Mnd" : false,
+    "utenlandsoppholdNeste12Mnd" : null,
+    "skalBoIUtlandetNeste12Mnd" : true,
+    "utenlandsoppholdSiste12Mnd" : [
+      {
+        "landnavn" : "Sverige",
+        "fraOgMed" : "2020-01-01",
+        "tilOgMed" : "2020-01-01"
+      }
+    ]
   }
 }

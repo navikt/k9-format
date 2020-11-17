@@ -24,6 +24,8 @@ public class MidlertidigAleneSøknadValidator extends SøknadValidator<Midlertid
         validerAnnenForelder(søknad.annenForelder, feil);
         validerArbeidssituasjon(søknad.arbeidssituasjon, feil);
         validerAntallBarn(søknad.antallBarn, feil);
+        validerFødselsårBarn(søknad.fødselsårBarn, feil);
+        validerMedlemskap(søknad.medlemskap, feil);
 
         return feil;
     }
@@ -86,5 +88,46 @@ public class MidlertidigAleneSøknadValidator extends SøknadValidator<Midlertid
         }
     }
 
+    private static void validerFødselsårBarn(List<Integer> fødselsårBarn, List<Feil> feil) {
+        if (fødselsårBarn == null) {
+            feil.add(new Feil("fødselsårBarn", PÅKREVD, "fødselsårBarn må være satt"));
+        } else if (fødselsårBarn.size() == 0) {
+            feil.add(new Feil("fødselsårBarn", PÅKREVD, "fødselsårBarn må inneholde minst et element"));
+        }
+    }
+
+    private static void validerMedlemskap(Medlemskap medlemskap, List<Feil> feil) {
+        if (medlemskap == null) {
+            feil.add(new Feil("medlemskap", PÅKREVD, "medlemskap må være satt i søknaden"));
+        } else if (medlemskap.harBoddIUtlandetSiste12Mnd == null) {
+            feil.add(new Feil("medlemskap", PÅKREVD, "medlemskap.harBoddIUtlandetSiste12Mnd må være satt i søknaden"));
+        } else if (medlemskap.skalBoIUtlandetNeste12Mnd == null) {
+            feil.add(new Feil("medlemskap", PÅKREVD, "medlemskap.skalBoIUtlandetNeste12Mnd må være satt i søknaden"));
+        }
+
+        if(medlemskap != null && medlemskap.utenlandsoppholdSiste12Mnd != null){
+            if(!medlemskap.utenlandsoppholdSiste12Mnd.isEmpty()){
+                validerUtenlandsopphold(medlemskap.utenlandsoppholdSiste12Mnd, feil);
+            }
+        }
+
+        if(medlemskap != null && medlemskap.utenlandsoppholdNeste12Mnd != null){
+            if(!medlemskap.utenlandsoppholdNeste12Mnd.isEmpty()){
+                validerUtenlandsopphold(medlemskap.utenlandsoppholdNeste12Mnd, feil);
+            }
+        }
+    }
+
+    private static void validerUtenlandsopphold(List<Utenlandsopphold> utenlandsopphold, List<Feil> feil) {
+        for(Utenlandsopphold opphold : utenlandsopphold){
+            if(opphold.landnavn == null){
+                feil.add(new Feil("landnavn", PÅKREVD, "landnavn må være satt i utenlandsopphold"));
+            } else if(opphold.fraOgMed == null){
+                feil.add(new Feil("fraOgMed", PÅKREVD, "fraOgMed må være satt i utenlandsopphold"));
+            } else if(opphold.tilOgMed == null){
+                feil.add(new Feil("tilOgMed", PÅKREVD, "tilOgMed må være satt i utenlandsopphold"));
+            }
+        }
+    }
 
 }
