@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import no.nav.k9.søknad.felles.LovbestemtFerie;
 import no.nav.k9.søknad.felles.opptjening.Opptjening;
 import no.nav.k9.søknad.felles.opptjening.arbeidstaker.Arbeidstaker;
+import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
@@ -45,6 +46,10 @@ public class PleiepengerSyktBarn implements Ytelse {
     private LovbestemtFerie lovbestemtFerie;
 
     @Valid
+    @JsonProperty(value = "barn")
+    private Barn barn;
+
+    @Valid
     @JsonInclude(value = JsonInclude.Include.NON_NULL)
     @JsonProperty(value = "perioder", required = true)
     private Map<Periode, SøknadsperiodeInfo> perioder;
@@ -60,6 +65,7 @@ public class PleiepengerSyktBarn implements Ytelse {
 
     @JsonCreator
     public PleiepengerSyktBarn(@JsonProperty(value = "perioder", required = true) @Valid Map<Periode, SøknadsperiodeInfo> perioder,
+                               @JsonProperty(value = "barn") @Valid Barn barn,
                                @JsonProperty(value = "beredskap") @Valid Beredskap beredskap,
                                @JsonProperty(value = "nattevåk") @Valid Nattevåk nattevåk,
                                @JsonProperty(value = "tilsynsordning", required = true) @NotNull @Valid Tilsynsordning tilsynsordning,
@@ -67,6 +73,7 @@ public class PleiepengerSyktBarn implements Ytelse {
                                @JsonProperty(value = "arbeidstaker") @Valid List<Arbeidstaker> arbeidstaker,
                                @JsonProperty(value = "lovbestemtFerie") @Valid LovbestemtFerie lovbestemtFerie) {
         this.perioder = perioder;
+        this.barn = barn;
         this.beredskap = beredskap;
         this.nattevåk = nattevåk;
         this.tilsynsordning = tilsynsordning;
@@ -132,6 +139,14 @@ public class PleiepengerSyktBarn implements Ytelse {
 
     public void setPerioder(Map<Periode, SøknadsperiodeInfo> perioder) {
         this.perioder = perioder;
+    }
+
+    public Barn getBarn(){
+        return this.barn;
+    }
+
+    public void setBarn(Barn barn) {
+        this.barn = barn;
     }
 
     @Override

@@ -15,6 +15,8 @@ import no.nav.k9.søknad.felles.opptjening.Opptjening;
 import no.nav.k9.søknad.felles.opptjening.arbeidstaker.Arbeidstaker;
 import no.nav.k9.søknad.felles.opptjening.snf.Frilanser;
 import no.nav.k9.søknad.felles.opptjening.snf.SelvstendigNæringsdrivende;
+import no.nav.k9.søknad.felles.personopplysninger.Barn;
+import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.psb.tilsyn.Tilsynsordning;
@@ -89,7 +91,11 @@ final class TestUtils {
                         .jobberFortsattSomFrilans(true)
                         .build())
                 .build();
+        var barn = Barn.builder()
+                .norskIdentitetsnummer(NorskIdentitetsnummer.of("11111111111"))
+                .fødselsdato(LocalDate.now())
+                .build();
 
-        return new PleiepengerSyktBarn(søknadsperiodeMap, beredskap, nattevåk, tilsynsordning, opptjening, arbeidstaker, lovbestemtFerie);
+        return new PleiepengerSyktBarn(søknadsperiodeMap, barn, beredskap, nattevåk, tilsynsordning, opptjening, arbeidstaker, lovbestemtFerie);
     }
 }
