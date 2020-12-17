@@ -43,7 +43,15 @@ final class TestUtils {
     }
 
     static PleiepengerSyktBarn komplettBuilder() {
-        var søknadsperiodeMap = Map.of(Periode.builder().fraOgMed(LocalDate.parse("2018-12-30")).tilOgMed(LocalDate.parse("2019-10-20")).build(), SøknadsperiodeInfo.builder().build());
+        var søknadsperiodeMap = Map.of(
+                        Periode.builder().fraOgMed(LocalDate.parse("2018-12-30")).tilOgMed(LocalDate.parse("2019-10-20")).build(),
+                        SøknadsperiodeInfo.builder()
+                                .søktPleiepengerProsent(BigDecimal.valueOf(100))
+                                .flereOmsorgspersoner(false)
+                                .relasjonTilBarnet("MORA")
+                                .samtykketOmsorgForBarnet(true)
+                                .beskrivelseAvOmsorgsrollen("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.")
+                                .build());
         var beredskap = Beredskap.builder()
                 .periode(Periode.builder().fraOgMed(LocalDate.parse("2018-10-10")).tilOgMed(LocalDate.parse("2018-12-29")).build(),
                         Beredskap.BeredskapPeriodeInfo.builder().tilleggsinformasjon("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.").build())
