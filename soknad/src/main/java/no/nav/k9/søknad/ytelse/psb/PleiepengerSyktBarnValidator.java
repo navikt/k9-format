@@ -54,10 +54,19 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
     }
 
     private void validerSøknadsperioder(Map<Periode, SøknadsperiodeInfo> søknadsperioder, List<Feil> feil) {
-        if (søknadsperioder == null || søknadsperioder.isEmpty()) {
+        if (søknadsperioder == null || søknadsperioder.isEmpty() ) {
             feil.add(new Feil("perioder", PÅKREVD, "Må settes minst en periode for søknaden."));
         } else {
             feil.addAll(periodeValidator.validerIkkeTillattOverlapp(søknadsperioder, "perioder"));
+            for(Map.Entry<Periode, SøknadsperiodeInfo> entry : søknadsperioder.entrySet()) {
+                if( entry.getValue().getRelasjonTilBarnet() == null || entry.getValue().getRelasjonTilBarnet().isEmpty() ) {
+                    feil.add(new Feil("SøknadsperiodeInfo", PÅKREVD, "Må sette en relasjonTilBarnet"));
+                }
+                if(entry.getValue().getSamtykketOmsorgForBarnet()==null ) {
+                    feil.add(new Feil("SøknadsperiodeInfo", PÅKREVD, "Må sette en samtykketOmsorgForBarnet"));
+
+                }
+            }
         }
     }
 

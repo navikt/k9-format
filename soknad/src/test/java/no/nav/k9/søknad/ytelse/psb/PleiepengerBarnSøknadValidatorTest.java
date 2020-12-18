@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import no.nav.k9.søknad.JsonUtils;
+import no.nav.k9.søknad.ytelse.Ytelse;
 import org.junit.Test;
 
 import no.nav.k9.søknad.Søknad;
@@ -40,6 +42,29 @@ public class PleiepengerBarnSøknadValidatorTest {
     }
 
     @Test
+    public void ytelseSøknadSkalIkkeHaValideringsfeil() {
+        var json = JsonUtils.toString(
+                TestUtils.komplettBuilder());
+        var psb = JsonUtils.fromString(json, PleiepengerSyktBarn.class);
+        verifyIngenFeil(psb);
+    }
+
+    @Test
+    public void ytelseSøknadSkalHaValideringsfeil() {
+        var builder = TestUtils.komplettBuilder();
+        var søknadsperiodeMap = Map.of(
+                Periode.builder().fraOgMed(LocalDate.parse("2018-12-30")).tilOgMed(LocalDate.parse("2019-10-20")).build(),
+                SøknadsperiodeInfo.builder()
+                        .søktPleiepengerProsent(BigDecimal.valueOf(100))
+                        .flereOmsorgspersoner(false)
+                        .beskrivelseAvOmsorgsrollen("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.")
+                        .build());
+        builder.setPerioder(søknadsperiodeMap);
+        List<Feil> feil = verifyHarFeil(builder);
+        assertThat("Har to feil", feil.size() == 2);
+    }
+
+    @Test
     public void søknadsperiodeErPåkrevd() {
         var builder = TestUtils.komplettBuilder();
 
@@ -50,7 +75,10 @@ public class PleiepengerBarnSøknadValidatorTest {
                         .fraOgMed(LocalDate.now())
                         .tilOgMed(LocalDate.now().plusDays(1))
                         .build(),
-                SøknadsperiodeInfo.builder().build()));
+                SøknadsperiodeInfo.builder()
+                        .relasjonTilBarnet("FARA")
+                        .samtykketOmsorgForBarnet(false)
+                        .build()));
         verifyIngenFeil(builder);
     }
 

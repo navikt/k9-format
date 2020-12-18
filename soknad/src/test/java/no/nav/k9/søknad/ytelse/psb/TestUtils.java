@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.felles.LovbestemtFerie;
 import no.nav.k9.søknad.felles.opptjening.Opptjening;
@@ -17,6 +18,7 @@ import no.nav.k9.søknad.felles.opptjening.snf.Frilanser;
 import no.nav.k9.søknad.felles.opptjening.snf.SelvstendigNæringsdrivende;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.psb.tilsyn.Tilsynsordning;
 import no.nav.k9.søknad.ytelse.psb.tilsyn.TilsynsordningOpphold;
 import no.nav.k9.søknad.ytelse.psb.tilsyn.TilsynsordningSvar;
@@ -40,6 +42,10 @@ final class TestUtils {
 
     static Søknad komplettSøknad() {
         return Søknad.SerDes.deserialize(jsonForKomplettSøknad());
+    }
+
+    static Ytelse komplettYtelsePsb(String ytelse) {
+        return JsonUtils.fromString(ytelse, Ytelse.class);
     }
 
     static PleiepengerSyktBarn komplettBuilder() {

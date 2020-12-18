@@ -39,6 +39,26 @@ public class SøknadsperiodeInfo {
         this.beskrivelseAvOmsorgsrollen = beskrivelseAvOmsorgsrollen;
     }
 
+    public BigDecimal getSøktPleiepengerProsent() {
+        return søktPleiepengerProsent;
+    }
+
+    public Boolean getFlereOmsorgspersoner() {
+        return flereOmsorgspersoner;
+    }
+
+    public String getRelasjonTilBarnet() {
+        return relasjonTilBarnet;
+    }
+
+    public Boolean getSamtykketOmsorgForBarnet() {
+        return samtykketOmsorgForBarnet;
+    }
+
+    public String getBeskrivelseAvOmsorgsrollen() {
+        return beskrivelseAvOmsorgsrollen;
+    }
+
     public static Builder builder() {
         return new Builder();
     }
