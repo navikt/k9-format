@@ -31,7 +31,13 @@
   "ytelse" : {
     "@type" : "PLEIEPENGER_SYKT_BARN",
     "perioder" : {
-      "2018-12-30/2019-10-20" : { }
+      "2018-12-30/2019-10-20" : {
+        "søktPleiepengerProsent" : 100,
+        "flereOmsorgspersoner" : false,
+        "relasjonTilBarnet" : "MORA",
+        "samtykketOmsorgForBarnet" : true,
+        "beskrivelseAvOmsorgsrollen" : "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
+      }
     },
     "beredskap" : {
       "perioder" : {

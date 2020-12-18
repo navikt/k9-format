@@ -16,11 +16,9 @@ public class SøknadsperiodeInfo {
     @JsonProperty(value = "flereOmsorgspersoner")
     public final Boolean flereOmsorgspersoner;
 
-    @JsonInclude(value = JsonInclude.Include.NON_NULL)
     @JsonProperty(value = "relasjonTilBarnet", required = true)
     public final String relasjonTilBarnet;
 
-    @JsonInclude(value = JsonInclude.Include.NON_NULL)
     @JsonProperty(value = "samtykketOmsorgForBarnet")
     public final Boolean samtykketOmsorgForBarnet;
 
