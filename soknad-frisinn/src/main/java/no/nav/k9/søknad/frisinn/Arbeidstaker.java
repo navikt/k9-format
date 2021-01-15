@@ -64,5 +64,4 @@ public class Arbeidstaker {
             return new Arbeidstaker(inntekterSøknadsperiode);
         }
     }
-
 }
