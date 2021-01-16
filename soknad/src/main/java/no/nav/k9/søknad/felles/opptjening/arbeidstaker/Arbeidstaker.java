@@ -12,7 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.validation.Valid;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -24,6 +27,7 @@ import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Arbeidstaker {
 
     @JsonProperty(value = "norskIdentitetsnummer")
@@ -34,7 +38,7 @@ public class Arbeidstaker {
     @Valid
     public final Organisasjonsnummer organisasjonsnummer;
 
-    @JsonInclude(value = Include.NON_NULL)
+    @JsonInclude(value = Include.NON_EMPTY)
     @JsonProperty(value = "perioder")
     @Valid
     public final Map<Periode, ArbeidstakerPeriodeInfo> perioder;
@@ -83,13 +87,14 @@ public class Arbeidstaker {
 
         public Arbeidstaker build() {
             return new Arbeidstaker(
-                    norskIdentitetsnummer,
-                    organisasjonsnummer,
-                    perioder
-            );
+                norskIdentitetsnummer,
+                organisasjonsnummer,
+                perioder);
         }
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
     public static final class ArbeidstakerPeriodeInfo {
         /**
          * En prosent mellom 0 og 100 som sier hvor mye søkeren kan jobbe (for en arbeidsgiver i en periode)
@@ -101,15 +106,19 @@ public class Arbeidstaker {
          * - Gitt at pleiepengene blir avkortet mot arbeid (ikke gradert mot tilsyn) vil "skalJobbeProsent" brukes ved
          * håndtering av inntektsmelding fra den aktuelle arbeidsgiveren for å regne ut inntektstapet i perioden.
          */
+        @JsonProperty(value = "skalJobbeProsent")
+        @DecimalMin(value = "0.00", message = "skalJobbeProsent [${validatedValue}] må være >= {value}")
+        @DecimalMax(value = "100.00", message = "skalJobbeProsent [${validatedValue}] må være <= {value}")
         public final BigDecimal skalJobbeProsent;
 
+        @JsonProperty(value = "jobberNormaltPerUke")
+        @Valid
         public final Duration jobberNormaltPerUke;
 
-        private ArbeidstakerPeriodeInfo(
-                @JsonProperty("skalJobbeProsent")
-                        BigDecimal skalJobbeProsent,
-                @JsonProperty("jobberNormaltPerUke")
-                        Duration jobberNormaltPerUke) {
+        @JsonCreator
+        ArbeidstakerPeriodeInfo(
+                                        @JsonProperty("skalJobbeProsent") BigDecimal skalJobbeProsent,
+                                        @JsonProperty("jobberNormaltPerUke") Duration jobberNormaltPerUke) {
             this.skalJobbeProsent = skalJobbeProsent == null ? null : skalJobbeProsent.setScale(2, RoundingMode.HALF_UP);
             this.jobberNormaltPerUke = jobberNormaltPerUke;
         }
@@ -137,9 +146,8 @@ public class Arbeidstaker {
 
             public ArbeidstakerPeriodeInfo build() {
                 return new ArbeidstakerPeriodeInfo(
-                        skalJobbeProsent,
-                        jobberNormaltPerUke
-                );
+                    skalJobbeProsent,
+                    jobberNormaltPerUke);
             }
         }
 

@@ -6,11 +6,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import no.nav.k9.søknad.Innsending;
 import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
@@ -18,7 +20,8 @@ import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.SøknadId;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class OmsorgspengerSøknad {
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
+public class OmsorgspengerSøknad implements Innsending {
 
     @JsonProperty(value = "søknadId", required = true)
     @Valid
@@ -62,6 +65,26 @@ public class OmsorgspengerSøknad {
         this.mottattDato = mottattDato;
         this.søker = søker;
         this.barn = barn;
+    }
+    
+    @Override
+    public ZonedDateTime getMottattDato() {
+        return mottattDato;
+    }
+
+    @Override
+    public Søker getSøker() {
+        return søker;
+    }
+    
+    @Override
+    public Versjon getVersjon() {
+        return versjon;
+    }
+
+    @Override
+    public SøknadId getSøknadId() {
+        return søknadId;
     }
 
     public static Builder builder() {
@@ -127,4 +150,5 @@ public class OmsorgspengerSøknad {
             return søknad;
         }
     }
+
 }

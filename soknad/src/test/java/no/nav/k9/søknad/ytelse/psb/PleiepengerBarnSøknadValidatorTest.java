@@ -3,7 +3,6 @@ package no.nav.k9.søknad.ytelse.psb;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -14,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import no.nav.k9.søknad.Søknad;
@@ -26,9 +26,12 @@ import no.nav.k9.søknad.felles.opptjening.snf.SelvstendigNæringsdrivende;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.ytelse.psb.tilsyn.Tilsynsordning;
-import no.nav.k9.søknad.ytelse.psb.tilsyn.TilsynsordningOpphold;
-import no.nav.k9.søknad.ytelse.psb.tilsyn.TilsynsordningSvar;
+import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
+import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnValidator;
+import no.nav.k9.søknad.ytelse.psb.v1.SøknadsperiodeInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningOpphold;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningSvar;
 
 public class PleiepengerBarnSøknadValidatorTest {
     private static final PleiepengerSyktBarnValidator validator = new PleiepengerSyktBarnValidator();
@@ -171,7 +174,7 @@ public class PleiepengerBarnSøknadValidatorTest {
 
         søknad.setArbeidstaker(arbeid);
 
-        assertEquals(1, verifyHarFeil(søknad).size());
+        Assertions.assertThat(verifyHarFeil(søknad)).hasSize(1);
     }
 
     @Test
@@ -192,7 +195,7 @@ public class PleiepengerBarnSøknadValidatorTest {
 
         søknad.setArbeidstaker(arbeid);
 
-        assertEquals(1, verifyHarFeil(søknad).size());
+        Assertions.assertThat(verifyHarFeil(søknad)).hasSize(1);
     }
 
     @Test
@@ -212,17 +215,11 @@ public class PleiepengerBarnSøknadValidatorTest {
 
         søknad.setArbeidstaker(arbeid);
 
-        assertEquals(1, verifyHarFeil(søknad).size());
+        Assertions.assertThat(verifyHarFeil(søknad)).hasSize(1);
     }
 
     private List<Feil> verifyHarFeil(PleiepengerSyktBarn builder) {
         final List<Feil> feil = valider(builder);
-        assertThat(feil, is(not(Collections.emptyList())));
-        return feil;
-    }
-
-    private List<Feil> verifyHarFeil(Søknad søknad) {
-        final List<Feil> feil = validator.valider(søknad.getYtelse());
         assertThat(feil, is(not(Collections.emptyList())));
         return feil;
     }

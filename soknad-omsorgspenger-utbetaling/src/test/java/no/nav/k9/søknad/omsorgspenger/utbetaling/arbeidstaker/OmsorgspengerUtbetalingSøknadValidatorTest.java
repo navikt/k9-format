@@ -19,6 +19,7 @@ import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 
+@SuppressWarnings("removal")
 public class OmsorgspengerUtbetalingSøknadValidatorTest {
     private static final OmsorgspengerUtbetalingSøknadValidator validator = new OmsorgspengerUtbetalingSøknadValidator();
 

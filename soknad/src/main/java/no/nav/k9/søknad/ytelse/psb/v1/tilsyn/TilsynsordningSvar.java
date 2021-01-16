@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.ytelse.psb.tilsyn;
+package no.nav.k9.søknad.ytelse.psb.v1.tilsyn;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;

@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.ytelse.psb.tilsyn;
+package no.nav.k9.søknad.ytelse.psb.v1.tilsyn;
 
 import no.nav.k9.søknad.felles.type.Periode;
 

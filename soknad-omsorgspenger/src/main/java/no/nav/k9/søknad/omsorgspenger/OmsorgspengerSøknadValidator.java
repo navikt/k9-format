@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import no.nav.k9.søknad.SøknadValidator;
-import no.nav.k9.søknad.Validator;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;

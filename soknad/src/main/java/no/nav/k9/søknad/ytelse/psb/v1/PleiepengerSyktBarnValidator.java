@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.ytelse.psb;
+package no.nav.k9.søknad.ytelse.psb.v1;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -8,18 +8,17 @@ import java.util.List;
 import java.util.Map;
 
 import no.nav.k9.søknad.PeriodeValidator;
+import no.nav.k9.søknad.Validator;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.LovbestemtFerie;
 import no.nav.k9.søknad.felles.opptjening.Opptjening;
 import no.nav.k9.søknad.felles.opptjening.arbeidstaker.Arbeidstaker;
 import no.nav.k9.søknad.felles.opptjening.snf.SelvstendigNæringsdrivende;
-import no.nav.k9.søknad.felles.personopplysninger.Barn;
-import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
-import no.nav.k9.søknad.ytelse.psb.tilsyn.Tilsynsordning;
-import no.nav.k9.søknad.ytelse.psb.tilsyn.TilsynsordningSvar;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningSvar;
 
 public class PleiepengerSyktBarnValidator extends YtelseValidator {
     private static final Duration MAKS_INNENFOR_EN_UKE = Duration.ofDays(7);
@@ -44,6 +43,8 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
         validerLovbestemtFerie(pleiepengerSyktBarn.getLovbestemtFerie(), feil);
         validerArbeidstaker(pleiepengerSyktBarn.getArbeidstaker(), feil);
         validerOpptjening(pleiepengerSyktBarn.getOpptjening(), feil);
+        
+        feil.addAll(Validator.validerTilFeil(ytelse));
         return feil;
     }
 

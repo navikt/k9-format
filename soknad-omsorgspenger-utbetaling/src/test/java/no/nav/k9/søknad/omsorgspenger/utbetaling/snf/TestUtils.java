@@ -54,6 +54,7 @@ class TestUtils {
         }
     }
 
+    @SuppressWarnings({ "removal" })
     static OmsorgspengerUtbetalingSøknad.Builder komplettBuilder() {
         return OmsorgspengerUtbetalingSøknad
                 .builder()
@@ -89,7 +90,8 @@ class TestUtils {
                 .mottattDato(ZonedDateTime.parse("2019-10-20T07:15:36.124Z"))
                 .søknadId(SøknadId.of("123-123-123"));
     }
-
+    
+    @SuppressWarnings("removal")
     static OmsorgspengerUtbetalingSøknad.Builder komplettBuilderUtenNæringsinntekt() {
         return OmsorgspengerUtbetalingSøknad
                 .builder()

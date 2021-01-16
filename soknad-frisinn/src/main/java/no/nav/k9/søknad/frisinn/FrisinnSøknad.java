@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import no.nav.k9.søknad.Innsending;
 import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
@@ -23,7 +24,7 @@ import no.nav.k9.søknad.felles.type.SøknadId;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-public class FrisinnSøknad {
+public class FrisinnSøknad implements Innsending {
 
     @JsonProperty(value = "søknadId")
     @Valid
@@ -104,22 +105,26 @@ public class FrisinnSøknad {
         }
     }
 
-    public SøknadId getSøknadId() {
-        return søknadId;
+    @Override
+    public ZonedDateTime getMottattDato() {
+        return mottattDato;
     }
 
+    @Override
     public Versjon getVersjon() {
         return versjon;
     }
 
-    public ZonedDateTime getMottattDato() {
-        return mottattDato;
+    @Override
+    public SøknadId getSøknadId() {
+        return søknadId;
     }
 
     public Språk getSpråk() {
         return språk;
     }
 
+    @Override
     public Søker getSøker() {
         return søker;
     }

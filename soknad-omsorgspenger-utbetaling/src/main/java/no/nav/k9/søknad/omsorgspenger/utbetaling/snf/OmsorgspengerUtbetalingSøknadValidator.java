@@ -2,7 +2,6 @@ package no.nav.k9.søknad.omsorgspenger.utbetaling.snf;
 
 import no.nav.k9.søknad.PeriodeValidator;
 import no.nav.k9.søknad.SøknadValidator;
-import no.nav.k9.søknad.Validator;
 import no.nav.k9.søknad.felles.*;
 import no.nav.k9.søknad.felles.opptjening.snf.Frilanser;
 import no.nav.k9.søknad.felles.opptjening.snf.SelvstendigNæringsdrivende;
@@ -15,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("removal")
 public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<OmsorgspengerUtbetalingSøknad> {
     private final PeriodeValidator periodeValidator;
     private static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();

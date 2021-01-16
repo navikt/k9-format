@@ -8,6 +8,7 @@ import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPerioder;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -19,6 +20,7 @@ import no.nav.k9.søknad.felles.type.Landkode;
 import no.nav.k9.søknad.felles.type.Periode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Utenlandsopphold {
 
     @JsonInclude(value = Include.ALWAYS)
@@ -26,10 +28,14 @@ public class Utenlandsopphold {
     public final Map<Periode, UtenlandsoppholdPeriodeInfo> perioder;
 
     @JsonCreator
-    private Utenlandsopphold(
+    public Utenlandsopphold(
             @JsonProperty("perioder")
             Map<Periode, UtenlandsoppholdPeriodeInfo> perioder) {
         this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
+    }
+    
+    public Map<Periode, UtenlandsoppholdPeriodeInfo> getPerioder() {
+        return perioder;
     }
 
     public static Utenlandsopphold.Builder builder() {

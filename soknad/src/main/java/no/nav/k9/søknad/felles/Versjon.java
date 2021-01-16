@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public class Versjon {
+    
     @JsonIgnore
     private static final String SEMVER_REGEX = "(\\d+)\\.(\\d+)\\.(\\d+)";
 

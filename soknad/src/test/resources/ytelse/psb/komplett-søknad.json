@@ -5,31 +5,31 @@
   "søker" : {
     "norskIdentitetsnummer" : "11111111111"
   },
-  "bosteder" : {
-    "perioder": {
-      "2022-12-30/2023-10-10" : {
-        "land": "POL"
-      }
-    }
-  },
-  "utenlandsopphold" : {
-    "perioder": {
-      "2018-12-30/2019-10-10" : {
-        "land": "SWE",
-        "årsak": "barnetInnlagtIHelseinstitusjonForNorskOffentligRegning"
-      },
-      "2018-10-10/2018-10-30" : {
-        "land": "NOR",
-        "årsak": null
-      },
-      "2021-10-10/2050-01-05" : {
-        "land": "DEN",
-        "årsak": "barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd"
-      }
-    }
-  },
   "ytelse" : {
-    "@type" : "PLEIEPENGER_SYKT_BARN",
+    "type" : "PLEIEPENGER_SYKT_BARN",
+    "bosteder" : {
+        "perioder": {
+          "2022-12-30/2023-10-10" : {
+            "land": "POL"
+          }
+        }
+    },
+    "utenlandsopphold" : {
+      "perioder": {
+          "2018-12-30/2019-10-10" : {
+            "land": "SWE",
+            "årsak": "barnetInnlagtIHelseinstitusjonForNorskOffentligRegning"
+          },
+          "2018-10-10/2018-10-30" : {
+            "land": "NOR",
+            "årsak": null
+          },
+          "2021-10-10/2050-01-05" : {
+            "land": "DEN",
+            "årsak": "barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd"
+          }
+        }
+      },
     "perioder" : {
       "2018-12-30/2019-10-20" : { }
     },

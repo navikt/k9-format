@@ -7,6 +7,7 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import static no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker.TestUtils.*;
 import static org.junit.Assert.assertEquals;
 
+@SuppressWarnings("removal")
 public class OmsorgspengerUtbetalingSøknadTest {
     @Test
     public void serialiseringAvJsonOgBrukAvBuilderGirSammeResultat() throws JSONException {

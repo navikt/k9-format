@@ -11,9 +11,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.Test;
 
 import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.ytelse.psb.tilsyn.Tilsynsordning;
-import no.nav.k9.søknad.ytelse.psb.tilsyn.TilsynsordningSvar;
-import no.nav.k9.søknad.ytelse.psb.tilsyn.TilsynsordningUke;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningSvar;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningUke;
 
 
 public class TilsynsordningTest {

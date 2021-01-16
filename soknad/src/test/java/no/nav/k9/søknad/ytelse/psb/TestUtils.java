@@ -15,11 +15,17 @@ import no.nav.k9.søknad.felles.opptjening.Opptjening;
 import no.nav.k9.søknad.felles.opptjening.arbeidstaker.Arbeidstaker;
 import no.nav.k9.søknad.felles.opptjening.snf.Frilanser;
 import no.nav.k9.søknad.felles.opptjening.snf.SelvstendigNæringsdrivende;
+import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
+import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.ytelse.psb.tilsyn.Tilsynsordning;
-import no.nav.k9.søknad.ytelse.psb.tilsyn.TilsynsordningOpphold;
-import no.nav.k9.søknad.ytelse.psb.tilsyn.TilsynsordningSvar;
+import no.nav.k9.søknad.ytelse.psb.v1.Beredskap;
+import no.nav.k9.søknad.ytelse.psb.v1.Nattevåk;
+import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
+import no.nav.k9.søknad.ytelse.psb.v1.SøknadsperiodeInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningOpphold;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningSvar;
 
 final class TestUtils {
 
@@ -90,6 +96,6 @@ final class TestUtils {
                         .build())
                 .build();
 
-        return new PleiepengerSyktBarn(søknadsperiodeMap, beredskap, nattevåk, tilsynsordning, opptjening, arbeidstaker, lovbestemtFerie);
+        return new PleiepengerSyktBarn(søknadsperiodeMap, beredskap, nattevåk, tilsynsordning, opptjening, arbeidstaker, lovbestemtFerie, new Bosteder(null), new Utenlandsopphold(null));
     }
 }

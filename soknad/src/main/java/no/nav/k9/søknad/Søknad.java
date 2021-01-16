@@ -12,15 +12,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.k9.søknad.felles.Versjon;
-import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
-import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
 import no.nav.k9.søknad.felles.type.SøknadId;
 import no.nav.k9.søknad.ytelse.Ytelse;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-public class Søknad {
+public class Søknad implements Innsending {
 
     @Valid
     @NotNull
@@ -44,14 +42,6 @@ public class Søknad {
     private Søker søker;
 
     @Valid
-    @JsonProperty(value = "bosteder")
-    private Bosteder bosteder;
-
-    @Valid
-    @JsonProperty(value = "utenlandsopphold")
-    private Utenlandsopphold utenlandsopphold;
-
-    @Valid
     @NotNull
     @JsonProperty(value = "ytelse", required = true)
     private Ytelse ytelse;
@@ -61,18 +51,15 @@ public class Søknad {
                   @JsonProperty(value = "versjon", required = true) @Valid @NotNull Versjon versjon,
                   @JsonProperty(value = "mottattDato", required = true) @Valid @NotNull ZonedDateTime mottattDato,
                   @JsonProperty(value = "søker", required = true) @Valid @NotNull Søker søker,
-                  @JsonProperty(value = "bosteder") @Valid @NotNull Bosteder bosteder,
-                  @JsonProperty(value = "utenlandsopphold") @Valid @NotNull Utenlandsopphold utenlandsopphold,
                   @JsonProperty(value = "ytelse", required = true) @Valid @NotNull Ytelse ytelse) {
         this.søknadId = søknadId;
         this.versjon = versjon;
         this.mottattDato = mottattDato;
         this.søker = søker;
-        this.bosteder = bosteder;
-        this.utenlandsopphold = utenlandsopphold;
         this.ytelse = ytelse;
     }
 
+    @Override
     public SøknadId getSøknadId() {
         return søknadId;
     }
@@ -81,6 +68,7 @@ public class Søknad {
         this.søknadId = søknadId;
     }
 
+    @Override
     public Versjon getVersjon() {
         return versjon;
     }
@@ -89,6 +77,7 @@ public class Søknad {
         this.versjon = versjon;
     }
 
+    @Override
     public ZonedDateTime getMottattDato() {
         return mottattDato;
     }
@@ -97,22 +86,7 @@ public class Søknad {
         this.mottattDato = mottattDato;
     }
 
-    public Bosteder getBosteder() {
-        return bosteder;
-    }
-
-    public void setBosteder(Bosteder bosteder) {
-        this.bosteder = bosteder;
-    }
-
-    public Utenlandsopphold getUtenlandsopphold() {
-        return utenlandsopphold;
-    }
-
-    public void setUtenlandsopphold(Utenlandsopphold utenlandsopphold) {
-        this.utenlandsopphold = utenlandsopphold;
-    }
-
+    @Override
     public Søker getSøker() {
         return søker;
     }

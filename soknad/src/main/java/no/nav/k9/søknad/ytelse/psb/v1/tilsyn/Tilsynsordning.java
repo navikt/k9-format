@@ -1,5 +1,6 @@
-package no.nav.k9.søknad.ytelse.psb.tilsyn;
+package no.nav.k9.søknad.ytelse.psb.v1.tilsyn;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -21,6 +22,7 @@ import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPerioder;
 import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPeriode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Tilsynsordning {
 
     @JsonProperty(value="iTilsynsordning", required=true)

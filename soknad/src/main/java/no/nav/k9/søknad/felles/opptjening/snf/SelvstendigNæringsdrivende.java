@@ -12,11 +12,13 @@ import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -24,25 +26,23 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.k9.søknad.felles.type.Landkode;
-import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
+import no.nav.k9.søknad.felles.type.Periode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class SelvstendigNæringsdrivende {
 
-    @JsonProperty("perioder")
+    @JsonProperty(value = "perioder", required = true)
     @Valid
-    @NotNull
     @NotEmpty
     public final Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> perioder;
 
-    @JsonProperty("organisasjonsnummer")
+    @JsonProperty(value = "organisasjonsnummer", required = false)
     public final Organisasjonsnummer organisasjonsnummer;
 
-    @JsonProperty("virksomhetNavn")
-    @NotNull
-    @NotBlank
-    @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message="'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
+    @JsonProperty(value = "virksomhetNavn", required = false)
+    @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message = "'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     public final String virksomhetNavn;
 
     public static SelvstendigNæringsdrivende.Builder builder() {
@@ -51,12 +51,24 @@ public class SelvstendigNæringsdrivende {
 
     @JsonCreator
     public SelvstendigNæringsdrivende(
-            @JsonProperty("perioder") Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> perioder,
-            @JsonProperty("organisasjonsnummer") Organisasjonsnummer organisasjonsnummer,
-            @JsonProperty("virksomhetNavn") String virksomhetNavn) {
+                                      @JsonProperty(value = "perioder", required = true) Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> perioder,
+                                      @JsonProperty(value = "organisasjonsnummer", required = false) Organisasjonsnummer organisasjonsnummer,
+                                      @JsonProperty(value = "virksomhetNavn", required = false) String virksomhetNavn) {
         this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
         this.organisasjonsnummer = organisasjonsnummer;
         this.virksomhetNavn = virksomhetNavn;
+    }
+
+    @AssertTrue(message = "organisasjonsnummer må være satt med mindre virksomhet er registrert i utlandet")
+    boolean isOkOrganisasjonsnummer() {
+        if (organisasjonsnummer == null) {
+            for (var sn : perioder.entrySet()) {
+                if (sn.getValue().registrertIUtlandet !=null && !sn.getValue().registrertIUtlandet) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public static final class Builder {
@@ -94,20 +106,19 @@ public class SelvstendigNæringsdrivende {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
     public static final class SelvstendigNæringsdrivendePeriodeInfo {
 
-        @JsonInclude(value = Include.NON_NULL)
+        @JsonInclude(value = Include.NON_EMPTY)
         @JsonProperty("virksomhetstyper")
-        @NotNull
-        @NotEmpty
         public final List<VirksomhetType> virksomhetstyper;
 
         @JsonProperty("regnskapsførerNavn")
-        @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message="'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
+        @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message = "'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
         public final String regnskapsførerNavn;
 
         @JsonProperty("regnskapsførerTlf")
-        @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message="'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
+        @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message = "'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
         public final String regnskapsførerTlf;
 
         @JsonProperty("erVarigEndring")
@@ -121,6 +132,8 @@ public class SelvstendigNæringsdrivende {
 
         @JsonProperty("bruttoInntekt")
         @Valid
+        @DecimalMin(value = "0.00", message = "bruttoInntekt [${validatedValue}] må være >= {value}")
+        @DecimalMax(value = "10000000.00", message = "bruttoInntekt [${validatedValue}] må være <= {value}")
         public final BigDecimal bruttoInntekt;
 
         @JsonProperty("erNyoppstartet")
@@ -135,16 +148,16 @@ public class SelvstendigNæringsdrivende {
 
         @JsonCreator
         private SelvstendigNæringsdrivendePeriodeInfo(
-                @JsonProperty("virksomhetstyper") List<VirksomhetType> virksomhetstyper,
-                @JsonProperty("regnskapsførerNavn") String regnskapsførerNavn,
-                @JsonProperty("regnskapsførerTlf") String regnskapsførerTlf,
-                @JsonProperty("erVarigEndring") Boolean erVarigEndring,
-                @JsonProperty("endringDato") LocalDate endringDato,
-                @JsonProperty("endringBegrunnelse") String endringBegrunnelse,
-                @JsonProperty("bruttoInntekt") BigDecimal bruttoInntekt,
-                @JsonProperty("erNyoppstartet") Boolean erNyoppstartet,
-                @JsonProperty("registrertIUtlandet") Boolean registrertIUtlandet,
-                @JsonProperty("landkode") Landkode landkode) {
+                                                      @JsonProperty("virksomhetstyper") List<VirksomhetType> virksomhetstyper,
+                                                      @JsonProperty("regnskapsførerNavn") String regnskapsførerNavn,
+                                                      @JsonProperty("regnskapsførerTlf") String regnskapsførerTlf,
+                                                      @JsonProperty("erVarigEndring") Boolean erVarigEndring,
+                                                      @JsonProperty("endringDato") LocalDate endringDato,
+                                                      @JsonProperty("endringBegrunnelse") String endringBegrunnelse,
+                                                      @JsonProperty("bruttoInntekt") BigDecimal bruttoInntekt,
+                                                      @JsonProperty("erNyoppstartet") Boolean erNyoppstartet,
+                                                      @JsonProperty("registrertIUtlandet") Boolean registrertIUtlandet,
+                                                      @JsonProperty("landkode") Landkode landkode) {
             this.virksomhetstyper = virksomhetstyper;
             this.regnskapsførerNavn = regnskapsførerNavn;
             this.regnskapsførerTlf = regnskapsførerTlf;
@@ -155,6 +168,10 @@ public class SelvstendigNæringsdrivende {
             this.erNyoppstartet = erNyoppstartet;
             this.registrertIUtlandet = registrertIUtlandet;
             this.landkode = landkode;
+        }
+
+        public List<VirksomhetType> getVirksomhetstyper() {
+            return virksomhetstyper;
         }
 
         public static Builder builder() {
@@ -228,15 +245,15 @@ public class SelvstendigNæringsdrivende {
 
             public SelvstendigNæringsdrivendePeriodeInfo build() {
                 return new SelvstendigNæringsdrivendePeriodeInfo(
-                        virksomhetstyper,
-                        regnskapsførerNavn,
-                        regnskapsførerTelefon,
-                        erVarigEndring,
-                        endringDato,
-                        endringBegrunnelse,
-                        bruttoInntekt,
-                        erNyoppstartet,
-                        registrertIUtlandet, landkode);
+                    virksomhetstyper,
+                    regnskapsførerNavn,
+                    regnskapsførerTelefon,
+                    erVarigEndring,
+                    endringDato,
+                    endringBegrunnelse,
+                    bruttoInntekt,
+                    erNyoppstartet,
+                    registrertIUtlandet, landkode);
             }
         }
     }

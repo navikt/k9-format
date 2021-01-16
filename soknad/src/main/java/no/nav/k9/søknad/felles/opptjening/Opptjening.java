@@ -19,12 +19,12 @@ import no.nav.k9.søknad.felles.opptjening.snf.SelvstendigNæringsdrivende;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Opptjening {
 
-    @JsonInclude(value = JsonInclude.Include.NON_NULL)
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     @JsonProperty(value = "selvstendigNæringsdrivende")
     @Valid
     private final List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende;
 
-    @JsonInclude(value = JsonInclude.Include.NON_NULL)
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     @JsonProperty(value = "frilanser")
     @Valid
     private final Frilanser frilanser;

@@ -1,10 +1,12 @@
-package no.nav.k9.søknad.ytelse.psb;
+package no.nav.k9.søknad.ytelse.psb.v1;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import no.nav.k9.søknad.felles.type.Periode;
 
 import java.util.HashMap;
@@ -19,17 +21,18 @@ import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPeriode;
 import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPerioder;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Beredskap {
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
+public class Nattevåk {
 
     @JsonProperty(value="perioder")
-    @JsonInclude(value = Include.ALWAYS)
+    @JsonInclude(value = Include.NON_EMPTY)
     @Valid
-    public final Map<Periode, BeredskapPeriodeInfo> perioder;
+    public final Map<Periode, NattevåkPeriodeInfo> perioder;
 
     @JsonCreator
-    private Beredskap(
+    private Nattevåk(
             @JsonProperty("perioder")
-            Map<Periode, BeredskapPeriodeInfo> perioder) {
+            Map<Periode, NattevåkPeriodeInfo> perioder) {
         this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
     }
 
@@ -38,35 +41,39 @@ public class Beredskap {
     }
 
     public static final class Builder {
-        private Map<Periode, BeredskapPeriodeInfo> perioder;
+        private Map<Periode, NattevåkPeriodeInfo> perioder;
 
         private Builder() {
             perioder = new HashMap<>();
         }
 
-        public Builder perioder(Map<Periode, BeredskapPeriodeInfo> perioder) {
+        public Builder perioder(Map<Periode, NattevåkPeriodeInfo> perioder) {
             leggTilPerioder(this.perioder, perioder);
             return this;
         }
 
-        public Builder periode(Periode periode, BeredskapPeriodeInfo beredskapPeriodeInfo) {
-            leggTilPeriode(this.perioder, periode, beredskapPeriodeInfo);
+        public Builder periode(Periode periode, NattevåkPeriodeInfo nattevåkPeriodeInfo) {
+            leggTilPeriode(this.perioder, periode, nattevåkPeriodeInfo);
             return this;
         }
 
-        public Beredskap build() {
-            return new Beredskap(
+        public Nattevåk build() {
+            return new Nattevåk(
                     perioder
             );
         }
     }
 
-    public static final class BeredskapPeriodeInfo {
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static final class NattevåkPeriodeInfo {
+
+        @JsonProperty(value="tilleggsinformasjon")
+        @Valid
         public final String tilleggsinformasjon;
 
         @JsonCreator
-        private BeredskapPeriodeInfo(
-                @JsonProperty("tilleggsinformasjon")
+        private NattevåkPeriodeInfo(
+                @JsonProperty(value="tilleggsinformasjon")
                 String tilleggsinformasjon) {
             this.tilleggsinformasjon = tilleggsinformasjon;
         }
@@ -85,8 +92,8 @@ public class Beredskap {
                 return this;
             }
 
-            public BeredskapPeriodeInfo build() {
-                return new BeredskapPeriodeInfo(
+            public NattevåkPeriodeInfo build() {
+                return new NattevåkPeriodeInfo(
                         tilleggsinformasjon
                 );
             }
