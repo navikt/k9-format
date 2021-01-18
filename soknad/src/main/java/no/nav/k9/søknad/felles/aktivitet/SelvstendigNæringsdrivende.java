@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.felles.opptjening.snf;
+package no.nav.k9.søknad.felles.aktivitet;
 
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableMap;
@@ -15,8 +15,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -25,23 +28,28 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.type.Landkode;
-import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(value = Include.NON_EMPTY)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class SelvstendigNæringsdrivende {
 
     @JsonProperty(value = "perioder", required = true)
     @Valid
+    @NotNull
     @NotEmpty
     public final Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> perioder;
 
-    @JsonProperty(value = "organisasjonsnummer", required = false)
+    /** Orgnummer - påkrevd for norske selskaper, ikke for utenlandske enn så lenge. */
+    @JsonProperty(value = "organisasjonsnummer")
     public final Organisasjonsnummer organisasjonsnummer;
 
-    @JsonProperty(value = "virksomhetNavn", required = false)
+    /** Virsomhetsnavn - påkrevd for norske og utenlandske selskaper. */
+    @JsonProperty(value = "virksomhetNavn")
+    @NotBlank(message = "Virksomhetnavn er påkrevd")
     @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message = "'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     public final String virksomhetNavn;
 
@@ -63,10 +71,11 @@ public class SelvstendigNæringsdrivende {
     boolean isOkOrganisasjonsnummer() {
         if (organisasjonsnummer == null) {
             for (var sn : perioder.entrySet()) {
-                if (sn.getValue().registrertIUtlandet !=null && !sn.getValue().registrertIUtlandet) {
+                if (sn.getValue().registrertIUtlandet != null && !sn.getValue().registrertIUtlandet) {
                     return false;
                 }
             }
+            return !perioder.isEmpty();
         }
         return true;
     }
@@ -106,11 +115,14 @@ public class SelvstendigNæringsdrivende {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonInclude(value = Include.NON_EMPTY)
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
     public static final class SelvstendigNæringsdrivendePeriodeInfo {
 
-        @JsonInclude(value = Include.NON_EMPTY)
-        @JsonProperty("virksomhetstyper")
+        private static final String PÅKREVD = "påkrevd";
+
+        @JsonProperty(value = "virksomhetstyper", required = true)
+        @NotEmpty
         public final List<VirksomhetType> virksomhetstyper;
 
         @JsonProperty("regnskapsførerNavn")
@@ -148,7 +160,7 @@ public class SelvstendigNæringsdrivende {
 
         @JsonCreator
         private SelvstendigNæringsdrivendePeriodeInfo(
-                                                      @JsonProperty("virksomhetstyper") List<VirksomhetType> virksomhetstyper,
+                                                      @JsonProperty(value = "virksomhetstyper", required = true) List<VirksomhetType> virksomhetstyper,
                                                       @JsonProperty("regnskapsførerNavn") String regnskapsførerNavn,
                                                       @JsonProperty("regnskapsførerTlf") String regnskapsførerTlf,
                                                       @JsonProperty("erVarigEndring") Boolean erVarigEndring,
@@ -176,6 +188,32 @@ public class SelvstendigNæringsdrivende {
 
         public static Builder builder() {
             return new Builder();
+        }
+
+        @Size(max = 0, message = "${validatedValue}")
+        private List<Feil> getValideringRegistrertUtlandet() {
+            if (registrertIUtlandet != null) {
+                if (registrertIUtlandet && landkode == null) {
+                    return List.of(new Feil(".landkode", PÅKREVD, "landkode må være satt, og kan ikke være null, dersom virksomhet er registrert i utlandet."));
+                }
+            }
+            return List.of();
+        }
+
+        @AssertTrue(message = "endringDato må være satt dersom erVarigEndring er true")
+        private boolean isVarigEndringsdatoSatt() {
+            if (erVarigEndring != null && erVarigEndring) {
+                return endringDato != null;
+            }
+            return true;
+        }
+
+        @AssertTrue(message = "endringBegrunnelse må være satt dersom erVarigEndring er true.")
+        private boolean isVarigEndringBegrunnelseSatt() {
+            if (erVarigEndring != null && erVarigEndring) {
+                return !(endringBegrunnelse == null || endringBegrunnelse.isBlank());
+            }
+            return true;
         }
 
         public static final class Builder {

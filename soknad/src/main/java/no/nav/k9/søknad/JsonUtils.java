@@ -53,7 +53,7 @@ public final class JsonUtils {
         final ObjectMapper objectMapper = new ObjectMapper()
                 .registerModule(new Jdk8Module())
                 .registerModule(new JavaTimeModule())
-                .setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE)
+                .setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE) // 
                 .setTimeZone(TimeZone.getTimeZone("Europe/Oslo"))
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .disable(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS)

@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.felles.opptjening.arbeidstaker;
+package no.nav.k9.søknad.felles.aktivitet;
 
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableMap;
@@ -23,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
-import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)

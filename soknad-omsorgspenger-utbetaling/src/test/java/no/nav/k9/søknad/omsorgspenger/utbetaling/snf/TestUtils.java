@@ -9,14 +9,14 @@ import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 
-import no.nav.k9.søknad.felles.opptjening.snf.Frilanser;
-import no.nav.k9.søknad.felles.opptjening.snf.SelvstendigNæringsdrivende;
-import no.nav.k9.søknad.felles.opptjening.snf.VirksomhetType;
+import no.nav.k9.søknad.felles.aktivitet.Frilanser;
+import no.nav.k9.søknad.felles.aktivitet.Organisasjonsnummer;
+import no.nav.k9.søknad.felles.aktivitet.SelvstendigNæringsdrivende;
+import no.nav.k9.søknad.felles.aktivitet.VirksomhetType;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.Landkode;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
-import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.SøknadId;
 

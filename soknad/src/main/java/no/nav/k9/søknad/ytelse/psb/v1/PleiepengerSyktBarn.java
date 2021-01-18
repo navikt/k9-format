@@ -18,8 +18,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import no.nav.k9.søknad.PeriodeValidator;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.LovbestemtFerie;
-import no.nav.k9.søknad.felles.opptjening.Opptjening;
-import no.nav.k9.søknad.felles.opptjening.arbeidstaker.Arbeidstaker;
+import no.nav.k9.søknad.felles.aktivitet.ArbeidAktivitet;
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
 import no.nav.k9.søknad.felles.type.Periode;
@@ -63,21 +62,15 @@ public class PleiepengerSyktBarn implements Ytelse {
     private Map<Periode, SøknadsperiodeInfo> perioder;
 
     @Valid
-    @JsonProperty(value = "arbeid")
-    private Opptjening opptjening;
-
-    @Valid
-    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-    @JsonProperty(value = "arbeidstaker")
-    private List<Arbeidstaker> arbeidstaker;
+    @JsonProperty(value = "arbeidAktivitet")
+    private ArbeidAktivitet arbeidAktivitet;
 
     @JsonCreator
     public PleiepengerSyktBarn(@JsonProperty(value = "perioder", required = true) @Valid Map<Periode, SøknadsperiodeInfo> perioder,
                                @JsonProperty(value = "beredskap") @Valid Beredskap beredskap,
                                @JsonProperty(value = "nattevåk") @Valid Nattevåk nattevåk,
                                @JsonProperty(value = "tilsynsordning", required = true) @NotNull @Valid Tilsynsordning tilsynsordning,
-                               @JsonProperty(value = "opptjening") @Valid Opptjening opptjening,
-                               @JsonProperty(value = "arbeidstaker") @Valid List<Arbeidstaker> arbeidstaker,
+                               @JsonProperty(value = "arbeidAktivitet") @Valid ArbeidAktivitet aktivitet,
                                @JsonProperty(value = "lovbestemtFerie") @Valid LovbestemtFerie lovbestemtFerie,
                                @JsonProperty(value = "bosteder") @Valid @NotNull Bosteder bosteder,
                                @JsonProperty(value = "utenlandsopphold") @Valid @NotNull Utenlandsopphold utenlandsopphold) {
@@ -85,8 +78,7 @@ public class PleiepengerSyktBarn implements Ytelse {
         this.beredskap = beredskap;
         this.nattevåk = nattevåk;
         this.tilsynsordning = tilsynsordning;
-        this.opptjening = opptjening;
-        this.arbeidstaker = arbeidstaker;
+        this.arbeidAktivitet = aktivitet;
         this.lovbestemtFerie = lovbestemtFerie;
         this.bosteder = bosteder;
         this.utenlandsopphold = utenlandsopphold;
@@ -124,20 +116,12 @@ public class PleiepengerSyktBarn implements Ytelse {
         this.lovbestemtFerie = lovbestemtFerie;
     }
 
-    public Opptjening getOpptjening() {
-        return opptjening;
+    public ArbeidAktivitet getAktivitet() {
+        return arbeidAktivitet;
     }
 
-    public void setOpptjening(Opptjening opptjening) {
-        this.opptjening = opptjening;
-    }
-
-    public List<Arbeidstaker> getArbeidstaker() {
-        return arbeidstaker;
-    }
-
-    public void setArbeidstaker(List<Arbeidstaker> arbeidstaker) {
-        this.arbeidstaker = arbeidstaker;
+    public void setArbeidAktivitet(ArbeidAktivitet opptjening) {
+        this.arbeidAktivitet = opptjening;
     }
 
     public Map<Periode, SøknadsperiodeInfo> getPerioder() {
@@ -161,14 +145,14 @@ public class PleiepengerSyktBarn implements Ytelse {
         return new PleiepengerSyktBarnValidator();
     }
 
-    @Size(max = 0)
+    @Size(max=0, message="${validatedValue}")
     private List<Feil> getValiderAngittUtenlandsopphold() {
         return utenlandsopphold == null
             ? List.of()
             : new PeriodeValidator().validerIkkeTillattOverlapp(utenlandsopphold.perioder, "utenlandsopphold.perioder");
     }
 
-    @Size(max = 0)
+    @Size(max=0, message="${validatedValue}")
     private List<Feil> getValiderAngittBosteder() {
         return bosteder == null
             ? List.of()

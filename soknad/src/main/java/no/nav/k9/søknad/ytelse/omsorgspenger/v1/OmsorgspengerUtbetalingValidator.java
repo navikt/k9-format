@@ -6,8 +6,8 @@ import java.util.List;
 import no.nav.k9.søknad.PeriodeValidator;
 import no.nav.k9.søknad.Validator;
 import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.opptjening.snf.Frilanser;
-import no.nav.k9.søknad.felles.opptjening.snf.SelvstendigNæringsdrivende;
+import no.nav.k9.søknad.felles.aktivitet.Frilanser;
+import no.nav.k9.søknad.felles.aktivitet.SelvstendigNæringsdrivende;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 
@@ -23,13 +23,13 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
         var omsorgspengerUtbetaling = (OmsorgspengerUtbetaling) ytelse;
 
         List<Feil> feil = new ArrayList<>();
-        validerAktivitet(omsorgspengerUtbetaling, feil);
+        getAktivitet(omsorgspengerUtbetaling, feil);
         feil.addAll(Validator.validerTilFeil(ytelse));
         return feil;
     }
 
-    private void validerAktivitet(OmsorgspengerUtbetaling søknad, List<Feil> feil) {
-        var aktivitet = søknad.getOpptjening();
+    private void getAktivitet(OmsorgspengerUtbetaling søknad, List<Feil> feil) {
+        var aktivitet = søknad.getAktivitet();
 
         if (aktivitet != null) {
 

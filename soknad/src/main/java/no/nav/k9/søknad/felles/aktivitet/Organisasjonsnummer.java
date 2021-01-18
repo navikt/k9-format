@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.felles.type;
+package no.nav.k9.søknad.felles.aktivitet;
 
 import java.util.Objects;
 

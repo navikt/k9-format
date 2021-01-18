@@ -19,12 +19,13 @@ import org.junit.Test;
 import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.opptjening.Opptjening;
-import no.nav.k9.søknad.felles.opptjening.arbeidstaker.Arbeidstaker;
-import no.nav.k9.søknad.felles.opptjening.snf.Frilanser;
-import no.nav.k9.søknad.felles.opptjening.snf.SelvstendigNæringsdrivende;
+import no.nav.k9.søknad.felles.aktivitet.ArbeidAktivitet;
+import no.nav.k9.søknad.felles.aktivitet.Arbeidstaker;
+import no.nav.k9.søknad.felles.aktivitet.Frilanser;
+import no.nav.k9.søknad.felles.aktivitet.Organisasjonsnummer;
+import no.nav.k9.søknad.felles.aktivitet.SelvstendigNæringsdrivende;
+import no.nav.k9.søknad.felles.aktivitet.VirksomhetType;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
-import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnValidator;
@@ -50,10 +51,10 @@ public class PleiepengerBarnSøknadValidatorTest {
         verifyHarFeil(builder);
 
         builder.setPerioder(Map.of(Periode.builder()
-                        .fraOgMed(LocalDate.now())
-                        .tilOgMed(LocalDate.now().plusDays(1))
-                        .build(),
-                SøknadsperiodeInfo.builder().build()));
+            .fraOgMed(LocalDate.now())
+            .tilOgMed(LocalDate.now().plusDays(1))
+            .build(),
+            SøknadsperiodeInfo.builder().build()));
         verifyIngenFeil(builder);
     }
 
@@ -61,12 +62,12 @@ public class PleiepengerBarnSøknadValidatorTest {
     public void søknadMedTilsynsordningOppholdLengreEnnPerioden() {
         var søknad = TestUtils.komplettBuilder();
         Tilsynsordning tilsynsordning = Tilsynsordning.builder()
-                .iTilsynsordning(TilsynsordningSvar.JA)
-                .opphold(Periode.builder().enkeltDag(LocalDate.now()).build(),
-                        TilsynsordningOpphold.builder()
-                                .lengde(Duration.ofDays(2))
-                                .build())
-                .build();
+            .iTilsynsordning(TilsynsordningSvar.JA)
+            .opphold(Periode.builder().enkeltDag(LocalDate.now()).build(),
+                TilsynsordningOpphold.builder()
+                    .lengde(Duration.ofDays(2))
+                    .build())
+            .build();
 
         søknad.setTilsynsordning(tilsynsordning);
 
@@ -76,103 +77,105 @@ public class PleiepengerBarnSøknadValidatorTest {
     @Test
     public void søknadMedUgyldigInfoOmArbeid() {
         var søknad = TestUtils.komplettBuilder();
-        var arbeid = new ArrayList<>(søknad.getArbeidstaker());
+        var arbeid = new ArrayList<>(søknad.getAktivitet().getArbeidstaker());
         arbeid.add(Arbeidstaker.builder()
-                .organisasjonsnummer(Organisasjonsnummer.of("88888888"))
-                .periode(Periode.builder()
-                                .fraOgMed(LocalDate.now())
-                                .tilOgMed(LocalDate.now().plusDays(3))
-                                .build(),
-                        Arbeidstaker.ArbeidstakerPeriodeInfo.builder()
-                                .skalJobbeProsent(BigDecimal.valueOf(120.00))
-                                .build())
-                .build());
+            .organisasjonsnummer(Organisasjonsnummer.of("88888888"))
+            .periode(Periode.builder()
+                .fraOgMed(LocalDate.now())
+                .tilOgMed(LocalDate.now().plusDays(3))
+                .build(),
+                Arbeidstaker.ArbeidstakerPeriodeInfo.builder()
+                    .skalJobbeProsent(BigDecimal.valueOf(120.00))
+                    .build())
+            .build());
 
-        søknad.setArbeidstaker(arbeid);
+        søknad.setArbeidAktivitet(ArbeidAktivitet.builder().arbeidstaker(arbeid).build());
         verifyHarFeil(søknad);
 
         arbeid.add(Arbeidstaker.builder()
-                .organisasjonsnummer(Organisasjonsnummer.of("88888888"))
-                .norskIdentitetsnummer(NorskIdentitetsnummer.of("29099012345"))
-                .periode(Periode.builder()
-                                .fraOgMed(LocalDate.now())
-                                .tilOgMed(LocalDate.now().plusDays(3))
-                                .build(),
-                        Arbeidstaker.ArbeidstakerPeriodeInfo.builder()
-                                .skalJobbeProsent(BigDecimal.valueOf(100.00))
-                                .build())
-                .build());
-        søknad.setArbeidstaker(arbeid);
+            .organisasjonsnummer(Organisasjonsnummer.of("88888888"))
+            .norskIdentitetsnummer(NorskIdentitetsnummer.of("29099012345"))
+            .periode(Periode.builder()
+                .fraOgMed(LocalDate.now())
+                .tilOgMed(LocalDate.now().plusDays(3))
+                .build(),
+                Arbeidstaker.ArbeidstakerPeriodeInfo.builder()
+                    .skalJobbeProsent(BigDecimal.valueOf(100.00))
+                    .build())
+            .build());
+        søknad.setArbeidAktivitet(ArbeidAktivitet.builder().arbeidstaker(arbeid).build());
         verifyHarFeil(søknad);
 
         arbeid.add(Arbeidstaker.builder()
-                .organisasjonsnummer(Organisasjonsnummer.of("88888888"))
-                .norskIdentitetsnummer(NorskIdentitetsnummer.of("29099012345"))
-                .periode(Periode.builder()
-                                .fraOgMed(LocalDate.now())
-                                .tilOgMed(LocalDate.now().plusDays(3))
-                                .build(),
-                        Arbeidstaker.ArbeidstakerPeriodeInfo.builder()
-                                .skalJobbeProsent(BigDecimal.valueOf(-20.00))
-                                .build())
-                .build());
+            .organisasjonsnummer(Organisasjonsnummer.of("88888888"))
+            .norskIdentitetsnummer(NorskIdentitetsnummer.of("29099012345"))
+            .periode(Periode.builder()
+                .fraOgMed(LocalDate.now())
+                .tilOgMed(LocalDate.now().plusDays(3))
+                .build(),
+                Arbeidstaker.ArbeidstakerPeriodeInfo.builder()
+                    .skalJobbeProsent(BigDecimal.valueOf(-20.00))
+                    .build())
+            .build());
 
-        søknad.setArbeidstaker(arbeid);
+        søknad.setArbeidAktivitet(ArbeidAktivitet.builder().arbeidstaker(arbeid).build());
         verifyHarFeil(søknad);
 
         arbeid.add(Arbeidstaker.builder()
-                .periode(Periode.builder()
-                                .fraOgMed(LocalDate.now())
-                                .tilOgMed(LocalDate.now().plusDays(3))
-                                .build(),
-                        Arbeidstaker.ArbeidstakerPeriodeInfo.builder()
-                                .skalJobbeProsent(BigDecimal.valueOf(20.00))
-                                .build())
-                .build());
+            .periode(Periode.builder()
+                .fraOgMed(LocalDate.now())
+                .tilOgMed(LocalDate.now().plusDays(3))
+                .build(),
+                Arbeidstaker.ArbeidstakerPeriodeInfo.builder()
+                    .skalJobbeProsent(BigDecimal.valueOf(20.00))
+                    .build())
+            .build());
 
-        søknad.setArbeidstaker(arbeid);
+        søknad.setArbeidAktivitet(ArbeidAktivitet.builder().arbeidstaker(arbeid).build());
         verifyHarFeil(søknad);
     }
 
     @Test
     public void ÅpneOgOverlappendePerioderForFrilanserOgSelvstendig() {
         var søknad = TestUtils.komplettBuilder();
-        var selvstendig = SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder().build();
+        var selvstendig = SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
+            .virksomhetstyper(List.of(VirksomhetType.ANNEN)).build();
 
-        var opptjening = Opptjening
-                .builder()
-                .frilanser(Frilanser.builder()
-                        .startdato(LocalDate.parse("2020-01-01"))
-                        .jobberFortsattSomFrilans(true)
-                        .build())
-                .selvstendigNæringsdrivende(SelvstendigNæringsdrivende.builder()
-                        .periode(Periode.parse("2020-01-01/2020-02-02"), selvstendig)
-                        .periode(Periode.parse("2020-01-05/2020-02-01"), selvstendig)
-                        .periode(Periode.parse("2020-01-01/.."), selvstendig)
-                        .periode(Periode.parse("2020-01-05/.."), selvstendig)
-                        .build()
-                ).build();
-        søknad.setOpptjening(opptjening);
+        var opptjening = ArbeidAktivitet
+            .builder()
+            .frilanser(Frilanser.builder()
+                .startdato(LocalDate.parse("2020-01-01"))
+                .jobberFortsattSomFrilans(true)
+                .build())
+            .selvstendigNæringsdrivende(SelvstendigNæringsdrivende.builder()
+                .virksomhetNavn("Hello AS")
+                .periode(Periode.parse("2020-01-01/2020-02-02"), selvstendig)
+                .periode(Periode.parse("2020-01-05/2020-02-01"), selvstendig)
+                .periode(Periode.parse("2020-01-01/.."), selvstendig)
+                .periode(Periode.parse("2020-01-05/.."), selvstendig)
+                .build())
+            .build();
+        søknad.setArbeidAktivitet(opptjening);
         verifyIngenFeil(søknad);
     }
 
     @Test
     public void ArbeidstakerInfoUtenJobberNormaltPerUke() {
         var søknad = TestUtils.komplettBuilder();
-        var arbeid = new ArrayList<>(søknad.getArbeidstaker());
+        var arbeid = new ArrayList<>(søknad.getAktivitet().getArbeidstaker());
         arbeid.add(Arbeidstaker.builder()
-                .organisasjonsnummer(Organisasjonsnummer.of("88888888"))
-                .periode(Periode.builder()
-                                .fraOgMed(LocalDate.now())
-                                .tilOgMed(LocalDate.now().plusDays(3))
-                                .build(),
-                        Arbeidstaker.ArbeidstakerPeriodeInfo.builder()
-                                .skalJobbeProsent(BigDecimal.valueOf(100.00))
-                                .jobberNormaltPerUke(null)
-                                .build())
-                .build());
+            .organisasjonsnummer(Organisasjonsnummer.of("88888888"))
+            .periode(Periode.builder()
+                .fraOgMed(LocalDate.now())
+                .tilOgMed(LocalDate.now().plusDays(3))
+                .build(),
+                Arbeidstaker.ArbeidstakerPeriodeInfo.builder()
+                    .skalJobbeProsent(BigDecimal.valueOf(100.00))
+                    .jobberNormaltPerUke(null)
+                    .build())
+            .build());
 
-        søknad.setArbeidstaker(arbeid);
+        søknad.setArbeidAktivitet(ArbeidAktivitet.builder().arbeidstaker(arbeid).build());
 
         Assertions.assertThat(verifyHarFeil(søknad)).hasSize(1);
     }
@@ -180,20 +183,20 @@ public class PleiepengerBarnSøknadValidatorTest {
     @Test
     public void ArbeidstakerInfoMedJobberNormaltPerUkeOverEnUke() {
         var søknad = TestUtils.komplettBuilder();
-        var arbeid = new ArrayList<>(søknad.getArbeidstaker());
+        var arbeid = new ArrayList<>(søknad.getAktivitet().getArbeidstaker());
         arbeid.add(Arbeidstaker.builder()
-                .organisasjonsnummer(Organisasjonsnummer.of("88888888"))
-                .periode(Periode.builder()
-                                .fraOgMed(LocalDate.now())
-                                .tilOgMed(LocalDate.now().plusDays(3))
-                                .build(),
-                        Arbeidstaker.ArbeidstakerPeriodeInfo.builder()
-                                .skalJobbeProsent(BigDecimal.valueOf(100.00))
-                                .jobberNormaltPerUke(Duration.ofDays(7).plusSeconds(1))
-                                .build()
-                ).build());
+            .organisasjonsnummer(Organisasjonsnummer.of("88888888"))
+            .periode(Periode.builder()
+                .fraOgMed(LocalDate.now())
+                .tilOgMed(LocalDate.now().plusDays(3))
+                .build(),
+                Arbeidstaker.ArbeidstakerPeriodeInfo.builder()
+                    .skalJobbeProsent(BigDecimal.valueOf(100.00))
+                    .jobberNormaltPerUke(Duration.ofDays(7).plusSeconds(1))
+                    .build())
+            .build());
 
-        søknad.setArbeidstaker(arbeid);
+        søknad.setArbeidAktivitet(ArbeidAktivitet.builder().arbeidstaker(arbeid).build());
 
         Assertions.assertThat(verifyHarFeil(søknad)).hasSize(1);
     }
@@ -201,19 +204,20 @@ public class PleiepengerBarnSøknadValidatorTest {
     @Test
     public void ArbeidstakerInfoMedJobberNormaltPerUkeSattTilNegativVerdi() {
         var søknad = TestUtils.komplettBuilder();
-        var arbeid = new ArrayList<>(søknad.getArbeidstaker());
+        var arbeid = new ArrayList<>(søknad.getAktivitet().getArbeidstaker());
         arbeid.add(Arbeidstaker.builder()
-                .organisasjonsnummer(Organisasjonsnummer.of("88888888"))
-                .periode(Periode.builder()
-                                .fraOgMed(LocalDate.now())
-                                .tilOgMed(LocalDate.now().plusDays(3))
-                                .build(),
-                        Arbeidstaker.ArbeidstakerPeriodeInfo.builder()
-                                .skalJobbeProsent(BigDecimal.valueOf(100.00))
-                                .jobberNormaltPerUke(Duration.ZERO.minusDays(1))
-                                .build()).build());
+            .organisasjonsnummer(Organisasjonsnummer.of("88888888"))
+            .periode(Periode.builder()
+                .fraOgMed(LocalDate.now())
+                .tilOgMed(LocalDate.now().plusDays(3))
+                .build(),
+                Arbeidstaker.ArbeidstakerPeriodeInfo.builder()
+                    .skalJobbeProsent(BigDecimal.valueOf(100.00))
+                    .jobberNormaltPerUke(Duration.ZERO.minusDays(1))
+                    .build())
+            .build());
 
-        søknad.setArbeidstaker(arbeid);
+        søknad.setArbeidAktivitet(ArbeidAktivitet.builder().arbeidstaker(arbeid).build());
 
         Assertions.assertThat(verifyHarFeil(søknad)).hasSize(1);
     }

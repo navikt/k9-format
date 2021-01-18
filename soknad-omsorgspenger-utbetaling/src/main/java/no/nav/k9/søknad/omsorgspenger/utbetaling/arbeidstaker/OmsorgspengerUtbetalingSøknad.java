@@ -88,7 +88,7 @@ public class OmsorgspengerUtbetalingSøknad implements Innsending {
         return søknadId;
     }
     
-    @Size(max=0)
+    @Size(max=0, message="${validatedValue}")
     private List<Feil> getValiderAngittFosterbarn() {
         var barn = this.fosterbarn;
         if (barn == null || barn.isEmpty())

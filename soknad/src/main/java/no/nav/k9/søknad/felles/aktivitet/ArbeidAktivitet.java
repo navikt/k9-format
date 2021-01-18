@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.felles.opptjening;
+package no.nav.k9.søknad.felles.aktivitet;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
@@ -13,11 +13,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import no.nav.k9.søknad.felles.opptjening.snf.Frilanser;
-import no.nav.k9.søknad.felles.opptjening.snf.SelvstendigNæringsdrivende;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Opptjening {
+public class ArbeidAktivitet {
 
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     @JsonProperty(value = "selvstendigNæringsdrivende")
@@ -29,9 +26,16 @@ public class Opptjening {
     @Valid
     private final Frilanser frilanser;
 
+    @Valid
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    @JsonProperty(value = "arbeidstaker")
+    private List<Arbeidstaker> arbeidstaker;
+
     @JsonCreator
-    private Opptjening(@JsonProperty(value = "selvstendigNæringsdrivende") List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende,
-                       @JsonProperty(value = "frilanser") Frilanser frilanser) {
+    private ArbeidAktivitet(@JsonProperty(value = "arbeidstaker") @Valid List<Arbeidstaker> arbeidstaker,
+                      @JsonProperty(value = "selvstendigNæringsdrivende") List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende,
+                      @JsonProperty(value = "frilanser") Frilanser frilanser) {
+        this.arbeidstaker = arbeidstaker;
         this.selvstendigNæringsdrivende = (selvstendigNæringsdrivende == null) ? emptyList() : unmodifiableList(selvstendigNæringsdrivende);
         this.frilanser = frilanser;
     }
@@ -47,14 +51,18 @@ public class Opptjening {
     public Frilanser getFrilanser() {
         return frilanser;
     }
+    
+    public List<Arbeidstaker> getArbeidstaker() {
+        return arbeidstaker;
+    }
+    
 
     public static final class Builder {
-        private List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende;
+        private List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende = new ArrayList<>();
         private Frilanser frilanser;
+        private List<Arbeidstaker> arbeidstaker = new ArrayList<>();
 
         private Builder() {
-            selvstendigNæringsdrivende = new ArrayList<>();
-            frilanser = null;
         }
 
         public Builder selvstendigNæringsdrivende(List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende) {
@@ -62,18 +70,28 @@ public class Opptjening {
             return this;
         }
 
+        public Builder arbeidstaker(Arbeidstaker arbeidstaker) {
+            this.arbeidstaker.add(arbeidstaker);
+            return this;
+        }
+        
+        public Builder arbeidstaker(List<Arbeidstaker> arbeidstaker) {
+            this.arbeidstaker.addAll(arbeidstaker);
+            return this;
+        }
+
         public Builder selvstendigNæringsdrivende(SelvstendigNæringsdrivende selvstendigNæringsdrivende) {
             this.selvstendigNæringsdrivende.add(selvstendigNæringsdrivende);
             return this;
         }
-
+        
         public Builder frilanser(Frilanser frilanser) {
             this.frilanser = frilanser;
             return this;
         }
 
-        public Opptjening build() {
-            return new Opptjening(selvstendigNæringsdrivende, frilanser);
+        public ArbeidAktivitet build() {
+            return new ArbeidAktivitet(arbeidstaker, selvstendigNæringsdrivende, frilanser);
         }
     }
 }

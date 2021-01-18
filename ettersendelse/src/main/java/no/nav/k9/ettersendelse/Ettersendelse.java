@@ -2,14 +2,17 @@ package no.nav.k9.ettersendelse;
 
 import java.time.ZonedDateTime;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.Innsending;
+import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.SøknadId;
@@ -17,15 +20,32 @@ import no.nav.k9.søknad.felles.type.SøknadId;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Ettersendelse implements Innsending {
+    
+    @JsonProperty(value="søknadId", required = true)
+    @NotNull
+    @Valid
     public final SøknadId søknadId;
 
+    @JsonProperty(value="versjon")
+    @Valid
     public final Versjon versjon;
 
+
+    @JsonProperty(value="mottattDato")
+    @Valid
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
     public final ZonedDateTime mottattDato;
 
+
+    @JsonProperty(value="søker", required = true)
+    @Valid
+    @NotNull
     public final Søker søker;
 
+
+    @JsonProperty(value="ytelse", required = true)
+    @Valid
+    @NotNull
     public final Ytelse ytelse;
 
     @JsonCreator

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -19,8 +20,8 @@ import no.nav.k9.søknad.Innsending;
 import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
-import no.nav.k9.søknad.felles.opptjening.snf.Frilanser;
-import no.nav.k9.søknad.felles.opptjening.snf.SelvstendigNæringsdrivende;
+import no.nav.k9.søknad.felles.aktivitet.Frilanser;
+import no.nav.k9.søknad.felles.aktivitet.SelvstendigNæringsdrivende;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.SøknadId;
@@ -64,7 +65,7 @@ public class OmsorgspengerUtbetalingSøknad implements Innsending {
     @JsonProperty("frilanser")
     @Valid
     public final Frilanser frilanser;
-
+    
     @JsonCreator
     private OmsorgspengerUtbetalingSøknad(
             @JsonProperty("søknadId") SøknadId søknadId,
@@ -81,6 +82,11 @@ public class OmsorgspengerUtbetalingSøknad implements Innsending {
         this.fosterbarn = (fosterbarn == null) ? List.of() : fosterbarn;
         this.selvstendigNæringsdrivende = selvstendigNæringsdrivende;
         this.frilanser = frilanser;
+    }
+    
+    @AssertTrue(message="Enten frilanser eller selvstendingNæringsdrivende må være satt i søknaden")
+    private boolean isFrilanserEllerSn() {
+        return frilanser!=null || (selvstendigNæringsdrivende!=null && !selvstendigNæringsdrivende.isEmpty());
     }
     
     @Override
@@ -103,7 +109,7 @@ public class OmsorgspengerUtbetalingSøknad implements Innsending {
         return søknadId;
     }
 
-    @Size(max=0)
+    @Size(max=0, message="${validatedValue}")
     private List<Feil> getValiderAngittFosterbarn() {
         var barn = this.fosterbarn;
         if (barn == null || barn.isEmpty())

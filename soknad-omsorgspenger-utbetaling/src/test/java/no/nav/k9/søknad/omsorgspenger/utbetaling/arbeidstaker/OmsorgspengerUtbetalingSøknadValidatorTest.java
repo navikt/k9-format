@@ -3,6 +3,7 @@ package no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker;
 import static junit.framework.TestCase.assertEquals;
 import static no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker.TestUtils.jsonForKomplettSøknad;
 import static no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker.TestUtils.komplettBuilder;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import no.nav.k9.søknad.ValideringsFeil;
@@ -46,10 +48,10 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
         builder.barn = new ArrayList<>();
         verifyIngenFeil(builder);
         builder.fosterbarn(Barn.builder().build());
-        assertEquals(1, verifyHarFeil(builder).size());
+        assertThat(verifyHarFeil(builder)).hasSize(1);
         builder.barn = new ArrayList<>();
         builder.fosterbarn(Barn.builder().fødselsdato(LocalDate.now()).norskIdentitetsnummer(NorskIdentitetsnummer.of("123")).build());
-        assertEquals(1, verifyHarFeil(builder).size());
+        assertThat(verifyHarFeil(builder)).hasSize(1);
         builder.barn = new ArrayList<>();
         builder.fosterbarn(Barn.builder().fødselsdato(LocalDate.now()).build());
         builder.fosterbarn(Barn.builder().norskIdentitetsnummer(NorskIdentitetsnummer.of("123")).build());

@@ -5,7 +5,6 @@ import static junit.framework.TestCase.assertEquals;
 import static no.nav.k9.søknad.omsorgspenger.utbetaling.snf.TestUtils.jsonForKomplettSøknad;
 import static no.nav.k9.søknad.omsorgspenger.utbetaling.snf.TestUtils.komplettBuilder;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.math.BigDecimal;
@@ -14,17 +13,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.opptjening.snf.Frilanser;
-import no.nav.k9.søknad.felles.opptjening.snf.SelvstendigNæringsdrivende;
-import no.nav.k9.søknad.felles.opptjening.snf.VirksomhetType;
+import no.nav.k9.søknad.felles.aktivitet.Frilanser;
+import no.nav.k9.søknad.felles.aktivitet.Organisasjonsnummer;
+import no.nav.k9.søknad.felles.aktivitet.SelvstendigNæringsdrivende;
+import no.nav.k9.søknad.felles.aktivitet.VirksomhetType;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.type.Landkode;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
-import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 
 @SuppressWarnings("removal")
@@ -54,10 +54,10 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
         builder.barn = new ArrayList<>();
         verifyIngenFeil(builder);
         builder.fosterbarn(Barn.builder().build());
-        assertEquals(1, verifyHarFeil(builder).size());
+        Assertions.assertThat(verifyHarFeil(builder)).hasSize(1);
         builder.barn = new ArrayList<>();
         builder.fosterbarn(Barn.builder().fødselsdato(LocalDate.now()).norskIdentitetsnummer(NorskIdentitetsnummer.of("123")).build());
-        assertEquals(1, verifyHarFeil(builder).size());
+        Assertions.assertThat(verifyHarFeil(builder)).hasSize(1);
         builder.barn = new ArrayList<>();
         builder.fosterbarn(Barn.builder().fødselsdato(LocalDate.now()).build());
         builder.fosterbarn(Barn.builder().norskIdentitetsnummer(NorskIdentitetsnummer.of("123")).build());
@@ -79,7 +79,8 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
                         .build()
         );
         builder.selvstendigNæringsdrivende(selvstendingeVirksomheter);
-        assertEquals(3, verifyHarFeil(builder).size());
+        Assertions.assertThat(verifyHarFeil(builder)).hasSize(3);
+
     }
 
     @Test
@@ -94,7 +95,7 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
                         ).build()
         );
         builder.selvstendigNæringsdrivende(selvstendingeVirksomheter);
-        assertEquals(4, verifyHarFeil(builder).size());
+        Assertions.assertThat(verifyHarFeil(builder)).hasSize(2);
     }
 
     @Test
@@ -114,7 +115,7 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
                         ).build()
         );
         builder.selvstendigNæringsdrivende(selvstendingeVirksomheter);
-        assertEquals(2, verifyHarFeil(builder).size());
+        Assertions.assertThat(verifyHarFeil(builder)).hasSize(2);
     }
 
     @Test
@@ -134,7 +135,7 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
                         ).build()
         );
         builder.selvstendigNæringsdrivende(selvstendingeVirksomheter);
-        assertEquals(1, verifyHarFeil(builder).size());
+        Assertions.assertThat(verifyHarFeil(builder)).hasSize(1);
     }
 
     @Test
@@ -155,7 +156,7 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
                         ).build()
         );
         builder.selvstendigNæringsdrivende(selvstendingeVirksomheter);
-        assertEquals(1, verifyHarFeil(builder).size());
+        Assertions.assertThat(verifyHarFeil(builder)).hasSize(1);
     }
 
     @Test
@@ -176,14 +177,14 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
                         ).build()
         );
         builder.selvstendigNæringsdrivende(selvstendingeVirksomheter);
-        assertEquals(1, verifyHarFeil(builder).size());
+        Assertions.assertThat(verifyHarFeil(builder)).hasSize(1);
     }
 
     @Test
     public void frilanser_mangler_startdato() {
         var builder = komplettBuilder();
         builder.frilanser(Frilanser.builder().build());
-        assertEquals(1, verifyHarFeil(builder).size());
+        Assertions.assertThat(verifyHarFeil(builder)).hasSize(1);
     }
 
     private List<Feil> valider(OmsorgspengerUtbetalingSøknad.Builder builder) {
@@ -197,24 +198,25 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
 
     private List<Feil> verifyHarFeil(OmsorgspengerUtbetalingSøknad.Builder builder) {
         final List<Feil> feil = valider(builder);
-        assertThat(feil, is(not(Collections.emptyList())));
+        Assertions.assertThat(feil).isNotEmpty();
         return feil;
     }
 
     private List<Feil> verifyHarFeil(OmsorgspengerUtbetalingSøknad søknad) {
         final List<Feil> feil = validator.valider(søknad);
-        assertThat(feil, is(not(Collections.emptyList())));
+        Assertions.assertThat(feil).isNotEmpty();
         return feil;
     }
 
     private void verifyIngenFeil(OmsorgspengerUtbetalingSøknad.Builder builder) {
         final List<Feil> feil = valider(builder);
-        assertThat(feil, is(Collections.emptyList()));
+        Assertions.assertThat(feil).isEmpty();
+
     }
 
     private void verifyIngenFeil(OmsorgspengerUtbetalingSøknad søknad) {
         final List<Feil> feil = validator.valider(søknad);
-        assertThat(feil, is(Collections.emptyList()));
+        Assertions.assertThat(feil).isEmpty();
     }
 
 }

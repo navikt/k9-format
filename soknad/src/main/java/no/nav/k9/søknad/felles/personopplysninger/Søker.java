@@ -17,6 +17,7 @@ import no.nav.k9.søknad.felles.type.PersonIdent;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Søker {
 
+    @JsonProperty(value="norskIdentitetsnummer", required = true)
     @NotNull
     @Valid
     public final NorskIdentitetsnummer norskIdentitetsnummer;

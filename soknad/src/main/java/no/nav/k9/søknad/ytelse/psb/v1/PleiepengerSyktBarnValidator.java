@@ -11,9 +11,9 @@ import no.nav.k9.søknad.PeriodeValidator;
 import no.nav.k9.søknad.Validator;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.LovbestemtFerie;
-import no.nav.k9.søknad.felles.opptjening.Opptjening;
-import no.nav.k9.søknad.felles.opptjening.arbeidstaker.Arbeidstaker;
-import no.nav.k9.søknad.felles.opptjening.snf.SelvstendigNæringsdrivende;
+import no.nav.k9.søknad.felles.aktivitet.ArbeidAktivitet;
+import no.nav.k9.søknad.felles.aktivitet.Arbeidstaker;
+import no.nav.k9.søknad.felles.aktivitet.SelvstendigNæringsdrivende;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
@@ -41,8 +41,8 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
         validerNattevåk(pleiepengerSyktBarn.getNattevåk(), feil);
         validerTilsynsordning(pleiepengerSyktBarn.getTilsynsordning(), feil);
         validerLovbestemtFerie(pleiepengerSyktBarn.getLovbestemtFerie(), feil);
-        validerArbeidstaker(pleiepengerSyktBarn.getArbeidstaker(), feil);
-        validerOpptjening(pleiepengerSyktBarn.getOpptjening(), feil);
+        validerArbeidstaker(pleiepengerSyktBarn.getAktivitet().getArbeidstaker(), feil);
+        validerOpptjening(pleiepengerSyktBarn.getAktivitet(), feil);
         
         feil.addAll(Validator.validerTilFeil(ytelse));
         return feil;
@@ -97,7 +97,7 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
         }
     }
 
-    private void validerOpptjening(Opptjening arbeid, List<Feil> feil) {
+    private void validerOpptjening(ArbeidAktivitet arbeid, List<Feil> feil) {
         if (arbeid == null) return;
 
         int i = 0;

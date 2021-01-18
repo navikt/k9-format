@@ -67,39 +67,40 @@
         }
       }
     },
-    "arbeidstaker" : [ {
-      "norskIdentitetsnummer" : null,
-      "organisasjonsnummer" : "999999999",
-      "perioder" : {
-        "2018-10-10/2018-12-29" : {
-          "skalJobbeProsent" : 50.25,
-          "jobberNormaltPerUke" : "PT37H30M"
-        }
-      }
-    } ],
     "lovbestemtFerie" : {
       "perioder" : {
         "2018-11-10/2018-12-29" : { }
       }
     },
-    "arbeid" : {
-      "selvstendigNæringsdrivende" : [ {
-        "perioder" : {
-          "2018-11-11/2018-11-30" : {
-            "regnskapsførerNavn" : null,
-            "regnskapsførerTlf" : null,
-            "erVarigEndring" : null,
-            "endringDato" : null,
-            "endringBegrunnelse" : null,
-            "bruttoInntekt" : null,
-            "erNyoppstartet" : null,
-            "registrertIUtlandet" : null,
-            "landkode" : null
+    "arbeidAktivitet" : {
+       "arbeidstaker" : [ {
+          "norskIdentitetsnummer" : null,
+          "organisasjonsnummer" : "999999999",
+          "perioder" : {
+            "2018-10-10/2018-12-29" : {
+              "skalJobbeProsent" : 50.25,
+              "jobberNormaltPerUke" : "PT37H30M"
+            }
           }
-        },
-        "organisasjonsnummer" : null,
-        "virksomhetNavn" : null
-      } ],
+        } ],
+        "selvstendigNæringsdrivende" : [ {
+            "organisasjonsnummer" : null,
+            "virksomhetNavn" : "Hello AS",
+            "perioder" : {
+              "2018-11-11/2018-11-30" : {
+                "virksomhetstyper":  [ "DAGMAMMA", "FISKE", "JORDBRUK_SKOGBRUK", "ANNEN", "-"],
+                "regnskapsførerNavn" : null,
+                "regnskapsførerTlf" : null,
+                "erVarigEndring" : null,
+                "endringDato" : null,
+                "endringBegrunnelse" : null,
+                "bruttoInntekt" : null,
+                "erNyoppstartet" : null,
+                "registrertIUtlandet" : null,
+                "landkode" : null
+              }
+            }
+          } ],
       "frilanser" : {
         "startdato" : "2019-10-10",
         "jobberFortsattSomFrilans" : true

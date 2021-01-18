@@ -1,0 +1,17 @@
+{"søknadId":"02c8db85-1f3a-489d-9fb5-36a3a1c7793b","versjon":"2.0.0"
+,"perioder":{"2021-01-11/2021-02-01":{}},
+"mottattDato":"2021-03-13T14:37:37.438Z",
+"språk":"nb"
+,"søker":{"norskIdentitetsnummer":"09876534123"}
+,"mottaker":{"norskIdentitetsnummer":"09876534123"}
+,"barn":{"norskIdentitetsnummer":"09876198123","fødselsdato":null}
+,"bosteder":null
+,"utenlandsopphold":null
+,"beredskap":null
+,"nattevåk":null
+,"tilsynsordning":{"iTilsynsordning":"nei","opphold":{}}
+,"arbeid":{"arbeidstaker":[]
+          ,"selvstendigNæringsdrivende":[{"perioder":{"2017-01-12/..":{}}}]
+          ,"frilanser":[]}
+          ,"lovbestemtFerie":null
+}

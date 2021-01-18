@@ -15,8 +15,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import no.nav.k9.søknad.PeriodeValidator;
 import no.nav.k9.søknad.felles.Feil;
+import no.nav.k9.søknad.felles.aktivitet.ArbeidAktivitet;
 import no.nav.k9.søknad.felles.fravær.FraværPeriode;
-import no.nav.k9.søknad.felles.opptjening.Opptjening;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
@@ -34,8 +34,8 @@ public class OmsorgspengerUtbetaling implements Ytelse {
 
     @Valid
     @NotNull
-    @JsonProperty(value = "opptjening", required = true)
-    private final Opptjening opptjening;
+    @JsonProperty(value = "aktivitet", required = true)
+    private final ArbeidAktivitet aktivitet;
 
     @Valid
     @JsonProperty(value = "bosteder")
@@ -47,18 +47,18 @@ public class OmsorgspengerUtbetaling implements Ytelse {
     
     @Valid
     @NotNull
-    @Size(min = 1)
+    @Size(min = 1, message="Minst 1 fraværsperiode må oppgis")
     @JsonProperty(value = "fraværsperioder", required = true)
     private final List<FraværPeriode> fraværsperioder;
 
     @JsonCreator
     public OmsorgspengerUtbetaling(@JsonProperty("fosterbarn") @Valid List<Barn> fosterbarn,
-                                   @JsonProperty(value = "aktivitet", required = true) @Valid @NotNull Opptjening opptjening,
+                                   @JsonProperty(value = "aktivitet", required = true) @Valid @NotNull ArbeidAktivitet opptjening,
                                    @JsonProperty(value = "fraværsperioder", required = true) @Valid @NotNull @Size(min = 1) List<FraværPeriode> fraværsperioder,
                                    @SuppressWarnings("unused") @JsonProperty(value = "bosteder") @Valid @NotNull Bosteder bosteder,
                                    @JsonProperty(value = "utenlandsopphold") @Valid @NotNull Utenlandsopphold utenlandsopphold) {
         this.fosterbarn = fosterbarn;
-        this.opptjening = opptjening;
+        this.aktivitet = opptjening;
         this.fraværsperioder = fraværsperioder;
         this.utenlandsopphold = utenlandsopphold;
     }
@@ -67,8 +67,8 @@ public class OmsorgspengerUtbetaling implements Ytelse {
         return fosterbarn;
     }
 
-    public Opptjening getOpptjening() {
-        return opptjening;
+    public ArbeidAktivitet getAktivitet() {
+        return aktivitet;
     }
 
     public List<FraværPeriode> getFraværsperioder() {
@@ -85,19 +85,19 @@ public class OmsorgspengerUtbetaling implements Ytelse {
         return new OmsorgspengerUtbetalingValidator();
     }
 
-    @Size(max=0)
+    @Size(max=0, message="${validatedValue}")
     private List<Feil> validerAngittUtenlandsopphold() {
         if (utenlandsopphold == null) List.of();
         return new PeriodeValidator().validerIkkeTillattOverlapp(utenlandsopphold.perioder, "utenlandsopphold.perioder");
     }
 
-    @Size(max=0)
+    @Size(max=0, message="${validatedValue}")
     private List<Feil> validerAngittBosteder() {
         if (bosteder == null) return List.of();
         return new PeriodeValidator().validerIkkeTillattOverlapp(bosteder.perioder, "bosteder.perioder");
     }
 
-    @Size(max=0)
+    @Size(max=0, message="${validatedValue}")
     private List<Feil> getValiderAngittFosterbarn() {
         var barn = this.fosterbarn;
         if (barn == null || barn.isEmpty())

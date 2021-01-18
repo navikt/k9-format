@@ -44,29 +44,25 @@ public class OmsorgspengerSøknad implements Innsending {
     @NotNull
     public final Søker søker;
 
-    @JsonAlias("barn")
+    @JsonAlias("fosterbarn")
+    @JsonProperty(value = "barn")
     @Valid
     public final Barn barn;
 
     @JsonCreator
     private OmsorgspengerSøknad(
-            @JsonProperty("søknadId")
-            SøknadId søknadId,
-            @JsonProperty("versjon")
-            Versjon versjon,
-            @JsonProperty("mottattDato")
-            ZonedDateTime mottattDato,
-            @JsonProperty("søker")
-            Søker søker,
-            @JsonProperty("barn")
-            Barn barn) {
+                                @JsonProperty("søknadId") SøknadId søknadId,
+                                @JsonProperty("versjon") Versjon versjon,
+                                @JsonProperty("mottattDato") ZonedDateTime mottattDato,
+                                @JsonProperty("søker") Søker søker,
+                                @JsonAlias("fosterbarn") @JsonProperty("barn") Barn barn) {
         this.søknadId = søknadId;
         this.versjon = versjon;
         this.mottattDato = mottattDato;
         this.søker = søker;
         this.barn = barn;
     }
-    
+
     @Override
     public ZonedDateTime getMottattDato() {
         return mottattDato;
@@ -76,7 +72,7 @@ public class OmsorgspengerSøknad implements Innsending {
     public Søker getSøker() {
         return søker;
     }
-    
+
     @Override
     public Versjon getVersjon() {
         return versjon;
@@ -92,10 +88,13 @@ public class OmsorgspengerSøknad implements Innsending {
     }
 
     public static final class SerDes {
-        private SerDes() {}
+        private SerDes() {
+        }
+
         public static String serialize(OmsorgspengerSøknad søknad) {
             return JsonUtils.toString(søknad);
         }
+
         public static OmsorgspengerSøknad deserialize(String søknad) {
             return JsonUtils.fromString(søknad, OmsorgspengerSøknad.class);
         }
@@ -111,7 +110,8 @@ public class OmsorgspengerSøknad implements Innsending {
         private Søker søker;
         private Barn barn;
 
-        private Builder() {}
+        private Builder() {
+        }
 
         public Builder søknadId(SøknadId søknadId) {
             this.søknadId = søknadId;
@@ -140,12 +140,11 @@ public class OmsorgspengerSøknad implements Innsending {
 
         public OmsorgspengerSøknad build() {
             OmsorgspengerSøknad søknad = (json == null) ? new OmsorgspengerSøknad(
-                    søknadId,
-                    versjon,
-                    mottattDato,
-                    søker,
-                    barn
-            ) : SerDes.deserialize(json);
+                søknadId,
+                versjon,
+                mottattDato,
+                søker,
+                barn) : SerDes.deserialize(json);
             validator.forsikreValidert(søknad);
             return søknad;
         }
