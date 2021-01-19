@@ -13,7 +13,6 @@
 		<module>soknad-omsorgspenger</module>
 		<module>soknad</module>
 		<module>soknad-omsorgspenger-utbetaling</module>
-		<module>soknad-omsorgspenger-overforing</module>
 		<module>soknad-frisinn</module>
 		<module>ettersendelse</module>
 	</modules>
@@ -61,7 +60,7 @@
 			<dependency>
 				<groupId>org.hibernate.validator</groupId>
 				<artifactId>hibernate-validator</artifactId>
-				<version>6.1.6.Final</version>
+				<version>6.2.0.Final</version>
 			</dependency>
 			<dependency>
 				<groupId>no.nav.k9</groupId>

@@ -10,9 +10,13 @@ import javax.validation.ValidatorFactory;
 import no.nav.k9.søknad.SøknadValidator;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
-import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 
+/**
+ * @deprecated ikke bruk
+ */
+@Deprecated(forRemoval = true, since = "5.0.2")
+@SuppressWarnings("removal")
 public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<OmsorgspengerUtbetalingSøknad> {
     private static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
 
@@ -21,7 +25,6 @@ public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<Om
         List<Feil> feil = validerSøknad(søknad);
         validerVersjon(søknad.versjon, feil);
         validerSøker(søknad.søker, feil);
-        validerFosterbarn(søknad.fosterbarn, feil);
         return feil;
     }
 
@@ -34,22 +37,6 @@ public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<Om
     private static void validerSøker(Søker søker, List<Feil> feil) {
         if (søker != null && søker.norskIdentitetsnummer == null) {
             feil.add(new Feil("søker.norskIdentitetsnummer", PÅKREVD, "Søkers Personnummer/D-nummer må settes i søknaden."));
-        }
-    }
-
-    private static void validerFosterbarn(List<Barn> barn, List<Feil> feil) {
-        if (barn == null || barn.isEmpty())
-            return;
-        var index = 0;
-        for (Barn b : barn) {
-            if (b.norskIdentitetsnummer == null && b.fødselsdato == null) {
-                feil.add(new Feil("fosterbarn[" + index + "]", "norskIdentitetsnummerEllerFødselsdatoPåkrevd",
-                    "Må sette enten Personnummer/D-nummer på fosterbarn, eller fødselsdato."));
-            } else if (b.norskIdentitetsnummer != null && b.fødselsdato != null) {
-                feil.add(
-                    new Feil("fosterbarn[" + index + "]", "ikkeEntydigIdPåBarnet", "Må sette enten Personnummer/D-nummer på fosterbarn, eller fødselsdato."));
-            }
-            index++;
         }
     }
 

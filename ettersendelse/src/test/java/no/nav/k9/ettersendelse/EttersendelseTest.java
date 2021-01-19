@@ -15,7 +15,9 @@ public class EttersendelseTest {
     @Test
     public void serialiseringAvJsonOgBrukAvBuilderGirSammeResultat() throws JSONException {
         String json = jsonForKomplettEttersendelse();
-        assertEquals(json, serialize(komplettBuilder().build()), true);
+        Ettersendelse ettersendelse = komplettBuilder().build();
+        String serialize = serialize(ettersendelse);
+        assertEquals(json, serialize, true);
     }
 
     @Test

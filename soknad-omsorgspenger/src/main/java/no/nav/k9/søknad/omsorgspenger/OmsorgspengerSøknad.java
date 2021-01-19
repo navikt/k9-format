@@ -6,11 +6,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import no.nav.k9.søknad.Innsending;
 import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
@@ -18,7 +20,8 @@ import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.SøknadId;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class OmsorgspengerSøknad {
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
+public class OmsorgspengerSøknad implements Innsending {
 
     @JsonProperty(value = "søknadId", required = true)
     @Valid
@@ -41,22 +44,18 @@ public class OmsorgspengerSøknad {
     @NotNull
     public final Søker søker;
 
-    @JsonAlias("barn")
+    @JsonAlias("fosterbarn")
+    @JsonProperty(value = "barn")
     @Valid
     public final Barn barn;
 
     @JsonCreator
     private OmsorgspengerSøknad(
-            @JsonProperty("søknadId")
-            SøknadId søknadId,
-            @JsonProperty("versjon")
-            Versjon versjon,
-            @JsonProperty("mottattDato")
-            ZonedDateTime mottattDato,
-            @JsonProperty("søker")
-            Søker søker,
-            @JsonProperty("barn")
-            Barn barn) {
+                                @JsonProperty("søknadId") SøknadId søknadId,
+                                @JsonProperty("versjon") Versjon versjon,
+                                @JsonProperty("mottattDato") ZonedDateTime mottattDato,
+                                @JsonProperty("søker") Søker søker,
+                                @JsonAlias("fosterbarn") @JsonProperty("barn") Barn barn) {
         this.søknadId = søknadId;
         this.versjon = versjon;
         this.mottattDato = mottattDato;
@@ -64,15 +63,38 @@ public class OmsorgspengerSøknad {
         this.barn = barn;
     }
 
+    @Override
+    public ZonedDateTime getMottattDato() {
+        return mottattDato;
+    }
+
+    @Override
+    public Søker getSøker() {
+        return søker;
+    }
+
+    @Override
+    public Versjon getVersjon() {
+        return versjon;
+    }
+
+    @Override
+    public SøknadId getSøknadId() {
+        return søknadId;
+    }
+
     public static Builder builder() {
         return new Builder();
     }
 
     public static final class SerDes {
-        private SerDes() {}
+        private SerDes() {
+        }
+
         public static String serialize(OmsorgspengerSøknad søknad) {
             return JsonUtils.toString(søknad);
         }
+
         public static OmsorgspengerSøknad deserialize(String søknad) {
             return JsonUtils.fromString(søknad, OmsorgspengerSøknad.class);
         }
@@ -88,7 +110,8 @@ public class OmsorgspengerSøknad {
         private Søker søker;
         private Barn barn;
 
-        private Builder() {}
+        private Builder() {
+        }
 
         public Builder søknadId(SøknadId søknadId) {
             this.søknadId = søknadId;
@@ -117,14 +140,14 @@ public class OmsorgspengerSøknad {
 
         public OmsorgspengerSøknad build() {
             OmsorgspengerSøknad søknad = (json == null) ? new OmsorgspengerSøknad(
-                    søknadId,
-                    versjon,
-                    mottattDato,
-                    søker,
-                    barn
-            ) : SerDes.deserialize(json);
+                søknadId,
+                versjon,
+                mottattDato,
+                søker,
+                barn) : SerDes.deserialize(json);
             validator.forsikreValidert(søknad);
             return søknad;
         }
     }
+
 }

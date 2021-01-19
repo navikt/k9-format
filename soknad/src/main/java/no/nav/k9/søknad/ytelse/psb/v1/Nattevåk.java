@@ -1,11 +1,13 @@
-package no.nav.k9.søknad.felles;
+package no.nav.k9.søknad.ytelse.psb.v1;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+import no.nav.k9.søknad.felles.type.Periode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,21 +20,19 @@ import static java.util.Collections.unmodifiableMap;
 import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPeriode;
 import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPerioder;
 
-import no.nav.k9.søknad.felles.type.Periode;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-public class LovbestemtFerie {
+public class Nattevåk {
 
     @JsonProperty(value="perioder")
+    @JsonInclude(value = Include.NON_EMPTY)
     @Valid
-    @JsonInclude(value = Include.ALWAYS)
-    public final Map<Periode, LovbestemtFeriePeriodeInfo> perioder;
+    public final Map<Periode, NattevåkPeriodeInfo> perioder;
 
     @JsonCreator
-    public LovbestemtFerie(
+    private Nattevåk(
             @JsonProperty("perioder")
-            Map<Periode, LovbestemtFeriePeriodeInfo> perioder) {
+            Map<Periode, NattevåkPeriodeInfo> perioder) {
         this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
     }
 
@@ -41,41 +41,61 @@ public class LovbestemtFerie {
     }
 
     public static final class Builder {
-        private Map<Periode, LovbestemtFeriePeriodeInfo> perioder;
+        private Map<Periode, NattevåkPeriodeInfo> perioder;
 
         private Builder() {
             perioder = new HashMap<>();
         }
 
-        public Builder perioder(Map<Periode, LovbestemtFeriePeriodeInfo> perioder) {
+        public Builder perioder(Map<Periode, NattevåkPeriodeInfo> perioder) {
             leggTilPerioder(this.perioder, perioder);
             return this;
         }
 
-        public Builder periode(Periode periode, LovbestemtFeriePeriodeInfo lovbestemtFeriePeriodeInfo) {
-            leggTilPeriode(this.perioder, periode, lovbestemtFeriePeriodeInfo);
+        public Builder periode(Periode periode, NattevåkPeriodeInfo nattevåkPeriodeInfo) {
+            leggTilPeriode(this.perioder, periode, nattevåkPeriodeInfo);
             return this;
         }
 
-        public LovbestemtFerie build() {
-            return new LovbestemtFerie(
+        public Nattevåk build() {
+            return new Nattevåk(
                     perioder
             );
         }
     }
 
-    public static final class LovbestemtFeriePeriodeInfo {
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static final class NattevåkPeriodeInfo {
+
+        @JsonProperty(value="tilleggsinformasjon")
+        @Valid
+        public final String tilleggsinformasjon;
+
+        @JsonCreator
+        private NattevåkPeriodeInfo(
+                @JsonProperty(value="tilleggsinformasjon")
+                String tilleggsinformasjon) {
+            this.tilleggsinformasjon = tilleggsinformasjon;
+        }
 
         public static Builder builder() {
             return new Builder();
         }
 
         public static final class Builder {
+            private String tilleggsinformasjon;
 
             private Builder() { }
 
-            public LovbestemtFeriePeriodeInfo build() {
-                return new LovbestemtFeriePeriodeInfo();
+            public Builder tilleggsinformasjon(String tilleggsinformasjon) {
+                this.tilleggsinformasjon = tilleggsinformasjon;
+                return this;
+            }
+
+            public NattevåkPeriodeInfo build() {
+                return new NattevåkPeriodeInfo(
+                        tilleggsinformasjon
+                );
             }
         }
     }

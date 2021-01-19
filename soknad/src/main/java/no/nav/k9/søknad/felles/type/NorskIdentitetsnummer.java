@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public class NorskIdentitetsnummer {
+public class NorskIdentitetsnummer implements PersonIdent {
 
     @JsonValue
     @Size(max=11)
@@ -26,6 +26,11 @@ public class NorskIdentitetsnummer {
         }
         return new NorskIdentitetsnummer(verdi);
     }
+    
+    @Override
+    public String getVerdi() {
+        return verdi;
+    }
 
     @Override
     public String toString() {
@@ -36,7 +41,7 @@ public class NorskIdentitetsnummer {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        NorskIdentitetsnummer that = (NorskIdentitetsnummer) o;
+        var that = (NorskIdentitetsnummer) o;
         return Objects.equals(verdi, that.verdi);
     }
 

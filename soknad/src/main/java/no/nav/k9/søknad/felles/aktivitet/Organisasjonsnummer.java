@@ -1,56 +1,49 @@
-package no.nav.k9.søknad.felles;
+package no.nav.k9.søknad.felles.aktivitet;
 
 import java.util.Objects;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public class Versjon {
-    
-    @JsonIgnore
-    private static final String SEMVER_REGEX = "(\\d+)\\.(\\d+)\\.(\\d+)";
+public class Organisasjonsnummer {
 
     @JsonValue
-    @Size(max=10)
-    @Pattern(regexp = SEMVER_REGEX, message = "'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
+    @NotNull
+    @Size(max = 20)
+    @Pattern(regexp = "^\\d+$", message = "'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     public final String verdi;
 
-    private Versjon(String verdi) {
-        this.verdi = verdi;
+    private Organisasjonsnummer(String verdi) {
+        this.verdi = Objects.requireNonNull(verdi, "organisasjonsnummer");
     }
 
     @JsonCreator
-    public static Versjon of(String verdi) {
+    public static Organisasjonsnummer of(String verdi) {
         if (verdi == null || verdi.isBlank()) {
             return null;
         }
-        return new Versjon(verdi);
+        return new Organisasjonsnummer(verdi);
     }
 
-    @JsonIgnore
-    public boolean erGyldig() {
-        return verdi.matches(SEMVER_REGEX);
-    }
-    
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        var other = (Versjon) obj;
+        var other = (Organisasjonsnummer) obj;
         return Objects.equals(verdi, other.verdi);
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(verdi);
     }
-    
+
     @Override
     public String toString() {
-        return getClass().getSimpleName()+"<versjon="+verdi+">";
+        return getClass().getSimpleName()+"<"+verdi+">";
     }
 }

@@ -9,14 +9,14 @@ import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import no.nav.k9.søknad.ytelse.omsorgspenger.OmsorgspengerUtbetaling;
-import no.nav.k9.søknad.ytelse.psb.PleiepengerSyktBarn;
+import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetaling;
+import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
 
 public final class JsonUtils {
 
@@ -53,11 +53,12 @@ public final class JsonUtils {
         final ObjectMapper objectMapper = new ObjectMapper()
                 .registerModule(new Jdk8Module())
                 .registerModule(new JavaTimeModule())
-                .setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE)
+                .setPropertyNamingStrategy(PropertyNamingStrategies.LOWER_CAMEL_CASE) 
                 .setTimeZone(TimeZone.getTimeZone("Europe/Oslo"))
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .disable(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS)
                 .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                 .configure(JsonGenerator.Feature.WRITE_BIGDECIMAL_AS_PLAIN, true)
                 .enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY)
                 .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
