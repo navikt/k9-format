@@ -57,7 +57,7 @@ public class Frilanser {
         if (inntekterSøknadsperiode.isEmpty()) {
             return null;
         } else {
-            return new Periode(inntekterSøknadsperiode.firstKey().fraOgMed, inntekterSøknadsperiode.lastKey().tilOgMed);
+            return new Periode(inntekterSøknadsperiode.firstKey().getFraOgMed(), inntekterSøknadsperiode.lastKey().getTilOgMed());
         }
     }
 

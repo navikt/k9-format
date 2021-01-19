@@ -1,8 +1,5 @@
 package no.nav.k9.søknad.ytelse.omsorgspenger.v1;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import no.nav.k9.søknad.PeriodeValidator;
 import no.nav.k9.søknad.Validator;
 import no.nav.k9.søknad.felles.Feil;
@@ -10,6 +7,9 @@ import no.nav.k9.søknad.felles.aktivitet.Frilanser;
 import no.nav.k9.søknad.felles.aktivitet.SelvstendigNæringsdrivende;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
     private final PeriodeValidator periodeValidator;
@@ -57,7 +57,7 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
             feil.addAll(this.periodeValidator.validerTillattOverlappOgÅpnePerioder(sn.perioder, snFelt + ".perioder"));
 
             sn.perioder.forEach((periode, snInfo) -> {
-                String periodeString = periode.fraOgMed + "-" + periode.tilOgMed;
+                String periodeString = periode.getFraOgMed() + "-" + periode.getTilOgMed();
                 String snInfoFelt = "selvstendigNæringsdrivende.perioder{" + periodeString + "}";
 
                 if (snInfo.erVarigEndring != null && snInfo.erVarigEndring) {

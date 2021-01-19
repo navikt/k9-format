@@ -1,17 +1,16 @@
 package no.nav.k9.søknad.felles.aktivitet;
 
-import static java.util.Collections.emptyList;
-import static java.util.Collections.unmodifiableList;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.validation.Valid;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.Collections.emptyList;
+import static java.util.Collections.unmodifiableList;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ArbeidAktivitet {
@@ -51,11 +50,11 @@ public class ArbeidAktivitet {
     public Frilanser getFrilanser() {
         return frilanser;
     }
-    
+
     public List<Arbeidstaker> getArbeidstaker() {
         return arbeidstaker;
     }
-    
+
 
     public static final class Builder {
         private List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende = new ArrayList<>();
@@ -74,7 +73,7 @@ public class ArbeidAktivitet {
             this.arbeidstaker.add(arbeidstaker);
             return this;
         }
-        
+
         public Builder arbeidstaker(List<Arbeidstaker> arbeidstaker) {
             this.arbeidstaker.addAll(arbeidstaker);
             return this;
@@ -84,7 +83,7 @@ public class ArbeidAktivitet {
             this.selvstendigNæringsdrivende.add(selvstendigNæringsdrivende);
             return this;
         }
-        
+
         public Builder frilanser(Frilanser frilanser) {
             this.frilanser = frilanser;
             return this;

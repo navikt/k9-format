@@ -1,8 +1,8 @@
 package no.nav.k9.søknad.ytelse;
 
-import javax.validation.Valid;
-
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+import javax.validation.Valid;
 
 @Valid
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")

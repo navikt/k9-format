@@ -1,13 +1,12 @@
 package no.nav.k9.søknad.ytelse.legacy;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import no.nav.k9.søknad.Validator;
+import org.junit.Test;
 
 import java.util.Collections;
 
-import org.junit.Test;
-
-import no.nav.k9.søknad.Validator;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class LegacySøknadValidatorTest {
 

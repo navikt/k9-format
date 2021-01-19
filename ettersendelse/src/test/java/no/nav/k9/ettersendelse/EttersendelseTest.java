@@ -3,9 +3,8 @@ package no.nav.k9.ettersendelse;
 import org.json.JSONException;
 import org.junit.Test;
 
-import static no.nav.k9.ettersendelse.Ettersendelse.SerDes.serialize;
 import static no.nav.k9.ettersendelse.Ettersendelse.SerDes.deserialize;
-
+import static no.nav.k9.ettersendelse.Ettersendelse.SerDes.serialize;
 import static no.nav.k9.ettersendelse.TestUtils.jsonForKomplettEttersendelse;
 import static no.nav.k9.ettersendelse.TestUtils.komplettBuilder;
 import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;

@@ -1,15 +1,15 @@
 package no.nav.k9.søknad.omsorgspenger;
 
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 import no.nav.k9.søknad.SøknadValidator;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.SøknadId;
+
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OmsorgspengerSøknadValidator extends SøknadValidator<OmsorgspengerSøknad> {
 

@@ -1,38 +1,37 @@
-package no.nav.k9.søknad.felles;
+package no.nav.k9.søknad.ytelse.psb.v1.arbeid;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import no.nav.k9.søknad.felles.type.Periode;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-public class LovbestemtFerie {
+public class Arbeid {
 
-    @JsonProperty(value="perioder", required = true)
+    //TODO legge inn støtte for SN FL
+
     @Valid
     @NotNull
-    @NotEmpty
-    private List<Periode> perioder;
+    @JsonProperty(value = "arbedstaker")
+    private List<Arbeidstaker> arbeidstaker;
 
     @JsonCreator
-    public LovbestemtFerie(
-            @JsonProperty(value = "perioder", required = true) @Valid @NotNull @NotEmpty
-            List<Periode> perioder) {
-        this.perioder = perioder;
+    public Arbeid(@JsonProperty(value = "arbeidstaker") @Valid List<Arbeidstaker> arbeidstaker) {
+        this.arbeidstaker = arbeidstaker;
     }
 
-    public List<Periode> getPerioder() {
-        return perioder;
+    public List<Arbeidstaker> getArbeidstaker() {
+        return arbeidstaker;
     }
 
-    public void setPerioder(List<Periode> perioder) {
-        this.perioder = perioder;
+    public void setArbeidstaker(List<Arbeidstaker> arbeidstaker) {
+        this.arbeidstaker = arbeidstaker;
     }
+
+
 }

@@ -1,110 +1,114 @@
 {
-  "søknadId" : "1",
-  "versjon" : "2.0.0",
-  "mottattDato" : "2020-10-12T12:53:21.046Z",
-  "søker" : {
-    "norskIdentitetsnummer" : "11111111111"
+  "søknadId": "1",
+  "versjon": "2.0.0",
+  "mottattDato": "2020-10-12T12:53:21.046Z",
+  "søker": {
+    "norskIdentitetsnummer": "11111111111"
   },
-  "ytelse" : {
-    "type" : "PLEIEPENGER_SYKT_BARN",
-    "bosteder" : {
-        "perioder": {
-          "2022-12-30/2023-10-10" : {
-            "land": "POL"
-          }
-        }
+  "ytelse": {
+    "type": "PLEIEPENGER_SYKT_BARN",
+    "søknadsperiode": "2018-12-30/2019-10-20",
+    "barn": {
+      "norskIdentitetsnummer": "11111111111",
+      "fødselsdato": "2021-01-19"
     },
-    "utenlandsopphold" : {
+    "arbeidAktivitet": {
+      "selvstendigNæringsdrivende": [
+        {
+          "perioder": {
+            "2018-11-11/2018-11-30": {
+              "virksomhetstyper": [
+                "FISKE"
+              ]
+            }
+          },
+          "virksomhetNavn": "Test"
+        }
+      ],
+      "frilanser": {
+        "startdato": "2019-10-10",
+        "jobberFortsattSomFrilans": true
+      }
+    },
+    "beredskap": {
       "perioder": {
-          "2018-12-30/2019-10-10" : {
-            "land": "SWE",
-            "årsak": "barnetInnlagtIHelseinstitusjonForNorskOffentligRegning"
-          },
-          "2018-10-10/2018-10-30" : {
-            "land": "NOR",
-            "årsak": null
-          },
-          "2021-10-10/2050-01-05" : {
-            "land": "DEN",
-            "årsak": "barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd"
-          }
-        }
-      },
-    "perioder" : {
-      "2018-12-30/2019-10-20" : { }
-    },
-    "beredskap" : {
-      "perioder" : {
-        "2018-10-10/2018-12-29" : {
-          "tilleggsinformasjon" : "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
+        "2018-12-30/2019-02-20": {
+          "tilleggsinformasjon": "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
         },
-        "2019-01-01/2019-01-30" : {
-          "tilleggsinformasjon" : "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
+        "2019-02-21/2019-05-21": {
+          "tilleggsinformasjon": "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
         }
       }
     },
-    "nattevåk" : {
-      "perioder" : {
-        "2018-10-10/2018-12-29" : {
-          "tilleggsinformasjon" : "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
+    "nattevåk": {
+      "perioder": {
+        "2018-12-30/2019-02-20": {
+          "tilleggsinformasjon": "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
         },
-        "2019-01-01/2019-01-30" : {
-          "tilleggsinformasjon" : "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
+        "2019-02-21/2019-05-21": {
+          "tilleggsinformasjon": "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
         }
       }
     },
-    "tilsynsordning" : {
-      "iTilsynsordning" : "ja",
-      "opphold" : {
-        "2019-01-01/2019-01-01" : {
-          "lengde" : "PT7H30M"
+    "tilsynsordning": {
+      "iTilsynsordning": "ja",
+      "opphold": {
+        "2019-01-02/2019-01-02": {
+          "lengde": "PT7H25M"
         },
-        "2020-01-03/2020-01-09" : {
-          "lengde" : "PT168H"
+        "2019-01-03/2019-01-09": {
+          "lengde": "PT168H"
         },
-        "2020-01-02/2020-01-02" : {
-          "lengde" : "PT7H25M"
+        "2019-01-01/2019-01-01": {
+          "lengde": "PT7H30M"
         }
       }
     },
-    "lovbestemtFerie" : {
-      "perioder" : {
-        "2018-11-10/2018-12-29" : { }
-      }
-    },
-    "arbeidAktivitet" : {
-       "arbeidstaker" : [ {
-          "norskIdentitetsnummer" : null,
-          "organisasjonsnummer" : "999999999",
-          "perioder" : {
-            "2018-10-10/2018-12-29" : {
-              "skalJobbeProsent" : 50.25,
-              "jobberNormaltPerUke" : "PT37H30M"
+    "arbeid": {
+      "arbeidstaker": [
+        {
+          "norskIdentitetsnummer": null,
+          "organisasjonsnummer": "999999999",
+          "arbeidsforholdId": null,
+          "perioder": {
+            "2018-12-30/2019-10-20": {
+              "faktiskArbeidTimerPerDag": 3.5,
+              "jobberNormaltTimerPerDag": 7.5
             }
           }
-        } ],
-        "selvstendigNæringsdrivende" : [ {
-            "organisasjonsnummer" : null,
-            "virksomhetNavn" : "Hello AS",
-            "perioder" : {
-              "2018-11-11/2018-11-30" : {
-                "virksomhetstyper":  [ "DAGMAMMA", "FISKE", "JORDBRUK_SKOGBRUK", "ANNEN", "-"],
-                "regnskapsførerNavn" : null,
-                "regnskapsførerTlf" : null,
-                "erVarigEndring" : null,
-                "endringDato" : null,
-                "endringBegrunnelse" : null,
-                "bruttoInntekt" : null,
-                "erNyoppstartet" : null,
-                "registrertIUtlandet" : null,
-                "landkode" : null
-              }
-            }
-          } ],
-      "frilanser" : {
-        "startdato" : "2019-10-10",
-        "jobberFortsattSomFrilans" : true
+        }
+      ]
+    },
+    "uttak": {
+      "perioder": {
+        "2018-12-30/2019-10-20": {
+          "timerPleieAvBarnetPerDag": 7
+        }
       }
-    }
+    },
+    "lovbestemtFerie": {
+      "perioder": [
+        "2019-02-21/2019-05-21"
+      ]
+    },
+    "bosteder": {
+      "perioder": {
+        "2018-12-30/2019-10-20": {
+          "land": "DNK"
+        }
+      }
+    },
+    "utenlandsopphold": {
+      "perioder": {
+        "2018-12-30/2019-10-20": {
+          "land": "DNK",
+          "årsak": "barnetInnlagtIHelseinstitusjonForNorskOffentligRegning"
+        }
+      }
+    },
+    "flereOmsorgspersoner": false,
+    "relasjonTilBarnet": "MORA",
+    "samtykketOmsorgForBarnet": true,
+    "beskrivelseAvOmsorgsrollen": "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
   }
 }

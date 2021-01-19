@@ -1,10 +1,10 @@
 package no.nav.k9.søknad.ytelse.legacy;
 
+import no.nav.k9.søknad.LegacySøknad;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import no.nav.k9.søknad.LegacySøknad;
 
 @SuppressWarnings("removal")
 class LegacyTestUtils {

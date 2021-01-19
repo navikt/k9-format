@@ -24,9 +24,9 @@ public class TilsynsordningUke {
     public static final Duration MAX_LENGDE_PER_DAG = Duration.ofHours(7).plusMinutes(30);
     private static final WeekFields WEEK_FIELDS = WeekFields.of(Locale.forLanguageTag("no-NO"));
 
-    final Map<Periode, TilsynsordningOpphold> opphold;
+    private Map<Periode, TilsynsordningOpphold> opphold;
 
-    private TilsynsordningUke(
+    public TilsynsordningUke(
                               Periode periode,
                               Duration mandag,
                               Duration tirsdag,
@@ -34,7 +34,7 @@ public class TilsynsordningUke {
                               Duration torsdag,
                               Duration fredag) {
         Map<String, UkeInfo> uker = new HashMap<>();
-        LocalDate dato = periode.fraOgMed;
+        LocalDate dato = periode.getFraOgMed();
         do {
             String ukeId = ukeId(dato);
             UkeInfo ukeInfo = uker.getOrDefault(ukeId, UkeInfo.of(dato));
@@ -65,22 +65,19 @@ public class TilsynsordningUke {
             }
             dato = dato.plusDays(1);
 
-        } while (dato.isBefore(periode.tilOgMed) || dato.equals(periode.tilOgMed));
+        } while (dato.isBefore(periode.getTilOgMed()) || dato.equals(periode.getTilOgMed()));
 
         Map<Periode, TilsynsordningOpphold> opphold = new HashMap<>();
 
         uker.forEach((ukeId, ukeInfo) -> opphold.put(
-            Periode
-                .builder()
-                .fraOgMed(ukeInfo.førsteAktuelleDag)
-                .tilOgMed(ukeInfo.sisteAktuelleDag)
-                .build(),
-            TilsynsordningOpphold
-                .builder()
-                .lengde(ukeInfo.summertLengde)
-                .build()));
+                new Periode(ukeInfo.førsteAktuelleDag, ukeInfo.sisteAktuelleDag),
+                new TilsynsordningOpphold(ukeInfo.summertLengde)));
 
         this.opphold = Collections.unmodifiableMap(opphold);
+    }
+
+    public Map<Periode, TilsynsordningOpphold> getOpphold() {
+        return opphold;
     }
 
     private static String ukeId(LocalDate dato) {
@@ -178,9 +175,9 @@ public class TilsynsordningUke {
         public TilsynsordningUke build() {
             if (periode == null) {
                 throw new IllegalArgumentException("Periode må settes.");
-            } else if (periode.fraOgMed == null || periode.tilOgMed == null) {
+            } else if (periode.getFraOgMed() == null || periode.getTilOgMed() == null) {
                 throw new IllegalArgumentException("Perioden må inneholde fraOgMed og tilOgMed.");
-            } else if (periode.tilOgMed.isBefore(periode.fraOgMed)) {
+            } else if (periode.getTilOgMed().isBefore(periode.getFraOgMed())) {
                 throw new IllegalArgumentException("Perioden må ha fraOgMed før tilOgMed.");
             }
             return new TilsynsordningUke(

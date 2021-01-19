@@ -1,30 +1,19 @@
 package no.nav.k9.søknad;
 
-import java.io.IOException;
-import java.time.ZonedDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.SøknadId;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.time.ZonedDateTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Forenkler lesing av gamle søknadsformater (som omdistribueres til oppgave).
@@ -104,7 +93,7 @@ public class LegacySøknad implements Innsending {
     }
 
     public List<Periode> getPerioder() {
-        return perioder == null ? Collections.emptyList() : List.copyOf(new TreeSet<>(perioder.keySet()));
+        return perioder == null ? Collections.emptyList() : List.copyOf(perioder.keySet());
     }
 
     @Override
@@ -122,14 +111,6 @@ public class LegacySøknad implements Innsending {
 
         public static LegacySøknad deserialize(String søknad) {
             return JsonUtils.fromString(søknad, LegacySøknad.class);
-        }
-        
-        public static LegacySøknad deserialize(ObjectNode node) {
-            try {
-                return JsonUtils.getObjectMapper().treeToValue(node, LegacySøknad.class);
-            } catch (IOException e) {
-                throw new IllegalArgumentException("Kunne ikke konvertere til LegacySøknad.class", e);
-            }
         }
     }
 
