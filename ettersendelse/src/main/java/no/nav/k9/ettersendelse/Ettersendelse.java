@@ -1,5 +1,6 @@
 package no.nav.k9.ettersendelse;
 
+import java.io.IOException;
 import java.time.ZonedDateTime;
 
 import javax.validation.Valid;
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import no.nav.k9.søknad.Innsending;
 import no.nav.k9.søknad.JsonUtils;
@@ -96,6 +98,14 @@ public class Ettersendelse implements Innsending {
 
         public static Ettersendelse deserialize(String ettersendelse) {
             return JsonUtils.fromString(ettersendelse, Ettersendelse.class);
+        }
+        
+        public static Ettersendelse deserialize(ObjectNode node) {
+            try {
+                return JsonUtils.getObjectMapper().treeToValue(node, Ettersendelse.class);
+            } catch (IOException e) {
+                throw new IllegalArgumentException("Kunne ikke konvertere til Ettersendelse.class", e);
+            }
         }
     }
 
