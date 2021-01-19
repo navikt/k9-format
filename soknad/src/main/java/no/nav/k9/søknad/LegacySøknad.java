@@ -79,7 +79,7 @@ public class LegacySøknad implements Innsending {
     }
 
     public List<Barn> getBarn() {
-        return barn;
+        return barn == null ? Collections.emptyList() : Collections.unmodifiableList(barn);
     }
 
     @Override

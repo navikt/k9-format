@@ -18,7 +18,6 @@ public class Barn {
 
     @JsonProperty(value = "fødselsdato")
     @Valid
-    @NotNull(message = "Barn Personnummer/D-nummer må settes i søknaden.")
     public final LocalDate fødselsdato;
 
     public static Builder builder() {

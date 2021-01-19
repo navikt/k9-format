@@ -1,6 +1,7 @@
 package no.nav.k9.søknad;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.SøknadId;
@@ -8,6 +9,7 @@ import no.nav.k9.søknad.ytelse.Ytelse;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 import java.time.ZonedDateTime;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -108,5 +110,14 @@ public class Søknad implements Innsending {
         public static Søknad deserialize(String søknad) {
             return JsonUtils.fromString(søknad, Søknad.class);
         }
+
+        public static Søknad deserialize(ObjectNode node) {
+            try {
+                return JsonUtils.getObjectMapper().treeToValue(node, Søknad.class);
+            } catch (IOException e) {
+                throw new IllegalArgumentException("Kunne ikke konvertere til Søknad.class", e);
+            }
+        }
+
     }
 }
