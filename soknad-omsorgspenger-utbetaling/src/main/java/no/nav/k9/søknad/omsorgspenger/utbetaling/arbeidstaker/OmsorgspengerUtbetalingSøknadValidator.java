@@ -12,6 +12,10 @@ import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 
+/**
+ * @deprecated ikke bruk
+ */
+@Deprecated(forRemoval = true, since = "5.0.2")
 @SuppressWarnings("removal")
 public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<OmsorgspengerUtbetalingSøknad> {
     private static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();

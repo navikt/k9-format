@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.k9.søknad.Innsending;
 import no.nav.k9.søknad.JsonUtils;
+import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.aktivitet.Frilanser;
@@ -27,7 +28,7 @@ import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.SøknadId;
 import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetaling;
 
-/** @deprecated bytt til {@link OmsorgspengerUtbetaling}. */
+/** @deprecated bytt til {@link Søknad} med {@link OmsorgspengerUtbetaling}. */
 @Deprecated(forRemoval = true, since = "5.0.1")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
