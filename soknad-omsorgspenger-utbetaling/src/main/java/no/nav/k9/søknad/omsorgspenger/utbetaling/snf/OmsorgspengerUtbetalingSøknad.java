@@ -1,5 +1,6 @@
 package no.nav.k9.søknad.omsorgspenger.utbetaling.snf;
 
+import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import no.nav.k9.søknad.Innsending;
 import no.nav.k9.søknad.JsonUtils;
@@ -110,6 +112,10 @@ public class OmsorgspengerUtbetalingSøknad implements Innsending {
         return søknadId;
     }
 
+    public List<Barn> getBarn() {
+        return fosterbarn;
+    }
+    
     @Size(max=0, message="${validatedValue}")
     private List<Feil> getValiderAngittFosterbarn() {
         var barn = this.fosterbarn;
@@ -144,6 +150,14 @@ public class OmsorgspengerUtbetalingSøknad implements Innsending {
 
         public static OmsorgspengerUtbetalingSøknad deserialize(String søknad) {
             return JsonUtils.fromString(søknad, OmsorgspengerUtbetalingSøknad.class);
+        }
+        
+        public static OmsorgspengerUtbetalingSøknad deserialize(ObjectNode node) {
+            try {
+                return JsonUtils.getObjectMapper().treeToValue(node, OmsorgspengerUtbetalingSøknad.class);
+            } catch (IOException e) {
+                throw new IllegalArgumentException("Kunne ikke konvertere til OmsorgspengerUtbetalingSøknad.class", e);
+            }
         }
     }
 

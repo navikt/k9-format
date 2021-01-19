@@ -17,14 +17,13 @@ import no.nav.k9.søknad.felles.type.PersonIdent;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Søker {
 
-    @JsonProperty(value="norskIdentitetsnummer", required = true)
+    @JsonProperty(value = "norskIdentitetsnummer", required = true)
     @NotNull
     @Valid
     public final NorskIdentitetsnummer norskIdentitetsnummer;
 
     @JsonCreator
-    private Søker(
-                  @JsonProperty("norskIdentitetsnummer") NorskIdentitetsnummer norskIdentitetsnummer) {
+    private Søker(@JsonProperty("norskIdentitetsnummer") NorskIdentitetsnummer norskIdentitetsnummer) {
         this.norskIdentitetsnummer = norskIdentitetsnummer;
     }
 
@@ -42,7 +41,7 @@ public class Søker {
     public PersonIdent getPersonIdent() {
         return norskIdentitetsnummer;
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(norskIdentitetsnummer);
