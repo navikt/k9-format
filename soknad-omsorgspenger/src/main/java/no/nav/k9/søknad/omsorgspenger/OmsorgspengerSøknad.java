@@ -100,14 +100,6 @@ public class OmsorgspengerSøknad implements Innsending {
         public static OmsorgspengerSøknad deserialize(String søknad) {
             return JsonUtils.fromString(søknad, OmsorgspengerSøknad.class);
         }
-        
-        public static OmsorgspengerSøknad deserialize(ObjectNode node) {
-            try {
-                return JsonUtils.getObjectMapper().treeToValue(node, OmsorgspengerSøknad.class);
-            } catch (IOException e) {
-                throw new IllegalArgumentException("Kunne ikke konvertere til OmsorgspengerSøknad.class", e);
-            }
-        }
     }
 
     public static final class Builder {

@@ -15,12 +15,12 @@ public class Periode implements Comparable<Periode> {
     static final String ÅPEN = "..";
     static final String SKILLE = "/";
 
-    public final LocalDate fraOgMed;
+    private LocalDate fraOgMed;
 
-    public final LocalDate tilOgMed;
+    private LocalDate tilOgMed;
 
     @JsonValue
-    public final String iso8601;
+    private String iso8601;
 
     @JsonCreator
     public Periode(String iso8601) {
@@ -37,21 +37,6 @@ public class Periode implements Comparable<Periode> {
         this.iso8601 = toIso8601(fraOgMed) + SKILLE + toIso8601(tilOgMed);
     }
 
-    public static Periode parse(String iso8601) {
-        return new Periode(iso8601);
-    }
-
-    public static Periode forsikreLukketPeriode(Periode periode, LocalDate fallbackTilOgMed) {
-        Objects.requireNonNull(periode);
-        Objects.requireNonNull(periode.fraOgMed);
-        Objects.requireNonNull(fallbackTilOgMed);
-        return Periode
-            .builder()
-            .fraOgMed(periode.fraOgMed)
-            .tilOgMed(periode.tilOgMed != null ? periode.tilOgMed : fallbackTilOgMed)
-            .build();
-    }
-
     public LocalDate getFraOgMed() {
         return fraOgMed;
     }
@@ -60,9 +45,34 @@ public class Periode implements Comparable<Periode> {
         return tilOgMed;
     }
 
-    public static Builder builder() {
-        return new Builder();
+    public void setFraOgMed(LocalDate fraOgMed) {
+        this.fraOgMed = fraOgMed;
     }
+
+    public void setTilOgMed(LocalDate tilOgMed) {
+        this.tilOgMed = tilOgMed;
+    }
+
+    public String getIso8601() {
+        return iso8601;
+    }
+
+    public void setIso8601(String iso8601) {
+        this.iso8601 = iso8601;
+    }
+
+    public static Periode parse(String iso8601) {
+        return new Periode(iso8601);
+    }
+
+    public static Periode forsikreLukketPeriode(Periode periode, LocalDate fallbackTilOgMed) {
+        Objects.requireNonNull(periode);
+        Objects.requireNonNull(periode.fraOgMed);
+        Objects.requireNonNull(fallbackTilOgMed);
+        return new Periode(periode.fraOgMed, periode.tilOgMed != null ? periode.tilOgMed : fallbackTilOgMed);
+    }
+
+
 
     @Override
     public int compareTo(Periode o) {
@@ -107,34 +117,6 @@ public class Periode implements Comparable<Periode> {
             return null;
         else
             return LocalDate.parse(iso8601);
-    }
-
-    public static final class Builder {
-        private LocalDate fraOgMed;
-        private LocalDate tilOgMed;
-
-        private Builder() {
-        }
-
-        public Builder fraOgMed(LocalDate fraOgMed) {
-            this.fraOgMed = fraOgMed;
-            return this;
-        }
-
-        public Builder tilOgMed(LocalDate tilOgMed) {
-            this.tilOgMed = tilOgMed;
-            return this;
-        }
-
-        public Builder enkeltDag(LocalDate enkeltDag) {
-            this.fraOgMed = enkeltDag;
-            this.tilOgMed = enkeltDag;
-            return this;
-        }
-
-        public Periode build() {
-            return new Periode(fraOgMed, tilOgMed);
-        }
     }
 
     public static final class Utils {

@@ -1,23 +1,17 @@
 package no.nav.k9.søknad.felles.personopplysninger;
 
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.unmodifiableMap;
-import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPeriode;
-import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPerioder;
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import no.nav.k9.søknad.felles.type.Landkode;
+import no.nav.k9.søknad.felles.type.Periode;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-
-import no.nav.k9.søknad.felles.type.Landkode;
-import no.nav.k9.søknad.felles.type.Periode;
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.unmodifiableMap;
+import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPeriode;
+import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPerioder;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)

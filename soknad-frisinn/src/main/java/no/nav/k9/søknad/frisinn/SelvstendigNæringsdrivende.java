@@ -86,7 +86,7 @@ public class SelvstendigNæringsdrivende {
         if (inntekterSøknadsperiode.isEmpty()) {
             return null;
         } else {
-            return new Periode(inntekterSøknadsperiode.firstKey().fraOgMed, inntekterSøknadsperiode.lastKey().tilOgMed);
+            return new Periode(inntekterSøknadsperiode.firstKey().getFraOgMed(), inntekterSøknadsperiode.lastKey().getTilOgMed());
         }
     }
 
@@ -94,7 +94,7 @@ public class SelvstendigNæringsdrivende {
         if (inntekterFør.isEmpty()) {
             return null;
         } else {
-            return new Periode(inntekterFør.firstKey().fraOgMed, inntekterFør.lastKey().tilOgMed);
+            return new Periode(inntekterFør.firstKey().getFraOgMed(), inntekterFør.lastKey().getTilOgMed());
         }
     }
 

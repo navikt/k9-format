@@ -1,18 +1,17 @@
 package no.nav.k9.søknad.omsorgspenger.utbetaling.snf;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.validation.Validation;
-import javax.validation.ValidatorFactory;
-
 import no.nav.k9.søknad.SøknadValidator;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.aktivitet.Frilanser;
 import no.nav.k9.søknad.felles.aktivitet.SelvstendigNæringsdrivende;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
+
+import javax.validation.Validation;
+import javax.validation.ValidatorFactory;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @deprecated ikke bruk

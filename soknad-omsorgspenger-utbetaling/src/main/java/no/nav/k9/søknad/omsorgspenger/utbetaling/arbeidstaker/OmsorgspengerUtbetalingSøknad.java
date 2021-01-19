@@ -1,21 +1,6 @@
 package no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker;
 
-import java.io.IOException;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
+import com.fasterxml.jackson.annotation.*;
 import no.nav.k9.søknad.Innsending;
 import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.Søknad;
@@ -25,6 +10,13 @@ import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.SøknadId;
 import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetaling;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /** @deprecated bytt til {@link Søknad} med {@link OmsorgspengerUtbetaling}. */
 @SuppressWarnings("removal")
@@ -92,10 +84,6 @@ public class OmsorgspengerUtbetalingSøknad implements Innsending {
         return søknadId;
     }
     
-    public List<Barn> getBarn() {
-        return fosterbarn;
-    }
-    
     @Size(max=0, message="${validatedValue}")
     private List<Feil> getValiderAngittFosterbarn() {
         var barn = this.fosterbarn;
@@ -130,14 +118,6 @@ public class OmsorgspengerUtbetalingSøknad implements Innsending {
 
         public static OmsorgspengerUtbetalingSøknad deserialize(String søknad) {
             return JsonUtils.fromString(søknad, OmsorgspengerUtbetalingSøknad.class);
-        }
-        
-        public static OmsorgspengerUtbetalingSøknad deserialize(ObjectNode node) {
-            try {
-                return JsonUtils.getObjectMapper().treeToValue(node, OmsorgspengerUtbetalingSøknad.class);
-            } catch (IOException e) {
-                throw new IllegalArgumentException("Kunne ikke konvertere til OmsorgspengerUtbetalingSøknad.class", e);
-            }
         }
     }
 

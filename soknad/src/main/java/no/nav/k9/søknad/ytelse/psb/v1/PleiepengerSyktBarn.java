@@ -1,35 +1,57 @@
 package no.nav.k9.søknad.ytelse.psb.v1;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-
+import com.fasterxml.jackson.annotation.*;
 import no.nav.k9.søknad.PeriodeValidator;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.LovbestemtFerie;
 import no.nav.k9.søknad.felles.aktivitet.ArbeidAktivitet;
+import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeid.Arbeid;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 @JsonTypeName(Ytelse.PLEIEPENGER_SYKT_BARN)
 public class PleiepengerSyktBarn implements Ytelse {
+
+    @Valid
+    @JsonProperty(value = "barn")
+    private Barn barn;
+
+    @Valid
+    @NotNull
+    @JsonProperty(value = "søknadsperiode", required = true)
+    private Periode søknadsperiode;
+
+    @Valid
+    @JsonProperty(value = "arbeidAktivitet")
+    private ArbeidAktivitet arbeidAktivitet;
+
+    @Valid
+    @JsonProperty(value = "flereOmsorgspersoner")
+    private Boolean flereOmsorgspersoner;
+
+    @Valid
+    @JsonProperty(value = "relasjonTilBarnet")
+    private String relasjonTilBarnet;
+
+    @Valid
+    @JsonProperty(value = "samtykketOmsorgForBarnet")
+    private Boolean samtykketOmsorgForBarnet;
+
+    @Valid
+    @JsonProperty(value = "beskrivelseAvOmsorgsrollen")
+    private String beskrivelseAvOmsorgsrollen;
 
     @Valid
     @JsonProperty(value = "bosteder")
@@ -48,8 +70,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     private Nattevåk nattevåk;
 
     @Valid
-    @NotNull
-    @JsonProperty(value = "tilsynsordning", required = true)
+    @JsonProperty(value = "tilsynsordning")
     private Tilsynsordning tilsynsordning;
 
     @Valid
@@ -57,30 +78,116 @@ public class PleiepengerSyktBarn implements Ytelse {
     private LovbestemtFerie lovbestemtFerie;
 
     @Valid
-    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-    @JsonProperty(value = "perioder", required = true)
-    private Map<Periode, SøknadsperiodeInfo> perioder;
+    @JsonProperty(value = "arbeid")
+    private Arbeid arbeid;
 
     @Valid
-    @JsonProperty(value = "arbeidAktivitet")
-    private ArbeidAktivitet arbeidAktivitet;
+    @NotNull
+    @JsonProperty(value = "uttak", required = true)
+    private Uttak uttak;
 
     @JsonCreator
-    public PleiepengerSyktBarn(@JsonProperty(value = "perioder", required = true) @Valid Map<Periode, SøknadsperiodeInfo> perioder,
+    public PleiepengerSyktBarn(@JsonProperty(value = "søknadsperiode", required = true) @NotNull @Valid Periode søknadsperiode,
+                               @JsonProperty(value = "barn") @Valid Barn barn,
+                               @JsonProperty(value = "arbeidAktivitet") @Valid ArbeidAktivitet aktivitet,
                                @JsonProperty(value = "beredskap") @Valid Beredskap beredskap,
                                @JsonProperty(value = "nattevåk") @Valid Nattevåk nattevåk,
-                               @JsonProperty(value = "tilsynsordning", required = true) @NotNull @Valid Tilsynsordning tilsynsordning,
-                               @JsonProperty(value = "arbeidAktivitet") @Valid ArbeidAktivitet aktivitet,
+                               @JsonProperty(value = "tilsynsordning") @Valid Tilsynsordning tilsynsordning,
+                               @JsonProperty(value = "arbeid") @Valid Arbeid arbeid,
+                               @JsonProperty(value = "uttak", required = true) @Valid @NotNull Uttak uttak,
                                @JsonProperty(value = "lovbestemtFerie") @Valid LovbestemtFerie lovbestemtFerie,
                                @JsonProperty(value = "bosteder") @Valid @NotNull Bosteder bosteder,
-                               @JsonProperty(value = "utenlandsopphold") @Valid @NotNull Utenlandsopphold utenlandsopphold) {
-        this.perioder = perioder;
+                               @JsonProperty(value = "utenlandsopphold") @Valid @NotNull Utenlandsopphold utenlandsopphold,
+                               @JsonProperty(value = "flereOmsorgspersoner") @Valid Boolean flereOmsorgspersoner,
+                               @JsonProperty(value = "relasjonTilBarnet") @Valid String relasjonTilBarnet,
+                               @JsonProperty(value = "samtykketOmsorgForBarnet") @Valid Boolean samtykketOmsorgForBarnet,
+                               @JsonProperty(value = "beskrivelseAvOmsorgsrollen") @Valid String beskrivelseAvOmsorgsrollen) {
+        this.søknadsperiode = søknadsperiode;
+        this.barn = barn;
+        this.arbeidAktivitet = aktivitet;
+        this.flereOmsorgspersoner = flereOmsorgspersoner;
+        this.relasjonTilBarnet = relasjonTilBarnet;
+        this.samtykketOmsorgForBarnet = samtykketOmsorgForBarnet;
+        this.beskrivelseAvOmsorgsrollen = beskrivelseAvOmsorgsrollen;
         this.beredskap = beredskap;
         this.nattevåk = nattevåk;
         this.tilsynsordning = tilsynsordning;
-        this.arbeidAktivitet = aktivitet;
+        this.arbeid = arbeid;
+        this.uttak = uttak;
         this.lovbestemtFerie = lovbestemtFerie;
         this.bosteder = bosteder;
+        this.utenlandsopphold = utenlandsopphold;
+    }
+
+    public Barn getBarn() {
+        return barn;
+    }
+
+    public void setBarn(Barn barn) {
+        this.barn = barn;
+    }
+
+    public Periode getSøknadsperiode() {
+        return søknadsperiode;
+    }
+
+    public void setSøknadsperiode(Periode søknadsperiode) {
+        this.søknadsperiode = søknadsperiode;
+    }
+
+    public ArbeidAktivitet getArbeidAktivitet() {
+        return arbeidAktivitet;
+    }
+
+    public void setArbeidAktivitet(ArbeidAktivitet arbeidAktivitet) {
+        this.arbeidAktivitet = arbeidAktivitet;
+    }
+
+    public Boolean getFlereOmsorgspersoner() {
+        return flereOmsorgspersoner;
+    }
+
+    public void setFlereOmsorgspersoner(Boolean flereOmsorgspersoner) {
+        this.flereOmsorgspersoner = flereOmsorgspersoner;
+    }
+
+    public String getRelasjonTilBarnet() {
+        return relasjonTilBarnet;
+    }
+
+    public void setRelasjonTilBarnet(String relasjonTilBarnet) {
+        this.relasjonTilBarnet = relasjonTilBarnet;
+    }
+
+    public Boolean getSamtykketOmsorgForBarnet() {
+        return samtykketOmsorgForBarnet;
+    }
+
+    public void setSamtykketOmsorgForBarnet(Boolean samtykketOmsorgForBarnet) {
+        this.samtykketOmsorgForBarnet = samtykketOmsorgForBarnet;
+    }
+
+    public String getBeskrivelseAvOmsorgsrollen() {
+        return beskrivelseAvOmsorgsrollen;
+    }
+
+    public void setBeskrivelseAvOmsorgsrollen(String beskrivelseAvOmsorgsrollen) {
+        this.beskrivelseAvOmsorgsrollen = beskrivelseAvOmsorgsrollen;
+    }
+
+    public Bosteder getBosteder() {
+        return bosteder;
+    }
+
+    public void setBosteder(Bosteder bosteder) {
+        this.bosteder = bosteder;
+    }
+
+    public Utenlandsopphold getUtenlandsopphold() {
+        return utenlandsopphold;
+    }
+
+    public void setUtenlandsopphold(Utenlandsopphold utenlandsopphold) {
         this.utenlandsopphold = utenlandsopphold;
     }
 
@@ -116,23 +223,20 @@ public class PleiepengerSyktBarn implements Ytelse {
         this.lovbestemtFerie = lovbestemtFerie;
     }
 
-    public ArbeidAktivitet getAktivitet() {
-        return arbeidAktivitet;
+    public Arbeid getArbeid() {
+        return arbeid;
     }
 
-    public void setArbeidAktivitet(ArbeidAktivitet opptjening) {
-        this.arbeidAktivitet = opptjening;
+    public void setArbeid(Arbeid arbeid) {
+        this.arbeid = arbeid;
     }
 
-    public Map<Periode, SøknadsperiodeInfo> getPerioder() {
-        if (perioder == null) {
-            return Collections.emptyMap();
-        }
-        return Collections.unmodifiableMap(perioder);
+    public Uttak getUttak() {
+        return uttak;
     }
 
-    public void setPerioder(Map<Periode, SøknadsperiodeInfo> perioder) {
-        this.perioder = perioder;
+    public void setUttak(Uttak uttak) {
+        this.uttak = uttak;
     }
 
     @Override

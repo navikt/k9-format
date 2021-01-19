@@ -9,7 +9,7 @@ public enum TilsynsordningSvar {
     VET_IKKE("vetIkke");
 
     @JsonValue
-    public final String dto;
+    private String dto;
 
     TilsynsordningSvar(String dto) {
         this.dto = dto;
@@ -30,5 +30,13 @@ public enum TilsynsordningSvar {
             }
         }
         throw new IllegalArgumentException("Ikke støttet svar '" + value + "'");
+    }
+
+    public String getDto() {
+        return dto;
+    }
+
+    public void setDto(String dto) {
+        this.dto = dto;
     }
 }

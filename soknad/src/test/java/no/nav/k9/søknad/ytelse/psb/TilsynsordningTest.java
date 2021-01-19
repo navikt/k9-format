@@ -1,19 +1,18 @@
 package no.nav.k9.søknad.ytelse.psb;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningSvar;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningUke;
+import org.junit.Test;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.junit.Test;
-
-import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningSvar;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningUke;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 public class TilsynsordningTest {
@@ -44,11 +43,7 @@ public class TilsynsordningTest {
         int expectedAntallUkerIPerioden = 14;
         int expectedAntallHeleUkerIPerioden = 12;
 
-        Periode periode = Periode
-                .builder()
-                .fraOgMed(fraOgMed)
-                .tilOgMed(tilOgMed)
-                .build();
+        Periode periode = new Periode(fraOgMed, tilOgMed);
 
         TilsynsordningUke uke = TilsynsordningUke
                 .builder()
@@ -60,27 +55,23 @@ public class TilsynsordningTest {
                 .fredag(fredagLengde)
                 .build();
 
-        Tilsynsordning tilsynsordning = Tilsynsordning
-                .builder()
-                .iTilsynsordning(TilsynsordningSvar.JA)
-                .uke(uke)
-                .build();
+        Tilsynsordning tilsynsordning = new Tilsynsordning(TilsynsordningSvar.JA, uke.getOpphold());
 
-        assertEquals(expectedAntallUkerIPerioden, tilsynsordning.opphold.size());
+        assertEquals(expectedAntallUkerIPerioden, tilsynsordning.getOpphold().size());
 
         AtomicInteger antallHeleUkerSjekket = new AtomicInteger();
         AtomicBoolean føresteUkeSjekket = new AtomicBoolean(false);
         AtomicBoolean sisteUkeSjekket = new AtomicBoolean(false);
-        tilsynsordning.opphold.forEach((p,opphold) -> {
+        tilsynsordning.getOpphold().forEach((p,opphold) -> {
 
-            if (p.fraOgMed.isEqual(fraOgMed)) {
+            if (p.getFraOgMed().isEqual(fraOgMed)) {
                 føresteUkeSjekket.set(true);
-                assertEquals(summertFørsteUke, opphold.lengde);
-            } else if (p.tilOgMed.isEqual(tilOgMed)) {
+                assertEquals(summertFørsteUke, opphold.getLengde());
+            } else if (p.getTilOgMed().isEqual(tilOgMed)) {
                 sisteUkeSjekket.set(true);
-                assertEquals(summertSisteUke, opphold.lengde);
+                assertEquals(summertSisteUke, opphold.getLengde());
             } else {
-                assertEquals(summertHeleUker, opphold.lengde);
+                assertEquals(summertHeleUker, opphold.getLengde());
                 antallHeleUkerSjekket.getAndIncrement();
             }
         });
@@ -94,11 +85,7 @@ public class TilsynsordningTest {
     public void fraTilsynsordningUkeEnDagsPeriode() {
         LocalDate torsdag = LocalDate.parse("2020-01-09");
 
-        Periode periode = Periode
-                .builder()
-                .fraOgMed(torsdag)
-                .tilOgMed(torsdag)
-                .build();
+        Periode periode = new Periode(torsdag, torsdag);
 
         TilsynsordningUke uke = TilsynsordningUke
                 .builder()
@@ -106,16 +93,12 @@ public class TilsynsordningTest {
                 .torsdag(Duration.ofHours(6).plusMinutes(30))
                 .build();
 
-        Tilsynsordning tilsynsordning = Tilsynsordning
-                .builder()
-                .iTilsynsordning(TilsynsordningSvar.JA)
-                .uke(uke)
-                .build();
+        Tilsynsordning tilsynsordning = new Tilsynsordning(TilsynsordningSvar.JA, uke.getOpphold());
 
-        assertEquals(1, tilsynsordning.opphold.size());
+        assertEquals(1, tilsynsordning.getOpphold().size());
         assertEquals(
                 Duration.ofHours(6).plusMinutes(30),
-                tilsynsordning.opphold.get(Periode.builder().enkeltDag(torsdag).build()).lengde
+                tilsynsordning.getOpphold().get(new Periode(torsdag, torsdag)).getLengde()
         );
     }
 
@@ -124,11 +107,7 @@ public class TilsynsordningTest {
         LocalDate lørdag = LocalDate.parse("2020-01-11");
         LocalDate onsdag = LocalDate.parse("2020-01-15");
 
-        Periode periode = Periode
-                .builder()
-                .fraOgMed(lørdag)
-                .tilOgMed(onsdag)
-                .build();
+        Periode periode = new Periode(lørdag, onsdag);
 
         TilsynsordningUke uke = TilsynsordningUke
                 .builder()
@@ -138,13 +117,9 @@ public class TilsynsordningTest {
                 .fredag(Duration.ofMinutes(30))
                 .build();
 
-        Tilsynsordning tilsynsordning = Tilsynsordning
-                .builder()
-                .iTilsynsordning(TilsynsordningSvar.JA)
-                .uke(uke)
-                .build();
+        Tilsynsordning tilsynsordning = new Tilsynsordning(TilsynsordningSvar.JA, uke.getOpphold());
 
-        assertEquals(0, tilsynsordning.opphold.size());
+        assertEquals(0, tilsynsordning.getOpphold().size());
     }
 
     @Test
@@ -157,11 +132,7 @@ public class TilsynsordningTest {
         Duration torsdagLengde = Duration.ofHours(4);
         Duration fredagLengde = null;
 
-        Periode periode = Periode
-                .builder()
-                .fraOgMed(fraOgMed)
-                .tilOgMed(tilOgMed)
-                .build();
+        Periode periode = new Periode(fraOgMed, tilOgMed);
 
         TilsynsordningUke uke = TilsynsordningUke
                 .builder()
@@ -173,11 +144,7 @@ public class TilsynsordningTest {
                 .fredag(fredagLengde)
                 .build();
 
-        Tilsynsordning tilsynsordning = Tilsynsordning
-                .builder()
-                .iTilsynsordning(TilsynsordningSvar.JA)
-                .uke(uke)
-                .build();
+        Tilsynsordning tilsynsordning = new Tilsynsordning(TilsynsordningSvar.JA, uke.getOpphold());
 
         Duration summertHeleUker = TilsynsordningUke.MAX_LENGDE_PER_DAG // Ettersom mandag er over 7:30
                 .plus(tirsdagLengde)
@@ -192,17 +159,17 @@ public class TilsynsordningTest {
         int expectedAntallUkerIPerioden = 3;
         int expectedAntallHeleUkerIPerioden = 2;
 
-        assertEquals(expectedAntallUkerIPerioden, tilsynsordning.opphold.size());
+        assertEquals(expectedAntallUkerIPerioden, tilsynsordning.getOpphold().size());
 
         AtomicInteger antallHeleUkerSjekket = new AtomicInteger();
         AtomicBoolean sisteUkeSjekket = new AtomicBoolean(false);
 
-        tilsynsordning.opphold.forEach((p,opphold) -> {
-            if (p.tilOgMed.isEqual(tilOgMed)) {
+        tilsynsordning.getOpphold().forEach((p,opphold) -> {
+            if (p.getTilOgMed().isEqual(tilOgMed)) {
                 sisteUkeSjekket.set(true);
-                assertEquals(summertSisteUke, opphold.lengde);
+                assertEquals(summertSisteUke, opphold.getLengde());
             } else {
-                assertEquals(summertHeleUker, opphold.lengde);
+                assertEquals(summertHeleUker, opphold.getLengde());
                 antallHeleUkerSjekket.getAndIncrement();
             }
         });

@@ -1,5 +1,24 @@
 package no.nav.k9.søknad.ytelse.psb;
 
+import no.nav.k9.søknad.JsonUtils;
+import no.nav.k9.søknad.Søknad;
+import no.nav.k9.søknad.felles.LovbestemtFerie;
+import no.nav.k9.søknad.felles.aktivitet.*;
+import no.nav.k9.søknad.felles.personopplysninger.Barn;
+import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
+import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
+import no.nav.k9.søknad.felles.type.Landkode;
+import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
+import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.ytelse.Ytelse;
+import no.nav.k9.søknad.ytelse.psb.v1.*;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeid.Arbeid;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeid.ArbeidPeriodeInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeid.Arbeidstaker;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningOpphold;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningSvar;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
@@ -8,25 +27,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-
-import no.nav.k9.søknad.Søknad;
-import no.nav.k9.søknad.felles.LovbestemtFerie;
-import no.nav.k9.søknad.felles.aktivitet.ArbeidAktivitet;
-import no.nav.k9.søknad.felles.aktivitet.Arbeidstaker;
-import no.nav.k9.søknad.felles.aktivitet.Frilanser;
-import no.nav.k9.søknad.felles.aktivitet.Organisasjonsnummer;
-import no.nav.k9.søknad.felles.aktivitet.SelvstendigNæringsdrivende;
-import no.nav.k9.søknad.felles.aktivitet.VirksomhetType;
-import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
-import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
-import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.ytelse.psb.v1.Beredskap;
-import no.nav.k9.søknad.ytelse.psb.v1.Nattevåk;
-import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
-import no.nav.k9.søknad.ytelse.psb.v1.SøknadsperiodeInfo;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningOpphold;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningSvar;
 
 final class TestUtils {
 
@@ -49,60 +49,89 @@ final class TestUtils {
         return Søknad.SerDes.deserialize(jsonForKomplettSøknad());
     }
 
-    static PleiepengerSyktBarn komplettBuilder() {
-        var søknadsperiodeMap = Map.of(Periode.builder().fraOgMed(LocalDate.parse("2018-12-30")).tilOgMed(LocalDate.parse("2019-10-20")).build(),
-            SøknadsperiodeInfo.builder().build());
-        var beredskap = Beredskap.builder()
-            .periode(Periode.builder().fraOgMed(LocalDate.parse("2018-10-10")).tilOgMed(LocalDate.parse("2018-12-29")).build(),
-                Beredskap.BeredskapPeriodeInfo.builder().tilleggsinformasjon("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.").build())
-            .periode(Periode.builder().fraOgMed(LocalDate.parse("2019-01-01")).tilOgMed(LocalDate.parse("2019-01-30")).build(),
-                Beredskap.BeredskapPeriodeInfo.builder().tilleggsinformasjon("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.").build())
-            .build();
-        var nattevåk = Nattevåk.builder()
-            .periode(Periode.builder().fraOgMed(LocalDate.parse("2018-10-10")).tilOgMed(LocalDate.parse("2018-12-29")).build(),
-                Nattevåk.NattevåkPeriodeInfo.builder().tilleggsinformasjon("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.").build())
-            .periode(Periode.builder().fraOgMed(LocalDate.parse("2019-01-01")).tilOgMed(LocalDate.parse("2019-01-30")).build(),
-                Nattevåk.NattevåkPeriodeInfo.builder().tilleggsinformasjon("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.").build())
-            .build();
-        var tilsynsordning = Tilsynsordning.builder()
-            .iTilsynsordning(TilsynsordningSvar.of("ja"))
-            .opphold(Periode.builder().fraOgMed(LocalDate.parse("2019-01-01")).tilOgMed(LocalDate.parse("2019-01-01")).build(),
-                TilsynsordningOpphold.builder().lengde(Duration.parse("PT7H30M")).build())
-            .opphold(Periode.builder().fraOgMed(LocalDate.parse("2020-01-02")).tilOgMed(LocalDate.parse("2020-01-02")).build(),
-                TilsynsordningOpphold.builder().lengde(Duration.parse("PT7H25M")).build())
-            .opphold(Periode.builder().fraOgMed(LocalDate.parse("2020-01-03")).tilOgMed(LocalDate.parse("2020-01-09")).build(),
-                TilsynsordningOpphold.builder().lengde(Duration.parse("PT168H")).build())
-            .build();
-        var arbeidstaker = List.of(Arbeidstaker.builder()
-            .organisasjonsnummer(Organisasjonsnummer.of("999999999"))
-            .periode(Periode.builder().fraOgMed(LocalDate.parse("2018-10-10")).tilOgMed(LocalDate.parse("2018-12-29")).build(),
-                Arbeidstaker.ArbeidstakerPeriodeInfo.builder()
-                    .skalJobbeProsent(BigDecimal.valueOf(50.25))
-                    .jobberNormaltPerUke(Duration.parse("PT37H30M"))
-                    .build())
-            .build());
+    static Ytelse komplettYtelsePsb(String ytelse) {
+        return JsonUtils.fromString(ytelse, Ytelse.class);
+    }
 
-        var lovbestemtFerie = LovbestemtFerie.builder()
-            .periode(Periode.builder().fraOgMed(LocalDate.parse("2018-11-10")).tilOgMed(LocalDate.parse("2018-12-29")).build(),
-                LovbestemtFerie.LovbestemtFeriePeriodeInfo.builder().build())
-            .build();
+    static PleiepengerSyktBarn komplettBuilder() {
+
+        var søknadsperiode = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-10-20"));
+        var delperiodeEn = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-02-20"));
+        var delperiodeTo = new Periode(LocalDate.parse("2019-02-21"), LocalDate.parse("2019-05-21"));
+
+        var uttak = new Uttak(Map.of(
+                søknadsperiode, new UttakPeriodeInfo(BigDecimal.valueOf(7))));
+
+        var arbeidstaker = List.of(
+                new Arbeidstaker(null, Organisasjonsnummer.of("999999999"), null,
+                        Map.of(søknadsperiode,
+                        new ArbeidPeriodeInfo(BigDecimal.valueOf(3.5), BigDecimal.valueOf(7.5)))));
+
+        var arbeid = new Arbeid(arbeidstaker);
+        var beredskap = new Beredskap(Map.of(
+                delperiodeEn, new Beredskap.BeredskapPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."),
+                delperiodeTo, new Beredskap.BeredskapPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.")));
+
+        var nattevåk = new Nattevåk(Map.of(
+                delperiodeEn, new Nattevåk.NattevåkPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."),
+                delperiodeTo, new Nattevåk.NattevåkPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.")));
+
+        var tilsynsordning = new Tilsynsordning(TilsynsordningSvar.of("ja"), Map.of(
+                new Periode(LocalDate.parse("2019-01-01"), LocalDate.parse("2019-01-01") ),
+                new TilsynsordningOpphold(Duration.parse("PT7H30M")),
+                new Periode(LocalDate.parse("2019-01-02"), LocalDate.parse("2019-01-02") ),
+                new TilsynsordningOpphold(Duration.parse("PT7H25M")),
+                new Periode(LocalDate.parse("2019-01-03"), LocalDate.parse("2019-01-09") ),
+                new TilsynsordningOpphold(Duration.parse("PT168H"))));
+
+        var lovbestemtFerie = new LovbestemtFerie(List.of(delperiodeTo));
 
         var aktivitet = ArbeidAktivitet.builder()
-            .arbeidstaker(arbeidstaker)
-            .selvstendigNæringsdrivende(SelvstendigNæringsdrivende.builder()
-                .organisasjonsnummer(Organisasjonsnummer.of("999999999"))
-                .virksomhetNavn("Hello AS")
-                .periode(
-                    Periode.builder().fraOgMed(LocalDate.parse("2018-11-11")).tilOgMed(LocalDate.parse("2018-11-30")).build(),
-                    SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder().virksomhetstyper(List.of(VirksomhetType.ANNEN)).build())
-                .build())
-            .frilanser(Frilanser.builder()
-                .startdato(LocalDate.parse("2019-10-10"))
-                .jobberFortsattSomFrilans(true)
-                .build())
-            .build();
+                .selvstendigNæringsdrivende(SelvstendigNæringsdrivende.builder()
+                        .periode(
+                                new Periode(LocalDate.parse("2018-11-11"), LocalDate.parse("2018-11-30")),
+                                SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
+                                        .virksomhetstyper(List.of(VirksomhetType.FISKE)).build())
+                        .virksomhetNavn("Test")
+                        .build())
+                .frilanser(Frilanser.builder()
+                        .startdato(LocalDate.parse("2019-10-10"))
+                        .jobberFortsattSomFrilans(true)
+                        .build())
+                .build();
 
-        return new PleiepengerSyktBarn(søknadsperiodeMap, beredskap, nattevåk, tilsynsordning, aktivitet, lovbestemtFerie, new Bosteder(null),
-            new Utenlandsopphold(null));
+        var barn = Barn.builder()
+                .norskIdentitetsnummer(NorskIdentitetsnummer.of("11111111111"))
+                .fødselsdato(LocalDate.now())
+                .build();
+
+        var bosteder = new Bosteder(Map.of(
+                søknadsperiode,
+                Bosteder.BostedPeriodeInfo.builder().land(Landkode.DANMARK).build()));
+
+        var utenlandsopphold = new Utenlandsopphold(Map.of(
+                søknadsperiode,
+                Utenlandsopphold.UtenlandsoppholdPeriodeInfo.builder()
+                        .land(Landkode.DANMARK)
+                        .årsak(Utenlandsopphold.UtenlandsoppholdÅrsak.BARNET_INNLAGT_I_HELSEINSTITUSJON_FOR_NORSK_OFFENTLIG_REGNING)
+                        .build()));
+
+        return new PleiepengerSyktBarn(søknadsperiode, barn, aktivitet, beredskap, nattevåk, tilsynsordning, arbeid, uttak, lovbestemtFerie, bosteder, utenlandsopphold,
+                false, "MORA", true, "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.");
     }
+
+    static PleiepengerSyktBarn minimumSøknadPleiepengerSyktBarn(){
+        var søknadsperiode = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-10-20"));
+        var uttakperiode = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-02-20"));
+        var uttakperiode2 = new Periode(LocalDate.parse("2019-02-21"), LocalDate.parse("2019-10-20"));
+
+        var uttak = new Uttak(Map.of(
+                uttakperiode, new UttakPeriodeInfo(BigDecimal.valueOf(7)),
+                uttakperiode2, new UttakPeriodeInfo(BigDecimal.valueOf(7))));
+
+        return new PleiepengerSyktBarn(
+                søknadsperiode, null, null, null, null, null, null, uttak, null, null, null, false,
+                null, true, null);
+    }
+
 }

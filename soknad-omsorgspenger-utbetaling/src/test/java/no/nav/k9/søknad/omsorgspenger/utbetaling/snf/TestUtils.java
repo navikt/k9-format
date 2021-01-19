@@ -1,14 +1,5 @@
 package no.nav.k9.søknad.omsorgspenger.utbetaling.snf;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.util.Collections;
-import java.util.List;
-
 import no.nav.k9.søknad.felles.aktivitet.Frilanser;
 import no.nav.k9.søknad.felles.aktivitet.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.aktivitet.SelvstendigNæringsdrivende;
@@ -19,6 +10,15 @@ import no.nav.k9.søknad.felles.type.Landkode;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.SøknadId;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.util.Collections;
+import java.util.List;
 
 class TestUtils {
 

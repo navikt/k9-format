@@ -18,20 +18,11 @@ public class PeriodeTest {
     @Test
     public void TestFinnSisteTilOgMedDatoBlantLukkedePerioder() {
         Map<Periode, Boolean> map = Map.of(
-                Periode.builder()
-                        .fraOgMed(LocalDate.parse("2017-01-01"))
-                        .tilOgMed(LocalDate.parse("2019-02-02"))
-                        .build(),
+                new Periode(LocalDate.parse("2017-01-01"),LocalDate.parse("2019-02-02")),
                 true,
-                Periode.builder()
-                        .fraOgMed(LocalDate.parse("2022-01-01"))
-                        .tilOgMed(LocalDate.parse("2023-02-02"))
-                        .build(),
+                new Periode(LocalDate.parse("2022-01-01"),LocalDate.parse("2023-02-02")),
                 true,
-                Periode.builder()
-                        .fraOgMed(LocalDate.parse("2010-01-01"))
-                        .tilOgMed(LocalDate.parse("2011-02-02"))
-                        .build(),
+                new Periode(LocalDate.parse("2010-01-01"), LocalDate.parse("2011-02-02")),
                 true
         );
 
@@ -42,20 +33,11 @@ public class PeriodeTest {
     @Test(expected = IllegalStateException.class)
     public void TestFinnSisteTilOgMedDatoBlantLukkedePerioderMedEnÅpenPeriode() {
         Map<Periode, Boolean> map = Map.of(
-                Periode.builder()
-                        .fraOgMed(LocalDate.parse("2017-01-01"))
-                        .tilOgMed(LocalDate.parse("2019-02-02"))
-                        .build(),
+                new Periode(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-02-02")),
                 true,
-                Periode.builder()
-                        .fraOgMed(LocalDate.parse("2022-01-01"))
-                        .tilOgMed(LocalDate.parse("2023-02-02"))
-                        .build(),
+                new Periode(LocalDate.parse("2022-01-01"), LocalDate.parse("2023-02-02")),
                 true,
-                Periode.builder()
-                        .fraOgMed(LocalDate.parse("2010-01-01"))
-                        .tilOgMed(null)
-                        .build(),
+                new Periode(LocalDate.parse("2010-01-01"), null),
                 true
         );
 
@@ -65,20 +47,14 @@ public class PeriodeTest {
     @Test
     public void TestFinnSisteTilOgMedDatoTillattÅpnePerioder() {
         Map<Periode, Boolean> map = Map.of(
-                Periode.builder()
-                        .fraOgMed(LocalDate.parse("2017-01-01"))
-                        .tilOgMed(LocalDate.parse("2019-02-02"))
-                        .build(),
+                new Periode(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-02-02")),
                 true,
-                Periode.builder()
-                        .fraOgMed(LocalDate.parse("2010-01-01"))
-                        .tilOgMed(null)
-                        .build(),
+                new Periode(LocalDate.parse("2010-01-01"), null),
                 true
         );
 
         LocalDate sisteTilOgMed = Periode.Utils.sisteTilOgMedTillatÅpnePerioder(map);
-        assertEquals(null, sisteTilOgMed);
+        assertNull(sisteTilOgMed);
     }
 
     @Test(expected = IllegalStateException.class)
@@ -97,12 +73,12 @@ public class PeriodeTest {
         Periode åpnePeriode = Periode.parse(fraOgMedIso + "/..");
         LocalDate tilOgMed = LocalDate.parse("2020-01-20");
         Periode lukketPeriode = Periode.forsikreLukketPeriode(åpnePeriode, tilOgMed);
-        assertEquals(åpnePeriode.fraOgMed, lukketPeriode.fraOgMed);
-        assertEquals(tilOgMed, lukketPeriode.tilOgMed);
+        assertEquals(åpnePeriode.getFraOgMed(), lukketPeriode.getFraOgMed());
+        assertEquals(tilOgMed, lukketPeriode.getTilOgMed());
 
         lukketPeriode = Periode.forsikreLukketPeriode(Periode.parse("2020-02-01/2020-02-03"), LocalDate.parse("2022-01-01"));
-        assertEquals(LocalDate.parse("2020-02-01"), lukketPeriode.fraOgMed);
-        assertEquals(LocalDate.parse("2020-02-03"), lukketPeriode.tilOgMed);
+        assertEquals(LocalDate.parse("2020-02-01"), lukketPeriode.getFraOgMed());
+        assertEquals(LocalDate.parse("2020-02-03"), lukketPeriode.getTilOgMed());
     }
 
     @Test(expected = IllegalArgumentException.class)
