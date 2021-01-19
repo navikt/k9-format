@@ -147,6 +147,7 @@ public class OmsorgspengerUtbetalingSøknad implements Innsending {
         }
     }
 
+    @SuppressWarnings("removal")
     public static final class Builder {
         private final static OmsorgspengerUtbetalingSøknadValidator validator = new OmsorgspengerUtbetalingSøknadValidator();
         private final static Versjon versjon = Versjon.of("0.0.1");

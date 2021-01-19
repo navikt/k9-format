@@ -1,6 +1,5 @@
 package no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker;
 
-import static junit.framework.TestCase.assertEquals;
 import static no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker.TestUtils.jsonForKomplettSøknad;
 import static no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker.TestUtils.komplettBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -13,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import no.nav.k9.søknad.ValideringsFeil;

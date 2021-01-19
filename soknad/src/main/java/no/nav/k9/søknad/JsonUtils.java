@@ -9,7 +9,7 @@ import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
@@ -53,7 +53,7 @@ public final class JsonUtils {
         final ObjectMapper objectMapper = new ObjectMapper()
                 .registerModule(new Jdk8Module())
                 .registerModule(new JavaTimeModule())
-                .setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE) // 
+                .setPropertyNamingStrategy(PropertyNamingStrategies.LOWER_CAMEL_CASE) 
                 .setTimeZone(TimeZone.getTimeZone("Europe/Oslo"))
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .disable(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS)

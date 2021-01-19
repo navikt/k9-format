@@ -1,7 +1,6 @@
 package no.nav.k9.søknad.omsorgspenger.utbetaling.snf;
 
 import static java.util.List.of;
-import static junit.framework.TestCase.assertEquals;
 import static no.nav.k9.søknad.omsorgspenger.utbetaling.snf.TestUtils.jsonForKomplettSøknad;
 import static no.nav.k9.søknad.omsorgspenger.utbetaling.snf.TestUtils.komplettBuilder;
 import static org.hamcrest.CoreMatchers.is;

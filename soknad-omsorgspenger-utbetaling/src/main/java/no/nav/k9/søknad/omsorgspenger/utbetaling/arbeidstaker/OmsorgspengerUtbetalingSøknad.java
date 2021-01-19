@@ -25,6 +25,7 @@ import no.nav.k9.søknad.felles.type.SøknadId;
 import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetaling;
 
 /** @deprecated bytt til {@link Søknad} med {@link OmsorgspengerUtbetaling}. */
+@SuppressWarnings("removal")
 @Deprecated(forRemoval = true, since = "5.0.1")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
