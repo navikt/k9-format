@@ -14,7 +14,7 @@ import no.nav.k9.søknad.felles.type.Periode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-public class FraværPeriode {
+public class FraværPeriode implements Comparable<FraværPeriode> {
 
     @Valid
     @JsonProperty("periode")
@@ -50,6 +50,11 @@ public class FraværPeriode {
         return Objects.hash(periode, duration);
     }
 
+    @Override
+    public int compareTo(FraværPeriode b) {
+        return this.getPeriode().compareTo(b.getPeriode());
+    }
+    
     @Override
     public String toString() {
         return "FraværPeriode{" +

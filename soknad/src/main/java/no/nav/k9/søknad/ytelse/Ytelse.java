@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
 
 @Valid
@@ -36,4 +37,6 @@ public interface Ytelse {
             return kode;
         }
     }
+
+    Periode getSøknadsperiode();
 }

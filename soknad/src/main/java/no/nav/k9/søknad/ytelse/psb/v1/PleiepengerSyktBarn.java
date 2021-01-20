@@ -139,6 +139,7 @@ public class PleiepengerSyktBarn implements Ytelse {
         this.barn = barn;
     }
 
+    @Override
     public Periode getSøknadsperiode() {
         return søknadsperiode;
     }
