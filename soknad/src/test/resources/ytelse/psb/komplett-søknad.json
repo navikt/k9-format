@@ -106,7 +106,9 @@
         }
       }
     },
-    "flereOmsorgspersoner"T  "samtykketOmsorgForBarnet": true,
+    "flereOmsorgspersoner": false,
+    "relasjonTilBarnet": "MORA",
+    "samtykketOmsorgForBarnet": true,
     "beskrivelseAvOmsorgsrollen": "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
   }
 }
