@@ -1,5 +1,6 @@
 package no.nav.k9.søknad;
 
+import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Collections;
@@ -18,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
@@ -144,6 +146,14 @@ public class LegacySøknad implements Innsending {
 
         public static LegacySøknad deserialize(String søknad) {
             return JsonUtils.fromString(søknad, LegacySøknad.class);
+        }
+        
+        public static LegacySøknad deserialize(ObjectNode node) {
+            try {
+                return JsonUtils.getObjectMapper().treeToValue(node, LegacySøknad.class);
+            } catch (IOException e) {
+                throw new IllegalArgumentException("Kunne ikke konvertere til LegacySøknad.class", e);
+            }
         }
     }
 
