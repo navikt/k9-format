@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.ytelse.psb.v1.arbeid;
+package no.nav.k9.søknad.ytelse.psb.v1.arbeidstid;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;

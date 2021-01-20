@@ -7,9 +7,9 @@ import no.nav.k9.søknad.felles.aktivitet.SelvstendigNæringsdrivende;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeid.Arbeid;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeid.ArbeidPeriodeInfo;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeid.Arbeidstaker;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidPeriodeInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningOpphold;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningSvar;
@@ -132,11 +132,11 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
         }));
     }
 
-    private void validerArbeid(Arbeid arbeid, Periode søknadsperiode, List<Feil> feil) {
-        if (arbeid == null) {
+    private void validerArbeid(Arbeidstid arbeidstid, Periode søknadsperiode, List<Feil> feil) {
+        if (arbeidstid == null) {
             return;
         }
-        validerArbeidstaker(arbeid.getArbeidstaker(), søknadsperiode, feil);
+        validerArbeidstaker(arbeidstid.getArbeidstaker(), søknadsperiode, feil);
     }
 
     private void validerArbeidstaker(List<Arbeidstaker> arbeidstakerList, Periode søknadsperiode, List<Feil> feil) {

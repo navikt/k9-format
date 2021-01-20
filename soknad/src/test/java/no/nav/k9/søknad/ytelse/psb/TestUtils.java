@@ -12,9 +12,9 @@ import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.psb.v1.*;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeid.Arbeid;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeid.ArbeidPeriodeInfo;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeid.Arbeidstaker;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidPeriodeInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningOpphold;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningSvar;
@@ -67,7 +67,7 @@ final class TestUtils {
                 Map.of(søknadsperiode,
                     new ArbeidPeriodeInfo(BigDecimal.valueOf(3.5), BigDecimal.valueOf(7.5)))));
 
-        var arbeid = new Arbeid(arbeidstaker);
+        var arbeidstid = new Arbeidstid(arbeidstaker);
         var beredskap = new Beredskap(Map.of(
             delperiodeEn, new Beredskap.BeredskapPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."),
             delperiodeTo, new Beredskap.BeredskapPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.")));
@@ -116,7 +116,7 @@ final class TestUtils {
                 .årsak(Utenlandsopphold.UtenlandsoppholdÅrsak.BARNET_INNLAGT_I_HELSEINSTITUSJON_FOR_NORSK_OFFENTLIG_REGNING)
                 .build()));
 
-        return new PleiepengerSyktBarn(søknadsperiode, barn, aktivitet, beredskap, nattevåk, tilsynsordning, arbeid, uttak, lovbestemtFerie, bosteder,
+        return new PleiepengerSyktBarn(søknadsperiode, barn, aktivitet, beredskap, nattevåk, tilsynsordning, arbeidstid, uttak, lovbestemtFerie, bosteder,
             utenlandsopphold,
             false, "MORA", true, "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.");
     }

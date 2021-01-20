@@ -24,7 +24,7 @@ import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeid.Arbeid;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -87,8 +87,8 @@ public class PleiepengerSyktBarn implements Ytelse {
     private LovbestemtFerie lovbestemtFerie;
 
     @Valid
-    @JsonProperty(value = "arbeid")
-    private Arbeid arbeid;
+    @JsonProperty(value = "arbeidstid")
+    private Arbeidstid arbeidstid;
 
     @Valid
     @NotNull
@@ -105,7 +105,7 @@ public class PleiepengerSyktBarn implements Ytelse {
                                @JsonProperty(value = "beredskap") @Valid Beredskap beredskap,
                                @JsonProperty(value = "nattevåk") @Valid Nattevåk nattevåk,
                                @JsonProperty(value = "tilsynsordning") @Valid Tilsynsordning tilsynsordning,
-                               @JsonProperty(value = "arbeid") @Valid Arbeid arbeid,
+                               @JsonProperty(value = "arbeidstid") @Valid Arbeidstid arbeidstid,
                                @JsonProperty(value = "uttak", required = true) @Valid @NotNull Uttak uttak,
                                @JsonProperty(value = "lovbestemtFerie") @Valid LovbestemtFerie lovbestemtFerie,
                                @JsonProperty(value = "bosteder") @Valid @NotNull Bosteder bosteder,
@@ -124,7 +124,7 @@ public class PleiepengerSyktBarn implements Ytelse {
         this.beredskap = beredskap;
         this.nattevåk = nattevåk;
         this.tilsynsordning = tilsynsordning;
-        this.arbeid = arbeid;
+        this.arbeidstid = arbeidstid;
         this.uttak = uttak;
         this.lovbestemtFerie = lovbestemtFerie;
         this.bosteder = bosteder;
@@ -236,12 +236,12 @@ public class PleiepengerSyktBarn implements Ytelse {
         this.lovbestemtFerie = lovbestemtFerie;
     }
 
-    public Arbeid getArbeid() {
-        return arbeid;
+    public Arbeidstid getArbeid() {
+        return arbeidstid;
     }
 
-    public void setArbeid(Arbeid arbeid) {
-        this.arbeid = arbeid;
+    public void setArbeid(Arbeidstid arbeidstid) {
+        this.arbeidstid = arbeidstid;
     }
 
     public Uttak getUttak() {
