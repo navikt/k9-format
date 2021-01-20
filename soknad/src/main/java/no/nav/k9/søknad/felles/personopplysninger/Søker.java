@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
+import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.felles.type.PersonIdent;
 
 import javax.validation.Valid;
@@ -13,7 +14,7 @@ import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-public class Søker {
+public class Søker implements Person {
 
     @JsonProperty(value = "norskIdentitetsnummer", required = true)
     @NotNull
@@ -36,6 +37,7 @@ public class Søker {
         return Objects.equals(norskIdentitetsnummer, other.norskIdentitetsnummer);
     }
 
+    @Override
     public PersonIdent getPersonIdent() {
         return norskIdentitetsnummer;
     }
