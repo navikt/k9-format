@@ -1,6 +1,5 @@
 package no.nav.k9.søknad.omsorgspenger;
 
-import java.io.IOException;
 import java.time.ZonedDateTime;
 
 import javax.validation.Valid;
@@ -12,8 +11,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import no.nav.k9.søknad.Innsending;
 import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.felles.Versjon;
