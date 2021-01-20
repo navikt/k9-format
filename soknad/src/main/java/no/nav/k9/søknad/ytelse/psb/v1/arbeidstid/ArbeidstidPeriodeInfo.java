@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-public class ArbeidPeriodeInfo {
+public class ArbeidstidPeriodeInfo {
 
     @Valid
     @NotNull
@@ -27,7 +27,7 @@ public class ArbeidPeriodeInfo {
     private BigDecimal jobberNormaltTimerPerDag;
 
     @JsonCreator
-    public ArbeidPeriodeInfo(
+    public ArbeidstidPeriodeInfo(
             @JsonProperty(value = "faktiskArbeidTimerPerDag") @Valid @NotNull BigDecimal faktiskArbeidTimerPerDag,
             @JsonProperty(value = "jobberNormaltTimerPerDag") @Valid @NotNull BigDecimal jobberNormaltTimerPerDag) {
         this.faktiskArbeidTimerPerDag = faktiskArbeidTimerPerDag;

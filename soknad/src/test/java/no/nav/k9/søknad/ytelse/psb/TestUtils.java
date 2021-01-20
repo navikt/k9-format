@@ -13,8 +13,8 @@ import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.psb.v1.*;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidPeriodeInfo;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningOpphold;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningSvar;
@@ -62,12 +62,14 @@ final class TestUtils {
         var uttak = new Uttak(Map.of(
             søknadsperiode, new UttakPeriodeInfo(BigDecimal.valueOf(7))));
 
-        var arbeidstaker = List.of(
-            new Arbeidstaker(null, Organisasjonsnummer.of("999999999"), null,
-                Map.of(søknadsperiode,
-                    new ArbeidPeriodeInfo(BigDecimal.valueOf(3.5), BigDecimal.valueOf(7.5)))));
+        var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("999999999"));
 
-        var arbeidstid = new Arbeidstid(arbeidstaker);
+        var arbeidstid = new Arbeidstid(Map.of(
+                arbeidstaker,
+                new ArbeidstidInfo(Map.of(
+                        søknadsperiode,
+                        new ArbeidstidPeriodeInfo(BigDecimal.valueOf(3.5), BigDecimal.valueOf(7.5))))), null, null);
+
         var beredskap = new Beredskap(Map.of(
             delperiodeEn, new Beredskap.BeredskapPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."),
             delperiodeTo, new Beredskap.BeredskapPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.")));

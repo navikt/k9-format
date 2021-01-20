@@ -8,8 +8,7 @@ import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidPeriodeInfo;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningOpphold;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningSvar;
@@ -136,7 +135,7 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
         if (arbeidstid == null) {
             return;
         }
-        validerArbeidstaker(arbeidstid.getArbeidstaker(), søknadsperiode, feil);
+        validerArbeidstaker(arbeidstid.getArbeidstakerInfoMap(), søknadsperiode, feil);
     }
 
     private void validerArbeidstaker(List<Arbeidstaker> arbeidstakerList, Periode søknadsperiode, List<Feil> feil) {
@@ -152,7 +151,7 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
     }
 
     private void validerArbeidstakerPeriode(Arbeidstaker arbeidstaker, int i, Periode søknadsperiode, List<Feil> feil) {
-        for (Map.Entry<Periode, ArbeidPeriodeInfo> periode : arbeidstaker.getPerioder().entrySet()) {
+        for (Map.Entry<Periode, ArbeidstidPeriodeInfo> periode : arbeidstaker.getPerioder().entrySet()) {
             validerGyldigPeriode(periode.getKey(), "arbeid.arbeidstaker[" + i + "].periode", false, feil);
             validerPeriodeInnenforSøknadsperiode(periode.getKey(), "arbeid.arbeidstaker[" + i + "]", søknadsperiode, feil);
             validerOverlappendePerioder(arbeidstaker.getPerioder(), periode.getKey(), "arbeid.arbeidstaker.periode[" + i + "]", feil);

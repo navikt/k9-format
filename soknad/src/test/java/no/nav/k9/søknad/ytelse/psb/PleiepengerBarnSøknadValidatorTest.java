@@ -24,8 +24,7 @@ import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnValidator;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidPeriodeInfo;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningOpphold;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningSvar;
@@ -68,19 +67,16 @@ public class PleiepengerBarnSøknadValidatorTest {
     public void søknadMedArbeidsSomOverlapper() {
         var søknad = TestUtils.komplettBuilder();
         var søknadsperiode = søknad.getSøknadsperiode();
-        var arbeidstaker = new ArrayList<>(søknad.getArbeid().getArbeidstaker());
-        
+        var arbeidstaker = new ArrayList<>(søknad.getArbeid().getArbeidstakerInfoMap());
         assertThat(søknadsperiode.getFraOgMed()).isNotNull();
         assertThat(søknadsperiode.getTilOgMed()).isNotNull();
-        
         arbeidstaker.add(
                 new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), null, Map.of(
                         søknadsperiode,
-                        new ArbeidPeriodeInfo(BigDecimal.valueOf(8), BigDecimal.valueOf(8)),
+                        new ArbeidstidPeriodeInfo(BigDecimal.valueOf(8), BigDecimal.valueOf(8)),
                         new Periode(søknadsperiode.getFraOgMed().plusDays(7), søknadsperiode.getTilOgMed().minusDays(7)),
-                        new ArbeidPeriodeInfo(BigDecimal.valueOf(8), BigDecimal.valueOf(8)))));
-        søknad.getArbeid().setArbeidstaker(arbeidstaker);
-        
+                        new ArbeidstidPeriodeInfo(BigDecimal.valueOf(8), BigDecimal.valueOf(8)))));
+        søknad.getArbeid().setArbeidstakerInfoMap(arbeidstaker);
         assertThat(verifyHarFeil(søknad)).hasSize(2);
 
     }
@@ -89,12 +85,12 @@ public class PleiepengerBarnSøknadValidatorTest {
     public void søknadMedNullJobberNormaltTimerPerDag() {
         var søknad = TestUtils.komplettBuilder();
         var arbeid = søknad.getArbeid();
-        var arbeidstaker = new ArrayList<>(arbeid.getArbeidstaker());
+        var arbeidstaker = new ArrayList<>(arbeid.getArbeidstakerInfoMap());
         arbeidstaker.add(new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), null, Map.of(
                 søknad.getSøknadsperiode(),
-                new ArbeidPeriodeInfo(BigDecimal.valueOf(8), null))));
+                new ArbeidstidPeriodeInfo(BigDecimal.valueOf(8), null))));
 
-        arbeid.setArbeidstaker(arbeidstaker);
+        arbeid.setArbeidstakerInfoMap(arbeidstaker);
         verifyHarFeil(søknad);
     }
 
@@ -102,11 +98,11 @@ public class PleiepengerBarnSøknadValidatorTest {
     public void søknadMedNullFaktiskArbeidTimerPerDag() {
         var søknad = TestUtils.komplettBuilder();
         var arbeid = søknad.getArbeid();
-        var arbeidstaker = new ArrayList<>(arbeid.getArbeidstaker());
+        var arbeidstaker = new ArrayList<>(arbeid.getArbeidstakerInfoMap());
         arbeidstaker.add(new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), null, Map.of(
                 søknad.getSøknadsperiode(),
-                new ArbeidPeriodeInfo(null, BigDecimal.valueOf(8)))));
-        arbeid.setArbeidstaker(arbeidstaker);
+                new ArbeidstidPeriodeInfo(null, BigDecimal.valueOf(8)))));
+        arbeid.setArbeidstakerInfoMap(arbeidstaker);
         verifyHarFeil(søknad);
     }
 
@@ -114,11 +110,11 @@ public class PleiepengerBarnSøknadValidatorTest {
     public void søknadMedNegativFaktiskArbeidTimerPerDag() {
         var søknad = TestUtils.komplettBuilder();
         var arbeid = søknad.getArbeid();
-        var arbeidstaker = new ArrayList<>(arbeid.getArbeidstaker());
+        var arbeidstaker = new ArrayList<>(arbeid.getArbeidstakerInfoMap());
         arbeidstaker.add(new Arbeidstaker(NorskIdentitetsnummer.of("29099012345"), null, null, Map.of(
                 søknad.getSøknadsperiode(),
-                new ArbeidPeriodeInfo(BigDecimal.valueOf(-20), BigDecimal.valueOf(8)))));
-        arbeid.setArbeidstaker(arbeidstaker);
+                new ArbeidstidPeriodeInfo(BigDecimal.valueOf(-20), BigDecimal.valueOf(8)))));
+        arbeid.setArbeidstakerInfoMap(arbeidstaker);
         verifyHarFeil(søknad);
     }
 
@@ -126,11 +122,11 @@ public class PleiepengerBarnSøknadValidatorTest {
     public void søknadMedNegativNormaltArbeidTimerPerDag() {
         var søknad = TestUtils.komplettBuilder();
         var arbeid = søknad.getArbeid();
-        var arbeidstaker = new ArrayList<>(arbeid.getArbeidstaker());
+        var arbeidstaker = new ArrayList<>(arbeid.getArbeidstakerInfoMap());
         arbeidstaker.add(new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), null, Map.of(
                 søknad.getSøknadsperiode(),
-                new ArbeidPeriodeInfo(BigDecimal.valueOf(8), BigDecimal.valueOf(-8)))));
-        arbeid.setArbeidstaker(arbeidstaker);
+                new ArbeidstidPeriodeInfo(BigDecimal.valueOf(8), BigDecimal.valueOf(-8)))));
+        arbeid.setArbeidstakerInfoMap(arbeidstaker);
         verifyHarFeil(søknad);
     }
 
@@ -138,11 +134,11 @@ public class PleiepengerBarnSøknadValidatorTest {
     public void søknadMedNullFeilArbeidstaker() {
         var søknad = TestUtils.komplettBuilder();
         var arbeid = søknad.getArbeid();
-        var arbeidstaker = new ArrayList<>(arbeid.getArbeidstaker());
+        var arbeidstaker = new ArrayList<>(arbeid.getArbeidstakerInfoMap());
         arbeidstaker.add(new Arbeidstaker(null, null, null, Map.of(
                 søknad.getSøknadsperiode(),
-                new ArbeidPeriodeInfo(BigDecimal.valueOf(8), BigDecimal.valueOf(8)))));
-        arbeid.setArbeidstaker(arbeidstaker);
+                new ArbeidstidPeriodeInfo(BigDecimal.valueOf(8), BigDecimal.valueOf(8)))));
+        arbeid.setArbeidstakerInfoMap(arbeidstaker);
         verifyHarFeil(søknad);
     }
 
@@ -150,11 +146,11 @@ public class PleiepengerBarnSøknadValidatorTest {
     public void søknadMedIkkeEntydigInfoForArbeidstaker() {
         var søknad = TestUtils.komplettBuilder();
         var arbeid = søknad.getArbeid();
-        var arbeidstaker = new ArrayList<>(arbeid.getArbeidstaker());
+        var arbeidstaker = new ArrayList<>(arbeid.getArbeidstakerInfoMap());
         arbeidstaker.add( new Arbeidstaker(NorskIdentitetsnummer.of("29099012345"), Organisasjonsnummer.of("88888888"), null, Map.of(
                 søknad.getSøknadsperiode(),
-                new ArbeidPeriodeInfo(BigDecimal.valueOf(8), BigDecimal.valueOf(8)))));
-        arbeid.setArbeidstaker(arbeidstaker);
+                new ArbeidstidPeriodeInfo(BigDecimal.valueOf(8), BigDecimal.valueOf(8)))));
+        arbeid.setArbeidstakerInfoMap(arbeidstaker);
         verifyHarFeil(søknad);
     }
 
@@ -186,11 +182,11 @@ public class PleiepengerBarnSøknadValidatorTest {
     public void ArbeidstakerInfoUtenJobberNormaltPerUke() {
         var søknad = TestUtils.komplettBuilder();
         var arbeid = søknad.getArbeid();
-        var arbeidstaker = new ArrayList<>(arbeid.getArbeidstaker());
+        var arbeidstaker = new ArrayList<>(arbeid.getArbeidstakerInfoMap());
         arbeidstaker.add( new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), null, Map.of(
                 søknad.getSøknadsperiode(),
-                new ArbeidPeriodeInfo(BigDecimal.valueOf(8), null))));
-        arbeid.setArbeidstaker(arbeidstaker);
+                new ArbeidstidPeriodeInfo(BigDecimal.valueOf(8), null))));
+        arbeid.setArbeidstakerInfoMap(arbeidstaker);
         søknad.setArbeid(arbeid);
 
         verifyHarFeil(søknad);
@@ -200,11 +196,11 @@ public class PleiepengerBarnSøknadValidatorTest {
     public void ArbeidstakerInfoMedJobberNormaltPerUkeSattTilNegativVerdi() {
         var søknad = TestUtils.komplettBuilder();
         var arbeid = søknad.getArbeid();
-        var arbeidstaker = new ArrayList<>(arbeid.getArbeidstaker());
+        var arbeidstaker = new ArrayList<>(arbeid.getArbeidstakerInfoMap());
         arbeidstaker.add( new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), null, Map.of(
                 søknad.getSøknadsperiode(),
-                new ArbeidPeriodeInfo(BigDecimal.valueOf(8), BigDecimal.valueOf(-8)))));
-        arbeid.setArbeidstaker(arbeidstaker);
+                new ArbeidstidPeriodeInfo(BigDecimal.valueOf(8), BigDecimal.valueOf(-8)))));
+        arbeid.setArbeidstakerInfoMap(arbeidstaker);
         søknad.setArbeid(arbeid);
 
         verifyHarFeil(søknad);
