@@ -1,19 +1,30 @@
 package no.nav.k9.søknad;
 
-import com.fasterxml.jackson.annotation.*;
+import java.time.ZonedDateTime;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.felles.type.SøknadId;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.time.ZonedDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Forenkler lesing av gamle søknadsformater (som omdistribueres til oppgave).
@@ -58,6 +69,16 @@ public class LegacySøknad implements Innsending {
     @JsonProperty(value = "perioder", required = false)
     private Map<Periode, Dummy> perioder;
 
+    public LegacySøknad(@JsonProperty(value = "søknadId", required = true) @Valid @NotNull SøknadId søknadId,
+                        @JsonProperty(value = "versjon", required = true) @Valid @NotNull Versjon versjon,
+                        @JsonProperty(value = "mottattDato", required = true) @Valid @NotNull ZonedDateTime mottattDato,
+                        @JsonProperty(value = "søker", required = true) @Valid @NotNull Søker søker) {
+        this.søknadId = søknadId;
+        this.versjon = versjon;
+        this.mottattDato = mottattDato;
+        this.søker = søker;
+    }
+
     @JsonCreator
     public LegacySøknad(@JsonProperty(value = "søknadId", required = true) @Valid @NotNull SøknadId søknadId,
                         @JsonProperty(value = "versjon", required = true) @Valid @NotNull Versjon versjon,
@@ -80,6 +101,18 @@ public class LegacySøknad implements Innsending {
 
     public List<Barn> getBarn() {
         return barn == null ? Collections.emptyList() : Collections.unmodifiableList(barn);
+    }
+
+    public List<Person> getBerørtePersoner() {
+        return List.copyOf(getBarn());
+    }
+
+    public void setBarn(List<Barn> barn) {
+        this.barn = barn == null ? null : List.copyOf(barn);
+    }
+    
+    public void setPerioder(List<Periode> perioder) {
+        this.perioder = perioder.stream().map(p -> new SimpleEntry<>(p, new Dummy())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     @Override

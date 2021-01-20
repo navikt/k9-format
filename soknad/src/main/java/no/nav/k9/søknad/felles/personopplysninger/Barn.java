@@ -1,16 +1,23 @@
 package no.nav.k9.søknad.felles.personopplysninger;
 
-import com.fasterxml.jackson.annotation.*;
-import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
-import no.nav.k9.søknad.felles.type.PersonIdent;
+import java.time.LocalDate;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
+import javax.validation.constraints.AssertTrue;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
+import no.nav.k9.søknad.felles.type.Person;
+import no.nav.k9.søknad.felles.type.PersonIdent;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-public class Barn {
+public class Barn implements Person {
 
     @JsonProperty(value = "norskIdentitetsnummer")
     @Valid
@@ -32,8 +39,14 @@ public class Barn {
         this.fødselsdato = fødselsdato;
     }
 
+    @Override
     public PersonIdent getPersonIdent() {
         return norskIdentitetsnummer;
+    }
+
+    @AssertTrue(message = "Enten fnr/dnr eller fødselsdato må oppgis")
+    private boolean isFnrEllerFødselsdato() {
+        return getPersonIdent() != null || fødselsdato != null;
     }
 
     public static final class Builder {

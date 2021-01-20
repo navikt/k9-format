@@ -1,16 +1,25 @@
 package no.nav.k9.søknad;
 
-import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import no.nav.k9.søknad.felles.Versjon;
-import no.nav.k9.søknad.felles.personopplysninger.Søker;
-import no.nav.k9.søknad.felles.type.SøknadId;
-import no.nav.k9.søknad.ytelse.Ytelse;
+import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.util.Collections;
+import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.io.IOException;
-import java.time.ZonedDateTime;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import no.nav.k9.søknad.felles.Versjon;
+import no.nav.k9.søknad.felles.personopplysninger.Søker;
+import no.nav.k9.søknad.felles.type.Person;
+import no.nav.k9.søknad.felles.type.SøknadId;
+import no.nav.k9.søknad.ytelse.Ytelse;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -82,6 +91,10 @@ public class Søknad implements Innsending {
         this.mottattDato = mottattDato;
     }
 
+    public List<Person> getBerørtePersoner() {
+        return ytelse == null ? Collections.emptyList() : ytelse.getBerørtePersoner();
+    }
+
     @Override
     public Søker getSøker() {
         return søker;
@@ -91,8 +104,9 @@ public class Søknad implements Innsending {
         this.søker = søker;
     }
 
-    public Ytelse getYtelse() {
-        return ytelse;
+    @SuppressWarnings("unchecked")
+    public <Y extends Ytelse> Y getYtelse() {
+        return (Y) ytelse;
     }
 
     public void setYtelse(Ytelse ytelse) {

@@ -1,6 +1,18 @@
 package no.nav.k9.søknad.ytelse.psb.v1;
 
-import com.fasterxml.jackson.annotation.*;
+import java.util.List;
+import java.util.Objects;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 import no.nav.k9.søknad.PeriodeValidator;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.LovbestemtFerie;
@@ -9,15 +21,11 @@ import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeid.Arbeid;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -25,7 +33,8 @@ import java.util.List;
 public class PleiepengerSyktBarn implements Ytelse {
 
     @Valid
-    @JsonProperty(value = "barn")
+    @JsonProperty(value = "barn", required = true)
+    @NotNull
     private Barn barn;
 
     @Valid
@@ -86,9 +95,12 @@ public class PleiepengerSyktBarn implements Ytelse {
     @JsonProperty(value = "uttak", required = true)
     private Uttak uttak;
 
+    public PleiepengerSyktBarn() {
+    }
+    
     @JsonCreator
     public PleiepengerSyktBarn(@JsonProperty(value = "søknadsperiode", required = true) @NotNull @Valid Periode søknadsperiode,
-                               @JsonProperty(value = "barn") @Valid Barn barn,
+                               @JsonProperty(value = "barn", required = true) @NotNull @Valid Barn barn,
                                @JsonProperty(value = "arbeidAktivitet") @Valid ArbeidAktivitet aktivitet,
                                @JsonProperty(value = "beredskap") @Valid Beredskap beredskap,
                                @JsonProperty(value = "nattevåk") @Valid Nattevåk nattevåk,
@@ -102,8 +114,8 @@ public class PleiepengerSyktBarn implements Ytelse {
                                @JsonProperty(value = "relasjonTilBarnet") @Valid String relasjonTilBarnet,
                                @JsonProperty(value = "samtykketOmsorgForBarnet") @Valid Boolean samtykketOmsorgForBarnet,
                                @JsonProperty(value = "beskrivelseAvOmsorgsrollen") @Valid String beskrivelseAvOmsorgsrollen) {
-        this.søknadsperiode = søknadsperiode;
-        this.barn = barn;
+        this.søknadsperiode = Objects.requireNonNull(søknadsperiode, "søknadsperiode");
+        this.barn = Objects.requireNonNull(barn, "barn");
         this.arbeidAktivitet = aktivitet;
         this.flereOmsorgspersoner = flereOmsorgspersoner;
         this.relasjonTilBarnet = relasjonTilBarnet;
@@ -242,6 +254,11 @@ public class PleiepengerSyktBarn implements Ytelse {
     @Override
     public Type getType() {
         return Type.PLEIEPENGER_SYKT_BARN;
+    }
+    
+    @Override
+    public List<Person> getBerørtePersoner() {
+        return List.of(barn); // kjenner ikke de andre søkerne her, kun pleietrengende som er identifisert
     }
 
     @Override

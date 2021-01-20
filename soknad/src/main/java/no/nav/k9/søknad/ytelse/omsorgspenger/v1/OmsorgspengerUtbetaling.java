@@ -8,6 +8,7 @@ import no.nav.k9.søknad.felles.fravær.FraværPeriode;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
+import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 
@@ -44,7 +45,7 @@ public class OmsorgspengerUtbetaling implements Ytelse {
     @Size(min = 1, message="Minst 1 fraværsperiode må oppgis")
     @JsonProperty(value = "fraværsperioder", required = true)
     private final List<FraværPeriode> fraværsperioder;
-
+    
     @JsonCreator
     public OmsorgspengerUtbetaling(@JsonProperty("fosterbarn") @Valid List<Barn> fosterbarn,
                                    @JsonProperty(value = "aktivitet", required = true) @Valid @NotNull ArbeidAktivitet opptjening,
@@ -74,6 +75,11 @@ public class OmsorgspengerUtbetaling implements Ytelse {
         return Type.OMSORGSPENGER_UTBETALING;
     }
 
+    @Override
+    public List<Person> getBerørtePersoner() {
+        return List.copyOf(fosterbarn);
+    }
+    
     @Override
     public YtelseValidator getValidator() {
         return new OmsorgspengerUtbetalingValidator();

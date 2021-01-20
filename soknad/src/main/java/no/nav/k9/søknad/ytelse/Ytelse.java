@@ -1,8 +1,12 @@
 package no.nav.k9.søknad.ytelse;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import java.util.List;
 
 import javax.validation.Valid;
+
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+import no.nav.k9.søknad.felles.type.Person;
 
 @Valid
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
@@ -14,6 +18,9 @@ public interface Ytelse {
     Ytelse.Type getType();
 
     YtelseValidator getValidator();
+    
+    /** @return andre berørte, kjente identifiserte personer (enn søker) - f.eks. barn, ektefelle, verge etc. som er involveres i denne saken.*/
+    List<Person> getBerørtePersoner();
 
     enum Type {
         OMSORGSPENGER_UTBETALING(Ytelse.OMSORGSPENGER_UTBETALING),

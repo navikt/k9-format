@@ -18,16 +18,15 @@ import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPerioder;
 public class Utenlandsopphold {
 
     @JsonInclude(value = Include.ALWAYS)
-    @JsonProperty(value="perioder")
+    @JsonProperty(value = "perioder")
     public final Map<Periode, UtenlandsoppholdPeriodeInfo> perioder;
 
     @JsonCreator
     public Utenlandsopphold(
-            @JsonProperty("perioder")
-            Map<Periode, UtenlandsoppholdPeriodeInfo> perioder) {
+                            @JsonProperty("perioder") Map<Periode, UtenlandsoppholdPeriodeInfo> perioder) {
         this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
     }
-    
+
     public Map<Periode, UtenlandsoppholdPeriodeInfo> getPerioder() {
         return perioder;
     }
@@ -55,28 +54,36 @@ public class Utenlandsopphold {
 
         public Utenlandsopphold build() {
             return new Utenlandsopphold(
-                    perioder
-            );
+                perioder);
         }
     }
 
-
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
     public static class UtenlandsoppholdPeriodeInfo {
 
+        @JsonProperty(value = "land", required = true)
         public final Landkode land;
 
+        @JsonProperty(value = "årsak")
         public final UtenlandsoppholdÅrsak årsak;
 
         @JsonCreator
         private UtenlandsoppholdPeriodeInfo(
-                @JsonProperty("land")
-                Landkode land,
-                @JsonProperty("årsak")
-                UtenlandsoppholdÅrsak årsak) {
+                                            @JsonProperty("land") Landkode land,
+                                            @JsonProperty("årsak") UtenlandsoppholdÅrsak årsak) {
             this.land = land;
             this.årsak = årsak;
         }
 
+        public Landkode getLand() {
+            return land;
+        }
+        
+        public UtenlandsoppholdÅrsak getÅrsak() {
+            return årsak;
+        }
+        
         public static Builder builder() {
             return new Builder();
         }
@@ -85,13 +92,13 @@ public class Utenlandsopphold {
             private Landkode land;
             private UtenlandsoppholdÅrsak årsak;
 
-            private Builder() {}
+            private Builder() {
+            }
 
             public Builder land(Landkode land) {
                 this.land = land;
                 return this;
             }
-
 
             public Builder årsak(UtenlandsoppholdÅrsak årsak) {
                 this.årsak = årsak;
@@ -100,16 +107,16 @@ public class Utenlandsopphold {
 
             public UtenlandsoppholdPeriodeInfo build() {
                 return new UtenlandsoppholdPeriodeInfo(
-                        land,
-                        årsak
-                );
+                    land,
+                    årsak);
             }
         }
     }
 
     public enum UtenlandsoppholdÅrsak {
         BARNET_INNLAGT_I_HELSEINSTITUSJON_FOR_NORSK_OFFENTLIG_REGNING("barnetInnlagtIHelseinstitusjonForNorskOffentligRegning"),
-        BARNET_INNLAGT_I_HELSEINSTITUSJON_DEKKET_ETTER_AVTALE_MED_ET_ANNET_LAND_OM_TRYGD("barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd");
+        BARNET_INNLAGT_I_HELSEINSTITUSJON_DEKKET_ETTER_AVTALE_MED_ET_ANNET_LAND_OM_TRYGD(
+                "barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd");
 
         @JsonValue
         public final String dto;
@@ -132,4 +139,3 @@ public class Utenlandsopphold {
         }
     }
 }
-
