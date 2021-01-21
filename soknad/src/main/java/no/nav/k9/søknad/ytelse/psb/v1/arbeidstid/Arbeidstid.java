@@ -10,13 +10,16 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.unmodifiableMap;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Arbeidstid {
 
     @Valid
     @NotNull
-    @JsonProperty(value = "arbedstakerMap")
+    @JsonProperty(value = "arbeidstakerMap")
     private Map<Arbeidstaker, ArbeidstidInfo> arbeidstakerMap;
 
     @Valid
@@ -30,10 +33,10 @@ public class Arbeidstid {
     private ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo;
 
     @JsonCreator
-    public Arbeidstid(@JsonProperty("arbedstakerMap") @Valid @NotNull Map<Arbeidstaker, ArbeidstidInfo> arbeidstakerMap,
+    public Arbeidstid(@JsonProperty("arbeidstakerMap") @Valid @NotNull Map<Arbeidstaker, ArbeidstidInfo> arbeidstakerMap,
                       @JsonProperty("frilanserArbeidstidInfo") @Valid @NotNull ArbeidstidInfo frilanserArbeidstidInfo,
                       @JsonProperty(value = "selvstendigNæringsdrivendeArbeidstidInfo") @Valid @NotNull ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo) {
-        this.arbeidstakerMap = arbeidstakerMap;
+        this.arbeidstakerMap = (arbeidstakerMap == null) ? emptyMap() : unmodifiableMap(arbeidstakerMap);
         this.frilanserArbeidstidInfo = frilanserArbeidstidInfo;
         this.selvstendigNæringsdrivendeArbeidstidInfo = selvstendigNæringsdrivendeArbeidstidInfo;
     }

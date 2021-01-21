@@ -9,6 +9,9 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.unmodifiableMap;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class ArbeidstidInfo {
@@ -28,16 +31,12 @@ public class ArbeidstidInfo {
     @JsonCreator
     public ArbeidstidInfo(@JsonProperty(value = "perioder") @Valid @NotNull Map<Periode, ArbeidstidPeriodeInfo> perioder,
                           @JsonProperty(value = "jobberNormaltTimerPerDag") @Valid @NotNull BigDecimal jobberNormaltTimerPerDag) {
-        this.perioder = perioder;
+        this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
         this.jobberNormaltTimerPerDag = jobberNormaltTimerPerDag;
     }
 
     public Map<Periode, ArbeidstidPeriodeInfo> getPerioder() {
         return perioder;
-    }
-
-    public void setPerioder(Map<Periode, ArbeidstidPeriodeInfo> perioder) {
-        this.perioder = perioder;
     }
 
     public BigDecimal getJobberNormaltTimerPerDag() {

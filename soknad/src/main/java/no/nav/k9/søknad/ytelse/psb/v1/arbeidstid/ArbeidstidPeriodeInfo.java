@@ -24,15 +24,13 @@ public class ArbeidstidPeriodeInfo {
     public ArbeidstidPeriodeInfo(
             @JsonProperty(value = "faktiskArbeidTimerPerDag") @Valid @NotNull BigDecimal faktiskArbeidTimerPerDag) {
         this.faktiskArbeidTimerPerDag = faktiskArbeidTimerPerDag;
-        this.jobberNormaltTimerPerDag = jobberNormaltTimerPerDag;
     }
 
     public BigDecimal getFaktiskArbeidTimerPerDag() {
         return faktiskArbeidTimerPerDag;
     }
 
-    public BigDecimal getJobberNormaltTimerPerDag() {
-        return jobberNormaltTimerPerDag;
+    public void setFaktiskArbeidTimerPerDag(BigDecimal faktiskArbeidTimerPerDag) {
+        this.faktiskArbeidTimerPerDag = faktiskArbeidTimerPerDag;
     }
-
 }
