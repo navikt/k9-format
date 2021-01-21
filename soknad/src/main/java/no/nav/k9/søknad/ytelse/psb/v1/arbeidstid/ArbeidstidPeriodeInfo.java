@@ -20,16 +20,9 @@ public class ArbeidstidPeriodeInfo {
     @JsonProperty(value = "faktiskArbeidTimerPerDag")
     private BigDecimal faktiskArbeidTimerPerDag;
 
-    @Valid
-    @NotNull
-    @Min(0)
-    @JsonProperty(value = "jobberNormaltTimerPerDag")
-    private BigDecimal jobberNormaltTimerPerDag;
-
     @JsonCreator
     public ArbeidstidPeriodeInfo(
-            @JsonProperty(value = "faktiskArbeidTimerPerDag") @Valid @NotNull BigDecimal faktiskArbeidTimerPerDag,
-            @JsonProperty(value = "jobberNormaltTimerPerDag") @Valid @NotNull BigDecimal jobberNormaltTimerPerDag) {
+            @JsonProperty(value = "faktiskArbeidTimerPerDag") @Valid @NotNull BigDecimal faktiskArbeidTimerPerDag) {
         this.faktiskArbeidTimerPerDag = faktiskArbeidTimerPerDag;
         this.jobberNormaltTimerPerDag = jobberNormaltTimerPerDag;
     }

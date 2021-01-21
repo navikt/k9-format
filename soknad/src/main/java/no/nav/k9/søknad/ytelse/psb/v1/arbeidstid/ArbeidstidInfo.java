@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.*;
 import no.nav.k9.søknad.felles.type.Periode;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -17,9 +19,17 @@ public class ArbeidstidInfo {
     @NotNull
     private Map<Periode, ArbeidstidPeriodeInfo> perioder;
 
+    @Valid
+    @NotNull
+    @Min(0)
+    @JsonProperty(value = "jobberNormaltTimerPerDag")
+    private BigDecimal jobberNormaltTimerPerDag;
+
     @JsonCreator
-    public ArbeidstidInfo(@JsonProperty(value = "perioder") @Valid @NotNull Map<Periode, ArbeidstidPeriodeInfo> perioder) {
+    public ArbeidstidInfo(@JsonProperty(value = "perioder") @Valid @NotNull Map<Periode, ArbeidstidPeriodeInfo> perioder,
+                          @JsonProperty(value = "jobberNormaltTimerPerDag") @Valid @NotNull BigDecimal jobberNormaltTimerPerDag) {
         this.perioder = perioder;
+        this.jobberNormaltTimerPerDag = jobberNormaltTimerPerDag;
     }
 
     public Map<Periode, ArbeidstidPeriodeInfo> getPerioder() {
@@ -28,5 +38,13 @@ public class ArbeidstidInfo {
 
     public void setPerioder(Map<Periode, ArbeidstidPeriodeInfo> perioder) {
         this.perioder = perioder;
+    }
+
+    public BigDecimal getJobberNormaltTimerPerDag() {
+        return jobberNormaltTimerPerDag;
+    }
+
+    public void setJobberNormaltTimerPerDag(BigDecimal jobberNormaltTimerPerDag) {
+        this.jobberNormaltTimerPerDag = jobberNormaltTimerPerDag;
     }
 }

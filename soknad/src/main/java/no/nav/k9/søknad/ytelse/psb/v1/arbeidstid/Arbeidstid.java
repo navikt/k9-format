@@ -5,12 +5,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.søknad.felles.aktivitet.Arbeidstaker;
-import no.nav.k9.søknad.felles.aktivitet.Frilanser;
-import no.nav.k9.søknad.felles.aktivitet.SelvstendigNæringsdrivende;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -24,23 +21,21 @@ public class Arbeidstid {
 
     @Valid
     @NotNull
-    @Size(max = 1)
-    @JsonProperty(value = "frilanserMap")
-    private Map<Frilanser, ArbeidstidInfo> frilanserMap;
+    @JsonProperty(value = "frilanserArbeidstidInfo")
+    private ArbeidstidInfo frilanserArbeidstidInfo;
 
     @Valid
     @NotNull
-    @Size(max = 1)
-    @JsonProperty(value = "selvstendigNæringsdrivendeMap")
-    private Map<SelvstendigNæringsdrivende, ArbeidstidInfo> selvstendigNæringsdrivendeMap;
+    @JsonProperty(value = "selvstendigNæringsdrivendeArbeidstidInfo")
+    private ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo;
 
     @JsonCreator
     public Arbeidstid(@JsonProperty("arbedstakerMap") @Valid @NotNull Map<Arbeidstaker, ArbeidstidInfo> arbeidstakerMap,
-                      @JsonProperty("frilanserMap") @Valid @NotNull @Size(max = 1) Map<Frilanser, ArbeidstidInfo> frilanserMap,
-                      @JsonProperty(value = "selvstendigNæringsdrivendeMap") @Valid @NotNull @Size(max = 1) Map<SelvstendigNæringsdrivende, ArbeidstidInfo> selvstendigNæringsdrivendeMap) {
+                      @JsonProperty("frilanserArbeidstidInfo") @Valid @NotNull ArbeidstidInfo frilanserArbeidstidInfo,
+                      @JsonProperty(value = "selvstendigNæringsdrivendeArbeidstidInfo") @Valid @NotNull ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo) {
         this.arbeidstakerMap = arbeidstakerMap;
-        this.frilanserMap = frilanserMap;
-        this.selvstendigNæringsdrivendeMap = selvstendigNæringsdrivendeMap;
+        this.frilanserArbeidstidInfo = frilanserArbeidstidInfo;
+        this.selvstendigNæringsdrivendeArbeidstidInfo = selvstendigNæringsdrivendeArbeidstidInfo;
     }
 
     public Map<Arbeidstaker, ArbeidstidInfo> getArbeidstakerMap() {
@@ -51,19 +46,19 @@ public class Arbeidstid {
         this.arbeidstakerMap = arbeidstakerMap;
     }
 
-    public Map<Frilanser, ArbeidstidInfo> getFrilanserMap() {
-        return frilanserMap;
+    public ArbeidstidInfo getFrilanserArbeidstidInfo() {
+        return frilanserArbeidstidInfo;
     }
 
-    public void setFrilanserMap(Map<Frilanser, ArbeidstidInfo> frilanserMap) {
-        this.frilanserMap = frilanserMap;
+    public void setFrilanserArbeidstidInfo(ArbeidstidInfo frilanserArbeidstidInfo) {
+        this.frilanserArbeidstidInfo = frilanserArbeidstidInfo;
     }
 
-    public Map<SelvstendigNæringsdrivende, ArbeidstidInfo> getSelvstendigNæringsdrivendeMap() {
-        return selvstendigNæringsdrivendeMap;
+    public ArbeidstidInfo getSelvstendigNæringsdrivendeArbeidstidInfo() {
+        return selvstendigNæringsdrivendeArbeidstidInfo;
     }
 
-    public void setSelvstendigNæringsdrivendeMap(Map<SelvstendigNæringsdrivende, ArbeidstidInfo> selvstendigNæringsdrivendeMap) {
-        this.selvstendigNæringsdrivendeMap = selvstendigNæringsdrivendeMap;
+    public void setSelvstendigNæringsdrivendeArbeidstidInfo(ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo) {
+        this.selvstendigNæringsdrivendeArbeidstidInfo = selvstendigNæringsdrivendeArbeidstidInfo;
     }
 }
