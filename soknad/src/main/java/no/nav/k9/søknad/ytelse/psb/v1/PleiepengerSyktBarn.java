@@ -47,20 +47,8 @@ public class PleiepengerSyktBarn implements Ytelse {
     private ArbeidAktivitet arbeidAktivitet;
 
     @Valid
-    @JsonProperty(value = "flereOmsorgspersoner")
-    private Boolean flereOmsorgspersoner;
-
-    @Valid
-    @JsonProperty(value = "relasjonTilBarnet")
-    private String relasjonTilBarnet;
-
-    @Valid
-    @JsonProperty(value = "samtykketOmsorgForBarnet")
-    private Boolean samtykketOmsorgForBarnet;
-
-    @Valid
-    @JsonProperty(value = "beskrivelseAvOmsorgsrollen")
-    private String beskrivelseAvOmsorgsrollen;
+    @JsonProperty(value = "søknadInfo", required = true)
+    private SøknadInfo søknadInfo;
 
     @Valid
     @JsonProperty(value = "bosteder")
@@ -100,6 +88,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     
     @JsonCreator
     public PleiepengerSyktBarn(@JsonProperty(value = "søknadsperiode", required = true) @NotNull @Valid Periode søknadsperiode,
+                               @JsonProperty(value = "søknadInfo", required = true) @Valid SøknadInfo søknadInfo,
                                @JsonProperty(value = "barn", required = true) @NotNull @Valid Barn barn,
                                @JsonProperty(value = "arbeidAktivitet") @Valid ArbeidAktivitet aktivitet,
                                @JsonProperty(value = "beredskap") @Valid Beredskap beredskap,
@@ -109,18 +98,11 @@ public class PleiepengerSyktBarn implements Ytelse {
                                @JsonProperty(value = "uttak", required = true) @Valid @NotNull Uttak uttak,
                                @JsonProperty(value = "lovbestemtFerie") @Valid LovbestemtFerie lovbestemtFerie,
                                @JsonProperty(value = "bosteder") @Valid @NotNull Bosteder bosteder,
-                               @JsonProperty(value = "utenlandsopphold") @Valid @NotNull Utenlandsopphold utenlandsopphold,
-                               @JsonProperty(value = "flereOmsorgspersoner") @Valid Boolean flereOmsorgspersoner,
-                               @JsonProperty(value = "relasjonTilBarnet") @Valid String relasjonTilBarnet,
-                               @JsonProperty(value = "samtykketOmsorgForBarnet") @Valid Boolean samtykketOmsorgForBarnet,
-                               @JsonProperty(value = "beskrivelseAvOmsorgsrollen") @Valid String beskrivelseAvOmsorgsrollen) {
+                               @JsonProperty(value = "utenlandsopphold") @Valid @NotNull Utenlandsopphold utenlandsopphold) {
         this.søknadsperiode = Objects.requireNonNull(søknadsperiode, "søknadsperiode");
+        this.søknadInfo = søknadInfo;
         this.barn = Objects.requireNonNull(barn, "barn");
         this.arbeidAktivitet = aktivitet;
-        this.flereOmsorgspersoner = flereOmsorgspersoner;
-        this.relasjonTilBarnet = relasjonTilBarnet;
-        this.samtykketOmsorgForBarnet = samtykketOmsorgForBarnet;
-        this.beskrivelseAvOmsorgsrollen = beskrivelseAvOmsorgsrollen;
         this.beredskap = beredskap;
         this.nattevåk = nattevåk;
         this.tilsynsordning = tilsynsordning;
@@ -156,36 +138,12 @@ public class PleiepengerSyktBarn implements Ytelse {
         this.arbeidAktivitet = arbeidAktivitet;
     }
 
-    public Boolean getFlereOmsorgspersoner() {
-        return flereOmsorgspersoner;
+    public SøknadInfo getSøknadInfo() {
+        return søknadInfo;
     }
 
-    public void setFlereOmsorgspersoner(Boolean flereOmsorgspersoner) {
-        this.flereOmsorgspersoner = flereOmsorgspersoner;
-    }
-
-    public String getRelasjonTilBarnet() {
-        return relasjonTilBarnet;
-    }
-
-    public void setRelasjonTilBarnet(String relasjonTilBarnet) {
-        this.relasjonTilBarnet = relasjonTilBarnet;
-    }
-
-    public Boolean getSamtykketOmsorgForBarnet() {
-        return samtykketOmsorgForBarnet;
-    }
-
-    public void setSamtykketOmsorgForBarnet(Boolean samtykketOmsorgForBarnet) {
-        this.samtykketOmsorgForBarnet = samtykketOmsorgForBarnet;
-    }
-
-    public String getBeskrivelseAvOmsorgsrollen() {
-        return beskrivelseAvOmsorgsrollen;
-    }
-
-    public void setBeskrivelseAvOmsorgsrollen(String beskrivelseAvOmsorgsrollen) {
-        this.beskrivelseAvOmsorgsrollen = beskrivelseAvOmsorgsrollen;
+    public void setSøknadInfo(SøknadInfo søknadInfo) {
+        this.søknadInfo = søknadInfo;
     }
 
     public Bosteder getBosteder() {
@@ -236,11 +194,11 @@ public class PleiepengerSyktBarn implements Ytelse {
         this.lovbestemtFerie = lovbestemtFerie;
     }
 
-    public Arbeidstid getArbeid() {
+    public Arbeidstid getArbeidstid() {
         return arbeidstid;
     }
 
-    public void setArbeid(Arbeidstid arbeidstid) {
+    public void setArbeidstid(Arbeidstid arbeidstid) {
         this.arbeidstid = arbeidstid;
     }
 

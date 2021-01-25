@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 
 import javax.validation.Valid;
 import javax.validation.constraints.DecimalMax;
@@ -25,44 +26,46 @@ public class Arbeidstaker {
 
     @JsonProperty(value = "norskIdentitetsnummer")
     @Valid
-    public final NorskIdentitetsnummer norskIdentitetsnummer;
+    private NorskIdentitetsnummer norskIdentitetsnummer;
 
     @JsonProperty(value = "organisasjonsnummer")
     @Valid
-    public final Organisasjonsnummer organisasjonsnummer;
+    private Organisasjonsnummer organisasjonsnummer;
+
+    @JsonProperty(value = "arbeidstidInfo")
+    @Valid
+    private ArbeidstidInfo arbeidstidInfo;
 
     @JsonCreator
     public Arbeidstaker(@JsonProperty(value = "norskIdentitetsnummer") NorskIdentitetsnummer norskIdentitetsnummer,
-                         @JsonProperty(value = "organisasjonsnummer") Organisasjonsnummer organisasjonsnummer) {
+                         @JsonProperty(value = "organisasjonsnummer") Organisasjonsnummer organisasjonsnummer,
+                        @JsonProperty(value = "arbeidstidInfo") ArbeidstidInfo arbeidstidInfo) {
         this.norskIdentitetsnummer = norskIdentitetsnummer;
+        this.organisasjonsnummer = organisasjonsnummer;
+        this.arbeidstidInfo = arbeidstidInfo;
+    }
+
+    public NorskIdentitetsnummer getNorskIdentitetsnummer() {
+        return norskIdentitetsnummer;
+    }
+
+    public void setNorskIdentitetsnummer(NorskIdentitetsnummer norskIdentitetsnummer) {
+        this.norskIdentitetsnummer = norskIdentitetsnummer;
+    }
+
+    public Organisasjonsnummer getOrganisasjonsnummer() {
+        return organisasjonsnummer;
+    }
+
+    public void setOrganisasjonsnummer(Organisasjonsnummer organisasjonsnummer) {
         this.organisasjonsnummer = organisasjonsnummer;
     }
 
-    public static Builder builder() {
-        return new Builder();
+    public ArbeidstidInfo getArbeidstidInfo() {
+        return arbeidstidInfo;
     }
 
-    public static final class Builder {
-        private NorskIdentitetsnummer norskIdentitetsnummer;
-        private Organisasjonsnummer organisasjonsnummer;
-
-        private Builder() {
-        }
-
-        public Builder organisasjonsnummer(Organisasjonsnummer organisasjonsnummer) {
-            this.organisasjonsnummer = organisasjonsnummer;
-            return this;
-        }
-
-        public Builder norskIdentitetsnummer(NorskIdentitetsnummer norskIdentitetsnummer) {
-            this.norskIdentitetsnummer = norskIdentitetsnummer;
-            return this;
-        }
-
-        public Arbeidstaker build() {
-            return new Arbeidstaker(
-                norskIdentitetsnummer,
-                organisasjonsnummer);
-        }
+    public void setArbeidstidInfo(ArbeidstidInfo arbeidstidInfo) {
+        this.arbeidstidInfo = arbeidstidInfo;
     }
 }

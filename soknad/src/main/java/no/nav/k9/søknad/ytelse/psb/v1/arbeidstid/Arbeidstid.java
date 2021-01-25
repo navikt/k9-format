@@ -7,46 +7,51 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.søknad.felles.aktivitet.Arbeidstaker;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.Map;
+import java.util.*;
 
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.unmodifiableMap;
+import static java.util.Collections.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Arbeidstid {
 
     @Valid
-    @NotNull
-    @JsonProperty(value = "arbeidstakerMap")
-    private Map<Arbeidstaker, ArbeidstidInfo> arbeidstakerMap;
+    @JsonProperty(value = "arbeidstakerList", required = true)
+    private List<Arbeidstaker> arbeidstakerList;
 
     @Valid
-    @NotNull
-    @JsonProperty(value = "frilanserArbeidstidInfo")
+    @JsonProperty(value = "frilanserArbeidstidInfo", required = true)
     private ArbeidstidInfo frilanserArbeidstidInfo;
 
     @Valid
-    @NotNull
-    @JsonProperty(value = "selvstendigNæringsdrivendeArbeidstidInfo")
+    @JsonProperty(value = "selvstendigNæringsdrivendeArbeidstidInfo", required = true)
     private ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo;
 
     @JsonCreator
-    public Arbeidstid(@JsonProperty("arbeidstakerMap") @Valid @NotNull Map<Arbeidstaker, ArbeidstidInfo> arbeidstakerMap,
-                      @JsonProperty("frilanserArbeidstidInfo") @Valid @NotNull ArbeidstidInfo frilanserArbeidstidInfo,
-                      @JsonProperty(value = "selvstendigNæringsdrivendeArbeidstidInfo") @Valid @NotNull ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo) {
-        this.arbeidstakerMap = (arbeidstakerMap == null) ? emptyMap() : unmodifiableMap(arbeidstakerMap);
+    public Arbeidstid(@JsonProperty(value = "arbeidstakerList", required = true) @Valid List<Arbeidstaker> arbeidstakerList,
+                      @JsonProperty(value = "frilanserArbeidstidInfo", required = true) @Valid ArbeidstidInfo frilanserArbeidstidInfo,
+                      @JsonProperty(value = "selvstendigNæringsdrivendeArbeidstidInfo", required = true) @Valid ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo) {
+        this.arbeidstakerList = (arbeidstakerList == null) ? emptyList() : unmodifiableList(arbeidstakerList);
         this.frilanserArbeidstidInfo = frilanserArbeidstidInfo;
         this.selvstendigNæringsdrivendeArbeidstidInfo = selvstendigNæringsdrivendeArbeidstidInfo;
     }
 
-    public Map<Arbeidstaker, ArbeidstidInfo> getArbeidstakerMap() {
-        return arbeidstakerMap;
+    public List<Arbeidstaker> getArbeidstakerList() {
+        return arbeidstakerList;
     }
 
-    public void setArbeidstakerMap(Map<Arbeidstaker, ArbeidstidInfo> arbeidstakerMap) {
-        this.arbeidstakerMap = arbeidstakerMap;
+    public void leggeTilArbeidstaker(Arbeidstaker arbeidstaker, ArbeidstidInfo arbeidstidInfo) {
+        Objects.requireNonNull(arbeidstaker);
+        Objects.requireNonNull(arbeidstidInfo);
+        arbeidstaker.setArbeidstidInfo(arbeidstidInfo);
+        leggeTilArbeidstaker(List.of(arbeidstaker));
+    }
+
+    public void leggeTilArbeidstaker(List<Arbeidstaker> arbeidstakerList) {
+        Objects.requireNonNull(arbeidstakerList);
+        var temp = new ArrayList<>(arbeidstakerList);
+        temp.addAll(this.getArbeidstakerList());
+        this.arbeidstakerList = unmodifiableList(temp);
     }
 
     public ArbeidstidInfo getFrilanserArbeidstidInfo() {

@@ -17,12 +17,20 @@ public class ArbeidstidPeriodeInfo {
     @Valid
     @NotNull
     @Min(0)
+    @JsonProperty(value = "jobberNormaltTimerPerDag")
+    private BigDecimal jobberNormaltTimerPerDag;
+
+    @Valid
+    @NotNull
+    @Min(0)
     @JsonProperty(value = "faktiskArbeidTimerPerDag")
     private BigDecimal faktiskArbeidTimerPerDag;
 
     @JsonCreator
     public ArbeidstidPeriodeInfo(
+            @JsonProperty(value = "jobberNormaltTimerPerDag") @Valid @NotNull BigDecimal jobberNormaltTimerPerDag,
             @JsonProperty(value = "faktiskArbeidTimerPerDag") @Valid @NotNull BigDecimal faktiskArbeidTimerPerDag) {
+        this.jobberNormaltTimerPerDag = jobberNormaltTimerPerDag;
         this.faktiskArbeidTimerPerDag = faktiskArbeidTimerPerDag;
     }
 
@@ -32,5 +40,13 @@ public class ArbeidstidPeriodeInfo {
 
     public void setFaktiskArbeidTimerPerDag(BigDecimal faktiskArbeidTimerPerDag) {
         this.faktiskArbeidTimerPerDag = faktiskArbeidTimerPerDag;
+    }
+
+    public BigDecimal getJobberNormaltTimerPerDag() {
+        return jobberNormaltTimerPerDag;
+    }
+
+    public void setJobberNormaltTimerPerDag(BigDecimal jobberNormaltTimerPerDag) {
+        this.jobberNormaltTimerPerDag = jobberNormaltTimerPerDag;
     }
 }

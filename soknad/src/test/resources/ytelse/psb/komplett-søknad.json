@@ -6,109 +6,106 @@
     "norskIdentitetsnummer": "11111111111"
   },
   "ytelse": {
-    "type": "PLEIEPENGER_SYKT_BARN",
-    "søknadsperiode": "2018-12-30/2019-10-20",
-    "barn": {
-      "norskIdentitetsnummer": "11111111111",
-      "fødselsdato": "2021-01-19"
+    "type" : "PLEIEPENGER_SYKT_BARN",
+    "søknadsperiode" : "2018-12-30/2019-10-20",
+    "søknadInfo" : {
+      "flereOmsorgspersoner" : false,
+      "relasjonTilBarnet" : "MORA",
+      "samtykketOmsorgForBarnet" : true,
+      "beskrivelseAvOmsorgsrollen" : "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
     },
-    "arbeidAktivitet": {
-      "selvstendigNæringsdrivende": [
-        {
-          "perioder": {
-            "2018-11-11/2018-11-30": {
-              "virksomhetstyper": [
-                "FISKE"
-              ]
-            }
-          },
-          "virksomhetNavn": "Test"
-        }
-      ],
-      "frilanser": {
-        "startdato": "2019-10-10",
-        "jobberFortsattSomFrilans": true
+    "barn" : {
+      "norskIdentitetsnummer" : "11111111111",
+      "fødselsdato" : "2021-01-25"
+    },
+    "arbeidAktivitet" : {
+      "selvstendigNæringsdrivende" : [ {
+        "perioder" : {
+          "2018-11-11/2018-11-30" : {
+            "virksomhetstyper" : [ "FISKE" ]
+          }
+        },
+        "virksomhetNavn" : "Test"
+      } ],
+      "frilanser" : {
+        "startdato" : "2019-10-10",
+        "jobberFortsattSomFrilans" : true
       }
     },
-    "beredskap": {
-      "perioder": {
-        "2018-12-30/2019-02-20": {
-          "tilleggsinformasjon": "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
+    "beredskap" : {
+      "perioder" : {
+        "2019-02-21/2019-05-21" : {
+          "tilleggsinformasjon" : "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
         },
-        "2019-02-21/2019-05-21": {
-          "tilleggsinformasjon": "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
-        }
-      }
-    },
-    "nattevåk": {
-      "perioder": {
-        "2018-12-30/2019-02-20": {
-          "tilleggsinformasjon": "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
-        },
-        "2019-02-21/2019-05-21": {
-          "tilleggsinformasjon": "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
+        "2018-12-30/2019-02-20" : {
+          "tilleggsinformasjon" : "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
         }
       }
     },
-    "tilsynsordning": {
-      "iTilsynsordning": "ja",
-      "opphold": {
-        "2019-01-02/2019-01-02": {
-          "lengde": "PT7H25M"
+    "nattevåk" : {
+      "perioder" : {
+        "2019-02-21/2019-05-21" : {
+          "tilleggsinformasjon" : "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
         },
-        "2019-01-03/2019-01-09": {
-          "lengde": "PT168H"
-        },
-        "2019-01-01/2019-01-01": {
-          "lengde": "PT7H30M"
+        "2018-12-30/2019-02-20" : {
+          "tilleggsinformasjon" : "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
         }
       }
     },
-    "arbeid": {
-      "arbeidstaker": [
-        {
-          "norskIdentitetsnummer": null,
-          "organisasjonsnummer": "999999999",
-          "arbeidsforholdId": null,
-          "perioder": {
-            "2018-12-30/2019-10-20": {
-              "faktiskArbeidTimerPerDag": 3.5,
-              "jobberNormaltTimerPerDag": 7.5
+    "tilsynsordning" : {
+      "iTilsynsordning" : "ja",
+      "opphold" : {
+        "2019-01-03/2019-01-09" : {
+          "lengde" : "PT168H"
+        },
+        "2019-01-02/2019-01-02" : {
+          "lengde" : "PT7H25M"
+        },
+        "2019-01-01/2019-01-01" : {
+          "lengde" : "PT7H30M"
+        }
+      }
+    },
+    "arbeidstid" : {
+      "frilanserArbeidstidInfo" : null,
+      "selvstendigNæringsdrivendeArbeidstidInfo" : null,
+      "arbeidstakerList" : [ {
+        "norskIdentitetsnummer" : null,
+        "organisasjonsnummer" : "999999999",
+        "arbeidstidInfo" : {
+          "perioder" : {
+            "2018-12-30/2019-10-20" : {
+              "jobberNormaltTimerPerDag" : 3.5,
+              "faktiskArbeidTimerPerDag" : 7.5
             }
           }
         }
-      ]
+      } ]
     },
-    "uttak": {
-      "perioder": {
-        "2018-12-30/2019-10-20": {
-          "timerPleieAvBarnetPerDag": 7
+    "uttak" : {
+      "perioder" : {
+        "2018-12-30/2019-10-20" : {
+          "timerPleieAvBarnetPerDag" : 7
         }
       }
     },
-    "lovbestemtFerie": {
-      "perioder": [
-        "2019-02-21/2019-05-21"
-      ]
+    "lovbestemtFerie" : {
+      "perioder" : [ "2019-02-21/2019-05-21" ]
     },
-    "bosteder": {
-      "perioder": {
-        "2018-12-30/2019-10-20": {
-          "land": "DNK"
+    "bosteder" : {
+      "perioder" : {
+        "2018-12-30/2019-10-20" : {
+          "land" : "DNK"
         }
       }
     },
-    "utenlandsopphold": {
-      "perioder": {
-        "2018-12-30/2019-10-20": {
-          "land": "DNK",
-          "årsak": "barnetInnlagtIHelseinstitusjonForNorskOffentligRegning"
+    "utenlandsopphold" : {
+      "perioder" : {
+        "2018-12-30/2019-10-20" : {
+          "land" : "DNK",
+          "årsak" : "barnetInnlagtIHelseinstitusjonForNorskOffentligRegning"
         }
       }
-    },
-    "flereOmsorgspersoner": false,
-    "relasjonTilBarnet": "MORA",
-    "samtykketOmsorgForBarnet": true,
-    "beskrivelseAvOmsorgsrollen": "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
+    }
   }
 }

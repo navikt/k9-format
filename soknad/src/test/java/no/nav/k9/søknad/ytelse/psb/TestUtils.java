@@ -25,6 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -62,13 +63,13 @@ final class TestUtils {
         var uttak = new Uttak(Map.of(
             søknadsperiode, new UttakPeriodeInfo(BigDecimal.valueOf(7))));
 
-        var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("999999999"));
-
-        var arbeidstid = new Arbeidstid(Map.of(
-                arbeidstaker,
+        var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("999999999"),
                 new ArbeidstidInfo(Map.of(
                         søknadsperiode,
-                        new ArbeidstidPeriodeInfo(BigDecimal.valueOf(3.5), BigDecimal.valueOf(7.5))))), null, null);
+                        new ArbeidstidPeriodeInfo(BigDecimal.valueOf(3.5), BigDecimal.valueOf(7.5)))));
+
+        var arbeidstid = new Arbeidstid(List.of(
+                arbeidstaker), null, null);
 
         var beredskap = new Beredskap(Map.of(
             delperiodeEn, new Beredskap.BeredskapPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."),
@@ -118,9 +119,11 @@ final class TestUtils {
                 .årsak(Utenlandsopphold.UtenlandsoppholdÅrsak.BARNET_INNLAGT_I_HELSEINSTITUSJON_FOR_NORSK_OFFENTLIG_REGNING)
                 .build()));
 
-        return new PleiepengerSyktBarn(søknadsperiode, barn, aktivitet, beredskap, nattevåk, tilsynsordning, arbeidstid, uttak, lovbestemtFerie, bosteder,
-            utenlandsopphold,
-            false, "MORA", true, "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.");
+        var søknadInfo = new SøknadInfo(false, "MORA", true,
+                "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.");
+
+        return new PleiepengerSyktBarn(søknadsperiode, søknadInfo, barn, aktivitet, beredskap, nattevåk, tilsynsordning, arbeidstid, uttak, lovbestemtFerie, bosteder,
+            utenlandsopphold);
     }
 
     static PleiepengerSyktBarn minimumSøknadPleiepengerSyktBarn() {
@@ -132,9 +135,12 @@ final class TestUtils {
             uttakperiode, new UttakPeriodeInfo(BigDecimal.valueOf(7)),
             uttakperiode2, new UttakPeriodeInfo(BigDecimal.valueOf(7))));
 
+        var barn = new Barn(null, LocalDate.now());
+
         return new PleiepengerSyktBarn(
-            søknadsperiode, new Barn(null, LocalDate.now()),
-            null, null, null, null, null, uttak, null, null, null, false, null, true, null);
+                søknadsperiode, null, barn, null,
+                null, null, null, null,
+                uttak, null, null, null);
     }
 
 }

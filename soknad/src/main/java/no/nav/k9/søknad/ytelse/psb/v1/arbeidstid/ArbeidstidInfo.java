@@ -22,28 +22,14 @@ public class ArbeidstidInfo {
     @NotNull
     private Map<Periode, ArbeidstidPeriodeInfo> perioder;
 
-    @Valid
-    @NotNull
-    @Min(0)
-    @JsonProperty(value = "jobberNormaltTimerPerDag")
-    private BigDecimal jobberNormaltTimerPerDag;
+
 
     @JsonCreator
-    public ArbeidstidInfo(@JsonProperty(value = "perioder") @Valid @NotNull Map<Periode, ArbeidstidPeriodeInfo> perioder,
-                          @JsonProperty(value = "jobberNormaltTimerPerDag") @Valid @NotNull BigDecimal jobberNormaltTimerPerDag) {
+    public ArbeidstidInfo(@JsonProperty(value = "perioder") @Valid @NotNull Map<Periode, ArbeidstidPeriodeInfo> perioder) {
         this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
-        this.jobberNormaltTimerPerDag = jobberNormaltTimerPerDag;
     }
 
     public Map<Periode, ArbeidstidPeriodeInfo> getPerioder() {
         return perioder;
-    }
-
-    public BigDecimal getJobberNormaltTimerPerDag() {
-        return jobberNormaltTimerPerDag;
-    }
-
-    public void setJobberNormaltTimerPerDag(BigDecimal jobberNormaltTimerPerDag) {
-        this.jobberNormaltTimerPerDag = jobberNormaltTimerPerDag;
     }
 }
