@@ -1,12 +1,17 @@
 package no.nav.k9.søknad.omsorgspenger.utbetaling.snf;
 
-import org.json.JSONException;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
+import static no.nav.k9.søknad.omsorgspenger.utbetaling.snf.TestUtils.jsonForKomplettSøknad;
+import static no.nav.k9.søknad.omsorgspenger.utbetaling.snf.TestUtils.jsonForKomplettSøknadMedBarn;
+import static no.nav.k9.søknad.omsorgspenger.utbetaling.snf.TestUtils.jsonForKomplettSøknadUtenNæringsinntenkt;
+import static no.nav.k9.søknad.omsorgspenger.utbetaling.snf.TestUtils.jsonForSøknadUtenBarn;
+import static no.nav.k9.søknad.omsorgspenger.utbetaling.snf.TestUtils.komplettBuilder;
+import static no.nav.k9.søknad.omsorgspenger.utbetaling.snf.TestUtils.komplettBuilderUtenNæringsinntekt;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import static no.nav.k9.søknad.omsorgspenger.utbetaling.snf.TestUtils.*;
-import static org.junit.Assert.assertEquals;
+import org.json.JSONException;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 
 @SuppressWarnings("removal")
 public class OmsorgspengerUtbetalingSøknadTest {
@@ -23,7 +28,7 @@ public class OmsorgspengerUtbetalingSøknadTest {
         JSONAssert.assertEquals(json, OmsorgspengerUtbetalingSøknad.SerDes.serialize(fraBuilder), false);
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void serialiseringAvJsonMedBarnOgBrukAvBuilderGirSammeResultat() throws JSONException {
         String json = jsonForKomplettSøknadMedBarn();
@@ -43,6 +48,6 @@ public class OmsorgspengerUtbetalingSøknadTest {
     public void deserialisereSøknadUtenBarn() {
         var json = jsonForSøknadUtenBarn();
         var søknad = OmsorgspengerUtbetalingSøknad.SerDes.deserialize(json);
-        assertEquals(0, søknad.fosterbarn.size());
+        assertThat(søknad.fosterbarn).isEmpty();
     }
 }

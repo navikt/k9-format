@@ -1,5 +1,7 @@
 package no.nav.k9.søknad.frisinn;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
@@ -8,17 +10,15 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Map;
 
-import no.nav.k9.søknad.felles.*;
+import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+
+import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Språk;
 import no.nav.k9.søknad.felles.type.SøknadId;
-
-import org.junit.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
-
-import static org.junit.Assert.*;
 
 public class FrisinnSøknadTest {
 
@@ -26,12 +26,12 @@ public class FrisinnSøknadTest {
     public void bygg_serialiser_og_deserialiser_roundtrip_førstegangssøknad() throws Exception {
         var søknad = førstegangssøknad();
         var json = FrisinnSøknad.SerDes.serialize(søknad);
-        assertNotNull(json);
+        assertThat(json).isNotNull();
         var deserialisert = FrisinnSøknad.SerDes.deserialize(json);
-        assertNotNull(deserialisert);
-        assertFalse(deserialisert.getInntekter().getSelvstendig().getInntekterFør().isEmpty());
-        assertNotNull(deserialisert.getInntekter().getSelvstendig().getRegnskapsførerNavn());
-        assertNotNull(deserialisert.getInntekter().getSelvstendig().getRegnskapsførerTlf());
+        assertThat(deserialisert).isNotNull();
+        assertThat(deserialisert.getInntekter().getSelvstendig().getInntekterFør()).isNotEmpty();
+        assertThat(deserialisert.getInntekter().getSelvstendig().getRegnskapsførerNavn()).isNotNull();
+        assertThat(deserialisert.getInntekter().getSelvstendig().getRegnskapsførerTlf()).isNotNull();
         JSONAssert.assertEquals(json, FrisinnSøknad.SerDes.serialize(deserialisert), true);
     }
 
@@ -39,27 +39,27 @@ public class FrisinnSøknadTest {
     public void bygg_serialiser_og_deserialiser_roundtrip_påfølgende_søknad() throws Exception {
         var søknad = påfølgendeSøknad();
         var json = FrisinnSøknad.SerDes.serialize(søknad);
-        assertNotNull(json);
+        assertThat(json).isNotNull();
         var deserialisert = FrisinnSøknad.SerDes.deserialize(json);
-        assertNotNull(deserialisert);
-        assertTrue(deserialisert.getInntekter().getSelvstendig().getInntekterFør().isEmpty());
-        assertNull(deserialisert.getInntekter().getSelvstendig().getRegnskapsførerNavn());
-        assertNull(deserialisert.getInntekter().getSelvstendig().getRegnskapsførerTlf());
+        assertThat(deserialisert).isNotNull();
+        assertThat(deserialisert.getInntekter().getSelvstendig().getInntekterFør()).isEmpty();
+        assertThat(deserialisert.getInntekter().getSelvstendig().getRegnskapsførerNavn()).isNull();
+        assertThat(deserialisert.getInntekter().getSelvstendig().getRegnskapsførerTlf()).isNull();
         JSONAssert.assertEquals(json, FrisinnSøknad.SerDes.serialize(deserialisert), true);
     }
 
     @Test
     public void deserilisere_og_validere_1_0_0_søknad() {
         var søknad = FrisinnSøknad.builder().json(jsonFromFile("1.0.0")).build();
-        assertEquals(Versjon.of("1.0.0"), søknad.getVersjon());
-        assertNull(søknad.getInntekter().getArbeidstaker());
+        assertThat(Versjon.of("1.0.0")).isEqualTo(søknad.getVersjon());
+        assertThat(søknad.getInntekter().getArbeidstaker()).isNull();
     }
 
     @Test
     public void deserilisere_og_validere_2_0_0_søknad() {
         var søknad = FrisinnSøknad.builder().json(jsonFromFile("2.0.0")).build();
-        assertEquals(Versjon.of("2.0.0"), søknad.getVersjon());
-        assertNotNull(søknad.getInntekter().getArbeidstaker());
+        assertThat(Versjon.of("2.0.0")).isEqualTo(søknad.getVersjon());
+        assertThat(søknad.getInntekter().getArbeidstaker()).isNotNull();
     }
 
     private FrisinnSøknad byggSøknad(

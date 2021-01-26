@@ -1,7 +1,7 @@
 package no.nav.k9.ettersendelse;
 
 import org.json.JSONException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static no.nav.k9.ettersendelse.Ettersendelse.SerDes.deserialize;
 import static no.nav.k9.ettersendelse.Ettersendelse.SerDes.serialize;

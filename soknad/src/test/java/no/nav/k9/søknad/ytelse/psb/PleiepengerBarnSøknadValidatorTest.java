@@ -1,10 +1,25 @@
 package no.nav.k9.søknad.ytelse.psb;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.jupiter.api.Test;
+
 import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.aktivitet.*;
+import no.nav.k9.søknad.felles.aktivitet.ArbeidAktivitet;
+import no.nav.k9.søknad.felles.aktivitet.Frilanser;
+import no.nav.k9.søknad.felles.aktivitet.Organisasjonsnummer;
+import no.nav.k9.søknad.felles.aktivitet.SelvstendigNæringsdrivende;
+import no.nav.k9.søknad.felles.aktivitet.VirksomhetType;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
@@ -14,21 +29,6 @@ import no.nav.k9.søknad.ytelse.psb.v1.arbeid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningOpphold;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningSvar;
-import org.junit.Test;
-
-import java.math.BigDecimal;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class PleiepengerBarnSøknadValidatorTest {
     private static final PleiepengerSyktBarnValidator validator = new PleiepengerSyktBarnValidator();
@@ -69,8 +69,10 @@ public class PleiepengerBarnSøknadValidatorTest {
         var søknad = TestUtils.komplettBuilder();
         var søknadsperiode = søknad.getSøknadsperiode();
         var arbeidstaker = new ArrayList<>(søknad.getArbeid().getArbeidstaker());
-        assertNotNull(søknadsperiode.getFraOgMed());
-        assertNotNull(søknadsperiode.getTilOgMed());
+        
+        assertThat(søknadsperiode.getFraOgMed()).isNotNull();
+        assertThat(søknadsperiode.getTilOgMed()).isNotNull();
+        
         arbeidstaker.add(
                 new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), null, Map.of(
                         søknadsperiode,
@@ -78,7 +80,8 @@ public class PleiepengerBarnSøknadValidatorTest {
                         new Periode(søknadsperiode.getFraOgMed().plusDays(7), søknadsperiode.getTilOgMed().minusDays(7)),
                         new ArbeidPeriodeInfo(BigDecimal.valueOf(8), BigDecimal.valueOf(8)))));
         søknad.getArbeid().setArbeidstaker(arbeidstaker);
-        assertEquals(2, verifyHarFeil(søknad).size());
+        
+        assertThat(verifyHarFeil(søknad)).hasSize(2);
 
     }
 
@@ -209,18 +212,18 @@ public class PleiepengerBarnSøknadValidatorTest {
 
     private List<Feil> verifyHarFeil(PleiepengerSyktBarn builder) {
         final List<Feil> feil = valider(builder);
-        assertThat(feil, is(not(Collections.emptyList())));
+        assertThat(feil).isNotEmpty();
         return feil;
     }
 
     private void verifyIngenFeil(PleiepengerSyktBarn builder) {
         final List<Feil> feil = valider(builder);
-        assertThat(feil, is(Collections.emptyList()));
+        assertThat(feil).isEmpty();
     }
 
     private void verifyIngenFeil(Søknad søknad) {
         final List<Feil> feil = validator.valider(søknad.getYtelse());
-        assertThat(feil, is(Collections.emptyList()));
+        assertThat(feil).isEmpty();
     }
 
     private List<Feil> valider(PleiepengerSyktBarn builder) {

@@ -1,19 +1,18 @@
 package no.nav.k9.søknad.ytelse.psb;
 
-import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningSvar;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningUke;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.Test;
 
+import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningSvar;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningUke;
 
 public class TilsynsordningTest {
     @Test
@@ -57,7 +56,7 @@ public class TilsynsordningTest {
 
         Tilsynsordning tilsynsordning = new Tilsynsordning(TilsynsordningSvar.JA, uke.getOpphold());
 
-        assertEquals(expectedAntallUkerIPerioden, tilsynsordning.getOpphold().size());
+        assertThat(expectedAntallUkerIPerioden).isEqualTo(tilsynsordning.getOpphold().size());
 
         AtomicInteger antallHeleUkerSjekket = new AtomicInteger();
         AtomicBoolean føresteUkeSjekket = new AtomicBoolean(false);
@@ -66,19 +65,19 @@ public class TilsynsordningTest {
 
             if (p.getFraOgMed().isEqual(fraOgMed)) {
                 føresteUkeSjekket.set(true);
-                assertEquals(summertFørsteUke, opphold.getLengde());
+                assertThat(summertFørsteUke).isEqualTo(opphold.getLengde());
             } else if (p.getTilOgMed().isEqual(tilOgMed)) {
                 sisteUkeSjekket.set(true);
-                assertEquals(summertSisteUke, opphold.getLengde());
+                assertThat(summertSisteUke).isEqualTo(opphold.getLengde());
             } else {
-                assertEquals(summertHeleUker, opphold.getLengde());
+                assertThat(summertHeleUker).isEqualTo(opphold.getLengde());
                 antallHeleUkerSjekket.getAndIncrement();
             }
         });
 
-        assertEquals(expectedAntallHeleUkerIPerioden, antallHeleUkerSjekket.get());
-        assertTrue(føresteUkeSjekket.get());
-        assertTrue(sisteUkeSjekket.get());
+        assertThat(expectedAntallHeleUkerIPerioden).isEqualTo(antallHeleUkerSjekket.get());
+        assertThat(føresteUkeSjekket.get()).isTrue();
+        assertThat(sisteUkeSjekket.get()).isTrue();
     }
 
     @Test
@@ -95,10 +94,9 @@ public class TilsynsordningTest {
 
         Tilsynsordning tilsynsordning = new Tilsynsordning(TilsynsordningSvar.JA, uke.getOpphold());
 
-        assertEquals(1, tilsynsordning.getOpphold().size());
-        assertEquals(
-                Duration.ofHours(6).plusMinutes(30),
-                tilsynsordning.getOpphold().get(new Periode(torsdag, torsdag)).getLengde()
+        assertThat(tilsynsordning.getOpphold()).hasSize(1);
+        assertThat(
+                Duration.ofHours(6).plusMinutes(30)).isEqualTo( tilsynsordning.getOpphold().get(new Periode(torsdag, torsdag)).getLengde()
         );
     }
 
@@ -119,7 +117,7 @@ public class TilsynsordningTest {
 
         Tilsynsordning tilsynsordning = new Tilsynsordning(TilsynsordningSvar.JA, uke.getOpphold());
 
-        assertEquals(0, tilsynsordning.getOpphold().size());
+        assertThat(0).isEqualTo(tilsynsordning.getOpphold().size());
     }
 
     @Test
@@ -159,7 +157,7 @@ public class TilsynsordningTest {
         int expectedAntallUkerIPerioden = 3;
         int expectedAntallHeleUkerIPerioden = 2;
 
-        assertEquals(expectedAntallUkerIPerioden, tilsynsordning.getOpphold().size());
+        assertThat(expectedAntallUkerIPerioden).isEqualTo(tilsynsordning.getOpphold().size());
 
         AtomicInteger antallHeleUkerSjekket = new AtomicInteger();
         AtomicBoolean sisteUkeSjekket = new AtomicBoolean(false);
@@ -167,14 +165,14 @@ public class TilsynsordningTest {
         tilsynsordning.getOpphold().forEach((p,opphold) -> {
             if (p.getTilOgMed().isEqual(tilOgMed)) {
                 sisteUkeSjekket.set(true);
-                assertEquals(summertSisteUke, opphold.getLengde());
+                assertThat(summertSisteUke).isEqualTo(opphold.getLengde());
             } else {
-                assertEquals(summertHeleUker, opphold.getLengde());
+                assertThat(summertHeleUker).isEqualTo(opphold.getLengde());
                 antallHeleUkerSjekket.getAndIncrement();
             }
         });
 
-        assertEquals(expectedAntallHeleUkerIPerioden, antallHeleUkerSjekket.get());
-        assertTrue(sisteUkeSjekket.get());
+        assertThat(expectedAntallHeleUkerIPerioden).isEqualTo(antallHeleUkerSjekket.get());
+        assertThat(sisteUkeSjekket.get()).isTrue();
     }
 }

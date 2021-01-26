@@ -1,15 +1,13 @@
 package no.nav.k9.søknad;
 
-import no.nav.k9.søknad.felles.type.Periode;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.MatcherAssert.assertThat;
+import org.junit.jupiter.api.Test;
+
+import no.nav.k9.søknad.felles.type.Periode;
 
 public class PeriodeValidatorTest {
 
@@ -23,8 +21,8 @@ public class PeriodeValidatorTest {
                 new Periode(LocalDate.now(), LocalDate.now().plusDays(5)), true
         );
 
-        assertThat(validator.validerTillattOverlapp(perioder, felt), is(Collections.emptyList()));
-        assertThat(validator.validerIkkeTillattOverlapp(perioder, felt), is(not(Collections.emptyList())));
+        assertThat(validator.validerTillattOverlapp(perioder, felt)).isEmpty();
+        assertThat(validator.validerIkkeTillattOverlapp(perioder, felt)).isNotEmpty();
     }
 
     @Test
@@ -36,8 +34,8 @@ public class PeriodeValidatorTest {
                 new Periode(tom.plusDays(1), tom.plusDays(5)), true
         );
 
-        assertThat(validator.validerTillattOverlapp(perioder, felt), is(Collections.emptyList()));
-        assertThat(validator.validerIkkeTillattOverlapp(perioder, felt), is(Collections.emptyList()));
+        assertThat(validator.validerTillattOverlapp(perioder, felt)).isEmpty();
+        assertThat(validator.validerIkkeTillattOverlapp(perioder, felt)).isEmpty();
     }
 
     @Test
@@ -49,8 +47,8 @@ public class PeriodeValidatorTest {
                 new Periode(tom, tom.plusDays(5)), true
         );
 
-        assertThat(validator.validerTillattOverlapp(perioder, felt), is(Collections.emptyList()));
-        assertThat(validator.validerIkkeTillattOverlapp(perioder, felt), is(not(Collections.emptyList())));
+        assertThat(validator.validerTillattOverlapp(perioder, felt)).isEmpty();
+        assertThat(validator.validerIkkeTillattOverlapp(perioder, felt)).isNotEmpty();
     }
 
     @Test
@@ -58,7 +56,7 @@ public class PeriodeValidatorTest {
         Map<Periode, Boolean> perioder = Map.of(
                 new Periode(LocalDate.now(), LocalDate.now().minusDays(5)), true
         );
-        assertThat(validator.validerIkkeTillattOverlapp(perioder, felt), is(not(Collections.emptyList())));
+        assertThat(validator.validerIkkeTillattOverlapp(perioder, felt)).isNotEmpty();
     }
 
     @Test
@@ -66,7 +64,7 @@ public class PeriodeValidatorTest {
         Map<Periode, Boolean> perioder = Map.of(
                 new Periode(null, null), true
         );
-        assertThat(validator.validerIkkeTillattOverlapp(perioder, felt), is(not(Collections.emptyList())));
+        assertThat(validator.validerIkkeTillattOverlapp(perioder, felt)).isNotEmpty();
     }
 
     @Test
@@ -74,7 +72,7 @@ public class PeriodeValidatorTest {
         Map<Periode, Boolean> perioder = Map.of(
                 new Periode(LocalDate.now(), null), true
         );
-        assertThat(validator.validerIkkeTillattOverlapp(perioder, felt), is(not(Collections.emptyList())));
+        assertThat(validator.validerIkkeTillattOverlapp(perioder, felt)).isNotEmpty();
     }
 
     @Test
@@ -82,6 +80,6 @@ public class PeriodeValidatorTest {
         Map<Periode, Boolean> perioder = Map.of(
                 new Periode(null, LocalDate.now()), true
         );
-        assertThat(validator.validerIkkeTillattOverlapp(perioder, felt), is(not(Collections.emptyList())));
+        assertThat(validator.validerIkkeTillattOverlapp(perioder, felt)).isNotEmpty();
     }
 }
