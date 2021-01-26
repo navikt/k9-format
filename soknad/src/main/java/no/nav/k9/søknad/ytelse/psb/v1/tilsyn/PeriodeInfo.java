@@ -1,10 +1,12 @@
 package no.nav.k9.søknad.ytelse.psb.v1.tilsyn;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -19,6 +21,7 @@ public class PeriodeInfo {
     @JsonProperty(value = "etablertTilsynTimerPerDag", required = true)
     private BigDecimal etablertTilsynTimerPerDag;
 
+    @JsonCreator
     public PeriodeInfo(@JsonProperty(value = "etablertTilsynTimerPerDag", required = true) @Valid @NotNull @Min(0) BigDecimal etablertTilsynTimerPerDag) {
         this.etablertTilsynTimerPerDag = etablertTilsynTimerPerDag;
     }

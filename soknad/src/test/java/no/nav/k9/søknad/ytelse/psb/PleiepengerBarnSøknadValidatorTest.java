@@ -28,6 +28,7 @@ import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnValidator;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.PeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningOpphold;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningSvar;
 
@@ -57,9 +58,9 @@ public class PleiepengerBarnSøknadValidatorTest {
     @Test
     public void søknadMedTilsynsordningOppholdLengreEnnPerioden() {
         var søknad = TestUtils.komplettBuilder();
-        Tilsynsordning tilsynsordning = new Tilsynsordning(TilsynsordningSvar.JA, Map.of(
+        Tilsynsordning tilsynsordning = new Tilsynsordning(true, Map.of(
                 new Periode(LocalDate.now(), LocalDate.now()),
-                new TilsynsordningOpphold(Duration.ofDays(2))));
+                new PeriodeInfo(BigDecimal.valueOf(7))));
         søknad.setTilsynsordning(tilsynsordning);
 
         verifyHarFeil(søknad);

@@ -53,16 +53,15 @@
       }
     },
     "tilsynsordning" : {
-      "iTilsynsordning" : "ja",
       "opphold" : {
-        "2019-01-03/2019-01-09" : {
-          "lengde" : "PT168H"
+        "2019-01-01/2019-01-01" : {
+          "etablertTilsynTimerPerDag" : 8
         },
         "2019-01-02/2019-01-02" : {
-          "lengde" : "PT7H25M"
+          "etablertTilsynTimerPerDag" : 8
         },
-        "2019-01-01/2019-01-01" : {
-          "lengde" : "PT7H30M"
+        "2019-01-03/2019-01-09" : {
+          "etablertTilsynTimerPerDag" : 8
         }
       }
     },
