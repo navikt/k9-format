@@ -1,30 +1,30 @@
 package no.nav.k9.søknad;
 
-import no.nav.k9.søknad.felles.Versjon;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
+import org.junit.jupiter.api.Test;
+
+import no.nav.k9.søknad.felles.Versjon;
 
 
 public class VersjonTest {
     @Test
     public void gylidgSemanticVersjon() {
-        assertTrue(Versjon.of("1.20.330").erGyldig());
+        assertThat(Versjon.of("1.20.330").erGyldig()).isTrue();
     }
 
     @Test
     public void gylidigSemanticVersjonMedPrereleaseOgMetadata() {
-        assertFalse(Versjon.of("1.20.330-alpha+sha").erGyldig());
+        assertThat(Versjon.of("1.20.330-alpha+sha").erGyldig()).isFalse();
     }
 
     @Test
     public void manglerPatch() {
-        assertFalse(Versjon.of("1.2").erGyldig());
+        assertThat(Versjon.of("1.2").erGyldig()).isFalse();
     }
 
     @Test
     public void ugyldigFormat() {
-        assertFalse(Versjon.of("1.2.f").erGyldig());
+        assertThat(Versjon.of("1.2.f").erGyldig()).isFalse();
     }
 }

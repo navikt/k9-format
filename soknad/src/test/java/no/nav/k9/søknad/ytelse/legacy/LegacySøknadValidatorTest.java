@@ -1,12 +1,7 @@
 package no.nav.k9.søknad.ytelse.legacy;
-
+import static org.assertj.core.api.Assertions.assertThat;
 import no.nav.k9.søknad.Validator;
-import org.junit.Test;
-
-import java.util.Collections;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import org.junit.jupiter.api.Test;
 
 public class LegacySøknadValidatorTest {
 
@@ -23,7 +18,7 @@ public class LegacySøknadValidatorTest {
     }
 
     private void verifyIngenFeil(Object builder) {
-        assertThat(Validator.validerTilFeil(builder), is(Collections.emptyList()));
+        assertThat(Validator.validerTilFeil(builder)).isEmpty();
     }
 
 }

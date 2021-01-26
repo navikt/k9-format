@@ -1,18 +1,16 @@
 package no.nav.k9.ettersendelse;
 
-import no.nav.k9.søknad.ValideringsFeil;
-import no.nav.k9.søknad.felles.*;
-import org.junit.Test;
+import static no.nav.k9.ettersendelse.TestUtils.jsonForKomplettEttersendelse;
+import static no.nav.k9.ettersendelse.TestUtils.komplettBuilder;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Collections;
 import java.util.List;
 
-import static no.nav.k9.ettersendelse.TestUtils.jsonForKomplettEttersendelse;
-import static no.nav.k9.ettersendelse.TestUtils.komplettBuilder;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.Test;
+
+import no.nav.k9.søknad.ValideringsFeil;
+import no.nav.k9.søknad.felles.Feil;
 
 public class EttersendelseValidatorTest {
     private static final EttersendelseValidator validator = new EttersendelseValidator();
@@ -23,7 +21,7 @@ public class EttersendelseValidatorTest {
         Ettersendelse ettersendelse = Ettersendelse.SerDes.deserialize("{\"versjon\":\"0.0.1\"}");
         List<Feil> builderFeil = verifyHarFeil(builder);
         List<Feil> jsonFeil = verifyHarFeil(ettersendelse);
-        assertThat(builderFeil, is(jsonFeil));
+        assertThat(builderFeil).containsAll(jsonFeil);
     }
 
     @Test
@@ -41,7 +39,7 @@ public class EttersendelseValidatorTest {
     @Test
     public void ettersendelseUtenYtelse() {
         Ettersendelse.Builder builder = komplettBuilder().ytelse(null);
-        assertEquals(1, verifyHarFeil(builder).size());
+        assertThat(verifyHarFeil(builder)).hasSize(1);
     }
 
     @Test
@@ -60,22 +58,22 @@ public class EttersendelseValidatorTest {
     }
     private List<Feil> verifyHarFeil(Ettersendelse.Builder builder) {
         final List<Feil> feil = valider(builder);
-        assertThat(feil, is(not(Collections.emptyList())));
+        assertThat(feil).isNotEmpty();
         return feil;
     }
     private List<Feil> verifyHarFeil(Ettersendelse ettersendelse) {
         final List<Feil> feil = validator.valider(ettersendelse);
-        assertThat(feil, is(not(Collections.emptyList())));
+        assertThat(feil).isNotEmpty();
         return feil;
     }
 
     private void verifyIngenFeil(Ettersendelse.Builder builder) {
         final List<Feil> feil = valider(builder);
-        assertThat(feil, is(Collections.emptyList()));
+        assertThat(feil).isEmpty();
     }
 
     private void verifyIngenFeil(Ettersendelse ettersendelse) {
         final List<Feil> feil = validator.valider(ettersendelse);
-        assertThat(feil, is(Collections.emptyList()));
+        assertThat(feil).isEmpty();
     }
 }

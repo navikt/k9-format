@@ -1,7 +1,7 @@
 package no.nav.k9.søknad.omsorgspenger;
 
 import org.json.JSONException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import static no.nav.k9.søknad.omsorgspenger.TestUtils.jsonForKomplettSøknad;

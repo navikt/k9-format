@@ -1,11 +1,12 @@
 package no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.json.JSONException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import static no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker.TestUtils.*;
-import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("removal")
 public class OmsorgspengerUtbetalingSøknadTest {
@@ -27,6 +28,6 @@ public class OmsorgspengerUtbetalingSøknadTest {
     public void deserialisereSøknadUtenBarn() {
         var json = jsonForSøknadUtenBarn();
         var søknad = OmsorgspengerUtbetalingSøknad.SerDes.deserialize(json);
-        assertEquals(0, søknad.fosterbarn.size());
+        assertThat(søknad.fosterbarn).isEmpty();
     }
 }

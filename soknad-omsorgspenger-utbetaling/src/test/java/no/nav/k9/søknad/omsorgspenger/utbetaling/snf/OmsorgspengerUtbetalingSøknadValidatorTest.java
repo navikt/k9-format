@@ -1,5 +1,19 @@
 package no.nav.k9.søknad.omsorgspenger.utbetaling.snf;
 
+import static java.util.List.of;
+import static no.nav.k9.søknad.omsorgspenger.utbetaling.snf.TestUtils.jsonForKomplettSøknad;
+import static no.nav.k9.søknad.omsorgspenger.utbetaling.snf.TestUtils.komplettBuilder;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.aktivitet.Frilanser;
@@ -10,20 +24,6 @@ import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.type.Landkode;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
-import org.assertj.core.api.Assertions;
-import org.junit.Test;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import static java.util.List.of;
-import static no.nav.k9.søknad.omsorgspenger.utbetaling.snf.TestUtils.jsonForKomplettSøknad;
-import static no.nav.k9.søknad.omsorgspenger.utbetaling.snf.TestUtils.komplettBuilder;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 @SuppressWarnings("removal")
 public class OmsorgspengerUtbetalingSøknadValidatorTest {
@@ -37,7 +37,7 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
         builderFeil = Collections.unmodifiableList(builderFeil);
         List<Feil> jsonFeil = verifyHarFeil(søknad);
         jsonFeil = Collections.unmodifiableList(jsonFeil);
-        assertThat(builderFeil.size(), is(jsonFeil.size()));
+        assertThat(builderFeil).hasSameSizeAs(jsonFeil);
     }
 
     @Test
