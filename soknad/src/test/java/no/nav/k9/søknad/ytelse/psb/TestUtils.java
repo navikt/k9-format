@@ -119,8 +119,9 @@ final class TestUtils {
                 .årsak(Utenlandsopphold.UtenlandsoppholdÅrsak.BARNET_INNLAGT_I_HELSEINSTITUSJON_FOR_NORSK_OFFENTLIG_REGNING)
                 .build()));
 
-        var søknadInfo = new SøknadInfo(false, "MORA", true,
-                "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.");
+        var søknadInfo = new SøknadInfo( "MORA", true,
+                "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.", true, true,
+                false, false, false, true );
 
         return new PleiepengerSyktBarn(søknadsperiode, søknadInfo, barn, aktivitet, beredskap, nattevåk, tilsynsordning, arbeidstid, uttak, lovbestemtFerie, bosteder,
             utenlandsopphold);

@@ -11,62 +11,64 @@ import javax.validation.Valid;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class SøknadInfo {
 
-    @Valid
-    @JsonProperty(value = "flereOmsorgspersoner")
-    private Boolean flereOmsorgspersoner;
 
-    @Valid
+
     @JsonProperty(value = "relasjonTilBarnet")
+    @Valid
     private String relasjonTilBarnet;
 
-    @Valid
     @JsonProperty(value = "samtykketOmsorgForBarnet")
+    @Valid
     private Boolean samtykketOmsorgForBarnet;
 
-    @Valid
     @JsonProperty(value = "beskrivelseAvOmsorgsrollen")
+    @Valid
     private String beskrivelseAvOmsorgsrollen;
 
+    @JsonProperty(value = "harForståttRettigheterOgPlikter")
+    @Valid
+    private Boolean harForståttRettigheterOgPlikter;
+
+    @JsonProperty(value = "harBekreftetOpplysninger")
+    @Valid
+    private Boolean harBekreftetOpplysninger;
+
+    @JsonProperty(value = "flereOmsorgspersoner")
+    @Valid
+    private Boolean flereOmsorgspersoner;
+
+    @JsonProperty(value = "samtidigHjemme")
+    @Valid
+    private Boolean samtidigHjemme;
+
+    @JsonProperty(value = "harMedsøker")
+    @Valid
+    private Boolean harMedsøker;
+
+    // Utgår?
+    @JsonProperty(value = "bekrefterPeriodeOver8Uker")
+    @Valid
+    private Boolean bekrefterPeriodeOver8Uker;
+
+
     @JsonCreator
-    public SøknadInfo(@JsonProperty(value = "flereOmsorgspersoner") @Valid Boolean flereOmsorgspersoner,
-                      @JsonProperty(value = "relasjonTilBarnet") @Valid String relasjonTilBarnet,
-                      @JsonProperty(value = "samtykketOmsorgForBarnet") @Valid Boolean samtykketOmsorgForBarnet,
-                      @JsonProperty(value = "beskrivelseAvOmsorgsrollen") @Valid String beskrivelseAvOmsorgsrollen) {
-        this.flereOmsorgspersoner = flereOmsorgspersoner;
+    public SøknadInfo( @JsonProperty(value = "relasjonTilBarnet") @Valid String relasjonTilBarnet,
+                       @JsonProperty(value = "samtykketOmsorgForBarnet") @Valid Boolean samtykketOmsorgForBarnet,
+                       @JsonProperty(value = "beskrivelseAvOmsorgsrollen") @Valid String beskrivelseAvOmsorgsrollen,
+                       @JsonProperty(value = "harForståttRettigheterOgPlikter") @Valid Boolean harForståttRettigheterOgPlikter,
+                       @JsonProperty(value = "harBekreftetOpplysninger") @Valid Boolean harBekreftetOpplysninger,
+                       @JsonProperty(value = "flereOmsorgspersoner") @Valid Boolean flereOmsorgspersoner,
+                       @JsonProperty(value = "samtidigHjemme") @Valid Boolean samtidigHjemme,
+                       @JsonProperty(value = "harMedsøker") @Valid Boolean harMedsøker,
+                       @JsonProperty(value = "bekrefterPeriodeOver8Uker") @Valid Boolean bekrefterPeriodeOver8Uker) {
         this.relasjonTilBarnet = relasjonTilBarnet;
         this.samtykketOmsorgForBarnet = samtykketOmsorgForBarnet;
         this.beskrivelseAvOmsorgsrollen = beskrivelseAvOmsorgsrollen;
-    }
-
-    public Boolean getFlereOmsorgspersoner() {
-        return flereOmsorgspersoner;
-    }
-
-    public void setFlereOmsorgspersoner(Boolean flereOmsorgspersoner) {
+        this.harForståttRettigheterOgPlikter = harForståttRettigheterOgPlikter;
+        this.harBekreftetOpplysninger = harBekreftetOpplysninger;
         this.flereOmsorgspersoner = flereOmsorgspersoner;
-    }
-
-    public String getRelasjonTilBarnet() {
-        return relasjonTilBarnet;
-    }
-
-    public void setRelasjonTilBarnet(String relasjonTilBarnet) {
-        this.relasjonTilBarnet = relasjonTilBarnet;
-    }
-
-    public Boolean getSamtykketOmsorgForBarnet() {
-        return samtykketOmsorgForBarnet;
-    }
-
-    public void setSamtykketOmsorgForBarnet(Boolean samtykketOmsorgForBarnet) {
-        this.samtykketOmsorgForBarnet = samtykketOmsorgForBarnet;
-    }
-
-    public String getBeskrivelseAvOmsorgsrollen() {
-        return beskrivelseAvOmsorgsrollen;
-    }
-
-    public void setBeskrivelseAvOmsorgsrollen(String beskrivelseAvOmsorgsrollen) {
-        this.beskrivelseAvOmsorgsrollen = beskrivelseAvOmsorgsrollen;
+        this.samtidigHjemme = samtidigHjemme;
+        this.harMedsøker = harMedsøker;
+        this.bekrefterPeriodeOver8Uker = bekrefterPeriodeOver8Uker;
     }
 }
