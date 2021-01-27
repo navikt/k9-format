@@ -76,13 +76,13 @@ final class TestUtils {
             delperiodeEn, new Nattevåk.NattevåkPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."),
             delperiodeTo, new Nattevåk.NattevåkPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.")));
 
-        var tilsynsordning = new Tilsynsordning(true, Map.of(
+        var tilsynsordning = new Tilsynsordning(Map.of(
                 new Periode(LocalDate.parse("2019-01-01"), LocalDate.parse("2019-01-01")),
-                new PeriodeInfo(BigDecimal.valueOf(8)),
+                new PeriodeInfo(BigDecimal.valueOf(7.5)),
                 new Periode(LocalDate.parse("2019-01-02"), LocalDate.parse("2019-01-02")),
-                new PeriodeInfo(BigDecimal.valueOf(8)),
+                new PeriodeInfo(BigDecimal.valueOf(7.5)),
                 new Periode(LocalDate.parse("2019-01-03"), LocalDate.parse("2019-01-09")),
-                new PeriodeInfo(BigDecimal.valueOf(8))));
+                new PeriodeInfo(BigDecimal.valueOf(7.5))));
 
         var lovbestemtFerie = new LovbestemtFerie(List.of(delperiodeTo));
 
@@ -102,7 +102,7 @@ final class TestUtils {
 
         var barn = Barn.builder()
             .norskIdentitetsnummer(NorskIdentitetsnummer.of("11111111111"))
-            .fødselsdato(LocalDate.now())
+            .fødselsdato(null)
             .build();
 
         var bosteder = new Bosteder(Map.of(

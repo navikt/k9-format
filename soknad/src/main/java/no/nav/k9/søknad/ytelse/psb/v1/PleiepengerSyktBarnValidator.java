@@ -176,14 +176,13 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
         if (tilsynsordning == null) {
             return;
         }
-        if (tilsynsordning.getiTilsynsordning())
-            if (tilsynsordning.getPerioder() == null || tilsynsordning.getPerioder().isEmpty()) {
-                feil.add(new Feil("tilsynsordning.perioder", PÅKREVD, "Det må minst være en periode med opphold."));
-            } else {
-                tilsynsordning.getPerioder().forEach((periode, periodeInfo) -> {
-                    validerGyldigPeriode(periode, "tilsynsordning.perioder", false, feil);
-                    validerPeriodeInnenforSøknadsperiode(periode, "tilsynsordning.perioder", søknadsperiode, feil);
-                });
+        if (tilsynsordning.getPerioder() == null || tilsynsordning.getPerioder().isEmpty()) {
+            feil.add(new Feil("tilsynsordning.perioder", PÅKREVD, "Det må minst være en periode med opphold."));
+        } else {
+            tilsynsordning.getPerioder().forEach((periode, periodeInfo) -> {
+                validerGyldigPeriode(periode, "tilsynsordning.perioder", false, feil);
+                validerPeriodeInnenforSøknadsperiode(periode, "tilsynsordning.perioder", søknadsperiode, feil);
+            });
         }
     }
 }

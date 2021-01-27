@@ -58,7 +58,7 @@ public class PleiepengerBarnSøknadValidatorTest {
     @Test
     public void søknadMedTilsynsordningOppholdLengreEnnPerioden() {
         var søknad = TestUtils.komplettBuilder();
-        Tilsynsordning tilsynsordning = new Tilsynsordning(true, Map.of(
+        Tilsynsordning tilsynsordning = new Tilsynsordning(Map.of(
                 new Periode(LocalDate.now(), LocalDate.now()),
                 new PeriodeInfo(BigDecimal.valueOf(7))));
         søknad.setTilsynsordning(tilsynsordning);

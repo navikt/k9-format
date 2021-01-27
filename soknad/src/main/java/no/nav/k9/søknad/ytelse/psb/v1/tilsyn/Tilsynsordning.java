@@ -20,29 +20,14 @@ import static java.util.Collections.unmodifiableMap;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Tilsynsordning {
 
-    @JsonProperty(value="iTilsynsordning", required=true)
-    @NotNull
-    @Valid
-    private Boolean iTilsynsordning;
-
-    @JsonProperty(value="opphold")
+    @JsonProperty(value="perioder")
     @Valid
     private Map<Periode, PeriodeInfo> perioder;
 
     @JsonCreator
     public Tilsynsordning(
-            @JsonProperty("iTilsynsordning") @Valid @NotNull Boolean iTilsynsordning,
-            @JsonProperty("opphold") @Valid Map<Periode, PeriodeInfo> perioder) {
-        this.iTilsynsordning = iTilsynsordning;
+            @JsonProperty("perioder") @Valid Map<Periode, PeriodeInfo> perioder) {
         this.perioder = new HashMap<>(perioder);
-    }
-
-    public Boolean getiTilsynsordning() {
-        return iTilsynsordning;
-    }
-
-    public void setiTilsynsordning(Boolean iTilsynsordning) {
-        this.iTilsynsordning = iTilsynsordning;
     }
 
     public Map<Periode, PeriodeInfo> getPerioder() {
