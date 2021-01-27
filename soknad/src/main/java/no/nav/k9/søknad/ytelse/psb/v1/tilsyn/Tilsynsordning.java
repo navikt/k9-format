@@ -8,44 +8,37 @@ import no.nav.k9.søknad.felles.type.Periode;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.unmodifiableMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Tilsynsordning {
 
-    @JsonProperty(value="iTilsynsordning", required=true)
-    @NotNull
+    @JsonProperty(value="perioder")
     @Valid
-    private TilsynsordningSvar iTilsynsordning;
-
-    @JsonProperty(value="opphold")
-    @Valid
-    private Map<Periode, TilsynsordningOpphold> opphold;
+    private Map<Periode, PeriodeInfo> perioder;
 
     @JsonCreator
     public Tilsynsordning(
-            @JsonProperty("iTilsynsordning")
-            TilsynsordningSvar iTilsynsordning,
-            @JsonProperty("opphold")
-            Map<Periode, TilsynsordningOpphold> opphold) {
-        this.iTilsynsordning = iTilsynsordning;
-        this.opphold = opphold;
+            @JsonProperty("perioder") @Valid Map<Periode, PeriodeInfo> perioder) {
+        this.perioder = new HashMap<>(perioder);
     }
 
-    public TilsynsordningSvar getiTilsynsordning() {
-        return iTilsynsordning;
+    public Map<Periode, PeriodeInfo> getPerioder() {
+        return unmodifiableMap(perioder);
     }
 
-    public void setiTilsynsordning(TilsynsordningSvar iTilsynsordning) {
-        this.iTilsynsordning = iTilsynsordning;
+    public void setPerioder(Map<Periode, PeriodeInfo> perioder) {
+        this.perioder = new HashMap<>(perioder);
     }
 
-    public Map<Periode, TilsynsordningOpphold> getOpphold() {
-        return opphold;
-    }
-
-    public void setOpphold(Map<Periode, TilsynsordningOpphold> opphold) {
-        this.opphold = opphold;
+    public void leggeTilPerioder(Map<Periode, PeriodeInfo> perioder) {
+        this.perioder.putAll(perioder);
     }
 }

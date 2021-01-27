@@ -16,7 +16,7 @@
     },
     "barn" : {
       "norskIdentitetsnummer" : "11111111111",
-      "fødselsdato" : "2021-01-25"
+      "fødselsdato" : null
     },
     "arbeidAktivitet" : {
       "selvstendigNæringsdrivende" : [ {
@@ -53,16 +53,15 @@
       }
     },
     "tilsynsordning" : {
-      "iTilsynsordning" : "ja",
-      "opphold" : {
-        "2019-01-03/2019-01-09" : {
-          "lengde" : "PT168H"
+      "perioder" : {
+        "2019-01-01/2019-01-01" : {
+          "etablertTilsynTimerPerDag" : 7.5
         },
         "2019-01-02/2019-01-02" : {
-          "lengde" : "PT7H25M"
+          "etablertTilsynTimerPerDag" : 7.5
         },
-        "2019-01-01/2019-01-01" : {
-          "lengde" : "PT7H30M"
+        "2019-01-03/2019-01-09" : {
+          "etablertTilsynTimerPerDag" : 7.5
         }
       }
     },

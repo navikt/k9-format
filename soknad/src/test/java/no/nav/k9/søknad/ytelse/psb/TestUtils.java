@@ -15,17 +15,14 @@ import no.nav.k9.søknad.ytelse.psb.v1.*;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.PeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningOpphold;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningSvar;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -79,13 +76,13 @@ final class TestUtils {
             delperiodeEn, new Nattevåk.NattevåkPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."),
             delperiodeTo, new Nattevåk.NattevåkPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.")));
 
-        var tilsynsordning = new Tilsynsordning(TilsynsordningSvar.of("ja"), Map.of(
-            new Periode(LocalDate.parse("2019-01-01"), LocalDate.parse("2019-01-01")),
-            new TilsynsordningOpphold(Duration.parse("PT7H30M")),
-            new Periode(LocalDate.parse("2019-01-02"), LocalDate.parse("2019-01-02")),
-            new TilsynsordningOpphold(Duration.parse("PT7H25M")),
-            new Periode(LocalDate.parse("2019-01-03"), LocalDate.parse("2019-01-09")),
-            new TilsynsordningOpphold(Duration.parse("PT168H"))));
+        var tilsynsordning = new Tilsynsordning(Map.of(
+                new Periode(LocalDate.parse("2019-01-01"), LocalDate.parse("2019-01-01")),
+                new PeriodeInfo(BigDecimal.valueOf(7.5)),
+                new Periode(LocalDate.parse("2019-01-02"), LocalDate.parse("2019-01-02")),
+                new PeriodeInfo(BigDecimal.valueOf(7.5)),
+                new Periode(LocalDate.parse("2019-01-03"), LocalDate.parse("2019-01-09")),
+                new PeriodeInfo(BigDecimal.valueOf(7.5))));
 
         var lovbestemtFerie = new LovbestemtFerie(List.of(delperiodeTo));
 
@@ -105,7 +102,7 @@ final class TestUtils {
 
         var barn = Barn.builder()
             .norskIdentitetsnummer(NorskIdentitetsnummer.of("11111111111"))
-            .fødselsdato(LocalDate.now())
+            .fødselsdato(null)
             .build();
 
         var bosteder = new Bosteder(Map.of(

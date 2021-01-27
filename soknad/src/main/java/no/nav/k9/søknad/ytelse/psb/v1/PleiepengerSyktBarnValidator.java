@@ -176,30 +176,13 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
         if (tilsynsordning == null) {
             return;
         }
-        if (TilsynsordningSvar.JA == tilsynsordning.getiTilsynsordning())
-            if (tilsynsordning.getOpphold() == null || tilsynsordning.getOpphold().isEmpty()) {
-                feil.add(new Feil("tilsynsordning.perioder", PÅKREVD, "Det må minst være en periode med opphold."));
-            } else {
-                tilsynsordning.getOpphold().forEach((periode, tilsynsordningOpphold) -> {
-                    validerGyldigPeriode(periode, "tilsynsordning.perioder", false, feil);
-                    validerPeriodeInnenforSøknadsperiode(periode, "tilsynsordning.perioder", søknadsperiode, feil);
-                    validerTilsynsordningOpphold(tilsynsordningOpphold, periode, feil);
-                });
-        }
-    }
-
-    private void validerTilsynsordningOpphold(TilsynsordningOpphold tilsynsordningOpphold, Periode periode, List<Feil> feil) {
-        Duration maks = maksInnenforPeriode(periode);
-        if (maks != null && tilsynsordningOpphold.getLengde().compareTo(maks) > 0) {
-            feil.add(new Feil("tilsynsordning.opphold[" + periode.getIso8601() + "].lengde", "ugyldigLengdePåOpphold", "Lengden på oppholdet overskrider tiden i perioden."));
-        }
-    }
-
-    private Duration maksInnenforPeriode(Periode periode) {
-        if (periode.getFraOgMed() == null || periode.getTilOgMed() == null) return null;
-        else {
-            Period p = Period.between(periode.getFraOgMed(), periode.getTilOgMed().plusDays(1));
-            return Duration.ofDays(p.getDays()).abs();
+        if (tilsynsordning.getPerioder() == null || tilsynsordning.getPerioder().isEmpty()) {
+            feil.add(new Feil("tilsynsordning.perioder", PÅKREVD, "Det må minst være en periode med opphold."));
+        } else {
+            tilsynsordning.getPerioder().forEach((periode, periodeInfo) -> {
+                validerGyldigPeriode(periode, "tilsynsordning.perioder", false, feil);
+                validerPeriodeInnenforSøknadsperiode(periode, "tilsynsordning.perioder", søknadsperiode, feil);
+            });
         }
     }
 }
