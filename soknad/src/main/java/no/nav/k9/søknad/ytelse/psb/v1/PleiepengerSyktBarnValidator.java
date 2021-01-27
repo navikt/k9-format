@@ -3,13 +3,14 @@ package no.nav.k9.søknad.ytelse.psb.v1;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.LovbestemtFerie;
 import no.nav.k9.søknad.felles.aktivitet.ArbeidAktivitet;
+import no.nav.k9.søknad.felles.aktivitet.Arbeidstaker;
 import no.nav.k9.søknad.felles.aktivitet.SelvstendigNæringsdrivende;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeid.Arbeid;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeid.ArbeidPeriodeInfo;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeid.Arbeidstaker;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningOpphold;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningSvar;
@@ -46,7 +47,7 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
         validerNattevåk(psb.getNattevåk(), søknadsperiode, feil);
         validerTilsynsordning(psb.getTilsynsordning(), søknadsperiode, feil);
         validerLovbestemtFerie(psb.getLovbestemtFerie(), søknadsperiode, feil);
-        validerArbeid(psb.getArbeid(), søknadsperiode, feil);
+        validerArbeidstid(psb.getArbeidstid(), søknadsperiode, feil);
         validerArbeidAktivitet(psb.getArbeidAktivitet(), feil);
 
         return feil;
@@ -55,7 +56,7 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
     private Feil toFeil(ConstraintViolation<PleiepengerSyktBarn> constraintViolation) {
         return new Feil(
                 constraintViolation.getPropertyPath().toString(),
-                constraintViolation.getMessage(),
+                constraintViolation.getMessage() + " ConstraintViolation ",
                 constraintViolation.getMessageTemplate());
     }
 
@@ -132,35 +133,38 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
         }));
     }
 
-    private void validerArbeid(Arbeid arbeid, Periode søknadsperiode, List<Feil> feil) {
-        if (arbeid == null) {
+    private void validerArbeidstid(Arbeidstid arbeidstid, Periode søknadsperiode, List<Feil> feil) {
+        if (arbeidstid == null) {
             return;
         }
-        validerArbeidstaker(arbeid.getArbeidstaker(), søknadsperiode, feil);
+        validerarbeidstakerList(arbeidstid.getArbeidstakerList(), søknadsperiode, feil);
+        if (arbeidstid.getFrilanserArbeidstidInfo() != null) {
+            validerArbeidstidInfo(arbeidstid.getFrilanserArbeidstidInfo(), "arbeidstid.frilanser.arbeidstidPeriode", søknadsperiode, feil);
+        }
     }
 
-    private void validerArbeidstaker(List<Arbeidstaker> arbeidstakerList, Periode søknadsperiode, List<Feil> feil) {
+    private void validerarbeidstakerList(List<Arbeidstaker> arbeidstakerList, Periode søknadsperiode, List<Feil> feil) {
         if (arbeidstakerList == null) {
             return;
         }
         int i = 0;
-        for (Arbeidstaker arbeidstaker : arbeidstakerList) {
-            validerArbeidstakerInfo(arbeidstaker, "arbeid.arbeidstaker[" + i + "]", feil);
-            validerArbeidstakerPeriode(arbeidstaker, i, søknadsperiode, feil);
+        for (Arbeidstaker arbeidstaker : arbeidstakerList ) {
+            validerArbeidstaker(arbeidstaker, "arbeidstid.arbeidstaker[" + i + "]", feil);
+            validerArbeidstidInfo(arbeidstaker.getArbeidstidInfo(), "arbeidstid.arbeidstaker[\" + i + \"].arbeidstidPeriode", søknadsperiode, feil);
             i++;
         }
     }
 
-    private void validerArbeidstakerPeriode(Arbeidstaker arbeidstaker, int i, Periode søknadsperiode, List<Feil> feil) {
-        for (Map.Entry<Periode, ArbeidPeriodeInfo> periode : arbeidstaker.getPerioder().entrySet()) {
-            validerGyldigPeriode(periode.getKey(), "arbeid.arbeidstaker[" + i + "].periode", false, feil);
-            validerPeriodeInnenforSøknadsperiode(periode.getKey(), "arbeid.arbeidstaker[" + i + "]", søknadsperiode, feil);
-            validerOverlappendePerioder(arbeidstaker.getPerioder(), periode.getKey(), "arbeid.arbeidstaker.periode[" + i + "]", feil);
+    private void validerArbeidstidInfo(ArbeidstidInfo arbeidstidInfo, String felt, Periode søknadsperiode, List<Feil> feil) {
+        for (Map.Entry<Periode, ArbeidstidPeriodeInfo> periode : arbeidstidInfo.getPerioder().entrySet()) {
+            validerGyldigPeriode(periode.getKey(), felt, false, feil);
+            validerPeriodeInnenforSøknadsperiode(periode.getKey(), felt, søknadsperiode, feil);
+            validerOverlappendePerioder(arbeidstidInfo.getPerioder(), periode.getKey(), felt, feil);
         }
     }
 
 
-        private void validerArbeidstakerInfo(Arbeidstaker arbeidstaker, String felt, List<Feil> feil) {
+        private void validerArbeidstaker(Arbeidstaker arbeidstaker, String felt, List<Feil> feil) {
         if (arbeidstaker.getNorskIdentitetsnummer() != null && arbeidstaker.getOrganisasjonsnummer() != null) {
             feil.add(new Feil(felt, "ikkeEntydigIdPåArbeidsgiver", "Ikke entydig ID på Arbeidsgiver, må oppgi enten norskIdentitetsnummer eller organisasjonsnummer."));
         } else if (arbeidstaker.getNorskIdentitetsnummer() == null && arbeidstaker.getOrganisasjonsnummer() == null) {

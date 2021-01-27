@@ -129,7 +129,7 @@ public class PeriodeTest {
         var perioder = Map.of(
             periode1, true,
             periode2, true);
-        Assertions.assertThrows(IllegalStateException.class, () -> {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
             leggTilPeriode(perioder, periode1, true);
         });
     }
