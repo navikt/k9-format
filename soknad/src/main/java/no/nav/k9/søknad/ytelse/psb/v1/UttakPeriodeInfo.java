@@ -25,11 +25,15 @@ public class UttakPeriodeInfo {
         this.timerPleieAvBarnetPerDag = timerPleieAvBarnetPerDag;
     }
 
+    public UttakPeriodeInfo() {
+    }
+
     public Duration getTimerPleieAvBarnetPerDag() {
         return timerPleieAvBarnetPerDag;
     }
 
-    public void setTimerPleieAvBarnetPerDag(Duration timerPleieAvBarnetPerDag) {
+    public UttakPeriodeInfo setTimerPleieAvBarnetPerDag(Duration timerPleieAvBarnetPerDag) {
         this.timerPleieAvBarnetPerDag = timerPleieAvBarnetPerDag;
+        return this;
     }
 }

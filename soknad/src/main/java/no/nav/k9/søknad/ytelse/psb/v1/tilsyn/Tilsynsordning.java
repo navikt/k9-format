@@ -26,15 +26,20 @@ public class Tilsynsordning {
         this.perioder = new HashMap<>(perioder);
     }
 
+    public Tilsynsordning() {
+    }
+
     public Map<Periode, TilsynPeriodeInfo> getPerioder() {
         return unmodifiableMap(perioder);
     }
 
-    public void setPerioder(Map<Periode, TilsynPeriodeInfo> perioder) {
+    public Tilsynsordning setPerioder(Map<Periode, TilsynPeriodeInfo> perioder) {
         this.perioder = new HashMap<>(perioder);
+        return this;
     }
 
-    public void leggeTilPerioder(Map<Periode, TilsynPeriodeInfo> perioder) {
+    public Tilsynsordning leggeTilPerioder(Map<Periode, TilsynPeriodeInfo> perioder) {
         this.perioder.putAll(perioder);
+        return this;
     }
 }

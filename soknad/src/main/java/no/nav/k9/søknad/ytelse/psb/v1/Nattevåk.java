@@ -9,6 +9,8 @@ import no.nav.k9.søknad.felles.type.Periode;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -22,15 +24,19 @@ public class Nattevåk {
 
     @JsonCreator
     public Nattevåk(@JsonProperty("perioder") @Valid @NotEmpty Map<Periode, NattevåkPeriodeInfo> perioder) {
-        this.perioder = perioder;
+        this.perioder = new HashMap<>(perioder);
+    }
+
+    public Nattevåk() {
     }
 
     public Map<Periode, NattevåkPeriodeInfo> getPerioder() {
-        return perioder;
+        return Collections.unmodifiableMap(perioder);
     }
 
-    public void setPerioder(Map<Periode, NattevåkPeriodeInfo> perioder) {
-        this.perioder = perioder;
+    public Nattevåk medPerioder(Map<Periode, NattevåkPeriodeInfo> perioder) {
+        this.perioder = new HashMap<>(perioder);
+        return this;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -48,12 +54,16 @@ public class Nattevåk {
             this.tilleggsinformasjon = tilleggsinformasjon;
         }
 
+        public NattevåkPeriodeInfo() {
+        }
+
         public String getTilleggsinformasjon() {
             return tilleggsinformasjon;
         }
 
-        public void setTilleggsinformasjon(String tilleggsinformasjon) {
+        public NattevåkPeriodeInfo medTilleggsinformasjon(String tilleggsinformasjon) {
             this.tilleggsinformasjon = tilleggsinformasjon;
+            return this;
         }
     }
 }

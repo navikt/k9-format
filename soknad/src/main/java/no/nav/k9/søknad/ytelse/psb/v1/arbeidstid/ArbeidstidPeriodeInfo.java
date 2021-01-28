@@ -26,11 +26,15 @@ public class ArbeidstidPeriodeInfo {
         this.faktiskArbeidTimerPerDag = faktiskArbeidTimerPerDag;
     }
 
+    public ArbeidstidPeriodeInfo() {
+    }
+
     public Duration getFaktiskArbeidTimerPerDag() {
         return faktiskArbeidTimerPerDag;
     }
 
-    public void setFaktiskArbeidTimerPerDag(Duration faktiskArbeidTimerPerDag) {
+    public ArbeidstidPeriodeInfo medFaktiskArbeidTimerPerDag(Duration faktiskArbeidTimerPerDag) {
         this.faktiskArbeidTimerPerDag = faktiskArbeidTimerPerDag;
+        return this;
     }
 }

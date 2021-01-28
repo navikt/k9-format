@@ -22,15 +22,19 @@ public class TilsynPeriodeInfo {
     private Duration etablertTilsynTimerPerDag;
 
     @JsonCreator
-    public TilsynPeriodeInfo(@JsonProperty(value = "etablertTilsynTimerPerDag", required = true) @Valid @NotNull @Min(0) Duration etablertTilsynTimerPerDag) {
+    public TilsynPeriodeInfo(@JsonProperty(value = "etablertTilsynTimerPerDag", required = true) @Valid @NotNull Duration etablertTilsynTimerPerDag) {
         this.etablertTilsynTimerPerDag = etablertTilsynTimerPerDag;
+    }
+
+    public TilsynPeriodeInfo() {
     }
 
     public Duration getEtablertTilsynTimerPerDag() {
         return etablertTilsynTimerPerDag;
     }
 
-    public void setEtablertTilsynTimerPerDag(Duration etablertTilsynTimerPerDag) {
+    public TilsynPeriodeInfo medEtablertTilsynTimerPerDag(Duration etablertTilsynTimerPerDag) {
         this.etablertTilsynTimerPerDag = etablertTilsynTimerPerDag;
+        return this;
     }
 }

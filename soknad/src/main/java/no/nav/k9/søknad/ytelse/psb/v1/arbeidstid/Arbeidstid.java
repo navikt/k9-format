@@ -31,42 +31,48 @@ public class Arbeidstid {
     public Arbeidstid(@JsonProperty(value = "arbeidstakerList", required = true) @Valid List<Arbeidstaker> arbeidstakerList,
                       @JsonProperty(value = "frilanserArbeidstidInfo", required = true) @Valid ArbeidstidInfo frilanserArbeidstidInfo,
                       @JsonProperty(value = "selvstendigNæringsdrivendeArbeidstidInfo", required = true) @Valid ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo) {
-        this.arbeidstakerList = (arbeidstakerList == null) ? emptyList() : unmodifiableList(arbeidstakerList);
+        this.arbeidstakerList = new ArrayList<>(arbeidstakerList);
         this.frilanserArbeidstidInfo = frilanserArbeidstidInfo;
         this.selvstendigNæringsdrivendeArbeidstidInfo = selvstendigNæringsdrivendeArbeidstidInfo;
     }
 
+    public Arbeidstid() {
+    }
+
     public List<Arbeidstaker> getArbeidstakerList() {
-        return arbeidstakerList;
+        return unmodifiableList(arbeidstakerList);
     }
 
-    public void leggeTilArbeidstaker(Arbeidstaker arbeidstaker, ArbeidstidInfo arbeidstidInfo) {
-        Objects.requireNonNull(arbeidstaker);
-        Objects.requireNonNull(arbeidstidInfo);
-        arbeidstaker.setArbeidstidInfo(arbeidstidInfo);
-        leggeTilArbeidstaker(List.of(arbeidstaker));
+    public Arbeidstid medArbeidstakerList(List<Arbeidstaker> arbeidstakerList) {
+        this.arbeidstakerList = new ArrayList<>(arbeidstakerList);
+        return this;
     }
 
-    public void leggeTilArbeidstaker(List<Arbeidstaker> arbeidstakerList) {
-        Objects.requireNonNull(arbeidstakerList);
-        var temp = new ArrayList<>(arbeidstakerList);
-        temp.addAll(this.getArbeidstakerList());
-        this.arbeidstakerList = unmodifiableList(temp);
+    public Arbeidstid leggeTilArbeidstaker(List<Arbeidstaker> arbeidstakerList) {
+        this.arbeidstakerList.addAll(arbeidstakerList);
+        return this;
+    }
+
+    public Arbeidstid leggeTilArbeidstaker(Arbeidstaker arbeidstaker) {
+        this.arbeidstakerList.add(arbeidstaker);
+        return this;
     }
 
     public ArbeidstidInfo getFrilanserArbeidstidInfo() {
         return frilanserArbeidstidInfo;
     }
 
-    public void setFrilanserArbeidstidInfo(ArbeidstidInfo frilanserArbeidstidInfo) {
+    public Arbeidstid medFrilanserArbeidstid(ArbeidstidInfo frilanserArbeidstidInfo) {
         this.frilanserArbeidstidInfo = frilanserArbeidstidInfo;
+        return this;
     }
 
     public ArbeidstidInfo getSelvstendigNæringsdrivendeArbeidstidInfo() {
         return selvstendigNæringsdrivendeArbeidstidInfo;
     }
 
-    public void setSelvstendigNæringsdrivendeArbeidstidInfo(ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo) {
+    public Arbeidstid medSelvstendigNæringsdrivendeArbeidstidInfo(ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo) {
         this.selvstendigNæringsdrivendeArbeidstidInfo = selvstendigNæringsdrivendeArbeidstidInfo;
+        return this;
     }
 }

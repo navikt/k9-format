@@ -9,6 +9,7 @@ import no.nav.k9.søknad.felles.type.Periode;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -21,14 +22,23 @@ public class Uttak {
 
     @JsonCreator
     public Uttak( @JsonProperty(value = "perioder", required = true) @Valid @NotNull Map<Periode, UttakPeriodeInfo> perioder ) {
-        this.perioder = perioder;
+        this.perioder = new HashMap<>(perioder);
+    }
+
+    public Uttak() {
     }
 
     public Map<Periode, UttakPeriodeInfo> getPerioder() {
         return perioder;
     }
 
-    public void setPerioder(Map<Periode, UttakPeriodeInfo> perioder) {
-        this.perioder = perioder;
+    public Uttak setPerioder(Map<Periode, UttakPeriodeInfo> perioder) {
+        this.perioder = new HashMap<>(perioder);
+        return this;
+    }
+
+    public Uttak leggeTilPeriode(Periode periode, UttakPeriodeInfo uttakPeriodeInfo) {
+        this.perioder.put(periode, uttakPeriodeInfo);
+        return this;
     }
 }

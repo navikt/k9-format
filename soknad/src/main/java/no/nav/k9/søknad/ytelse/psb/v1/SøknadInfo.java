@@ -11,8 +11,6 @@ import javax.validation.Valid;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class SøknadInfo {
 
-
-
     @JsonProperty(value = "relasjonTilBarnet")
     @Valid
     private String relasjonTilBarnet;
@@ -70,5 +68,89 @@ public class SøknadInfo {
         this.samtidigHjemme = samtidigHjemme;
         this.harMedsøker = harMedsøker;
         this.bekrefterPeriodeOver8Uker = bekrefterPeriodeOver8Uker;
+    }
+
+    public SøknadInfo() {
+    }
+
+    public String getRelasjonTilBarnet() {
+        return relasjonTilBarnet;
+    }
+
+    public SøknadInfo medRelasjonTilBarnet(String relasjonTilBarnet) {
+        this.relasjonTilBarnet = relasjonTilBarnet;
+        return this;
+    }
+
+    public Boolean getSamtykketOmsorgForBarnet() {
+        return samtykketOmsorgForBarnet;
+    }
+
+    public SøknadInfo medSamtykketOmsorgForBarnet(Boolean samtykketOmsorgForBarnet) {
+        this.samtykketOmsorgForBarnet = samtykketOmsorgForBarnet;
+        return this;
+    }
+
+    public String getBeskrivelseAvOmsorgsrollen() {
+        return beskrivelseAvOmsorgsrollen;
+    }
+
+    public SøknadInfo medBeskrivelseAvOmsorgsrollen(String beskrivelseAvOmsorgsrollen) {
+        this.beskrivelseAvOmsorgsrollen = beskrivelseAvOmsorgsrollen;
+        return this;
+    }
+
+    public Boolean getHarForståttRettigheterOgPlikter() {
+        return harForståttRettigheterOgPlikter;
+    }
+
+    public SøknadInfo medHarForståttRettigheterOgPlikter(Boolean harForståttRettigheterOgPlikter) {
+        this.harForståttRettigheterOgPlikter = harForståttRettigheterOgPlikter;
+        return this;
+    }
+
+    public Boolean getHarBekreftetOpplysninger() {
+        return harBekreftetOpplysninger;
+    }
+
+    public SøknadInfo medHarBekreftetOpplysninger(Boolean harBekreftetOpplysninger) {
+        this.harBekreftetOpplysninger = harBekreftetOpplysninger;
+        return this;
+    }
+
+    public Boolean getFlereOmsorgspersoner() {
+        return flereOmsorgspersoner;
+    }
+
+    public SøknadInfo medFlereOmsorgspersoner(Boolean flereOmsorgspersoner) {
+        this.flereOmsorgspersoner = flereOmsorgspersoner;
+        return this;
+    }
+
+    public Boolean getSamtidigHjemme() {
+        return samtidigHjemme;
+    }
+
+    public SøknadInfo medSamtidigHjemme(Boolean samtidigHjemme) {
+        this.samtidigHjemme = samtidigHjemme;
+        return this;
+    }
+
+    public Boolean getHarMedsøker() {
+        return harMedsøker;
+    }
+
+    public SøknadInfo medHarMedsøker(Boolean harMedsøker) {
+        this.harMedsøker = harMedsøker;
+        return this;
+    }
+
+    public Boolean getBekrefterPeriodeOver8Uker() {
+        return bekrefterPeriodeOver8Uker;
+    }
+
+    public SøknadInfo medBekrefterPeriodeOver8Uker(Boolean bekrefterPeriodeOver8Uker) {
+        this.bekrefterPeriodeOver8Uker = bekrefterPeriodeOver8Uker;
+        return this;
     }
 }
