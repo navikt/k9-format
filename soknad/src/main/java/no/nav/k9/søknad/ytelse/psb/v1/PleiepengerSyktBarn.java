@@ -117,8 +117,9 @@ public class PleiepengerSyktBarn implements Ytelse {
         return barn;
     }
 
-    public void setBarn(Barn barn) {
+    public PleiepengerSyktBarn medBarn(Barn barn) {
         this.barn = barn;
+        return this;
     }
 
     @Override
@@ -126,88 +127,99 @@ public class PleiepengerSyktBarn implements Ytelse {
         return søknadsperiode;
     }
 
-    public void setSøknadsperiode(Periode søknadsperiode) {
+    public PleiepengerSyktBarn medSøknadsperiode(Periode søknadsperiode) {
         this.søknadsperiode = søknadsperiode;
+        return this;
     }
 
     public ArbeidAktivitet getArbeidAktivitet() {
         return arbeidAktivitet;
     }
 
-    public void setArbeidAktivitet(ArbeidAktivitet arbeidAktivitet) {
+    public PleiepengerSyktBarn medArbeidAktivitet(ArbeidAktivitet arbeidAktivitet) {
         this.arbeidAktivitet = arbeidAktivitet;
+        return this;
     }
 
     public SøknadInfo getSøknadInfo() {
         return søknadInfo;
     }
 
-    public void setSøknadInfo(SøknadInfo søknadInfo) {
+    public PleiepengerSyktBarn medSøknadInfo(SøknadInfo søknadInfo) {
         this.søknadInfo = søknadInfo;
+        return this;
     }
 
     public Bosteder getBosteder() {
         return bosteder;
     }
 
-    public void setBosteder(Bosteder bosteder) {
+    public PleiepengerSyktBarn medBosteder(Bosteder bosteder) {
         this.bosteder = bosteder;
+        return this;
     }
 
     public Utenlandsopphold getUtenlandsopphold() {
         return utenlandsopphold;
     }
 
-    public void setUtenlandsopphold(Utenlandsopphold utenlandsopphold) {
+    public PleiepengerSyktBarn medUtenlandsopphold(Utenlandsopphold utenlandsopphold) {
         this.utenlandsopphold = utenlandsopphold;
+        return this;
     }
 
     public Beredskap getBeredskap() {
         return beredskap;
     }
 
-    public void setBeredskap(Beredskap beredskap) {
+    public PleiepengerSyktBarn medBeredskap(Beredskap beredskap) {
         this.beredskap = beredskap;
+        return this;
     }
 
     public Nattevåk getNattevåk() {
         return nattevåk;
     }
 
-    public void setNattevåk(Nattevåk nattevåk) {
+    public PleiepengerSyktBarn medNattevåk(Nattevåk nattevåk) {
         this.nattevåk = nattevåk;
+        return this;
     }
 
     public Tilsynsordning getTilsynsordning() {
         return tilsynsordning;
     }
 
-    public void setTilsynsordning(Tilsynsordning tilsynsordning) {
+    public PleiepengerSyktBarn medTilsynsordning(Tilsynsordning tilsynsordning) {
         this.tilsynsordning = tilsynsordning;
+        return this;
     }
 
     public LovbestemtFerie getLovbestemtFerie() {
         return lovbestemtFerie;
     }
 
-    public void setLovbestemtFerie(LovbestemtFerie lovbestemtFerie) {
+    public PleiepengerSyktBarn medLovbestemtFerie(LovbestemtFerie lovbestemtFerie) {
         this.lovbestemtFerie = lovbestemtFerie;
+        return this;
     }
 
     public Arbeidstid getArbeidstid() {
         return arbeidstid;
     }
 
-    public void setArbeidstid(Arbeidstid arbeidstid) {
+    public PleiepengerSyktBarn medArbeidstid(Arbeidstid arbeidstid) {
         this.arbeidstid = arbeidstid;
+        return this;
     }
 
     public Uttak getUttak() {
         return uttak;
     }
 
-    public void setUttak(Uttak uttak) {
+    public PleiepengerSyktBarn medUttak(Uttak uttak) {
         this.uttak = uttak;
+        return this;
     }
 
     @Override

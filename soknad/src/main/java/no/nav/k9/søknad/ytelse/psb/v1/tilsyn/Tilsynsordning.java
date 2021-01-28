@@ -7,8 +7,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.søknad.felles.type.Periode;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import static java.util.Collections.unmodifiableMap;
 
@@ -23,18 +23,23 @@ public class Tilsynsordning {
     @JsonCreator
     public Tilsynsordning(
             @JsonProperty("perioder") @Valid Map<Periode, TilsynPeriodeInfo> perioder) {
-        this.perioder = new HashMap<>(perioder);
+        this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
+    }
+
+    public Tilsynsordning() {
     }
 
     public Map<Periode, TilsynPeriodeInfo> getPerioder() {
         return unmodifiableMap(perioder);
     }
 
-    public void setPerioder(Map<Periode, TilsynPeriodeInfo> perioder) {
-        this.perioder = new HashMap<>(perioder);
+    public Tilsynsordning setPerioder(Map<Periode, TilsynPeriodeInfo> perioder) {
+        this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
+        return this;
     }
 
-    public void leggeTilPerioder(Map<Periode, TilsynPeriodeInfo> perioder) {
-        this.perioder.putAll(perioder);
+    public Tilsynsordning leggeTilPeriode(Periode periode, TilsynPeriodeInfo tilsynPeriodeInfo) {
+        this.perioder.put(periode, tilsynPeriodeInfo);
+        return this;
     }
 }

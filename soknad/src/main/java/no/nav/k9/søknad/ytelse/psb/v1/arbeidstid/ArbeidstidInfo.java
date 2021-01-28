@@ -4,13 +4,11 @@ import com.fasterxml.jackson.annotation.*;
 import no.nav.k9.søknad.felles.type.Periode;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.Map;
+import java.util.TreeMap;
 
-import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -28,24 +26,36 @@ public class ArbeidstidInfo {
     @NotNull
     private Map<Periode, ArbeidstidPeriodeInfo> perioder;
 
-
-
     @JsonCreator
     public ArbeidstidInfo(@JsonProperty(value = "jobberNormaltTimerPerDag", required = true) @Valid @NotNull Duration jobberNormaltTimerPerDag,
             @JsonProperty(value = "perioder") @Valid @NotNull Map<Periode, ArbeidstidPeriodeInfo> perioder) {
         this.jobberNormaltTimerPerDag = jobberNormaltTimerPerDag;
-        this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
+        this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
     }
 
-    public Map<Periode, ArbeidstidPeriodeInfo> getPerioder() {
-        return perioder;
+    public ArbeidstidInfo() {
     }
 
     public Duration getJobberNormaltTimerPerDag() {
         return jobberNormaltTimerPerDag;
     }
 
-    public void setJobberNormaltTimerPerDag(Duration jobberNormaltTimerPerDag) {
+    public ArbeidstidInfo medJobberNormaltTimerPerDag(Duration jobberNormaltTimerPerDag) {
         this.jobberNormaltTimerPerDag = jobberNormaltTimerPerDag;
+        return this;
+    }
+
+    public Map<Periode, ArbeidstidPeriodeInfo> getPerioder() {
+        return unmodifiableMap(perioder);
+    }
+
+    public ArbeidstidInfo medPerioder(Map<Periode, ArbeidstidPeriodeInfo> perioder) {
+        this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
+        return this;
+    }
+
+    public ArbeidstidInfo leggeTilPeriode(Periode periode, ArbeidstidPeriodeInfo arbeidstidPeriodeInfo) {
+        this.perioder.put(periode, arbeidstidPeriodeInfo);
+        return this;
     }
 }

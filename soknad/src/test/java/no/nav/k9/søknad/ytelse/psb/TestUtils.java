@@ -136,10 +136,7 @@ final class TestUtils {
 
         var barn = new Barn(null, LocalDate.now());
 
-        return new PleiepengerSyktBarn(
-                søknadsperiode, null, barn, null,
-                null, null, null, null,
-                uttak, null, null, null);
+        return new PleiepengerSyktBarn().medSøknadsperiode(søknadsperiode).medBarn(barn).medUttak(uttak);
     }
 
 }

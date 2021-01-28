@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 import java.time.Duration;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -25,11 +24,15 @@ public class UttakPeriodeInfo {
         this.timerPleieAvBarnetPerDag = timerPleieAvBarnetPerDag;
     }
 
+    public UttakPeriodeInfo() {
+    }
+
     public Duration getTimerPleieAvBarnetPerDag() {
         return timerPleieAvBarnetPerDag;
     }
 
-    public void setTimerPleieAvBarnetPerDag(Duration timerPleieAvBarnetPerDag) {
+    public UttakPeriodeInfo setTimerPleieAvBarnetPerDag(Duration timerPleieAvBarnetPerDag) {
         this.timerPleieAvBarnetPerDag = timerPleieAvBarnetPerDag;
+        return this;
     }
 }

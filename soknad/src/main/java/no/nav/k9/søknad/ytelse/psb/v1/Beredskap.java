@@ -10,6 +10,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
+import java.util.TreeMap;
+
+import static java.util.Collections.unmodifiableMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -23,15 +26,19 @@ public class Beredskap {
     @JsonCreator
     public Beredskap(
             @JsonProperty(value = "perioder") @NotEmpty @Valid Map<Periode, BeredskapPeriodeInfo> perioder) {
-        this.perioder = perioder;
+        this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
+    }
+
+    public Beredskap() {
     }
 
     public Map<Periode, BeredskapPeriodeInfo> getPerioder() {
-        return perioder;
+        return unmodifiableMap(perioder);
     }
 
-    public void setPerioder(Map<Periode, BeredskapPeriodeInfo> perioder) {
-        this.perioder = perioder;
+    public Beredskap medPerioder(Map<Periode, BeredskapPeriodeInfo> perioder) {
+        this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
+        return this;
     }
 
     public static final class BeredskapPeriodeInfo {
@@ -46,12 +53,16 @@ public class Beredskap {
             this.tilleggsinformasjon = tilleggsinformasjon;
         }
 
+        public BeredskapPeriodeInfo() {
+        }
+
         public String getTilleggsinformasjon() {
             return tilleggsinformasjon;
         }
 
-        public void setTilleggsinformasjon(String tilleggsinformasjon) {
+        public BeredskapPeriodeInfo medTilleggsinformasjon(String tilleggsinformasjon) {
             this.tilleggsinformasjon = tilleggsinformasjon;
+            return this;
         }
     }
 }

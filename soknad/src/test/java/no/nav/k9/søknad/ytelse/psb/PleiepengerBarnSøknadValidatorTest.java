@@ -49,7 +49,7 @@ public class PleiepengerBarnSøknadValidatorTest {
     @Test
     public void søknadsperiodeKanIkkeVæreNull() {
         var builder = TestUtils.komplettBuilder();
-        builder.setSøknadsperiode(null);
+        builder.medSøknadsperiode(null);
         verifyHarFeil(builder);
     }
 
@@ -59,7 +59,7 @@ public class PleiepengerBarnSøknadValidatorTest {
         Tilsynsordning tilsynsordning = new Tilsynsordning(Map.of(
                 new Periode(LocalDate.now(), LocalDate.now()),
                 new TilsynPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
-        søknad.setTilsynsordning(tilsynsordning);
+        søknad.medTilsynsordning(tilsynsordning);
 
         verifyHarFeil(søknad);
     }
@@ -74,7 +74,7 @@ public class PleiepengerBarnSøknadValidatorTest {
                 new Periode(søknadsperiode.getFraOgMed().plusDays(7), søknadsperiode.getTilOgMed().minusDays(7)),
                 new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
         var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), arbeidstidInfo);
-        søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker, arbeidstidInfo);
+        søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
         assertThat(verifyHarFeil(søknad)).hasSize(2);
 
     }
@@ -87,7 +87,7 @@ public class PleiepengerBarnSøknadValidatorTest {
                 søknadsperiode,
                 new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
         var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), arbeidstidInfo);
-        søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker, arbeidstidInfo);
+        søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
         verifyHarFeil(søknad);
     }
 
@@ -99,7 +99,7 @@ public class PleiepengerBarnSøknadValidatorTest {
                 søknadsperiode,
                 new ArbeidstidPeriodeInfo(null)));
         var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), arbeidstidInfo);
-        søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker, arbeidstidInfo);
+        søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
         verifyHarFeil(søknad);
     }
 
@@ -111,7 +111,7 @@ public class PleiepengerBarnSøknadValidatorTest {
                 søknadsperiode,
                 new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
         var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), arbeidstidInfo);
-        søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker, arbeidstidInfo);
+        søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
         verifyHarFeil(søknad);
     }
 
@@ -123,7 +123,7 @@ public class PleiepengerBarnSøknadValidatorTest {
                 søknadsperiode,
                 new ArbeidstidPeriodeInfo(Duration.ofHours(-7).plusMinutes(30))));
         var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), arbeidstidInfo);
-        søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker, arbeidstidInfo);
+        søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
         verifyHarFeil(søknad);
     }
 
@@ -135,7 +135,7 @@ public class PleiepengerBarnSøknadValidatorTest {
                 søknadsperiode,
                 new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
         var arbeidstaker = new Arbeidstaker(null, null, arbeidstidInfo);
-        søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker, arbeidstidInfo);
+        søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
         verifyHarFeil(søknad);
     }
 
@@ -147,7 +147,7 @@ public class PleiepengerBarnSøknadValidatorTest {
                 søknadsperiode,
                 new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
         var arbeidstaker = new Arbeidstaker(NorskIdentitetsnummer.of("29099012345"), Organisasjonsnummer.of("88888888"), arbeidstidInfo);
-        søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker, arbeidstidInfo);
+        søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
         verifyHarFeil(søknad);
     }
 
@@ -171,7 +171,7 @@ public class PleiepengerBarnSøknadValidatorTest {
                         .virksomhetNavn("testUlf")
                         .build()
                 ).build();
-        søknad.setArbeidAktivitet(arbeidAktivitet);
+        søknad.medArbeidAktivitet(arbeidAktivitet);
         verifyIngenFeil(søknad);
     }
 

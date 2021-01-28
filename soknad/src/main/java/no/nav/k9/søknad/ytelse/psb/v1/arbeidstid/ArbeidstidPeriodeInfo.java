@@ -6,9 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 import java.time.Duration;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -26,11 +24,15 @@ public class ArbeidstidPeriodeInfo {
         this.faktiskArbeidTimerPerDag = faktiskArbeidTimerPerDag;
     }
 
+    public ArbeidstidPeriodeInfo() {
+    }
+
     public Duration getFaktiskArbeidTimerPerDag() {
         return faktiskArbeidTimerPerDag;
     }
 
-    public void setFaktiskArbeidTimerPerDag(Duration faktiskArbeidTimerPerDag) {
+    public ArbeidstidPeriodeInfo medFaktiskArbeidTimerPerDag(Duration faktiskArbeidTimerPerDag) {
         this.faktiskArbeidTimerPerDag = faktiskArbeidTimerPerDag;
+        return this;
     }
 }
