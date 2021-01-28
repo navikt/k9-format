@@ -10,27 +10,27 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.time.Duration;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-public class PeriodeInfo {
+public class TilsynPeriodeInfo {
 
     @Valid
     @NotNull
-    @Min(0)
     @JsonProperty(value = "etablertTilsynTimerPerDag", required = true)
-    private BigDecimal etablertTilsynTimerPerDag;
+    private Duration etablertTilsynTimerPerDag;
 
     @JsonCreator
-    public PeriodeInfo(@JsonProperty(value = "etablertTilsynTimerPerDag", required = true) @Valid @NotNull @Min(0) BigDecimal etablertTilsynTimerPerDag) {
+    public TilsynPeriodeInfo(@JsonProperty(value = "etablertTilsynTimerPerDag", required = true) @Valid @NotNull @Min(0) Duration etablertTilsynTimerPerDag) {
         this.etablertTilsynTimerPerDag = etablertTilsynTimerPerDag;
     }
 
-    public BigDecimal getEtablertTilsynTimerPerDag() {
+    public Duration getEtablertTilsynTimerPerDag() {
         return etablertTilsynTimerPerDag;
     }
 
-    public void setEtablertTilsynTimerPerDag(BigDecimal etablertTilsynTimerPerDag) {
+    public void setEtablertTilsynTimerPerDag(Duration etablertTilsynTimerPerDag) {
         this.etablertTilsynTimerPerDag = etablertTilsynTimerPerDag;
     }
 }

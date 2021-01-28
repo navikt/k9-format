@@ -15,13 +15,14 @@ import no.nav.k9.søknad.ytelse.psb.v1.*;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.PeriodeInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -58,12 +59,12 @@ final class TestUtils {
         var delperiodeTo = new Periode(LocalDate.parse("2019-02-21"), LocalDate.parse("2019-05-21"));
 
         var uttak = new Uttak(Map.of(
-            søknadsperiode, new UttakPeriodeInfo(BigDecimal.valueOf(7))));
+            søknadsperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
 
         var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("999999999"),
-                new ArbeidstidInfo(Map.of(
+                new ArbeidstidInfo(Duration.ofHours(7).plusMinutes(30), Map.of(
                         søknadsperiode,
-                        new ArbeidstidPeriodeInfo(BigDecimal.valueOf(3.5), BigDecimal.valueOf(7.5)))));
+                        new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30)))));
 
         var arbeidstid = new Arbeidstid(List.of(
                 arbeidstaker), null, null);
@@ -78,11 +79,11 @@ final class TestUtils {
 
         var tilsynsordning = new Tilsynsordning(Map.of(
                 new Periode(LocalDate.parse("2019-01-01"), LocalDate.parse("2019-01-01")),
-                new PeriodeInfo(BigDecimal.valueOf(7.5)),
+                new TilsynPeriodeInfo(Duration.ofHours(7).plusMinutes(30)),
                 new Periode(LocalDate.parse("2019-01-02"), LocalDate.parse("2019-01-02")),
-                new PeriodeInfo(BigDecimal.valueOf(7.5)),
+                new TilsynPeriodeInfo(Duration.ofHours(7).plusMinutes(30)),
                 new Periode(LocalDate.parse("2019-01-03"), LocalDate.parse("2019-01-09")),
-                new PeriodeInfo(BigDecimal.valueOf(7.5))));
+                new TilsynPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
 
         var lovbestemtFerie = new LovbestemtFerie(List.of(delperiodeTo));
 
@@ -130,8 +131,8 @@ final class TestUtils {
         var uttakperiode2 = new Periode(LocalDate.parse("2019-02-21"), LocalDate.parse("2019-10-20"));
 
         var uttak = new Uttak(Map.of(
-            uttakperiode, new UttakPeriodeInfo(BigDecimal.valueOf(7)),
-            uttakperiode2, new UttakPeriodeInfo(BigDecimal.valueOf(7))));
+            uttakperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30)),
+            uttakperiode2, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
 
         var barn = new Barn(null, LocalDate.now());
 
