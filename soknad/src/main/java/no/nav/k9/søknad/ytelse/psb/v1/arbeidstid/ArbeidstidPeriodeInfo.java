@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.time.Duration;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -16,37 +17,20 @@ public class ArbeidstidPeriodeInfo {
 
     @Valid
     @NotNull
-    @Min(0)
-    @JsonProperty(value = "jobberNormaltTimerPerDag")
-    private BigDecimal jobberNormaltTimerPerDag;
-
-    @Valid
-    @NotNull
-    @Min(0)
     @JsonProperty(value = "faktiskArbeidTimerPerDag")
-    private BigDecimal faktiskArbeidTimerPerDag;
+    private Duration faktiskArbeidTimerPerDag;
 
     @JsonCreator
     public ArbeidstidPeriodeInfo(
-            @JsonProperty(value = "jobberNormaltTimerPerDag") @Valid @NotNull BigDecimal jobberNormaltTimerPerDag,
-            @JsonProperty(value = "faktiskArbeidTimerPerDag") @Valid @NotNull BigDecimal faktiskArbeidTimerPerDag) {
-        this.jobberNormaltTimerPerDag = jobberNormaltTimerPerDag;
+            @JsonProperty(value = "faktiskArbeidTimerPerDag") @Valid @NotNull Duration faktiskArbeidTimerPerDag) {
         this.faktiskArbeidTimerPerDag = faktiskArbeidTimerPerDag;
     }
 
-    public BigDecimal getFaktiskArbeidTimerPerDag() {
+    public Duration getFaktiskArbeidTimerPerDag() {
         return faktiskArbeidTimerPerDag;
     }
 
-    public void setFaktiskArbeidTimerPerDag(BigDecimal faktiskArbeidTimerPerDag) {
+    public void setFaktiskArbeidTimerPerDag(Duration faktiskArbeidTimerPerDag) {
         this.faktiskArbeidTimerPerDag = faktiskArbeidTimerPerDag;
-    }
-
-    public BigDecimal getJobberNormaltTimerPerDag() {
-        return jobberNormaltTimerPerDag;
-    }
-
-    public void setJobberNormaltTimerPerDag(BigDecimal jobberNormaltTimerPerDag) {
-        this.jobberNormaltTimerPerDag = jobberNormaltTimerPerDag;
     }
 }

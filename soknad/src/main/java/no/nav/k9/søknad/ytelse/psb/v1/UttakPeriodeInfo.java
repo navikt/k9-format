@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.time.Duration;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -16,19 +17,19 @@ public class UttakPeriodeInfo {
     @Valid
     @NotNull
     @JsonProperty(value = "timerPleieAvBarnetPerDag", required = true)
-    private BigDecimal timerPleieAvBarnetPerDag;
+    private Duration timerPleieAvBarnetPerDag;
 
     @JsonCreator
     public UttakPeriodeInfo(
-            @JsonProperty(value = "timerPleieAvBarnetPerDag", required = true) @Valid @NotNull BigDecimal timerPleieAvBarnetPerDag) {
+            @JsonProperty(value = "timerPleieAvBarnetPerDag", required = true) @Valid @NotNull Duration timerPleieAvBarnetPerDag) {
         this.timerPleieAvBarnetPerDag = timerPleieAvBarnetPerDag;
     }
 
-    public BigDecimal getTimerPleieAvBarnetPerDag() {
+    public Duration getTimerPleieAvBarnetPerDag() {
         return timerPleieAvBarnetPerDag;
     }
 
-    public void setTimerPleieAvBarnetPerDag(BigDecimal timerPleieAvBarnetPerDag) {
+    public void setTimerPleieAvBarnetPerDag(Duration timerPleieAvBarnetPerDag) {
         this.timerPleieAvBarnetPerDag = timerPleieAvBarnetPerDag;
     }
 }

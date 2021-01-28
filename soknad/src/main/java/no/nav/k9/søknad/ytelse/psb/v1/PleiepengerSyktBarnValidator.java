@@ -81,6 +81,7 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
         uttak.getPerioder().forEach((periode, uttakPeriodeInfo) -> {
             validerGyldigPeriode(periode, "uttak.perioder", false, feil);
             validerPeriodeInnenforSøknadsperiode(periode, "uttak.periode", søknadsperiode, feil);
+            validerDurationIkkeNegativ(uttakPeriodeInfo.getTimerPleieAvBarnetPerDag(), "uttak.periode.Info", feil);
         });
     }
 
@@ -156,15 +157,16 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
     }
 
     private void validerArbeidstidInfo(ArbeidstidInfo arbeidstidInfo, String felt, Periode søknadsperiode, List<Feil> feil) {
+        validerDurationIkkeNegativ(arbeidstidInfo.getJobberNormaltTimerPerDag(), felt + "info", feil);
         for (Map.Entry<Periode, ArbeidstidPeriodeInfo> periode : arbeidstidInfo.getPerioder().entrySet()) {
             validerGyldigPeriode(periode.getKey(), felt, false, feil);
             validerPeriodeInnenforSøknadsperiode(periode.getKey(), felt, søknadsperiode, feil);
             validerOverlappendePerioder(arbeidstidInfo.getPerioder(), periode.getKey(), felt, feil);
+            validerDurationIkkeNegativ(periode.getValue().getFaktiskArbeidTimerPerDag(), felt + "periodeInfo", feil);
         }
     }
 
-
-        private void validerArbeidstaker(Arbeidstaker arbeidstaker, String felt, List<Feil> feil) {
+    private void validerArbeidstaker(Arbeidstaker arbeidstaker, String felt, List<Feil> feil) {
         if (arbeidstaker.getNorskIdentitetsnummer() != null && arbeidstaker.getOrganisasjonsnummer() != null) {
             feil.add(new Feil(felt, "ikkeEntydigIdPåArbeidsgiver", "Ikke entydig ID på Arbeidsgiver, må oppgi enten norskIdentitetsnummer eller organisasjonsnummer."));
         } else if (arbeidstaker.getNorskIdentitetsnummer() == null && arbeidstaker.getOrganisasjonsnummer() == null) {
@@ -182,7 +184,17 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
             tilsynsordning.getPerioder().forEach((periode, periodeInfo) -> {
                 validerGyldigPeriode(periode, "tilsynsordning.perioder", false, feil);
                 validerPeriodeInnenforSøknadsperiode(periode, "tilsynsordning.perioder", søknadsperiode, feil);
+                validerDurationIkkeNegativ(periodeInfo.getEtablertTilsynTimerPerDag(), "tilsynsordning.perioder", feil);
             });
+        }
+    }
+
+    private void validerDurationIkkeNegativ(Duration duration,String felt,  List<Feil> feil) {
+        if (duration == null) {
+            return;
+        }
+        if (duration.isNegative()) {
+            feil.add(new Feil(felt, "ugyldigFeltVerdi", "Duration kan ikke være negativ"));
         }
     }
 }

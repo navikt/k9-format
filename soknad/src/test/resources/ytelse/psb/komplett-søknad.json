@@ -55,36 +55,36 @@
     "tilsynsordning" : {
       "perioder" : {
         "2019-01-01/2019-01-01" : {
-          "etablertTilsynTimerPerDag" : 7.5
+          "etablertTilsynTimerPerDag" : "PT7H30M"
         },
         "2019-01-02/2019-01-02" : {
-          "etablertTilsynTimerPerDag" : 7.5
+          "etablertTilsynTimerPerDag" : "PT7H30M"
         },
         "2019-01-03/2019-01-09" : {
-          "etablertTilsynTimerPerDag" : 7.5
+          "etablertTilsynTimerPerDag" : "PT7H30M"
         }
       }
     },
     "arbeidstid" : {
-      "frilanserArbeidstidInfo" : null,
-      "selvstendigNæringsdrivendeArbeidstidInfo" : null,
       "arbeidstakerList" : [ {
         "norskIdentitetsnummer" : null,
         "organisasjonsnummer" : "999999999",
         "arbeidstidInfo" : {
+          "jobberNormaltTimerPerDag" : "PT7H30M",
           "perioder" : {
             "2018-12-30/2019-10-20" : {
-              "jobberNormaltTimerPerDag" : 3.5,
-              "faktiskArbeidTimerPerDag" : 7.5
+              "faktiskArbeidTimerPerDag" : "PT7H30M"
             }
           }
         }
-      } ]
+      } ],
+      "frilanserArbeidstidInfo" : null,
+      "selvstendigNæringsdrivendeArbeidstidInfo" : null
     },
     "uttak" : {
       "perioder" : {
         "2018-12-30/2019-10-20" : {
-          "timerPleieAvBarnetPerDag" : 7
+          "timerPleieAvBarnetPerDag" : "PT7H30M"
         }
       }
     },

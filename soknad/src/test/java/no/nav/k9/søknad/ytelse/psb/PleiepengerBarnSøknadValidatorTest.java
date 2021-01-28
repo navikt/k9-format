@@ -5,10 +5,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.JsonUtils;
@@ -28,9 +28,7 @@ import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnValidator;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.PeriodeInfo;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningOpphold;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynsordningSvar;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo;
 
 public class PleiepengerBarnSøknadValidatorTest {
     private static final PleiepengerSyktBarnValidator validator = new PleiepengerSyktBarnValidator();
@@ -60,7 +58,7 @@ public class PleiepengerBarnSøknadValidatorTest {
         var søknad = TestUtils.komplettBuilder();
         Tilsynsordning tilsynsordning = new Tilsynsordning(Map.of(
                 new Periode(LocalDate.now(), LocalDate.now()),
-                new PeriodeInfo(BigDecimal.valueOf(7))));
+                new TilsynPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
         søknad.setTilsynsordning(tilsynsordning);
 
         verifyHarFeil(søknad);
@@ -70,11 +68,11 @@ public class PleiepengerBarnSøknadValidatorTest {
     public void søknadMedArbeidsSomOverlapper() {
         var søknad = TestUtils.komplettBuilder();
         var søknadsperiode = søknad.getSøknadsperiode();
-        var arbeidstidInfo = new ArbeidstidInfo(Map.of(
+        var arbeidstidInfo = new ArbeidstidInfo(Duration.ofHours(7).plusMinutes(30), Map.of(
                 søknadsperiode,
-                new ArbeidstidPeriodeInfo(BigDecimal.valueOf(8), BigDecimal.valueOf(8)),
+                new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30)),
                 new Periode(søknadsperiode.getFraOgMed().plusDays(7), søknadsperiode.getTilOgMed().minusDays(7)),
-                new ArbeidstidPeriodeInfo(BigDecimal.valueOf(8), BigDecimal.valueOf(8))));
+                new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
         var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), arbeidstidInfo);
         søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker, arbeidstidInfo);
         assertThat(verifyHarFeil(søknad)).hasSize(2);
@@ -85,9 +83,9 @@ public class PleiepengerBarnSøknadValidatorTest {
     public void søknadMedNullJobberNormaltTimerPerDag() {
         var søknad = TestUtils.komplettBuilder();
         var søknadsperiode = søknad.getSøknadsperiode();
-        var arbeidstidInfo = new ArbeidstidInfo(Map.of(
+        var arbeidstidInfo = new ArbeidstidInfo(null, Map.of(
                 søknadsperiode,
-                new ArbeidstidPeriodeInfo(null, BigDecimal.valueOf(8))));
+                new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
         var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), arbeidstidInfo);
         søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker, arbeidstidInfo);
         verifyHarFeil(søknad);
@@ -97,9 +95,9 @@ public class PleiepengerBarnSøknadValidatorTest {
     public void søknadMedNullFaktiskArbeidTimerPerDag() {
         var søknad = TestUtils.komplettBuilder();
         var søknadsperiode = søknad.getSøknadsperiode();
-        var arbeidstidInfo = new ArbeidstidInfo(Map.of(
+        var arbeidstidInfo = new ArbeidstidInfo(Duration.ofHours(7).plusMinutes(30), Map.of(
                 søknadsperiode,
-                new ArbeidstidPeriodeInfo(BigDecimal.valueOf(8), null)));
+                new ArbeidstidPeriodeInfo(null)));
         var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), arbeidstidInfo);
         søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker, arbeidstidInfo);
         verifyHarFeil(søknad);
@@ -109,9 +107,9 @@ public class PleiepengerBarnSøknadValidatorTest {
     public void søknadMedNegativNormaltArbeidTimerPerDag() {
         var søknad = TestUtils.komplettBuilder();
         var søknadsperiode = søknad.getSøknadsperiode();
-        var arbeidstidInfo = new ArbeidstidInfo(Map.of(
+        var arbeidstidInfo = new ArbeidstidInfo(Duration.ofHours(-8), Map.of(
                 søknadsperiode,
-                new ArbeidstidPeriodeInfo(BigDecimal.valueOf(-20), BigDecimal.valueOf(8))));
+                new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
         var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), arbeidstidInfo);
         søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker, arbeidstidInfo);
         verifyHarFeil(søknad);
@@ -121,9 +119,9 @@ public class PleiepengerBarnSøknadValidatorTest {
     public void søknadMedNegativFaktiskArbeidTimerPerDag() {
         var søknad = TestUtils.komplettBuilder();
         var søknadsperiode = søknad.getSøknadsperiode();
-        var arbeidstidInfo = new ArbeidstidInfo(Map.of(
+        var arbeidstidInfo = new ArbeidstidInfo(Duration.ofHours(7).plusMinutes(30), Map.of(
                 søknadsperiode,
-                new ArbeidstidPeriodeInfo(BigDecimal.valueOf(8), BigDecimal.valueOf(-8))));
+                new ArbeidstidPeriodeInfo(Duration.ofHours(-7).plusMinutes(30))));
         var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), arbeidstidInfo);
         søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker, arbeidstidInfo);
         verifyHarFeil(søknad);
@@ -133,9 +131,9 @@ public class PleiepengerBarnSøknadValidatorTest {
     public void søknadMedNullFeilArbeidstaker() {
         var søknad = TestUtils.komplettBuilder();
         var søknadsperiode = søknad.getSøknadsperiode();
-        var arbeidstidInfo = new ArbeidstidInfo(Map.of(
+        var arbeidstidInfo = new ArbeidstidInfo(Duration.ofHours(7).plusMinutes(30), Map.of(
                 søknadsperiode,
-                new ArbeidstidPeriodeInfo(BigDecimal.valueOf(8), BigDecimal.valueOf(8))));
+                new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
         var arbeidstaker = new Arbeidstaker(null, null, arbeidstidInfo);
         søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker, arbeidstidInfo);
         verifyHarFeil(søknad);
@@ -145,9 +143,9 @@ public class PleiepengerBarnSøknadValidatorTest {
     public void søknadMedIkkeEntydigInfoForArbeidstaker() {
         var søknad = TestUtils.komplettBuilder();
         var søknadsperiode = søknad.getSøknadsperiode();
-        var arbeidstidInfo = new ArbeidstidInfo(Map.of(
+        var arbeidstidInfo = new ArbeidstidInfo(Duration.ofHours(7).plusMinutes(30), Map.of(
                 søknadsperiode,
-                new ArbeidstidPeriodeInfo(BigDecimal.valueOf(8), BigDecimal.valueOf(8))));
+                new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
         var arbeidstaker = new Arbeidstaker(NorskIdentitetsnummer.of("29099012345"), Organisasjonsnummer.of("88888888"), arbeidstidInfo);
         søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker, arbeidstidInfo);
         verifyHarFeil(søknad);
