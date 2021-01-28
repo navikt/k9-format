@@ -9,10 +9,10 @@ import no.nav.k9.søknad.felles.type.Periode;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
-import static java.util.Collections.*;
+import static java.util.Collections.unmodifiableMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -26,7 +26,7 @@ public class Beredskap {
     @JsonCreator
     public Beredskap(
             @JsonProperty(value = "perioder") @NotEmpty @Valid Map<Periode, BeredskapPeriodeInfo> perioder) {
-        this.perioder = new HashMap<>(perioder);
+        this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
     }
 
     public Beredskap() {
@@ -37,7 +37,7 @@ public class Beredskap {
     }
 
     public Beredskap medPerioder(Map<Periode, BeredskapPeriodeInfo> perioder) {
-        this.perioder = new HashMap<>(perioder);
+        this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
         return this;
     }
 

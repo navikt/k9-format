@@ -4,14 +4,11 @@ import com.fasterxml.jackson.annotation.*;
 import no.nav.k9.søknad.felles.type.Periode;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
-import java.util.HashMap;
 import java.time.Duration;
 import java.util.Map;
+import java.util.TreeMap;
 
-import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -33,7 +30,7 @@ public class ArbeidstidInfo {
     public ArbeidstidInfo(@JsonProperty(value = "jobberNormaltTimerPerDag", required = true) @Valid @NotNull Duration jobberNormaltTimerPerDag,
             @JsonProperty(value = "perioder") @Valid @NotNull Map<Periode, ArbeidstidPeriodeInfo> perioder) {
         this.jobberNormaltTimerPerDag = jobberNormaltTimerPerDag;
-        this.perioder = new HashMap<>(perioder);
+        this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
     }
 
     public ArbeidstidInfo() {
@@ -53,12 +50,7 @@ public class ArbeidstidInfo {
     }
 
     public ArbeidstidInfo medPerioder(Map<Periode, ArbeidstidPeriodeInfo> perioder) {
-        this.perioder = new HashMap<>(perioder);
-        return this;
-    }
-
-    public ArbeidstidInfo leggeTilPeriode(Map<Periode, ArbeidstidPeriodeInfo> perioder) {
-        this.perioder.putAll(perioder);
+        this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
         return this;
     }
 

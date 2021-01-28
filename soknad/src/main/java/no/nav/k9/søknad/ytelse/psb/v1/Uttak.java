@@ -9,8 +9,8 @@ import no.nav.k9.søknad.felles.type.Periode;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -22,7 +22,7 @@ public class Uttak {
 
     @JsonCreator
     public Uttak( @JsonProperty(value = "perioder", required = true) @Valid @NotNull Map<Periode, UttakPeriodeInfo> perioder ) {
-        this.perioder = new HashMap<>(perioder);
+        this.perioder = (perioder == null ) ? new TreeMap<>() : new TreeMap<>(perioder);
     }
 
     public Uttak() {
@@ -32,8 +32,8 @@ public class Uttak {
         return perioder;
     }
 
-    public Uttak setPerioder(Map<Periode, UttakPeriodeInfo> perioder) {
-        this.perioder = new HashMap<>(perioder);
+    public Uttak medPerioder(Map<Periode, UttakPeriodeInfo> perioder) {
+        this.perioder = (perioder == null ) ? new TreeMap<>() : new TreeMap<>(perioder);
         return this;
     }
 

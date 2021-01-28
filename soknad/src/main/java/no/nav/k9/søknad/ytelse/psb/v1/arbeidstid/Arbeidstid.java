@@ -31,7 +31,7 @@ public class Arbeidstid {
     public Arbeidstid(@JsonProperty(value = "arbeidstakerList", required = true) @Valid List<Arbeidstaker> arbeidstakerList,
                       @JsonProperty(value = "frilanserArbeidstidInfo", required = true) @Valid ArbeidstidInfo frilanserArbeidstidInfo,
                       @JsonProperty(value = "selvstendigNæringsdrivendeArbeidstidInfo", required = true) @Valid ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo) {
-        this.arbeidstakerList = new ArrayList<>(arbeidstakerList);
+        this.arbeidstakerList = (arbeidstakerList == null ) ? new ArrayList<>() : new ArrayList<>(arbeidstakerList);
         this.frilanserArbeidstidInfo = frilanserArbeidstidInfo;
         this.selvstendigNæringsdrivendeArbeidstidInfo = selvstendigNæringsdrivendeArbeidstidInfo;
     }
@@ -44,7 +44,7 @@ public class Arbeidstid {
     }
 
     public Arbeidstid medArbeidstakerList(List<Arbeidstaker> arbeidstakerList) {
-        this.arbeidstakerList = new ArrayList<>(arbeidstakerList);
+        this.arbeidstakerList = (arbeidstakerList == null ) ? new ArrayList<>() : new ArrayList<>(arbeidstakerList);
         return this;
     }
 
