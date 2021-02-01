@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import no.nav.k9.søknad.felles.type.IdentifisertPerson;
+import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerKroniskSyktBarn;
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerMidlertidigAlene;
@@ -39,7 +39,7 @@ public interface Ytelse {
     /**
      * @return andre berørte, kjente identifiserte personer (enn søker) - f.eks. barn, ektefelle, verge etc. som er involveres i denne saken.
      */
-    List<IdentifisertPerson> getBerørtePersoner();
+    List<Person> getBerørtePersoner();
 
     enum Type {
         OMSORGSPENGER_UTBETALING(Ytelse.OMSORGSPENGER_UTBETALING),

@@ -21,7 +21,7 @@ import no.nav.k9.søknad.felles.fravær.FraværPeriode;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
-import no.nav.k9.søknad.felles.type.IdentifisertPerson;
+import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
@@ -104,7 +104,7 @@ public class OmsorgspengerUtbetaling implements Ytelse {
     }
 
     @Override
-    public List<IdentifisertPerson> getBerørtePersoner() {
+    public List<Person> getBerørtePersoner() {
         return fosterbarn == null ? null : Collections.unmodifiableList(fosterbarn);
     }
 

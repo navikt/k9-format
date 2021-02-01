@@ -21,7 +21,7 @@ import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
 import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.felles.type.IdentifisertPerson;
+import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
@@ -228,7 +228,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     }
     
     @Override
-    public List<IdentifisertPerson> getBerørtePersoner() {
+    public List<Person> getBerørtePersoner() {
         return List.of(barn); // kjenner ikke de andre søkerne her, kun pleietrengende som er identifisert
     }
 

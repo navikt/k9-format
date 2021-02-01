@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
-import no.nav.k9.søknad.felles.type.IdentifisertPerson;
+import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
@@ -84,7 +84,7 @@ public class OmsorgspengerMidlertidigAlene implements OmsorgspengerUtvidetRett {
     }
 
     @Override
-    public List<IdentifisertPerson> getBerørtePersoner() {
+    public List<Person> getBerørtePersoner() {
         return Stream.of(barn, List.of(annenForelder)).flatMap(List::stream).collect(Collectors.toList());
     }
 

@@ -1,6 +1,6 @@
 package no.nav.k9.søknad.felles.type;
 
-public interface IdentifisertPerson {
+public interface Person {
 
     PersonIdent getPersonIdent();
 

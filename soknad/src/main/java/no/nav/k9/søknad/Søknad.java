@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
-import no.nav.k9.søknad.felles.type.IdentifisertPerson;
+import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.felles.type.Språk;
 import no.nav.k9.søknad.felles.type.SøknadId;
 import no.nav.k9.søknad.ytelse.Ytelse;
@@ -156,7 +156,7 @@ public class Søknad implements Innsending {
         return this;
     }
 
-    public List<IdentifisertPerson> getBerørtePersoner() {
+    public List<Person> getBerørtePersoner() {
         return ytelse == null ? Collections.emptyList() : ytelse.getBerørtePersoner();
     }
 
