@@ -12,12 +12,14 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.Person;
+import no.nav.k9.søknad.felles.type.Språk;
 import no.nav.k9.søknad.felles.type.SøknadId;
 import no.nav.k9.søknad.ytelse.Ytelse;
 
@@ -47,21 +49,40 @@ public class Søknad implements Innsending {
     private Søker søker;
 
     @Valid
+    @JsonProperty(value = "språk", required = false)
+    private Språk språk = Språk.NORSK_BOKMÅL;
+
+    @JsonManagedReference
+    @Valid
     @NotNull
     @JsonProperty(value = "ytelse", required = true)
     private Ytelse ytelse;
+
+    public Søknad() {
+        //
+    }
 
     @JsonCreator
     public Søknad(@JsonProperty(value = "søknadId", required = true) @Valid @NotNull SøknadId søknadId,
                   @JsonProperty(value = "versjon", required = true) @Valid @NotNull Versjon versjon,
                   @JsonProperty(value = "mottattDato", required = true) @Valid @NotNull ZonedDateTime mottattDato,
                   @JsonProperty(value = "søker", required = true) @Valid @NotNull Søker søker,
+                  @JsonProperty(value = "språk", required = false) @Valid Språk språk,
                   @JsonProperty(value = "ytelse", required = true) @Valid @NotNull Ytelse ytelse) {
         this.søknadId = søknadId;
         this.versjon = versjon;
         this.mottattDato = mottattDato;
         this.søker = søker;
         this.ytelse = ytelse;
+        this.språk = språk;
+    }
+
+    public Søknad(@JsonProperty(value = "søknadId", required = true) @Valid @NotNull SøknadId søknadId,
+                  @JsonProperty(value = "versjon", required = true) @Valid @NotNull Versjon versjon,
+                  @JsonProperty(value = "mottattDato", required = true) @Valid @NotNull ZonedDateTime mottattDato,
+                  @JsonProperty(value = "søker", required = true) @Valid @NotNull Søker søker,
+                  @JsonProperty(value = "ytelse", required = true) @Valid @NotNull Ytelse ytelse) {
+        this(søknadId, versjon, mottattDato, søker, Språk.NORSK_BOKMÅL, ytelse);
     }
 
     @Override
@@ -87,8 +108,52 @@ public class Søknad implements Innsending {
         return mottattDato;
     }
 
+    public Språk getSpråk() {
+        return språk;
+    }
+
     public void setMottattDato(ZonedDateTime mottattDato) {
         this.mottattDato = mottattDato;
+    }
+
+    public Søknad medMottattDato(ZonedDateTime mottattDato) {
+        this.mottattDato = mottattDato;
+        return this;
+    }
+
+    public Søknad medSpråk(Språk språk) {
+        this.språk = språk;
+        return this;
+    }
+
+    public Søknad medSøknadId(String søknadId) {
+        this.søknadId = new SøknadId(søknadId);
+        return this;
+    }
+
+    public Søknad medSøknadId(SøknadId søknadId) {
+        this.søknadId = søknadId;
+        return this;
+    }
+
+    public Søknad medVersjon(String versjon) {
+        this.versjon = new Versjon(versjon);
+        return this;
+    }
+
+    public Søknad medVersjon(Versjon versjon) {
+        this.versjon = versjon;
+        return this;
+    }
+
+    public Søknad medSøker(Søker søker) {
+        this.søker = søker;
+        return this;
+    }
+
+    public Søknad medYtelse(Ytelse ytelse) {
+        this.ytelse = ytelse;
+        return this;
     }
 
     public List<Person> getBerørtePersoner() {

@@ -39,7 +39,7 @@ public class OmsorgspengerSøknadValidator extends SøknadValidator<Omsorgspenge
     private static void validerSøker(Søker søker, List<Feil> feil) {
         if (søker == null) {
             feil.add(new Feil("søker", PÅKREVD, "Søker må settes i søknaden."));
-        } else if (søker.norskIdentitetsnummer == null) {
+        } else if (søker.getPersonIdent() == null) {
             feil.add(new Feil("søker.norskIdentitetsnummer", PÅKREVD, "Søkers Personnummer/D-nummer må settes i søknaden."));
         }
     }

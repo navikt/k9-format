@@ -30,6 +30,14 @@ public class Frilanser {
         this.startdato = startdato;
         this.jobberFortsattSomFrilans = jobberFortsattSomFrilans;
     }
+    
+    public LocalDate getStartdato() {
+        return startdato;
+    }
+    
+    public Boolean getJobberFortsattSomFrilans() {
+        return jobberFortsattSomFrilans;
+    }
 
     public static final class Builder {
         private LocalDate startdato;

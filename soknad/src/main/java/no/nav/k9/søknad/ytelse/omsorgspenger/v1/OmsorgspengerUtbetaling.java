@@ -1,6 +1,7 @@
 package no.nav.k9.søknad.ytelse.omsorgspenger.v1;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -20,8 +21,8 @@ import no.nav.k9.søknad.felles.fravær.FraværPeriode;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
-import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
+import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 
@@ -32,12 +33,12 @@ public class OmsorgspengerUtbetaling implements Ytelse {
 
     @Valid
     @JsonProperty("fosterbarn")
-    private final List<Barn> fosterbarn;
+    private List<Barn> fosterbarn;
 
     @Valid
     @NotNull
     @JsonProperty(value = "aktivitet", required = true)
-    private final ArbeidAktivitet aktivitet;
+    private ArbeidAktivitet aktivitet;
 
     @Valid
     @JsonProperty(value = "bosteder")
@@ -51,7 +52,11 @@ public class OmsorgspengerUtbetaling implements Ytelse {
     @NotNull
     @Size(min = 1, message = "Minst 1 fraværsperiode må oppgis")
     @JsonProperty(value = "fraværsperioder", required = true)
-    private final List<FraværPeriode> fraværsperioder;
+    private List<FraværPeriode> fraværsperioder;
+
+    public OmsorgspengerUtbetaling() {
+        //
+    }
 
     @JsonCreator
     public OmsorgspengerUtbetaling(@JsonProperty("fosterbarn") @Valid List<Barn> fosterbarn,
@@ -66,7 +71,7 @@ public class OmsorgspengerUtbetaling implements Ytelse {
     }
 
     public List<Barn> getFosterbarn() {
-        return fosterbarn;
+        return fosterbarn == null ? null : Collections.unmodifiableList(fosterbarn);
     }
 
     public ArbeidAktivitet getAktivitet() {
@@ -74,7 +79,7 @@ public class OmsorgspengerUtbetaling implements Ytelse {
     }
 
     public List<FraværPeriode> getFraværsperioder() {
-        return fraværsperioder;
+        return fraværsperioder == null? null: Collections.unmodifiableList(fraværsperioder);
     }
 
     public Bosteder getBosteder() {
@@ -100,12 +105,41 @@ public class OmsorgspengerUtbetaling implements Ytelse {
 
     @Override
     public List<Person> getBerørtePersoner() {
-        return List.copyOf(fosterbarn);
+        return fosterbarn == null ? null : Collections.unmodifiableList(fosterbarn);
     }
 
     @Override
     public YtelseValidator getValidator() {
         return new OmsorgspengerUtbetalingValidator();
+    }
+
+    public OmsorgspengerUtbetaling medFosterbarn(List<Barn> barn) {
+        if (this.fraværsperioder == null)
+            this.fosterbarn = new ArrayList<>();
+        this.fosterbarn.addAll(barn);
+        return this;
+    }
+
+    public OmsorgspengerUtbetaling medFraværsperioder(List<FraværPeriode> fraværsperioder) {
+        if (this.fraværsperioder == null)
+            this.fraværsperioder = new ArrayList<>();
+        this.fraværsperioder.addAll(fraværsperioder);
+        return this;
+    }
+
+    public OmsorgspengerUtbetaling medAktivitet(ArbeidAktivitet arbeidAktivitet) {
+        this.aktivitet = arbeidAktivitet;
+        return this;
+    }
+
+    public OmsorgspengerUtbetaling medBosteder(Bosteder bosteder) {
+        this.bosteder = bosteder;
+        return this;
+    }
+
+    public OmsorgspengerUtbetaling medUtenlandsopphold(Utenlandsopphold utenlandsopphold) {
+        this.utenlandsopphold = utenlandsopphold;
+        return this;
     }
 
     @Size(max = 0, message = "${validatedValue}")

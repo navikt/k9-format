@@ -44,6 +44,18 @@ public class SelvstendigNæringsdrivende {
         return new SelvstendigNæringsdrivende.Builder();
     }
 
+    public Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> getPerioder() {
+        return perioder;
+    }
+
+    public String getVirksomhetNavn() {
+        return virksomhetNavn;
+    }
+
+    public Organisasjonsnummer getOrganisasjonsnummer() {
+        return organisasjonsnummer;
+    }
+
     @JsonCreator
     public SelvstendigNæringsdrivende(
                                       @JsonProperty(value = "perioder", required = true) Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> perioder,

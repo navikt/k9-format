@@ -16,22 +16,26 @@ public class ArbeidAktivitet {
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     @JsonProperty(value = "selvstendigNæringsdrivende")
     @Valid
-    private final List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende;
+    private List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende;
 
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     @JsonProperty(value = "frilanser")
     @Valid
-    private final Frilanser frilanser;
+    private Frilanser frilanser;
 
     @Valid
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     @JsonProperty(value = "arbeidstaker")
     private List<Arbeidstaker> arbeidstaker;
 
+    public ArbeidAktivitet() {
+        //
+    }
+
     @JsonCreator
-    private ArbeidAktivitet(@JsonProperty(value = "arbeidstaker") @Valid List<Arbeidstaker> arbeidstaker,
-                      @JsonProperty(value = "selvstendigNæringsdrivende") List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende,
-                      @JsonProperty(value = "frilanser") Frilanser frilanser) {
+    public ArbeidAktivitet(@JsonProperty(value = "arbeidstaker") @Valid List<Arbeidstaker> arbeidstaker,
+                            @JsonProperty(value = "selvstendigNæringsdrivende") List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende,
+                            @JsonProperty(value = "frilanser") Frilanser frilanser) {
         this.arbeidstaker = arbeidstaker;
         this.selvstendigNæringsdrivende = (selvstendigNæringsdrivende == null) ? emptyList() : unmodifiableList(selvstendigNæringsdrivende);
         this.frilanser = frilanser;
@@ -53,6 +57,38 @@ public class ArbeidAktivitet {
         return arbeidstaker;
     }
 
+    public ArbeidAktivitet medSelvstendigNæringsdrivende(List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende) {
+        if (this.selvstendigNæringsdrivende == null)
+            this.selvstendigNæringsdrivende = new ArrayList<>();
+        this.selvstendigNæringsdrivende.addAll(selvstendigNæringsdrivende);
+        return this;
+    }
+
+    public ArbeidAktivitet medArbeidstaker(Arbeidstaker arbeidstaker) {
+        if (this.arbeidstaker == null)
+            this.arbeidstaker = new ArrayList<>();
+        this.arbeidstaker.add(arbeidstaker);
+        return this;
+    }
+
+    public ArbeidAktivitet medArbeidstaker(List<Arbeidstaker> arbeidstaker) {
+        if (this.arbeidstaker == null)
+            this.arbeidstaker = new ArrayList<>();
+        this.arbeidstaker.addAll(arbeidstaker);
+        return this;
+    }
+
+    public ArbeidAktivitet medSelvstendigNæringsdrivende(SelvstendigNæringsdrivende selvstendigNæringsdrivende) {
+        if (this.selvstendigNæringsdrivende == null)
+            this.selvstendigNæringsdrivende = new ArrayList<>();
+        this.selvstendigNæringsdrivende.add(selvstendigNæringsdrivende);
+        return this;
+    }
+
+    public ArbeidAktivitet medFrilanser(Frilanser frilanser) {
+        this.frilanser = frilanser;
+        return this;
+    }
 
     public static final class Builder {
         private List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende = new ArrayList<>();

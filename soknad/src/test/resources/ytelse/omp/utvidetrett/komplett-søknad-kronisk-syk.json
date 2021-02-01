@@ -1,0 +1,26 @@
+{
+  "søknadId": "$søknadId",
+  "mottattDato": "2018-01-02T03:04:05.006Z",
+  "versjon" : "0.1",
+  "språk": "nb",
+  "ytelse" : {
+      "type" : "OMP_UTV_KS",
+      "kroniskEllerFunksjonshemming": false,
+      "barn": {
+        "navn": "Kari",
+        "norskIdentifikator": "2323",
+        "fødselsdato": "2019-03-01",
+        "aktørId": null
+      }
+  },
+  "søker": {
+    "fødselsnummer": "1212",
+    "fornavn": "Ola",
+    "mellomnavn": "Mellomnavn",
+    "etternavn": "Nordmann",
+    "fødselsdato": null,
+    "aktørId": "123456"
+  },
+  "harBekreftetOpplysninger": true,
+  "harForståttRettigheterOgPlikter": true
+}

@@ -19,7 +19,6 @@ import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
