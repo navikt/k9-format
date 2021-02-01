@@ -6,11 +6,11 @@
       "type" : "OMP_UTV_KS",
       "kroniskEllerFunksjonshemming": false,
       "barn": {
-        "norskIdentifikator": "23232323232",
+        "norskIdentitetsnummer": "23232323232",
         "fødselsdato": "2020-03-03"
       }
   },
   "søker": {
-    "fødselsnummer": "23232323231"
+    "norskIdentitetsnummer": "23232323231"
   }
 }
