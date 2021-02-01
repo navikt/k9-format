@@ -1,6 +1,7 @@
 package no.nav.k9.søknad.felles.personopplysninger;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
@@ -12,13 +13,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import no.nav.k9.søknad.felles.type.IdentifisertPerson;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
-import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.felles.type.PersonIdent;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-public class Barn implements Person {
+public class Barn implements IdentifisertPerson {
 
     @JsonAlias({ "fødselsnummer", "norskIdentifikator" })
     @JsonProperty(value = "norskIdentitetsnummer")
@@ -28,10 +29,6 @@ public class Barn implements Person {
     @JsonProperty(value = "fødselsdato")
     @Valid
     public final LocalDate fødselsdato;
-
-    public static Builder builder() {
-        return new Builder();
-    }
 
     @JsonCreator
     public Barn(
@@ -61,6 +58,30 @@ public class Barn implements Person {
         return getPersonIdent() != null || fødselsdato != null;
     }
 
+    /** @deprecated brukt ctor. */
+    @Deprecated(forRemoval = true)
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(norskIdentitetsnummer, fødselsdato);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this)
+            return true;
+        if (obj == null || !getClass().equals(obj.getClass()))
+            return false;
+        var other = (Barn) obj;
+        return Objects.equals(getPersonIdent(), other.getPersonIdent())
+            && Objects.equals(getFødselsdato(), other.getFødselsdato());
+    }
+
+    /** @deprecated brukt ctor. */
+    @Deprecated(forRemoval = true)
     public static final class Builder {
         private NorskIdentitetsnummer norskIdentitetsnummer;
         private LocalDate fødselsdato;

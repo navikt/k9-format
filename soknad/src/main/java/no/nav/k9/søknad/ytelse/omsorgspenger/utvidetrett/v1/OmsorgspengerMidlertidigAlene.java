@@ -1,7 +1,12 @@
 package no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -13,42 +18,50 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
-import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.IdentifisertPerson;
+import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-public class OmsorgspengerKroniskSyktBarn implements OmsorgspengerUtvidetRett {
+public class OmsorgspengerMidlertidigAlene implements OmsorgspengerUtvidetRett {
+    
+    @Valid
+    @JsonProperty(value = "annenForelder", required = true)
+    @NotNull
+    private AnnenForelder annenForelder;
 
     @Valid
-    @JsonProperty(value = "barn", required = true)
+    @JsonProperty(value = "barn")
     @NotNull
-    private Barn barn;
+    private List<Barn> barn;
 
-    @JsonProperty(value = "kroniskEllerFunksjonshemming")
-    @Valid
-    @NotNull
-    private Boolean kroniskEllerFunksjonshemming;
-
-    public OmsorgspengerKroniskSyktBarn() {
+    public OmsorgspengerMidlertidigAlene() {
     }
 
     @JsonCreator
-    public OmsorgspengerKroniskSyktBarn(@JsonProperty(value = "barn", required = true) @Valid @NotNull Barn barn,
-                                        @JsonProperty(value = "kroniskEllerFunksjonshemming") @Valid @NotNull Boolean kroniskEllerFunksjonshemming) {
-        this.barn = Objects.requireNonNull(barn, "barn");
-        this.kroniskEllerFunksjonshemming = Objects.requireNonNull(kroniskEllerFunksjonshemming, "kroniskEllerFunksjonshemming");
+    public OmsorgspengerMidlertidigAlene(@JsonProperty(value = "barn", required = true) @Valid @NotNull Collection<Barn> barn,
+                                         @JsonProperty(value = "annenForelder", required = true) @Valid @NotNull AnnenForelder annenForelder) {
+        this.annenForelder = Objects.requireNonNull(annenForelder, "annenForelder");
+        this.barn = barn == null ? null : new ArrayList<>(barn);
     }
 
-    public OmsorgspengerKroniskSyktBarn medBarn(Barn barn) {
-        this.barn = Objects.requireNonNull(barn, "barn");
+    public OmsorgspengerMidlertidigAlene medBarn(Barn... barn) {
+        if (barn == null || barn.length == 0) {
+            this.barn = null;
+            return this;
+        }
+        
+        if (this.barn == null) {
+            this.barn = new ArrayList<>();
+        }
+        this.barn.addAll(Arrays.asList(Objects.requireNonNull(barn, "barn")));
         return this;
     }
 
-    public OmsorgspengerKroniskSyktBarn medKroniskEllerFunksjonshemming(Boolean kroniskEllerFunksjonshemming) {
-        this.kroniskEllerFunksjonshemming = Objects.requireNonNull(kroniskEllerFunksjonshemming, "kroniskEllerFunksjonshemming");
+    public OmsorgspengerMidlertidigAlene medAnnenForelder(AnnenForelder annenForelder) {
+        this.annenForelder = annenForelder;
         return this;
     }
 
@@ -64,12 +77,12 @@ public class OmsorgspengerKroniskSyktBarn implements OmsorgspengerUtvidetRett {
 
     @Override
     public List<IdentifisertPerson> getBerørtePersoner() {
-        return List.of(barn);
+        return Stream.of(barn, List.of(annenForelder)).flatMap(List::stream).collect(Collectors.toList());
     }
 
     @Override
     public Periode getSøknadsperiode() {
-        return new Periode(barn.getFødselsdato(), null);
+        return null;
     }
 
     public static class MinValidator extends YtelseValidator {

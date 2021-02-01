@@ -2,6 +2,10 @@ package no.nav.søknad.ytelse.omsorgspenger.utvidetrett;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -9,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.Feil;
+import no.nav.k9.søknad.felles.personopplysninger.Barn;
+import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerKroniskSyktBarn;
@@ -21,7 +27,7 @@ public class OmsorgspengerKroniskSyktBarnValidatorTest {
         var søknad = TestUtils.minimumSøknad();
         verifyIngenFeil(søknad);
     }
-    
+
     @Test
     public void minimumJsonSøknad() {
         var søknad = TestUtils.minimumJsonSøknad();
@@ -50,5 +56,30 @@ public class OmsorgspengerKroniskSyktBarnValidatorTest {
         } catch (ValideringsFeil ex) {
             return ex.getFeil();
         }
+    }
+
+    private static class TestUtils {
+
+        private static String jsonFromFile(String filename) {
+            try {
+                return Files.readString(Path.of("src/test/resources/ytelse/omp/utvidetrett/" + filename));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        static Søknad komplettSøknad() {
+            return Søknad.SerDes.deserialize(jsonFromFile("komplett-søknad-kronisk-syk.json"));
+        }
+
+        static Søknad minimumJsonSøknad() {
+            return Søknad.SerDes.deserialize(jsonFromFile("minimum-søknad-kronisk-syk.json"));
+        }
+
+        static OmsorgspengerKroniskSyktBarn minimumSøknad() {
+            var barn = new Barn(null, LocalDate.now());
+            return new OmsorgspengerKroniskSyktBarn().medBarn(barn);
+        }
+
     }
 }

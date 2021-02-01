@@ -11,13 +11,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import no.nav.k9.søknad.felles.type.IdentifisertPerson;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
-import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.felles.type.PersonIdent;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-public class Søker implements Person {
+public class Søker implements IdentifisertPerson {
 
     @JsonAlias({ "fødselsnummer", "norskIdentifikator" })
     @JsonProperty(value = "norskIdentitetsnummer", required = true)
@@ -26,8 +26,8 @@ public class Søker implements Person {
     public final NorskIdentitetsnummer norskIdentitetsnummer;
 
     @JsonCreator
-    private Søker(@JsonProperty(value = "norskIdentitetsnummer", required = true) NorskIdentitetsnummer norskIdentitetsnummer) {
-        this.norskIdentitetsnummer = norskIdentitetsnummer;
+    public Søker(@JsonProperty(value = "norskIdentitetsnummer", required = true) NorskIdentitetsnummer norskIdentitetsnummer) {
+        this.norskIdentitetsnummer = Objects.requireNonNull(norskIdentitetsnummer, "norskIdentitetsnummer");
     }
 
     @Override
@@ -51,10 +51,14 @@ public class Søker implements Person {
         return Objects.hash(norskIdentitetsnummer);
     }
 
+    /**@deprecated brukt ctor.*/
+    @Deprecated(forRemoval = true)
     public static Builder builder() {
         return new Builder();
     }
 
+    /**@deprecated brukt ctor.*/
+    @Deprecated(forRemoval = true)
     public static final class Builder {
         private NorskIdentitetsnummer norskIdentitetsnummer;
 

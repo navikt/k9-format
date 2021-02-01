@@ -39,10 +39,14 @@ public class Bosteder {
         return perioder;
     }
 
+    /**@deprecated brukt ctor.*/
+    @Deprecated(forRemoval = true)
     public static Builder builder() {
         return new Builder();
     }
 
+    /**@deprecated brukt ctor.*/
+    @Deprecated(forRemoval = true)
     public static final class Builder {
         private Map<Periode, BostedPeriodeInfo> perioder;
 
@@ -74,7 +78,7 @@ public class Bosteder {
         public final Landkode land;
 
         @JsonCreator
-        private BostedPeriodeInfo(@JsonProperty(value = "land") Landkode land) {
+        public BostedPeriodeInfo(@JsonProperty(value = "land") Landkode land) {
             this.land = land;
         }
 
@@ -82,10 +86,14 @@ public class Bosteder {
             return land;
         }
 
+        /**@deprecated brukt ctor.*/
+        @Deprecated(forRemoval = true)
         public static Builder builder() {
             return new Builder();
         }
 
+        /**@deprecated brukt ctor.*/
+        @Deprecated(forRemoval = true)
         public static final class Builder {
             private Landkode land;
 

@@ -31,10 +31,14 @@ public class Utenlandsopphold {
         return perioder;
     }
 
+    /**@deprecated brukt ctor.*/
+    @Deprecated(forRemoval = true)
     public static Utenlandsopphold.Builder builder() {
         return new Builder();
     }
 
+    /**@deprecated brukt ctor.*/
+    @Deprecated(forRemoval = true)
     public static final class Builder {
         private Map<Periode, UtenlandsoppholdPeriodeInfo> perioder;
 

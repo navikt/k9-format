@@ -25,7 +25,7 @@ import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.felles.type.Person;
+import no.nav.k9.søknad.felles.type.IdentifisertPerson;
 import no.nav.k9.søknad.felles.type.SøknadId;
 
 /**
@@ -105,7 +105,7 @@ public class LegacySøknad implements Innsending {
         return barn == null ? Collections.emptyList() : Collections.unmodifiableList(barn);
     }
 
-    public List<Person> getBerørtePersoner() {
+    public List<IdentifisertPerson> getBerørtePersoner() {
         return List.copyOf(getBarn());
     }
 

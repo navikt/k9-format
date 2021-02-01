@@ -1,0 +1,22 @@
+{
+  "søknadId" : "123",
+  "versjon" : "0.1",
+  "mottattDato" : "2021-02-01T09:50:50.470Z",
+  "søker" : {
+    "norskIdentitetsnummer" : "123"
+  },
+  "språk" : "nb",
+  "ytelse" : {
+    "type" : "OMP_UTV_MA",
+    "barn" : [ {
+      "norskIdentitetsnummer" : "11111111111",
+      "fødselsdato" : null
+    } ],
+    "annenForelder" : {
+      "norskIdentitetsnummer" : "21111111111",
+      "situasjon" : "ANNET",
+      "situasjonBeskrivelse" : "en annen årsak",
+      "periode" : "2021-01-01/2021-07-01"
+    }
+  }
+}

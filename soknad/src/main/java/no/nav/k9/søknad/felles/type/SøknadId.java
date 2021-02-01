@@ -15,7 +15,10 @@ public class SøknadId {
     @Pattern(regexp = "^[\\p{Alnum}-]+$", message = "'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     public final String id;
 
-    private SøknadId(String id) {
+    public SøknadId(String id) {
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("Kan ikke ha null eller blank id");
+        }
         this.id = id;
     }
 
