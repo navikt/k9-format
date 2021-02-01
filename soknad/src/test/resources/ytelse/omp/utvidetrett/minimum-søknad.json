@@ -1,0 +1,16 @@
+{
+  "søknadId": "$søknadId",
+  "mottattDato": "2018-01-02T03:04:05.006Z",
+  "versjon" : "0.1",
+  "ytelse" : {
+      "type" : "OMP_UTV_KS",
+      "kroniskEllerFunksjonshemming": false,
+      "barn": {
+        "norskIdentifikator": "23232323232",
+        "fødselsdato": "2020-03-03"
+      }
+  },
+  "søker": {
+    "fødselsnummer": "23232323231"
+  }
+}

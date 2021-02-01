@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -19,6 +20,7 @@ import no.nav.k9.søknad.felles.type.PersonIdent;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Barn implements Person {
 
+    @JsonAlias({ "fødselsnummer", "norskIdentifikator" })
     @JsonProperty(value = "norskIdentitetsnummer")
     @Valid
     public final NorskIdentitetsnummer norskIdentitetsnummer;
@@ -39,9 +41,19 @@ public class Barn implements Person {
         this.fødselsdato = fødselsdato;
     }
 
+    @AssertTrue(message = "minst en av norskIdentitetsnummer eller fødselsdato må være satt")
+    private boolean isOk() {
+        return (norskIdentitetsnummer != null && norskIdentitetsnummer.verdi != null)
+            || (fødselsdato != null);
+    }
+
     @Override
     public PersonIdent getPersonIdent() {
         return norskIdentitetsnummer;
+    }
+
+    public LocalDate getFødselsdato() {
+        return fødselsdato;
     }
 
     @AssertTrue(message = "Enten fnr/dnr eller fødselsdato må oppgis")
