@@ -77,6 +77,14 @@ public class OmsorgspengerUtbetaling implements Ytelse {
         return fraværsperioder;
     }
 
+    public Bosteder getBosteder() {
+        return bosteder;
+    }
+
+    public Utenlandsopphold getUtenlandsopphold() {
+        return utenlandsopphold;
+    }
+
     /** har ikke egen søknadsperiode for omsorgspenger, men angir på bakggrunn av angitte fraværsperioder. */
     @Override
     public Periode getSøknadsperiode() {
