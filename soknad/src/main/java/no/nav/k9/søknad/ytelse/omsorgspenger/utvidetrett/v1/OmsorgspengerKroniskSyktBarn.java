@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -34,6 +35,7 @@ public class OmsorgspengerKroniskSyktBarn implements OmsorgspengerUtvidetRett {
     public OmsorgspengerKroniskSyktBarn() {
     }
 
+    @JsonCreator
     public OmsorgspengerKroniskSyktBarn(@JsonProperty(value = "barn", required = true) @Valid @NotNull Barn barn,
                                         @JsonProperty(value = "kroniskEllerFunksjonshemming") @Valid @NotNull Boolean kroniskEllerFunksjonshemming) {
         this.barn = Objects.requireNonNull(barn, "barn");
