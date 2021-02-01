@@ -58,7 +58,7 @@ public class Søknad implements Innsending {
     @JsonProperty(value = "ytelse", required = true)
     private Ytelse ytelse;
 
-    Søknad() {
+    public Søknad() {
         //
     }
 
