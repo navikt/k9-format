@@ -14,7 +14,6 @@ import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
-import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerKroniskSyktBarn;
@@ -23,21 +22,22 @@ public class OmsorgspengerKroniskSyktBarnValidatorTest {
     private static final YtelseValidator validator = new OmsorgspengerKroniskSyktBarn.MinValidator();
 
     @Test
-    public void minimumSøknadNullTest() {
+    void minimumSøknadNullTest() {
         var søknad = TestUtils.minimumSøknad();
         verifyIngenFeil(søknad);
     }
 
     @Test
-    public void minimumJsonSøknad() {
+    void minimumJsonSøknad() {
         var søknad = TestUtils.minimumJsonSøknad();
         verifyIngenFeil(søknad);
     }
 
     @Test
-    public void komplettSøknadSkalIkkeHaValideringsfeil() {
+    void komplettSøknadSkalIkkeHaValideringsfeil() {
         var søknad = TestUtils.komplettSøknad();
         verifyIngenFeil(søknad);
+        
     }
 
     private void verifyIngenFeil(Ytelse builder) {

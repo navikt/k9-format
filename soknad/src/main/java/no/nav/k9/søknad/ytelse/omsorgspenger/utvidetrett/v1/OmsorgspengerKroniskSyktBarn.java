@@ -7,14 +7,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
-import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.IdentifisertPerson;
+import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 
@@ -35,7 +34,6 @@ public class OmsorgspengerKroniskSyktBarn implements OmsorgspengerUtvidetRett {
     public OmsorgspengerKroniskSyktBarn() {
     }
 
-    @JsonCreator
     public OmsorgspengerKroniskSyktBarn(@JsonProperty(value = "barn", required = true) @Valid @NotNull Barn barn,
                                         @JsonProperty(value = "kroniskEllerFunksjonshemming") @Valid @NotNull Boolean kroniskEllerFunksjonshemming) {
         this.barn = Objects.requireNonNull(barn, "barn");
@@ -69,7 +67,16 @@ public class OmsorgspengerKroniskSyktBarn implements OmsorgspengerUtvidetRett {
 
     @Override
     public Periode getSøknadsperiode() {
-        return new Periode(barn.getFødselsdato(), null);
+        // bestemmes ut fra [mottattdato, fødseldato+18år]
+        return null;
+    }
+
+    public Barn getBarn() {
+        return barn;
+    }
+
+    public Boolean getKroniskEllerFunksjonshemming() {
+        return kroniskEllerFunksjonshemming;
     }
 
     public static class MinValidator extends YtelseValidator {

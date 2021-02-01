@@ -38,7 +38,7 @@ public class Barn implements IdentifisertPerson {
         this.fødselsdato = fødselsdato;
     }
 
-    @AssertTrue(message = "minst en av norskIdentitetsnummer eller fødselsdato må være satt")
+    @AssertTrue(message = "norskIdentitetsnummer og fødselsdato må være satt")
     private boolean isOk() {
         return (norskIdentitetsnummer != null && norskIdentitetsnummer.verdi != null)
             || (fødselsdato != null);

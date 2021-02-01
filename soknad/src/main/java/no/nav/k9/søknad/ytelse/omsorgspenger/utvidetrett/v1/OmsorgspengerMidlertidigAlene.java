@@ -26,7 +26,7 @@ import no.nav.k9.søknad.ytelse.YtelseValidator;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class OmsorgspengerMidlertidigAlene implements OmsorgspengerUtvidetRett {
-    
+
     @Valid
     @JsonProperty(value = "annenForelder", required = true)
     @NotNull
@@ -52,7 +52,7 @@ public class OmsorgspengerMidlertidigAlene implements OmsorgspengerUtvidetRett {
             this.barn = null;
             return this;
         }
-        
+
         if (this.barn == null) {
             this.barn = new ArrayList<>();
         }
@@ -75,6 +75,14 @@ public class OmsorgspengerMidlertidigAlene implements OmsorgspengerUtvidetRett {
         return new MinValidator();
     }
 
+    public AnnenForelder getAnnenForelder() {
+        return annenForelder;
+    }
+
+    public List<Barn> getBarn() {
+        return barn;
+    }
+
     @Override
     public List<IdentifisertPerson> getBerørtePersoner() {
         return Stream.of(barn, List.of(annenForelder)).flatMap(List::stream).collect(Collectors.toList());
@@ -82,7 +90,7 @@ public class OmsorgspengerMidlertidigAlene implements OmsorgspengerUtvidetRett {
 
     @Override
     public Periode getSøknadsperiode() {
-        return null;
+        return getAnnenForelder().getPeriode();
     }
 
     public static class MinValidator extends YtelseValidator {

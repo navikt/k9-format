@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -51,10 +52,15 @@ public class Søknad implements Innsending {
     @JsonProperty(value = "språk", required = false)
     private Språk språk = Språk.NORSK_BOKMÅL;
 
+    @JsonManagedReference
     @Valid
     @NotNull
     @JsonProperty(value = "ytelse", required = true)
     private Ytelse ytelse;
+
+    Søknad() {
+        //
+    }
 
     @JsonCreator
     public Søknad(@JsonProperty(value = "søknadId", required = true) @Valid @NotNull SøknadId søknadId,
@@ -117,6 +123,36 @@ public class Søknad implements Innsending {
 
     public Søknad medSpråk(Språk språk) {
         this.språk = språk;
+        return this;
+    }
+
+    public Søknad medSøknadId(String søknadId) {
+        this.søknadId = new SøknadId(søknadId);
+        return this;
+    }
+
+    public Søknad medSøknadId(SøknadId søknadId) {
+        this.søknadId = søknadId;
+        return this;
+    }
+
+    public Søknad medVersjon(String versjon) {
+        this.versjon = new Versjon(versjon);
+        return this;
+    }
+
+    public Søknad medVersjon(Versjon versjon) {
+        this.versjon = versjon;
+        return this;
+    }
+
+    public Søknad medSøker(Søker søker) {
+        this.søker = søker;
+        return this;
+    }
+
+    public Søknad medYtelse(Ytelse ytelse) {
+        this.ytelse = ytelse;
         return this;
     }
 
