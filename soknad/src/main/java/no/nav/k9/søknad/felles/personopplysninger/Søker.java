@@ -23,7 +23,7 @@ public class Søker implements Person {
     @JsonProperty(value = "norskIdentitetsnummer", required = true)
     @NotNull
     @Valid
-    public final NorskIdentitetsnummer norskIdentitetsnummer;
+    private NorskIdentitetsnummer norskIdentitetsnummer;
 
     @JsonCreator
     public Søker(@JsonProperty(value = "norskIdentitetsnummer", required = true) NorskIdentitetsnummer norskIdentitetsnummer) {

@@ -3,6 +3,7 @@ package no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -18,8 +19,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
-import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 
@@ -80,7 +81,7 @@ public class OmsorgspengerMidlertidigAlene implements OmsorgspengerUtvidetRett {
     }
 
     public List<Barn> getBarn() {
-        return barn;
+        return barn == null ? barn : Collections.unmodifiableList(barn);
     }
 
     @Override
