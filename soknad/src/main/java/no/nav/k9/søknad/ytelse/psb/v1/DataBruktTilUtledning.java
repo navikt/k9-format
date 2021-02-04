@@ -36,7 +36,6 @@ public class DataBruktTilUtledning {
     @JsonCreator
     public DataBruktTilUtledning(@JsonProperty(value = "harForståttRettigheterOgPlikter") @Valid Boolean harForståttRettigheterOgPlikter,
                                  @JsonProperty(value = "harBekreftetOpplysninger") @Valid Boolean harBekreftetOpplysninger,
-
                                  @JsonProperty(value = "samtidigHjemme") @Valid Boolean samtidigHjemme,
                                  @JsonProperty(value = "harMedsøker") @Valid Boolean harMedsøker,
                                  @JsonProperty(value = "bekrefterPeriodeOver8Uker") @Valid Boolean bekrefterPeriodeOver8Uker) {
