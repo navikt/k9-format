@@ -100,14 +100,11 @@ final class TestUtils {
                 .build())
             .build();
 
-        var barn = Barn.builder()
-            .norskIdentitetsnummer(NorskIdentitetsnummer.of("11111111111"))
-            .fødselsdato(null)
-            .build();
+        var barn = new Barn(NorskIdentitetsnummer.of("11111111111"), null);
 
         var bosteder = new Bosteder(Map.of(
             søknadsperiode,
-            Bosteder.BostedPeriodeInfo.builder().land(Landkode.DANMARK).build()));
+            new Bosteder.BostedPeriodeInfo(Landkode.DANMARK)));
 
         var utenlandsopphold = new Utenlandsopphold(Map.of(
             søknadsperiode,
@@ -116,11 +113,13 @@ final class TestUtils {
                 .årsak(Utenlandsopphold.UtenlandsoppholdÅrsak.BARNET_INNLAGT_I_HELSEINSTITUSJON_FOR_NORSK_OFFENTLIG_REGNING)
                 .build()));
 
-        var søknadInfo = new SøknadInfo( "MORA", true,
-                "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.", true, true,
-                false, false, false, true );
+        var omsorg = new Omsorg("MORA", true,
+                "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.");
 
-        return new PleiepengerSyktBarn(søknadsperiode, søknadInfo, barn, aktivitet, beredskap, nattevåk, tilsynsordning, arbeidstid, uttak, lovbestemtFerie, bosteder,
+        var søknadInfo = new DataBruktTilUtledning( true, true,
+                false, false, true );
+
+        return new PleiepengerSyktBarn(søknadsperiode, søknadInfo, barn, aktivitet, beredskap, nattevåk, tilsynsordning, arbeidstid, uttak, omsorg, lovbestemtFerie, bosteder,
             utenlandsopphold);
     }
 

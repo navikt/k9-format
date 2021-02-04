@@ -8,12 +8,6 @@
   "ytelse": {
     "type" : "PLEIEPENGER_SYKT_BARN",
     "søknadsperiode" : "2018-12-30/2019-10-20",
-    "søknadInfo" : {
-      "flereOmsorgspersoner" : false,
-      "relasjonTilBarnet" : "MORA",
-      "samtykketOmsorgForBarnet" : true,
-      "beskrivelseAvOmsorgsrollen" : "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
-    },
     "barn" : {
       "norskIdentitetsnummer" : "11111111111",
       "fødselsdato" : null
@@ -87,6 +81,11 @@
           "timerPleieAvBarnetPerDag" : "PT7H30M"
         }
       }
+    },
+    "omsorg" : {
+      "relasjonTilBarnet" : "MORA",
+      "samtykketOmsorgForBarnet" : true,
+      "beskrivelseAvOmsorgsrollen" : "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
     },
     "lovbestemtFerie" : {
       "perioder" : [ "2019-02-21/2019-05-21" ]
