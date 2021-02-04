@@ -47,8 +47,8 @@ public class PleiepengerSyktBarn implements Ytelse {
     private ArbeidAktivitet arbeidAktivitet;
 
     @Valid
-    @JsonProperty(value = "søknadInfo", required = true)
-    private SøknadInfo søknadInfo;
+    @JsonProperty(value = "dataBruktTilUtledning")
+    private DataBruktTilUtledning dataBruktTilUtledning;
 
     @Valid
     @JsonProperty(value = "bosteder")
@@ -75,7 +75,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     private LovbestemtFerie lovbestemtFerie;
 
     @Valid
-    @JsonProperty(value = "arbeidstid")
+    @JsonProperty(value = "arbeidstid", required = true)
     private Arbeidstid arbeidstid;
 
     @Valid
@@ -83,24 +83,29 @@ public class PleiepengerSyktBarn implements Ytelse {
     @JsonProperty(value = "uttak", required = true)
     private Uttak uttak;
 
+    @JsonProperty(value = "omsorg", required = true)
+    @Valid
+    private Omsorg omsorg;
+
     public PleiepengerSyktBarn() {
     }
     
     @JsonCreator
     public PleiepengerSyktBarn(@JsonProperty(value = "søknadsperiode", required = true) @NotNull @Valid Periode søknadsperiode,
-                               @JsonProperty(value = "søknadInfo", required = true) @Valid SøknadInfo søknadInfo,
+                               @JsonProperty(value = "dataBruktTilUtledning") @Valid DataBruktTilUtledning dataBruktTilUtledning,
                                @JsonProperty(value = "barn", required = true) @NotNull @Valid Barn barn,
                                @JsonProperty(value = "arbeidAktivitet") @Valid ArbeidAktivitet aktivitet,
                                @JsonProperty(value = "beredskap") @Valid Beredskap beredskap,
                                @JsonProperty(value = "nattevåk") @Valid Nattevåk nattevåk,
                                @JsonProperty(value = "tilsynsordning") @Valid Tilsynsordning tilsynsordning,
-                               @JsonProperty(value = "arbeidstid") @Valid Arbeidstid arbeidstid,
+                               @JsonProperty(value = "arbeidstid", required = true) @Valid Arbeidstid arbeidstid,
                                @JsonProperty(value = "uttak", required = true) @Valid @NotNull Uttak uttak,
+                               @JsonProperty(value = "omsorg", required = true) @Valid Omsorg omsorg,
                                @JsonProperty(value = "lovbestemtFerie") @Valid LovbestemtFerie lovbestemtFerie,
                                @JsonProperty(value = "bosteder") @Valid @NotNull Bosteder bosteder,
                                @JsonProperty(value = "utenlandsopphold") @Valid @NotNull Utenlandsopphold utenlandsopphold) {
         this.søknadsperiode = Objects.requireNonNull(søknadsperiode, "søknadsperiode");
-        this.søknadInfo = søknadInfo;
+        this.dataBruktTilUtledning = dataBruktTilUtledning;
         this.barn = Objects.requireNonNull(barn, "barn");
         this.arbeidAktivitet = aktivitet;
         this.beredskap = beredskap;
@@ -108,6 +113,7 @@ public class PleiepengerSyktBarn implements Ytelse {
         this.tilsynsordning = tilsynsordning;
         this.arbeidstid = arbeidstid;
         this.uttak = uttak;
+        this.omsorg = omsorg;
         this.lovbestemtFerie = lovbestemtFerie;
         this.bosteder = bosteder;
         this.utenlandsopphold = utenlandsopphold;
@@ -141,12 +147,12 @@ public class PleiepengerSyktBarn implements Ytelse {
         return this;
     }
 
-    public SøknadInfo getSøknadInfo() {
-        return søknadInfo;
+    public DataBruktTilUtledning getSøknadInfo() {
+        return dataBruktTilUtledning;
     }
 
-    public PleiepengerSyktBarn medSøknadInfo(SøknadInfo søknadInfo) {
-        this.søknadInfo = søknadInfo;
+    public PleiepengerSyktBarn medSøknadInfo(DataBruktTilUtledning dataBruktTilUtledning) {
+        this.dataBruktTilUtledning = dataBruktTilUtledning;
         return this;
     }
 
@@ -219,6 +225,15 @@ public class PleiepengerSyktBarn implements Ytelse {
 
     public PleiepengerSyktBarn medUttak(Uttak uttak) {
         this.uttak = uttak;
+        return this;
+    }
+
+    public Omsorg getOmsorg() {
+        return this.omsorg;
+    }
+
+    public PleiepengerSyktBarn medOmsorg(Omsorg omsorg) {
+        this.omsorg = omsorg;
         return this;
     }
 
