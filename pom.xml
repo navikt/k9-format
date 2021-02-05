@@ -22,7 +22,7 @@
 		<sha1></sha1>
 		<changelist>-SNAPSHOT</changelist>
 		<java.version>11</java.version>
-		<junit.version>5.7.0</junit.version>
+		<junit.version>5.7.1</junit.version>
 
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
