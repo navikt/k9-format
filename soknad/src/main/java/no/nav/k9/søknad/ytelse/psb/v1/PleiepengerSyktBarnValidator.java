@@ -53,8 +53,8 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
     private Feil toFeil(ConstraintViolation<PleiepengerSyktBarn> constraintViolation) {
         return new Feil(
                 constraintViolation.getPropertyPath().toString(),
-                constraintViolation.getMessage() + " ConstraintViolation ",
-                constraintViolation.getMessageTemplate());
+                PÅKREVD,
+                constraintViolation.getMessage());
     }
 
     private void validerSøknadsperiode(Periode søknadsperiode, List<Feil> feil) {
