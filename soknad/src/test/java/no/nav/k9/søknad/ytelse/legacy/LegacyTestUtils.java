@@ -11,7 +11,7 @@ class LegacyTestUtils {
 
     private static String jsonFromFile(String filename) {
         try {
-            return Files.readString(Path.of("src/test/resources/ytelse/psb/" + filename));
+            return Files.readString(Path.of("src/test/resources/ytelse/" + filename));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

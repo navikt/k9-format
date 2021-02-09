@@ -1,0 +1,124 @@
+{
+  "søknadId": "9c889606-677a-4337-924d-5289b0e881c3",
+  "mottatt": "2021-02-09T14:09:58.727679+01:00",
+  "søker": {
+    "fødselsnummer": "11112270033",
+    "fornavn": "Ola",
+    "mellomnavn": "Mellomnavn",
+    "etternavn": "Nordmann",
+    "fødselsdato": "2018-05-16",
+    "aktørId": "123456"
+  },
+  "språk": "nb",
+  "bosteder": [
+    {
+      "fraOgMed": "2020-01-01",
+      "tilOgMed": "2020-01-06",
+      "landkode": "SWE",
+      "landnavn": "Sverige",
+      "erEØSLand": true
+    },
+    {
+      "fraOgMed": "2020-01-11",
+      "tilOgMed": "2020-01-11",
+      "landkode": "NOR",
+      "landnavn": "Norge",
+      "erEØSLand": true
+    }
+  ],
+  "opphold": [
+    {
+      "fraOgMed": "2020-01-16",
+      "tilOgMed": "2020-01-21",
+      "landkode": "Eng",
+      "landnavn": "England",
+      "erEØSLand": true
+    },
+    {
+      "fraOgMed": "2019-12-22",
+      "tilOgMed": "2019-12-27",
+      "landkode": "CRO",
+      "landnavn": "Kroatia",
+      "erEØSLand": true
+    }
+  ],
+  "spørsmål": [
+    {
+      "spørsmål": "Har du vært hjemme?",
+      "svar": true
+    },
+    {
+      "spørsmål": "Skal du være hjemme?",
+      "svar": false
+    }
+  ],
+  "utbetalingsperioder": [
+    {
+      "fraOgMed": "2020-01-01",
+      "tilOgMed": "2020-01-11",
+      "lengde": "PT5H30M",
+      "antallTimerBorte": null,
+      "antallTimerPlanlagt": null
+    },
+    {
+      "fraOgMed": "2020-01-21",
+      "tilOgMed": "2020-01-21",
+      "lengde": "PT5H30M",
+      "antallTimerBorte": null,
+      "antallTimerPlanlagt": null
+    },
+    {
+      "fraOgMed": "2020-01-31",
+      "tilOgMed": "2020-02-05",
+      "lengde": "PT5H30M",
+      "antallTimerBorte": null,
+      "antallTimerPlanlagt": null
+    }
+  ],
+  "andreUtbetalinger": [
+    "dagpenger",
+    "sykepenger"
+  ],
+  "fosterbarn": [
+    {
+      "fødselsnummer": "02119970078"
+    }
+  ],
+  "vedlegg": [
+    "http://localhost:8080/vedlegg/1",
+    "http://localhost:8080/vedlegg/2",
+    "http://localhost:8080/vedlegg/3"
+  ],
+  "frilans": null,
+  "selvstendigVirksomheter": [
+    {
+      "næringstyper": [
+        "ANNEN",
+        "FISKE"
+      ],
+      "fiskerErPåBladB": false,
+      "fraOgMed": "2021-02-09",
+      "tilOgMed": "2021-02-19",
+      "næringsinntekt": 123456789,
+      "navnPåVirksomheten": "Kjells Møbelsnekkeri",
+      "organisasjonsnummer": "111111",
+      "registrertINorge": true,
+      "registrertILand": null,
+      "registrertIUtlandet": null,
+      "yrkesaktivSisteTreFerdigliknedeÅrene": null,
+      "varigEndring": {
+        "dato": "2021-01-20",
+        "inntektEtterEndring": 234543,
+        "forklaring": "Forklaring som handler om varig endring"
+      },
+      "regnskapsfører": null
+    }
+  ],
+  "erArbeidstakerOgså": true,
+  "hjemmePgaSmittevernhensyn": true,
+  "hjemmePgaStengtBhgSkole": null,
+  "bekreftelser": {
+    "harBekreftetOpplysninger": true,
+    "harForståttRettigheterOgPlikter": true
+  }
+}

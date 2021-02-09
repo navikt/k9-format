@@ -1,6 +1,7 @@
 package no.nav.k9.søknad;
 
 import java.io.IOException;
+import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Collections;
@@ -9,6 +10,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
@@ -43,16 +45,21 @@ public class LegacySøknad implements Innsending {
     @JsonProperty(value = "søknadId", required = true)
     private SøknadId søknadId;
 
+    @JsonInclude(value = Include.NON_EMPTY)
     @Valid
-    @NotNull
-    @JsonProperty(value = "versjon", required = true)
+    @JsonProperty(value = "versjon")
     private Versjon versjon;
 
-    @Valid
-    @NotNull
+    @JsonInclude(value = Include.NON_EMPTY)
+    @JsonProperty(value = "mottattDato")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
-    @JsonProperty(value = "mottattDato", required = true)
+    @Valid
     private ZonedDateTime mottattDato;
+
+    @JsonInclude(value = Include.NON_EMPTY)
+    @JsonProperty(value = "mottatt")
+    @Valid
+    private OffsetDateTime mottatt;
 
     @Valid
     @NotNull
@@ -72,8 +79,8 @@ public class LegacySøknad implements Innsending {
     private Map<Periode, Dummy> perioder;
 
     public LegacySøknad(@JsonProperty(value = "søknadId", required = true) @Valid @NotNull SøknadId søknadId,
-                        @JsonProperty(value = "versjon", required = true) @Valid @NotNull Versjon versjon,
-                        @JsonProperty(value = "mottattDato", required = true) @Valid @NotNull ZonedDateTime mottattDato,
+                        @JsonProperty(value = "versjon") @Valid Versjon versjon,
+                        @JsonProperty(value = "mottattDato") @Valid @NotNull ZonedDateTime mottattDato,
                         @JsonProperty(value = "søker", required = true) @Valid @NotNull Søker søker) {
         this.søknadId = søknadId;
         this.versjon = versjon;
@@ -83,17 +90,24 @@ public class LegacySøknad implements Innsending {
 
     @JsonCreator
     public LegacySøknad(@JsonProperty(value = "søknadId", required = true) @Valid @NotNull SøknadId søknadId,
-                        @JsonProperty(value = "versjon", required = true) @Valid @NotNull Versjon versjon,
-                        @JsonProperty(value = "mottattDato", required = true) @Valid @NotNull ZonedDateTime mottattDato,
+                        @JsonProperty(value = "versjon") @Valid Versjon versjon,
+                        @JsonProperty(value = "mottattDato") @Valid ZonedDateTime mottattDato,
+                        @JsonProperty(value = "mottatt") @Valid OffsetDateTime mottattDato2,
                         @JsonProperty(value = "søker", required = true) @Valid @NotNull Søker søker,
                         @JsonAlias(value = { "fosterbarn" }) @JsonProperty(value = "barn", required = true) List<Barn> barn,
                         @JsonProperty(value = "perioder", required = false) Map<Periode, Dummy> perioder) {
         this.søknadId = søknadId;
         this.versjon = versjon;
         this.mottattDato = mottattDato;
+        this.mottatt = mottattDato2;
         this.søker = søker;
         this.barn = barn;
         this.perioder = perioder;
+    }
+
+    @AssertTrue(message = "trenger enten mottatDato eller mottatt")
+    private boolean isOk() {
+        return mottattDato != null || mottatt != null;
     }
 
     @Override
@@ -112,7 +126,7 @@ public class LegacySøknad implements Innsending {
     public void setBarn(List<Barn> barn) {
         this.barn = barn == null ? null : List.copyOf(barn);
     }
-    
+
     public void setPerioder(List<Periode> perioder) {
         this.perioder = perioder.stream().map(p -> new SimpleEntry<>(p, new Dummy())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
@@ -124,7 +138,7 @@ public class LegacySøknad implements Innsending {
 
     @Override
     public ZonedDateTime getMottattDato() {
-        return mottattDato;
+        return mottattDato == null ? mottatt.toZonedDateTime() : mottattDato;
     }
 
     public List<Periode> getPerioder() {
@@ -147,7 +161,7 @@ public class LegacySøknad implements Innsending {
         public static LegacySøknad deserialize(String søknad) {
             return JsonUtils.fromString(søknad, LegacySøknad.class);
         }
-        
+
         public static LegacySøknad deserialize(ObjectNode node) {
             try {
                 return JsonUtils.getObjectMapper().treeToValue(node, LegacySøknad.class);
