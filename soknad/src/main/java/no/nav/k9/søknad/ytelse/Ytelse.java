@@ -40,6 +40,9 @@ public interface Ytelse {
      * @return andre berørte, kjente identifiserte personer (enn søker) - f.eks. barn, ektefelle, verge etc. som er involveres i denne saken.
      */
     List<Person> getBerørtePersoner();
+    
+    
+    Person getPleietrengende();
 
     enum Type {
         OMSORGSPENGER_UTBETALING(Ytelse.OMSORGSPENGER_UTBETALING),

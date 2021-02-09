@@ -122,6 +122,11 @@ public class PleiepengerSyktBarn implements Ytelse {
     public Barn getBarn() {
         return barn;
     }
+    
+    @Override
+    public Person getPleietrengende() {
+        return barn;
+    }
 
     public PleiepengerSyktBarn medBarn(Barn barn) {
         this.barn = barn;
