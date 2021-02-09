@@ -66,6 +66,11 @@ public class OmsorgspengerKroniskSyktBarn implements OmsorgspengerUtvidetRett {
     public List<Person> getBerørtePersoner() {
         return List.of(barn);
     }
+    
+    @Override
+    public Person getPleietrengende() {
+        return barn;
+    }
 
     @Override
     public Periode getSøknadsperiode() {

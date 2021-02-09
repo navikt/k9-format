@@ -83,6 +83,11 @@ public class OmsorgspengerMidlertidigAlene implements OmsorgspengerUtvidetRett {
     public List<Barn> getBarn() {
         return barn == null ? barn : Collections.unmodifiableList(barn);
     }
+    
+    @Override
+    public Person getPleietrengende() {
+        return null; // ignorerer her
+    }
 
     @Override
     public List<Person> getBerørtePersoner() {
