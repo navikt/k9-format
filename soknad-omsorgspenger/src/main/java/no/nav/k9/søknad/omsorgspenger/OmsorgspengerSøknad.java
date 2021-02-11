@@ -17,7 +17,10 @@ import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.SøknadId;
+import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerUtvidetRett;
 
+/** byttet til {@link OmsorgspengerUtvidetRett} */
+@Deprecated(forRemoval = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class OmsorgspengerSøknad implements Innsending {
@@ -32,6 +35,7 @@ public class OmsorgspengerSøknad implements Innsending {
     @NotNull
     public final Versjon versjon;
 
+    @JsonAlias("mottatt")
     @JsonProperty(value = "mottattDato", required = true)
     @Valid
     @NotNull

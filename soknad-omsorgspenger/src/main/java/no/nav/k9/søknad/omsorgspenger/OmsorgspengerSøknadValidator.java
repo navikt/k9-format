@@ -6,11 +6,14 @@ import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.SøknadId;
+import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerUtvidetRett;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/** byttet til {@link OmsorgspengerUtvidetRett} */
+@Deprecated(forRemoval = true)
 public class OmsorgspengerSøknadValidator extends SøknadValidator<OmsorgspengerSøknad> {
 
     OmsorgspengerSøknadValidator() {
