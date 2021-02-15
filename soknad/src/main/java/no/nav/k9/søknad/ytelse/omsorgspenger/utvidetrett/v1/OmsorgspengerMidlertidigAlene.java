@@ -68,7 +68,7 @@ public class OmsorgspengerMidlertidigAlene implements OmsorgspengerUtvidetRett {
 
     @Override
     public Type getType() {
-        return Type.OMSORGSPENGER_UTVIDETRETT_KRONISK_SYKT_BARN;
+        return Type.OMSORGSPENGER_UTVIDETRETT_MIDLERTIDIG_ALENE;
     }
 
     @Override
