@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.søknad.felles.type.Periode;
 
 import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Map;

@@ -1,10 +1,14 @@
 package no.nav.k9.søknad.felles.aktivitet;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 
 import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -30,6 +34,20 @@ public class Arbeidstaker {
         this.organisasjonsnummer = organisasjonsnummer;
         this.arbeidstidInfo = arbeidstidInfo;
     }
+
+    public Arbeidstaker() {
+
+    }
+
+    @AssertTrue(message = "Ikke entydig ID på Arbeidsgiver, må oppgi enten norskIdentitetsnummer eller organisasjonsnummer.")
+    private boolean erEntydigPåID() {
+        return !(this.norskIdentitetsnummer != null && this.organisasjonsnummer != null);
+    }
+
+//    @AssertTrue(message =  "Mangler ID på Arbeidsgiver, må oppgi en av norskIdentitetsnummer eller organisasjonsnummer.")
+//    private boolean manglerIkkeID() {
+//        return (this.norskIdentitetsnummer != null || this.organisasjonsnummer != null);
+//    }
 
     public NorskIdentitetsnummer getNorskIdentitetsnummer() {
         return norskIdentitetsnummer;

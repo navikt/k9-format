@@ -55,7 +55,7 @@ final class TestUtils {
 
         var søknadsperiode = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-10-20"));
         var delperiodeEn = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-02-20"));
-        var delperiodeTo = new Periode(LocalDate.parse("2019-02-21"), LocalDate.parse("2019-05-21"));
+        var delperiodeTo = new Periode(LocalDate.parse("2019-02-21"), LocalDate.parse("2019-10-20"));
 
         var uttak = new Uttak(Map.of(
             søknadsperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));

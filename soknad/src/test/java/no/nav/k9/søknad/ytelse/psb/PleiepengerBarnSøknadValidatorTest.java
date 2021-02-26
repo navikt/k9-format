@@ -1,32 +1,28 @@
 package no.nav.k9.søknad.ytelse.psb;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import no.nav.k9.søknad.JsonUtils;
+import no.nav.k9.søknad.Søknad;
+import no.nav.k9.søknad.ValideringsFeil;
+import no.nav.k9.søknad.felles.Feil;
+import no.nav.k9.søknad.felles.aktivitet.*;
+import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
+import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
+import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnValidator;
+import no.nav.k9.søknad.ytelse.psb.v1.Uttak;
+import no.nav.k9.søknad.ytelse.psb.v1.UttakPeriodeInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
+import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.jupiter.api.Test;
-
-import no.nav.k9.søknad.JsonUtils;
-import no.nav.k9.søknad.Søknad;
-import no.nav.k9.søknad.ValideringsFeil;
-import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.aktivitet.ArbeidAktivitet;
-import no.nav.k9.søknad.felles.aktivitet.Arbeidstaker;
-import no.nav.k9.søknad.felles.aktivitet.Frilanser;
-import no.nav.k9.søknad.felles.aktivitet.Organisasjonsnummer;
-import no.nav.k9.søknad.felles.aktivitet.SelvstendigNæringsdrivende;
-import no.nav.k9.søknad.felles.aktivitet.VirksomhetType;
-import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
-import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
-import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnValidator;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PleiepengerBarnSøknadValidatorTest {
     private static final PleiepengerSyktBarnValidator validator = new PleiepengerSyktBarnValidator();
@@ -49,6 +45,20 @@ public class PleiepengerBarnSøknadValidatorTest {
         var builder = TestUtils.komplettBuilder();
         builder.medSøknadsperiode(null);
         verifyHarFeil(builder);
+    }
+
+    @Test
+    public void søknadTemp() {
+        var ytelse = TestUtils.komplettBuilder();
+        var feilPeriode = new Periode(ytelse.getSøknadsperiode().getFraOgMed(), ytelse.getSøknadsperiode().getTilOgMed().plusDays(10));
+        ytelse.medUttak(
+                new Uttak(Map.of(
+                        feilPeriode,
+                        new UttakPeriodeInfo(Duration.ofHours(8)))));
+        verifyHarFeil(ytelse);
+
+
+        var i = 0;
     }
 
     @Test

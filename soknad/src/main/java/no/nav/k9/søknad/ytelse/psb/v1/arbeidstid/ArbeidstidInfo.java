@@ -2,6 +2,7 @@ package no.nav.k9.søknad.ytelse.psb.v1.arbeidstid;
 
 import com.fasterxml.jackson.annotation.*;
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.ytelse.psb.v1.DurationWrapper;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -18,7 +19,7 @@ public class ArbeidstidInfo {
     @Valid
     @NotNull
     @JsonProperty(value = "jobberNormaltTimerPerDag", required = true)
-    private Duration jobberNormaltTimerPerDag;
+    private DurationWrapper jobberNormaltTimerPerDag;
 
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     @JsonProperty(value = "perioder")
@@ -29,7 +30,7 @@ public class ArbeidstidInfo {
     @JsonCreator
     public ArbeidstidInfo(@JsonProperty(value = "jobberNormaltTimerPerDag", required = true) @Valid @NotNull Duration jobberNormaltTimerPerDag,
             @JsonProperty(value = "perioder") @Valid @NotNull Map<Periode, ArbeidstidPeriodeInfo> perioder) {
-        this.jobberNormaltTimerPerDag = jobberNormaltTimerPerDag;
+        this.jobberNormaltTimerPerDag = new DurationWrapper(jobberNormaltTimerPerDag);
         this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
     }
 
@@ -37,11 +38,11 @@ public class ArbeidstidInfo {
     }
 
     public Duration getJobberNormaltTimerPerDag() {
-        return jobberNormaltTimerPerDag;
+        return jobberNormaltTimerPerDag.getDuration();
     }
 
     public ArbeidstidInfo medJobberNormaltTimerPerDag(Duration jobberNormaltTimerPerDag) {
-        this.jobberNormaltTimerPerDag = jobberNormaltTimerPerDag;
+        this.jobberNormaltTimerPerDag = new DurationWrapper(jobberNormaltTimerPerDag);
         return this;
     }
 

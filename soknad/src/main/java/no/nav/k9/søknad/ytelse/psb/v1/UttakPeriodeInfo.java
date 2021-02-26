@@ -16,23 +16,23 @@ public class UttakPeriodeInfo {
     @Valid
     @NotNull
     @JsonProperty(value = "timerPleieAvBarnetPerDag", required = true)
-    private Duration timerPleieAvBarnetPerDag;
+    private DurationWrapper timerPleieAvBarnetPerDag;
 
     @JsonCreator
     public UttakPeriodeInfo(
             @JsonProperty(value = "timerPleieAvBarnetPerDag", required = true) @Valid @NotNull Duration timerPleieAvBarnetPerDag) {
-        this.timerPleieAvBarnetPerDag = timerPleieAvBarnetPerDag;
+        this.timerPleieAvBarnetPerDag = new DurationWrapper(timerPleieAvBarnetPerDag);
     }
 
     public UttakPeriodeInfo() {
     }
 
     public Duration getTimerPleieAvBarnetPerDag() {
-        return timerPleieAvBarnetPerDag;
+        return timerPleieAvBarnetPerDag.getDuration();
     }
 
     public UttakPeriodeInfo setTimerPleieAvBarnetPerDag(Duration timerPleieAvBarnetPerDag) {
-        this.timerPleieAvBarnetPerDag = timerPleieAvBarnetPerDag;
+        this.timerPleieAvBarnetPerDag = new DurationWrapper(timerPleieAvBarnetPerDag);
         return this;
     }
 }

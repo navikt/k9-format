@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import no.nav.k9.søknad.ytelse.psb.v1.DurationWrapper;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -16,23 +17,23 @@ public class ArbeidstidPeriodeInfo {
     @Valid
     @NotNull
     @JsonProperty(value = "faktiskArbeidTimerPerDag")
-    private Duration faktiskArbeidTimerPerDag;
+    private DurationWrapper faktiskArbeidTimerPerDag;
 
     @JsonCreator
     public ArbeidstidPeriodeInfo(
             @JsonProperty(value = "faktiskArbeidTimerPerDag") @Valid @NotNull Duration faktiskArbeidTimerPerDag) {
-        this.faktiskArbeidTimerPerDag = faktiskArbeidTimerPerDag;
+        this.faktiskArbeidTimerPerDag = new DurationWrapper(faktiskArbeidTimerPerDag);
     }
 
     public ArbeidstidPeriodeInfo() {
     }
 
     public Duration getFaktiskArbeidTimerPerDag() {
-        return faktiskArbeidTimerPerDag;
+        return faktiskArbeidTimerPerDag.getDuration();
     }
 
     public ArbeidstidPeriodeInfo medFaktiskArbeidTimerPerDag(Duration faktiskArbeidTimerPerDag) {
-        this.faktiskArbeidTimerPerDag = faktiskArbeidTimerPerDag;
+        this.faktiskArbeidTimerPerDag = new DurationWrapper(faktiskArbeidTimerPerDag);
         return this;
     }
 }
