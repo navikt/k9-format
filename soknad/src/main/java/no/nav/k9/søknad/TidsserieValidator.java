@@ -27,10 +27,12 @@ public class TidsserieValidator {
     }
 
     public static boolean periodeInneholderDagerSomIkkeErHelg(Periode periode) {
-        for (LocalDate testDag = periode.getFraOgMed() ; testDag != periode.getTilOgMed() ; testDag.plusDays(1)) {
-            if (!(testDag.getDayOfWeek() == DayOfWeek.SUNDAY) || !(testDag.getDayOfWeek() == DayOfWeek.SATURDAY)) {
+        LocalDate testDag = periode.getFraOgMed();
+        while (testDag.isBefore(periode.getTilOgMed()) || testDag.isEqual(periode.getTilOgMed())) {
+            if (!((testDag.getDayOfWeek() == DayOfWeek.SUNDAY) || (testDag.getDayOfWeek() == DayOfWeek.SATURDAY))) {
                 return true;
             }
+            testDag = testDag.plusDays(1);
         }
         return false;
     }
@@ -67,7 +69,7 @@ public class TidsserieValidator {
         }
 
         public void valider(String felt , List<Feil> feil) {
-            if(this.perioderSomIkkeOverlapperMedHovedperiode.isEmpty()) {
+            if(!this.perioderSomIkkeOverlapperMedHovedperiode.isEmpty()) {
                 feil.addAll(this.perioderSomIkkeOverlapperMedHovedperiode.stream()
                         .filter(TidsserieValidator::periodeInneholderDagerSomIkkeErHelg)
                         .map(p -> toFeil(p, felt, "ikkeKomplettPeriode", "Periodene er ikke komplett, periode som mangler er: "))

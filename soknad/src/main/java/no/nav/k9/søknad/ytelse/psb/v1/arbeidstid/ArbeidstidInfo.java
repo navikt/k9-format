@@ -28,7 +28,8 @@ public class ArbeidstidInfo {
     private Map<Periode, ArbeidstidPeriodeInfo> perioder;
 
     @JsonCreator
-    public ArbeidstidInfo(@JsonProperty(value = "jobberNormaltTimerPerDag", required = true) @Valid @NotNull Duration jobberNormaltTimerPerDag,
+    public ArbeidstidInfo(
+            @JsonProperty(value = "jobberNormaltTimerPerDag", required = true) @Valid @NotNull Duration jobberNormaltTimerPerDag,
             @JsonProperty(value = "perioder") @Valid @NotNull Map<Periode, ArbeidstidPeriodeInfo> perioder) {
         this.jobberNormaltTimerPerDag = new DurationWrapper(jobberNormaltTimerPerDag);
         this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
