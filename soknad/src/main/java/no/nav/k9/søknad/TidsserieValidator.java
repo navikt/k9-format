@@ -73,7 +73,7 @@ public class TidsserieValidator {
                         .map(p -> toFeil(p, felt, "ikkeKomplettPeriode", "Periodene er ikke komplett, periode som mangler er: "))
                         .collect(Collectors.toList()));
             }
-            if(!this.perioderSomIkkeOverlapperMedHovedperiode.isEmpty()) {
+            if(!this.perioderUtenforHovedperiode.isEmpty()) {
                 feil.addAll(this.perioderUtenforHovedperiode.stream()
                         .map(p -> toFeil(p, felt, "ugyldigPeriode", "Perioden er utenfor søknadsperioden : "))
                         .collect(Collectors.toList()));

@@ -47,25 +47,25 @@ public class PleiepengerBarnSøknadValidatorTest {
         verifyHarFeil(builder);
     }
 
-    @Test
-    public void søknadTemp() {
-        var ytelse = TestUtils.komplettBuilder();
-        var feilPeriode = new Periode(ytelse.getSøknadsperiode().getFraOgMed(), ytelse.getSøknadsperiode().getTilOgMed().plusDays(10));
-        ytelse.medUttak(
-                new Uttak(Map.of(
-                        feilPeriode,
-                        new UttakPeriodeInfo(Duration.ofHours(8)))));
-        verifyHarFeil(ytelse);
-
-
-        var i = 0;
-    }
+//    @Test
+//    public void søknadTemp() {
+//        var ytelse = TestUtils.komplettBuilder();
+//        var feilPeriode = new Periode(ytelse.getSøknadsperiode().getFraOgMed(), ytelse.getSøknadsperiode().getTilOgMed().plusDays(10));
+//        ytelse.medUttak(
+//                new Uttak(Map.of(
+//                        feilPeriode,
+//                        new UttakPeriodeInfo(Duration.ofHours(8)))));
+//        verifyHarFeil(ytelse);
+//
+//
+//        var i = 0;
+//    }
 
     @Test
     public void søknadMedTilsynsordningOppholdLengreEnnPerioden() {
         var søknad = TestUtils.komplettBuilder();
         Tilsynsordning tilsynsordning = new Tilsynsordning(Map.of(
-                new Periode(LocalDate.now(), LocalDate.now()),
+                new Periode(søknad.getSøknadsperiode().getFraOgMed(), søknad.getSøknadsperiode().getTilOgMed().plusDays(10)),
                 new TilsynPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
         søknad.medTilsynsordning(tilsynsordning);
 
@@ -83,7 +83,7 @@ public class PleiepengerBarnSøknadValidatorTest {
                 new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
         var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), arbeidstidInfo);
         søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
-        assertThat(verifyHarFeil(søknad)).hasSize(2);
+        verifyHarFeil(søknad);
 
     }
 

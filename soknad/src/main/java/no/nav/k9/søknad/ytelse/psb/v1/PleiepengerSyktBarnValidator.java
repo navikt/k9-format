@@ -3,9 +3,7 @@ package no.nav.k9.søknad.ytelse.psb.v1;
 import no.nav.fpsak.tidsserie.LocalDateTimeline;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.LovbestemtFerie;
-import no.nav.k9.søknad.felles.aktivitet.ArbeidAktivitet;
 import no.nav.k9.søknad.felles.aktivitet.Arbeidstaker;
-import no.nav.k9.søknad.felles.aktivitet.SelvstendigNæringsdrivende;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
@@ -16,13 +14,12 @@ import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
-import java.time.Duration;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static no.nav.k9.søknad.TidsserieValidator.TidsserieUtils.toLocalDateTimeline;
-import static no.nav.k9.søknad.TidsserieValidator.*;
+import static no.nav.k9.søknad.TidsserieValidator.finnIkkeKomplettePerioderOgPerioderUtenfor;
+import static no.nav.k9.søknad.TidsserieValidator.finnPerioderUtenfor;
 
 public class PleiepengerSyktBarnValidator extends YtelseValidator {
 
@@ -120,6 +117,7 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
             return;
         }
         for (Arbeidstaker arbeidstaker : arbeidstakerList ) {
+            arbeidstaker.valider("arbeidstid.arbeidstaker", feil);
             finnIkkeKomplettePerioderOgPerioderUtenfor(
                     toLocalDateTimeline(arbeidstaker.getArbeidstidInfo().getPerioder()),
                     søknadsperiode)

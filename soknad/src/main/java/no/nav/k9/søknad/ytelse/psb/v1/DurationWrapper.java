@@ -30,6 +30,9 @@ public class DurationWrapper {
 
     @AssertTrue(message = "Duration kan ikke være negativ. ")
     private boolean isNotNegative() {
+        if(duration == null) {
+            return false;
+        }
         return !this.duration.isNegative();
     }
 }
