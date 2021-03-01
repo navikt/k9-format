@@ -40,9 +40,9 @@ public class PleiepengerBarnSøknadValidatorTest {
     }
 
     @Test
-    public void søknadsperiodeKanIkkeVæreNull() {
+    public void uttakKanIkkeVæreNull() {
         var builder = TestUtils.komplettYtelsePsb();
-        builder.medSøknadsperiode(null);
+        builder.medUttak(null);
         verifyHarFeil(builder);
     }
 

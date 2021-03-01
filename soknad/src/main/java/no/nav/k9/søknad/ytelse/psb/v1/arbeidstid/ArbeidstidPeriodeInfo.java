@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import no.nav.k9.søknad.ytelse.psb.v1.AlltidPositivDuration;
+import org.hibernate.validator.constraints.time.DurationMin;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -16,24 +16,25 @@ public class ArbeidstidPeriodeInfo {
 
     @Valid
     @NotNull
+    @DurationMin
     @JsonProperty(value = "faktiskArbeidTimerPerDag")
-    private AlltidPositivDuration faktiskArbeidTimerPerDag;
+    private Duration faktiskArbeidTimerPerDag;
 
     @JsonCreator
     public ArbeidstidPeriodeInfo(
             @JsonProperty(value = "faktiskArbeidTimerPerDag") @Valid @NotNull Duration faktiskArbeidTimerPerDag) {
-        this.faktiskArbeidTimerPerDag = new AlltidPositivDuration(faktiskArbeidTimerPerDag);
+        this.faktiskArbeidTimerPerDag = faktiskArbeidTimerPerDag;
     }
 
     public ArbeidstidPeriodeInfo() {
     }
 
     public Duration getFaktiskArbeidTimerPerDag() {
-        return faktiskArbeidTimerPerDag.getDuration();
+        return faktiskArbeidTimerPerDag;
     }
 
     public ArbeidstidPeriodeInfo medFaktiskArbeidTimerPerDag(Duration faktiskArbeidTimerPerDag) {
-        this.faktiskArbeidTimerPerDag = new AlltidPositivDuration(faktiskArbeidTimerPerDag);
+        this.faktiskArbeidTimerPerDag = faktiskArbeidTimerPerDag;
         return this;
     }
 }

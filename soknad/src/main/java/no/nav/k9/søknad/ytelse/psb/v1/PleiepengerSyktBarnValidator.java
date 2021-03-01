@@ -35,7 +35,6 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
                 .collect(Collectors.toList());
 
         try {
-            if(psb.getSøknadsperiode() != null) {
                 var søknadsperiode = validerSøknadsperiode(psb.getSøknadsperiode());
                 validerBeredskap(psb.getBeredskap(), søknadsperiode, feil);
                 validerUttak(psb.getUttak(), søknadsperiode, feil);
@@ -44,7 +43,7 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
                 validerLovbestemtFerie(psb.getLovbestemtFerie(), søknadsperiode, feil);
                 validerArbeidstid(psb.getArbeidstid(), søknadsperiode, feil);
                 //TODO validerArbeidAktivitet
-            }
+
 
         }catch (IllegalArgumentException e) {
             feil.add(new Feil(e.getClass().getName(), e.getCause() + "IllegalArgumentException", e.getMessage()));
