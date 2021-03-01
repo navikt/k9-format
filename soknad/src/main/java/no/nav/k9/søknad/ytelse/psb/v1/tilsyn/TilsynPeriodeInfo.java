@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import no.nav.k9.søknad.ytelse.psb.v1.DurationWrapper;
+import no.nav.k9.søknad.ytelse.psb.v1.AlltidPositivDuration;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -17,11 +17,11 @@ public class TilsynPeriodeInfo {
     @Valid
     @NotNull
     @JsonProperty(value = "etablertTilsynTimerPerDag", required = true)
-    private DurationWrapper etablertTilsynTimerPerDag;
+    private AlltidPositivDuration etablertTilsynTimerPerDag;
 
     @JsonCreator
     public TilsynPeriodeInfo(@JsonProperty(value = "etablertTilsynTimerPerDag", required = true) @Valid @NotNull Duration etablertTilsynTimerPerDag) {
-        this.etablertTilsynTimerPerDag = new DurationWrapper(etablertTilsynTimerPerDag);
+        this.etablertTilsynTimerPerDag = new AlltidPositivDuration(etablertTilsynTimerPerDag);
     }
 
     public TilsynPeriodeInfo() {
@@ -32,7 +32,7 @@ public class TilsynPeriodeInfo {
     }
 
     public TilsynPeriodeInfo medEtablertTilsynTimerPerDag(Duration etablertTilsynTimerPerDag) {
-        this.etablertTilsynTimerPerDag = new DurationWrapper(etablertTilsynTimerPerDag);
+        this.etablertTilsynTimerPerDag = new AlltidPositivDuration(etablertTilsynTimerPerDag);
         return this;
     }
 }

@@ -12,16 +12,16 @@ import java.time.Duration;
 @JsonFormat
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-public class DurationWrapper {
+public class AlltidPositivDuration {
 
     @JsonValue
     private Duration duration;
 
-    public DurationWrapper(Duration duration) {
+    public AlltidPositivDuration(Duration duration) {
         this.duration = duration;
     }
 
-    public DurationWrapper() {
+    public AlltidPositivDuration() {
     }
 
     public Duration getDuration() {

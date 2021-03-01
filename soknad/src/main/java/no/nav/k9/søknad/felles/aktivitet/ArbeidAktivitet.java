@@ -23,7 +23,7 @@ public class ArbeidAktivitet {
     @Valid
     private Frilanser frilanser;
 
-    @Deprecated()
+    @Deprecated
     @Valid
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     @JsonProperty(value = "arbeidstaker")

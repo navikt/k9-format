@@ -9,8 +9,6 @@ import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnValidator;
-import no.nav.k9.søknad.ytelse.psb.v1.Uttak;
-import no.nav.k9.søknad.ytelse.psb.v1.UttakPeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
