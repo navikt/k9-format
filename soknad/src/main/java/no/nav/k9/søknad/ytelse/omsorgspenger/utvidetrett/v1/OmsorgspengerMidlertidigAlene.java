@@ -76,6 +76,11 @@ public class OmsorgspengerMidlertidigAlene implements OmsorgspengerUtvidetRett {
         return new MinValidator();
     }
 
+    @Override
+    public Person getAnnenPart() {
+        return getAnnenForelder();
+    }
+
     public AnnenForelder getAnnenForelder() {
         return annenForelder;
     }

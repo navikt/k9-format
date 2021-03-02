@@ -41,9 +41,12 @@ public interface Ytelse {
      */
     List<Person> getBerørtePersoner();
     
-    
+    /** Pleietrengende person omtalt i søknaden (eks. barn/nærstående) når denne er subjektet bruker søker på bakgrunn av. */
     Person getPleietrengende();
 
+    /** Annen part omtalt i søknaden (eks. ektefelle/samboer) når denne er subjektet bruker søker på bakgrunn av.*/
+    Person getAnnenPart();
+    
     enum Type {
         OMSORGSPENGER_UTBETALING(Ytelse.OMSORGSPENGER_UTBETALING),
         PLEIEPENGER_SYKT_BARN(Ytelse.PLEIEPENGER_SYKT_BARN),

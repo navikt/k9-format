@@ -73,6 +73,11 @@ public class OmsorgspengerKroniskSyktBarn implements OmsorgspengerUtvidetRett {
     }
 
     @Override
+    public Person getAnnenPart() {
+        return null;
+    }
+    
+    @Override
     public Periode getSøknadsperiode() {
         // bestemmes ut fra [mottattdato, fødseldato+18år]
         return null;

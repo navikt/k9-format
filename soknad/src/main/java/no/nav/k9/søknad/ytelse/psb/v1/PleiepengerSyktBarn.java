@@ -128,6 +128,12 @@ public class PleiepengerSyktBarn implements Ytelse {
         return barn;
     }
 
+    @Override
+    public Person getAnnenPart() {
+        // ikke relevant for pleiepenger sykt barn
+        return null;
+    }
+    
     public PleiepengerSyktBarn medBarn(Barn barn) {
         this.barn = barn;
         return this;
