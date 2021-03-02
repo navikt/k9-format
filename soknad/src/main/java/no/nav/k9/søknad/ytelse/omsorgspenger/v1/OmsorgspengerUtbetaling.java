@@ -94,6 +94,11 @@ public class OmsorgspengerUtbetaling implements Ytelse {
     public Person getPleietrengende() {
         return null;
     }
+    
+    @Override
+    public Person getAnnenPart() {
+        return null;
+    }
 
     /** har ikke egen søknadsperiode for omsorgspenger, men angir på bakggrunn av angitte fraværsperioder. */
     @Override
