@@ -30,7 +30,7 @@ jobs:
           
       - name: Build & Deploy
         run: |
-             mvn verify -e --batch-mode --settings .github/settings.xml --file pom.xml -DtrimStackTrace=false
+             mvn verify -e --batch-mode --settings ./../.github/settings.xml --file pom.xml -DtrimStackTrace=false
         env:
           GITHUB_USERNAME: x-access-token
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
