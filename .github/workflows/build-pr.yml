@@ -29,4 +29,4 @@ jobs:
             ${{ runner.os }}-maven-${{ env.PREVIOUS_CACHE_KEY }}
       
       - name: Build
-        run: mvn verify -DtrimStackTrace=false
+        run: mvn verify --settings .github/settings.xml -DtrimStackTrace=false
