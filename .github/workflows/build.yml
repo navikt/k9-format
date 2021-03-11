@@ -39,4 +39,4 @@ jobs:
         uses: release-drafter/release-drafter@v5
         if: success()
         env:
-          GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
