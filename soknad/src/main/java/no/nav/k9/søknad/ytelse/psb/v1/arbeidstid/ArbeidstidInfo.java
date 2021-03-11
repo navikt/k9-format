@@ -2,6 +2,7 @@ package no.nav.k9.søknad.ytelse.psb.v1.arbeidstid;
 
 import com.fasterxml.jackson.annotation.*;
 import no.nav.k9.søknad.felles.type.Periode;
+import org.hibernate.validator.constraints.time.DurationMin;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -17,6 +18,7 @@ public class ArbeidstidInfo {
 
     @Valid
     @NotNull
+    @DurationMin
     @JsonProperty(value = "jobberNormaltTimerPerDag", required = true)
     private Duration jobberNormaltTimerPerDag;
 
@@ -27,7 +29,8 @@ public class ArbeidstidInfo {
     private Map<Periode, ArbeidstidPeriodeInfo> perioder;
 
     @JsonCreator
-    public ArbeidstidInfo(@JsonProperty(value = "jobberNormaltTimerPerDag", required = true) @Valid @NotNull Duration jobberNormaltTimerPerDag,
+    public ArbeidstidInfo(
+            @JsonProperty(value = "jobberNormaltTimerPerDag", required = true) @Valid @NotNull Duration jobberNormaltTimerPerDag,
             @JsonProperty(value = "perioder") @Valid @NotNull Map<Periode, ArbeidstidPeriodeInfo> perioder) {
         this.jobberNormaltTimerPerDag = jobberNormaltTimerPerDag;
         this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);

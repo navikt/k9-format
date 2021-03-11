@@ -1,32 +1,27 @@
 package no.nav.k9.søknad.ytelse.psb;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import no.nav.k9.søknad.JsonUtils;
+import no.nav.k9.søknad.Søknad;
+import no.nav.k9.søknad.ValideringsFeil;
+import no.nav.k9.søknad.felles.Feil;
+import no.nav.k9.søknad.felles.aktivitet.*;
+import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
+import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
+import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnValidator;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
+import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.jupiter.api.Test;
-
-import no.nav.k9.søknad.JsonUtils;
-import no.nav.k9.søknad.Søknad;
-import no.nav.k9.søknad.ValideringsFeil;
-import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.aktivitet.ArbeidAktivitet;
-import no.nav.k9.søknad.felles.aktivitet.Arbeidstaker;
-import no.nav.k9.søknad.felles.aktivitet.Frilanser;
-import no.nav.k9.søknad.felles.aktivitet.Organisasjonsnummer;
-import no.nav.k9.søknad.felles.aktivitet.SelvstendigNæringsdrivende;
-import no.nav.k9.søknad.felles.aktivitet.VirksomhetType;
-import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
-import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
-import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnValidator;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PleiepengerBarnSøknadValidatorTest {
     private static final PleiepengerSyktBarnValidator validator = new PleiepengerSyktBarnValidator();
@@ -45,17 +40,72 @@ public class PleiepengerBarnSøknadValidatorTest {
     }
 
     @Test
-    public void søknadsperiodeKanIkkeVæreNull() {
-        var builder = TestUtils.komplettBuilder();
-        builder.medSøknadsperiode(null);
+    public void uttakKanIkkeVæreNull() {
+        var builder = TestUtils.komplettYtelsePsb();
+        builder.medUttak(null);
         verifyHarFeil(builder);
     }
 
     @Test
+    public void perioderIkkekompletHelg() {
+        var søknadsperiodeFom = LocalDate.of(2021, 01, 04);
+        var søknadsperiodeTom = LocalDate.of(2021, 01, 31);
+
+        var arbeidstidPeriode = List.of(
+                new Periode(søknadsperiodeFom, søknadsperiodeFom.plusDays(4)),
+                new Periode(søknadsperiodeFom.plusDays(7), søknadsperiodeFom.plusDays(4+7)),
+                new Periode(søknadsperiodeFom.plusDays(14), søknadsperiodeTom));
+
+        var ytelse = TestUtils.komplettYtelsePsb(new Periode(søknadsperiodeFom, søknadsperiodeTom));
+        var arbeidstaker = new Arbeidstaker(
+                null,
+                Organisasjonsnummer.of("999999999"),
+                new ArbeidstidInfo(
+                        Duration.ofHours(8),
+                        Map.of(
+                                arbeidstidPeriode.get(0), new ArbeidstidPeriodeInfo(Duration.ofHours(0)),
+                                arbeidstidPeriode.get(1), new ArbeidstidPeriodeInfo(Duration.ofHours(0)),
+                                arbeidstidPeriode.get(2), new ArbeidstidPeriodeInfo(Duration.ofHours(0))
+                        )
+                )
+        );
+        ytelse.medArbeidstid(new Arbeidstid(List.of(arbeidstaker), null, null));
+        verifyIngenFeil(ytelse);
+    }
+
+    @Test
+    public void perioderIkkekompletIkkeHelg() {
+        var søknadsperiodeFom = LocalDate.of(2021, 01, 04);
+        var søknadsperiodeTom = LocalDate.of(2021, 01, 31);
+
+        var arbeidstidPeriode = List.of(
+                new Periode(søknadsperiodeFom, søknadsperiodeFom.plusDays(3)),
+                new Periode(søknadsperiodeFom.plusDays(7), søknadsperiodeFom.plusDays(4+7)),
+                new Periode(søknadsperiodeFom.plusDays(14), søknadsperiodeFom.plusDays(4+14)),
+                new Periode(søknadsperiodeFom.plusDays(22), søknadsperiodeTom));
+
+        var ytelse = TestUtils.komplettYtelsePsb(new Periode(søknadsperiodeFom, søknadsperiodeTom));
+        var arbeidstaker = new Arbeidstaker(
+                null,
+                Organisasjonsnummer.of("999999999"),
+                new ArbeidstidInfo(
+                        Duration.ofHours(8),
+                        Map.of(
+                                arbeidstidPeriode.get(0), new ArbeidstidPeriodeInfo(Duration.ofHours(0)),
+                                arbeidstidPeriode.get(1), new ArbeidstidPeriodeInfo(Duration.ofHours(0)),
+                                arbeidstidPeriode.get(2), new ArbeidstidPeriodeInfo(Duration.ofHours(0))
+                        )
+                )
+        );
+        ytelse.medArbeidstid(new Arbeidstid(List.of(arbeidstaker), null, null));
+        assertThat(valider(ytelse)).size().isEqualTo(2);
+    }
+
+    @Test
     public void søknadMedTilsynsordningOppholdLengreEnnPerioden() {
-        var søknad = TestUtils.komplettBuilder();
+        var søknad = TestUtils.komplettYtelsePsb();
         Tilsynsordning tilsynsordning = new Tilsynsordning(Map.of(
-                new Periode(LocalDate.now(), LocalDate.now()),
+                new Periode(søknad.getSøknadsperiode().getFraOgMed(), søknad.getSøknadsperiode().getTilOgMed().plusDays(10)),
                 new TilsynPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
         søknad.medTilsynsordning(tilsynsordning);
 
@@ -64,7 +114,7 @@ public class PleiepengerBarnSøknadValidatorTest {
 
     @Test
     public void søknadMedArbeidsSomOverlapper() {
-        var søknad = TestUtils.komplettBuilder();
+        var søknad = TestUtils.komplettYtelsePsb();
         var søknadsperiode = søknad.getSøknadsperiode();
         var arbeidstidInfo = new ArbeidstidInfo(Duration.ofHours(7).plusMinutes(30), Map.of(
                 søknadsperiode,
@@ -73,13 +123,13 @@ public class PleiepengerBarnSøknadValidatorTest {
                 new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
         var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), arbeidstidInfo);
         søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
-        assertThat(verifyHarFeil(søknad)).hasSize(2);
+        verifyHarFeil(søknad);
 
     }
 
     @Test
     public void søknadMedNullJobberNormaltTimerPerDag() {
-        var søknad = TestUtils.komplettBuilder();
+        var søknad = TestUtils.komplettYtelsePsb();
         var søknadsperiode = søknad.getSøknadsperiode();
         var arbeidstidInfo = new ArbeidstidInfo(null, Map.of(
                 søknadsperiode,
@@ -91,7 +141,7 @@ public class PleiepengerBarnSøknadValidatorTest {
 
     @Test
     public void søknadMedNullFaktiskArbeidTimerPerDag() {
-        var søknad = TestUtils.komplettBuilder();
+        var søknad = TestUtils.komplettYtelsePsb();
         var søknadsperiode = søknad.getSøknadsperiode();
         var arbeidstidInfo = new ArbeidstidInfo(Duration.ofHours(7).plusMinutes(30), Map.of(
                 søknadsperiode,
@@ -103,7 +153,7 @@ public class PleiepengerBarnSøknadValidatorTest {
 
     @Test
     public void søknadMedNegativNormaltArbeidTimerPerDag() {
-        var søknad = TestUtils.komplettBuilder();
+        var søknad = TestUtils.komplettYtelsePsb();
         var søknadsperiode = søknad.getSøknadsperiode();
         var arbeidstidInfo = new ArbeidstidInfo(Duration.ofHours(-8), Map.of(
                 søknadsperiode,
@@ -115,7 +165,7 @@ public class PleiepengerBarnSøknadValidatorTest {
 
     @Test
     public void søknadMedNegativFaktiskArbeidTimerPerDag() {
-        var søknad = TestUtils.komplettBuilder();
+        var søknad = TestUtils.komplettYtelsePsb();
         var søknadsperiode = søknad.getSøknadsperiode();
         var arbeidstidInfo = new ArbeidstidInfo(Duration.ofHours(7).plusMinutes(30), Map.of(
                 søknadsperiode,
@@ -127,7 +177,7 @@ public class PleiepengerBarnSøknadValidatorTest {
 
     @Test
     public void søknadMedNullFeilArbeidstaker() {
-        var søknad = TestUtils.komplettBuilder();
+        var søknad = TestUtils.komplettYtelsePsb();
         var søknadsperiode = søknad.getSøknadsperiode();
         var arbeidstidInfo = new ArbeidstidInfo(Duration.ofHours(7).plusMinutes(30), Map.of(
                 søknadsperiode,
@@ -139,7 +189,7 @@ public class PleiepengerBarnSøknadValidatorTest {
 
     @Test
     public void søknadMedIkkeEntydigInfoForArbeidstaker() {
-        var søknad = TestUtils.komplettBuilder();
+        var søknad = TestUtils.komplettYtelsePsb();
         var søknadsperiode = søknad.getSøknadsperiode();
         var arbeidstidInfo = new ArbeidstidInfo(Duration.ofHours(7).plusMinutes(30), Map.of(
                 søknadsperiode,
@@ -151,7 +201,7 @@ public class PleiepengerBarnSøknadValidatorTest {
 
     @Test
     public void ÅpneOgOverlappendePerioderForFrilanserOgSelvstendig() {
-        var søknad = TestUtils.komplettBuilder();
+        var søknad = TestUtils.komplettYtelsePsb();
         var selvstendig = SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
                 .virksomhetstyper(List.of(VirksomhetType.ANNEN)).build();
 

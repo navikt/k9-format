@@ -23,6 +23,7 @@ public class ArbeidAktivitet {
     @Valid
     private Frilanser frilanser;
 
+    @Deprecated
     @Valid
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     @JsonProperty(value = "arbeidstaker")
@@ -41,6 +42,7 @@ public class ArbeidAktivitet {
         this.frilanser = frilanser;
     }
 
+    @Deprecated
     public static Builder builder() {
         return new Builder();
     }
@@ -90,6 +92,7 @@ public class ArbeidAktivitet {
         return this;
     }
 
+    @Deprecated
     public static final class Builder {
         private List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende = new ArrayList<>();
         private Frilanser frilanser;

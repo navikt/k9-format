@@ -51,11 +51,11 @@ final class TestUtils {
         return JsonUtils.fromString(ytelse, Ytelse.class);
     }
 
-    static PleiepengerSyktBarn komplettBuilder() {
+    static PleiepengerSyktBarn komplettYtelsePsb() {
 
         var søknadsperiode = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-10-20"));
         var delperiodeEn = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-02-20"));
-        var delperiodeTo = new Periode(LocalDate.parse("2019-02-21"), LocalDate.parse("2019-05-21"));
+        var delperiodeTo = new Periode(LocalDate.parse("2019-02-21"), LocalDate.parse("2019-10-20"));
 
         var uttak = new Uttak(Map.of(
             søknadsperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
@@ -121,6 +121,47 @@ final class TestUtils {
 
         return new PleiepengerSyktBarn(søknadsperiode, søknadInfo, barn, aktivitet, beredskap, nattevåk, tilsynsordning, arbeidstid, uttak, omsorg, lovbestemtFerie, bosteder,
             utenlandsopphold);
+    }
+
+    static PleiepengerSyktBarn komplettYtelsePsb(Periode søknadsperiode) {
+
+        var uttak = new Uttak(Map.of(
+                søknadsperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
+
+        var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("999999999"),
+                new ArbeidstidInfo(Duration.ofHours(7).plusMinutes(30), Map.of(
+                        søknadsperiode,
+                        new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30)))));
+
+        var arbeidstid = new Arbeidstid(List.of(
+                arbeidstaker), null, null);
+
+        var beredskap = new Beredskap(Map.of(
+                søknadsperiode, new Beredskap.BeredskapPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.")));
+
+        var nattevåk = new Nattevåk(Map.of(
+                søknadsperiode, new Nattevåk.NattevåkPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.")));
+
+        var tilsynsordning = new Tilsynsordning(Map.of(
+                søknadsperiode,
+                new TilsynPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
+
+        var lovbestemtFerie = new LovbestemtFerie(List.of(søknadsperiode));
+
+        var barn = new Barn(NorskIdentitetsnummer.of("11111111111"), null);
+
+        var bosteder = new Bosteder(Map.of(
+                søknadsperiode,
+                new Bosteder.BostedPeriodeInfo(Landkode.NORGE)));
+
+        var omsorg = new Omsorg("MORA", true,
+                "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.");
+
+        var søknadInfo = new DataBruktTilUtledning( true, true,
+                false, false, true );
+
+        return new PleiepengerSyktBarn(søknadsperiode, søknadInfo, barn, null, beredskap, nattevåk, tilsynsordning, arbeidstid, uttak, omsorg, lovbestemtFerie, bosteder,
+                null);
     }
 
     static PleiepengerSyktBarn minimumSøknadPleiepengerSyktBarn() {
