@@ -19,14 +19,14 @@ import no.nav.k9.søknad.felles.type.PersonIdent;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Søker implements Person {
 
-    @JsonAlias({ "fødselsnummer", "norskIdentifikator" })
+    @JsonAlias({ "fødselsnummer", "norskIdentifikator", "identitetsnummer", "fnr" })
     @JsonProperty(value = "norskIdentitetsnummer", required = true)
     @NotNull
     @Valid
     private NorskIdentitetsnummer norskIdentitetsnummer;
 
     @JsonCreator
-    public Søker(@JsonProperty(value = "norskIdentitetsnummer", required = true) NorskIdentitetsnummer norskIdentitetsnummer) {
+    public Søker(@JsonProperty(value = "norskIdentitetsnummer", required = true) @JsonAlias({ "fødselsnummer", "norskIdentifikator", "identitetsnummer", "fnr" }) NorskIdentitetsnummer norskIdentitetsnummer) {
         this.norskIdentitetsnummer = Objects.requireNonNull(norskIdentitetsnummer, "norskIdentitetsnummer");
     }
 

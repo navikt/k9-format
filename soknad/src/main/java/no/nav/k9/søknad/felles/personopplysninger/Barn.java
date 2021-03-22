@@ -21,7 +21,7 @@ import no.nav.k9.søknad.felles.type.PersonIdent;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Barn implements Person {
 
-    @JsonAlias({ "fødselsnummer", "norskIdentifikator" })
+    @JsonAlias({ "fødselsnummer", "norskIdentifikator", "identitetsnummer", "fnr" })
     @JsonProperty(value = "norskIdentitetsnummer")
     @Valid
     public final NorskIdentitetsnummer norskIdentitetsnummer;
@@ -32,7 +32,7 @@ public class Barn implements Person {
 
     @JsonCreator
     public Barn(
-                @JsonProperty("norskIdentitetsnummer") NorskIdentitetsnummer norskIdentitetsnummer,
+                @JsonProperty("norskIdentitetsnummer") @JsonAlias({ "fødselsnummer", "norskIdentifikator", "identitetsnummer", "fnr" }) NorskIdentitetsnummer norskIdentitetsnummer,
                 @JsonProperty("fødselsdato") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Oslo") LocalDate fødselsdato) {
         this.norskIdentitetsnummer = norskIdentitetsnummer;
         this.fødselsdato = fødselsdato;
