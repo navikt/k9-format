@@ -42,11 +42,7 @@ autolabeler:
       - '/^[A-Z]{3,8}-[0-9]{1,4}:/'
   - label: 'kontrakt'
     files:
-      - '**/*'
-      - '!pom.xml'
-      - '!**/pom.xml'
-      - '!**/*.yml'
-      - '!*.yml'
+      - '**/*.java'
   - label: 'pom'
     files:
       - 'pom.xml'
