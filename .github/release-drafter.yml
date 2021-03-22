@@ -1,6 +1,7 @@
 name-template: $NEXT_PATCH_VERSION
 tag-template: $NEXT_PATCH_VERSION
 change-template: '- $TITLE (#$NUMBER) @$AUTHOR'
+commitish: 'master'
 categories:
   - title: '🚀 Features'
     labels:
@@ -21,6 +22,24 @@ categories:
     labels:
       - 'bump'
       - 'dependencies'
+autolabeler:
+  - label: 'chore'
+    title:
+      - '/^chore:/i'
+    files:
+      - '*.md'
+  - label: 'bug'
+    branch:
+      - '/fix\/.+/'
+    title:
+      - '/^fix:/i'
+  - label: 'enhancement'
+    branch:
+      - '/feature\/.+/'
+    title:
+      - '/^feature:/i'
+    body:
+      - '/^[A-Z]{3,8}-[0-9]{1,4}:/'
 include-labels:
   - 'kontrakt'
 template: |
