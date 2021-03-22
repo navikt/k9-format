@@ -44,10 +44,9 @@ autolabeler:
     files:
       - '**/*'
       - '!pom.xml'
-      - '!**/*/pom.xml'
+      - '!*.yml'
   - label: 'pom'
     files:
-      - '**/*/pom.xml'
       - 'pom.xml'
 include-labels:
   - 'kontrakt'
