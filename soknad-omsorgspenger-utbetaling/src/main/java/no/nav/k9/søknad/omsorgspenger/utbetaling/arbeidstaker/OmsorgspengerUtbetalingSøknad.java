@@ -92,10 +92,10 @@ public class OmsorgspengerUtbetalingSøknad implements Innsending {
         var index = 0;
         List<Feil> feil = new ArrayList<>();
         for (Barn b : barn) {
-            if (b.norskIdentitetsnummer == null && b.fødselsdato == null) {
+            if (b.getPersonIdent() == null && b.getFødselsdato() == null) {
                 feil.add(new Feil("fosterbarn[" + index + "]", "norskIdentitetsnummerEllerFødselsdatoPåkrevd",
                     "Må sette enten Personnummer/D-nummer på fosterbarn, eller fødselsdato."));
-            } else if (b.norskIdentitetsnummer != null && b.fødselsdato != null) {
+            } else if (b.getPersonIdent() != null && b.getFødselsdato() != null) {
                 feil.add(
                     new Feil("fosterbarn[" + index + "]", "ikkeEntydigIdPåBarnet", "Må sette enten Personnummer/D-nummer på fosterbarn, eller fødselsdato."));
             }

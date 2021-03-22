@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -38,12 +39,18 @@ public class OmsorgspengerMidlertidigAlene implements OmsorgspengerUtvidetRett {
     @NotNull
     private List<Barn> barn;
 
+    @JsonProperty(value = "begrunnelse")
+    @Size(max = 30000)
+    private String begrunnelse;
+
     public OmsorgspengerMidlertidigAlene() {
     }
 
     @JsonCreator
     public OmsorgspengerMidlertidigAlene(@JsonProperty(value = "barn", required = true) @Valid @NotNull Collection<Barn> barn,
+                                         @JsonProperty(value = "begrunnelse") String begrunnelse,
                                          @JsonProperty(value = "annenForelder", required = true) @Valid @NotNull AnnenForelder annenForelder) {
+        this.begrunnelse = begrunnelse;
         this.annenForelder = Objects.requireNonNull(annenForelder, "annenForelder");
         this.barn = barn == null ? null : new ArrayList<>(barn);
     }
@@ -75,6 +82,10 @@ public class OmsorgspengerMidlertidigAlene implements OmsorgspengerUtvidetRett {
     public YtelseValidator getValidator() {
         return new MinValidator();
     }
+    
+    public String getBegrunnelse() {
+        return begrunnelse;
+    }
 
     @Override
     public Person getAnnenPart() {
@@ -88,7 +99,7 @@ public class OmsorgspengerMidlertidigAlene implements OmsorgspengerUtvidetRett {
     public List<Barn> getBarn() {
         return barn == null ? barn : Collections.unmodifiableList(barn);
     }
-    
+
     @Override
     public Person getPleietrengende() {
         return null; // ignorerer her

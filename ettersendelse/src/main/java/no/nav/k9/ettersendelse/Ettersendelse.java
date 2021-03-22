@@ -26,29 +26,29 @@ public class Ettersendelse implements Innsending {
     @JsonProperty(value="søknadId", required = true)
     @NotNull
     @Valid
-    public final SøknadId søknadId;
+    private final SøknadId søknadId;
 
     @JsonProperty(value="versjon")
     @Valid
-    public final Versjon versjon;
+    private final Versjon versjon;
 
 
     @JsonProperty(value="mottattDato")
     @Valid
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
-    public final ZonedDateTime mottattDato;
+    private final ZonedDateTime mottattDato;
 
 
     @JsonProperty(value="søker", required = true)
     @Valid
     @NotNull
-    public final Søker søker;
+    private final Søker søker;
 
 
     @JsonProperty(value="ytelse", required = true)
     @Valid
     @NotNull
-    public final Ytelse ytelse;
+    private final Ytelse ytelse;
 
     @JsonCreator
     private Ettersendelse(
@@ -84,6 +84,10 @@ public class Ettersendelse implements Innsending {
         return versjon;
     }
 
+    public Ytelse getYtelse() {
+        return ytelse;
+    }
+    
     public static Builder builder() {
         return new Builder();
     }

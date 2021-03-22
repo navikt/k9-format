@@ -13,7 +13,7 @@ public class SøknadId {
     @JsonValue
     @Size(max=40)
     @Pattern(regexp = "^[\\p{Alnum}-]+$", message = "'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
-    public final String id;
+    private final String id;
 
     public SøknadId(String id) {
         if (id == null || id.isBlank()) {
@@ -28,6 +28,10 @@ public class SøknadId {
             return null;
         }
         return new SøknadId(id);
+    }
+    
+    public String getId() {
+        return id;
     }
 
     @Override

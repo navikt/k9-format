@@ -14,10 +14,10 @@ public class Frilanser {
 
     @JsonProperty(value = "startdato")
     @NotNull
-    public final LocalDate startdato;
+    private final LocalDate startdato;
 
     @JsonProperty(value = "jobberFortsattSomFrilans")
-    public final Boolean jobberFortsattSomFrilans;
+    private final Boolean jobberFortsattSomFrilans;
 
     public static Frilanser.Builder builder() {
         return new Frilanser.Builder();

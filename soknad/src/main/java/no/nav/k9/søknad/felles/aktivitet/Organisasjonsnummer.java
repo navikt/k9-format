@@ -14,12 +14,16 @@ public class Organisasjonsnummer {
     @NotNull
     @Size(max = 20)
     @Pattern(regexp = "^\\d+$", message = "'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
-    public final String verdi;
+    private final String verdi;
 
     private Organisasjonsnummer(String verdi) {
         this.verdi = Objects.requireNonNull(verdi, "organisasjonsnummer");
     }
 
+    public String getVerdi() {
+        return verdi;
+    }
+    
     @JsonCreator
     public static Organisasjonsnummer of(String verdi) {
         if (verdi == null || verdi.isBlank()) {
