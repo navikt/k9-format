@@ -39,7 +39,16 @@ autolabeler:
     title:
       - '/^feature:/i'
     body:
-      - '/^[A-Z]{3,8}-[0-9]{1,4}:/'
+      - '/^[A-Z]{3,8}-[0-9]{1,4}:/'kontrakt:
+  - label: 'kontrakt'
+    files:
+      - '**/*'
+      - '!pom.xml'
+      - '!**/*/pom.xml'
+  - label: 'pom'
+    files:
+      - '**/*/pom.xml'
+      - pom.xml
 include-labels:
   - 'kontrakt'
 template: |
