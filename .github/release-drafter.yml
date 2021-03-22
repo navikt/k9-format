@@ -39,7 +39,7 @@ autolabeler:
     title:
       - '/^feature:/i'
     body:
-      - '/^[A-Z]{3,8}-[0-9]{1,4}:/'kontrakt:
+      - '/^[A-Z]{3,8}-[0-9]{1,4}:/'
   - label: 'kontrakt'
     files:
       - '**/*'
