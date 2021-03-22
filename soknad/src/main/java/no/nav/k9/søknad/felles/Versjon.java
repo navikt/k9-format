@@ -17,8 +17,9 @@ public class Versjon {
     @JsonValue
     @Size(max = 10)
     @Pattern(regexp = SEMVER_REGEX, message = "'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
-    public final String verdi;
+    private final String verdi;
 
+    @JsonCreator
     public Versjon(String verdi) {
         if (verdi == null || verdi.isBlank()) {
             throw new IllegalArgumentException("Kan ikke ha null eller blank versjon");
@@ -26,6 +27,10 @@ public class Versjon {
         this.verdi = verdi;
     }
 
+    public String getVerdi() {
+        return verdi;
+    }
+    
     @JsonCreator
     public static Versjon of(String verdi) {
         if (verdi == null || verdi.isBlank()) {

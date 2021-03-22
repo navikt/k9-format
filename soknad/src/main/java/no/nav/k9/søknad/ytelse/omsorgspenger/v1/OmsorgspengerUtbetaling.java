@@ -156,14 +156,14 @@ public class OmsorgspengerUtbetaling implements Ytelse {
     private List<Feil> validerAngittUtenlandsopphold() {
         if (utenlandsopphold == null)
             List.of();
-        return new PeriodeValidator().validerIkkeTillattOverlapp(utenlandsopphold.perioder, "utenlandsopphold.perioder");
+        return new PeriodeValidator().validerIkkeTillattOverlapp(utenlandsopphold.getPerioder(), "utenlandsopphold.perioder");
     }
 
     @Size(max = 0, message = "${validatedValue}")
     private List<Feil> validerAngittBosteder() {
         if (bosteder == null)
             return List.of();
-        return new PeriodeValidator().validerIkkeTillattOverlapp(bosteder.perioder, "bosteder.perioder");
+        return new PeriodeValidator().validerIkkeTillattOverlapp(bosteder.getPerioder(), "bosteder.perioder");
     }
 
     @Size(max = 0, message = "${validatedValue}")
@@ -174,10 +174,10 @@ public class OmsorgspengerUtbetaling implements Ytelse {
         var index = 0;
         List<Feil> feil = new ArrayList<>();
         for (Barn b : barn) {
-            if (b.norskIdentitetsnummer == null && b.fødselsdato == null) {
+            if (b.getPersonIdent() == null && b.getFødselsdato() == null) {
                 feil.add(new Feil("fosterbarn[" + index + "]", "norskIdentitetsnummerEllerFødselsdatoPåkrevd",
                     "Må sette enten Personnummer/D-nummer på fosterbarn, eller fødselsdato."));
-            } else if (b.norskIdentitetsnummer != null && b.fødselsdato != null) {
+            } else if (b.getPersonIdent() != null && b.getFødselsdato() != null) {
                 feil.add(
                     new Feil("fosterbarn[" + index + "]", "ikkeEntydigIdPåBarnet", "Må sette enten Personnummer/D-nummer på fosterbarn, eller fødselsdato."));
             }

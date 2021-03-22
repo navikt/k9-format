@@ -28,17 +28,17 @@ public class SelvstendigNæringsdrivende {
     @Valid
     @NotNull
     @NotEmpty
-    public final Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> perioder;
+    private final Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> perioder;
 
     /** Orgnummer - påkrevd for norske selskaper, ikke for utenlandske enn så lenge. */
     @JsonProperty(value = "organisasjonsnummer")
-    public final Organisasjonsnummer organisasjonsnummer;
+    private final Organisasjonsnummer organisasjonsnummer;
 
     /** Virsomhetsnavn - påkrevd for norske og utenlandske selskaper. */
     @JsonProperty(value = "virksomhetNavn")
     @NotBlank(message = "Virksomhetnavn er påkrevd")
     @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message = "'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
-    public final String virksomhetNavn;
+    private final String virksomhetNavn;
 
     public static SelvstendigNæringsdrivende.Builder builder() {
         return new SelvstendigNæringsdrivende.Builder();
@@ -122,40 +122,76 @@ public class SelvstendigNæringsdrivende {
 
         @JsonProperty(value = "virksomhetstyper", required = true)
         @NotEmpty
-        public final List<VirksomhetType> virksomhetstyper;
+        private final List<VirksomhetType> virksomhetstyper;
 
         @JsonProperty("regnskapsførerNavn")
         @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message = "'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
-        public final String regnskapsførerNavn;
+        private final String regnskapsførerNavn;
 
         @JsonProperty("regnskapsførerTlf")
         @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message = "'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
-        public final String regnskapsførerTlf;
+        private final String regnskapsførerTlf;
 
         @JsonProperty("erVarigEndring")
-        public final Boolean erVarigEndring;
+        private final Boolean erVarigEndring;
 
         @JsonProperty("endringDato")
-        public final LocalDate endringDato;
+        private final LocalDate endringDato;
 
         @JsonProperty("endringBegrunnelse")
-        public final String endringBegrunnelse;
+        private final String endringBegrunnelse;
 
         @JsonProperty("bruttoInntekt")
         @Valid
         @DecimalMin(value = "0.00", message = "bruttoInntekt [${validatedValue}] må være >= {value}")
         @DecimalMax(value = "10000000.00", message = "bruttoInntekt [${validatedValue}] må være <= {value}")
-        public final BigDecimal bruttoInntekt;
+        private final BigDecimal bruttoInntekt;
 
         @JsonProperty("erNyoppstartet")
-        public final Boolean erNyoppstartet;
+        private final Boolean erNyoppstartet;
 
         @JsonProperty("registrertIUtlandet")
-        public final Boolean registrertIUtlandet;
+        private final Boolean registrertIUtlandet;
 
         @JsonProperty("landkode")
         @Valid
-        public final Landkode landkode;
+        private final Landkode landkode;
+
+        public String getRegnskapsførerNavn() {
+            return regnskapsførerNavn;
+        }
+
+        public String getRegnskapsførerTlf() {
+            return regnskapsførerTlf;
+        }
+
+        public Boolean getErVarigEndring() {
+            return erVarigEndring;
+        }
+
+        public LocalDate getEndringDato() {
+            return endringDato;
+        }
+
+        public String getEndringBegrunnelse() {
+            return endringBegrunnelse;
+        }
+
+        public BigDecimal getBruttoInntekt() {
+            return bruttoInntekt;
+        }
+
+        public Boolean getErNyoppstartet() {
+            return erNyoppstartet;
+        }
+
+        public Boolean getRegistrertIUtlandet() {
+            return registrertIUtlandet;
+        }
+
+        public Landkode getLandkode() {
+            return landkode;
+        }
 
         @JsonCreator
         private SelvstendigNæringsdrivendePeriodeInfo(

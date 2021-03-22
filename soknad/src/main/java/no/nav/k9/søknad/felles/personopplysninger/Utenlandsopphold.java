@@ -19,7 +19,7 @@ public class Utenlandsopphold {
 
     @JsonInclude(value = Include.ALWAYS)
     @JsonProperty(value = "perioder")
-    public final Map<Periode, UtenlandsoppholdPeriodeInfo> perioder;
+    private final Map<Periode, UtenlandsoppholdPeriodeInfo> perioder;
 
     @JsonCreator
     public Utenlandsopphold(
@@ -67,10 +67,10 @@ public class Utenlandsopphold {
     public static class UtenlandsoppholdPeriodeInfo {
 
         @JsonProperty(value = "land", required = true)
-        public final Landkode land;
+        private final Landkode land;
 
         @JsonProperty(value = "årsak")
-        public final UtenlandsoppholdÅrsak årsak;
+        private final UtenlandsoppholdÅrsak årsak;
 
         @JsonCreator
         private UtenlandsoppholdPeriodeInfo(
@@ -123,19 +123,23 @@ public class Utenlandsopphold {
                 "barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd");
 
         @JsonValue
-        public final String dto;
+        private final String årsak;
 
         UtenlandsoppholdÅrsak(String dto) {
-            this.dto = dto;
+            this.årsak = dto;
         }
 
+        public String getÅrsak() {
+            return årsak;
+        }
+        
         @JsonCreator
         public static UtenlandsoppholdÅrsak of(String value) {
             if (value == null || value.isBlank()) {
                 return null;
             }
             for (UtenlandsoppholdÅrsak årsak : values()) {
-                if (årsak.dto.equals(value)) {
+                if (årsak.årsak.equals(value)) {
                     return årsak;
                 }
             }

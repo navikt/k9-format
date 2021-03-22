@@ -28,7 +28,7 @@ public class Landkode {
     @Size(max = 3)
     @NotNull
     @Pattern(regexp = "^[A-Z]+$", message = "'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
-    public final String landkode;
+    private final String landkode;
 
     private Landkode(String landkode) {
         this.landkode = landkode;
@@ -40,6 +40,10 @@ public class Landkode {
             return null;
         }
         return new Landkode(landkode);
+    }
+
+    public String getLandkode() {
+        return landkode;
     }
 
     @Override

@@ -54,27 +54,27 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
         var index = 0;
         for (SelvstendigNæringsdrivende sn : selvstendigeVirksomheter) {
             String snFelt = "selvstendigNæringsdrivende[" + index + "]";
-            feil.addAll(this.periodeValidator.validerTillattOverlappOgÅpnePerioder(sn.perioder, snFelt + ".perioder"));
+            feil.addAll(this.periodeValidator.validerTillattOverlappOgÅpnePerioder(sn.getPerioder(), snFelt + ".perioder"));
 
-            sn.perioder.forEach((periode, snInfo) -> {
+            sn.getPerioder().forEach((periode, snInfo) -> {
                 String periodeString = periode.getFraOgMed() + "-" + periode.getTilOgMed();
                 String snInfoFelt = "selvstendigNæringsdrivende.perioder{" + periodeString + "}";
 
-                if (snInfo.erVarigEndring != null && snInfo.erVarigEndring) {
-                    if (snInfo.endringDato == null) {
+                if (snInfo.getErVarigEndring() != null && snInfo.getErVarigEndring()) {
+                    if (snInfo.getEndringDato() == null) {
                         feil.add(new Feil(snInfoFelt + ".endringsDato", PÅKREVD, "endringDato må være satt dersom erVarigEndring er true."));
                     }
-                    if (snInfo.endringBegrunnelse == null || snInfo.endringBegrunnelse.isBlank()) {
+                    if (snInfo.getEndringBegrunnelse() == null || snInfo.getEndringBegrunnelse().isBlank()) {
                         feil.add(new Feil(snInfoFelt + ".endringBegrunnelse", PÅKREVD, "endringBegrunnelse må være satt dersom erVarigEndring er true."));
                     }
                 }
 
-                if (snInfo.registrertIUtlandet != null) {
-                    if (snInfo.registrertIUtlandet && snInfo.landkode == null) {
+                if (snInfo.getRegistrertIUtlandet() != null) {
+                    if (snInfo.getRegistrertIUtlandet() && snInfo.getLandkode() == null) {
                         feil.add(new Feil(snInfoFelt + ".landkode", PÅKREVD,
                             "landkode må være satt, og kan ikke være null, dersom virksomhet er registrert i utlandet."));
                     }
-                } else if (sn.organisasjonsnummer == null) {
+                } else if (sn.getOrganisasjonsnummer() == null) {
                     feil.add(new Feil(snInfoFelt + ".registrertIUtlandet og " + snFelt + ".organisasjonsnummer", PÅKREVD,
                         "Dersom virksomheten er registrert i norge, må organisasjonsnummeret være satt."));
                 }

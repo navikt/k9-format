@@ -13,8 +13,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
+import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.felles.type.PersonIdent;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -24,11 +24,11 @@ public class Barn implements Person {
     @JsonAlias({ "fødselsnummer", "norskIdentifikator", "identitetsnummer", "fnr" })
     @JsonProperty(value = "norskIdentitetsnummer")
     @Valid
-    public final NorskIdentitetsnummer norskIdentitetsnummer;
+    private final NorskIdentitetsnummer norskIdentitetsnummer;
 
     @JsonProperty(value = "fødselsdato")
     @Valid
-    public final LocalDate fødselsdato;
+    private final LocalDate fødselsdato;
 
     @JsonCreator
     public Barn(
@@ -40,7 +40,7 @@ public class Barn implements Person {
 
     @AssertTrue(message = "norskIdentitetsnummer og fødselsdato må være satt")
     private boolean isOk() {
-        return (norskIdentitetsnummer != null && norskIdentitetsnummer.verdi != null)
+        return (norskIdentitetsnummer != null && norskIdentitetsnummer.getVerdi() != null)
             || (fødselsdato != null);
     }
 

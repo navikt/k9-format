@@ -50,9 +50,9 @@ public class OmsorgspengerSøknadValidator extends SøknadValidator<Omsorgspenge
     private static void validerBarn(Barn barn, List<Feil> feil) {
         if (barn == null) {
             feil.add(new Feil("barn", PÅKREVD, "Barn må settes i søknaden."));
-        } else if (barn.norskIdentitetsnummer == null && barn.fødselsdato == null) {
+        } else if (barn.getPersonIdent() == null && barn.getFødselsdato() == null) {
             feil.add(new Feil("barn", "norskIdentitetsnummerEllerFødselsdatoPåkrevd", "Må sette enten Personnummer/D-nummer på barn, eller fødselsdato."));
-        } else if (barn.norskIdentitetsnummer != null && barn.fødselsdato != null) {
+        } else if (barn.getPersonIdent() != null && barn.getFødselsdato() != null) {
             feil.add(new Feil("barn", "ikkeEntydigIdPåBarnet", "Må sette enten Personnummer/D-nummer på barn, eller fødselsdato."));
         }
     }

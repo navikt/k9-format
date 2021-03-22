@@ -27,7 +27,7 @@ public class Bosteder {
     @JsonProperty(value = "perioder")
     @Valid
     @JsonInclude(value = Include.ALWAYS)
-    public final Map<Periode, BostedPeriodeInfo> perioder;
+    private final Map<Periode, BostedPeriodeInfo> perioder;
 
     @JsonCreator
     public Bosteder(
@@ -75,7 +75,7 @@ public class Bosteder {
     public static class BostedPeriodeInfo {
 
         @JsonProperty(value = "land")
-        public final Landkode land;
+        private final Landkode land;
 
         @JsonCreator
         public BostedPeriodeInfo(@JsonProperty(value = "land") Landkode land) {

@@ -16,10 +16,10 @@ public class EttersendelseValidator extends SøknadValidator<Ettersendelse> {
 
         // I en ettersendelse må ikke søknadId settes.
         // Men om den er satt kan vi ruete deen samme veg som selve søknaden.
-        validerVersjon(ettersendelse.versjon, feil);
-        validerMottattDato(ettersendelse.mottattDato, feil);
-        validerSøker(ettersendelse.søker, feil);
-        validerYtelse(ettersendelse.ytelse, feil);
+        validerVersjon(ettersendelse.getVersjon(), feil);
+        validerMottattDato(ettersendelse.getMottattDato(), feil);
+        validerSøker(ettersendelse.getSøker(), feil);
+        validerYtelse(ettersendelse.getYtelse(), feil);
 
         return feil;
     }
