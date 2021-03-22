@@ -78,7 +78,7 @@ public class OmsorgspengerMidlertidigAleneValidatorTest {
                 .medSituasjon(SituasjonType.ANNET, "en annen årsak")
                 .medPeriode(LocalDate.parse("2021-01-01"), LocalDate.parse("2021-07-01"));
 
-            return new OmsorgspengerMidlertidigAlene(List.of(barn), annenForelder);
+            return new OmsorgspengerMidlertidigAlene(List.of(barn), annenForelder, "ok");
         }
 
     }

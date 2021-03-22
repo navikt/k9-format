@@ -48,8 +48,8 @@ public class OmsorgspengerMidlertidigAlene implements OmsorgspengerUtvidetRett {
 
     @JsonCreator
     public OmsorgspengerMidlertidigAlene(@JsonProperty(value = "barn", required = true) @Valid @NotNull Collection<Barn> barn,
-                                         @JsonProperty(value = "begrunnelse") String begrunnelse,
-                                         @JsonProperty(value = "annenForelder", required = true) @Valid @NotNull AnnenForelder annenForelder) {
+                                         @JsonProperty(value = "annenForelder", required = true) @Valid @NotNull AnnenForelder annenForelder,
+                                         @JsonProperty(value = "begrunnelse") String begrunnelse) {
         this.begrunnelse = begrunnelse;
         this.annenForelder = Objects.requireNonNull(annenForelder, "annenForelder");
         this.barn = barn == null ? null : new ArrayList<>(barn);
@@ -82,7 +82,7 @@ public class OmsorgspengerMidlertidigAlene implements OmsorgspengerUtvidetRett {
     public YtelseValidator getValidator() {
         return new MinValidator();
     }
-    
+
     public String getBegrunnelse() {
         return begrunnelse;
     }
