@@ -44,6 +44,8 @@ autolabeler:
     files:
       - '**/*'
       - '!pom.xml'
+      - '!**/pom.xml'
+      - '!**/*.yml'
       - '!*.yml'
   - label: 'pom'
     files:
