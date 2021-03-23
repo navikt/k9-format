@@ -17,7 +17,7 @@
       {
         "periode": null,
         "duration": null,
-        "fraværÅrsak": "STENGT_SKOLE_ELLER_BARNEHAGE"
+        "årsak": "STENGT_SKOLE_ELLER_BARNEHAGE"
       }
     ],
     "bosteder": null,

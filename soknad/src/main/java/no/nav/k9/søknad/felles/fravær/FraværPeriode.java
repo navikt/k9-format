@@ -24,18 +24,18 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
     private final Duration duration;
 
     @NotNull
-    @JsonProperty(value = "fraværÅrsak", required = true)
-    private final FraværÅrsak fraværÅrsak;
+    @JsonProperty(value = "årsak", required = true)
+    private final FraværÅrsak årsak;
 
     @JsonCreator
     public FraværPeriode(
             @JsonProperty("periode") @Valid Periode periode,
             @JsonProperty("duration") Duration duration,
-            @JsonProperty("fraværÅrsak") FraværÅrsak fraværÅrsak
+            @JsonProperty("årsak") FraværÅrsak årsak
     ) {
         this.periode = periode;
         this.duration = duration;
-        this.fraværÅrsak = fraværÅrsak;
+        this.årsak = årsak;
     }
 
     public Periode getPeriode() {
@@ -46,7 +46,7 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
         return duration;
     }
 
-    public FraværÅrsak getFraværÅrsak() { return fraværÅrsak; }
+    public FraværÅrsak getÅrsak() { return årsak; }
 
     @Override
     public boolean equals(Object o) {
@@ -55,12 +55,12 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
         FraværPeriode that = (FraværPeriode) o;
         return periode.equals(that.periode) &&
                 Objects.equals(duration, that.duration) &&
-                Objects.equals(fraværÅrsak, that.fraværÅrsak);
+                Objects.equals(årsak, that.årsak);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(periode, duration, fraværÅrsak);
+        return Objects.hash(periode, duration, årsak);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
         return "FraværPeriode{" +
                 "periode=" + periode +
                 ", duration=" + duration +
-                ", fraværÅrsak=" + fraværÅrsak +
+                ", årsak=" + årsak +
                 '}';
     }
 }

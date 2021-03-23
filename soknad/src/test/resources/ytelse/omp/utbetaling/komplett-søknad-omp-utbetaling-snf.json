@@ -49,17 +49,17 @@
       {
         "periode": "2020-01-01/2020-01-11",
         "duration": "PT7H",
-        "fraværÅrsak": "STENGT_SKOLE_ELLER_BARNEHAGE"
+        "årsak": "STENGT_SKOLE_ELLER_BARNEHAGE"
       },
       {
         "periode": "2020-01-21/2020-01-21",
         "duration": "PT5H",
-        "fraværÅrsak": "SMITTEVERNHENSYN"
+        "årsak": "SMITTEVERNHENSYN"
       },
       {
         "periode": "2020-01-31/2020-02-05",
         "duration": null,
-        "fraværÅrsak": "ORDINÆRT_FRAVÆR"
+        "årsak": "ORDINÆRT_FRAVÆR"
       }
     ],
     "bosteder": null,
