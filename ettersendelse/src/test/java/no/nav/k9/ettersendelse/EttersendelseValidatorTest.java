@@ -31,8 +31,8 @@ public class EttersendelseValidatorTest {
     }
 
     @Test
-    public void ettersendelseForOmsorgspenger() {
-        Ettersendelse.Builder builder = komplettBuilder().ytelse(Ytelse.OMSORGSPENGER);
+    public void ettersendelseForYtelse() {
+        Ettersendelse.Builder builder = komplettBuilder().ytelse(Ytelse.OMP_UT);
         verifyIngenFeil(builder);
     }
 
