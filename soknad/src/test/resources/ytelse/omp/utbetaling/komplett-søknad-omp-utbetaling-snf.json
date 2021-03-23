@@ -1,0 +1,75 @@
+{
+  "søknadId": "$søknadId",
+  "mottattDato": "2018-01-02T03:04:05.000Z",
+  "versjon": "1.0.0",
+  "språk": "nb",
+  "søker": {
+    "norskIdentitetsnummer": "02119970078"
+  },
+  "ytelse": {
+    "type": "OMP_UT",
+    "fosterbarn": [
+      {
+        "norskIdentitetsnummer": "02119970078",
+        "fødselsdato": null
+      }
+    ],
+    "aktivitet": {
+      "selvstendigNæringsdrivende": [
+        {
+          "perioder": {
+            "2019-12-31/2020-01-01": {
+              "virksomhetstyper": [
+                "JORDBRUK_SKOGBRUK",
+                "FISKE",
+                "DAGMAMMA",
+                "ANNEN"
+              ],
+              "regnskapsførerNavn": "Kjell",
+              "regnskapsførerTlf": "84554",
+              "erVarigEndring": true,
+              "endringDato": "2020-01-01",
+              "endringBegrunnelse": "Fordi",
+              "bruttoInntekt": 123123,
+              "erNyoppstartet": true,
+              "registrertIUtlandet": true,
+              "landkode": "DEU"
+            }
+          },
+          "organisasjonsnummer": "101010",
+          "virksomhetNavn": "TullOgTøys"
+        }
+      ],
+      "frilanser": {
+        "startdato": "2020-01-01",
+        "jobberFortsattSomFrilans": true
+      }
+    },
+    "fraværsperioder": [
+      {
+        "periode": "2020-01-01/2020-01-11",
+        "duration": "PT7H",
+        "fraværÅrsak": "STENGT_SKOLE_ELLER_BARNEHAGE"
+      },
+      {
+        "periode": "2020-01-21/2020-01-21",
+        "duration": "PT5H",
+        "fraværÅrsak": "SMITTEVERNHENSYN"
+      },
+      {
+        "periode": "2020-01-31/2020-02-05",
+        "duration": null,
+        "fraværÅrsak": "ORDINÆRT_FRAVÆR"
+      }
+    ],
+    "bosteder": null,
+    "utenlandsopphold": {
+      "perioder": {
+        "2019-12-12/2019-12-22": {
+          "land": "GB",
+          "årsak": null
+        }
+      }
+    }
+  }
+}

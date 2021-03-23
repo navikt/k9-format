@@ -1,0 +1,26 @@
+{
+  "søknadId": "$søknadId",
+  "mottattDato": "2018-01-02T03:04:05.000Z",
+  "versjon": "1.0.0",
+  "språk": "nb",
+  "søker": {
+    "norskIdentitetsnummer": "02119970078"
+  },
+  "ytelse": {
+    "type": "OMP_UT",
+    "fosterbarn": null,
+    "aktivitet": {
+      "selvstendigNæringsdrivende": null,
+      "frilanser": null
+    },
+    "fraværsperioder": [
+      {
+        "periode": null,
+        "duration": null,
+        "fraværÅrsak": "STENGT_SKOLE_ELLER_BARNEHAGE"
+      }
+    ],
+    "bosteder": null,
+    "utenlandsopphold": null
+  }
+}
