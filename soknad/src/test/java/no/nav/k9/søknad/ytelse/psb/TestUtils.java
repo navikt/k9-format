@@ -1,25 +1,5 @@
 package no.nav.k9.søknad.ytelse.psb;
 
-import no.nav.k9.søknad.JsonUtils;
-import no.nav.k9.søknad.Søknad;
-import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie;
-import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFeriePeriodeInfo;
-import no.nav.k9.søknad.felles.opptjening.*;
-import no.nav.k9.søknad.felles.opptjening.arbeidstaker.PsbArbeidstaker;
-import no.nav.k9.søknad.felles.personopplysninger.Barn;
-import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
-import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
-import no.nav.k9.søknad.felles.type.Landkode;
-import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
-import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.ytelse.Ytelse;
-import no.nav.k9.søknad.ytelse.psb.v1.*;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,6 +7,36 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+
+import no.nav.k9.søknad.JsonUtils;
+import no.nav.k9.søknad.Søknad;
+import no.nav.k9.søknad.felles.opptjening.Frilanser;
+import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
+import no.nav.k9.søknad.felles.opptjening.Organisasjonsnummer;
+import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende;
+import no.nav.k9.søknad.felles.opptjening.VirksomhetType;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.PsbArbeidstaker;
+import no.nav.k9.søknad.felles.personopplysninger.Barn;
+import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
+import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
+import no.nav.k9.søknad.felles.type.Landkode;
+import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
+import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.ytelse.Ytelse;
+import no.nav.k9.søknad.ytelse.psb.v1.Beredskap;
+import no.nav.k9.søknad.ytelse.psb.v1.DataBruktTilUtledning;
+import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie;
+import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie.LovbestemtFeriePeriodeInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.Nattevåk;
+import no.nav.k9.søknad.ytelse.psb.v1.Omsorg;
+import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
+import no.nav.k9.søknad.ytelse.psb.v1.Uttak;
+import no.nav.k9.søknad.ytelse.psb.v1.UttakPeriodeInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
 
 final class TestUtils {
 
@@ -70,9 +80,9 @@ final class TestUtils {
         var arbeidstid = new Arbeidstid(List.of(
                 arbeidstaker), null, null);
 
-        var beredskap = new Beredskap(Map.of(
-            delperiodeEn, new Beredskap.BeredskapPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."),
-            delperiodeTo, new Beredskap.BeredskapPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.")));
+        var beredskap = new Beredskap(
+                Map.of( delperiodeEn, new Beredskap.BeredskapPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."),
+                        delperiodeTo, new Beredskap.BeredskapPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.")));
 
         var nattevåk = new Nattevåk(Map.of(
             delperiodeEn, new Nattevåk.NattevåkPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."),
@@ -138,8 +148,8 @@ final class TestUtils {
         var arbeidstid = new Arbeidstid(List.of(
                 arbeidstaker), null, null);
 
-        var beredskap = new Beredskap(Map.of(
-                søknadsperiode, new Beredskap.BeredskapPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.")));
+        var beredskap = new Beredskap(
+                Map.of(søknadsperiode, new Beredskap.BeredskapPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.")));
 
         var nattevåk = new Nattevåk(Map.of(
                 søknadsperiode, new Nattevåk.NattevåkPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.")));

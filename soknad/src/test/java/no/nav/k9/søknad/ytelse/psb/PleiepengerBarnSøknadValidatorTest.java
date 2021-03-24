@@ -5,7 +5,7 @@ import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.opptjening.*;
-import no.nav.k9.søknad.felles.opptjening.arbeidstaker.PsbArbeidstaker;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.PsbArbeidstaker;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;

@@ -22,6 +22,10 @@ public class Nattevåk {
     @NotEmpty
     private Map<Periode, NattevåkPeriodeInfo> perioder;
 
+    @JsonProperty(value="perioderSomSkalSlettes")
+    @Valid
+    private Map<Periode, NattevåkPeriodeInfo> perioderSomSkalSlettes;
+
     @JsonCreator
     public Nattevåk(@JsonProperty("perioder") @Valid @NotEmpty Map<Periode, NattevåkPeriodeInfo> perioder) {
         this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
@@ -36,6 +40,15 @@ public class Nattevåk {
 
     public Nattevåk medPerioder(Map<Periode, NattevåkPeriodeInfo> perioder) {
         this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
+        return this;
+    }
+
+    public Map<Periode, NattevåkPeriodeInfo> getPerioderSomSkalSlettes() {
+        return Collections.unmodifiableMap(perioderSomSkalSlettes);
+    }
+
+    public Nattevåk medPerioderSomSkalSlettes(Map<Periode, NattevåkPeriodeInfo> perioderSomSkalSlettes) {
+        this.perioderSomSkalSlettes = (perioderSomSkalSlettes == null) ? new TreeMap<>() : new TreeMap<>(perioderSomSkalSlettes);
         return this;
     }
 

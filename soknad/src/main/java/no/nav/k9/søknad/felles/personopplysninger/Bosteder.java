@@ -29,6 +29,11 @@ public class Bosteder {
     @JsonInclude(value = Include.ALWAYS)
     private final Map<Periode, BostedPeriodeInfo> perioder;
 
+    @JsonProperty(value = "perioderSomSkalSlettes")
+    @Valid
+    @JsonInclude(value = Include.ALWAYS)
+    public Map<Periode, BostedPeriodeInfo> perioderSomSkalSlettes;
+
     @JsonCreator
     public Bosteder(
                     @JsonProperty("perioder") Map<Periode, BostedPeriodeInfo> perioder) {
@@ -37,6 +42,15 @@ public class Bosteder {
 
     public Map<Periode, BostedPeriodeInfo> getPerioder() {
         return perioder;
+    }
+
+    public Map<Periode, BostedPeriodeInfo> getPerioderSomSkalSlettes() {
+        return unmodifiableMap(perioderSomSkalSlettes);
+    }
+
+    public Bosteder medPerioderSomSkalSlettes(Map<Periode, BostedPeriodeInfo> perioderSomSkalSlettes) {
+        this.perioderSomSkalSlettes = perioderSomSkalSlettes;
+        return this;
     }
 
     /**@deprecated brukt ctor.*/

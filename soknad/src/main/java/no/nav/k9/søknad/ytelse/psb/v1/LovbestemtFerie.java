@@ -22,6 +22,10 @@ public class LovbestemtFerie {
     @Valid
     private Map<Periode, LovbestemtFeriePeriodeInfo> perioder;
 
+    @JsonProperty(value="perioderSomSkalSlettes", required = true)
+    @Valid
+    private Map<Periode, LovbestemtFeriePeriodeInfo> perioderSomSkalSlettes;
+
     @JsonCreator
     public LovbestemtFerie(
             @JsonProperty(value = "perioder", required = true) @Valid Map<Periode, LovbestemtFeriePeriodeInfo> perioder) {
@@ -43,6 +47,23 @@ public class LovbestemtFerie {
     public LovbestemtFerie leggeTilPeriode(Periode periode, LovbestemtFeriePeriodeInfo tilsynPeriodeInfo) {
         this.perioder.put(periode, tilsynPeriodeInfo);
         return this;
+    }
+
+    public Map<Periode, LovbestemtFeriePeriodeInfo> getPerioderSomSkalSlettes() {
+        return unmodifiableMap(perioderSomSkalSlettes);
+    }
+
+    public LovbestemtFerie medPerioderSomSkalSlettes(Map<Periode, LovbestemtFeriePeriodeInfo> perioderSomSkalSlettes) {
+        this.perioderSomSkalSlettes = (perioderSomSkalSlettes == null) ? new TreeMap<>() : new TreeMap<>(perioderSomSkalSlettes);
+        return this;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class LovbestemtFeriePeriodeInfo {
+
+        public LovbestemtFeriePeriodeInfo() {
+        }
+
     }
 
 

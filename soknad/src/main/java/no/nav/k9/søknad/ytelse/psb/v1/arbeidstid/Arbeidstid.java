@@ -11,8 +11,6 @@ import java.util.*;
 
 import static java.util.Collections.*;
 
-import no.nav.k9.søknad.felles.opptjening.arbeidstaker.PsbArbeidstaker;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Arbeidstid {

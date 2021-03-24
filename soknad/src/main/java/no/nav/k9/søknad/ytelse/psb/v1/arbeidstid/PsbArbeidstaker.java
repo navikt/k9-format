@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.felles.opptjening.arbeidstaker;
+package no.nav.k9.søknad.ytelse.psb.v1.arbeidstid;
 
 import java.util.List;
 
@@ -17,7 +17,15 @@ import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 
-public class PsbArbeidstaker extends Arbeidstaker{
+public class PsbArbeidstaker{
+
+    @JsonProperty(value = "norskIdentitetsnummer")
+    @Valid
+    private NorskIdentitetsnummer norskIdentitetsnummer;
+
+    @JsonProperty(value = "organisasjonsnummer")
+    @Valid
+    private Organisasjonsnummer organisasjonsnummer;
 
     @JsonProperty(value = "arbeidstidInfo")
     @Valid
@@ -27,13 +35,20 @@ public class PsbArbeidstaker extends Arbeidstaker{
     public PsbArbeidstaker(@JsonProperty(value = "norskIdentitetsnummer") @Valid NorskIdentitetsnummer norskIdentitetsnummer,
                            @JsonProperty(value = "organisasjonsnummer") @Valid Organisasjonsnummer organisasjonsnummer,
                            @JsonProperty(value = "arbeidstidInfo") @Valid ArbeidstidInfo arbeidstidInfo) {
-        setNorskIdentitetsnummer(norskIdentitetsnummer);
-        setOrganisasjonsnummer(organisasjonsnummer);
+        this.norskIdentitetsnummer = norskIdentitetsnummer;
+        this.organisasjonsnummer = organisasjonsnummer;
         this.arbeidstidInfo = arbeidstidInfo;
     }
 
     public PsbArbeidstaker() {
 
+    }
+    protected boolean erEntydigPåID() {
+        return this.norskIdentitetsnummer != null && this.organisasjonsnummer != null;
+    }
+
+    protected boolean manglerIkkeID() {
+        return (this.norskIdentitetsnummer == null && this.organisasjonsnummer == null);
     }
 
     public void valider(String felt, List<Feil> feilList) {
@@ -43,6 +58,22 @@ public class PsbArbeidstaker extends Arbeidstaker{
         if (manglerIkkeID()) {
             feilList.add(new Feil(felt, "illegalArgument",  "Mangler ID på Arbeidsgiver, må oppgi en av norskIdentitetsnummer eller organisasjonsnummer."));
         }
+    }
+
+    public NorskIdentitetsnummer getNorskIdentitetsnummer() {
+        return norskIdentitetsnummer;
+    }
+
+    public void setNorskIdentitetsnummer(NorskIdentitetsnummer norskIdentitetsnummer) {
+        this.norskIdentitetsnummer = norskIdentitetsnummer;
+    }
+
+    public Organisasjonsnummer getOrganisasjonsnummer() {
+        return organisasjonsnummer;
+    }
+
+    public void setOrganisasjonsnummer(Organisasjonsnummer organisasjonsnummer) {
+        this.organisasjonsnummer = organisasjonsnummer;
     }
 
     public ArbeidstidInfo getArbeidstidInfo() {

@@ -9,8 +9,6 @@ import java.util.List;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 
-import no.nav.k9.søknad.felles.opptjening.arbeidstaker.Arbeidstaker;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class OpptjeningAktivitet {
@@ -72,23 +70,12 @@ public class OpptjeningAktivitet {
     public static final class Builder {
         private List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende = new ArrayList<>();
         private Frilanser frilanser;
-        private List<Arbeidstaker> arbeidstaker = new ArrayList<>();
 
         private Builder() {
         }
 
         public Builder selvstendigNæringsdrivende(List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende) {
             this.selvstendigNæringsdrivende.addAll(selvstendigNæringsdrivende);
-            return this;
-        }
-
-        public Builder arbeidstaker(Arbeidstaker arbeidstaker) {
-            this.arbeidstaker.add(arbeidstaker);
-            return this;
-        }
-
-        public Builder arbeidstaker(List<Arbeidstaker> arbeidstaker) {
-            this.arbeidstaker.addAll(arbeidstaker);
             return this;
         }
 
