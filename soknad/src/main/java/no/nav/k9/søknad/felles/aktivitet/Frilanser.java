@@ -29,7 +29,6 @@ public class Frilanser {
         return new Frilanser.Builder();
     }
 
-    @JsonCreator
     public Frilanser() {}
 
     @JsonCreator
