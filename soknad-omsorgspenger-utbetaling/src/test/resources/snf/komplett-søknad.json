@@ -33,6 +33,7 @@
   }],
   "frilanser": {
     "startdato": "2019-01-01",
+    "sluttdato": "2020-01-01",
     "jobberFortsattSomFrilans": false
   }
 }
