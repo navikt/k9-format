@@ -3,7 +3,8 @@ package no.nav.k9.søknad.ytelse.psb;
 import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.felles.LovbestemtFerie;
-import no.nav.k9.søknad.felles.aktivitet.*;
+import no.nav.k9.søknad.felles.LovbestemtFeriePeriodeInfo;
+import no.nav.k9.søknad.felles.opptjeningAktivitet.*;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
@@ -12,6 +13,7 @@ import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.psb.v1.*;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
@@ -61,9 +63,9 @@ final class TestUtils {
             søknadsperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
 
         var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("999999999"),
-                new ArbeidstidInfo(Duration.ofHours(7).plusMinutes(30), Map.of(
-                        søknadsperiode,
-                        new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30)))));
+                new ArbeidstidInfo(
+                        Map.of( søknadsperiode,
+                                new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30), Duration.ofHours(7).plusMinutes(30)))));
 
         var arbeidstid = new Arbeidstid(List.of(
                 arbeidstaker), null, null);
@@ -84,9 +86,9 @@ final class TestUtils {
                 new Periode(LocalDate.parse("2019-01-03"), LocalDate.parse("2019-01-09")),
                 new TilsynPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
 
-        var lovbestemtFerie = new LovbestemtFerie(List.of(delperiodeTo));
+        var lovbestemtFerie = new LovbestemtFerie(Map.of(delperiodeTo, new LovbestemtFeriePeriodeInfo()));
 
-        var aktivitet = ArbeidAktivitet.builder()
+        var aktivitet = OpptjeningAktivitet.builder()
             .selvstendigNæringsdrivende(SelvstendigNæringsdrivende.builder()
                 .periode(
                     new Periode(LocalDate.parse("2018-11-11"), LocalDate.parse("2018-11-30")),
@@ -129,9 +131,9 @@ final class TestUtils {
                 søknadsperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
 
         var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("999999999"),
-                new ArbeidstidInfo(Duration.ofHours(7).plusMinutes(30), Map.of(
-                        søknadsperiode,
-                        new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30)))));
+                new ArbeidstidInfo(
+                        Map.of( søknadsperiode,
+                                new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30), Duration.ofHours(7).plusMinutes(30)))));
 
         var arbeidstid = new Arbeidstid(List.of(
                 arbeidstaker), null, null);
@@ -146,7 +148,7 @@ final class TestUtils {
                 søknadsperiode,
                 new TilsynPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
 
-        var lovbestemtFerie = new LovbestemtFerie(List.of(søknadsperiode));
+        var lovbestemtFerie = new LovbestemtFerie(Map.of(søknadsperiode, new LovbestemtFeriePeriodeInfo()));
 
         var barn = new Barn(NorskIdentitetsnummer.of("11111111111"), null);
 

@@ -1,9 +1,9 @@
 package no.nav.k9.søknad.omsorgspenger.utbetaling.snf;
 
-import no.nav.k9.søknad.felles.aktivitet.Frilanser;
-import no.nav.k9.søknad.felles.aktivitet.Organisasjonsnummer;
-import no.nav.k9.søknad.felles.aktivitet.SelvstendigNæringsdrivende;
-import no.nav.k9.søknad.felles.aktivitet.VirksomhetType;
+import no.nav.k9.søknad.felles.opptjeningAktivitet.Frilanser;
+import no.nav.k9.søknad.felles.opptjeningAktivitet.Organisasjonsnummer;
+import no.nav.k9.søknad.felles.opptjeningAktivitet.SelvstendigNæringsdrivende;
+import no.nav.k9.søknad.felles.opptjeningAktivitet.VirksomhetType;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.Landkode;

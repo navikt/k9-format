@@ -3,7 +3,7 @@ package no.nav.k9.søknad.ytelse.psb.v1;
 import no.nav.fpsak.tidsserie.LocalDateTimeline;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.LovbestemtFerie;
-import no.nav.k9.søknad.felles.aktivitet.Arbeidstaker;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
@@ -42,7 +42,7 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
                 validerTilsynsordning(psb.getTilsynsordning(), søknadsperiode, feil);
                 validerLovbestemtFerie(psb.getLovbestemtFerie(), søknadsperiode, feil);
                 validerArbeidstid(psb.getArbeidstid(), søknadsperiode, feil);
-                //TODO validerArbeidAktivitet
+                //TODO validerOpptjeningAktivitet
 
 
         }catch (IllegalArgumentException e) {
@@ -118,8 +118,7 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
         for (Arbeidstaker arbeidstaker : arbeidstakerList ) {
             arbeidstaker.valider("arbeidstid.arbeidstaker", feil);
             finnIkkeKomplettePerioderOgPerioderUtenfor(
-                    toLocalDateTimeline(arbeidstaker.getArbeidstidInfo().getPerioder()),
-                    søknadsperiode)
+                    toLocalDateTimeline(arbeidstaker.getArbeidstidInfo().getPerioder()), søknadsperiode)
                     .valider("arbeidstid.arbeidstaker", feil);
         }
     }
