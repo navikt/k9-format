@@ -33,10 +33,11 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
 
         if (aktivitet != null) {
 
-            if (aktivitet.getFrilanser() != null
-                || (aktivitet.getSelvstendigNæringsdrivende() != null && !aktivitet.getSelvstendigNæringsdrivende().isEmpty())) {
+            if ((aktivitet.getFrilanser() != null)
+                    || ((aktivitet.getSelvstendigNæringsdrivende() != null) && !aktivitet.getSelvstendigNæringsdrivende().isEmpty())) {
                 validerFrilanserOgSelvstendingNæringsdrivende(aktivitet.getSelvstendigNæringsdrivende(), aktivitet.getFrilanser(), feil);
                 validerSelvstendingNæringsdrivende(aktivitet.getSelvstendigNæringsdrivende(), feil);
+                validerFrilanser(aktivitet.getFrilanser(), feil);
             }
         }
     }
@@ -45,6 +46,18 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
                                                                List<Feil> feil) {
         if (frilanser == null && (selvstendigeVirksomheter == null || selvstendigeVirksomheter.isEmpty())) {
             feil.add(new Feil("frilanser & selvstendingNæringsdrivene", PÅKREVD, "Enten frilanser eller selvstendingNæringsdrivende må være satt i søknaden."));
+        }
+    }
+
+    private void validerFrilanser(Frilanser frilanser, List<Feil> feil) {
+        if (frilanser == null) return;
+
+        if (!frilanser.getJobberFortsattSomFrilans() && frilanser.getSluttdato() == null) {
+            feil.add(new Feil("frilanser.sluttdato", PÅKREVD, "'sluttdato' kan ikke være null, dersom 'jobberFortsattSomFrilans' er false."));
+        }
+
+        if (frilanser.getSluttdato() != null && frilanser.getStartdato().isAfter(frilanser.getSluttdato())) {
+            feil.add(new Feil("frilanser.startdato", UGYLDIG_ARGUMENT, "'startdato' kan ikke være etter 'sluttdato'"));
         }
     }
 
@@ -72,11 +85,11 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
                 if (snInfo.getRegistrertIUtlandet() != null) {
                     if (snInfo.getRegistrertIUtlandet() && snInfo.getLandkode() == null) {
                         feil.add(new Feil(snInfoFelt + ".landkode", PÅKREVD,
-                            "landkode må være satt, og kan ikke være null, dersom virksomhet er registrert i utlandet."));
+                                "landkode må være satt, og kan ikke være null, dersom virksomhet er registrert i utlandet."));
                     }
                 } else if (sn.getOrganisasjonsnummer() == null) {
                     feil.add(new Feil(snInfoFelt + ".registrertIUtlandet og " + snFelt + ".organisasjonsnummer", PÅKREVD,
-                        "Dersom virksomheten er registrert i norge, må organisasjonsnummeret være satt."));
+                            "Dersom virksomheten er registrert i norge, må organisasjonsnummeret være satt."));
                 }
             });
             index++;

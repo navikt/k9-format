@@ -80,6 +80,7 @@ class TestUtils {
                 ))
                 .frilanser(Frilanser.builder()
                         .startdato(LocalDate.parse("2019-01-01"))
+                        .sluttdato(LocalDate.parse("2020-01-01"))
                         .jobberFortsattSomFrilans(false)
                         .build())
                 .søker(Søker.builder()
