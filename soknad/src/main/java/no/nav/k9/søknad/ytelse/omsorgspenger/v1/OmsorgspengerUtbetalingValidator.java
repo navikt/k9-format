@@ -3,8 +3,8 @@ package no.nav.k9.søknad.ytelse.omsorgspenger.v1;
 import no.nav.k9.søknad.PeriodeValidator;
 import no.nav.k9.søknad.Validator;
 import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.opptjeningAktivitet.Frilanser;
-import no.nav.k9.søknad.felles.opptjeningAktivitet.SelvstendigNæringsdrivende;
+import no.nav.k9.søknad.felles.opptjening.Frilanser;
+import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 

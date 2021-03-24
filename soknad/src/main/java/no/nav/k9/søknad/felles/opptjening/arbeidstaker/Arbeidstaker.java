@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.felles.opptjeningAktivitet.arbeidstaker;
+package no.nav.k9.søknad.felles.opptjening.arbeidstaker;
 
 import javax.validation.Valid;
 
@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-import no.nav.k9.søknad.felles.opptjeningAktivitet.Organisasjonsnummer;
+import no.nav.k9.søknad.felles.opptjening.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 
 @JsonIgnoreProperties(ignoreUnknown = true)

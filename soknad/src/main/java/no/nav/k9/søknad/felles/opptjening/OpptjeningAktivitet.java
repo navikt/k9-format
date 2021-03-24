@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.felles.opptjeningAktivitet;
+package no.nav.k9.søknad.felles.opptjening;
 
 import com.fasterxml.jackson.annotation.*;
 
@@ -9,7 +9,7 @@ import java.util.List;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 
-import no.nav.k9.søknad.felles.opptjeningAktivitet.arbeidstaker.Arbeidstaker;
+import no.nav.k9.søknad.felles.opptjening.arbeidstaker.Arbeidstaker;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)

@@ -1,10 +1,9 @@
-package no.nav.k9.søknad.felles.opptjeningAktivitet;
+package no.nav.k9.søknad.felles.opptjening;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.util.ClassUtil;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;

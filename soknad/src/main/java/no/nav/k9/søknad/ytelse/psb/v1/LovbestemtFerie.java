@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.felles;
+package no.nav.k9.søknad.ytelse.psb.v1;
 
 import static java.util.Collections.unmodifiableMap;
 
@@ -7,15 +7,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
-import java.time.Duration;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 

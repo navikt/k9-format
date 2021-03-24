@@ -2,9 +2,7 @@ package no.nav.k9.søknad.ytelse.psb.v1;
 
 import no.nav.fpsak.tidsserie.LocalDateTimeline;
 import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.LovbestemtFerie;
-import no.nav.k9.søknad.felles.opptjeningAktivitet.arbeidstaker.Arbeidstaker;
-import no.nav.k9.søknad.felles.opptjeningAktivitet.arbeidstaker.PsbArbeidstaker;
+import no.nav.k9.søknad.felles.opptjening.arbeidstaker.PsbArbeidstaker;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;

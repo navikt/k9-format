@@ -10,8 +10,8 @@ import javax.validation.ValidatorFactory;
 import no.nav.k9.søknad.SøknadValidator;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
-import no.nav.k9.søknad.felles.opptjeningAktivitet.Frilanser;
-import no.nav.k9.søknad.felles.opptjeningAktivitet.SelvstendigNæringsdrivende;
+import no.nav.k9.søknad.felles.opptjening.Frilanser;
+import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 
 /**

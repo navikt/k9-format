@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.felles;
+package no.nav.k9.søknad.ytelse.psb.v1;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
