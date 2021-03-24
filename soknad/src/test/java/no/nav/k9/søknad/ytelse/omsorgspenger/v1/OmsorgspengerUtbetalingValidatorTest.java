@@ -37,7 +37,13 @@ class OmsorgspengerUtbetalingValidatorTest {
     @Test
     void gitt_frilanser_ikke_jobber_lenger_og_sluttdato_er_null_forvent_valideringsfeil() {
         var søknad = TestUtils.minimumSøknad().medAktivitet(
-                new ArbeidAktivitet(null, null, new Frilanser(LocalDate.now().minusDays(10), null, false))
+                new ArbeidAktivitet(null,
+                        null,
+                        new Frilanser()
+                                .medStartDato(LocalDate.now().minusDays(10))
+                                .medSluttDato(null)
+                                .medJobberFortsattSomFrilans(false)
+                )
         );
         assertThat(valider(søknad)).hasSize(1);
     }
@@ -45,7 +51,13 @@ class OmsorgspengerUtbetalingValidatorTest {
     @Test
     void gitt_frilanser_startdato_er_etter_sluttdato_forvent_valideringsfeil() {
         var søknad = TestUtils.minimumSøknad().medAktivitet(
-                new ArbeidAktivitet(null, null, new Frilanser(LocalDate.now().plusDays(1), LocalDate.now(), true))
+                new ArbeidAktivitet(null,
+                        null,
+                        new Frilanser()
+                                .medStartDato(LocalDate.now().plusDays(1))
+                                .medSluttDato(LocalDate.now())
+                                .medJobberFortsattSomFrilans(true)
+                )
         );
         assertThat(valider(søknad)).hasSize(1);
     }
