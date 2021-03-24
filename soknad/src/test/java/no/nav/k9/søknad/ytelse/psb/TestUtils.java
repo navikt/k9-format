@@ -5,6 +5,7 @@ import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.felles.LovbestemtFerie;
 import no.nav.k9.søknad.felles.LovbestemtFeriePeriodeInfo;
 import no.nav.k9.søknad.felles.opptjeningAktivitet.*;
+import no.nav.k9.søknad.felles.opptjeningAktivitet.arbeidstaker.PsbArbeidstaker;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
@@ -13,7 +14,7 @@ import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.psb.v1.*;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
+import no.nav.k9.søknad.felles.opptjeningAktivitet.arbeidstaker.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
@@ -62,7 +63,7 @@ final class TestUtils {
         var uttak = new Uttak(Map.of(
             søknadsperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
 
-        var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("999999999"),
+        var arbeidstaker = new PsbArbeidstaker(null, Organisasjonsnummer.of("999999999"),
                 new ArbeidstidInfo(
                         Map.of( søknadsperiode,
                                 new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30), Duration.ofHours(7).plusMinutes(30)))));
@@ -130,7 +131,7 @@ final class TestUtils {
         var uttak = new Uttak(Map.of(
                 søknadsperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
 
-        var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("999999999"),
+        var arbeidstaker = new PsbArbeidstaker(null, Organisasjonsnummer.of("999999999"),
                 new ArbeidstidInfo(
                         Map.of( søknadsperiode,
                                 new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30), Duration.ofHours(7).plusMinutes(30)))));
