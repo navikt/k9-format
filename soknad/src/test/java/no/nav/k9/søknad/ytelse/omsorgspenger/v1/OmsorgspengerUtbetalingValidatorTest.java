@@ -34,7 +34,7 @@ class OmsorgspengerUtbetalingValidatorTest {
         verifyIngenFeil(søknad);
     }
 
-    @Test
+    /*@Test // TODO: 24/03/2021 Bør aktiveres senere når søknadsdialogen er prodsatt med frilanser.sluttdato feltet.
     void gitt_frilanser_ikke_jobber_lenger_og_sluttdato_er_null_forvent_valideringsfeil() {
         var søknad = TestUtils.minimumSøknad().medAktivitet(
                 new ArbeidAktivitet(null,
@@ -60,7 +60,7 @@ class OmsorgspengerUtbetalingValidatorTest {
                 )
         );
         assertThat(valider(søknad)).hasSize(1);
-    }
+    }*/
 
     @Test
     void komplett_json_søknad_skal_ikke_ha_valideringsfeil() {
