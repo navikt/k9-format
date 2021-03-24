@@ -4,6 +4,7 @@ import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.aktivitet.ArbeidAktivitet;
+import no.nav.k9.søknad.felles.aktivitet.Frilanser;
 import no.nav.k9.søknad.felles.fravær.FraværPeriode;
 import no.nav.k9.søknad.felles.fravær.FraværÅrsak;
 import no.nav.k9.søknad.ytelse.Ytelse;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,6 +32,22 @@ class OmsorgspengerUtbetalingValidatorTest {
     void minimum_søknad_skal_ikke_ha_valideringsfeil() {
         var søknad = TestUtils.minimumSøknad();
         verifyIngenFeil(søknad);
+    }
+
+    @Test
+    void gitt_frilanser_ikke_jobber_lenger_og_sluttdato_er_null_forvent_valideringsfeil() {
+        var søknad = TestUtils.minimumSøknad().medAktivitet(
+                new ArbeidAktivitet(null, null, new Frilanser(LocalDate.now().minusDays(10), null, false))
+        );
+        assertThat(valider(søknad)).hasSize(1);
+    }
+
+    @Test
+    void gitt_frilanser_startdato_er_etter_sluttdato_forvent_valideringsfeil() {
+        var søknad = TestUtils.minimumSøknad().medAktivitet(
+                new ArbeidAktivitet(null, null, new Frilanser(LocalDate.now().plusDays(1), LocalDate.now(), true))
+        );
+        assertThat(valider(søknad)).hasSize(1);
     }
 
     @Test
