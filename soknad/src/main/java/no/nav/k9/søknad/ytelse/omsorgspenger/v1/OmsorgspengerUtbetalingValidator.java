@@ -37,7 +37,7 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
                     || ((aktivitet.getSelvstendigNæringsdrivende() != null) && !aktivitet.getSelvstendigNæringsdrivende().isEmpty())) {
                 validerFrilanserOgSelvstendingNæringsdrivende(aktivitet.getSelvstendigNæringsdrivende(), aktivitet.getFrilanser(), feil);
                 validerSelvstendingNæringsdrivende(aktivitet.getSelvstendigNæringsdrivende(), feil);
-                validerFrilanser(aktivitet.getFrilanser(), feil);
+                // validerFrilanser(aktivitet.getFrilanser(), feil); // TODO: 24/03/2021 Bør aktiveres senere når søknadsdialogen er prodsatt med frilanser.sluttdato feltet.
             }
         }
     }
