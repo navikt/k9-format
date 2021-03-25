@@ -15,7 +15,7 @@ import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
 import no.nav.k9.søknad.felles.opptjening.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende;
 import no.nav.k9.søknad.felles.opptjening.VirksomhetType;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.PsbArbeidstaker;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
@@ -72,7 +72,7 @@ final class TestUtils {
         var uttak = new Uttak(Map.of(
             søknadsperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
 
-        var arbeidstaker = new PsbArbeidstaker(null, Organisasjonsnummer.of("999999999"),
+        var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("999999999"),
                 new ArbeidstidInfo(
                         Map.of( søknadsperiode,
                                 new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30), Duration.ofHours(7).plusMinutes(30)))));
@@ -140,7 +140,7 @@ final class TestUtils {
         var uttak = new Uttak(Map.of(
                 søknadsperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
 
-        var arbeidstaker = new PsbArbeidstaker(null, Organisasjonsnummer.of("999999999"),
+        var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("999999999"),
                 new ArbeidstidInfo(
                         Map.of( søknadsperiode,
                                 new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30), Duration.ofHours(7).plusMinutes(30)))));

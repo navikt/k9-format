@@ -17,7 +17,7 @@ public class Arbeidstid {
 
     @Valid
     @JsonProperty(value = "arbeidstakerList", required = true)
-    private List<PsbArbeidstaker> arbeidstakerList;
+    private List<Arbeidstaker> arbeidstakerList;
 
     @Valid
     @JsonProperty(value = "frilanserArbeidstidInfo", required = true)
@@ -28,7 +28,7 @@ public class Arbeidstid {
     private ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo;
 
     @JsonCreator
-    public Arbeidstid(@JsonProperty(value = "arbeidstakerList", required = true) @Valid List<PsbArbeidstaker> arbeidstakerList,
+    public Arbeidstid(@JsonProperty(value = "arbeidstakerList", required = true) @Valid List<Arbeidstaker> arbeidstakerList,
                       @JsonProperty(value = "frilanserArbeidstidInfo", required = true) @Valid ArbeidstidInfo frilanserArbeidstidInfo,
                       @JsonProperty(value = "selvstendigNæringsdrivendeArbeidstidInfo", required = true) @Valid ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo) {
         this.arbeidstakerList = (arbeidstakerList == null ) ? new ArrayList<>() : new ArrayList<>(arbeidstakerList);
@@ -39,21 +39,21 @@ public class Arbeidstid {
     public Arbeidstid() {
     }
 
-    public List<PsbArbeidstaker> getArbeidstakerList() {
+    public List<Arbeidstaker> getArbeidstakerList() {
         return unmodifiableList(arbeidstakerList);
     }
 
-    public Arbeidstid medArbeidstakerList(List<PsbArbeidstaker> arbeidstakerList) {
+    public Arbeidstid medArbeidstakerList(List<Arbeidstaker> arbeidstakerList) {
         this.arbeidstakerList = (arbeidstakerList == null ) ? new ArrayList<>() : new ArrayList<>(arbeidstakerList);
         return this;
     }
 
-    public Arbeidstid leggeTilArbeidstaker(List<PsbArbeidstaker> arbeidstakerList) {
+    public Arbeidstid leggeTilArbeidstaker(List<Arbeidstaker> arbeidstakerList) {
         this.arbeidstakerList.addAll(arbeidstakerList);
         return this;
     }
 
-    public Arbeidstid leggeTilArbeidstaker(PsbArbeidstaker arbeidstaker) {
+    public Arbeidstid leggeTilArbeidstaker(Arbeidstaker arbeidstaker) {
         this.arbeidstakerList.add(arbeidstaker);
         return this;
     }
