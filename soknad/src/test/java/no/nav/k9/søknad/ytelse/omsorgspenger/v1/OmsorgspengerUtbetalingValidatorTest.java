@@ -1,15 +1,6 @@
 package no.nav.k9.søknad.ytelse.omsorgspenger.v1;
 
-import no.nav.k9.søknad.Søknad;
-import no.nav.k9.søknad.ValideringsFeil;
-import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.aktivitet.ArbeidAktivitet;
-import no.nav.k9.søknad.felles.aktivitet.Frilanser;
-import no.nav.k9.søknad.felles.fravær.FraværPeriode;
-import no.nav.k9.søknad.felles.fravær.FraværÅrsak;
-import no.nav.k9.søknad.ytelse.Ytelse;
-import no.nav.k9.søknad.ytelse.YtelseValidator;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,7 +8,17 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
+
+import no.nav.k9.søknad.Søknad;
+import no.nav.k9.søknad.ValideringsFeil;
+import no.nav.k9.søknad.felles.Feil;
+import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
+import no.nav.k9.søknad.felles.opptjening.Frilanser;
+import no.nav.k9.søknad.felles.fravær.FraværPeriode;
+import no.nav.k9.søknad.felles.fravær.FraværÅrsak;
+import no.nav.k9.søknad.ytelse.Ytelse;
+import no.nav.k9.søknad.ytelse.YtelseValidator;
 
 class OmsorgspengerUtbetalingValidatorTest {
     private static final YtelseValidator validator = new OmsorgspengerUtbetalingValidator();
@@ -37,8 +38,7 @@ class OmsorgspengerUtbetalingValidatorTest {
     /*@Test // TODO: 24/03/2021 Bør aktiveres senere når søknadsdialogen er prodsatt med frilanser.sluttdato feltet.
     void gitt_frilanser_ikke_jobber_lenger_og_sluttdato_er_null_forvent_valideringsfeil() {
         var søknad = TestUtils.minimumSøknad().medAktivitet(
-                new ArbeidAktivitet(null,
-                        null,
+                new OpptjeningAktivitet(null,
                         new Frilanser()
                                 .medStartDato(LocalDate.now().minusDays(10))
                                 .medSluttDato(null)
@@ -51,8 +51,7 @@ class OmsorgspengerUtbetalingValidatorTest {
     @Test
     void gitt_frilanser_startdato_er_etter_sluttdato_forvent_valideringsfeil() {
         var søknad = TestUtils.minimumSøknad().medAktivitet(
-                new ArbeidAktivitet(null,
-                        null,
+                new OpptjeningAktivitet(null,
                         new Frilanser()
                                 .medStartDato(LocalDate.now().plusDays(1))
                                 .medSluttDato(LocalDate.now())
@@ -107,7 +106,7 @@ class OmsorgspengerUtbetalingValidatorTest {
         static OmsorgspengerUtbetaling minimumSøknad() {
             return new OmsorgspengerUtbetaling(
                     null,
-                    new ArbeidAktivitet(null, null, null),
+                    new OpptjeningAktivitet(null, null),
                     List.of(
                             new FraværPeriode(
                                     null,

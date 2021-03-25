@@ -23,6 +23,10 @@ public class Beredskap {
     @NotEmpty
     private Map<Periode, BeredskapPeriodeInfo> perioder;
 
+    @JsonProperty(value="perioderSomSkalSlettes")
+    @Valid
+    private Map<Periode, BeredskapPeriodeInfo> perioderSomSkalSlettes;
+
     @JsonCreator
     public Beredskap(
             @JsonProperty(value = "perioder") @NotEmpty @Valid Map<Periode, BeredskapPeriodeInfo> perioder) {
@@ -41,6 +45,16 @@ public class Beredskap {
         return this;
     }
 
+    public Map<Periode, BeredskapPeriodeInfo> getPerioderSomSkalSlettes() {
+        return unmodifiableMap(perioderSomSkalSlettes);
+    }
+
+    public Beredskap medPerioderSomSkalSlettes(Map<Periode, BeredskapPeriodeInfo> perioderSomSkalSlettes) {
+        this.perioderSomSkalSlettes = (perioderSomSkalSlettes == null) ? new TreeMap<>() : new TreeMap<>(perioderSomSkalSlettes);
+        return this;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class BeredskapPeriodeInfo {
 
         @Valid

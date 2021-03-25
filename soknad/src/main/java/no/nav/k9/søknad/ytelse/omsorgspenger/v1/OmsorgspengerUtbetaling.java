@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import no.nav.k9.søknad.PeriodeValidator;
 import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.aktivitet.ArbeidAktivitet;
+import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
 import no.nav.k9.søknad.felles.fravær.FraværPeriode;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
@@ -38,7 +38,7 @@ public class OmsorgspengerUtbetaling implements Ytelse {
     @Valid
     @NotNull
     @JsonProperty(value = "aktivitet", required = true)
-    private ArbeidAktivitet aktivitet;
+    private OpptjeningAktivitet aktivitet;
 
     @Valid
     @JsonProperty(value = "bosteder")
@@ -60,7 +60,7 @@ public class OmsorgspengerUtbetaling implements Ytelse {
 
     @JsonCreator
     public OmsorgspengerUtbetaling(@JsonProperty("fosterbarn") @Valid List<Barn> fosterbarn,
-                                   @JsonProperty(value = "aktivitet", required = true) @Valid @NotNull ArbeidAktivitet opptjening,
+                                   @JsonProperty(value = "aktivitet", required = true) @Valid @NotNull OpptjeningAktivitet opptjening,
                                    @JsonProperty(value = "fraværsperioder", required = true) @Valid @NotNull @Size(min = 1) List<FraværPeriode> fraværsperioder,
                                    @SuppressWarnings("unused") @JsonProperty(value = "bosteder") @Valid @NotNull Bosteder bosteder,
                                    @JsonProperty(value = "utenlandsopphold") @Valid @NotNull Utenlandsopphold utenlandsopphold) {
@@ -74,7 +74,7 @@ public class OmsorgspengerUtbetaling implements Ytelse {
         return fosterbarn == null ? null : Collections.unmodifiableList(fosterbarn);
     }
 
-    public ArbeidAktivitet getAktivitet() {
+    public OpptjeningAktivitet getAktivitet() {
         return aktivitet;
     }
 
@@ -137,7 +137,7 @@ public class OmsorgspengerUtbetaling implements Ytelse {
         return this;
     }
 
-    public OmsorgspengerUtbetaling medAktivitet(ArbeidAktivitet arbeidAktivitet) {
+    public OmsorgspengerUtbetaling medAktivitet(OpptjeningAktivitet arbeidAktivitet) {
         this.aktivitet = arbeidAktivitet;
         return this;
     }

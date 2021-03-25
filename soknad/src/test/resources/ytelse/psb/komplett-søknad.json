@@ -64,9 +64,9 @@
         "norskIdentitetsnummer" : null,
         "organisasjonsnummer" : "999999999",
         "arbeidstidInfo" : {
-          "jobberNormaltTimerPerDag" : "PT7H30M",
           "perioder" : {
             "2018-12-30/2019-10-20" : {
+              "jobberNormaltTimerPerDag" : "PT7H30M",
               "faktiskArbeidTimerPerDag" : "PT7H30M"
             }
           }
@@ -88,7 +88,9 @@
       "beskrivelseAvOmsorgsrollen" : "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
     },
     "lovbestemtFerie" : {
-      "perioder" : [ "2019-02-21/2019-05-21" ]
+      "perioder" : {
+        "2019-02-21/2019-10-20" : { }
+      }
     },
     "bosteder" : {
       "perioder" : {

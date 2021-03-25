@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import no.nav.k9.søknad.felles.aktivitet.Arbeidstaker;
 
 import javax.validation.Valid;
+
 import java.util.*;
 
 import static java.util.Collections.*;
@@ -17,7 +17,7 @@ public class Arbeidstid {
 
     @Valid
     @JsonProperty(value = "arbeidstakerList", required = true)
-    private List<Arbeidstaker> arbeidstakerList;
+    private List<PsbArbeidstaker> arbeidstakerList;
 
     @Valid
     @JsonProperty(value = "frilanserArbeidstidInfo", required = true)
@@ -28,7 +28,7 @@ public class Arbeidstid {
     private ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo;
 
     @JsonCreator
-    public Arbeidstid(@JsonProperty(value = "arbeidstakerList", required = true) @Valid List<Arbeidstaker> arbeidstakerList,
+    public Arbeidstid(@JsonProperty(value = "arbeidstakerList", required = true) @Valid List<PsbArbeidstaker> arbeidstakerList,
                       @JsonProperty(value = "frilanserArbeidstidInfo", required = true) @Valid ArbeidstidInfo frilanserArbeidstidInfo,
                       @JsonProperty(value = "selvstendigNæringsdrivendeArbeidstidInfo", required = true) @Valid ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo) {
         this.arbeidstakerList = (arbeidstakerList == null ) ? new ArrayList<>() : new ArrayList<>(arbeidstakerList);
@@ -39,21 +39,21 @@ public class Arbeidstid {
     public Arbeidstid() {
     }
 
-    public List<Arbeidstaker> getArbeidstakerList() {
+    public List<PsbArbeidstaker> getArbeidstakerList() {
         return unmodifiableList(arbeidstakerList);
     }
 
-    public Arbeidstid medArbeidstakerList(List<Arbeidstaker> arbeidstakerList) {
+    public Arbeidstid medArbeidstakerList(List<PsbArbeidstaker> arbeidstakerList) {
         this.arbeidstakerList = (arbeidstakerList == null ) ? new ArrayList<>() : new ArrayList<>(arbeidstakerList);
         return this;
     }
 
-    public Arbeidstid leggeTilArbeidstaker(List<Arbeidstaker> arbeidstakerList) {
+    public Arbeidstid leggeTilArbeidstaker(List<PsbArbeidstaker> arbeidstakerList) {
         this.arbeidstakerList.addAll(arbeidstakerList);
         return this;
     }
 
-    public Arbeidstid leggeTilArbeidstaker(Arbeidstaker arbeidstaker) {
+    public Arbeidstid leggeTilArbeidstaker(PsbArbeidstaker arbeidstaker) {
         this.arbeidstakerList.add(arbeidstaker);
         return this;
     }

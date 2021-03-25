@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.felles.aktivitet;
+package no.nav.k9.søknad.felles.opptjening;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;

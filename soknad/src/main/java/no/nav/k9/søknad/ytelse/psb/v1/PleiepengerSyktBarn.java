@@ -15,8 +15,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import no.nav.k9.søknad.PeriodeValidator;
 import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.LovbestemtFerie;
-import no.nav.k9.søknad.felles.aktivitet.ArbeidAktivitet;
+import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
@@ -43,8 +42,8 @@ public class PleiepengerSyktBarn implements Ytelse {
     private Periode søknadsperiode;
 
     @Valid
-    @JsonProperty(value = "arbeidAktivitet")
-    private ArbeidAktivitet arbeidAktivitet;
+    @JsonProperty(value = "opptjeningAktivitet")
+    private OpptjeningAktivitet opptjeningAktivitet;
 
     @Valid
     @JsonProperty(value = "dataBruktTilUtledning")
@@ -94,7 +93,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     public PleiepengerSyktBarn(@JsonProperty(value = "søknadsperiode", required = true) @NotNull @Valid Periode søknadsperiode,
                                @JsonProperty(value = "dataBruktTilUtledning") @Valid DataBruktTilUtledning dataBruktTilUtledning,
                                @JsonProperty(value = "barn", required = true) @NotNull @Valid Barn barn,
-                               @JsonProperty(value = "arbeidAktivitet") @Valid ArbeidAktivitet aktivitet,
+                               @JsonProperty(value = "opptjeningAktivitet") @Valid OpptjeningAktivitet opptjeningAktivitet1,
                                @JsonProperty(value = "beredskap") @Valid Beredskap beredskap,
                                @JsonProperty(value = "nattevåk") @Valid Nattevåk nattevåk,
                                @JsonProperty(value = "tilsynsordning") @Valid Tilsynsordning tilsynsordning,
@@ -107,7 +106,7 @@ public class PleiepengerSyktBarn implements Ytelse {
         this.søknadsperiode = Objects.requireNonNull(søknadsperiode, "søknadsperiode");
         this.dataBruktTilUtledning = dataBruktTilUtledning;
         this.barn = Objects.requireNonNull(barn, "barn");
-        this.arbeidAktivitet = aktivitet;
+        this.opptjeningAktivitet = opptjeningAktivitet1;
         this.beredskap = beredskap;
         this.nattevåk = nattevåk;
         this.tilsynsordning = tilsynsordning;
@@ -149,12 +148,12 @@ public class PleiepengerSyktBarn implements Ytelse {
         return this;
     }
 
-    public ArbeidAktivitet getArbeidAktivitet() {
-        return arbeidAktivitet;
+    public OpptjeningAktivitet getOpptjeningAktivitet() {
+        return opptjeningAktivitet;
     }
 
-    public PleiepengerSyktBarn medArbeidAktivitet(ArbeidAktivitet arbeidAktivitet) {
-        this.arbeidAktivitet = arbeidAktivitet;
+    public PleiepengerSyktBarn medOpptjeningAktivitet(OpptjeningAktivitet arbeidAktivitet) {
+        this.opptjeningAktivitet = arbeidAktivitet;
         return this;
     }
 
