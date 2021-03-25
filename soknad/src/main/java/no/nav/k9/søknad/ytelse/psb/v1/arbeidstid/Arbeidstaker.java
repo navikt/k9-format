@@ -17,7 +17,7 @@ import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 
-public class PsbArbeidstaker{
+public class Arbeidstaker {
 
     @JsonProperty(value = "norskIdentitetsnummer")
     @Valid
@@ -32,15 +32,15 @@ public class PsbArbeidstaker{
     private ArbeidstidInfo arbeidstidInfo;
 
     @JsonCreator
-    public PsbArbeidstaker(@JsonProperty(value = "norskIdentitetsnummer") @Valid NorskIdentitetsnummer norskIdentitetsnummer,
-                           @JsonProperty(value = "organisasjonsnummer") @Valid Organisasjonsnummer organisasjonsnummer,
-                           @JsonProperty(value = "arbeidstidInfo") @Valid ArbeidstidInfo arbeidstidInfo) {
+    public Arbeidstaker(@JsonProperty(value = "norskIdentitetsnummer") @Valid NorskIdentitetsnummer norskIdentitetsnummer,
+                        @JsonProperty(value = "organisasjonsnummer") @Valid Organisasjonsnummer organisasjonsnummer,
+                        @JsonProperty(value = "arbeidstidInfo") @Valid ArbeidstidInfo arbeidstidInfo) {
         this.norskIdentitetsnummer = norskIdentitetsnummer;
         this.organisasjonsnummer = organisasjonsnummer;
         this.arbeidstidInfo = arbeidstidInfo;
     }
 
-    public PsbArbeidstaker() {
+    public Arbeidstaker() {
 
     }
     protected boolean erEntydigPåID() {
