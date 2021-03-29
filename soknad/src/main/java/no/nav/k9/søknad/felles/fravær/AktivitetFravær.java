@@ -4,7 +4,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum AktivitetFravær {
-    FRILNSER(
+    ARBEIDSTAKER(
+            "ARBEIDSTAKER",
+            "Arbeidstaker"),
+
+    FRILANSER(
             "FRILANSER",
             "Frilanser"),
 
