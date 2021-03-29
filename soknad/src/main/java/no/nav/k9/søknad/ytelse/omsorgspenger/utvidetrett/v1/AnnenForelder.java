@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
-import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.felles.type.PersonIdent;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -38,9 +38,8 @@ public class AnnenForelder implements Person {
     @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message = "[${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
     private String situasjonBeskrivelse;
 
-    @JsonProperty(value = "periode", required = true)
+    @JsonProperty(value = "periode")
     @Valid
-    @NotNull
     private Periode periode;
 
     public AnnenForelder() {
@@ -52,7 +51,7 @@ public class AnnenForelder implements Person {
                          @JsonProperty(value = "norskIdentitetsnummer", required = true) @NotNull NorskIdentitetsnummer norskIdentitetsnummer,
                          @JsonProperty(value = "situasjon", required = true) @Valid @NotNull SituasjonType situasjon,
                          @JsonProperty(value = "situasjonBeskrivelse") String beskrivelse,
-                         @JsonProperty(value = "periode", required = true) @Valid @NotNull Periode periode) {
+                         @JsonProperty(value = "periode") @Valid Periode periode) {
         this(norskIdentitetsnummer);
         this.situasjonType = situasjon;
         this.situasjonBeskrivelse = beskrivelse;

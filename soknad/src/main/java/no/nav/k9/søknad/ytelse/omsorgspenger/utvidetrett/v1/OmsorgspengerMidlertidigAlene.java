@@ -110,9 +110,11 @@ public class OmsorgspengerMidlertidigAlene implements OmsorgspengerUtvidetRett {
         return Stream.of(barn, List.of(annenForelder)).flatMap(List::stream).collect(Collectors.toList());
     }
 
+    /** NB: kan returnere null dersom ikke oppgitt i søknad */
     @Override
     public Periode getSøknadsperiode() {
-        return getAnnenForelder().getPeriode();
+        var annenForelderPeriode = getAnnenForelder().getPeriode();
+        return annenForelderPeriode;
     }
 
     public static class MinValidator extends YtelseValidator {
