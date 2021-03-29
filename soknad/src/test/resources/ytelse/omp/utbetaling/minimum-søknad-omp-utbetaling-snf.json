@@ -18,7 +18,7 @@
         "periode": null,
         "duration": null,
         "årsak": "STENGT_SKOLE_ELLER_BARNEHAGE",
-        "fraværFraAktivitet": ["SELVSTENDIG_VIRKSOMHET"]
+        "aktivitetFravær": ["SELVSTENDIG_VIRKSOMHET"]
       }
     ],
     "bosteder": null,

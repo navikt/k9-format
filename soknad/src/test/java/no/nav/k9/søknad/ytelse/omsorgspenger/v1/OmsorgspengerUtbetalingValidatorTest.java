@@ -5,17 +5,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDate;
 import java.util.List;
 
-import no.nav.k9.søknad.felles.fravær.FraværFraAktivitet;
+import no.nav.k9.søknad.felles.fravær.AktivitetFravær;
 import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
-import no.nav.k9.søknad.felles.opptjening.Frilanser;
 import no.nav.k9.søknad.felles.fravær.FraværPeriode;
 import no.nav.k9.søknad.felles.fravær.FraværÅrsak;
 import no.nav.k9.søknad.ytelse.Ytelse;
@@ -113,7 +111,7 @@ class OmsorgspengerUtbetalingValidatorTest {
                                     null,
                                     null,
                                     FraværÅrsak.ORDINÆRT_FRAVÆR,
-                                    List.of(FraværFraAktivitet.SELVSTENDIG_VIRKSOMHET)
+                                    List.of(AktivitetFravær.SELVSTENDIG_VIRKSOMHET)
                             )
                     ),
                     null,

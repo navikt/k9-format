@@ -3,7 +3,7 @@ package no.nav.k9.søknad.felles.fravær;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum FraværFraAktivitet {
+public enum AktivitetFravær {
     FRILNSER(
             "FRILANSER",
             "Frilanser"),
@@ -17,7 +17,7 @@ public enum FraværFraAktivitet {
     private String årsak;
 
 
-    FraværFraAktivitet(String kode, String årsak) {
+    AktivitetFravær(String kode, String årsak) {
         this.kode = kode;
         this.årsak = årsak;
     }
@@ -30,11 +30,11 @@ public enum FraværFraAktivitet {
     public String getKode() { return kode; }
 
     @JsonCreator
-    public static FraværFraAktivitet of(String value) {
+    public static AktivitetFravær of(String value) {
         if (value == null || value.isBlank()) {
             return null;
         }
-        for (FraværFraAktivitet årsak : values()) {
+        for (AktivitetFravær årsak : values()) {
             if (årsak.kode.equals(value)) {
                 return årsak;
             }

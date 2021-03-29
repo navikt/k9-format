@@ -31,20 +31,20 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
 
     @NotNull
     @Size(min = 1, max = 2)
-    @JsonProperty(value = "fraværFraAktivitet", required = true)
-    private final List<FraværFraAktivitet> fraværFraAktivitet;
+    @JsonProperty(value = "aktivitetFravær", required = true)
+    private final List<AktivitetFravær> aktivitetFravær;
 
     @JsonCreator
     public FraværPeriode(
             @JsonProperty("periode") @Valid Periode periode,
             @JsonProperty("duration") Duration duration,
             @JsonProperty("årsak") FraværÅrsak årsak,
-            @JsonProperty("fraværFraAktivitet") List<FraværFraAktivitet> fraværFraAktivitet
+            @JsonProperty("aktivitetFravær") List<AktivitetFravær> aktivitetFravær
     ) {
         this.periode = periode;
         this.duration = duration;
         this.årsak = årsak;
-        this.fraværFraAktivitet = fraværFraAktivitet;
+        this.aktivitetFravær = aktivitetFravær;
     }
 
     public Periode getPeriode() {
@@ -83,7 +83,7 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
                 "periode=" + periode +
                 ", duration=" + duration +
                 ", årsak=" + årsak +
-                ", fraværFraAktivitet=" + fraværFraAktivitet +
+                ", fraværFraAktivitet=" + aktivitetFravær +
                 '}';
     }
 }
