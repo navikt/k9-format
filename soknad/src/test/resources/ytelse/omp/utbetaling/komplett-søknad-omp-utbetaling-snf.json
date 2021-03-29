@@ -49,17 +49,20 @@
       {
         "periode": "2020-01-01/2020-01-11",
         "duration": "PT7H",
-        "årsak": "STENGT_SKOLE_ELLER_BARNEHAGE"
+        "årsak": "STENGT_SKOLE_ELLER_BARNEHAGE",
+        "aktivitetFravær": ["FRILANSER"]
       },
       {
         "periode": "2020-01-21/2020-01-21",
         "duration": "PT5H",
-        "årsak": "SMITTEVERNHENSYN"
+        "årsak": "SMITTEVERNHENSYN",
+        "aktivitetFravær": ["SELVSTENDIG_VIRKSOMHET"]
       },
       {
         "periode": "2020-01-31/2020-02-05",
         "duration": null,
-        "årsak": "ORDINÆRT_FRAVÆR"
+        "årsak": "ORDINÆRT_FRAVÆR",
+        "aktivitetFravær": ["FRILANSER", "SELVSTENDIG_VIRKSOMHET"]
       }
     ],
     "bosteder": null,
