@@ -8,7 +8,7 @@ public enum AktivitetFravær {
             "ARBEIDSTAKER",
             "Arbeidstaker"),
 
-    FRILNSER(
+    FRILANSER(
             "FRILANSER",
             "Frilanser"),
 
