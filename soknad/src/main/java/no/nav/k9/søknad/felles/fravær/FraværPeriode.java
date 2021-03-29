@@ -1,10 +1,12 @@
 package no.nav.k9.søknad.felles.fravær;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -27,15 +29,22 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
     @JsonProperty(value = "årsak", required = true)
     private final FraværÅrsak årsak;
 
+    @NotNull
+    @Size(min = 1, max = 2)
+    @JsonProperty(value = "fraværFraAktivitet", required = true)
+    private final List<FraværFraAktivitet> fraværFraAktivitet;
+
     @JsonCreator
     public FraværPeriode(
             @JsonProperty("periode") @Valid Periode periode,
             @JsonProperty("duration") Duration duration,
-            @JsonProperty("årsak") FraværÅrsak årsak
+            @JsonProperty("årsak") FraværÅrsak årsak,
+            @JsonProperty("fraværFraAktivitet") List<FraværFraAktivitet> fraværFraAktivitet
     ) {
         this.periode = periode;
         this.duration = duration;
         this.årsak = årsak;
+        this.fraværFraAktivitet = fraværFraAktivitet;
     }
 
     public Periode getPeriode() {
@@ -74,6 +83,7 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
                 "periode=" + periode +
                 ", duration=" + duration +
                 ", årsak=" + årsak +
+                ", fraværFraAktivitet=" + fraværFraAktivitet +
                 '}';
     }
 }

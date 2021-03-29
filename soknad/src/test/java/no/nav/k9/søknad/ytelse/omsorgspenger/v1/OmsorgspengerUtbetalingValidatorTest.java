@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 
+import no.nav.k9.søknad.felles.fravær.FraværFraAktivitet;
 import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.Søknad;
@@ -111,7 +112,8 @@ class OmsorgspengerUtbetalingValidatorTest {
                             new FraværPeriode(
                                     null,
                                     null,
-                                    FraværÅrsak.ORDINÆRT_FRAVÆR
+                                    FraværÅrsak.ORDINÆRT_FRAVÆR,
+                                    List.of(FraværFraAktivitet.SELVSTENDIG_VIRKSOMHET)
                             )
                     ),
                     null,
