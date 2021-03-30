@@ -57,6 +57,10 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
 
     public FraværÅrsak getÅrsak() { return årsak; }
 
+    public List<AktivitetFravær> getAktivitetFravær() {
+        return aktivitetFravær;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
