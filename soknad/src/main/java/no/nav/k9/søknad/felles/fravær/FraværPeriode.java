@@ -3,6 +3,7 @@ package no.nav.k9.søknad.felles.fravær;
 import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -39,12 +40,11 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
             @JsonProperty("periode") @Valid Periode periode,
             @JsonProperty("duration") Duration duration,
             @JsonProperty("årsak") FraværÅrsak årsak,
-            @JsonProperty("aktivitetFravær") List<AktivitetFravær> aktivitetFravær
-    ) {
+            @JsonProperty("aktivitetFravær") List<AktivitetFravær> aktivitetFravær) {
         this.periode = periode;
         this.duration = duration;
         this.årsak = årsak;
-        this.aktivitetFravær = aktivitetFravær;
+        this.aktivitetFravær = aktivitetFravær.stream().sorted().collect(Collectors.toList()); //sorterer for å få enklere equals/hashcode
     }
 
     public Periode getPeriode() {
@@ -55,7 +55,9 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
         return duration;
     }
 
-    public FraværÅrsak getÅrsak() { return årsak; }
+    public FraværÅrsak getÅrsak() {
+        return årsak;
+    }
 
     public List<AktivitetFravær> getAktivitetFravær() {
         return aktivitetFravær;
@@ -68,12 +70,13 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
         FraværPeriode that = (FraværPeriode) o;
         return periode.equals(that.periode) &&
                 Objects.equals(duration, that.duration) &&
-                Objects.equals(årsak, that.årsak);
+                Objects.equals(årsak, that.årsak) &&
+                Objects.equals(aktivitetFravær, that.aktivitetFravær);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(periode, duration, årsak);
+        return Objects.hash(periode, duration, årsak, aktivitetFravær);
     }
 
     @Override
@@ -90,4 +93,5 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
                 ", fraværFraAktivitet=" + aktivitetFravær +
                 '}';
     }
+
 }
