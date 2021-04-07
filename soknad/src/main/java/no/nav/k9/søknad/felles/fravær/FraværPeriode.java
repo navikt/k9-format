@@ -44,7 +44,7 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
         this.periode = periode;
         this.duration = duration;
         this.årsak = årsak;
-        this.aktivitetFravær = aktivitetFravær.stream().sorted().collect(Collectors.toList()); //sorterer for å få enklere equals/hashcode
+        this.aktivitetFravær = aktivitetFravær.stream().sorted().collect(Collectors.toList()); //sorterer for å få enklere equals og hashcode
     }
 
     public Periode getPeriode() {
