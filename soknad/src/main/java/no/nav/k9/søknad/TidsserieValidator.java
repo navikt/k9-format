@@ -14,16 +14,30 @@ import java.util.stream.Collectors;
 
 public class TidsserieValidator {
 
-    public static TidsseriePeriodeWrapper finnIkkeKomplettePerioderOgPerioderUtenfor(LocalDateTimeline<Boolean> testTidsserie, LocalDateTimeline<Boolean> hovedTidsserie) {
-        return new TidsseriePeriodeWrapper(
-                TidsserieUtils.toPeriodeList(hovedTidsserie.disjoint(testTidsserie)),
-                TidsserieUtils.toPeriodeList(testTidsserie.disjoint(hovedTidsserie)));
+    public static PerioderMedFeilWrapper finnIkkeKomplettePerioderOgPerioderUtenfor(LocalDateTimeline<Boolean> test, TidsseriePeriodeWrapper tidsseriePeriodeWrapper) {
+        return new PerioderMedFeilWrapper(
+                getPerioderSomIkkeOverlapperMedHovedperiode(test, tidsseriePeriodeWrapper),
+                getPerioderUtenforGyldigperiode(test, tidsseriePeriodeWrapper));
     }
 
-    public static TidsseriePeriodeWrapper finnPerioderUtenfor(LocalDateTimeline<Boolean> testTidsserie, LocalDateTimeline<Boolean> hovedTidsserie) {
-        return new TidsseriePeriodeWrapper(
-                new ArrayList<>(),
-                TidsserieUtils.toPeriodeList(testTidsserie.disjoint(hovedTidsserie)));
+    private static List<Periode> getPerioderUtenforGyldigperiode(LocalDateTimeline<Boolean> test, TidsseriePeriodeWrapper tidsseriePeriodeWrapper) {
+        return TidsserieUtils.toPeriodeList(test.disjoint(tidsseriePeriodeWrapper.gyldigInterval));
+    }
+
+    private static List<Periode> getPerioderSomIkkeOverlapperMedHovedperiode(LocalDateTimeline<Boolean> test, TidsseriePeriodeWrapper tidsseriePeriodeWrapper) {
+        if (tidsseriePeriodeWrapper.getSøknadsperiode() == null || tidsseriePeriodeWrapper.getSøknadsperiode().isEmpty()) {
+            return null;
+        }
+        return TidsserieUtils.toPeriodeList(tidsseriePeriodeWrapper.søknadsperiode.disjoint(test));
+    }
+
+    public static PerioderMedFeilWrapper finnPerioderUtenfor(LocalDateTimeline<Boolean> testTidsserie, TidsseriePeriodeWrapper hovedTidsserie) {
+        if (hovedTidsserie == null) {
+            return new PerioderMedFeilWrapper(new ArrayList<>(), new ArrayList<>());
+        }
+        return new PerioderMedFeilWrapper(
+                null,
+                getPerioderUtenforGyldigperiode(testTidsserie, hovedTidsserie));
     }
 
     public static boolean periodeInneholderDagerSomIkkeErHelg(Periode periode) {
@@ -52,31 +66,58 @@ public class TidsserieValidator {
     }
 
     public static class TidsseriePeriodeWrapper {
-        private final List<Periode> perioderSomIkkeOverlapperMedHovedperiode;
-        private final List<Periode> perioderUtenforHovedperiode;
+        private LocalDateTimeline<Boolean> søknadsperiode;
+        private LocalDateTimeline<Boolean> gyldigInterval;
 
-        public TidsseriePeriodeWrapper(List<Periode> perioderSomIkkeOverlapperMedHovedperiode, List<Periode> perioderUtenforHovedperiode) {
+        public TidsseriePeriodeWrapper(List<Periode> søknadsperiode, List<Periode> endringsperiode) {
+            if (søknadsperiode != null && !søknadsperiode.isEmpty()) {
+                this.søknadsperiode = TidsserieUtils.toLocalDateTimeline(søknadsperiode);
+                if (endringsperiode != null && !endringsperiode.isEmpty()) {
+                    this.gyldigInterval = this.søknadsperiode.crossJoin(TidsserieUtils.toLocalDateTimeline(endringsperiode));
+                } else {
+                    this.gyldigInterval = this.søknadsperiode;
+                }
+            } else if (endringsperiode != null && !endringsperiode.isEmpty()) {
+                gyldigInterval = TidsserieUtils.toLocalDateTimeline(endringsperiode);
+            }
+        }
+
+        public LocalDateTimeline<Boolean> getSøknadsperiode() {
+            return søknadsperiode;
+        }
+
+        public LocalDateTimeline<Boolean> getGyldigInterval() {
+            return gyldigInterval;
+        }
+    }
+
+    public static class PerioderMedFeilWrapper {
+        private final List<Periode> perioderSomIkkeOverlapperMedHovedperiode;
+        private final List<Periode> perioderUtenforGyldigperiode;
+
+        public PerioderMedFeilWrapper(List<Periode> perioderSomIkkeOverlapperMedHovedperiode, List<Periode> perioderUtenforGyldigperiode) {
             this.perioderSomIkkeOverlapperMedHovedperiode = perioderSomIkkeOverlapperMedHovedperiode;
-            this.perioderUtenforHovedperiode = perioderUtenforHovedperiode;
+            this.perioderUtenforGyldigperiode = perioderUtenforGyldigperiode;
         }
 
         public List<Periode> getPerioderSomIkkeOverlapperMedHovedperiode() {
             return perioderSomIkkeOverlapperMedHovedperiode;
         }
 
-        public List<Periode> getPerioderUtenforHovedperiode() {
-            return perioderUtenforHovedperiode;
+        public List<Periode> getPerioderUtenforGyldigperiode() {
+            return perioderUtenforGyldigperiode;
         }
 
         public void valider(String felt , List<Feil> feil) {
-            if(!this.perioderSomIkkeOverlapperMedHovedperiode.isEmpty()) {
+            if(perioderSomIkkeOverlapperMedHovedperiode != null && !this.perioderSomIkkeOverlapperMedHovedperiode.isEmpty()) {
                 feil.addAll(this.perioderSomIkkeOverlapperMedHovedperiode.stream()
                         .filter(TidsserieValidator::periodeInneholderDagerSomIkkeErHelg)
                         .map(p -> toFeil(p, felt, "ikkeKomplettPeriode", "Periodene er ikke komplett, periode som mangler er: "))
                         .collect(Collectors.toList()));
             }
-            if(!this.perioderUtenforHovedperiode.isEmpty()) {
-                feil.addAll(this.perioderUtenforHovedperiode.stream()
+
+            if(perioderUtenforGyldigperiode != null && !this.perioderUtenforGyldigperiode.isEmpty()) {
+                feil.addAll(this.perioderUtenforGyldigperiode.stream()
                         .map(p -> toFeil(p, felt, "ugyldigPeriode", "Perioden er utenfor søknadsperioden : "))
                         .collect(Collectors.toList()));
             }

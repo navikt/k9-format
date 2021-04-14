@@ -146,7 +146,39 @@ final class TestUtils {
 
         var barn = new Barn(null, LocalDate.now());
 
-        return new PleiepengerSyktBarn().medSøknadsperiode(søknadsperiode).medBarn(barn).medUttak(uttak);
+        var omsorg = new Omsorg("Mor", true, "jeg er mora");
+
+        return new PleiepengerSyktBarn()
+                .medSøknadsperiode(søknadsperiode)
+                .medBarn(barn)
+                .medUttak(uttak)
+                .medOmsorg(omsorg);
+    }
+
+    static PleiepengerSyktBarn minimumEndringssøknad(Periode endringsperiode) {
+        return new PleiepengerSyktBarn()
+                .medEndringsperiode(endringsperiode)
+                .medBarn(new Barn(NorskIdentitetsnummer.of("11111111111"), null));
+    }
+
+    static PleiepengerSyktBarn fullEndringssøknad(Periode periode, Periode endringsperiode) {
+        return TestUtils.minimumEndringssøknad(endringsperiode)
+                .medBeredskap(new Beredskap(Map.of(periode,
+                        new Beredskap.BeredskapPeriodeInfo(TestUtils.testTekst()))))
+                .medNattevåk(new Nattevåk(Map.of(periode,
+                        new Nattevåk.NattevåkPeriodeInfo(TestUtils.testTekst()))))
+                .medTilsynsordning(new Tilsynsordning(Map.of(periode,
+                        new TilsynPeriodeInfo(Duration.ofHours(5)))))
+                .medArbeidstid(new Arbeidstid().medArbeidstakerList(List.of(new Arbeidstaker(null,
+                        Organisasjonsnummer.of("999999999"),
+                        new ArbeidstidInfo(Map.of(periode,
+                                new ArbeidstidPeriodeInfo(Duration.ofHours(8), Duration.ofHours(4))))))))
+                .medUttak(new Uttak(Map.of(periode,
+                        new UttakPeriodeInfo(Duration.ofHours(3)))));
+    }
+
+    static String testTekst() {
+        return "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
     }
 
 }

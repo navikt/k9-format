@@ -1,5 +1,7 @@
 package no.nav.k9.søknad.ytelse.psb.v1;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,9 +39,12 @@ public class PleiepengerSyktBarn implements Ytelse {
     private Barn barn;
 
     @Valid
-    @NotNull
-    @JsonProperty(value = "søknadsperiode", required = true)
-    private Periode søknadsperiode;
+    @JsonProperty(value = "søknadsperiodeList")
+    private List<Periode> søknadsperiodeList;
+
+    @Valid
+    @JsonProperty(value = "endringsperiodeList")
+    private List<Periode> endringsperiodeList;
 
     @Valid
     @JsonProperty(value = "opptjeningAktivitet")
@@ -78,15 +83,14 @@ public class PleiepengerSyktBarn implements Ytelse {
     private LovbestemtFerie lovbestemtFerie;
 
     @Valid
-    @JsonProperty(value = "arbeidstid", required = true)
+    @JsonProperty(value = "arbeidstid")
     private Arbeidstid arbeidstid;
 
     @Valid
-    @NotNull
-    @JsonProperty(value = "uttak", required = true)
+    @JsonProperty(value = "uttak")
     private Uttak uttak;
 
-    @JsonProperty(value = "omsorg", required = true)
+    @JsonProperty(value = "omsorg")
     @Valid
     private Omsorg omsorg;
 
@@ -94,7 +98,8 @@ public class PleiepengerSyktBarn implements Ytelse {
     }
     
     @JsonCreator
-    public PleiepengerSyktBarn(@JsonProperty(value = "søknadsperiode", required = true) @NotNull @Valid Periode søknadsperiode,
+    public PleiepengerSyktBarn(@JsonProperty(value = "søknadsperiodeList") @Valid List<Periode> søknadsperiodeList,
+                               @JsonProperty(value = "endringsperiodeList") @Valid List<Periode> endringsperiodeList,
                                @JsonProperty(value = "dataBruktTilUtledning") @Valid DataBruktTilUtledning dataBruktTilUtledning,
                                @JsonProperty(value = "infoFraPunsj") @Valid InfoFraPunsj infoFraPunsj,
                                @JsonProperty(value = "barn", required = true) @NotNull @Valid Barn barn,
@@ -102,13 +107,14 @@ public class PleiepengerSyktBarn implements Ytelse {
                                @JsonProperty(value = "beredskap") @Valid Beredskap beredskap,
                                @JsonProperty(value = "nattevåk") @Valid Nattevåk nattevåk,
                                @JsonProperty(value = "tilsynsordning") @Valid Tilsynsordning tilsynsordning,
-                               @JsonProperty(value = "arbeidstid", required = true) @Valid Arbeidstid arbeidstid,
-                               @JsonProperty(value = "uttak", required = true) @Valid @NotNull Uttak uttak,
-                               @JsonProperty(value = "omsorg", required = true) @Valid Omsorg omsorg,
+                               @JsonProperty(value = "arbeidstid") @Valid Arbeidstid arbeidstid,
+                               @JsonProperty(value = "uttak") @Valid Uttak uttak,
+                               @JsonProperty(value = "omsorg") @Valid Omsorg omsorg,
                                @JsonProperty(value = "lovbestemtFerie") @Valid LovbestemtFerie lovbestemtFerie,
-                               @JsonProperty(value = "bosteder") @Valid @NotNull Bosteder bosteder,
-                               @JsonProperty(value = "utenlandsopphold") @Valid @NotNull Utenlandsopphold utenlandsopphold) {
-        this.søknadsperiode = Objects.requireNonNull(søknadsperiode, "søknadsperiode");
+                               @JsonProperty(value = "bosteder") @Valid Bosteder bosteder,
+                               @JsonProperty(value = "utenlandsopphold") @Valid Utenlandsopphold utenlandsopphold) {
+        this.søknadsperiodeList = søknadsperiodeList;
+        this.endringsperiodeList = endringsperiodeList;
         this.dataBruktTilUtledning = dataBruktTilUtledning;
         this.infoFraPunsj = infoFraPunsj;
         this.barn = Objects.requireNonNull(barn, "barn");
@@ -146,11 +152,45 @@ public class PleiepengerSyktBarn implements Ytelse {
 
     @Override
     public Periode getSøknadsperiode() {
-        return søknadsperiode;
+        if(søknadsperiodeList == null || søknadsperiodeList.size() != 1) {
+            return null;
+        }
+        return søknadsperiodeList.get(0);
+    }
+
+    public List<Periode> getSøknadsperiodeList() {
+        return søknadsperiodeList == null? null: Collections.unmodifiableList(søknadsperiodeList);
+    }
+
+    public PleiepengerSyktBarn medSøknadsperiodeList(List<Periode> søknadsperiodeList) {
+        if (this.søknadsperiodeList == null)
+            this.søknadsperiodeList = new ArrayList<>();
+        this.søknadsperiodeList.addAll(søknadsperiodeList);
+        return this;
     }
 
     public PleiepengerSyktBarn medSøknadsperiode(Periode søknadsperiode) {
-        this.søknadsperiode = søknadsperiode;
+        if (this.søknadsperiodeList == null)
+            this.søknadsperiodeList = new ArrayList<>();
+        this.søknadsperiodeList.add(søknadsperiode);
+        return this;
+    }
+
+    public List<Periode> getEndringsperiodeList() {
+        return endringsperiodeList == null? null: Collections.unmodifiableList(endringsperiodeList);
+    }
+
+    public PleiepengerSyktBarn medEndringsperiodeList(List<Periode> endringsperiodeList) {
+        if (this.endringsperiodeList == null)
+            this.endringsperiodeList = new ArrayList<>();
+        this.endringsperiodeList.addAll(endringsperiodeList);
+        return this;
+    }
+
+    public PleiepengerSyktBarn medEndringsperiode(Periode endringsperiode) {
+        if (this.endringsperiodeList == null)
+            this.endringsperiodeList = new ArrayList<>();
+        this.endringsperiodeList.add(endringsperiode);
         return this;
     }
 

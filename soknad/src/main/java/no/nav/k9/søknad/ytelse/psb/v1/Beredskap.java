@@ -54,6 +54,11 @@ public class Beredskap {
         return this;
     }
 
+    public Beredskap leggeTilPeriode(Periode periode, BeredskapPeriodeInfo beredskapPeriodeInfo) {
+        this.perioder.put(periode, beredskapPeriodeInfo);
+        return this;
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class BeredskapPeriodeInfo {
 

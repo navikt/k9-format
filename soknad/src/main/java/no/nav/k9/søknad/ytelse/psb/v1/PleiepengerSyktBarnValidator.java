@@ -1,9 +1,9 @@
 package no.nav.k9.søknad.ytelse.psb.v1;
 
 import no.nav.fpsak.tidsserie.LocalDateTimeline;
+import no.nav.k9.søknad.TidsserieValidator;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
-import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
@@ -34,21 +34,88 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
                 .collect(Collectors.toList());
 
         try {
-                var søknadsperiode = validerSøknadsperiode(psb.getSøknadsperiode());
-                validerBeredskap(psb.getBeredskap(), søknadsperiode, feil);
-                validerUttak(psb.getUttak(), søknadsperiode, feil);
-                validerNattevåk(psb.getNattevåk(), søknadsperiode, feil);
-                validerTilsynsordning(psb.getTilsynsordning(), søknadsperiode, feil);
-                validerLovbestemtFerie(psb.getLovbestemtFerie(), søknadsperiode, feil);
-                validerArbeidstid(psb.getArbeidstid(), søknadsperiode, feil);
-                //TODO validerOpptjeningAktivitet
+            var tidsserier = validerSøknadsOgEndringsPerioder(psb, feil);
+            validerKomplettSøknad(psb, feil);
 
+            validerBeredskap(psb.getBeredskap(), tidsserier, feil);
+            validerUttak(psb.getUttak(), tidsserier, feil);
+            validerNattevåk(psb.getNattevåk(), tidsserier, feil);
+            validerTilsynsordning(psb.getTilsynsordning(), tidsserier, feil);
+            validerLovbestemtFerie(psb.getLovbestemtFerie(), tidsserier, feil);
+            validerArbeidstid(psb.getArbeidstid(), tidsserier, feil);
 
-        }catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             feil.add(new Feil(e.getClass().getName(), e.getCause() + "IllegalArgumentException", e.getMessage()));
         }
 
+        validerOpptjeningsAktivtet(psb, feil);
+        validerBosteder(psb, feil);
+        validerUtenlandsOpphold(psb, feil);
+        validerOmsorg(psb, feil);
+
         return feil;
+    }
+
+    private void validerAtSøknadsperiodeIkkeErNullOgTom(String felt, PleiepengerSyktBarn psb, List<Feil> feil) {
+        if(psb.getSøknadsperiodeList() == null || psb.getSøknadsperiodeList().isEmpty()) {
+            feil.add(new Feil(felt,"IllegalArgumentException","Må være en søknad med minst en søknadsperiode"));
+        }
+    }
+
+    private void manglerIkkeSøknadEllerEndringsPerioder(PleiepengerSyktBarn psb, List<Feil> feil) {
+        if( (psb.getSøknadsperiodeList() == null && psb.getEndringsperiodeList() == null)) {
+            feil.add(new Feil("søknadsperiode/endringsperiode", "missingArgument","Mangler søknadsperiode eller endringsperiode."));
+        }
+    }
+
+
+    private TidsserieValidator.TidsseriePeriodeWrapper validerSøknadsOgEndringsPerioder(PleiepengerSyktBarn psb, List<Feil> feil) {
+        manglerIkkeSøknadEllerEndringsPerioder(psb, feil);
+        return new TidsserieValidator.TidsseriePeriodeWrapper(psb.getSøknadsperiodeList(), psb.getEndringsperiodeList());
+    }
+
+    private void validerOmsorg(PleiepengerSyktBarn psb, List<Feil> feil) {
+        if (psb.getOmsorg() == null) {
+            return;
+        }
+        validerAtSøknadsperiodeIkkeErNullOgTom("omsorg" ,psb, feil);
+    }
+
+    private void validerUtenlandsOpphold(PleiepengerSyktBarn psb, List<Feil> feil) {
+        if (psb.getUtenlandsopphold() == null) {
+            return;
+        }
+        validerAtSøknadsperiodeIkkeErNullOgTom("utenlandsopphold", psb, feil);
+    }
+
+    private void validerBosteder(PleiepengerSyktBarn psb, List<Feil> feil) {
+        if (psb.getBosteder() == null) {
+            return;
+        }
+        validerAtSøknadsperiodeIkkeErNullOgTom("bosteder", psb, feil);
+    }
+
+    private void validerOpptjeningsAktivtet(PleiepengerSyktBarn psb, List<Feil> feil) {
+        if(psb.getOpptjeningAktivitet() == null) {
+            return;
+        }
+        validerAtSøknadsperiodeIkkeErNullOgTom("opptjeningsAktivitet", psb, feil);
+    }
+
+    private void validerKomplettSøknad(PleiepengerSyktBarn psb, List<Feil> feil) {
+        if (psb.getSøknadsperiodeList() != null && psb.getSøknadsperiodeList().size() <= 1) {
+            if (psb.getUttak() == null) {
+                feil.add(new Feil("uttak", "missingArgument","Uttak kan ikke være null."));
+            }
+            if (psb.getOmsorg() == null) {
+                feil.add(new Feil("omsorg", "missingArgument","Omsorg kan ikke være null."));
+            }
+            if (psb.getBarn() == null) {
+                feil.add(new Feil("barn", "missingArgument","Barn kan ikke være null."));
+            }
+            // bosteder (kan være tom?)
+            // utenlandsopphold (kan være tom)
+        }
     }
 
     private Feil toFeil(ConstraintViolation<PleiepengerSyktBarn> constraintViolation) {
@@ -58,31 +125,34 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
                 constraintViolation.getMessage());
     }
 
-    private LocalDateTimeline<Boolean> validerSøknadsperiode(Periode søknadsperiode) {
-        //Validerer at det ikke er overlapp i perioden
-        return toLocalDateTimeline(List.of(søknadsperiode));
+    private LocalDateTimeline<Boolean> validerSøknadsperiode(PleiepengerSyktBarn psb) {
+        if (psb.getSøknadsperiodeList() == null) {
+            return new LocalDateTimeline<Boolean>(null);
+        }
+        return toLocalDateTimeline(psb.getSøknadsperiodeList());
     }
 
-    private void validerBeredskap(Beredskap beredskap, LocalDateTimeline<Boolean> søknadsperiode, List<Feil> feil) {
+    private void validerBeredskap(Beredskap beredskap, TidsserieValidator.TidsseriePeriodeWrapper tidsseriePeriodeWrapper, List<Feil> feil) {
         if (beredskap == null) {
             return;
         }
         finnPerioderUtenfor(
                 toLocalDateTimeline(beredskap.getPerioder()),
-                søknadsperiode).valider("beredskap", feil);
+                tidsseriePeriodeWrapper)
+                .valider("beredskap", feil);
     }
 
-    private void validerUttak(Uttak uttak, LocalDateTimeline<Boolean> søknadsperiode, List<Feil> feil) {
+    private void validerUttak(Uttak uttak, TidsserieValidator.TidsseriePeriodeWrapper tidsseriePeriodeWrapper, List<Feil> feil) {
         if (uttak == null) {
             return;
         }
         finnIkkeKomplettePerioderOgPerioderUtenfor(
                 toLocalDateTimeline(uttak.getPerioder()),
-                søknadsperiode)
+                tidsseriePeriodeWrapper)
                 .valider("uttak", feil);
     }
 
-    private void validerLovbestemtFerie(LovbestemtFerie lovbestemtFerie, LocalDateTimeline<Boolean> søknadsperiode, List<Feil> feil) {
+    private void validerLovbestemtFerie(LovbestemtFerie lovbestemtFerie, TidsserieValidator.TidsseriePeriodeWrapper søknadsperiode, List<Feil> feil) {
         if (lovbestemtFerie == null) {
             return;
         }
@@ -91,7 +161,7 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
                 søknadsperiode).valider("lovbestemtFerie", feil);
     }
 
-    private void validerNattevåk(Nattevåk nattevåk, LocalDateTimeline<Boolean> søknadsperiode,  List<Feil> feil) {
+    private void validerNattevåk(Nattevåk nattevåk, TidsserieValidator.TidsseriePeriodeWrapper søknadsperiode, List<Feil> feil) {
         if (nattevåk == null) {
             return;
         }
@@ -101,7 +171,7 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
                 .valider("nattevåk", feil);
     }
 
-    private void validerArbeidstid(Arbeidstid arbeidstid, LocalDateTimeline<Boolean> søknadsperiode, List<Feil> feil) {
+    private void validerArbeidstid(Arbeidstid arbeidstid, TidsserieValidator.TidsseriePeriodeWrapper søknadsperiode, List<Feil> feil) {
         if (arbeidstid == null) {
             return;
         }
@@ -110,7 +180,7 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
         validerSelvstendigNæringsdrivende(arbeidstid.getSelvstendigNæringsdrivendeArbeidstidInfo(), søknadsperiode, feil);
     }
 
-    private void validerArbeidstaker(List<Arbeidstaker> arbeidstakerList, LocalDateTimeline<Boolean> søknadsperiode, List<Feil> feil) {
+    private void validerArbeidstaker(List<Arbeidstaker> arbeidstakerList, TidsserieValidator.TidsseriePeriodeWrapper søknadsperiode, List<Feil> feil) {
         if (arbeidstakerList == null) {
             return;
         }
@@ -122,7 +192,7 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
         }
     }
 
-    private void validerFrilanser(ArbeidstidInfo frilanser, LocalDateTimeline<Boolean> søknadsperiode, List<Feil> feil) {
+    private void validerFrilanser(ArbeidstidInfo frilanser, TidsserieValidator.TidsseriePeriodeWrapper søknadsperiode, List<Feil> feil) {
         if (frilanser == null) {
             return;
         }
@@ -132,7 +202,7 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
                 .valider("arbeidstid.frilanser", feil);
     }
 
-    private void validerSelvstendigNæringsdrivende(ArbeidstidInfo selvstendigNæringsdrivende, LocalDateTimeline<Boolean> søknadsperiode, List<Feil> feil) {
+    private void validerSelvstendigNæringsdrivende(ArbeidstidInfo selvstendigNæringsdrivende, TidsserieValidator.TidsseriePeriodeWrapper søknadsperiode, List<Feil> feil) {
         if (selvstendigNæringsdrivende == null) {
             return;
         }
@@ -142,7 +212,7 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
                 .valider("arbeidstid.frilanser", feil);
     }
 
-    private void validerTilsynsordning(Tilsynsordning tilsynsordning, LocalDateTimeline<Boolean> søknadsperiode, List<Feil> feil) {
+    private void validerTilsynsordning(Tilsynsordning tilsynsordning, TidsserieValidator.TidsseriePeriodeWrapper søknadsperiode, List<Feil> feil) {
         if (tilsynsordning == null) {
             return;
         }

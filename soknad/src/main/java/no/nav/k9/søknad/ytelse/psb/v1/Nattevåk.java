@@ -43,6 +43,11 @@ public class Nattevåk {
         return this;
     }
 
+    public Nattevåk leggeTilPeriode(Periode periode, NattevåkPeriodeInfo nattevåkPeriodeInfo) {
+        this.perioder.put(periode, nattevåkPeriodeInfo);
+        return this;
+    }
+
     public Map<Periode, NattevåkPeriodeInfo> getPerioderSomSkalSlettes() {
         return Collections.unmodifiableMap(perioderSomSkalSlettes);
     }
