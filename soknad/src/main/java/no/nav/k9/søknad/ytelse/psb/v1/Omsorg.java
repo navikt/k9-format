@@ -49,10 +49,15 @@ public class Omsorg {
         FOSTERFORELDER("Fosterforelder"),
         ANNET("Annet");
 
-        private String rolle;
+        private final String rolle;
 
         BarnRelasjon(String rolle) {
             this.rolle = rolle;
         }
+
+        public String getRolle() {
+            return rolle;
+        }
+
     }
 }
