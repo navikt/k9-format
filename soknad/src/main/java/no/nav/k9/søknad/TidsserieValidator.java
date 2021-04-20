@@ -2,6 +2,7 @@ package no.nav.k9.søknad;
 
 import no.nav.fpsak.tidsserie.LocalDateSegment;
 import no.nav.fpsak.tidsserie.LocalDateTimeline;
+import no.nav.fpsak.tidsserie.StandardCombinators;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.type.Periode;
 
@@ -14,28 +15,28 @@ import java.util.stream.Collectors;
 
 public class TidsserieValidator {
 
-    public static PerioderMedFeilWrapper finnIkkeKomplettePerioderOgPerioderUtenfor(LocalDateTimeline<Boolean> test, TidsseriePeriodeWrapper tidsseriePeriodeWrapper) {
-        return new PerioderMedFeilWrapper(
-                getPerioderSomIkkeOverlapperMedHovedperiode(test, tidsseriePeriodeWrapper),
-                getPerioderUtenforGyldigperiode(test, tidsseriePeriodeWrapper));
+    public static PerioderMedFeil finnIkkeKomplettePerioderOgPerioderUtenfor(LocalDateTimeline<Boolean> test, Perioder perioder) {
+        return new PerioderMedFeil(
+                getPerioderSomIkkeOverlapperMedHovedperiode(test, perioder),
+                getPerioderUtenforGyldigperiode(test, perioder));
     }
 
-    private static List<Periode> getPerioderUtenforGyldigperiode(LocalDateTimeline<Boolean> test, TidsseriePeriodeWrapper tidsseriePeriodeWrapper) {
-        return TidsserieUtils.toPeriodeList(test.disjoint(tidsseriePeriodeWrapper.gyldigInterval));
+    private static List<Periode> getPerioderUtenforGyldigperiode(LocalDateTimeline<Boolean> test, Perioder perioder) {
+        return TidsserieUtils.toPeriodeList(test.disjoint(perioder.gyldigInterval));
     }
 
-    private static List<Periode> getPerioderSomIkkeOverlapperMedHovedperiode(LocalDateTimeline<Boolean> test, TidsseriePeriodeWrapper tidsseriePeriodeWrapper) {
-        if (tidsseriePeriodeWrapper.getSøknadsperiode() == null || tidsseriePeriodeWrapper.getSøknadsperiode().isEmpty()) {
+    private static List<Periode> getPerioderSomIkkeOverlapperMedHovedperiode(LocalDateTimeline<Boolean> test, Perioder perioder) {
+        if (perioder.getSøknadsperiode() == null || perioder.getSøknadsperiode().isEmpty()) {
             return null;
         }
-        return TidsserieUtils.toPeriodeList(tidsseriePeriodeWrapper.søknadsperiode.disjoint(test));
+        return TidsserieUtils.toPeriodeList(perioder.søknadsperiode.disjoint(test));
     }
 
-    public static PerioderMedFeilWrapper finnPerioderUtenfor(LocalDateTimeline<Boolean> testTidsserie, TidsseriePeriodeWrapper hovedTidsserie) {
+    public static PerioderMedFeil finnPerioderUtenfor(LocalDateTimeline<Boolean> testTidsserie, Perioder hovedTidsserie) {
         if (hovedTidsserie == null) {
-            return new PerioderMedFeilWrapper(new ArrayList<>(), new ArrayList<>());
+            return new PerioderMedFeil(new ArrayList<>(), new ArrayList<>());
         }
-        return new PerioderMedFeilWrapper(
+        return new PerioderMedFeil(
                 null,
                 getPerioderUtenforGyldigperiode(testTidsserie, hovedTidsserie));
     }
@@ -65,37 +66,29 @@ public class TidsserieValidator {
         }
     }
 
-    public static class TidsseriePeriodeWrapper {
-        private LocalDateTimeline<Boolean> søknadsperiode;
-        private LocalDateTimeline<Boolean> gyldigInterval;
+    public static class Perioder {
+        private final LocalDateTimeline<Boolean> søknadsperiode;
+        private final LocalDateTimeline<Boolean> gyldigInterval;
 
-        public TidsseriePeriodeWrapper(List<Periode> søknadsperiode, List<Periode> endringsperiode) {
-            if (søknadsperiode != null && !søknadsperiode.isEmpty()) {
-                this.søknadsperiode = TidsserieUtils.toLocalDateTimeline(søknadsperiode);
-                if (endringsperiode != null && !endringsperiode.isEmpty()) {
-                    this.gyldigInterval = this.søknadsperiode.crossJoin(TidsserieUtils.toLocalDateTimeline(endringsperiode));
-                } else {
-                    this.gyldigInterval = this.søknadsperiode;
-                }
-            } else if (endringsperiode != null && !endringsperiode.isEmpty()) {
-                gyldigInterval = TidsserieUtils.toLocalDateTimeline(endringsperiode);
-            }
+        public Perioder(List<Periode> søknadsperiode, List<Periode> endringsperiode) {
+            this.søknadsperiode = TidsserieUtils.toLocalDateTimeline(søknadsperiode);
+            this.gyldigInterval = this.søknadsperiode.union(TidsserieUtils.toLocalDateTimeline(endringsperiode), StandardCombinators::coalesceLeftHandSide);
         }
 
         public LocalDateTimeline<Boolean> getSøknadsperiode() {
             return søknadsperiode;
         }
 
-        public LocalDateTimeline<Boolean> getGyldigInterval() {
+        public LocalDateTimeline<Boolean> getPerioderDerEndringerErTillatt() {
             return gyldigInterval;
         }
     }
 
-    public static class PerioderMedFeilWrapper {
+    public static class PerioderMedFeil {
         private final List<Periode> perioderSomIkkeOverlapperMedHovedperiode;
         private final List<Periode> perioderUtenforGyldigperiode;
 
-        public PerioderMedFeilWrapper(List<Periode> perioderSomIkkeOverlapperMedHovedperiode, List<Periode> perioderUtenforGyldigperiode) {
+        public PerioderMedFeil(List<Periode> perioderSomIkkeOverlapperMedHovedperiode, List<Periode> perioderUtenforGyldigperiode) {
             this.perioderSomIkkeOverlapperMedHovedperiode = perioderSomIkkeOverlapperMedHovedperiode;
             this.perioderUtenforGyldigperiode = perioderUtenforGyldigperiode;
         }

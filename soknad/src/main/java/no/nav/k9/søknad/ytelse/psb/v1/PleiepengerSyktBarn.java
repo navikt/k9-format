@@ -1,5 +1,6 @@
 package no.nav.k9.søknad.ytelse.psb.v1;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -40,11 +41,11 @@ public class PleiepengerSyktBarn implements Ytelse {
 
     @Valid
     @JsonProperty(value = "søknadsperiodeList")
-    private List<Periode> søknadsperiodeList;
+    private List<Periode> søknadsperiodeList = new ArrayList<>();
 
     @Valid
     @JsonProperty(value = "endringsperiodeList")
-    private List<Periode> endringsperiodeList;
+    private List<Periode> endringsperiodeList = new ArrayList<>();
 
     @Valid
     @JsonProperty(value = "opptjeningAktivitet")
@@ -68,27 +69,27 @@ public class PleiepengerSyktBarn implements Ytelse {
 
     @Valid
     @JsonProperty(value = "beredskap")
-    private Beredskap beredskap;
+    private Beredskap beredskap = new Beredskap();
 
     @Valid
     @JsonProperty(value = "nattevåk")
-    private Nattevåk nattevåk;
+    private Nattevåk nattevåk = new Nattevåk();
 
     @Valid
     @JsonProperty(value = "tilsynsordning")
-    private Tilsynsordning tilsynsordning;
+    private Tilsynsordning tilsynsordning = new Tilsynsordning();
 
     @Valid
     @JsonProperty(value = "lovbestemtFerie")
-    private LovbestemtFerie lovbestemtFerie;
+    private LovbestemtFerie lovbestemtFerie = new LovbestemtFerie();
 
     @Valid
     @JsonProperty(value = "arbeidstid")
-    private Arbeidstid arbeidstid;
+    private Arbeidstid arbeidstid = new Arbeidstid();
 
     @Valid
     @JsonProperty(value = "uttak")
-    private Uttak uttak;
+    private Uttak uttak = new Uttak();
 
     @JsonProperty(value = "omsorg")
     @Valid
@@ -113,8 +114,8 @@ public class PleiepengerSyktBarn implements Ytelse {
                                @JsonProperty(value = "lovbestemtFerie") @Valid LovbestemtFerie lovbestemtFerie,
                                @JsonProperty(value = "bosteder") @Valid Bosteder bosteder,
                                @JsonProperty(value = "utenlandsopphold") @Valid Utenlandsopphold utenlandsopphold) {
-        this.søknadsperiodeList = søknadsperiodeList;
-        this.endringsperiodeList = endringsperiodeList;
+        this.søknadsperiodeList = (søknadsperiodeList == null ) ? new ArrayList<>() : new ArrayList<>(søknadsperiodeList);
+        this.endringsperiodeList = (endringsperiodeList == null ) ? new ArrayList<>() : new ArrayList<>(endringsperiodeList);
         this.dataBruktTilUtledning = dataBruktTilUtledning;
         this.infoFraPunsj = infoFraPunsj;
         this.barn = Objects.requireNonNull(barn, "barn");
@@ -152,10 +153,20 @@ public class PleiepengerSyktBarn implements Ytelse {
 
     @Override
     public Periode getSøknadsperiode() {
-        if(søknadsperiodeList == null || søknadsperiodeList.size() != 1) {
-            return null;
-        }
-        return søknadsperiodeList.get(0);
+        final List<Periode> perioder = new ArrayList<>(søknadsperiodeList);
+        perioder.addAll(endringsperiodeList);
+
+        final var fom = søknadsperiodeList
+                .stream()
+                .map(Periode::getFraOgMed)
+                .min(LocalDate::compareTo)
+                .orElseThrow();
+        final var tom = søknadsperiodeList
+                .stream()
+                .map(Periode::getTilOgMed)
+                .max(LocalDate::compareTo)
+                .orElseThrow();
+        return new Periode(fom, tom);
     }
 
     public List<Periode> getSøknadsperiodeList() {

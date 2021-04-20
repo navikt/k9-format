@@ -18,10 +18,9 @@ import static java.util.Collections.unmodifiableMap;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Beredskap {
 
-    @JsonProperty(value="perioder")
+    @JsonProperty(value="perioder", required = true)
     @Valid
-    @NotEmpty
-    private Map<Periode, BeredskapPeriodeInfo> perioder;
+    private Map<Periode, BeredskapPeriodeInfo> perioder = new TreeMap<>();
 
     @JsonProperty(value="perioderSomSkalSlettes")
     @Valid
@@ -29,7 +28,7 @@ public class Beredskap {
 
     @JsonCreator
     public Beredskap(
-            @JsonProperty(value = "perioder") @NotEmpty @Valid Map<Periode, BeredskapPeriodeInfo> perioder) {
+            @JsonProperty(value = "perioder", required = true) @Valid Map<Periode, BeredskapPeriodeInfo> perioder) {
         this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
     }
 
@@ -63,14 +62,9 @@ public class Beredskap {
     public static final class BeredskapPeriodeInfo {
 
         @Valid
+        @NotNull
         @JsonProperty(value = "tilleggsinformasjon")
         private String tilleggsinformasjon;
-
-        @JsonCreator
-        public BeredskapPeriodeInfo(@JsonProperty(value = "tilleggsinformasjon")
-                                                     @NotNull @Valid String tilleggsinformasjon) {
-            this.tilleggsinformasjon = tilleggsinformasjon;
-        }
 
         public BeredskapPeriodeInfo() {
         }

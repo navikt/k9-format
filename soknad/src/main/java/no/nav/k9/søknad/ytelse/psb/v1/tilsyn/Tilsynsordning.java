@@ -5,8 +5,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.ytelse.psb.v1.Nattevåk;
 
 import javax.validation.Valid;
+
+import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -18,7 +21,11 @@ public class Tilsynsordning {
 
     @JsonProperty(value="perioder")
     @Valid
-    private Map<Periode, TilsynPeriodeInfo> perioder;
+    private Map<Periode, TilsynPeriodeInfo> perioder = new TreeMap<>();
+
+    @JsonProperty(value="perioderSomSkalSlettes")
+    @Valid
+    private Map<Periode, TilsynPeriodeInfo> perioderSomSkalSlettes;
 
     @JsonCreator
     public Tilsynsordning(
@@ -40,6 +47,15 @@ public class Tilsynsordning {
 
     public Tilsynsordning leggeTilPeriode(Periode periode, TilsynPeriodeInfo tilsynPeriodeInfo) {
         this.perioder.put(periode, tilsynPeriodeInfo);
+        return this;
+    }
+
+    public Map<Periode, TilsynPeriodeInfo> getPerioderSomSkalSlettes() {
+        return Collections.unmodifiableMap(perioderSomSkalSlettes);
+    }
+
+    public Tilsynsordning medPerioderSomSkalSlettes(Map<Periode, TilsynPeriodeInfo> perioderSomSkalSlettes) {
+        this.perioderSomSkalSlettes = (perioderSomSkalSlettes == null) ? new TreeMap<>() : new TreeMap<>(perioderSomSkalSlettes);
         return this;
     }
 }

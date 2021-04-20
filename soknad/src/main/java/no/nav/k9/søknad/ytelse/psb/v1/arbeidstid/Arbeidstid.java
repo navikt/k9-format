@@ -15,22 +15,24 @@ import static java.util.Collections.*;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Arbeidstid {
 
-    @Valid
-    @JsonProperty(value = "arbeidstakerList", required = true)
-    private List<Arbeidstaker> arbeidstakerList;
+    //TODO endre til Optional?? avklaring med SG
 
     @Valid
-    @JsonProperty(value = "frilanserArbeidstidInfo", required = true)
+    @JsonProperty(value = "arbeidstakerList")
+    private List<Arbeidstaker> arbeidstakerList = new ArrayList<>();
+
+    @Valid
+    @JsonProperty(value = "frilanserArbeidstidInfo")
     private ArbeidstidInfo frilanserArbeidstidInfo;
 
     @Valid
-    @JsonProperty(value = "selvstendigNæringsdrivendeArbeidstidInfo", required = true)
+    @JsonProperty(value = "selvstendigNæringsdrivendeArbeidstidInfo")
     private ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo;
 
     @JsonCreator
-    public Arbeidstid(@JsonProperty(value = "arbeidstakerList", required = true) @Valid List<Arbeidstaker> arbeidstakerList,
-                      @JsonProperty(value = "frilanserArbeidstidInfo", required = true) @Valid ArbeidstidInfo frilanserArbeidstidInfo,
-                      @JsonProperty(value = "selvstendigNæringsdrivendeArbeidstidInfo", required = true) @Valid ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo) {
+    public Arbeidstid(@JsonProperty(value = "arbeidstakerList") @Valid List<Arbeidstaker> arbeidstakerList,
+                      @JsonProperty(value = "frilanserArbeidstidInfo") @Valid ArbeidstidInfo frilanserArbeidstidInfo,
+                      @JsonProperty(value = "selvstendigNæringsdrivendeArbeidstidInfo") @Valid ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo) {
         this.arbeidstakerList = (arbeidstakerList == null ) ? new ArrayList<>() : new ArrayList<>(arbeidstakerList);
         this.frilanserArbeidstidInfo = frilanserArbeidstidInfo;
         this.selvstendigNæringsdrivendeArbeidstidInfo = selvstendigNæringsdrivendeArbeidstidInfo;

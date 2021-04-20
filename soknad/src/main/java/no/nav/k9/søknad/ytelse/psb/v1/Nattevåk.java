@@ -19,15 +19,14 @@ public class Nattevåk {
 
     @JsonProperty(value="perioder")
     @Valid
-    @NotEmpty
-    private Map<Periode, NattevåkPeriodeInfo> perioder;
+    private Map<Periode, NattevåkPeriodeInfo> perioder = new TreeMap<>();
 
     @JsonProperty(value="perioderSomSkalSlettes")
     @Valid
     private Map<Periode, NattevåkPeriodeInfo> perioderSomSkalSlettes;
 
     @JsonCreator
-    public Nattevåk(@JsonProperty("perioder") @Valid @NotEmpty Map<Periode, NattevåkPeriodeInfo> perioder) {
+    public Nattevåk(@JsonProperty("perioder") @Valid Map<Periode, NattevåkPeriodeInfo> perioder) {
         this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
     }
 

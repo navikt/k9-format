@@ -10,6 +10,7 @@ import no.nav.k9.søknad.felles.type.Periode;
 
 import javax.validation.Valid;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -18,9 +19,9 @@ import java.util.TreeMap;
 public class LovbestemtFerie {
 
 
-    @JsonProperty(value="perioder", required = true)
+    @JsonProperty(value="perioder")
     @Valid
-    private Map<Periode, LovbestemtFeriePeriodeInfo> perioder;
+    private Map<Periode, LovbestemtFeriePeriodeInfo> perioder = new TreeMap<>();
 
     @JsonProperty(value="perioderSomSkalSlettes", required = true)
     @Valid
@@ -28,7 +29,7 @@ public class LovbestemtFerie {
 
     @JsonCreator
     public LovbestemtFerie(
-            @JsonProperty(value = "perioder", required = true) @Valid Map<Periode, LovbestemtFeriePeriodeInfo> perioder) {
+            @JsonProperty(value = "perioder") @Valid Map<Periode, LovbestemtFeriePeriodeInfo> perioder) {
         this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
     }
 

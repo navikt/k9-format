@@ -107,7 +107,7 @@ final class TestUtils {
                 arbeidstaker), null, null);
 
         var beredskap = new Beredskap(
-                Map.of(søknadsperiode, new Beredskap.BeredskapPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.")));
+                Map.of(søknadsperiode, new Beredskap.BeredskapPeriodeInfo().medTilleggsinformasjon("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.")));
 
         var nattevåk = new Nattevåk(Map.of(
                 søknadsperiode, new Nattevåk.NattevåkPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.")));
@@ -164,7 +164,7 @@ final class TestUtils {
     static PleiepengerSyktBarn fullEndringssøknad(Periode periode, Periode endringsperiode) {
         return TestUtils.minimumEndringssøknad(endringsperiode)
                 .medBeredskap(new Beredskap(Map.of(periode,
-                        new Beredskap.BeredskapPeriodeInfo(TestUtils.testTekst()))))
+                        new Beredskap.BeredskapPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()))))
                 .medNattevåk(new Nattevåk(Map.of(periode,
                         new Nattevåk.NattevåkPeriodeInfo(TestUtils.testTekst()))))
                 .medTilsynsordning(new Tilsynsordning(Map.of(periode,
