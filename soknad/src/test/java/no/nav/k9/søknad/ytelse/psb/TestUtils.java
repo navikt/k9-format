@@ -125,8 +125,8 @@ final class TestUtils {
                 .årsak(Utenlandsopphold.UtenlandsoppholdÅrsak.BARNET_INNLAGT_I_HELSEINSTITUSJON_FOR_NORSK_OFFENTLIG_REGNING)
                 .build()));
 
-        var omsorg = new Omsorg("MORA", true,
-                "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.");
+        var omsorg = new Omsorg()
+                .medRelasjonTilBarnet(Omsorg.BarnRelasjon.MOR);
 
         var søknadInfo = new DataBruktTilUtledning( true, true,
                 false, false, true );
@@ -166,8 +166,7 @@ final class TestUtils {
                 søknadsperiode,
                 new Bosteder.BostedPeriodeInfo(Landkode.NORGE)));
 
-        var omsorg = new Omsorg("MORA", true,
-                "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.");
+        var omsorg = new Omsorg().medRelasjonTilBarnet(Omsorg.BarnRelasjon.MOR);
 
         var søknadInfo = new DataBruktTilUtledning( true, true,
                 false, false, true );

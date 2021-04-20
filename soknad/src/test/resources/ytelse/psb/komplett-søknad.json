@@ -83,8 +83,7 @@
       }
     },
     "omsorg" : {
-      "relasjonTilBarnet" : "MORA",
-      "samtykketOmsorgForBarnet" : true,
+      "relasjonTilBarnet" : "MOR",
       "beskrivelseAvOmsorgsrollen" : "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
     },
     "lovbestemtFerie" : {
