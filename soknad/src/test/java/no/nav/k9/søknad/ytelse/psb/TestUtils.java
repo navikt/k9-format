@@ -89,7 +89,7 @@ final class TestUtils {
                 new TilsynPeriodeInfo(Duration.ofHours(7).plusMinutes(30)))));
 
         psb.medLovbestemtFerie(new LovbestemtFerie(Map.of(delperiodeTo, new LovbestemtFeriePeriodeInfo())));
-        
+
         return psb;
     }
 
@@ -129,7 +129,9 @@ final class TestUtils {
         var søknadInfo = new DataBruktTilUtledning( true, true,
                 false, false, true );
 
-        return new PleiepengerSyktBarn(søknadsperiode, søknadInfo, null, barn, null, beredskap, nattevåk, tilsynsordning, arbeidstid, uttak, omsorg, lovbestemtFerie, bosteder,
+        var infoFraPunsj = new InfoFraPunsj().medSøknadenInneholderInfomasjonSomIkkeKanPunsjes(false);
+
+        return new PleiepengerSyktBarn(søknadsperiode, søknadInfo, infoFraPunsj, barn, null, beredskap, nattevåk, tilsynsordning, arbeidstid, uttak, omsorg, lovbestemtFerie, bosteder,
                 null);
     }
 
