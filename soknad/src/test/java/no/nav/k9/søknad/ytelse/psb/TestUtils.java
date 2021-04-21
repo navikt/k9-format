@@ -72,13 +72,13 @@ final class TestUtils {
         var delperiodeEn = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-02-20"));
         var delperiodeTo = new Periode(LocalDate.parse("2019-02-21"), LocalDate.parse("2019-10-20"));
 
-        psb.medBeredskap(new Beredskap(
-                Map.of( delperiodeEn, new Beredskap.BeredskapPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."),
-                        delperiodeTo, new Beredskap.BeredskapPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."))));
+        psb.medBeredskap(new Beredskap().medPerioder(Map.of(
+                delperiodeEn, new Beredskap.BeredskapPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()),
+                delperiodeTo, new Beredskap.BeredskapPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()))));
 
-        psb.medNattevåk(new Nattevåk(Map.of(
-            delperiodeEn, new Nattevåk.NattevåkPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."),
-            delperiodeTo, new Nattevåk.NattevåkPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."))));
+        psb.medNattevåk(new Nattevåk().medPerioder(Map.of(
+                delperiodeEn, new Nattevåk.NattevåkPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()),
+                delperiodeTo, new Nattevåk.NattevåkPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()))));
 
         psb.medTilsynsordning( new Tilsynsordning(Map.of(
                 new Periode(LocalDate.parse("2019-01-01"), LocalDate.parse("2019-01-01")),
@@ -88,7 +88,8 @@ final class TestUtils {
                 new Periode(LocalDate.parse("2019-01-03"), LocalDate.parse("2019-01-09")),
                 new TilsynPeriodeInfo(Duration.ofHours(7).plusMinutes(30)))));
 
-        psb.medLovbestemtFerie(new LovbestemtFerie(Map.of(delperiodeTo, new LovbestemtFeriePeriodeInfo())));
+        psb.medLovbestemtFerie(new LovbestemtFerie().medPerioder(
+                Map.of(delperiodeTo, new LovbestemtFeriePeriodeInfo())));
 
         return psb;
     }
@@ -130,8 +131,19 @@ final class TestUtils {
 
         var infoFraPunsj = new InfoFraPunsj().medSøknadenInneholderInfomasjonSomIkkeKanPunsjes(false);
 
-        return new PleiepengerSyktBarn(søknadsperiode, søknadInfo, infoFraPunsj, barn, null, beredskap, nattevåk, tilsynsordning, arbeidstid, uttak, omsorg, lovbestemtFerie, bosteder,
-                null);
+        return new PleiepengerSyktBarn()
+                .medSøknadsperiode(søknadsperiode)
+                .medSøknadInfo(søknadInfo)
+                .medInfoFraPunsj(infoFraPunsj)
+                .medBarn(barn)
+                .medBeredskap(beredskap)
+                .medNattevåk(nattevåk)
+                .medTilsynsordning(tilsynsordning)
+                .medArbeidstid(arbeidstid)
+                .medUttak(uttak)
+                .medOmsorg(omsorg)
+                .medLovbestemtFerie(lovbestemtFerie)
+                .medBosteder(bosteder);
     }
 
     static PleiepengerSyktBarn minimumSøknadPleiepengerSyktBarn() {
@@ -145,7 +157,9 @@ final class TestUtils {
 
         var barn = new Barn(null, LocalDate.now());
 
-        var omsorg = new Omsorg("Mor", true, "jeg er mora");
+        var omsorg = new Omsorg()
+                .medRelasjonTilBarnet(Omsorg.BarnRelasjon.MOR)
+                .medBeskrivelseAvOmsorgsrollen(TestUtils.testTekst());
 
         return new PleiepengerSyktBarn()
                 .medSøknadsperiode(søknadsperiode)
@@ -162,18 +176,15 @@ final class TestUtils {
 
     static PleiepengerSyktBarn fullEndringssøknad(Periode periode, Periode endringsperiode) {
         return TestUtils.minimumEndringssøknad(endringsperiode)
-                .medBeredskap(new Beredskap(Map.of(periode,
-                        new Beredskap.BeredskapPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()))))
-                .medNattevåk(new Nattevåk(Map.of(periode,
-                        new Nattevåk.NattevåkPeriodeInfo(TestUtils.testTekst()))))
-                .medTilsynsordning(new Tilsynsordning(Map.of(periode,
-                        new TilsynPeriodeInfo(Duration.ofHours(5)))))
-                .medArbeidstid(new Arbeidstid().medArbeidstakerList(List.of(new Arbeidstaker(null,
-                        Organisasjonsnummer.of("999999999"),
-                        new ArbeidstidInfo(Map.of(periode,
-                                new ArbeidstidPeriodeInfo(Duration.ofHours(8), Duration.ofHours(4))))))))
-                .medUttak(new Uttak(Map.of(periode,
-                        new UttakPeriodeInfo(Duration.ofHours(3)))));
+                .medBeredskap(new Beredskap().medPerioder(Map.of(
+                        periode, new Beredskap.BeredskapPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()))))
+                .medNattevåk(new Nattevåk().medPerioder(Map.of(
+                        periode, new Nattevåk.NattevåkPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()))))
+                .medTilsynsordning(new Tilsynsordning(Map.of(periode, new TilsynPeriodeInfo(Duration.ofHours(5)))))
+                .medArbeidstid(new Arbeidstid().medArbeidstakerList(List.of(
+                        new Arbeidstaker(null, Organisasjonsnummer.of("999999999"), new ArbeidstidInfo(
+                                Map.of(periode, new ArbeidstidPeriodeInfo(Duration.ofHours(8), Duration.ofHours(4))))))))
+                .medUttak(new Uttak(Map.of(periode, new UttakPeriodeInfo(Duration.ofHours(3)))));
     }
 
     static String testTekst() {

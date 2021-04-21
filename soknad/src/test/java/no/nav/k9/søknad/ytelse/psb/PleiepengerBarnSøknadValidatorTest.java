@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -49,7 +50,6 @@ public class PleiepengerBarnSøknadValidatorTest {
 
     @Test
     public void uttakKanIkkeVæreTom() {
-        //TODO skrive om
         var ytelse = TestUtils.komplettYtelsePsbMedDelperioder();
         ytelse.medUttak(new Uttak());
         verifyHarFeil(ytelse);
@@ -59,8 +59,7 @@ public class PleiepengerBarnSøknadValidatorTest {
     @Test
     public void måVæreSøknadHvisDetErInfoOmOmsorg() {
         var ytelse = TestUtils.minimumEndringssøknad(new Periode(LocalDate.now().minusMonths(1), LocalDate.now().plusMonths(1)))
-                .medOmsorg(new Omsorg("mor", true, "jeg er mor"));
-
+                .medOmsorg(new Omsorg().medRelasjonTilBarnet(Omsorg.BarnRelasjon.MOR).medBeskrivelseAvOmsorgsrollen(TestUtils.testTekst()));
         var feil = valider(ytelse);
         assertThat(feil.size()).isEqualTo(1);
         assertThat(feil.get(0).getFeilkode()).isEqualTo("IllegalArgumentException");
