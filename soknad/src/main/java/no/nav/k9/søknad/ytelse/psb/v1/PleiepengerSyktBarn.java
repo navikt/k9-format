@@ -35,8 +35,8 @@ import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
 public class PleiepengerSyktBarn implements Ytelse {
 
     @Valid
-    @JsonProperty(value = "barn", required = true)
     @NotNull
+    @JsonProperty(value = "barn", required = true)
     private Barn barn;
 
     @Valid
@@ -55,8 +55,8 @@ public class PleiepengerSyktBarn implements Ytelse {
     @JsonProperty(value = "dataBruktTilUtledning")
     private DataBruktTilUtledning dataBruktTilUtledning;
 
-    @JsonProperty(value = "infoFraPunsj")
     @Valid
+    @JsonProperty(value = "infoFraPunsj")
     private InfoFraPunsj infoFraPunsj;
 
     @Valid
@@ -91,8 +91,8 @@ public class PleiepengerSyktBarn implements Ytelse {
     @JsonProperty(value = "uttak", required = true)
     private Uttak uttak = new Uttak();
 
-    @JsonProperty(value = "omsorg", required = true)
     @Valid
+    @JsonProperty(value = "omsorg", required = true)
     private Omsorg omsorg = new Omsorg();
 
     public PleiepengerSyktBarn() {

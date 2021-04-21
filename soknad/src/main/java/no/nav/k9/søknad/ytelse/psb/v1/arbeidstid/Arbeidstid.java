@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import java.util.*;
 
@@ -15,8 +16,9 @@ import static java.util.Collections.*;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Arbeidstid {
 
+    @JsonProperty(value = "arbeidstakerList", required = true)
     @Valid
-    @JsonProperty(value = "arbeidstakerList")
+    @NotNull
     private List<Arbeidstaker> arbeidstakerList = new ArrayList<>();
 
     //TODO endre til Optional
@@ -30,7 +32,7 @@ public class Arbeidstid {
     private ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo;
 
     @JsonCreator
-    public Arbeidstid(@JsonProperty(value = "arbeidstakerList") @Valid List<Arbeidstaker> arbeidstakerList,
+    public Arbeidstid(@JsonProperty(value = "arbeidstakerList", required = true) @Valid @NotNull List<Arbeidstaker> arbeidstakerList,
                       @JsonProperty(value = "frilanserArbeidstidInfo") @Valid ArbeidstidInfo frilanserArbeidstidInfo,
                       @JsonProperty(value = "selvstendigNæringsdrivendeArbeidstidInfo") @Valid ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo) {
         this.arbeidstakerList = (arbeidstakerList == null ) ? new ArrayList<>() : new ArrayList<>(arbeidstakerList);
