@@ -49,6 +49,10 @@ public class PleiepengerSyktBarn implements Ytelse {
     @JsonProperty(value = "dataBruktTilUtledning")
     private DataBruktTilUtledning dataBruktTilUtledning;
 
+    @JsonProperty(value = "infoFraPunsj")
+    @Valid
+    private InfoFraPunsj infoFraPunsj;
+
     @Valid
     @JsonProperty(value = "bosteder")
     private Bosteder bosteder;
@@ -92,6 +96,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     @JsonCreator
     public PleiepengerSyktBarn(@JsonProperty(value = "søknadsperiode", required = true) @NotNull @Valid Periode søknadsperiode,
                                @JsonProperty(value = "dataBruktTilUtledning") @Valid DataBruktTilUtledning dataBruktTilUtledning,
+                               @JsonProperty(value = "infoFraPunsj") @Valid InfoFraPunsj infoFraPunsj,
                                @JsonProperty(value = "barn", required = true) @NotNull @Valid Barn barn,
                                @JsonProperty(value = "opptjeningAktivitet") @Valid OpptjeningAktivitet opptjeningAktivitet1,
                                @JsonProperty(value = "beredskap") @Valid Beredskap beredskap,
@@ -105,6 +110,7 @@ public class PleiepengerSyktBarn implements Ytelse {
                                @JsonProperty(value = "utenlandsopphold") @Valid @NotNull Utenlandsopphold utenlandsopphold) {
         this.søknadsperiode = Objects.requireNonNull(søknadsperiode, "søknadsperiode");
         this.dataBruktTilUtledning = dataBruktTilUtledning;
+        this.infoFraPunsj = infoFraPunsj;
         this.barn = Objects.requireNonNull(barn, "barn");
         this.opptjeningAktivitet = opptjeningAktivitet1;
         this.beredskap = beredskap;
@@ -163,6 +169,15 @@ public class PleiepengerSyktBarn implements Ytelse {
 
     public PleiepengerSyktBarn medSøknadInfo(DataBruktTilUtledning dataBruktTilUtledning) {
         this.dataBruktTilUtledning = dataBruktTilUtledning;
+        return this;
+    }
+
+    public InfoFraPunsj getInfoFraPunsj() {
+        return infoFraPunsj;
+    }
+
+    public PleiepengerSyktBarn medInfoFraPunsj(InfoFraPunsj infoFraPunsj) {
+        this.infoFraPunsj = infoFraPunsj;
         return this;
     }
 
