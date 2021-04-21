@@ -9,6 +9,7 @@ import no.nav.k9.søknad.felles.type.Periode;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -26,18 +27,13 @@ public class TidsserieValidator {
     }
 
     private static List<Periode> getPerioderSomIkkeOverlapperMedHovedperiode(LocalDateTimeline<Boolean> test, Perioder perioder) {
-        if (perioder.getSøknadsperiode() == null || perioder.getSøknadsperiode().isEmpty()) {
-            return null;
-        }
+
         return TidsserieUtils.toPeriodeList(perioder.søknadsperiode.disjoint(test));
     }
 
     public static PerioderMedFeil finnPerioderUtenfor(LocalDateTimeline<Boolean> testTidsserie, Perioder hovedTidsserie) {
-        if (hovedTidsserie == null) {
-            return new PerioderMedFeil(new ArrayList<>(), new ArrayList<>());
-        }
         return new PerioderMedFeil(
-                null,
+                Collections.emptyList(),
                 getPerioderUtenforGyldigperiode(testTidsserie, hovedTidsserie));
     }
 
@@ -102,14 +98,14 @@ public class TidsserieValidator {
         }
 
         public void valider(String felt , List<Feil> feil) {
-            if(perioderSomIkkeOverlapperMedHovedperiode != null && !this.perioderSomIkkeOverlapperMedHovedperiode.isEmpty()) {
+            if (!this.perioderSomIkkeOverlapperMedHovedperiode.isEmpty()) {
                 feil.addAll(this.perioderSomIkkeOverlapperMedHovedperiode.stream()
                         .filter(TidsserieValidator::periodeInneholderDagerSomIkkeErHelg)
                         .map(p -> toFeil(p, felt, "ikkeKomplettPeriode", "Periodene er ikke komplett, periode som mangler er: "))
                         .collect(Collectors.toList()));
             }
 
-            if(perioderUtenforGyldigperiode != null && !this.perioderUtenforGyldigperiode.isEmpty()) {
+            if (!this.perioderUtenforGyldigperiode.isEmpty()) {
                 feil.addAll(this.perioderUtenforGyldigperiode.stream()
                         .map(p -> toFeil(p, felt, "ugyldigPeriode", "Perioden er utenfor søknadsperioden : "))
                         .collect(Collectors.toList()));

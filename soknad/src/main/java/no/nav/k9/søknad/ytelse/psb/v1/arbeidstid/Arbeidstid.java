@@ -15,16 +15,16 @@ import static java.util.Collections.*;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Arbeidstid {
 
-    //TODO endre til Optional?? avklaring med SG
-
     @Valid
     @JsonProperty(value = "arbeidstakerList")
     private List<Arbeidstaker> arbeidstakerList = new ArrayList<>();
 
+    //TODO endre til Optional
     @Valid
     @JsonProperty(value = "frilanserArbeidstidInfo")
     private ArbeidstidInfo frilanserArbeidstidInfo;
 
+    //TODO endre til Optional
     @Valid
     @JsonProperty(value = "selvstendigNæringsdrivendeArbeidstidInfo")
     private ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo;

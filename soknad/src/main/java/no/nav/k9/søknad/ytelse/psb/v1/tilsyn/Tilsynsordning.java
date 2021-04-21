@@ -19,13 +19,13 @@ import static java.util.Collections.unmodifiableMap;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Tilsynsordning {
 
-    @JsonProperty(value="perioder")
+    @JsonProperty(value="perioder", required = true)
     @Valid
     private Map<Periode, TilsynPeriodeInfo> perioder = new TreeMap<>();
 
-    @JsonProperty(value="perioderSomSkalSlettes")
+    @JsonProperty(value="perioderSomSkalSlettes", required = true)
     @Valid
-    private Map<Periode, TilsynPeriodeInfo> perioderSomSkalSlettes;
+    private Map<Periode, TilsynPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
     @JsonCreator
     public Tilsynsordning(

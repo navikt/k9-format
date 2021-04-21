@@ -45,7 +45,7 @@ public class Arbeidstaker {
     }
 
     public void valider(String felt, List<Feil> feilList) {
-        if(erEntydigPåID()) {
+        if (erEntydigPåID()) {
             feilList.add(new Feil(felt, "illegalArgument",  "Ikke entydig ID på Arbeidsgiver, må oppgi enten norskIdentitetsnummer eller organisasjonsnummer."));
         }
         if (manglerIkkeID()) {

@@ -24,13 +24,7 @@ public class Beredskap {
 
     @JsonProperty(value="perioderSomSkalSlettes")
     @Valid
-    private Map<Periode, BeredskapPeriodeInfo> perioderSomSkalSlettes;
-
-    @JsonCreator
-    public Beredskap(
-            @JsonProperty(value = "perioder", required = true) @Valid Map<Periode, BeredskapPeriodeInfo> perioder) {
-        this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
-    }
+    private Map<Periode, BeredskapPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
     public Beredskap() {
     }
@@ -61,9 +55,9 @@ public class Beredskap {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class BeredskapPeriodeInfo {
 
+        @JsonProperty(value = "tilleggsinformasjon", required = true)
         @Valid
         @NotNull
-        @JsonProperty(value = "tilleggsinformasjon")
         private String tilleggsinformasjon;
 
         public BeredskapPeriodeInfo() {

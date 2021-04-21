@@ -77,7 +77,7 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
     }
 
     private void manglerIkkeSøknadEllerEndringsPerioder(PleiepengerSyktBarn psb, List<Feil> feil) {
-        if( (psb.getSøknadsperiodeList() == null && psb.getEndringsperiodeList() == null)) {
+        if ( (psb.getSøknadsperiodeList() == null && psb.getEndringsperiodeList() == null)) {
             feil.add(new Feil("søknadsperiode/endringsperiode", "missingArgument","Mangler søknadsperiode eller endringsperiode."));
         }
     }

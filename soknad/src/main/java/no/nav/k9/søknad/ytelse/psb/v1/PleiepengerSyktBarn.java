@@ -40,11 +40,11 @@ public class PleiepengerSyktBarn implements Ytelse {
     private Barn barn;
 
     @Valid
-    @JsonProperty(value = "søknadsperiodeList")
+    @JsonProperty(value = "søknadsperiodeList", required = true)
     private List<Periode> søknadsperiodeList = new ArrayList<>();
 
     @Valid
-    @JsonProperty(value = "endringsperiodeList")
+    @JsonProperty(value = "endringsperiodeList", required = true)
     private List<Periode> endringsperiodeList = new ArrayList<>();
 
     @Valid
@@ -68,67 +68,34 @@ public class PleiepengerSyktBarn implements Ytelse {
     private Utenlandsopphold utenlandsopphold;
 
     @Valid
-    @JsonProperty(value = "beredskap")
+    @JsonProperty(value = "beredskap", required = true)
     private Beredskap beredskap = new Beredskap();
 
     @Valid
-    @JsonProperty(value = "nattevåk")
+    @JsonProperty(value = "nattevåk", required = true)
     private Nattevåk nattevåk = new Nattevåk();
 
     @Valid
-    @JsonProperty(value = "tilsynsordning")
+    @JsonProperty(value = "tilsynsordning", required = true)
     private Tilsynsordning tilsynsordning = new Tilsynsordning();
 
     @Valid
-    @JsonProperty(value = "lovbestemtFerie")
+    @JsonProperty(value = "lovbestemtFerie", required = true)
     private LovbestemtFerie lovbestemtFerie = new LovbestemtFerie();
 
     @Valid
-    @JsonProperty(value = "arbeidstid")
+    @JsonProperty(value = "arbeidstid", required = true)
     private Arbeidstid arbeidstid = new Arbeidstid();
 
     @Valid
-    @JsonProperty(value = "uttak")
+    @JsonProperty(value = "uttak", required = true)
     private Uttak uttak = new Uttak();
 
-    @JsonProperty(value = "omsorg")
+    @JsonProperty(value = "omsorg", required = true)
     @Valid
-    private Omsorg omsorg;
+    private Omsorg omsorg = new Omsorg();
 
     public PleiepengerSyktBarn() {
-    }
-    
-    @JsonCreator
-    public PleiepengerSyktBarn(@JsonProperty(value = "søknadsperiodeList") @Valid List<Periode> søknadsperiodeList,
-                               @JsonProperty(value = "endringsperiodeList") @Valid List<Periode> endringsperiodeList,
-                               @JsonProperty(value = "dataBruktTilUtledning") @Valid DataBruktTilUtledning dataBruktTilUtledning,
-                               @JsonProperty(value = "infoFraPunsj") @Valid InfoFraPunsj infoFraPunsj,
-                               @JsonProperty(value = "barn", required = true) @NotNull @Valid Barn barn,
-                               @JsonProperty(value = "opptjeningAktivitet") @Valid OpptjeningAktivitet opptjeningAktivitet1,
-                               @JsonProperty(value = "beredskap") @Valid Beredskap beredskap,
-                               @JsonProperty(value = "nattevåk") @Valid Nattevåk nattevåk,
-                               @JsonProperty(value = "tilsynsordning") @Valid Tilsynsordning tilsynsordning,
-                               @JsonProperty(value = "arbeidstid") @Valid Arbeidstid arbeidstid,
-                               @JsonProperty(value = "uttak") @Valid Uttak uttak,
-                               @JsonProperty(value = "omsorg") @Valid Omsorg omsorg,
-                               @JsonProperty(value = "lovbestemtFerie") @Valid LovbestemtFerie lovbestemtFerie,
-                               @JsonProperty(value = "bosteder") @Valid Bosteder bosteder,
-                               @JsonProperty(value = "utenlandsopphold") @Valid Utenlandsopphold utenlandsopphold) {
-        this.søknadsperiodeList = (søknadsperiodeList == null ) ? new ArrayList<>() : new ArrayList<>(søknadsperiodeList);
-        this.endringsperiodeList = (endringsperiodeList == null ) ? new ArrayList<>() : new ArrayList<>(endringsperiodeList);
-        this.dataBruktTilUtledning = dataBruktTilUtledning;
-        this.infoFraPunsj = infoFraPunsj;
-        this.barn = Objects.requireNonNull(barn, "barn");
-        this.opptjeningAktivitet = opptjeningAktivitet1;
-        this.beredskap = beredskap;
-        this.nattevåk = nattevåk;
-        this.tilsynsordning = tilsynsordning;
-        this.arbeidstid = arbeidstid;
-        this.uttak = uttak;
-        this.omsorg = omsorg;
-        this.lovbestemtFerie = lovbestemtFerie;
-        this.bosteder = bosteder;
-        this.utenlandsopphold = utenlandsopphold;
     }
 
     public Barn getBarn() {

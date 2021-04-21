@@ -19,19 +19,13 @@ import java.util.TreeMap;
 public class LovbestemtFerie {
 
 
-    @JsonProperty(value="perioder")
+    @JsonProperty(value="perioder", required = true)
     @Valid
     private Map<Periode, LovbestemtFeriePeriodeInfo> perioder = new TreeMap<>();
 
     @JsonProperty(value="perioderSomSkalSlettes", required = true)
     @Valid
-    private Map<Periode, LovbestemtFeriePeriodeInfo> perioderSomSkalSlettes;
-
-    @JsonCreator
-    public LovbestemtFerie(
-            @JsonProperty(value = "perioder") @Valid Map<Periode, LovbestemtFeriePeriodeInfo> perioder) {
-        this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
-    }
+    private Map<Periode, LovbestemtFeriePeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
     public LovbestemtFerie() {
     }
@@ -40,7 +34,7 @@ public class LovbestemtFerie {
         return unmodifiableMap(perioder);
     }
 
-    public LovbestemtFerie setPerioder(Map<Periode, LovbestemtFeriePeriodeInfo> perioder) {
+    public LovbestemtFerie medPerioder(Map<Periode, LovbestemtFeriePeriodeInfo> perioder) {
         this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
         return this;
     }

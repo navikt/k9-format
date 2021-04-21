@@ -56,15 +56,15 @@ final class TestUtils {
         return jsonFromFile("komplett-søknad.json");
     }
 
-    static Søknad komplettSøknad() {
+    static Søknad komplettSøknadJson() {
         return Søknad.SerDes.deserialize(jsonForKomplettSøknad());
     }
 
-    static Ytelse komplettYtelsePsb(String ytelse) {
+    static Ytelse komplettYtelsePsbJson(String ytelse) {
         return JsonUtils.fromString(ytelse, Ytelse.class);
     }
 
-    static PleiepengerSyktBarn komplettYtelsePsb() {
+    static PleiepengerSyktBarn komplettYtelsePsbMedDelperioder() {
 
         var søknadsperiode = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-10-20"));
         var psb = komplettYtelsePsb(søknadsperiode);
@@ -106,23 +106,22 @@ final class TestUtils {
         var arbeidstid = new Arbeidstid(List.of(
                 arbeidstaker), null, null);
 
-        var beredskap = new Beredskap(
-                Map.of(søknadsperiode, new Beredskap.BeredskapPeriodeInfo().medTilleggsinformasjon("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.")));
+        var beredskap = new Beredskap().medPerioder(Map.of(
+                søknadsperiode, new Beredskap.BeredskapPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst())));
 
-        var nattevåk = new Nattevåk(Map.of(
-                søknadsperiode, new Nattevåk.NattevåkPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.")));
+        var nattevåk = new Nattevåk().medPerioder(Map.of(
+                søknadsperiode, new Nattevåk.NattevåkPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst())));
 
         var tilsynsordning = new Tilsynsordning(Map.of(
-                søknadsperiode,
-                new TilsynPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
+                søknadsperiode, new TilsynPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
 
-        var lovbestemtFerie = new LovbestemtFerie(Map.of(søknadsperiode, new LovbestemtFeriePeriodeInfo()));
+        var lovbestemtFerie = new LovbestemtFerie().medPerioder(Map.of(
+                søknadsperiode, new LovbestemtFeriePeriodeInfo()));
 
         var barn = new Barn(NorskIdentitetsnummer.of("11111111111"), null);
 
         var bosteder = new Bosteder(Map.of(
-                søknadsperiode,
-                new Bosteder.BostedPeriodeInfo(Landkode.NORGE)));
+                søknadsperiode, new Bosteder.BostedPeriodeInfo(Landkode.NORGE)));
 
         var omsorg = new Omsorg().medRelasjonTilBarnet(Omsorg.BarnRelasjon.MOR);
 
