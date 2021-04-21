@@ -15,6 +15,7 @@ import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
 import no.nav.k9.søknad.felles.opptjening.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende;
 import no.nav.k9.søknad.felles.opptjening.VirksomhetType;
+import no.nav.k9.søknad.ytelse.psb.v1.InfoFraPunsj;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
@@ -66,73 +67,30 @@ final class TestUtils {
     static PleiepengerSyktBarn komplettYtelsePsb() {
 
         var søknadsperiode = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-10-20"));
+        var psb = komplettYtelsePsb(søknadsperiode);
+
         var delperiodeEn = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-02-20"));
         var delperiodeTo = new Periode(LocalDate.parse("2019-02-21"), LocalDate.parse("2019-10-20"));
 
-        var uttak = new Uttak(Map.of(
-            søknadsperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
-
-        var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("999999999"),
-                new ArbeidstidInfo(
-                        Map.of( søknadsperiode,
-                                new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30), Duration.ofHours(7).plusMinutes(30)))));
-
-        var arbeidstid = new Arbeidstid(List.of(
-                arbeidstaker), null, null);
-
-        var beredskap = new Beredskap(
+        psb.medBeredskap(new Beredskap(
                 Map.of( delperiodeEn, new Beredskap.BeredskapPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."),
-                        delperiodeTo, new Beredskap.BeredskapPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.")));
+                        delperiodeTo, new Beredskap.BeredskapPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."))));
 
-        var nattevåk = new Nattevåk(Map.of(
+        psb.medNattevåk(new Nattevåk(Map.of(
             delperiodeEn, new Nattevåk.NattevåkPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."),
-            delperiodeTo, new Nattevåk.NattevåkPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ.")));
+            delperiodeTo, new Nattevåk.NattevåkPeriodeInfo("Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."))));
 
-        var tilsynsordning = new Tilsynsordning(Map.of(
+        psb.medTilsynsordning( new Tilsynsordning(Map.of(
                 new Periode(LocalDate.parse("2019-01-01"), LocalDate.parse("2019-01-01")),
                 new TilsynPeriodeInfo(Duration.ofHours(7).plusMinutes(30)),
                 new Periode(LocalDate.parse("2019-01-02"), LocalDate.parse("2019-01-02")),
                 new TilsynPeriodeInfo(Duration.ofHours(7).plusMinutes(30)),
                 new Periode(LocalDate.parse("2019-01-03"), LocalDate.parse("2019-01-09")),
-                new TilsynPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
+                new TilsynPeriodeInfo(Duration.ofHours(7).plusMinutes(30)))));
 
-        var lovbestemtFerie = new LovbestemtFerie(Map.of(delperiodeTo, new LovbestemtFeriePeriodeInfo()));
+        psb.medLovbestemtFerie(new LovbestemtFerie(Map.of(delperiodeTo, new LovbestemtFeriePeriodeInfo())));
 
-        var aktivitet = OpptjeningAktivitet.builder()
-            .selvstendigNæringsdrivende(SelvstendigNæringsdrivende.builder()
-                .periode(
-                    new Periode(LocalDate.parse("2018-11-11"), LocalDate.parse("2018-11-30")),
-                    SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
-                        .virksomhetstyper(List.of(VirksomhetType.FISKE)).build())
-                .virksomhetNavn("Test")
-                .build())
-            .frilanser(Frilanser.builder()
-                .startdato(LocalDate.parse("2019-10-10"))
-                .jobberFortsattSomFrilans(true)
-                .build())
-            .build();
-
-        var barn = new Barn(NorskIdentitetsnummer.of("11111111111"), null);
-
-        var bosteder = new Bosteder(Map.of(
-            søknadsperiode,
-            new Bosteder.BostedPeriodeInfo(Landkode.DANMARK)));
-
-        var utenlandsopphold = new Utenlandsopphold(Map.of(
-            søknadsperiode,
-            Utenlandsopphold.UtenlandsoppholdPeriodeInfo.builder()
-                .land(Landkode.DANMARK)
-                .årsak(Utenlandsopphold.UtenlandsoppholdÅrsak.BARNET_INNLAGT_I_HELSEINSTITUSJON_FOR_NORSK_OFFENTLIG_REGNING)
-                .build()));
-
-        var omsorg = new Omsorg()
-                .medRelasjonTilBarnet(Omsorg.BarnRelasjon.MOR);
-
-        var søknadInfo = new DataBruktTilUtledning( true, true,
-                false, false, true );
-
-        return new PleiepengerSyktBarn(søknadsperiode, søknadInfo, barn, aktivitet, beredskap, nattevåk, tilsynsordning, arbeidstid, uttak, omsorg, lovbestemtFerie, bosteder,
-            utenlandsopphold);
+        return psb;
     }
 
     static PleiepengerSyktBarn komplettYtelsePsb(Periode søknadsperiode) {
@@ -171,7 +129,9 @@ final class TestUtils {
         var søknadInfo = new DataBruktTilUtledning( true, true,
                 false, false, true );
 
-        return new PleiepengerSyktBarn(søknadsperiode, søknadInfo, barn, null, beredskap, nattevåk, tilsynsordning, arbeidstid, uttak, omsorg, lovbestemtFerie, bosteder,
+        var infoFraPunsj = new InfoFraPunsj().medSøknadenInneholderInfomasjonSomIkkeKanPunsjes(false);
+
+        return new PleiepengerSyktBarn(søknadsperiode, søknadInfo, infoFraPunsj, barn, null, beredskap, nattevåk, tilsynsordning, arbeidstid, uttak, omsorg, lovbestemtFerie, bosteder,
                 null);
     }
 
