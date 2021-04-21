@@ -7,11 +7,14 @@ import no.nav.k9.søknad.felles.type.Periode;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableMap;
 import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPeriode;
 import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPerioder;
+
+import javax.validation.Valid;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -19,16 +22,38 @@ public class Utenlandsopphold {
 
     @JsonInclude(value = Include.ALWAYS)
     @JsonProperty(value = "perioder")
-    private final Map<Periode, UtenlandsoppholdPeriodeInfo> perioder;
+    private Map<Periode, UtenlandsoppholdPeriodeInfo> perioder;
+
+    @JsonInclude(value = Include.ALWAYS)
+    @JsonProperty(value = "perioderSomSkalSlettes")
+    private Map<Periode, UtenlandsoppholdPeriodeInfo> perioderSomSkalSlettes;
 
     @JsonCreator
     public Utenlandsopphold(
                             @JsonProperty("perioder") Map<Periode, UtenlandsoppholdPeriodeInfo> perioder) {
-        this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
+        this.perioder = (perioder == null ) ? new TreeMap<>() : new TreeMap<>(perioder);
+    }
+
+    public Utenlandsopphold() {
+
     }
 
     public Map<Periode, UtenlandsoppholdPeriodeInfo> getPerioder() {
-        return perioder;
+        return unmodifiableMap(perioder);
+    }
+
+    public Utenlandsopphold medPerioder(Map<Periode, UtenlandsoppholdPeriodeInfo> perioder) {
+        this.perioder = (perioder == null ) ? new TreeMap<>() : new TreeMap<>(perioder);
+        return this;
+    }
+
+    public Map<Periode, UtenlandsoppholdPeriodeInfo> getPerioderSomSkalSlettes() {
+        return unmodifiableMap(perioderSomSkalSlettes);
+    }
+
+    public Utenlandsopphold medPerioderSomSkalSlettes(Map<Periode, UtenlandsoppholdPeriodeInfo> perioderSomSkalSlettes) {
+        this.perioderSomSkalSlettes = (perioderSomSkalSlettes == null ) ? new TreeMap<>() : new TreeMap<>(perioderSomSkalSlettes);
+        return this;
     }
 
     /**@deprecated brukt ctor.*/

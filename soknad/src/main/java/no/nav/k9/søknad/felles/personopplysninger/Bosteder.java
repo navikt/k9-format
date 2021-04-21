@@ -7,6 +7,7 @@ import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPerioder;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.validation.Valid;
 
@@ -27,21 +28,30 @@ public class Bosteder {
     @JsonProperty(value = "perioder")
     @Valid
     @JsonInclude(value = Include.ALWAYS)
-    private final Map<Periode, BostedPeriodeInfo> perioder;
+    private Map<Periode, BostedPeriodeInfo> perioder;
 
     @JsonProperty(value = "perioderSomSkalSlettes")
     @Valid
     @JsonInclude(value = Include.ALWAYS)
-    public Map<Periode, BostedPeriodeInfo> perioderSomSkalSlettes;
+    private Map<Periode, BostedPeriodeInfo> perioderSomSkalSlettes;
 
     @JsonCreator
     public Bosteder(
                     @JsonProperty("perioder") Map<Periode, BostedPeriodeInfo> perioder) {
-        this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
+        this.perioder = (perioder == null ) ? new TreeMap<>() : new TreeMap<>(perioder);
+    }
+
+    public Bosteder() {
+
     }
 
     public Map<Periode, BostedPeriodeInfo> getPerioder() {
-        return perioder;
+        return unmodifiableMap(perioder);
+    }
+
+    public Bosteder medPerioder() {
+        this.perioder = (perioder == null ) ? new TreeMap<>() : new TreeMap<>(perioder);
+        return this;
     }
 
     public Map<Periode, BostedPeriodeInfo> getPerioderSomSkalSlettes() {
@@ -49,7 +59,7 @@ public class Bosteder {
     }
 
     public Bosteder medPerioderSomSkalSlettes(Map<Periode, BostedPeriodeInfo> perioderSomSkalSlettes) {
-        this.perioderSomSkalSlettes = perioderSomSkalSlettes;
+        this.perioderSomSkalSlettes = (perioderSomSkalSlettes == null ) ? new TreeMap<>() : new TreeMap<>(perioderSomSkalSlettes);
         return this;
     }
 
