@@ -62,12 +62,12 @@ public class PleiepengerSyktBarn implements Ytelse {
     private InfoFraPunsj infoFraPunsj;
 
     @Valid
-    @JsonProperty(value = "bosteder")
-    private Bosteder bosteder;
+    @JsonProperty(value = "bosteder", required = true)
+    private Bosteder bosteder = new Bosteder();
 
     @Valid
-    @JsonProperty(value = "utenlandsopphold")
-    private Utenlandsopphold utenlandsopphold;
+    @JsonProperty(value = "utenlandsopphold", required = true)
+    private Utenlandsopphold utenlandsopphold = new Utenlandsopphold();
 
     @Valid
     @NotNull

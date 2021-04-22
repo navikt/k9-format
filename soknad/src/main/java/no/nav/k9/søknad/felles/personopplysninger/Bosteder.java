@@ -49,7 +49,7 @@ public class Bosteder {
         return unmodifiableMap(perioder);
     }
 
-    public Bosteder medPerioder() {
+    public Bosteder medPerioder(Map<Periode, BostedPeriodeInfo> perioder) {
         this.perioder = (perioder == null ) ? new TreeMap<>() : new TreeMap<>(perioder);
         return this;
     }
@@ -99,15 +99,24 @@ public class Bosteder {
     public static class BostedPeriodeInfo {
 
         @JsonProperty(value = "land")
-        private final Landkode land;
+        private Landkode land;
 
         @JsonCreator
         public BostedPeriodeInfo(@JsonProperty(value = "land") Landkode land) {
             this.land = land;
         }
 
+        public BostedPeriodeInfo() {
+
+        }
+
         public Landkode getLand() {
             return land;
+        }
+
+        public BostedPeriodeInfo medLand(Landkode land) {
+            this.land = land;
+            return this;
         }
 
         /**@deprecated brukt ctor.*/
