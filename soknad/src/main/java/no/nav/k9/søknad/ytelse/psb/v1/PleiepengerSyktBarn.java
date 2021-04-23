@@ -1,14 +1,16 @@
 package no.nav.k9.søknad.ytelse.psb.v1;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -32,25 +34,31 @@ import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
 public class PleiepengerSyktBarn implements Ytelse {
 
     @Valid
-    @JsonProperty(value = "barn", required = true)
     @NotNull
+    @JsonProperty(value = "barn", required = true)
     private Barn barn;
 
     @Valid
-    @NotNull
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     @JsonProperty(value = "søknadsperiode", required = true)
-    private Periode søknadsperiode;
+    private List<Periode> søknadsperiode = new ArrayList<>();
 
     @Valid
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+    @JsonProperty(value = "endringsperiode", required = true)
+    private List<Periode> endringsperiode = new ArrayList<>();
+
+    @Valid
+    @NotNull
     @JsonProperty(value = "opptjeningAktivitet")
-    private OpptjeningAktivitet opptjeningAktivitet;
+    private OpptjeningAktivitet opptjeningAktivitet = new OpptjeningAktivitet();
 
     @Valid
     @JsonProperty(value = "dataBruktTilUtledning")
     private DataBruktTilUtledning dataBruktTilUtledning;
 
-    @JsonProperty(value = "infoFraPunsj")
     @Valid
+    @JsonProperty(value = "infoFraPunsj")
     private InfoFraPunsj infoFraPunsj;
 
     @Valid
@@ -62,66 +70,41 @@ public class PleiepengerSyktBarn implements Ytelse {
     private Utenlandsopphold utenlandsopphold;
 
     @Valid
-    @JsonProperty(value = "beredskap")
-    private Beredskap beredskap;
+    @NotNull
+    @JsonProperty(value = "beredskap", required = true)
+    private Beredskap beredskap = new Beredskap();
 
     @Valid
-    @JsonProperty(value = "nattevåk")
-    private Nattevåk nattevåk;
+    @NotNull
+    @JsonProperty(value = "nattevåk", required = true)
+    private Nattevåk nattevåk = new Nattevåk();
 
     @Valid
-    @JsonProperty(value = "tilsynsordning")
-    private Tilsynsordning tilsynsordning;
+    @NotNull
+    @JsonProperty(value = "tilsynsordning", required = true)
+    private Tilsynsordning tilsynsordning = new Tilsynsordning();
 
     @Valid
-    @JsonProperty(value = "lovbestemtFerie")
-    private LovbestemtFerie lovbestemtFerie;
+    @NotNull
+    @JsonProperty(value = "lovbestemtFerie", required = true)
+    private LovbestemtFerie lovbestemtFerie = new LovbestemtFerie();
 
     @Valid
+    @NotNull
     @JsonProperty(value = "arbeidstid", required = true)
-    private Arbeidstid arbeidstid;
+    private Arbeidstid arbeidstid = new Arbeidstid();
 
     @Valid
     @NotNull
     @JsonProperty(value = "uttak", required = true)
-    private Uttak uttak;
+    private Uttak uttak = new Uttak();
 
-    @JsonProperty(value = "omsorg", required = true)
     @Valid
-    private Omsorg omsorg;
+    @NotNull
+    @JsonProperty(value = "omsorg", required = true)
+    private Omsorg omsorg = new Omsorg();
 
     public PleiepengerSyktBarn() {
-    }
-    
-    @JsonCreator
-    public PleiepengerSyktBarn(@JsonProperty(value = "søknadsperiode", required = true) @NotNull @Valid Periode søknadsperiode,
-                               @JsonProperty(value = "dataBruktTilUtledning") @Valid DataBruktTilUtledning dataBruktTilUtledning,
-                               @JsonProperty(value = "infoFraPunsj") @Valid InfoFraPunsj infoFraPunsj,
-                               @JsonProperty(value = "barn", required = true) @NotNull @Valid Barn barn,
-                               @JsonProperty(value = "opptjeningAktivitet") @Valid OpptjeningAktivitet opptjeningAktivitet1,
-                               @JsonProperty(value = "beredskap") @Valid Beredskap beredskap,
-                               @JsonProperty(value = "nattevåk") @Valid Nattevåk nattevåk,
-                               @JsonProperty(value = "tilsynsordning") @Valid Tilsynsordning tilsynsordning,
-                               @JsonProperty(value = "arbeidstid", required = true) @Valid Arbeidstid arbeidstid,
-                               @JsonProperty(value = "uttak", required = true) @Valid @NotNull Uttak uttak,
-                               @JsonProperty(value = "omsorg", required = true) @Valid Omsorg omsorg,
-                               @JsonProperty(value = "lovbestemtFerie") @Valid LovbestemtFerie lovbestemtFerie,
-                               @JsonProperty(value = "bosteder") @Valid @NotNull Bosteder bosteder,
-                               @JsonProperty(value = "utenlandsopphold") @Valid @NotNull Utenlandsopphold utenlandsopphold) {
-        this.søknadsperiode = Objects.requireNonNull(søknadsperiode, "søknadsperiode");
-        this.dataBruktTilUtledning = dataBruktTilUtledning;
-        this.infoFraPunsj = infoFraPunsj;
-        this.barn = Objects.requireNonNull(barn, "barn");
-        this.opptjeningAktivitet = opptjeningAktivitet1;
-        this.beredskap = beredskap;
-        this.nattevåk = nattevåk;
-        this.tilsynsordning = tilsynsordning;
-        this.arbeidstid = arbeidstid;
-        this.uttak = uttak;
-        this.omsorg = omsorg;
-        this.lovbestemtFerie = lovbestemtFerie;
-        this.bosteder = bosteder;
-        this.utenlandsopphold = utenlandsopphold;
     }
 
     public Barn getBarn() {
@@ -146,11 +129,55 @@ public class PleiepengerSyktBarn implements Ytelse {
 
     @Override
     public Periode getSøknadsperiode() {
-        return søknadsperiode;
+        final List<Periode> perioder = new ArrayList<>(søknadsperiode);
+        perioder.addAll(endringsperiode);
+
+        final var fom = søknadsperiode
+                .stream()
+                .map(Periode::getFraOgMed)
+                .min(LocalDate::compareTo)
+                .orElseThrow();
+        final var tom = søknadsperiode
+                .stream()
+                .map(Periode::getTilOgMed)
+                .max(LocalDate::compareTo)
+                .orElseThrow();
+        return new Periode(fom, tom);
+    }
+
+    public List<Periode> getSøknadsperiodeList() {
+        return søknadsperiode == null? null: Collections.unmodifiableList(søknadsperiode);
+    }
+
+    public PleiepengerSyktBarn medSøknadsperiodeList(List<Periode> søknadsperiodeList) {
+        if (this.søknadsperiode == null)
+            this.søknadsperiode = new ArrayList<>();
+        this.søknadsperiode.addAll(søknadsperiodeList);
+        return this;
     }
 
     public PleiepengerSyktBarn medSøknadsperiode(Periode søknadsperiode) {
-        this.søknadsperiode = søknadsperiode;
+        if (this.søknadsperiode == null)
+            this.søknadsperiode = new ArrayList<>();
+        this.søknadsperiode.add(søknadsperiode);
+        return this;
+    }
+
+    public List<Periode> getEndringsperiodeList() {
+        return endringsperiode == null? null: Collections.unmodifiableList(endringsperiode);
+    }
+
+    public PleiepengerSyktBarn medEndringsperiodeList(List<Periode> endringsperiodeList) {
+        if (this.endringsperiode == null)
+            this.endringsperiode = new ArrayList<>();
+        this.endringsperiode.addAll(endringsperiodeList);
+        return this;
+    }
+
+    public PleiepengerSyktBarn medEndringsperiode(Periode endringsperiode) {
+        if (this.endringsperiode == null)
+            this.endringsperiode = new ArrayList<>();
+        this.endringsperiode.add(endringsperiode);
         return this;
     }
 

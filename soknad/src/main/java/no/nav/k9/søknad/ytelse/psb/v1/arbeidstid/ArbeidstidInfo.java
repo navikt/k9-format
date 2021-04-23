@@ -17,14 +17,14 @@ import static java.util.Collections.unmodifiableMap;
 public class ArbeidstidInfo {
 
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-    @JsonProperty(value = "perioder")
+    @JsonProperty(value = "perioder", required = true)
     @Valid
     @NotNull
     private Map<Periode, ArbeidstidPeriodeInfo> perioder;
 
     @JsonCreator
     public ArbeidstidInfo(
-            @JsonProperty(value = "perioder") @Valid @NotNull Map<Periode, ArbeidstidPeriodeInfo> perioder) {
+            @JsonProperty(value = "perioder", required = true) @Valid @NotNull Map<Periode, ArbeidstidPeriodeInfo> perioder) {
         this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
     }
 

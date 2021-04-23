@@ -18,20 +18,14 @@ import static java.util.Collections.unmodifiableMap;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Beredskap {
 
-    @JsonProperty(value="perioder")
+    @JsonProperty(value="perioder", required = true)
     @Valid
-    @NotEmpty
-    private Map<Periode, BeredskapPeriodeInfo> perioder;
+    @NotNull
+    private Map<Periode, BeredskapPeriodeInfo> perioder = new TreeMap<>();
 
     @JsonProperty(value="perioderSomSkalSlettes")
     @Valid
-    private Map<Periode, BeredskapPeriodeInfo> perioderSomSkalSlettes;
-
-    @JsonCreator
-    public Beredskap(
-            @JsonProperty(value = "perioder") @NotEmpty @Valid Map<Periode, BeredskapPeriodeInfo> perioder) {
-        this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
-    }
+    private Map<Periode, BeredskapPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
     public Beredskap() {
     }
@@ -54,18 +48,18 @@ public class Beredskap {
         return this;
     }
 
+    public Beredskap leggeTilPeriode(Periode periode, BeredskapPeriodeInfo beredskapPeriodeInfo) {
+        this.perioder.put(periode, beredskapPeriodeInfo);
+        return this;
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class BeredskapPeriodeInfo {
 
+        @JsonProperty(value = "tilleggsinformasjon", required = true)
         @Valid
-        @JsonProperty(value = "tilleggsinformasjon")
+        @NotNull
         private String tilleggsinformasjon;
-
-        @JsonCreator
-        public BeredskapPeriodeInfo(@JsonProperty(value = "tilleggsinformasjon")
-                                                     @NotNull @Valid String tilleggsinformasjon) {
-            this.tilleggsinformasjon = tilleggsinformasjon;
-        }
 
         public BeredskapPeriodeInfo() {
         }

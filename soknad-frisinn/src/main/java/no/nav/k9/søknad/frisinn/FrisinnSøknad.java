@@ -86,7 +86,7 @@ public class FrisinnSøknad implements Innsending {
     }
 
     private void validerSøknadInntektPeriode(String tekst, Periode inntektPeriode) {
-        if(inntektPeriode==null) {
+        if (inntektPeriode==null) {
             throw new IllegalArgumentException("Mangler inntektperiode for " + tekst);
         }
         validerInnenforSøknadsperiode(tekst, inntektPeriode);

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import java.util.*;
 
@@ -15,22 +16,25 @@ import static java.util.Collections.*;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Arbeidstid {
 
-    @Valid
     @JsonProperty(value = "arbeidstakerList", required = true)
-    private List<Arbeidstaker> arbeidstakerList;
-
     @Valid
-    @JsonProperty(value = "frilanserArbeidstidInfo", required = true)
+    @NotNull
+    private List<Arbeidstaker> arbeidstakerList = new ArrayList<>();
+
+    //TODO endre til Optional
+    @Valid
+    @JsonProperty(value = "frilanserArbeidstidInfo")
     private ArbeidstidInfo frilanserArbeidstidInfo;
 
+    //TODO endre til Optional
     @Valid
-    @JsonProperty(value = "selvstendigNæringsdrivendeArbeidstidInfo", required = true)
+    @JsonProperty(value = "selvstendigNæringsdrivendeArbeidstidInfo")
     private ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo;
 
     @JsonCreator
-    public Arbeidstid(@JsonProperty(value = "arbeidstakerList", required = true) @Valid List<Arbeidstaker> arbeidstakerList,
-                      @JsonProperty(value = "frilanserArbeidstidInfo", required = true) @Valid ArbeidstidInfo frilanserArbeidstidInfo,
-                      @JsonProperty(value = "selvstendigNæringsdrivendeArbeidstidInfo", required = true) @Valid ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo) {
+    public Arbeidstid(@JsonProperty(value = "arbeidstakerList", required = true) @Valid @NotNull List<Arbeidstaker> arbeidstakerList,
+                      @JsonProperty(value = "frilanserArbeidstidInfo") @Valid ArbeidstidInfo frilanserArbeidstidInfo,
+                      @JsonProperty(value = "selvstendigNæringsdrivendeArbeidstidInfo") @Valid ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo) {
         this.arbeidstakerList = (arbeidstakerList == null ) ? new ArrayList<>() : new ArrayList<>(arbeidstakerList);
         this.frilanserArbeidstidInfo = frilanserArbeidstidInfo;
         this.selvstendigNæringsdrivendeArbeidstidInfo = selvstendigNæringsdrivendeArbeidstidInfo;
