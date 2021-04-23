@@ -49,6 +49,24 @@ public class PleiepengerBarnSøknadValidatorTest {
     }
 
     @Test
+    public void minimumSøknadSkalIkkeHaValideringsfeil() {
+        var søknad = TestUtils.minimumSøknadJson();
+        verifyIngenFeil(søknad);
+    }
+
+    @Test
+    public void komplettSøknadGammelVersjonSkalIkkeHaValideringsfeil() {
+        var søknad = TestUtils.komplettGammelVersjonSøknadJson();
+        verifyIngenFeil(søknad);
+    }
+
+    @Test
+    public void minimumSøknadGammelVersjonSkalIkkeHaValideringsfeil() {
+        var søknad = TestUtils.minimumGammelVersjonSøknadJson();
+        verifyIngenFeil(søknad);
+    }
+
+    @Test
     public void uttakKanIkkeVæreTom() {
         var ytelse = TestUtils.komplettYtelsePsbMedDelperioder();
         ytelse.medUttak(new Uttak());

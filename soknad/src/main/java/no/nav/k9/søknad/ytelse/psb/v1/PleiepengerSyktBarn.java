@@ -4,14 +4,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -40,12 +39,14 @@ public class PleiepengerSyktBarn implements Ytelse {
     private Barn barn;
 
     @Valid
-    @JsonProperty(value = "søknadsperiodeList", required = true)
-    private List<Periode> søknadsperiodeList = new ArrayList<>();
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+    @JsonProperty(value = "søknadsperiode", required = true)
+    private List<Periode> søknadsperiode = new ArrayList<>();
 
     @Valid
-    @JsonProperty(value = "endringsperiodeList", required = true)
-    private List<Periode> endringsperiodeList = new ArrayList<>();
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+    @JsonProperty(value = "endringsperiode", required = true)
+    private List<Periode> endringsperiode = new ArrayList<>();
 
     @Valid
     @JsonProperty(value = "opptjeningAktivitet")
@@ -120,15 +121,15 @@ public class PleiepengerSyktBarn implements Ytelse {
 
     @Override
     public Periode getSøknadsperiode() {
-        final List<Periode> perioder = new ArrayList<>(søknadsperiodeList);
-        perioder.addAll(endringsperiodeList);
+        final List<Periode> perioder = new ArrayList<>(søknadsperiode);
+        perioder.addAll(endringsperiode);
 
-        final var fom = søknadsperiodeList
+        final var fom = søknadsperiode
                 .stream()
                 .map(Periode::getFraOgMed)
                 .min(LocalDate::compareTo)
                 .orElseThrow();
-        final var tom = søknadsperiodeList
+        final var tom = søknadsperiode
                 .stream()
                 .map(Periode::getTilOgMed)
                 .max(LocalDate::compareTo)
@@ -137,38 +138,38 @@ public class PleiepengerSyktBarn implements Ytelse {
     }
 
     public List<Periode> getSøknadsperiodeList() {
-        return søknadsperiodeList == null? null: Collections.unmodifiableList(søknadsperiodeList);
+        return søknadsperiode == null? null: Collections.unmodifiableList(søknadsperiode);
     }
 
     public PleiepengerSyktBarn medSøknadsperiodeList(List<Periode> søknadsperiodeList) {
-        if (this.søknadsperiodeList == null)
-            this.søknadsperiodeList = new ArrayList<>();
-        this.søknadsperiodeList.addAll(søknadsperiodeList);
+        if (this.søknadsperiode == null)
+            this.søknadsperiode = new ArrayList<>();
+        this.søknadsperiode.addAll(søknadsperiodeList);
         return this;
     }
 
     public PleiepengerSyktBarn medSøknadsperiode(Periode søknadsperiode) {
-        if (this.søknadsperiodeList == null)
-            this.søknadsperiodeList = new ArrayList<>();
-        this.søknadsperiodeList.add(søknadsperiode);
+        if (this.søknadsperiode == null)
+            this.søknadsperiode = new ArrayList<>();
+        this.søknadsperiode.add(søknadsperiode);
         return this;
     }
 
     public List<Periode> getEndringsperiodeList() {
-        return endringsperiodeList == null? null: Collections.unmodifiableList(endringsperiodeList);
+        return endringsperiode == null? null: Collections.unmodifiableList(endringsperiode);
     }
 
     public PleiepengerSyktBarn medEndringsperiodeList(List<Periode> endringsperiodeList) {
-        if (this.endringsperiodeList == null)
-            this.endringsperiodeList = new ArrayList<>();
-        this.endringsperiodeList.addAll(endringsperiodeList);
+        if (this.endringsperiode == null)
+            this.endringsperiode = new ArrayList<>();
+        this.endringsperiode.addAll(endringsperiodeList);
         return this;
     }
 
     public PleiepengerSyktBarn medEndringsperiode(Periode endringsperiode) {
-        if (this.endringsperiodeList == null)
-            this.endringsperiodeList = new ArrayList<>();
-        this.endringsperiodeList.add(endringsperiode);
+        if (this.endringsperiode == null)
+            this.endringsperiode = new ArrayList<>();
+        this.endringsperiode.add(endringsperiode);
         return this;
     }
 

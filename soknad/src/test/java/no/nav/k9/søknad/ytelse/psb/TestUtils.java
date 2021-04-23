@@ -52,12 +52,20 @@ final class TestUtils {
         }
     }
 
-    static String jsonForKomplettSøknad() {
-        return jsonFromFile("komplett-søknad.json");
+    static Søknad komplettSøknadJson() {
+        return Søknad.SerDes.deserialize(jsonFromFile("komplett-søknad.json"));
     }
 
-    static Søknad komplettSøknadJson() {
-        return Søknad.SerDes.deserialize(jsonForKomplettSøknad());
+    static Søknad minimumSøknadJson() {
+        return Søknad.SerDes.deserialize(jsonFromFile("minimum-søknad.json"));
+    }
+
+    static Søknad komplettGammelVersjonSøknadJson() {
+        return Søknad.SerDes.deserialize(jsonFromFile("5.1.33/komplett-søknad.json"));
+    }
+
+    static Søknad minimumGammelVersjonSøknadJson() {
+        return Søknad.SerDes.deserialize(jsonFromFile("5.1.33/minimum-søknad.json"));
     }
 
     static Ytelse komplettYtelsePsbJson(String ytelse) {

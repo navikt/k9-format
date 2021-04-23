@@ -2,7 +2,6 @@ package no.nav.k9.søknad.ytelse.psb.v1;
 
 import no.nav.k9.søknad.TidsserieValidator;
 import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
@@ -77,7 +76,7 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
     }
 
     private void manglerIkkeSøknadEllerEndringsPerioder(PleiepengerSyktBarn psb, List<Feil> feil) {
-        if ( (psb.getSøknadsperiodeList() == null && psb.getEndringsperiodeList() == null)) {
+        if ( (psb.getSøknadsperiodeList().isEmpty() && psb.getEndringsperiodeList().isEmpty())) {
             feil.add(new Feil("søknadsperiode/endringsperiode", "missingArgument","Mangler søknadsperiode eller endringsperiode."));
         }
     }
