@@ -19,6 +19,7 @@ public class Nattevåk {
 
     @JsonProperty(value="perioder", required = true)
     @Valid
+    @NotNull
     private Map<Periode, NattevåkPeriodeInfo> perioder = new TreeMap<>();
 
     @JsonProperty(value="perioderSomSkalSlettes", required = true)

@@ -49,8 +49,9 @@ public class PleiepengerSyktBarn implements Ytelse {
     private List<Periode> endringsperiode = new ArrayList<>();
 
     @Valid
+    @NotNull
     @JsonProperty(value = "opptjeningAktivitet")
-    private OpptjeningAktivitet opptjeningAktivitet;
+    private OpptjeningAktivitet opptjeningAktivitet = new OpptjeningAktivitet();
 
     @Valid
     @JsonProperty(value = "dataBruktTilUtledning")
@@ -69,30 +70,37 @@ public class PleiepengerSyktBarn implements Ytelse {
     private Utenlandsopphold utenlandsopphold;
 
     @Valid
+    @NotNull
     @JsonProperty(value = "beredskap", required = true)
     private Beredskap beredskap = new Beredskap();
 
     @Valid
+    @NotNull
     @JsonProperty(value = "nattevåk", required = true)
     private Nattevåk nattevåk = new Nattevåk();
 
     @Valid
+    @NotNull
     @JsonProperty(value = "tilsynsordning", required = true)
     private Tilsynsordning tilsynsordning = new Tilsynsordning();
 
     @Valid
+    @NotNull
     @JsonProperty(value = "lovbestemtFerie", required = true)
     private LovbestemtFerie lovbestemtFerie = new LovbestemtFerie();
 
     @Valid
+    @NotNull
     @JsonProperty(value = "arbeidstid", required = true)
     private Arbeidstid arbeidstid = new Arbeidstid();
 
     @Valid
+    @NotNull
     @JsonProperty(value = "uttak", required = true)
     private Uttak uttak = new Uttak();
 
     @Valid
+    @NotNull
     @JsonProperty(value = "omsorg", required = true)
     private Omsorg omsorg = new Omsorg();
 

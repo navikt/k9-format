@@ -13,6 +13,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static no.nav.k9.søknad.TidsserieValidator.TidsserieUtils.toLocalDateTimeline;
@@ -96,18 +97,12 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
     }
 
     private void validerLovbestemtFerie(LovbestemtFerie lovbestemtFerie, TidsserieValidator.Perioder søknadsperiode, List<Feil> feil) {
-        if (lovbestemtFerie == null) {
-            return;
-        }
         finnPerioderUtenfor(
                 toLocalDateTimeline(lovbestemtFerie.getPerioder()),
                 søknadsperiode).valider("lovbestemtFerie", feil);
     }
 
     private void validerNattevåk(Nattevåk nattevåk, TidsserieValidator.Perioder søknadsperiode, List<Feil> feil) {
-        if (nattevåk == null) {
-            return;
-        }
         finnPerioderUtenfor(
                 toLocalDateTimeline(nattevåk.getPerioder()),
                 søknadsperiode)
@@ -115,9 +110,6 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
     }
 
     private void validerArbeidstid(Arbeidstid arbeidstid, TidsserieValidator.Perioder søknadsperiode, List<Feil> feil) {
-        if (arbeidstid == null) {
-            return;
-        }
         validerArbeidstaker(arbeidstid.getArbeidstakerList(), søknadsperiode, feil);
         validerFrilanser(arbeidstid.getFrilanserArbeidstidInfo(), søknadsperiode, feil);
         validerSelvstendigNæringsdrivende(arbeidstid.getSelvstendigNæringsdrivendeArbeidstidInfo(), søknadsperiode, feil);
@@ -156,9 +148,6 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
     }
 
     private void validerTilsynsordning(Tilsynsordning tilsynsordning, TidsserieValidator.Perioder søknadsperiode, List<Feil> feil) {
-        if (tilsynsordning == null) {
-            return;
-        }
         finnPerioderUtenfor(
                 toLocalDateTimeline(tilsynsordning.getPerioder()),
                 søknadsperiode)

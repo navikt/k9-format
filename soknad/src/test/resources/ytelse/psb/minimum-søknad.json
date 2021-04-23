@@ -14,33 +14,7 @@
     "søknadsperiode": [
       "2018-12-30/2019-10-20"
     ],
-    "endringsperiodeList": [],
-    "opptjeningAktivitet": null,
-    "dataBruktTilUtledning": null,
-    "infoFraPunsj": null,
-    "bosteder": null,
-    "utenlandsopphold": null,
-    "beredskap": {
-      "perioder": {},
-      "perioderSomSkalSlettes": {}
-    },
-    "nattevåk": {
-      "perioder": {},
-      "perioderSomSkalSlettes": {}
-    },
-    "tilsynsordning": {
-      "perioder": {},
-      "perioderSomSkalSlettes": {}
-    },
-    "lovbestemtFerie": {
-      "perioder": {},
-      "perioderSomSkalSlettes": {}
-    },
-    "arbeidstid": {
-      "arbeidstakerList": [],
-      "frilanserArbeidstidInfo": null,
-      "selvstendigNæringsdrivendeArbeidstidInfo": null
-    },
+    "endringsperiode": [],
     "uttak": {
       "perioder": {
         "2018-12-30/2019-02-20": {
@@ -51,10 +25,6 @@
         }
       },
       "perioderSomSkalSlettes": {}
-    },
-    "omsorg": {
-      "relasjonTilBarnet": "MOR",
-      "beskrivelseAvOmsorgsrollen": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
     }
   }
 }

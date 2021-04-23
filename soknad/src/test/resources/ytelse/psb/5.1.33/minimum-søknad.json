@@ -8,15 +8,10 @@
   "ytelse": {
     "type" : "PLEIEPENGER_SYKT_BARN",
     "søknadsperiode" : "2018-12-30/2019-10-20",
-    "dataBruktTilUtledning" : null,
     "barn" : {
       "norskIdentitetsnummer" : null,
       "fødselsdato" : "2021-04-22"
     },
-    "opptjeningAktivitet" : null,
-    "nattevåk" : null,
-    "tilsynsordning" : null,
-    "arbeidstid" : null,
     "uttak" : {
       "perioder" : {
         "2018-12-30/2019-02-20" : {
@@ -26,10 +21,6 @@
           "timerPleieAvBarnetPerDag" : "PT7H30M"
         }
       }
-    },
-    "omsorg" : null,
-    "lovbestemtFerie" : null,
-    "bosteder" : null,
-    "utenlandsopphold" : null
+    }
   }
 }

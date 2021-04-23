@@ -20,6 +20,7 @@ public class Beredskap {
 
     @JsonProperty(value="perioder", required = true)
     @Valid
+    @NotNull
     private Map<Periode, BeredskapPeriodeInfo> perioder = new TreeMap<>();
 
     @JsonProperty(value="perioderSomSkalSlettes")
