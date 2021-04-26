@@ -1,5 +1,7 @@
 package no.nav.k9.søknad.ytelse.psb.v1;
 
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -29,7 +31,7 @@ public class Omsorg {
     }
 
     public Omsorg medRelasjonTilBarnet(BarnRelasjon relasjonTilBarnet) {
-        this.relasjonTilBarnet = relasjonTilBarnet;
+        this.relasjonTilBarnet = Objects.requireNonNull(relasjonTilBarnet, "relasjonTilBarnet");
         return this;
     }
 
@@ -38,7 +40,7 @@ public class Omsorg {
     }
 
     public Omsorg medBeskrivelseAvOmsorgsrollen(String beskrivelseAvOmsorgsrollen) {
-        this.beskrivelseAvOmsorgsrollen = beskrivelseAvOmsorgsrollen;
+        this.beskrivelseAvOmsorgsrollen = Objects.requireNonNull(beskrivelseAvOmsorgsrollen, "beskrivelseAvOmsorgsrollen");
         return this;
     }
 

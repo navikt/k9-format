@@ -11,6 +11,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -68,7 +69,7 @@ public class Nattevåk {
         }
 
         public NattevåkPeriodeInfo medTilleggsinformasjon(String tilleggsinformasjon) {
-            this.tilleggsinformasjon = tilleggsinformasjon;
+            this.tilleggsinformasjon = Objects.requireNonNull(tilleggsinformasjon, "NattevåkPeriodeInfo.tilleggsinformasjon");
             return this;
         }
     }

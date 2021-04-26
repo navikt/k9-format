@@ -11,6 +11,7 @@ import javax.validation.Valid;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 import static java.util.Collections.unmodifiableMap;
@@ -27,12 +28,6 @@ public class Tilsynsordning {
     @Valid
     private Map<Periode, TilsynPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
-    @JsonCreator
-    public Tilsynsordning(
-            @JsonProperty("perioder") @Valid Map<Periode, TilsynPeriodeInfo> perioder) {
-        this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
-    }
-
     public Tilsynsordning() {
     }
 
@@ -40,7 +35,7 @@ public class Tilsynsordning {
         return unmodifiableMap(perioder);
     }
 
-    public Tilsynsordning setPerioder(Map<Periode, TilsynPeriodeInfo> perioder) {
+    public Tilsynsordning medPerioder(Map<Periode, TilsynPeriodeInfo> perioder) {
         this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
         return this;
     }

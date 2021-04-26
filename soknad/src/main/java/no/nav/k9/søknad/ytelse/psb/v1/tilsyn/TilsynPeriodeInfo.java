@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.Duration;
+import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -18,11 +19,6 @@ public class TilsynPeriodeInfo {
     @JsonProperty(value = "etablertTilsynTimerPerDag", required = true)
     private Duration etablertTilsynTimerPerDag;
 
-    @JsonCreator
-    public TilsynPeriodeInfo(@JsonProperty(value = "etablertTilsynTimerPerDag", required = true) @Valid @NotNull Duration etablertTilsynTimerPerDag) {
-        this.etablertTilsynTimerPerDag = etablertTilsynTimerPerDag;
-    }
-
     public TilsynPeriodeInfo() {
     }
 
@@ -31,7 +27,7 @@ public class TilsynPeriodeInfo {
     }
 
     public TilsynPeriodeInfo medEtablertTilsynTimerPerDag(Duration etablertTilsynTimerPerDag) {
-        this.etablertTilsynTimerPerDag = etablertTilsynTimerPerDag;
+        this.etablertTilsynTimerPerDag = Objects.requireNonNull(etablertTilsynTimerPerDag, "TilsynPeriodeInfo.etablertTilsynTimerPerDag");
         return this;
     }
 }

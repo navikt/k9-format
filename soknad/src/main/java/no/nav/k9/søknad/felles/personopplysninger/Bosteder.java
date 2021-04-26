@@ -7,9 +7,11 @@ import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPerioder;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -35,6 +37,7 @@ public class Bosteder {
     @JsonInclude(value = Include.ALWAYS)
     private Map<Periode, BostedPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
+    /**@deprecated brukt tom ctor.*/
     @JsonCreator
     public Bosteder(
                     @JsonProperty("perioder") Map<Periode, BostedPeriodeInfo> perioder) {
@@ -98,12 +101,15 @@ public class Bosteder {
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
     public static class BostedPeriodeInfo {
 
-        @JsonProperty(value = "land")
+        @JsonProperty(value = "land", required = true)
+        @NotNull
+        @Valid
         private Landkode land;
 
+        /**@deprecated brukt tom ctor.*/
         @JsonCreator
-        public BostedPeriodeInfo(@JsonProperty(value = "land") Landkode land) {
-            this.land = land;
+        public BostedPeriodeInfo(@JsonProperty(value = "land", required = true) @NotNull @Valid Landkode land) {
+            this.land = Objects.requireNonNull(land, "land");
         }
 
         public BostedPeriodeInfo() {
@@ -115,7 +121,7 @@ public class Bosteder {
         }
 
         public BostedPeriodeInfo medLand(Landkode land) {
-            this.land = land;
+            this.land = Objects.requireNonNull(land, "land");
             return this;
         }
 

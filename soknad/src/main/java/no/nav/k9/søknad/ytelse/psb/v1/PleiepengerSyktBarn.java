@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.TreeMap;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -110,7 +112,12 @@ public class PleiepengerSyktBarn implements Ytelse {
     public Barn getBarn() {
         return barn;
     }
-    
+
+    public PleiepengerSyktBarn medBarn(Barn barn) {
+        this.barn = Objects.requireNonNull(barn, "barn");
+        return this;
+    }
+
     @Override
     public Person getPleietrengende() {
         return barn;
@@ -120,11 +127,6 @@ public class PleiepengerSyktBarn implements Ytelse {
     public Person getAnnenPart() {
         // ikke relevant for pleiepenger sykt barn
         return null;
-    }
-    
-    public PleiepengerSyktBarn medBarn(Barn barn) {
-        this.barn = barn;
-        return this;
     }
 
     @Override
@@ -149,7 +151,7 @@ public class PleiepengerSyktBarn implements Ytelse {
         return søknadsperiode == null? null: Collections.unmodifiableList(søknadsperiode);
     }
 
-    public PleiepengerSyktBarn medSøknadsperiodeList(List<Periode> søknadsperiodeList) {
+    public PleiepengerSyktBarn medSøknadsperiode(List<Periode> søknadsperiodeList) {
         if (this.søknadsperiode == null)
             this.søknadsperiode = new ArrayList<>();
         this.søknadsperiode.addAll(søknadsperiodeList);
@@ -163,11 +165,11 @@ public class PleiepengerSyktBarn implements Ytelse {
         return this;
     }
 
-    public List<Periode> getEndringsperiodeList() {
-        return endringsperiode == null? null: Collections.unmodifiableList(endringsperiode);
+    public List<Periode> getEndringsperiode() {
+        return (endringsperiode == null) ? null : Collections.unmodifiableList(endringsperiode);
     }
 
-    public PleiepengerSyktBarn medEndringsperiodeList(List<Periode> endringsperiodeList) {
+    public PleiepengerSyktBarn medEndringsperiode(List<Periode> endringsperiodeList) {
         if (this.endringsperiode == null)
             this.endringsperiode = new ArrayList<>();
         this.endringsperiode.addAll(endringsperiodeList);
@@ -186,7 +188,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     }
 
     public PleiepengerSyktBarn medOpptjeningAktivitet(OpptjeningAktivitet arbeidAktivitet) {
-        this.opptjeningAktivitet = arbeidAktivitet;
+        this.opptjeningAktivitet = Objects.requireNonNull(arbeidAktivitet, "arbeidAktivitet");
         return this;
     }
 
@@ -195,7 +197,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     }
 
     public PleiepengerSyktBarn medSøknadInfo(DataBruktTilUtledning dataBruktTilUtledning) {
-        this.dataBruktTilUtledning = dataBruktTilUtledning;
+        this.dataBruktTilUtledning = Objects.requireNonNull(dataBruktTilUtledning, "dataBruktTilUtledning");
         return this;
     }
 
@@ -204,7 +206,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     }
 
     public PleiepengerSyktBarn medInfoFraPunsj(InfoFraPunsj infoFraPunsj) {
-        this.infoFraPunsj = infoFraPunsj;
+        this.infoFraPunsj = Objects.requireNonNull(infoFraPunsj, "infoFraPunsj");
         return this;
     }
 
@@ -213,7 +215,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     }
 
     public PleiepengerSyktBarn medBosteder(Bosteder bosteder) {
-        this.bosteder = bosteder;
+        this.bosteder = Objects.requireNonNull(bosteder, "bosteder");
         return this;
     }
 
@@ -222,7 +224,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     }
 
     public PleiepengerSyktBarn medUtenlandsopphold(Utenlandsopphold utenlandsopphold) {
-        this.utenlandsopphold = utenlandsopphold;
+        this.utenlandsopphold = Objects.requireNonNull(utenlandsopphold, "utenlandsopphold");
         return this;
     }
 
@@ -231,7 +233,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     }
 
     public PleiepengerSyktBarn medBeredskap(Beredskap beredskap) {
-        this.beredskap = beredskap;
+        this.beredskap = Objects.requireNonNull(beredskap, "beredskap");
         return this;
     }
 
@@ -240,7 +242,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     }
 
     public PleiepengerSyktBarn medNattevåk(Nattevåk nattevåk) {
-        this.nattevåk = nattevåk;
+        this.nattevåk = Objects.requireNonNull(nattevåk, "nattevåk");
         return this;
     }
 
@@ -249,7 +251,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     }
 
     public PleiepengerSyktBarn medTilsynsordning(Tilsynsordning tilsynsordning) {
-        this.tilsynsordning = tilsynsordning;
+        this.tilsynsordning = Objects.requireNonNull(tilsynsordning, "tilsynsordning");
         return this;
     }
 
@@ -258,7 +260,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     }
 
     public PleiepengerSyktBarn medLovbestemtFerie(LovbestemtFerie lovbestemtFerie) {
-        this.lovbestemtFerie = lovbestemtFerie;
+        this.lovbestemtFerie = Objects.requireNonNull(lovbestemtFerie, "lovbestemtFerie");
         return this;
     }
 
@@ -267,7 +269,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     }
 
     public PleiepengerSyktBarn medArbeidstid(Arbeidstid arbeidstid) {
-        this.arbeidstid = arbeidstid;
+        this.arbeidstid = Objects.requireNonNull(arbeidstid, "arbeidstid");
         return this;
     }
 
@@ -276,7 +278,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     }
 
     public PleiepengerSyktBarn medUttak(Uttak uttak) {
-        this.uttak = uttak;
+        this.uttak = Objects.requireNonNull(uttak, "uttak");
         return this;
     }
 
@@ -285,7 +287,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     }
 
     public PleiepengerSyktBarn medOmsorg(Omsorg omsorg) {
-        this.omsorg = omsorg;
+        this.omsorg = Objects.requireNonNull(omsorg, "omsorg");
         return this;
     }
 
