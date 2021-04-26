@@ -13,7 +13,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static no.nav.k9.søknad.TidsserieValidator.TidsserieUtils.toLocalDateTimeline;
@@ -73,11 +72,11 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
 
     private TidsserieValidator.Perioder validerSøknadsOgEndringsPerioder(PleiepengerSyktBarn psb, List<Feil> feil) {
         manglerIkkeSøknadEllerEndringsPerioder(psb, feil);
-        return new TidsserieValidator.Perioder(psb.getSøknadsperiodeList(), psb.getEndringsperiodeList());
+        return new TidsserieValidator.Perioder(psb.getSøknadsperiodeList(), psb.getEndringsperiode());
     }
 
     private void manglerIkkeSøknadEllerEndringsPerioder(PleiepengerSyktBarn psb, List<Feil> feil) {
-        if ( (psb.getSøknadsperiodeList().isEmpty() && psb.getEndringsperiodeList().isEmpty())) {
+        if ( (psb.getSøknadsperiodeList().isEmpty() && psb.getEndringsperiode().isEmpty())) {
             feil.add(new Feil("søknadsperiode/endringsperiode", "missingArgument","Mangler søknadsperiode eller endringsperiode."));
         }
     }

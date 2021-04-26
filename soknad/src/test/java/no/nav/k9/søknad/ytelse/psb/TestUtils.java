@@ -10,11 +10,7 @@ import java.util.Map;
 
 import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.Søknad;
-import no.nav.k9.søknad.felles.opptjening.Frilanser;
-import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
 import no.nav.k9.søknad.felles.opptjening.Organisasjonsnummer;
-import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende;
-import no.nav.k9.søknad.felles.opptjening.VirksomhetType;
 import no.nav.k9.søknad.ytelse.psb.v1.InfoFraPunsj;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
@@ -88,13 +84,13 @@ final class TestUtils {
                 delperiodeEn, new Nattevåk.NattevåkPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()),
                 delperiodeTo, new Nattevåk.NattevåkPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()))));
 
-        psb.medTilsynsordning( new Tilsynsordning(Map.of(
+        psb.medTilsynsordning( new Tilsynsordning().medPerioder(Map.of(
                 new Periode(LocalDate.parse("2019-01-01"), LocalDate.parse("2019-01-01")),
-                new TilsynPeriodeInfo(Duration.ofHours(7).plusMinutes(30)),
+                new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7).plusMinutes(30)),
                 new Periode(LocalDate.parse("2019-01-02"), LocalDate.parse("2019-01-02")),
-                new TilsynPeriodeInfo(Duration.ofHours(7).plusMinutes(30)),
+                new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7).plusMinutes(30)),
                 new Periode(LocalDate.parse("2019-01-03"), LocalDate.parse("2019-01-09")),
-                new TilsynPeriodeInfo(Duration.ofHours(7).plusMinutes(30)))));
+                new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7).plusMinutes(30)))));
 
         psb.medLovbestemtFerie(new LovbestemtFerie().medPerioder(
                 Map.of(delperiodeTo, new LovbestemtFeriePeriodeInfo())));
@@ -104,7 +100,7 @@ final class TestUtils {
 
     static PleiepengerSyktBarn komplettYtelsePsb(Periode søknadsperiode) {
 
-        var uttak = new Uttak(Map.of(
+        var uttak = new Uttak().medPerioder(Map.of(
                 søknadsperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
 
         var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("999999999"),
@@ -112,8 +108,8 @@ final class TestUtils {
                         Map.of( søknadsperiode,
                                 new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30), Duration.ofHours(7).plusMinutes(30)))));
 
-        var arbeidstid = new Arbeidstid(List.of(
-                arbeidstaker), null, null);
+        var arbeidstid = new Arbeidstid().medArbeidstaker(List.of(
+                arbeidstaker));
 
         var beredskap = new Beredskap().medPerioder(Map.of(
                 søknadsperiode, new Beredskap.BeredskapPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst())));
@@ -121,8 +117,8 @@ final class TestUtils {
         var nattevåk = new Nattevåk().medPerioder(Map.of(
                 søknadsperiode, new Nattevåk.NattevåkPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst())));
 
-        var tilsynsordning = new Tilsynsordning(Map.of(
-                søknadsperiode, new TilsynPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
+        var tilsynsordning = new Tilsynsordning().medPerioder(Map.of(
+                søknadsperiode, new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7).plusMinutes(30))));
 
         var lovbestemtFerie = new LovbestemtFerie().medPerioder(Map.of(
                 søknadsperiode, new LovbestemtFeriePeriodeInfo()));
@@ -166,7 +162,7 @@ final class TestUtils {
         var uttakperiode = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-02-20"));
         var uttakperiode2 = new Periode(LocalDate.parse("2019-02-21"), LocalDate.parse("2019-10-20"));
 
-        var uttak = new Uttak(Map.of(
+        var uttak = new Uttak().medPerioder(Map.of(
             uttakperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30)),
             uttakperiode2, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
 
@@ -195,11 +191,21 @@ final class TestUtils {
                         periode, new Beredskap.BeredskapPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()))))
                 .medNattevåk(new Nattevåk().medPerioder(Map.of(
                         periode, new Nattevåk.NattevåkPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()))))
-                .medTilsynsordning(new Tilsynsordning(Map.of(periode, new TilsynPeriodeInfo(Duration.ofHours(5)))))
-                .medArbeidstid(new Arbeidstid().medArbeidstakerList(List.of(
+                .medTilsynsordning(new Tilsynsordning().medPerioder(Map.of(periode, new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(5)))))
+                .medArbeidstid(new Arbeidstid().medArbeidstaker(List.of(
                         new Arbeidstaker(null, Organisasjonsnummer.of("999999999"), new ArbeidstidInfo(
                                 Map.of(periode, new ArbeidstidPeriodeInfo(Duration.ofHours(8), Duration.ofHours(4))))))))
-                .medUttak(new Uttak(Map.of(periode, new UttakPeriodeInfo(Duration.ofHours(3)))));
+                .medUttak(new Uttak().medPerioder(Map.of(periode, new UttakPeriodeInfo(Duration.ofHours(3)))));
+    }
+
+    static PleiepengerSyktBarn minimumSøknadOgEndringsSøknad(Periode søknadsperiode, Periode endringsperiode) {
+        return TestUtils.fullEndringssøknad(søknadsperiode, endringsperiode)
+                .medSøknadsperiode(søknadsperiode)
+                .medOmsorg(new Omsorg()
+                        .medBeskrivelseAvOmsorgsrollen(TestUtils.testTekst())
+                        .medRelasjonTilBarnet(Omsorg.BarnRelasjon.MOR))
+                .medBosteder(new Bosteder())
+                .medUtenlandsopphold(new Utenlandsopphold());
     }
 
     static String testTekst() {

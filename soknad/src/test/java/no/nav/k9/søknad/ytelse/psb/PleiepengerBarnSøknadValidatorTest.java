@@ -5,6 +5,9 @@ import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.opptjening.*;
+import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
+import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
+import no.nav.k9.søknad.felles.type.Landkode;
 import no.nav.k9.søknad.ytelse.psb.v1.Beredskap;
 import no.nav.k9.søknad.ytelse.psb.v1.Nattevåk;
 import no.nav.k9.søknad.ytelse.psb.v1.Omsorg;
@@ -97,18 +100,8 @@ public class PleiepengerBarnSøknadValidatorTest {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
         var endringsperiode = new Periode(LocalDate.now().minusMonths(2), LocalDate.now().minusDays(1));
 
-        var ytelse = TestUtils.komplettYtelsePsb(søknadsperiode);
-        ytelse.medEndringsperiode(endringsperiode);
-        ytelse.getUttak().leggeTilPeriode(endringsperiode, new UttakPeriodeInfo(Duration.ofHours(8)));
-        ytelse.getTilsynsordning().leggeTilPeriode(endringsperiode, new TilsynPeriodeInfo(Duration.ofHours(7)));
-        ytelse.getBeredskap().leggeTilPeriode(endringsperiode, new Beredskap.BeredskapPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()));
-        ytelse.getNattevåk().leggeTilPeriode(endringsperiode, new Nattevåk.NattevåkPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()));
-        ytelse.getArbeidstid().leggeTilArbeidstaker(new Arbeidstaker(null, Organisasjonsnummer.of("199999999"),
-                new ArbeidstidInfo(Map.of(
-                        endringsperiode, new ArbeidstidPeriodeInfo(Duration.ofHours(8), Duration.ofHours(4)),
-                        søknadsperiode, new ArbeidstidPeriodeInfo(Duration.ofHours(8), Duration.ofHours(0))))));
-
-        verifyIngenFeil(ytelse);
+        var endringssøknad = TestUtils.minimumSøknadOgEndringsSøknad(søknadsperiode, endringsperiode);
+        verifyIngenFeil(endringssøknad);
 
     }
     @Test
@@ -117,13 +110,17 @@ public class PleiepengerBarnSøknadValidatorTest {
         var endringsperiode = new Periode(LocalDate.now().minusMonths(2), LocalDate.now().minusDays(1));
         var periodeUtenfor = new Periode(endringsperiode.getFraOgMed().minusMonths(1), endringsperiode.getFraOgMed().minusDays(1));
 
+        var endringssøknad = TestUtils.minimumSøknadOgEndringsSøknad(søknadsperiode, periodeUtenfor)
+                .medEndringsperiode(endringsperiode);
+
+
         var ytelse = TestUtils.komplettYtelsePsb(søknadsperiode);
-        ytelse.medUttak(new Uttak(Map.of(
+        ytelse.medUttak(new Uttak().medPerioder(Map.of(
                 periodeUtenfor, new UttakPeriodeInfo(Duration.ofHours(8)),
                 endringsperiode, new UttakPeriodeInfo(Duration.ofHours(8)))));
 
         ytelse.medEndringsperiode(endringsperiode);
-        ytelse.getTilsynsordning().leggeTilPeriode(periodeUtenfor, new TilsynPeriodeInfo(Duration.ofHours(7)));
+        ytelse.getTilsynsordning().leggeTilPeriode(periodeUtenfor, new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7)));
         ytelse.getBeredskap().leggeTilPeriode(periodeUtenfor, new Beredskap.BeredskapPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()));
         ytelse.getNattevåk().leggeTilPeriode(periodeUtenfor, new Nattevåk.NattevåkPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()));
         ytelse.getArbeidstid().leggeTilArbeidstaker(new Arbeidstaker(null, Organisasjonsnummer.of("199999999"),
@@ -159,7 +156,7 @@ public class PleiepengerBarnSøknadValidatorTest {
                         )
                 )
         );
-        ytelse.medArbeidstid(new Arbeidstid(List.of(arbeidstaker), null, null));
+        ytelse.medArbeidstid(new Arbeidstid().medArbeidstaker(List.of(arbeidstaker)));
         verifyIngenFeil(ytelse);
     }
 
@@ -186,16 +183,16 @@ public class PleiepengerBarnSøknadValidatorTest {
                         )
                 )
         );
-        ytelse.medArbeidstid(new Arbeidstid(List.of(arbeidstaker), null, null));
+        ytelse.medArbeidstid(new Arbeidstid().medArbeidstaker(List.of(arbeidstaker)));
         assertThat(valider(ytelse)).size().isEqualTo(2);
     }
 
     @Test
     public void søknadMedTilsynsordningOppholdLengreEnnPerioden() {
         var søknad = TestUtils.komplettYtelsePsbMedDelperioder();
-        Tilsynsordning tilsynsordning = new Tilsynsordning(Map.of(
+        Tilsynsordning tilsynsordning = new Tilsynsordning().medPerioder(Map.of(
                 new Periode(søknad.getSøknadsperiode().getFraOgMed(), søknad.getSøknadsperiode().getTilOgMed().plusDays(10)),
-                new TilsynPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
+                new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7).plusMinutes(30))));
         søknad.medTilsynsordning(tilsynsordning);
 
         verifyHarFeil(søknad);

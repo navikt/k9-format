@@ -31,15 +31,6 @@ public class Arbeidstid {
     @JsonProperty(value = "selvstendigNæringsdrivendeArbeidstidInfo")
     private ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo;
 
-    @JsonCreator
-    public Arbeidstid(@JsonProperty(value = "arbeidstakerList", required = true) @Valid @NotNull List<Arbeidstaker> arbeidstakerList,
-                      @JsonProperty(value = "frilanserArbeidstidInfo") @Valid ArbeidstidInfo frilanserArbeidstidInfo,
-                      @JsonProperty(value = "selvstendigNæringsdrivendeArbeidstidInfo") @Valid ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo) {
-        this.arbeidstakerList = (arbeidstakerList == null ) ? new ArrayList<>() : new ArrayList<>(arbeidstakerList);
-        this.frilanserArbeidstidInfo = frilanserArbeidstidInfo;
-        this.selvstendigNæringsdrivendeArbeidstidInfo = selvstendigNæringsdrivendeArbeidstidInfo;
-    }
-
     public Arbeidstid() {
     }
 
@@ -47,18 +38,18 @@ public class Arbeidstid {
         return unmodifiableList(arbeidstakerList);
     }
 
-    public Arbeidstid medArbeidstakerList(List<Arbeidstaker> arbeidstakerList) {
+    public Arbeidstid medArbeidstaker(List<Arbeidstaker> arbeidstakerList) {
         this.arbeidstakerList = (arbeidstakerList == null ) ? new ArrayList<>() : new ArrayList<>(arbeidstakerList);
         return this;
     }
 
     public Arbeidstid leggeTilArbeidstaker(List<Arbeidstaker> arbeidstakerList) {
-        this.arbeidstakerList.addAll(arbeidstakerList);
+        this.arbeidstakerList.addAll(Objects.requireNonNull(arbeidstakerList, "Arbeidstid.arbeidstaker"));
         return this;
     }
 
     public Arbeidstid leggeTilArbeidstaker(Arbeidstaker arbeidstaker) {
-        this.arbeidstakerList.add(arbeidstaker);
+        this.arbeidstakerList.add(Objects.requireNonNull(arbeidstaker, "Arbeidstid.arbeidstaker"));
         return this;
     }
 
@@ -67,7 +58,7 @@ public class Arbeidstid {
     }
 
     public Arbeidstid medFrilanserArbeidstid(ArbeidstidInfo frilanserArbeidstidInfo) {
-        this.frilanserArbeidstidInfo = frilanserArbeidstidInfo;
+        this.frilanserArbeidstidInfo = Objects.requireNonNull(frilanserArbeidstidInfo, "Arbeidstid.frilanserArbeidstidInfo");
         return this;
     }
 
@@ -76,7 +67,7 @@ public class Arbeidstid {
     }
 
     public Arbeidstid medSelvstendigNæringsdrivendeArbeidstidInfo(ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo) {
-        this.selvstendigNæringsdrivendeArbeidstidInfo = selvstendigNæringsdrivendeArbeidstidInfo;
+        this.selvstendigNæringsdrivendeArbeidstidInfo = Objects.requireNonNull(selvstendigNæringsdrivendeArbeidstidInfo, "Arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo");
         return this;
     }
 }

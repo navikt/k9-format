@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 import static java.util.Collections.unmodifiableMap;
@@ -28,11 +29,6 @@ public class Uttak {
     @JsonProperty(value="perioderSomSkalSlettes")
     @Valid
     private Map<Periode, UttakPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
-
-    @JsonCreator
-    public Uttak( @JsonProperty(value = "perioder") @Valid Map<Periode, UttakPeriodeInfo> perioder ) {
-        this.perioder = (perioder == null ) ? new TreeMap<>() : new TreeMap<>(perioder);
-    }
 
     public Uttak() {
     }

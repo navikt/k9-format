@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 import static java.util.Collections.unmodifiableMap;
@@ -69,7 +70,7 @@ public class Beredskap {
         }
 
         public BeredskapPeriodeInfo medTilleggsinformasjon(String tilleggsinformasjon) {
-            this.tilleggsinformasjon = tilleggsinformasjon;
+            this.tilleggsinformasjon = Objects.requireNonNull(tilleggsinformasjon, "BeredskapPeriodeInfo.tilleggsinformasjon");
             return this;
         }
     }

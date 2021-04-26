@@ -7,6 +7,7 @@ import no.nav.k9.søknad.felles.type.Periode;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 import static java.util.Collections.emptyMap;
@@ -15,6 +16,7 @@ import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPeriode;
 import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPerioder;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -28,6 +30,7 @@ public class Utenlandsopphold {
     @JsonProperty(value = "perioderSomSkalSlettes")
     private Map<Periode, UtenlandsoppholdPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
+    /**@deprecated brukt tom ctor.*/
     @JsonCreator
     public Utenlandsopphold(
                             @JsonProperty("perioder") Map<Periode, UtenlandsoppholdPeriodeInfo> perioder) {
@@ -92,16 +95,18 @@ public class Utenlandsopphold {
     public static class UtenlandsoppholdPeriodeInfo {
 
         @JsonProperty(value = "land", required = true)
+        @NotNull
         private Landkode land;
 
         @JsonProperty(value = "årsak")
         private UtenlandsoppholdÅrsak årsak;
 
+        /**@Deprecated bruk tom ctor*/
         @JsonCreator
         private UtenlandsoppholdPeriodeInfo(
                                             @JsonProperty("land") Landkode land,
                                             @JsonProperty("årsak") UtenlandsoppholdÅrsak årsak) {
-            this.land = land;
+            this.land = Objects.requireNonNull(land, "UtenlandsoppholdPeriodeInfo.land");
             this.årsak = årsak;
         }
 
@@ -114,7 +119,7 @@ public class Utenlandsopphold {
         }
 
         public UtenlandsoppholdPeriodeInfo medLand(Landkode land) {
-            this.land = land;
+            this.land = Objects.requireNonNull(land, "UtenlandsoppholdPeriodeInfo.land");
             return this;
         }
         
@@ -123,10 +128,11 @@ public class Utenlandsopphold {
         }
 
         public UtenlandsoppholdPeriodeInfo medÅrsak(UtenlandsoppholdÅrsak årsak) {
-            this.årsak = årsak;
+            this.årsak = Objects.requireNonNull(årsak, "UtenlandsoppholdPeriodeInfo.årsak");
             return this;
         }
-        
+
+        @Deprecated
         public static Builder builder() {
             return new Builder();
         }
