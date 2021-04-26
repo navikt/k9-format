@@ -22,11 +22,11 @@ public class Utenlandsopphold {
 
     @JsonInclude(value = Include.ALWAYS)
     @JsonProperty(value = "perioder")
-    private Map<Periode, UtenlandsoppholdPeriodeInfo> perioder;
+    private Map<Periode, UtenlandsoppholdPeriodeInfo> perioder = new TreeMap<>();
 
     @JsonInclude(value = Include.ALWAYS)
     @JsonProperty(value = "perioderSomSkalSlettes")
-    private Map<Periode, UtenlandsoppholdPeriodeInfo> perioderSomSkalSlettes;
+    private Map<Periode, UtenlandsoppholdPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
     @JsonCreator
     public Utenlandsopphold(

@@ -306,14 +306,14 @@ public class PleiepengerSyktBarn implements Ytelse {
 
     @Size(max=0, message="${validatedValue}")
     private List<Feil> getValiderAngittUtenlandsopphold() {
-        return utenlandsopphold == null
+        return utenlandsopphold.getPerioder().isEmpty()
             ? List.of()
             : new PeriodeValidator().validerIkkeTillattOverlapp(utenlandsopphold.getPerioder(), "utenlandsopphold.perioder");
     }
 
     @Size(max=0, message="${validatedValue}")
     private List<Feil> getValiderAngittBosteder() {
-        return bosteder == null
+        return bosteder.getPerioder().isEmpty()
             ? List.of()
             : new PeriodeValidator().validerIkkeTillattOverlapp(bosteder.getPerioder(), "bosteder.perioder");
     }
