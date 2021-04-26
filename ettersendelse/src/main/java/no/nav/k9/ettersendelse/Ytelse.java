@@ -14,5 +14,8 @@ public enum Ytelse {
     OMP_UTV_KS,
     
     /** Omsorgspenger utvidet rett - midlertidig alene. */
-    OMP_UTV_MA
+    OMP_UTV_MA,
+
+    /** Omsorgspenger dele omsorgsdager*/
+    OMP_DELE_DAGER
 }
