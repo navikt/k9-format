@@ -22,11 +22,11 @@ public class Utenlandsopphold {
 
     @JsonInclude(value = Include.ALWAYS)
     @JsonProperty(value = "perioder")
-    private Map<Periode, UtenlandsoppholdPeriodeInfo> perioder;
+    private Map<Periode, UtenlandsoppholdPeriodeInfo> perioder = new TreeMap<>();
 
     @JsonInclude(value = Include.ALWAYS)
     @JsonProperty(value = "perioderSomSkalSlettes")
-    private Map<Periode, UtenlandsoppholdPeriodeInfo> perioderSomSkalSlettes;
+    private Map<Periode, UtenlandsoppholdPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
     @JsonCreator
     public Utenlandsopphold(
@@ -92,10 +92,10 @@ public class Utenlandsopphold {
     public static class UtenlandsoppholdPeriodeInfo {
 
         @JsonProperty(value = "land", required = true)
-        private final Landkode land;
+        private Landkode land;
 
         @JsonProperty(value = "årsak")
-        private final UtenlandsoppholdÅrsak årsak;
+        private UtenlandsoppholdÅrsak årsak;
 
         @JsonCreator
         private UtenlandsoppholdPeriodeInfo(
@@ -105,12 +105,26 @@ public class Utenlandsopphold {
             this.årsak = årsak;
         }
 
+        public UtenlandsoppholdPeriodeInfo() {
+
+        }
+
         public Landkode getLand() {
             return land;
+        }
+
+        public UtenlandsoppholdPeriodeInfo medLand(Landkode land) {
+            this.land = land;
+            return this;
         }
         
         public UtenlandsoppholdÅrsak getÅrsak() {
             return årsak;
+        }
+
+        public UtenlandsoppholdPeriodeInfo medÅrsak(UtenlandsoppholdÅrsak årsak) {
+            this.årsak = årsak;
+            return this;
         }
         
         public static Builder builder() {

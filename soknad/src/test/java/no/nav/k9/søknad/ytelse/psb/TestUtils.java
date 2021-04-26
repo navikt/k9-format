@@ -129,8 +129,15 @@ final class TestUtils {
 
         var barn = new Barn(NorskIdentitetsnummer.of("11111111111"), null);
 
-        var bosteder = new Bosteder(Map.of(
-                søknadsperiode, new Bosteder.BostedPeriodeInfo(Landkode.NORGE)));
+        var bosteder = new Bosteder().medPerioder(Map.of(
+                søknadsperiode,
+                new Bosteder.BostedPeriodeInfo().medLand(Landkode.NORGE)));
+
+        var utenlandsopphold = new Utenlandsopphold().medPerioder(Map.of(
+                søknadsperiode, new Utenlandsopphold
+                        .UtenlandsoppholdPeriodeInfo()
+                        .medLand(Landkode.FINLAND)
+                        .medÅrsak(Utenlandsopphold.UtenlandsoppholdÅrsak.BARNET_INNLAGT_I_HELSEINSTITUSJON_FOR_NORSK_OFFENTLIG_REGNING)));
 
         var omsorg = new Omsorg().medRelasjonTilBarnet(Omsorg.BarnRelasjon.MOR);
 
