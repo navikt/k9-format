@@ -44,12 +44,12 @@ public class Arbeidstid {
     }
 
     public Arbeidstid leggeTilArbeidstaker(List<Arbeidstaker> arbeidstakerList) {
-        this.arbeidstakerList.addAll(Objects.requireNonNull(arbeidstakerList, "Arbeidstid.arbeidstaker"));
+        this.arbeidstakerList.addAll(arbeidstakerList);
         return this;
     }
 
     public Arbeidstid leggeTilArbeidstaker(Arbeidstaker arbeidstaker) {
-        this.arbeidstakerList.add(Objects.requireNonNull(arbeidstaker, "Arbeidstid.arbeidstaker"));
+        this.arbeidstakerList.add(arbeidstaker);
         return this;
     }
 
