@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.felles.opptjening;
+package no.nav.k9.søknad.felles.type;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
