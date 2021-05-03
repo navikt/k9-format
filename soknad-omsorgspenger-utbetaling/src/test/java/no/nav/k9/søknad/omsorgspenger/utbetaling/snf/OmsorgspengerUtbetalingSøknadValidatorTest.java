@@ -17,13 +17,13 @@ import org.junit.jupiter.api.Test;
 import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.opptjening.Frilanser;
-import no.nav.k9.søknad.felles.opptjening.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende;
-import no.nav.k9.søknad.felles.opptjening.VirksomhetType;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.type.Landkode;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
+import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.felles.type.VirksomhetType;
 
 @SuppressWarnings("removal")
 public class OmsorgspengerUtbetalingSøknadValidatorTest {

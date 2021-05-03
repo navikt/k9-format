@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.type.Landkode;
+import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.felles.type.VirksomhetType;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
