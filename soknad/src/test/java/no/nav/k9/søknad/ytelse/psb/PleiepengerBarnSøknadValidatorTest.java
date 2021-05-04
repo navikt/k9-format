@@ -72,6 +72,12 @@ public class PleiepengerBarnSøknadValidatorTest {
     }
 
     @Test
+    public void minimumSøknadMedOmsorgNullPåFelterSkalIkkeHaValideringsfeil() {
+        var psb = TestUtils.minimumSøknadPleiepengerSyktBarn();
+        psb.medOmsorg(new Omsorg().medBeskrivelseAvOmsorgsrollen(null).medRelasjonTilBarnet(null));
+        verifyIngenFeil(psb);
+    }
+    @Test
     public void uttakKanIkkeVæreTom() {
         var ytelse = TestUtils.komplettYtelsePsbMedDelperioder();
         ytelse.medUttak(new Uttak());
