@@ -143,7 +143,7 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
         finnIkkeKomplettePerioderOgPerioderUtenfor(
                 toLocalDateTimeline(selvstendigNæringsdrivende.getPerioder()),
                 søknadsperiode)
-                .valider("arbeidstid.frilanser", feil);
+                .valider("arbeidstid.selvstendigNæringsdrivende", feil);
     }
 
     private void validerTilsynsordning(Tilsynsordning tilsynsordning, TidsserieValidator.Perioder søknadsperiode, List<Feil> feil) {
