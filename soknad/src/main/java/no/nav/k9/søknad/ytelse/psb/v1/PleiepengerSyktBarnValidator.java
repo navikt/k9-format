@@ -48,7 +48,7 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
             //TODO valider Utlandsopphold
 
         } catch (IllegalArgumentException e) {
-            feil.add(new Feil(e.getClass().getName(), " IllegalArgumentException", e.getMessage()));
+            feil.add(new Feil(e.getClass().getName(), "IllegalArgumentException", e.getMessage()));
         }
 
         validerKomplettSøknad(psb, feil);
