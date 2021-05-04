@@ -5,9 +5,6 @@ import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.opptjening.*;
-import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
-import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
-import no.nav.k9.søknad.felles.type.Landkode;
 import no.nav.k9.søknad.ytelse.psb.v1.Beredskap;
 import no.nav.k9.søknad.ytelse.psb.v1.Nattevåk;
 import no.nav.k9.søknad.ytelse.psb.v1.Omsorg;
@@ -31,7 +28,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +38,7 @@ public class PleiepengerBarnSøknadValidatorTest {
 
     @Test
     public void minimumSøknadNullTest() {
-        var psb = TestUtils.minimumSøknadPleiepengerSyktBarn();
+        var psb = TestUtils.minimumSøknadPleiepengerSyktBarnMedDelperioder();
         JsonUtils.toString(psb);
         verifyIngenFeil(psb);
     }
@@ -73,9 +69,17 @@ public class PleiepengerBarnSøknadValidatorTest {
 
     @Test
     public void minimumSøknadMedOmsorgNullPåFelterSkalIkkeHaValideringsfeil() {
-        var psb = TestUtils.minimumSøknadPleiepengerSyktBarn();
+        var psb = TestUtils.minimumSøknadPleiepengerSyktBarnMedDelperioder();
         psb.medOmsorg(new Omsorg().medBeskrivelseAvOmsorgsrollen(null).medRelasjonTilBarnet(null));
         verifyIngenFeil(psb);
+    }
+
+    @Test void søknadPerioderFeilFomFørTom() {
+        var søknadperiode = new Periode(LocalDate.now().plusDays(10), LocalDate.now().minusDays(10));
+        var psb = TestUtils.minimumSøknadPleiepengerSyktBarn(søknadperiode);
+
+        final List<Feil> feil = valider(psb);
+        assertThat(feil).isNotEmpty();
     }
 
     @Test

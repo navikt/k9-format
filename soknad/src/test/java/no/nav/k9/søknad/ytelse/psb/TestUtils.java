@@ -48,6 +48,10 @@ final class TestUtils {
         }
     }
 
+    /*
+    JSON
+     */
+
     static Søknad komplettSøknadJson() {
         return Søknad.SerDes.deserialize(jsonFromFile("komplett-søknad.json"));
     }
@@ -64,9 +68,9 @@ final class TestUtils {
         return Søknad.SerDes.deserialize(jsonFromFile("5.1.33/minimum-søknad.json"));
     }
 
-    static Ytelse komplettYtelsePsbJson(String ytelse) {
-        return JsonUtils.fromString(ytelse, Ytelse.class);
-    }
+    /*
+    Komplett
+     */
 
     static PleiepengerSyktBarn komplettYtelsePsbMedDelperioder() {
 
@@ -157,7 +161,11 @@ final class TestUtils {
                 .medBosteder(bosteder);
     }
 
-    static PleiepengerSyktBarn minimumSøknadPleiepengerSyktBarn() {
+    /*@
+    Minimum
+     */
+
+    static PleiepengerSyktBarn minimumSøknadPleiepengerSyktBarnMedDelperioder() {
         var søknadsperiode = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-10-20"));
         var uttakperiode = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-02-20"));
         var uttakperiode2 = new Periode(LocalDate.parse("2019-02-21"), LocalDate.parse("2019-10-20"));
@@ -168,16 +176,27 @@ final class TestUtils {
 
         var barn = new Barn(null, LocalDate.now());
 
-        var omsorg = new Omsorg()
-                .medRelasjonTilBarnet(Omsorg.BarnRelasjon.MOR)
-                .medBeskrivelseAvOmsorgsrollen(TestUtils.testTekst());
+        return new PleiepengerSyktBarn()
+                .medSøknadsperiode(søknadsperiode)
+                .medBarn(barn)
+                .medUttak(uttak);
+    }
+
+    static PleiepengerSyktBarn minimumSøknadPleiepengerSyktBarn(Periode søknadsperiode) {
+        var uttak = new Uttak().medPerioder(Map.of(
+                søknadsperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
+
+        var barn = new Barn(null, LocalDate.now());
 
         return new PleiepengerSyktBarn()
                 .medSøknadsperiode(søknadsperiode)
                 .medBarn(barn)
-                .medUttak(uttak)
-                .medOmsorg(omsorg);
+                .medUttak(uttak);
     }
+
+    /*
+    Endring
+     */
 
     static PleiepengerSyktBarn minimumEndringssøknad(Periode endringsperiode) {
         return new PleiepengerSyktBarn()
@@ -207,6 +226,10 @@ final class TestUtils {
                 .medBosteder(new Bosteder())
                 .medUtenlandsopphold(new Utenlandsopphold());
     }
+
+    /*
+    Util
+     */
 
     static String testTekst() {
         return "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
