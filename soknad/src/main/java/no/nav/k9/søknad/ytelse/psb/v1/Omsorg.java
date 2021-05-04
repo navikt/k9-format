@@ -26,21 +26,23 @@ public class Omsorg {
     public Omsorg() {
     }
 
+    //TODO optinal returverdi
     public BarnRelasjon getRelasjonTilBarnet() {
         return relasjonTilBarnet;
     }
 
     public Omsorg medRelasjonTilBarnet(BarnRelasjon relasjonTilBarnet) {
-        this.relasjonTilBarnet = Objects.requireNonNull(relasjonTilBarnet, "relasjonTilBarnet");
+        this.relasjonTilBarnet = relasjonTilBarnet;
         return this;
     }
 
+    //TODO optional returverdi
     public String getBeskrivelseAvOmsorgsrollen() {
         return beskrivelseAvOmsorgsrollen;
     }
 
     public Omsorg medBeskrivelseAvOmsorgsrollen(String beskrivelseAvOmsorgsrollen) {
-        this.beskrivelseAvOmsorgsrollen = Objects.requireNonNull(beskrivelseAvOmsorgsrollen, "beskrivelseAvOmsorgsrollen");
+        this.beskrivelseAvOmsorgsrollen = beskrivelseAvOmsorgsrollen;
         return this;
     }
 
