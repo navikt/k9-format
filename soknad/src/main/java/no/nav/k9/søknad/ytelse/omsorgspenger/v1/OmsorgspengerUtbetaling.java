@@ -62,11 +62,12 @@ public class OmsorgspengerUtbetaling implements Ytelse {
     public OmsorgspengerUtbetaling(@JsonProperty("fosterbarn") @Valid List<Barn> fosterbarn,
                                    @JsonProperty(value = "aktivitet", required = true) @Valid @NotNull OpptjeningAktivitet opptjening,
                                    @JsonProperty(value = "fraværsperioder", required = true) @Valid @NotNull @Size(min = 1) List<FraværPeriode> fraværsperioder,
-                                   @SuppressWarnings("unused") @JsonProperty(value = "bosteder") @Valid @NotNull Bosteder bosteder,
+                                   @JsonProperty(value = "bosteder") @Valid @NotNull Bosteder bosteder,
                                    @JsonProperty(value = "utenlandsopphold") @Valid @NotNull Utenlandsopphold utenlandsopphold) {
         this.fosterbarn = fosterbarn;
         this.aktivitet = opptjening;
         this.fraværsperioder = fraværsperioder;
+        this.bosteder = bosteder;
         this.utenlandsopphold = utenlandsopphold;
     }
 
@@ -89,12 +90,12 @@ public class OmsorgspengerUtbetaling implements Ytelse {
     public Utenlandsopphold getUtenlandsopphold() {
         return utenlandsopphold;
     }
-    
+
     @Override
     public Person getPleietrengende() {
         return null;
     }
-    
+
     @Override
     public Person getAnnenPart() {
         return null;
