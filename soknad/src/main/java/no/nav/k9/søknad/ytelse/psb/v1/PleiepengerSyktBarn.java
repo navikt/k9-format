@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.TreeMap;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -60,8 +59,8 @@ public class PleiepengerSyktBarn implements Ytelse {
     private DataBruktTilUtledning dataBruktTilUtledning;
 
     @Valid
-    @JsonProperty(value = "infoFraPunsj")
-    private InfoFraPunsj infoFraPunsj;
+    @JsonProperty(value = "journalposter")
+    private List<Journalposter> journalposter = new ArrayList<>();
 
     @Valid
     @JsonProperty(value = "bosteder", required = true)
@@ -152,16 +151,12 @@ public class PleiepengerSyktBarn implements Ytelse {
     }
 
     public PleiepengerSyktBarn medSøknadsperiode(List<Periode> søknadsperiodeList) {
-        if (this.søknadsperiode == null)
-            this.søknadsperiode = new ArrayList<>();
-        this.søknadsperiode.addAll(søknadsperiodeList);
+        this.søknadsperiode.addAll(Objects.requireNonNull(søknadsperiodeList, "søknadsperiodeList"));
         return this;
     }
 
     public PleiepengerSyktBarn medSøknadsperiode(Periode søknadsperiode) {
-        if (this.søknadsperiode == null)
-            this.søknadsperiode = new ArrayList<>();
-        this.søknadsperiode.add(søknadsperiode);
+        this.søknadsperiode.add(Objects.requireNonNull(søknadsperiode, "søknadsperiode"));
         return this;
     }
 
@@ -201,12 +196,17 @@ public class PleiepengerSyktBarn implements Ytelse {
         return this;
     }
 
-    public InfoFraPunsj getInfoFraPunsj() {
-        return infoFraPunsj;
+    public List<Journalposter> getJournalposter() {
+        return journalposter;
     }
 
-    public PleiepengerSyktBarn medInfoFraPunsj(InfoFraPunsj infoFraPunsj) {
-        this.infoFraPunsj = Objects.requireNonNull(infoFraPunsj, "infoFraPunsj");
+    public PleiepengerSyktBarn medJournalposter(Journalposter journalposter) {
+        this.journalposter.add(Objects.requireNonNull(journalposter, "journalposter"));
+        return this;
+    }
+
+    public PleiepengerSyktBarn medJournalposter(List<Journalposter> journalposterList) {
+        this.journalposter.addAll(Objects.requireNonNull(journalposterList, "journalposterList"));
         return this;
     }
 

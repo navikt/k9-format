@@ -68,6 +68,13 @@ public class PleiepengerBarnSøknadValidatorTest {
     }
 
     @Test
+    public void komplettSøknadSkalIkkeHaFeil() {
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(3));
+        var psb = TestUtils.komplettYtelsePsb(søknadsperiode);
+        verifyIngenFeil(psb);
+    }
+
+    @Test
     public void minimumSøknadMedOmsorgNullPåFelterSkalIkkeHaValideringsfeil() {
         var psb = TestUtils.minimumSøknadPleiepengerSyktBarnMedDelperioder();
         psb.medOmsorg(new Omsorg().medBeskrivelseAvOmsorgsrollen(null).medRelasjonTilBarnet(null));
@@ -117,6 +124,7 @@ public class PleiepengerBarnSøknadValidatorTest {
         verifyIngenFeil(endringssøknad);
 
     }
+
     @Test
     public void søknadOgEndringMedFeil() {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));

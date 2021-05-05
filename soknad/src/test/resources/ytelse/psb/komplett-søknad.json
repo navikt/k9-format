@@ -16,9 +16,10 @@
       "harMedsøker" : false,
       "bekrefterPeriodeOver8Uker" : true
     },
-    "infoFraPunsj" : {
-      "søknadenInneholderInfomasjonSomIkkeKanPunsjes" : false
-    },
+    "journalposter" : [ {
+      "søknadenInneholderInfomasjonSomIkkeKanPunsjes" : false,
+      "journalpostId" : "sajhdasd83724234"
+    } ],
     "barn" : {
       "norskIdentitetsnummer" : "11111111111",
       "fødselsdato" : null
