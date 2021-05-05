@@ -17,7 +17,7 @@
       "bekrefterPeriodeOver8Uker" : true
     },
     "journalposter" : [ {
-      "søknadenInneholderInfomasjonSomIkkeKanPunsjes" : false,
+      "inneholderInfomasjonSomIkkeKanPunsjes" : false,
       "journalpostId" : "sajhdasd83724234"
     } ],
     "barn" : {

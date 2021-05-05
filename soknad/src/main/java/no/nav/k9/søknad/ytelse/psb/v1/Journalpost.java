@@ -13,13 +13,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-public class Journalposter {
+public class Journalpost {
 
     private static final String GYLDIG = "^[\\p{Alnum}]+$";
 
-    @JsonProperty(value = "søknadenInneholderInfomasjonSomIkkeKanPunsjes")
+    @JsonProperty(value = "inneholderInfomasjonSomIkkeKanPunsjes")
     @Valid
-    private Boolean søknadenInneholderInfomasjonSomIkkeKanPunsjes;
+    private Boolean inneholderInfomasjonSomIkkeKanPunsjes;
 
     @JsonProperty(value = "journalpostId", required = true)
     @NotNull
@@ -27,15 +27,15 @@ public class Journalposter {
     @Pattern(regexp = GYLDIG, message = "Saksnummer [${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
     private String journalpostId;
 
-    public Journalposter() {
+    public Journalpost() {
     }
 
-    public Boolean getSøknadenInneholderInfomasjonSomIkkeKanPunsjes() {
-        return søknadenInneholderInfomasjonSomIkkeKanPunsjes;
+    public Boolean getInneholderInfomasjonSomIkkeKanPunsjes() {
+        return inneholderInfomasjonSomIkkeKanPunsjes;
     }
 
-    public Journalposter medSøknadenInneholderInfomasjonSomIkkeKanPunsjes(Boolean søknadenInneholderInfomasjonSomIkkeKanPunsjes) {
-        this.søknadenInneholderInfomasjonSomIkkeKanPunsjes = søknadenInneholderInfomasjonSomIkkeKanPunsjes;
+    public Journalpost medInfomasjonSomIkkeKanPunsjes(Boolean søknadenInneholderInfomasjonSomIkkeKanPunsjes) {
+        this.inneholderInfomasjonSomIkkeKanPunsjes = søknadenInneholderInfomasjonSomIkkeKanPunsjes;
         return this;
     }
 
@@ -43,7 +43,7 @@ public class Journalposter {
         return journalpostId;
     }
 
-    public Journalposter medJournalpostId(String journalpostId) {
+    public Journalpost medJournalpostId(String journalpostId) {
         this.journalpostId = Objects.requireNonNull(journalpostId);
         return this;
     }

@@ -18,7 +18,7 @@ import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.psb.v1.Beredskap;
 import no.nav.k9.søknad.ytelse.psb.v1.DataBruktTilUtledning;
-import no.nav.k9.søknad.ytelse.psb.v1.Journalposter;
+import no.nav.k9.søknad.ytelse.psb.v1.Journalpost;
 import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie;
 import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie.LovbestemtFeriePeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.Nattevåk;
@@ -142,8 +142,8 @@ final class TestUtils {
         var søknadInfo = new DataBruktTilUtledning( true, true,
                 false, false, true );
 
-        var journalpostInfo = new Journalposter()
-                .medSøknadenInneholderInfomasjonSomIkkeKanPunsjes(false)
+        var journalpostInfo = new Journalpost()
+                .medInfomasjonSomIkkeKanPunsjes(false)
                 .medJournalpostId(TestUtils.journalpostId());
 
         return new PleiepengerSyktBarn()

@@ -60,7 +60,7 @@ public class PleiepengerSyktBarn implements Ytelse {
 
     @Valid
     @JsonProperty(value = "journalposter")
-    private List<Journalposter> journalposter = new ArrayList<>();
+    private List<Journalpost> journalposter = new ArrayList<>();
 
     @Valid
     @JsonProperty(value = "bosteder", required = true)
@@ -196,17 +196,17 @@ public class PleiepengerSyktBarn implements Ytelse {
         return this;
     }
 
-    public List<Journalposter> getJournalposter() {
+    public List<Journalpost> getJournalposter() {
         return journalposter;
     }
 
-    public PleiepengerSyktBarn medJournalposter(Journalposter journalposter) {
-        this.journalposter.add(Objects.requireNonNull(journalposter, "journalposter"));
+    public PleiepengerSyktBarn medJournalposter(Journalpost journalpost) {
+        this.journalposter.add(Objects.requireNonNull(journalpost, "journalpost"));
         return this;
     }
 
-    public PleiepengerSyktBarn medJournalposter(List<Journalposter> journalposterList) {
-        this.journalposter.addAll(Objects.requireNonNull(journalposterList, "journalposterList"));
+    public PleiepengerSyktBarn medJournalposter(List<Journalpost> journalposter) {
+        this.journalposter.addAll(Objects.requireNonNull(journalposter, "journalposter"));
         return this;
     }
 
