@@ -1,6 +1,7 @@
 package no.nav.k9.søknad.ytelse.psb.v1;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -26,9 +27,8 @@ public class Omsorg {
     public Omsorg() {
     }
 
-    //TODO optinal returverdi
-    public BarnRelasjon getRelasjonTilBarnet() {
-        return relasjonTilBarnet;
+    public Optional<BarnRelasjon> getRelasjonTilBarnet() {
+        return Optional.ofNullable(relasjonTilBarnet);
     }
 
     public Omsorg medRelasjonTilBarnet(BarnRelasjon relasjonTilBarnet) {
@@ -37,8 +37,8 @@ public class Omsorg {
     }
 
     //TODO optional returverdi
-    public String getBeskrivelseAvOmsorgsrollen() {
-        return beskrivelseAvOmsorgsrollen;
+    public Optional<String> getBeskrivelseAvOmsorgsrollen() {
+        return Optional.ofNullable(beskrivelseAvOmsorgsrollen);
     }
 
     public Omsorg medBeskrivelseAvOmsorgsrollen(String beskrivelseAvOmsorgsrollen) {

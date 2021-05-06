@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -51,7 +52,6 @@ public class PleiepengerSyktBarn implements Ytelse {
     private List<Periode> endringsperiode = new ArrayList<>();
 
     @Valid
-    @NotNull
     @JsonProperty(value = "opptjeningAktivitet")
     private OpptjeningAktivitet opptjeningAktivitet = new OpptjeningAktivitet();
 
@@ -72,37 +72,30 @@ public class PleiepengerSyktBarn implements Ytelse {
     private Utenlandsopphold utenlandsopphold = new Utenlandsopphold();
 
     @Valid
-    @NotNull
     @JsonProperty(value = "beredskap", required = true)
     private Beredskap beredskap = new Beredskap();
 
     @Valid
-    @NotNull
     @JsonProperty(value = "nattevåk", required = true)
     private Nattevåk nattevåk = new Nattevåk();
 
     @Valid
-    @NotNull
     @JsonProperty(value = "tilsynsordning", required = true)
     private Tilsynsordning tilsynsordning = new Tilsynsordning();
 
     @Valid
-    @NotNull
     @JsonProperty(value = "lovbestemtFerie", required = true)
     private LovbestemtFerie lovbestemtFerie = new LovbestemtFerie();
 
     @Valid
-    @NotNull
     @JsonProperty(value = "arbeidstid", required = true)
     private Arbeidstid arbeidstid = new Arbeidstid();
 
     @Valid
-    @NotNull
     @JsonProperty(value = "uttak", required = true)
     private Uttak uttak = new Uttak();
 
     @Valid
-    @NotNull
     @JsonProperty(value = "omsorg", required = true)
     private Omsorg omsorg = new Omsorg();
 
@@ -188,8 +181,8 @@ public class PleiepengerSyktBarn implements Ytelse {
         return this;
     }
 
-    public DataBruktTilUtledning getSøknadInfo() {
-        return dataBruktTilUtledning;
+    public Optional<DataBruktTilUtledning> getSøknadInfo() {
+        return Optional.ofNullable(dataBruktTilUtledning);
     }
 
     public PleiepengerSyktBarn medSøknadInfo(DataBruktTilUtledning dataBruktTilUtledning) {
@@ -197,8 +190,8 @@ public class PleiepengerSyktBarn implements Ytelse {
         return this;
     }
 
-    public InfoFraPunsj getInfoFraPunsj() {
-        return infoFraPunsj;
+    public Optional<InfoFraPunsj> getInfoFraPunsj() {
+        return Optional.ofNullable(infoFraPunsj);
     }
 
     public PleiepengerSyktBarn medInfoFraPunsj(InfoFraPunsj infoFraPunsj) {
