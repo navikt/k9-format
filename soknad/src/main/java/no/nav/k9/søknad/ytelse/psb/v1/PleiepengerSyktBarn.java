@@ -22,6 +22,7 @@ import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
+import no.nav.k9.søknad.felles.type.Journalpost;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.ytelse.Ytelse;
@@ -59,8 +60,8 @@ public class PleiepengerSyktBarn implements Ytelse {
     private DataBruktTilUtledning dataBruktTilUtledning;
 
     @Valid
-    @JsonProperty(value = "journalposter")
-    private List<Journalpost> journalposter = new ArrayList<>();
+    @JsonProperty(value = "infoFraPunsj")
+    private InfoFraPunsj infoFraPunsj;
 
     @Valid
     @JsonProperty(value = "bosteder", required = true)
@@ -196,17 +197,12 @@ public class PleiepengerSyktBarn implements Ytelse {
         return this;
     }
 
-    public List<Journalpost> getJournalposter() {
-        return journalposter;
+    public InfoFraPunsj getInfoFraPunsj() {
+        return infoFraPunsj;
     }
 
-    public PleiepengerSyktBarn medJournalposter(Journalpost journalpost) {
-        this.journalposter.add(Objects.requireNonNull(journalpost, "journalpost"));
-        return this;
-    }
-
-    public PleiepengerSyktBarn medJournalposter(List<Journalpost> journalposter) {
-        this.journalposter.addAll(Objects.requireNonNull(journalposter, "journalposter"));
+    public PleiepengerSyktBarn medInfoFraPunsj(InfoFraPunsj infoFraPunsj) {
+        this.infoFraPunsj = Objects.requireNonNull(infoFraPunsj, "infoFraPunsj");
         return this;
     }
 

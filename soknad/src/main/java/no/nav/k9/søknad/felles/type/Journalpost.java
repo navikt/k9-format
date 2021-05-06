@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.ytelse.psb.v1;
+package no.nav.k9.søknad.felles.type;
 
 import java.util.Objects;
 

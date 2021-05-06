@@ -96,16 +96,6 @@ public class PleiepengerBarnSøknadValidatorTest {
         verifyHarFeil(ytelse);
     }
 
-    @Disabled //Disabled siden det er usikkert om dette er et krav
-    @Test
-    public void måVæreSøknadHvisDetErInfoOmOmsorg() {
-        var ytelse = TestUtils.minimumEndringssøknad(new Periode(LocalDate.now().minusMonths(1), LocalDate.now().plusMonths(1)))
-                .medOmsorg(new Omsorg().medRelasjonTilBarnet(Omsorg.BarnRelasjon.MOR).medBeskrivelseAvOmsorgsrollen(TestUtils.testTekst()));
-        var feil = valider(ytelse);
-        assertThat(feil.size()).isEqualTo(1);
-        assertThat(feil.get(0).getFeilkode()).isEqualTo("IllegalArgumentException");
-    }
-
     @Test
     public void endringssøknadUtenFeil() {
         var endringsperiode = new Periode(LocalDate.now().minusMonths(1), LocalDate.now().plusMonths(1));

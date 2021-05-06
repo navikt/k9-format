@@ -2,11 +2,15 @@ package no.nav.k9.søknad;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -18,10 +22,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
+import no.nav.k9.søknad.felles.type.Journalpost;
 import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.felles.type.Språk;
 import no.nav.k9.søknad.felles.type.SøknadId;
 import no.nav.k9.søknad.ytelse.Ytelse;
+import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -51,6 +57,11 @@ public class Søknad implements Innsending {
     @Valid
     @JsonProperty(value = "språk", required = false)
     private Språk språk = Språk.NORSK_BOKMÅL;
+
+    @Valid
+    @Size(max=1000)
+    @JsonProperty(value = "journalposter")
+    private List<Journalpost> journalposter = new ArrayList<>();
 
     @JsonManagedReference
     @Valid
@@ -167,6 +178,20 @@ public class Søknad implements Innsending {
 
     public void setSøker(Søker søker) {
         this.søker = søker;
+    }
+
+    public List<Journalpost> getJournalposter() {
+        return journalposter;
+    }
+
+    public Søknad medJournalpost(Journalpost journalpost) {
+        this.journalposter.add(Objects.requireNonNull(journalpost, "journalpost"));
+        return this;
+    }
+
+    public Søknad medJournalposter(List<Journalpost> journalposter) {
+        this.journalposter.addAll(Objects.requireNonNull(journalposter, "journalposter"));
+        return this;
     }
 
     @SuppressWarnings("unchecked")

@@ -5,6 +5,10 @@
   "søker": {
     "norskIdentitetsnummer": "11111111111"
   },
+  "journalposter" : [ {
+    "inneholderInfomasjonSomIkkeKanPunsjes" : false,
+    "journalpostId" : "sajhdasd83724234"
+  } ],
   "ytelse": {
     "type" : "PLEIEPENGER_SYKT_BARN",
     "søknadsperiode" : [ "2018-12-30/2019-10-20" ],
@@ -16,10 +20,9 @@
       "harMedsøker" : false,
       "bekrefterPeriodeOver8Uker" : true
     },
-    "journalposter" : [ {
-      "inneholderInfomasjonSomIkkeKanPunsjes" : false,
-      "journalpostId" : "sajhdasd83724234"
-    } ],
+    "infoFraPunsj" : {
+      "søknadenInneholderInfomasjonSomIkkeKanPunsjes" : false
+    },
     "barn" : {
       "norskIdentitetsnummer" : "11111111111",
       "fødselsdato" : null
