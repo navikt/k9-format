@@ -23,7 +23,6 @@ import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
-import no.nav.k9.søknad.felles.type.Journalpost;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.ytelse.Ytelse;
@@ -127,12 +126,12 @@ public class PleiepengerSyktBarn implements Ytelse {
         final List<Periode> perioder = new ArrayList<>(søknadsperiode);
         perioder.addAll(endringsperiode);
 
-        final var fom = søknadsperiode
+        final var fom = perioder
                 .stream()
                 .map(Periode::getFraOgMed)
                 .min(LocalDate::compareTo)
                 .orElseThrow();
-        final var tom = søknadsperiode
+        final var tom = perioder
                 .stream()
                 .map(Periode::getTilOgMed)
                 .max(LocalDate::compareTo)
