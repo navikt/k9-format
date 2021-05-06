@@ -68,6 +68,13 @@ public class PleiepengerBarnSøknadValidatorTest {
     }
 
     @Test
+    public void komplettSøknadSkalIkkeHaFeil() {
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(3));
+        var psb = TestUtils.komplettYtelsePsb(søknadsperiode);
+        verifyIngenFeil(psb);
+    }
+
+    @Test
     public void minimumSøknadMedOmsorgNullPåFelterSkalIkkeHaValideringsfeil() {
         var psb = TestUtils.minimumSøknadPleiepengerSyktBarnMedDelperioder();
         psb.medOmsorg(new Omsorg().medBeskrivelseAvOmsorgsrollen(null).medRelasjonTilBarnet(null));
@@ -89,16 +96,6 @@ public class PleiepengerBarnSøknadValidatorTest {
         verifyHarFeil(ytelse);
     }
 
-    @Disabled //Disabled siden det er usikkert om dette er et krav
-    @Test
-    public void måVæreSøknadHvisDetErInfoOmOmsorg() {
-        var ytelse = TestUtils.minimumEndringssøknad(new Periode(LocalDate.now().minusMonths(1), LocalDate.now().plusMonths(1)))
-                .medOmsorg(new Omsorg().medRelasjonTilBarnet(Omsorg.BarnRelasjon.MOR).medBeskrivelseAvOmsorgsrollen(TestUtils.testTekst()));
-        var feil = valider(ytelse);
-        assertThat(feil.size()).isEqualTo(1);
-        assertThat(feil.get(0).getFeilkode()).isEqualTo("IllegalArgumentException");
-    }
-
     @Test
     public void endringssøknadUtenFeil() {
         var endringsperiode = new Periode(LocalDate.now().minusMonths(1), LocalDate.now().plusMonths(1));
@@ -117,6 +114,7 @@ public class PleiepengerBarnSøknadValidatorTest {
         verifyIngenFeil(endringssøknad);
 
     }
+
     @Test
     public void søknadOgEndringMedFeil() {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));

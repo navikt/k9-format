@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.TreeMap;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -23,6 +22,7 @@ import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
+import no.nav.k9.søknad.felles.type.Journalpost;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.ytelse.Ytelse;
@@ -152,16 +152,12 @@ public class PleiepengerSyktBarn implements Ytelse {
     }
 
     public PleiepengerSyktBarn medSøknadsperiode(List<Periode> søknadsperiodeList) {
-        if (this.søknadsperiode == null)
-            this.søknadsperiode = new ArrayList<>();
-        this.søknadsperiode.addAll(søknadsperiodeList);
+        this.søknadsperiode.addAll(Objects.requireNonNull(søknadsperiodeList, "søknadsperiodeList"));
         return this;
     }
 
     public PleiepengerSyktBarn medSøknadsperiode(Periode søknadsperiode) {
-        if (this.søknadsperiode == null)
-            this.søknadsperiode = new ArrayList<>();
-        this.søknadsperiode.add(søknadsperiode);
+        this.søknadsperiode.add(Objects.requireNonNull(søknadsperiode, "søknadsperiode"));
         return this;
     }
 

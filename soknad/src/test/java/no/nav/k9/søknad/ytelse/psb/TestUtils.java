@@ -8,10 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.Søknad;
-import no.nav.k9.søknad.ytelse.psb.v1.InfoFraPunsj;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
@@ -19,9 +16,10 @@ import no.nav.k9.søknad.felles.type.Landkode;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.psb.v1.Beredskap;
 import no.nav.k9.søknad.ytelse.psb.v1.DataBruktTilUtledning;
+import no.nav.k9.søknad.felles.type.Journalpost;
+import no.nav.k9.søknad.ytelse.psb.v1.InfoFraPunsj;
 import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie;
 import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie.LovbestemtFeriePeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.Nattevåk;
@@ -29,6 +27,7 @@ import no.nav.k9.søknad.ytelse.psb.v1.Omsorg;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
 import no.nav.k9.søknad.ytelse.psb.v1.Uttak;
 import no.nav.k9.søknad.ytelse.psb.v1.UttakPeriodeInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
@@ -144,7 +143,8 @@ final class TestUtils {
         var søknadInfo = new DataBruktTilUtledning( true, true,
                 false, false, true );
 
-        var infoFraPunsj = new InfoFraPunsj().medSøknadenInneholderInfomasjonSomIkkeKanPunsjes(false);
+        var infoFraPunsj = new InfoFraPunsj()
+                .medSøknadenInneholderInfomasjonSomIkkeKanPunsjes(false);
 
         return new PleiepengerSyktBarn()
                 .medSøknadsperiode(søknadsperiode)
@@ -233,6 +233,10 @@ final class TestUtils {
 
     static String testTekst() {
         return "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+    }
+
+    static String journalpostId() {
+        return "sajhdasd83724234";
     }
 
 }
