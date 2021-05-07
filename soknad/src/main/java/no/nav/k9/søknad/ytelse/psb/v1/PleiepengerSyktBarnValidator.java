@@ -110,8 +110,12 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
 
     private void validerArbeidstid(Arbeidstid arbeidstid, TidsserieValidator.Perioder søknadsperiode, List<Feil> feil) {
         validerArbeidstaker(arbeidstid.getArbeidstakerList(), søknadsperiode, feil);
-        validerFrilanser(arbeidstid.getFrilanserArbeidstidInfo(), søknadsperiode, feil);
-        validerSelvstendigNæringsdrivende(arbeidstid.getSelvstendigNæringsdrivendeArbeidstidInfo(), søknadsperiode, feil);
+        if (arbeidstid.getFrilanserArbeidstidInfo().isPresent()) {
+            validerFrilanser(arbeidstid.getFrilanserArbeidstidInfo().get(), søknadsperiode, feil);
+        }
+        if (arbeidstid.getSelvstendigNæringsdrivendeArbeidstidInfo().isPresent()) {
+            validerSelvstendigNæringsdrivende(arbeidstid.getSelvstendigNæringsdrivendeArbeidstidInfo().get(), søknadsperiode, feil);
+        }
     }
 
     private void validerArbeidstaker(List<Arbeidstaker> arbeidstakerList, TidsserieValidator.Perioder søknadsperiode, List<Feil> feil) {
@@ -127,9 +131,6 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
     }
 
     private void validerFrilanser(ArbeidstidInfo frilanser, TidsserieValidator.Perioder søknadsperiode, List<Feil> feil) {
-        if (frilanser == null) {
-            return;
-        }
         finnIkkeKomplettePerioderOgPerioderUtenfor(
                 toLocalDateTimeline(frilanser.getPerioder()),
                 søknadsperiode)
@@ -137,9 +138,6 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
     }
 
     private void validerSelvstendigNæringsdrivende(ArbeidstidInfo selvstendigNæringsdrivende, TidsserieValidator.Perioder søknadsperiode, List<Feil> feil) {
-        if (selvstendigNæringsdrivende == null) {
-            return;
-        }
         finnIkkeKomplettePerioderOgPerioderUtenfor(
                 toLocalDateTimeline(selvstendigNæringsdrivende.getPerioder()),
                 søknadsperiode)

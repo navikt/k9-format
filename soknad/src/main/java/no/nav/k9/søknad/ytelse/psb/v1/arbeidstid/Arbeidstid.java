@@ -53,8 +53,8 @@ public class Arbeidstid {
         return this;
     }
 
-    public ArbeidstidInfo getFrilanserArbeidstidInfo() {
-        return frilanserArbeidstidInfo;
+    public Optional<ArbeidstidInfo> getFrilanserArbeidstidInfo() {
+        return Optional.ofNullable(frilanserArbeidstidInfo);
     }
 
     public Arbeidstid medFrilanserArbeidstid(ArbeidstidInfo frilanserArbeidstidInfo) {
@@ -62,8 +62,8 @@ public class Arbeidstid {
         return this;
     }
 
-    public ArbeidstidInfo getSelvstendigNæringsdrivendeArbeidstidInfo() {
-        return selvstendigNæringsdrivendeArbeidstidInfo;
+    public Optional<ArbeidstidInfo> getSelvstendigNæringsdrivendeArbeidstidInfo() {
+        return Optional.ofNullable(selvstendigNæringsdrivendeArbeidstidInfo);
     }
 
     public Arbeidstid medSelvstendigNæringsdrivendeArbeidstidInfo(ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo) {
