@@ -28,6 +28,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -297,7 +298,36 @@ public class PleiepengerBarnSøknadValidatorTest {
     }
 
     @Test
-    public void ÅpneOgOverlappendePerioderForFrilanserOgSelvstendig() {
+    public void søknadsperiodeInneholderÅpnePerioder() {
+        var søknadsperiode = new Periode(LocalDate.now(), null);
+        var psb = TestUtils.minimumSøknadPleiepengerSyktBarn(søknadsperiode);
+        try {
+            final List<Feil> feil = valider(psb);
+            assertThat(feil).isEmpty();
+        } catch (NullPointerException e) {
+            var feil = new ArrayList<>();
+            feil.add(new Feil("søknad", "NullPointerException", "Null"));
+            assertThat(feil).isNotEmpty();
+        }
+    }
+
+    @Test
+    public void tilsynnInneholderÅpnePerioder() {
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
+        var psb = TestUtils.minimumSøknadPleiepengerSyktBarn(søknadsperiode);
+        psb.medTilsynsordning(new Tilsynsordning().medPerioder(Map.of(new Periode(LocalDate.now(), null), new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7)))));
+        try {
+            final List<Feil> feil = valider(psb);
+            assertThat(feil).isEmpty();
+        } catch (NullPointerException e) {
+            var feil = new ArrayList<>();
+            feil.add(new Feil("søknad", "NullPointerException", "Null"));
+            assertThat(feil).isNotEmpty();
+        }
+    }
+
+    @Test
+    public void åpneOgOverlappendePerioderForFrilanserOgSelvstendig() {
         var søknad = TestUtils.komplettYtelsePsbMedDelperioder();
         var selvstendig = SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
                 .virksomhetstyper(List.of(VirksomhetType.ANNEN)).build();
