@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class TidsserieValidator {
@@ -54,7 +55,13 @@ public class TidsserieValidator {
         }
 
         public static LocalDateTimeline<Boolean> toLocalDateTimeline(List<Periode> perioder) throws IllegalArgumentException{
-            return new LocalDateTimeline<Boolean>(perioder.stream().map(p -> new LocalDateSegment<Boolean>(p.getFraOgMed(), p.getTilOgMed(), true)).collect(Collectors.toList())).compress();
+            return new LocalDateTimeline<Boolean>(perioder
+                    .stream()
+                    .map(p -> new LocalDateSegment<Boolean>(
+                            Objects.requireNonNull(p.getFraOgMed()),
+                            Objects.requireNonNull(p.getTilOgMed()),
+                            true))
+                    .collect(Collectors.toList())).compress();
         }
 
         public static LocalDateTimeline<Boolean> toLocalDateTimeline(Map<Periode, ?> periodeMap) {
