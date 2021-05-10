@@ -7,6 +7,7 @@
   },
   "journalposter" : [ {
     "inneholderInfomasjonSomIkkeKanPunsjes" : false,
+    "inneholderMedisinskeOpplysninger" : false,
     "journalpostId" : "sajhdasd83724234"
   } ],
   "ytelse": {
@@ -21,7 +22,8 @@
       "bekrefterPeriodeOver8Uker" : true
     },
     "infoFraPunsj" : {
-      "søknadenInneholderInfomasjonSomIkkeKanPunsjes" : false
+      "søknadenInneholderInfomasjonSomIkkeKanPunsjes" : false,
+      "inneholderMedisinskeOpplysninger" : false
     },
     "barn" : {
       "norskIdentitetsnummer" : "11111111111",

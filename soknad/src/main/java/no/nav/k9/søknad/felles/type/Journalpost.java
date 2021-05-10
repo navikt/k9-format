@@ -21,6 +21,10 @@ public class Journalpost {
     @Valid
     private Boolean inneholderInfomasjonSomIkkeKanPunsjes;
 
+    @JsonProperty(value = "inneholderMedisinskeOpplysninger")
+    @Valid
+    private Boolean inneholderMedisinskeOpplysninger;
+
     @JsonProperty(value = "journalpostId", required = true)
     @NotNull
     @Size(max = 50, min = 3)
@@ -36,6 +40,15 @@ public class Journalpost {
 
     public Journalpost medInfomasjonSomIkkeKanPunsjes(Boolean søknadenInneholderInfomasjonSomIkkeKanPunsjes) {
         this.inneholderInfomasjonSomIkkeKanPunsjes = søknadenInneholderInfomasjonSomIkkeKanPunsjes;
+        return this;
+    }
+
+    public Boolean getInneholderMedisinskeOpplysninger() {
+        return inneholderMedisinskeOpplysninger;
+    }
+
+    public Journalpost medInneholderMedisinskeOpplysninger(Boolean inneholderMedisinskeOpplysninger) {
+        this.inneholderMedisinskeOpplysninger = inneholderMedisinskeOpplysninger;
         return this;
     }
 
