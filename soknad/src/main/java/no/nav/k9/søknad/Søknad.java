@@ -31,7 +31,7 @@ import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-public class Søknad implements Innsending {
+public class Søknad<Y extends Ytelse> implements Innsending {
 
     @Valid
     @NotNull
@@ -67,7 +67,7 @@ public class Søknad implements Innsending {
     @Valid
     @NotNull
     @JsonProperty(value = "ytelse", required = true)
-    private Ytelse ytelse;
+    private Y ytelse;
 
     public Søknad() {
         //
@@ -79,7 +79,7 @@ public class Søknad implements Innsending {
                   @JsonProperty(value = "mottattDato", required = true) @Valid @NotNull ZonedDateTime mottattDato,
                   @JsonProperty(value = "søker", required = true) @Valid @NotNull Søker søker,
                   @JsonProperty(value = "språk", required = false) @Valid Språk språk,
-                  @JsonProperty(value = "ytelse", required = true) @Valid @NotNull Ytelse ytelse) {
+                  @JsonProperty(value = "ytelse", required = true) @Valid @NotNull Y ytelse) {
         this.søknadId = søknadId;
         this.versjon = versjon;
         this.mottattDato = mottattDato;
@@ -92,7 +92,7 @@ public class Søknad implements Innsending {
                   @JsonProperty(value = "versjon", required = true) @Valid @NotNull Versjon versjon,
                   @JsonProperty(value = "mottattDato", required = true) @Valid @NotNull ZonedDateTime mottattDato,
                   @JsonProperty(value = "søker", required = true) @Valid @NotNull Søker søker,
-                  @JsonProperty(value = "ytelse", required = true) @Valid @NotNull Ytelse ytelse) {
+                  @JsonProperty(value = "ytelse", required = true) @Valid @NotNull Y ytelse) {
         this(søknadId, versjon, mottattDato, søker, Språk.NORSK_BOKMÅL, ytelse);
     }
 
@@ -162,7 +162,7 @@ public class Søknad implements Innsending {
         return this;
     }
 
-    public Søknad medYtelse(Ytelse ytelse) {
+    public Søknad medYtelse(Y ytelse) {
         this.ytelse = ytelse;
         return this;
     }
@@ -199,7 +199,7 @@ public class Søknad implements Innsending {
         return (Y) ytelse;
     }
 
-    public void setYtelse(Ytelse ytelse) {
+    public void setYtelse (Y ytelse) {
         this.ytelse = ytelse;
     }
 
