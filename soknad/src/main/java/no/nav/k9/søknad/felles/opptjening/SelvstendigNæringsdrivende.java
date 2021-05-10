@@ -131,7 +131,6 @@ public class SelvstendigNæringsdrivende {
         private final String regnskapsførerNavn;
 
         @JsonProperty("regnskapsførerTlf")
-        @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message = "'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
         private final String regnskapsførerTlf;
 
         @JsonProperty("erVarigEndring")
