@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -27,7 +26,6 @@ import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.felles.type.Språk;
 import no.nav.k9.søknad.felles.type.SøknadId;
 import no.nav.k9.søknad.ytelse.Ytelse;
-import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -127,42 +125,42 @@ public class Søknad<Y extends Ytelse> implements Innsending {
         this.mottattDato = mottattDato;
     }
 
-    public Søknad medMottattDato(ZonedDateTime mottattDato) {
+    public Søknad<Y> medMottattDato(ZonedDateTime mottattDato) {
         this.mottattDato = mottattDato;
         return this;
     }
 
-    public Søknad medSpråk(Språk språk) {
+    public Søknad<Y> medSpråk(Språk språk) {
         this.språk = språk;
         return this;
     }
 
-    public Søknad medSøknadId(String søknadId) {
+    public Søknad<Y> medSøknadId(String søknadId) {
         this.søknadId = new SøknadId(søknadId);
         return this;
     }
 
-    public Søknad medSøknadId(SøknadId søknadId) {
+    public Søknad<Y> medSøknadId(SøknadId søknadId) {
         this.søknadId = søknadId;
         return this;
     }
 
-    public Søknad medVersjon(String versjon) {
+    public Søknad<Y> medVersjon(String versjon) {
         this.versjon = new Versjon(versjon);
         return this;
     }
 
-    public Søknad medVersjon(Versjon versjon) {
+    public Søknad<Y> medVersjon(Versjon versjon) {
         this.versjon = versjon;
         return this;
     }
 
-    public Søknad medSøker(Søker søker) {
+    public Søknad<Y> medSøker(Søker søker) {
         this.søker = søker;
         return this;
     }
 
-    public Søknad medYtelse(Y ytelse) {
+    public Søknad<Y> medYtelse(Y ytelse) {
         this.ytelse = ytelse;
         return this;
     }
@@ -184,19 +182,19 @@ public class Søknad<Y extends Ytelse> implements Innsending {
         return journalposter;
     }
 
-    public Søknad medJournalpost(Journalpost journalpost) {
+    public Søknad<Y> medJournalpost(Journalpost journalpost) {
         this.journalposter.add(Objects.requireNonNull(journalpost, "journalpost"));
         return this;
     }
 
-    public Søknad medJournalposter(List<Journalpost> journalposter) {
+    public Søknad<Y> medJournalposter(List<Journalpost> journalposter) {
         this.journalposter.addAll(Objects.requireNonNull(journalposter, "journalposter"));
         return this;
     }
 
     @SuppressWarnings("unchecked")
-    public <Y extends Ytelse> Y getYtelse() {
-        return (Y) ytelse;
+    public Y getYtelse() {
+        return ytelse;
     }
 
     public void setYtelse (Y ytelse) {
@@ -207,15 +205,15 @@ public class Søknad<Y extends Ytelse> implements Innsending {
         private SerDes() {
         }
 
-        public static String serialize(Søknad søknad) {
+        public static String serialize(Søknad<?> søknad) {
             return JsonUtils.toString(søknad);
         }
 
-        public static Søknad deserialize(String søknad) {
+        public static Søknad<?> deserialize(String søknad) {
             return JsonUtils.fromString(søknad, Søknad.class);
         }
 
-        public static Søknad deserialize(ObjectNode node) {
+        public static Søknad<?> deserialize(ObjectNode node) {
             try {
                 return JsonUtils.getObjectMapper().treeToValue(node, Søknad.class);
             } catch (IOException e) {

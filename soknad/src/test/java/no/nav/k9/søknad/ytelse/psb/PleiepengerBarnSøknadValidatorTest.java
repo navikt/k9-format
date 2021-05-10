@@ -361,7 +361,7 @@ public class PleiepengerBarnSøknadValidatorTest {
         assertThat(feil).isEmpty();
     }
 
-    private void verifyIngenFeil(Søknad søknad) {
+    private void verifyIngenFeil(Søknad<?> søknad) {
         final List<Feil> feil = validator.valider(søknad.getYtelse());
         assertThat(feil).isEmpty();
     }
