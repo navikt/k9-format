@@ -32,13 +32,19 @@ public class Barn implements Person {
 
     @JsonCreator
     public Barn(
-                @JsonProperty("norskIdentitetsnummer") @JsonAlias({ "fødselsnummer", "norskIdentifikator", "identitetsnummer", "fnr" }) NorskIdentitetsnummer norskIdentitetsnummer,
+                @JsonProperty("norskIdentitetsnummer") @JsonAlias({ "fødselsnummer", "norskIdentifikator", "identitetsnummer",
+                        "fnr" }) NorskIdentitetsnummer norskIdentitetsnummer,
                 @JsonProperty("fødselsdato") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Oslo") LocalDate fødselsdato) {
         this.norskIdentitetsnummer = norskIdentitetsnummer;
         this.fødselsdato = fødselsdato;
     }
 
-    @AssertTrue(message = "norskIdentitetsnummer og fødselsdato må være satt")
+    public Barn(NorskIdentitetsnummer norskIdentitetsnummer) {
+        this.norskIdentitetsnummer = Objects.requireNonNull(norskIdentitetsnummer);
+        this.fødselsdato = null;
+    }
+
+    @AssertTrue(message = "norskIdentitetsnummer eller fødselsdato må være satt")
     private boolean isOk() {
         return (norskIdentitetsnummer != null && norskIdentitetsnummer.getVerdi() != null)
             || (fødselsdato != null);
