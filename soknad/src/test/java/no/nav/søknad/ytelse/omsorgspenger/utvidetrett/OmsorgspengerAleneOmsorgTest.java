@@ -18,14 +18,13 @@ import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
+import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.SøknadId;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
-import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.AnnenForelder;
-import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.AnnenForelder.SituasjonType;
-import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerMidlertidigAlene;
+import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerAleneOmsorg;
 
-public class OmsorgspengerMidlertidigAleneValidatorTest {
-    private static final YtelseValidator validator = new OmsorgspengerMidlertidigAlene.MinValidator();
+public class OmsorgspengerAleneOmsorgTest {
+    private static final YtelseValidator validator = new OmsorgspengerAleneOmsorg.MinValidator();
 
     @Test
     void komplettSøknadSkalIkkeHaValideringsfeil() {
@@ -64,18 +63,13 @@ public class OmsorgspengerMidlertidigAleneValidatorTest {
         }
 
         static Søknad komplettSøknad() {
-            return Søknad.SerDes.deserialize(jsonFromFile("komplett-søknad-midlertidig-alene.json"));
+            return Søknad.SerDes.deserialize(jsonFromFile("komplett-søknad-alene-omsorg.json"));
         }
 
-        static OmsorgspengerMidlertidigAlene komplettBuilder() {
-
+        static OmsorgspengerAleneOmsorg komplettBuilder() {
             var barn = new Barn(NorskIdentitetsnummer.of("11111111111"));
-
-            var annenForelder = new AnnenForelder(NorskIdentitetsnummer.of("21111111111"))
-                .medSituasjon(SituasjonType.ANNET, "en annen årsak")
-                .medPeriode(LocalDate.parse("2021-01-01"), LocalDate.parse("2021-07-01"));
-
-            return new OmsorgspengerMidlertidigAlene(List.of(barn), annenForelder, "ok");
+            var periode = new Periode(LocalDate.parse("2021-01-01"), null);
+            return new OmsorgspengerAleneOmsorg(barn, periode, "ok");
         }
 
     }

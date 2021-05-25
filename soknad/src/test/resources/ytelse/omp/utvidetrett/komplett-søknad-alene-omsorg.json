@@ -1,0 +1,16 @@
+{
+  "søknadId" : "123",
+  "versjon" : "0.1",
+  "mottattDato" : "2021-02-01T09:50:50.470Z",
+  "søker" : {
+    "norskIdentitetsnummer" : "123"
+  },
+  "språk" : "nb",
+  "ytelse" : {
+    "type" : "OMP_UTV_AO",
+    "barn" : {
+      "norskIdentitetsnummer" : "11111111111"
+    },
+    "periode" : "2021-01-01/.."
+  }
+}

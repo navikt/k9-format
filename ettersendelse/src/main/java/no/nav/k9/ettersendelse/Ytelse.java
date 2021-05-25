@@ -15,7 +15,11 @@ public enum Ytelse {
     
     /** Omsorgspenger utvidet rett - midlertidig alene. */
     OMP_UTV_MA,
+    
+    /** Omsorgspenger alene om omsorg. */
+    OMP_UTV_AO,
 
     /** Omsorgspenger dele omsorgsdager*/
-    OMP_DELE_DAGER
+    OMP_DELE_DAGER,
+    ;
 }
