@@ -29,7 +29,7 @@ public class OmsorgspengerAleneOmsorg implements OmsorgspengerUtvidetRett {
     @NotNull
     private Barn barn;
 
-    /** Periode alene om omsorgen.  Evt. <code>[startdato, ]</code> eller <code>( ,sluttdato]</code> */
+    /** Periode alene om omsorgen.  Evt. <code>[startdato, )</code> eller <code>( ,sluttdato]</code> */
     @Valid
     @JsonProperty(value = "periode")
     @NotNull
