@@ -31,6 +31,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -301,14 +302,8 @@ public class PleiepengerBarnSøknadValidatorTest {
     public void søknadsperiodeInneholderÅpnePerioder() {
         var søknadsperiode = new Periode(LocalDate.now(), null);
         var psb = TestUtils.minimumSøknadPleiepengerSyktBarn(søknadsperiode);
-        try {
-            final List<Feil> feil = valider(psb);
-            assertThat(feil).isEmpty();
-        } catch (NullPointerException e) {
-            var feil = new ArrayList<>();
-            feil.add(new Feil("søknad", "NullPointerException", "Null"));
-            assertThat(feil).isNotEmpty();
-        }
+        var feil = verifyHarFeil(psb);
+        feilInneholderFeilkode(feil, "NullPointerException");
     }
 
     @Test
@@ -316,14 +311,8 @@ public class PleiepengerBarnSøknadValidatorTest {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
         var psb = TestUtils.minimumSøknadPleiepengerSyktBarn(søknadsperiode);
         psb.medTilsynsordning(new Tilsynsordning().medPerioder(Map.of(new Periode(LocalDate.now(), null), new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7)))));
-        try {
-            final List<Feil> feil = valider(psb);
-            assertThat(feil).isEmpty();
-        } catch (NullPointerException e) {
-            var feil = new ArrayList<>();
-            feil.add(new Feil("søknad", "NullPointerException", "Null"));
-            assertThat(feil).isNotEmpty();
-        }
+        var feil = verifyHarFeil(psb);
+        feilInneholderFeilkode(feil, "NullPointerException");
     }
 
     @Test
@@ -348,6 +337,14 @@ public class PleiepengerBarnSøknadValidatorTest {
                 ).build();
         søknad.medOpptjeningAktivitet(arbeidAktivitet);
         verifyIngenFeil(søknad);
+    }
+
+    private void feilInneholderFeilkode(List<Feil> feil, String feilkode) {
+        assertThat(feil
+                .stream()
+                .filter(f -> f.getFeilkode().equals(feilkode))
+                .collect(Collectors.toList())
+        ).isNotEmpty();
     }
 
     private List<Feil> verifyHarFeil(PleiepengerSyktBarn ytelse) {

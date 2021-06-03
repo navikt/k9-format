@@ -54,9 +54,10 @@ public class TidsserieValidator {
             return t.stream().map(l -> new Periode(l.getFom(), l.getTom())).collect(Collectors.toList());
         }
 
-        public static LocalDateTimeline<Boolean> toLocalDateTimeline(List<Periode> perioder) throws IllegalArgumentException{
+        public static LocalDateTimeline<Boolean> toLocalDateTimeline(List<Periode> perioder, String felt, List<Feil> feil) throws IllegalArgumentException{
             return new LocalDateTimeline<Boolean>(perioder
                     .stream()
+                    .filter(p -> validerPeriode(p, felt, feil))
                     .map(p -> new LocalDateSegment<Boolean>(
                             Objects.requireNonNull(p.getFraOgMed()),
                             Objects.requireNonNull(p.getTilOgMed()),
@@ -64,8 +65,16 @@ public class TidsserieValidator {
                     .collect(Collectors.toList())).compress();
         }
 
-        public static LocalDateTimeline<Boolean> toLocalDateTimeline(Map<Periode, ?> periodeMap) {
-            return toLocalDateTimeline(new ArrayList<>(periodeMap.keySet()));
+        private static Boolean validerPeriode(Periode periode, String felt, List<Feil> feil) {
+            if (periode.getTilOgMed() != null && periode.getFraOgMed() != null) {
+                return true;
+            }
+            feil.add(new Feil (felt, "NullPointerException", "Null"));
+            return false;
+        }
+
+        public static LocalDateTimeline<Boolean> toLocalDateTimeline(Map<Periode, ?> periodeMap, String felt, List<Feil> feil) {
+            return toLocalDateTimeline(new ArrayList<>(periodeMap.keySet()), felt, feil);
         }
     }
 
@@ -73,9 +82,9 @@ public class TidsserieValidator {
         private final LocalDateTimeline<Boolean> søknadsperiode;
         private final LocalDateTimeline<Boolean> gyldigInterval;
 
-        public Perioder(List<Periode> søknadsperiode, List<Periode> endringsperiode) {
-            this.søknadsperiode = TidsserieUtils.toLocalDateTimeline(søknadsperiode);
-            this.gyldigInterval = this.søknadsperiode.union(TidsserieUtils.toLocalDateTimeline(endringsperiode), StandardCombinators::coalesceLeftHandSide);
+        public Perioder(List<Periode> søknadsperiode, List<Periode> endringsperiode, List<Feil> feil) {
+            this.søknadsperiode = TidsserieUtils.toLocalDateTimeline(søknadsperiode, "Søknadsperiode.periode", feil);
+            this.gyldigInterval = this.søknadsperiode.union(TidsserieUtils.toLocalDateTimeline(endringsperiode, "Endringsperiode.periode", feil), StandardCombinators::coalesceLeftHandSide);
         }
 
         public LocalDateTimeline<Boolean> getSøknadsperiode() {
