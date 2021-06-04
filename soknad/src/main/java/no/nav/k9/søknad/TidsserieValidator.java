@@ -1,5 +1,6 @@
 package no.nav.k9.søknad;
 
+import no.nav.fpsak.tidsserie.LocalDateInterval;
 import no.nav.fpsak.tidsserie.LocalDateSegment;
 import no.nav.fpsak.tidsserie.LocalDateTimeline;
 import no.nav.fpsak.tidsserie.StandardCombinators;
@@ -12,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class TidsserieValidator {
@@ -57,20 +57,26 @@ public class TidsserieValidator {
         public static LocalDateTimeline<Boolean> toLocalDateTimeline(List<Periode> perioder, String felt, List<Feil> feil) throws IllegalArgumentException{
             return new LocalDateTimeline<Boolean>(perioder
                     .stream()
-                    .filter(p -> validerPeriode(p, felt, feil))
-                    .map(p -> new LocalDateSegment<Boolean>(
-                            Objects.requireNonNull(p.getFraOgMed()),
-                            Objects.requireNonNull(p.getTilOgMed()),
-                            true))
+                    .map(p -> mapLocalDateSegment(p, felt, feil))
                     .collect(Collectors.toList())).compress();
         }
 
-        private static Boolean validerPeriode(Periode periode, String felt, List<Feil> feil) {
-            if (periode.getTilOgMed() != null && periode.getFraOgMed() != null) {
-                return true;
+        private static LocalDateSegment<Boolean> mapLocalDateSegment(Periode periode, String felt, List<Feil> feil) {
+            validerPeriode(periode, felt, feil);
+            return new LocalDateSegment<Boolean>(
+                    periode.getFraOgMed(),
+                    periode.getTilOgMed(),
+                    true);
+        }
+
+        private static void validerPeriode(Periode periode, String felt, List<Feil> feil) {
+            if (periode.getTilOgMed() == null || periode.getFraOgMed() == null) {
+                feil.add(new Feil (felt, "NullPointerException", "Null"));
             }
-            feil.add(new Feil (felt, "NullPointerException", "Null"));
-            return false;
+            if(periode.getTilOgMed() == LocalDateInterval.TIDENES_BEGYNNELSE || periode.getFraOgMed() == LocalDateInterval.TIDENES_ENDE) {
+                feil.add(new Feil (felt, "IllegalArgumentException", "Illegal Argument"));
+
+            }
         }
 
         public static LocalDateTimeline<Boolean> toLocalDateTimeline(Map<Periode, ?> periodeMap, String felt, List<Feil> feil) {
