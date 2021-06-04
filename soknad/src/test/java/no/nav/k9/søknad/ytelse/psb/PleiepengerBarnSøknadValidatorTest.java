@@ -1,38 +1,40 @@
 package no.nav.k9.søknad.ytelse.psb;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.time.Duration;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.Test;
+
+import no.nav.fpsak.tidsserie.LocalDateInterval;
 import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.opptjening.*;
-import no.nav.k9.søknad.ytelse.psb.v1.Beredskap;
-import no.nav.k9.søknad.ytelse.psb.v1.Nattevåk;
-import no.nav.k9.søknad.ytelse.psb.v1.Omsorg;
-import no.nav.k9.søknad.ytelse.psb.v1.Uttak;
-import no.nav.k9.søknad.ytelse.psb.v1.UttakPeriodeInfo;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
+import no.nav.k9.søknad.felles.opptjening.Frilanser;
+import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
+import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.VirksomhetType;
+import no.nav.k9.søknad.ytelse.psb.v1.Beredskap;
+import no.nav.k9.søknad.ytelse.psb.v1.Nattevåk;
+import no.nav.k9.søknad.ytelse.psb.v1.Omsorg;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnValidator;
+import no.nav.k9.søknad.ytelse.psb.v1.Uttak;
+import no.nav.k9.søknad.ytelse.psb.v1.UttakPeriodeInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
-
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
-import java.time.Duration;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class PleiepengerBarnSøknadValidatorTest {
     private static final PleiepengerSyktBarnValidator validator = new PleiepengerSyktBarnValidator();
@@ -122,10 +124,6 @@ public class PleiepengerBarnSøknadValidatorTest {
         var endringsperiode = new Periode(LocalDate.now().minusMonths(2), LocalDate.now().minusDays(1));
         var periodeUtenfor = new Periode(endringsperiode.getFraOgMed().minusMonths(1), endringsperiode.getFraOgMed().minusDays(1));
 
-        var endringssøknad = TestUtils.minimumSøknadOgEndringsSøknad(søknadsperiode, periodeUtenfor)
-                .medEndringsperiode(endringsperiode);
-
-
         var ytelse = TestUtils.komplettYtelsePsb(søknadsperiode);
         ytelse.medUttak(new Uttak().medPerioder(Map.of(
                 periodeUtenfor, new UttakPeriodeInfo(Duration.ofHours(8)),
@@ -144,6 +142,8 @@ public class PleiepengerBarnSøknadValidatorTest {
 
         final List<Feil> feil = valider(ytelse);
         assertThat(feil).isNotEmpty();
+        feilInneholderFeilkode(feil, "ugyldigPeriode");
+        feilInneholderFeilkode(feil, "ikkeKomplettPeriode");
     }
 
     @Test
@@ -301,14 +301,8 @@ public class PleiepengerBarnSøknadValidatorTest {
     public void søknadsperiodeInneholderÅpnePerioder() {
         var søknadsperiode = new Periode(LocalDate.now(), null);
         var psb = TestUtils.minimumSøknadPleiepengerSyktBarn(søknadsperiode);
-        try {
-            final List<Feil> feil = valider(psb);
-            assertThat(feil).isEmpty();
-        } catch (NullPointerException e) {
-            var feil = new ArrayList<>();
-            feil.add(new Feil("søknad", "NullPointerException", "Null"));
-            assertThat(feil).isNotEmpty();
-        }
+        var feil = verifyHarFeil(psb);
+        feilInneholderFeilkode(feil, "NullPointerException");
     }
 
     @Test
@@ -316,14 +310,8 @@ public class PleiepengerBarnSøknadValidatorTest {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
         var psb = TestUtils.minimumSøknadPleiepengerSyktBarn(søknadsperiode);
         psb.medTilsynsordning(new Tilsynsordning().medPerioder(Map.of(new Periode(LocalDate.now(), null), new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7)))));
-        try {
-            final List<Feil> feil = valider(psb);
-            assertThat(feil).isEmpty();
-        } catch (NullPointerException e) {
-            var feil = new ArrayList<>();
-            feil.add(new Feil("søknad", "NullPointerException", "Null"));
-            assertThat(feil).isNotEmpty();
-        }
+        var feil = verifyHarFeil(psb);
+        feilInneholderFeilkode(feil, "NullPointerException");
     }
 
     @Test
@@ -348,6 +336,14 @@ public class PleiepengerBarnSøknadValidatorTest {
                 ).build();
         søknad.medOpptjeningAktivitet(arbeidAktivitet);
         verifyIngenFeil(søknad);
+    }
+
+    private void feilInneholderFeilkode(List<Feil> feil, String feilkode) {
+        assertThat(feil
+                .stream()
+                .filter(f -> f.getFeilkode().equals(feilkode))
+                .collect(Collectors.toList())
+        ).isNotEmpty();
     }
 
     private List<Feil> verifyHarFeil(PleiepengerSyktBarn ytelse) {

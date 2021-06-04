@@ -1,5 +1,6 @@
 package no.nav.k9.søknad;
 
+import no.nav.fpsak.tidsserie.LocalDateInterval;
 import no.nav.fpsak.tidsserie.LocalDateSegment;
 import no.nav.fpsak.tidsserie.LocalDateTimeline;
 import no.nav.fpsak.tidsserie.StandardCombinators;
@@ -12,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class TidsserieValidator {
@@ -54,18 +54,29 @@ public class TidsserieValidator {
             return t.stream().map(l -> new Periode(l.getFom(), l.getTom())).collect(Collectors.toList());
         }
 
-        public static LocalDateTimeline<Boolean> toLocalDateTimeline(List<Periode> perioder) throws IllegalArgumentException{
+        public static LocalDateTimeline<Boolean> toLocalDateTimeline(List<Periode> perioder, String felt, List<Feil> feil) throws IllegalArgumentException{
             return new LocalDateTimeline<Boolean>(perioder
                     .stream()
-                    .map(p -> new LocalDateSegment<Boolean>(
-                            Objects.requireNonNull(p.getFraOgMed()),
-                            Objects.requireNonNull(p.getTilOgMed()),
-                            true))
+                    .map(p -> mapLocalDateSegment(p, felt, feil))
                     .collect(Collectors.toList())).compress();
         }
 
-        public static LocalDateTimeline<Boolean> toLocalDateTimeline(Map<Periode, ?> periodeMap) {
-            return toLocalDateTimeline(new ArrayList<>(periodeMap.keySet()));
+        private static LocalDateSegment<Boolean> mapLocalDateSegment(Periode periode, String felt, List<Feil> feil) {
+            validerPeriode(periode, felt, feil);
+            return new LocalDateSegment<Boolean>(
+                    periode.getFraOgMed(),
+                    periode.getTilOgMed(),
+                    true);
+        }
+
+        private static void validerPeriode(Periode periode, String felt, List<Feil> feil) {
+            if (periode.getTilOgMed() == null || periode.getFraOgMed() == null) {
+                feil.add(new Feil (felt, "NullPointerException", "Null"));
+            }
+        }
+
+        public static LocalDateTimeline<Boolean> toLocalDateTimeline(Map<Periode, ?> periodeMap, String felt, List<Feil> feil) {
+            return toLocalDateTimeline(new ArrayList<>(periodeMap.keySet()), felt, feil);
         }
     }
 
@@ -73,9 +84,9 @@ public class TidsserieValidator {
         private final LocalDateTimeline<Boolean> søknadsperiode;
         private final LocalDateTimeline<Boolean> gyldigInterval;
 
-        public Perioder(List<Periode> søknadsperiode, List<Periode> endringsperiode) {
-            this.søknadsperiode = TidsserieUtils.toLocalDateTimeline(søknadsperiode);
-            this.gyldigInterval = this.søknadsperiode.union(TidsserieUtils.toLocalDateTimeline(endringsperiode), StandardCombinators::coalesceLeftHandSide);
+        public Perioder(List<Periode> søknadsperiode, List<Periode> endringsperiode, List<Feil> feil) {
+            this.søknadsperiode = TidsserieUtils.toLocalDateTimeline(søknadsperiode, "Søknadsperiode.periode", feil);
+            this.gyldigInterval = this.søknadsperiode.union(TidsserieUtils.toLocalDateTimeline(endringsperiode, "Endringsperiode.periode", feil), StandardCombinators::coalesceLeftHandSide);
         }
 
         public LocalDateTimeline<Boolean> getSøknadsperiode() {
