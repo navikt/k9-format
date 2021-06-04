@@ -73,10 +73,6 @@ public class TidsserieValidator {
             if (periode.getTilOgMed() == null || periode.getFraOgMed() == null) {
                 feil.add(new Feil (felt, "NullPointerException", "Null"));
             }
-            if(periode.getTilOgMed() == LocalDateInterval.TIDENES_BEGYNNELSE || periode.getFraOgMed() == LocalDateInterval.TIDENES_ENDE) {
-                feil.add(new Feil (felt, "IllegalArgumentException", "Illegal Argument"));
-
-            }
         }
 
         public static LocalDateTimeline<Boolean> toLocalDateTimeline(Map<Periode, ?> periodeMap, String felt, List<Feil> feil) {

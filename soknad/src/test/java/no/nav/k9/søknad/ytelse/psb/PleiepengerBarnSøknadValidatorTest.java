@@ -315,15 +315,6 @@ public class PleiepengerBarnSøknadValidatorTest {
     }
 
     @Test
-    public void tilsynnInneholderPeriodeMedUgyldigVerdi() {
-        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
-        var psb = TestUtils.minimumSøknadPleiepengerSyktBarn(søknadsperiode);
-        psb.medTilsynsordning(new Tilsynsordning().medPerioder(Map.of(new Periode(LocalDate.now(), LocalDateInterval.TIDENES_BEGYNNELSE), new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7)))));
-        var feil = verifyHarFeil(psb);
-        feilInneholderFeilkode(feil, "IllegalArgumentException");
-    }
-
-    @Test
     public void åpneOgOverlappendePerioderForFrilanserOgSelvstendig() {
         var søknad = TestUtils.komplettYtelsePsbMedDelperioder();
         var selvstendig = SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
