@@ -56,11 +56,9 @@ public class LovbestemtFerie {
             return this;
         }
 
-        public Boolean getSkalHaFerie() {
-            return skalHaFerie;
+        public Boolean isSkalHaFerie() {
+            return skalHaFerie == null || skalHaFerie;
         }
-
-
     }
 
 }
