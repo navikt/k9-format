@@ -12,6 +12,7 @@
 	<modules>
 		<module>soknad-omsorgspenger</module>
 		<module>soknad</module>
+		<module>inntektsmelding</module>
 		<module>soknad-omsorgspenger-utbetaling</module>
 		<module>soknad-frisinn</module>
 		<module>ettersendelse</module>

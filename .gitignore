@@ -7,3 +7,5 @@ target
 .classpath
 logs
 bin
+pom.xml.versionsBackup
+
