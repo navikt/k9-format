@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
-import no.nav.fpsak.tidsserie.LocalDateInterval;
 import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.ValideringsFeil;
