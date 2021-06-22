@@ -77,6 +77,9 @@ public class TidsserieValidator {
             if (periode.getTilOgMed() == null || periode.getFraOgMed() == null) {
                 feil.add(new Feil (felt, "NullPointerException", "Null"));
             }
+            if (periode.getTilOgMed().isBefore(periode.getFraOgMed()) ) {
+                feil.add(new Feil (felt, "IllegalArgumentException", "Til og med dato før fra og med dato: " + periode.getFraOgMed() + ">" + periode.getTilOgMed()));
+            }
         }
 
         public static LocalDateTimeline<Boolean> toLocalDateTimeline(Map<Periode, ?> periodeMap, String felt, List<Feil> feil) {
