@@ -1,23 +1,25 @@
 package no.nav.k9.søknad.ytelse.psb.v1;
 
-import no.nav.k9.søknad.TidsserieValidator;
-import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
-import no.nav.k9.søknad.ytelse.Ytelse;
-import no.nav.k9.søknad.ytelse.YtelseValidator;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
+import static no.nav.k9.søknad.TidsserieValidator.TidsserieUtils.toLocalDateTimeline;
+import static no.nav.k9.søknad.TidsserieValidator.finnIkkeKomplettePerioderOgPerioderUtenfor;
+import static no.nav.k9.søknad.TidsserieValidator.finnPerioderUtenfor;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
-import java.util.List;
-import java.util.stream.Collectors;
 
-import static no.nav.k9.søknad.TidsserieValidator.TidsserieUtils.toLocalDateTimeline;
-import static no.nav.k9.søknad.TidsserieValidator.finnIkkeKomplettePerioderOgPerioderUtenfor;
-import static no.nav.k9.søknad.TidsserieValidator.finnPerioderUtenfor;
+import no.nav.k9.søknad.PeriodeValidator;
+import no.nav.k9.søknad.TidsserieValidator;
+import no.nav.k9.søknad.felles.Feil;
+import no.nav.k9.søknad.ytelse.Ytelse;
+import no.nav.k9.søknad.ytelse.YtelseValidator;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
 
 public class PleiepengerSyktBarnValidator extends YtelseValidator {
 
@@ -32,24 +34,18 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
                 .map(this::toFeil)
                 .collect(Collectors.toList());
 
-        try {
-            var tidsserier = validerSøknadsOgEndringsPerioder(psb, feil);
+        var tidsserier = validerSøknadsOgEndringsPerioder(psb, feil);
+        validerBeredskap(psb.getBeredskap(), tidsserier, feil);
+        validerUttak(psb.getUttak(), tidsserier, feil);
+        validerNattevåk(psb.getNattevåk(), tidsserier, feil);
+        validerTilsynsordning(psb.getTilsynsordning(), tidsserier, feil);
+        validerLovbestemtFerie(psb.getLovbestemtFerie(), tidsserier, feil);
+        validerArbeidstid(psb.getArbeidstid(), tidsserier, feil);
 
-            validerBeredskap(psb.getBeredskap(), tidsserier, feil);
-            validerUttak(psb.getUttak(), tidsserier, feil);
-            validerNattevåk(psb.getNattevåk(), tidsserier, feil);
-            validerTilsynsordning(psb.getTilsynsordning(), tidsserier, feil);
-            validerLovbestemtFerie(psb.getLovbestemtFerie(), tidsserier, feil);
-            validerArbeidstid(psb.getArbeidstid(), tidsserier, feil);
-
-            //TODO valider OpptjeningAktivitet ??
-            //TODO valider Omsorg
-            //TODO valider Bosterder
-            //TODO valider Utlandsopphold
-
-        } catch (IllegalArgumentException e) {
-            feil.add(new Feil(e.getClass().getName(), "IllegalArgumentException", e.getMessage()));
-        }
+        //TODO valider OpptjeningAktivitet ??
+        //TODO valider Omsorg
+        //TODO valider Bosterder
+        //TODO valider Utlandsopphold
 
         validerKomplettSøknad(psb, feil);
         //TODO validere at felter som bare kan være i en søknad er satt hvis det er en søknadsperiode.
@@ -82,16 +78,17 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
     }
 
     private void validerBeredskap(Beredskap beredskap, TidsserieValidator.Perioder perioder, List<Feil> feil) {
-        finnPerioderUtenfor(
-                toLocalDateTimeline(beredskap.getPerioder(), "beredskap.periode", feil),
-                perioder)
-                .valider("beredskap", feil);
+        if ((new PeriodeValidator().validerIkkeTillattOverlapp(beredskap.getPerioder(), "beredskap.periode")).isEmpty()) {
+            finnPerioderUtenfor(
+                    toLocalDateTimeline(beredskap.getPerioder(), "beredskap.periode", feil), perioder)
+                    .valider("beredskap", feil);
+        }
+
     }
 
     private void validerUttak(Uttak uttak, TidsserieValidator.Perioder perioder, List<Feil> feil) {
         finnIkkeKomplettePerioderOgPerioderUtenfor(
-                toLocalDateTimeline(uttak.getPerioder(), "uttak.periode", feil),
-                perioder)
+                toLocalDateTimeline(uttak.getPerioder(), "uttak.periode", feil), perioder)
                 .valider("uttak", feil);
     }
 
@@ -103,8 +100,7 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
 
     private void validerNattevåk(Nattevåk nattevåk, TidsserieValidator.Perioder søknadsperiode, List<Feil> feil) {
         finnPerioderUtenfor(
-                toLocalDateTimeline(nattevåk.getPerioder(), "nattevåk.periode", feil),
-                søknadsperiode)
+                toLocalDateTimeline(nattevåk.getPerioder(), "nattevåk.periode", feil), søknadsperiode)
                 .valider("nattevåk", feil);
     }
 

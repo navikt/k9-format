@@ -1,12 +1,5 @@
 package no.nav.k9.søknad;
 
-import no.nav.fpsak.tidsserie.LocalDateInterval;
-import no.nav.fpsak.tidsserie.LocalDateSegment;
-import no.nav.fpsak.tidsserie.LocalDateTimeline;
-import no.nav.fpsak.tidsserie.StandardCombinators;
-import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.type.Periode;
-
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,6 +7,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import no.nav.fpsak.tidsserie.LocalDateSegment;
+import no.nav.fpsak.tidsserie.LocalDateTimeline;
+import no.nav.fpsak.tidsserie.StandardCombinators;
+import no.nav.k9.søknad.felles.Feil;
+import no.nav.k9.søknad.felles.type.Periode;
 
 public class TidsserieValidator {
 
@@ -24,11 +23,16 @@ public class TidsserieValidator {
     }
 
     private static List<Periode> getPerioderUtenforGyldigperiode(LocalDateTimeline<Boolean> test, Perioder perioder) {
+        if (test.isEmpty()) {
+            return Collections.emptyList();
+        }
         return TidsserieUtils.toPeriodeList(test.disjoint(perioder.gyldigInterval));
     }
 
     private static List<Periode> getPerioderSomIkkeOverlapperMedHovedperiode(LocalDateTimeline<Boolean> test, Perioder perioder) {
-
+        if (perioder.getSøknadsperiode().isEmpty()) {
+            return Collections.emptyList();
+        }
         return TidsserieUtils.toPeriodeList(perioder.søknadsperiode.disjoint(test));
     }
 
@@ -55,14 +59,20 @@ public class TidsserieValidator {
         }
 
         public static LocalDateTimeline<Boolean> toLocalDateTimeline(List<Periode> perioder, String felt, List<Feil> feil) throws IllegalArgumentException{
-            return new LocalDateTimeline<Boolean>(perioder
-                    .stream()
-                    .map(p -> mapLocalDateSegment(p, felt, feil))
-                    .collect(Collectors.toList())).compress();
+            perioder.forEach(p -> validerPeriode(p, felt, feil));
+            try {
+                return new LocalDateTimeline<Boolean>(perioder
+                        .stream()
+                        .map(TidsserieUtils::mapLocalDateSegment)
+                        .collect(Collectors.toList()))
+                        .compress();
+            } catch (IllegalArgumentException e) {
+                feil.add(new Feil(felt, "IllegalArgumentException", e.getMessage()));
+            }
+            return new LocalDateTimeline<>(Collections.emptyList());
         }
 
-        private static LocalDateSegment<Boolean> mapLocalDateSegment(Periode periode, String felt, List<Feil> feil) {
-            validerPeriode(periode, felt, feil);
+        private static LocalDateSegment<Boolean> mapLocalDateSegment(Periode periode) {
             return new LocalDateSegment<Boolean>(
                     periode.getFraOgMed(),
                     periode.getTilOgMed(),
@@ -72,9 +82,6 @@ public class TidsserieValidator {
         private static void validerPeriode(Periode periode, String felt, List<Feil> feil) {
             if (periode.getTilOgMed() == null || periode.getFraOgMed() == null) {
                 feil.add(new Feil (felt, "NullPointerException", "Null"));
-            }
-            if (periode.getTilOgMed().isBefore(periode.getFraOgMed()) ) {
-                feil.add(new Feil (felt, "IllegalArgumentException", "Til og med dato før fra og med dato: " + periode.getFraOgMed() + ">" + periode.getTilOgMed()));
             }
         }
 
