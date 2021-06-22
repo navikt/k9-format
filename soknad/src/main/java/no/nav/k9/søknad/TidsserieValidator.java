@@ -23,6 +23,9 @@ public class TidsserieValidator {
     }
 
     private static List<Periode> getPerioderUtenforGyldigperiode(LocalDateTimeline<Boolean> test, Perioder perioder) {
+        if (test.isEmpty()) {
+            return Collections.emptyList();
+        }
         return TidsserieUtils.toPeriodeList(test.disjoint(perioder.gyldigInterval));
     }
 
@@ -76,9 +79,6 @@ public class TidsserieValidator {
         private static void validerPeriode(Periode periode, String felt, List<Feil> feil) {
             if (periode.getTilOgMed() == null || periode.getFraOgMed() == null) {
                 feil.add(new Feil (felt, "NullPointerException", "Null"));
-            }
-            if (periode.getTilOgMed().isBefore(periode.getFraOgMed()) ) {
-                feil.add(new Feil (felt, "IllegalArgumentException", "Til og med dato før fra og med dato: " + periode.getFraOgMed() + ">" + periode.getTilOgMed()));
             }
         }
 

@@ -11,6 +11,18 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 
+import static no.nav.k9.søknad.TidsserieValidator.TidsserieUtils.toLocalDateTimeline;
+import static no.nav.k9.søknad.TidsserieValidator.finnIkkeKomplettePerioderOgPerioderUtenfor;
+import static no.nav.k9.søknad.TidsserieValidator.finnPerioderUtenfor;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.ValidatorFactory;
+
+import no.nav.k9.søknad.PeriodeValidator;
 import no.nav.k9.søknad.TidsserieValidator;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.ytelse.Ytelse;
@@ -80,6 +92,8 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
         finnPerioderUtenfor(
                 toLocalDateTimeline(beredskap.getPerioder(), "beredskap.periode", feil), perioder)
                 .valider("beredskap", feil);
+
+    }
 
     }
 
