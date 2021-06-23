@@ -23,9 +23,6 @@ public class TidsserieValidator {
     }
 
     private static List<Periode> getPerioderUtenforGyldigperiode(LocalDateTimeline<Boolean> test, Perioder perioder) {
-        if (test.isEmpty()) {
-            return Collections.emptyList();
-        }
         return TidsserieUtils.toPeriodeList(test.disjoint(perioder.gyldigInterval));
     }
 
