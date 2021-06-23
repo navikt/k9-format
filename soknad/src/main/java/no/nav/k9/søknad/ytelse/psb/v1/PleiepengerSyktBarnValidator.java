@@ -95,8 +95,6 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
 
     }
 
-    }
-
     private void validerUttak(Uttak uttak, TidsserieValidator.Perioder perioder, List<Feil> feil) {
         finnIkkeKomplettePerioderOgPerioderUtenfor(
                 toLocalDateTimeline(uttak.getPerioder(), "uttak.periode", feil), perioder)
