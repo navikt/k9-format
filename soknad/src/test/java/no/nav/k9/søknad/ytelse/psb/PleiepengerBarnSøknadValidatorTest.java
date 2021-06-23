@@ -337,6 +337,36 @@ public class PleiepengerBarnSøknadValidatorTest {
         verifyIngenFeil(søknad);
     }
 
+    @Test
+    public void feilISøknadsperidodeFomTom() {
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now());
+        var psb = TestUtils.komplettYtelsePsb(søknadsperiode);
+        psb.medSøknadsperiode(new Periode(LocalDate.now().plusDays(2), LocalDate.now()));
+
+        var feil = verifyHarFeil(psb);
+        assertThat(feil.size()).isEqualTo(7);
+    }
+
+    @Test
+    public void feilIEndringsperiodeFomTom() {
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now());
+        var psb = TestUtils.komplettYtelsePsb(søknadsperiode);
+        psb.medEndringsperiode(new Periode(LocalDate.now().plusDays(2), LocalDate.now()));
+
+        var feil = verifyHarFeil(psb);
+        assertThat(feil.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void feilIUttaksperidodeFomTom() {
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now());
+        var psb = TestUtils.komplettYtelsePsb(søknadsperiode);
+        psb.medUttak(new Uttak().medPerioder(Map.of(new Periode(LocalDate.now().plusDays(2), LocalDate.now()), new UttakPeriodeInfo(Duration.ofHours(8)))));
+
+        var feil = verifyHarFeil(psb);
+        assertThat(feil.size()).isEqualTo(2);
+    }
+
     private void feilInneholderFeilkode(List<Feil> feil, String feilkode) {
         assertThat(feil
                 .stream()
