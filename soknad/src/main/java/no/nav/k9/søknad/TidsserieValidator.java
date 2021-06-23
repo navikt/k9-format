@@ -23,16 +23,10 @@ public class TidsserieValidator {
     }
 
     private static List<Periode> getPerioderUtenforGyldigperiode(LocalDateTimeline<Boolean> test, Perioder perioder) {
-        if (test.isEmpty()) {
-            return Collections.emptyList();
-        }
         return TidsserieUtils.toPeriodeList(test.disjoint(perioder.gyldigInterval));
     }
 
     private static List<Periode> getPerioderSomIkkeOverlapperMedHovedperiode(LocalDateTimeline<Boolean> test, Perioder perioder) {
-        if (perioder.getSøknadsperiode().isEmpty()) {
-            return Collections.emptyList();
-        }
         return TidsserieUtils.toPeriodeList(perioder.søknadsperiode.disjoint(test));
     }
 
