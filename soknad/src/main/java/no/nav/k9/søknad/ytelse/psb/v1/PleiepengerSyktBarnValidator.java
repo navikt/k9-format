@@ -11,7 +11,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 
-import no.nav.k9.søknad.PeriodeValidator;
 import no.nav.k9.søknad.TidsserieValidator;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.ytelse.Ytelse;
@@ -78,11 +77,9 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
     }
 
     private void validerBeredskap(Beredskap beredskap, TidsserieValidator.Perioder perioder, List<Feil> feil) {
-        if ((new PeriodeValidator().validerIkkeTillattOverlapp(beredskap.getPerioder(), "beredskap.periode")).isEmpty()) {
-            finnPerioderUtenfor(
-                    toLocalDateTimeline(beredskap.getPerioder(), "beredskap.periode", feil), perioder)
-                    .valider("beredskap", feil);
-        }
+        finnPerioderUtenfor(
+                toLocalDateTimeline(beredskap.getPerioder(), "beredskap.periode", feil), perioder)
+                .valider("beredskap", feil);
 
     }
 
