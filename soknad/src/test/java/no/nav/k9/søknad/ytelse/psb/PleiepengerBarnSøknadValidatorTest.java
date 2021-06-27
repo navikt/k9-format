@@ -6,6 +6,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.VirksomhetType;
 import no.nav.k9.søknad.ytelse.psb.v1.Beredskap;
+import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie;
 import no.nav.k9.søknad.ytelse.psb.v1.Nattevåk;
 import no.nav.k9.søknad.ytelse.psb.v1.Omsorg;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
@@ -365,6 +367,16 @@ public class PleiepengerBarnSøknadValidatorTest {
 
         var feil = verifyHarFeil(psb);
         feilInneholderFeilkode(feil, "IllegalArgumentException");
+    }
+
+    @Test
+    public void nullpointerVedObjektIPeriodeMap() {
+        var søknadsperiode = new Periode(LocalDate.now().minusWeeks(3), LocalDate.now().plusWeeks(2));
+        var psbYtelse = TestUtils.minimumSøknadPleiepengerSyktBarn(søknadsperiode);
+        var periode = new TreeMap<Periode, LovbestemtFerie.LovbestemtFeriePeriodeInfo>() ;
+        psbYtelse.medLovbestemtFerie(new LovbestemtFerie().medPerioder(periode));
+        var feil = verifyHarFeil(psbYtelse);
+        assertThat(feil.size()).isEqualTo(1);
     }
 
     private void feilInneholderFeilkode(List<Feil> feil, String feilkode) {
