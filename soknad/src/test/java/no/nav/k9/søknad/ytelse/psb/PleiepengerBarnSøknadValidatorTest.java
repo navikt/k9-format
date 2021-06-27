@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Disabled;
 
 import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.Søknad;
@@ -358,7 +357,6 @@ public class PleiepengerBarnSøknadValidatorTest {
         assertThat(feil.size()).isEqualTo(1);
     }
 
-    @Disabled()
     @Test
     public void feilIUttaksperidodeFomTom() {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now());
@@ -366,7 +364,7 @@ public class PleiepengerBarnSøknadValidatorTest {
         psb.medUttak(new Uttak().medPerioder(Map.of(new Periode(LocalDate.now().plusDays(2), LocalDate.now()), new UttakPeriodeInfo(Duration.ofHours(8)))));
 
         var feil = verifyHarFeil(psb);
-        assertThat(feil.size()).isEqualTo(2);
+        feilInneholderFeilkode(feil, "IllegalArgumentException");
     }
 
     private void feilInneholderFeilkode(List<Feil> feil, String feilkode) {
