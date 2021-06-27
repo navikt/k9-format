@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 
 import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.Søknad;
@@ -357,6 +358,7 @@ public class PleiepengerBarnSøknadValidatorTest {
         assertThat(feil.size()).isEqualTo(1);
     }
 
+    @Disabled()
     @Test
     public void feilIUttaksperidodeFomTom() {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now());
