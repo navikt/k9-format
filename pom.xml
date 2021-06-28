@@ -258,47 +258,6 @@
 				</executions>
 			</plugin>
 			
-			<plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.3.2</version>
-                <executions>
-                    <execution>
-                        <id>create-pom-properties</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                          <executable>echo</executable>
-                          <arguments>   
-                              <argument>-e</argument>
-                              <argument>
-								pom.properties=transformer-pom.properties\npom.xml=transformer-pom.properties
-                              </argument>
-                          </arguments>
-                          <outputFile>${project.build.directory}/pom.properties</outputFile>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>create-transformer-pom-properties</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                          <executable>echo</executable>
-                          <arguments>
-                              <argument>-e</argument>
-                              <argument>
-								artifactId\\=${project.artifactId}=artifactId\\=${project.artifactId}-jakarta\n&lt;artifactId&gt;${project.artifactId}&lt;/artifactId&gt;=&lt;artifactId&gt;${project.artifactId}-jakarta&lt;/artifactId&gt;
-                              </argument>
-                          </arguments>
-                          <outputFile>${project.build.directory}/transformer-pom.properties</outputFile>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
@@ -325,7 +284,7 @@
                                     <arg value="-td"/>
                                     <arg value="${maven.multiModuleProjectDirectory}/rules/jakarta-direct.properties"/>
                                     <arg value="-tf"/>
-                                    <arg value="${project.build.directory}/pom.properties"/>
+                                    <arg value="${maven.multiModuleProjectDirectory}/rules/pom.properties"/>
                                     <classpath>
                                         <pathelement path="${plugin_classpath}"/>
                                     </classpath>
@@ -354,7 +313,7 @@
                                     <arg value="-td"/>
                                     <arg value="${maven.multiModuleProjectDirectory}/rules/jakarta-direct.properties"/>
                                     <arg value="-tf"/>
-                                    <arg value="${project.build.directory}/pom.properties"/>
+                                    <arg value="${maven.multiModuleProjectDirectory}/rules/pom.properties"/>
                                     <classpath>
                                         <pathelement path="${plugin_classpath}"/>
                                     </classpath>
@@ -396,29 +355,82 @@
 	        <build>
 	           <plugins>
 	               <plugin>
-		                <groupId>org.codehaus.mojo</groupId>
-		                <artifactId>build-helper-maven-plugin</artifactId>
-		                <version>3.2.0</version>
-		                <executions>
-		                    <execution>
-		                        <id>attach-artifacts</id>
-		                        <phase>package</phase>
-		                        <goals>
-		                            <goal>attach-artifact</goal>
-		                        </goals>
-		                        <configuration>
-		                            <artifacts>
-		                                <artifact>
-		                                    <file>${project.build.directory}/${project.artifactId}-jakarta-${project.version}.jar</file>
-		                                    <type>jar</type>  
-                                            <classifier>jakarta</classifier>                        
-		                                </artifact>
-		                            </artifacts>
-		                        </configuration>
-		                    </execution>
-		                </executions>
-		            </plugin>
-	           </plugins>
+					    <groupId>org.apache.maven.plugins</groupId>
+					    <artifactId>maven-install-plugin</artifactId>
+					    <executions>
+					        <execution>
+					            <phase>install</phase>
+					            <goals>
+					                <goal>install-file</goal>
+					            </goals>
+					            <configuration>
+					                <packaging>jar</packaging>
+					                <artifactId>${project.artifactId}-jakarta</artifactId>
+					                <groupId>${project.groupId}</groupId>
+					                <version>${project.version}</version>
+					                <file>
+					                    ${project.build.directory}/${project.artifactId}-jakarta-${project.version}.jar
+					                </file>
+					            </configuration>
+					        </execution>
+					        <execution>
+                                <phase>install</phase>
+                                <id>install-jakarta-sources</id>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <configuration>
+                                    <packaging>jar</packaging>
+                                    <artifactId>${project.artifactId}-jakarta</artifactId>
+                                    <groupId>${project.groupId}</groupId>
+                                    <version>${project.version}</version>
+                                    <classifier>sources</classifier>
+                                    <file>
+                                        ${project.build.directory}/${project.artifactId}-jakarta-${project.version}-sources.jar
+                                    </file>
+                                </configuration>
+                            </execution>
+					    </executions>
+					</plugin>
+					<plugin>
+					    <groupId>org.apache.maven.plugins</groupId>
+					    <artifactId>maven-deploy-plugin</artifactId>
+					    <executions>
+					        <execution>
+					            <phase>deploy</phase>
+					            <goals>
+					                <goal>deploy-file</goal>
+					            </goals>
+					            <configuration>
+					                <packaging>jar</packaging>
+					                <generatePom>true</generatePom>
+					                <url>${project.distributionManagement.repository.url}</url>
+					                <artifactId>${project.artifactId}-jakarta</artifactId>
+					                <groupId>${project.groupId}</groupId>
+					                <version>${project.version}</version>
+					                <file>${project.build.directory}/${project.artifactId}-jakarta-${project.version}.jar</file>
+					            </configuration>
+					        </execution>
+					        <execution>
+                                <phase>deploy</phase>
+                                <id>deploy-jakarta-sources</id>
+                                <goals>
+                                    <goal>deploy-file</goal>
+                                </goals>
+                                <configuration>
+                                    <packaging>jar</packaging>
+                                    <generatePom>true</generatePom>
+                                    <url>${project.distributionManagement.repository.url}</url>
+                                    <artifactId>${project.artifactId}-jakarta</artifactId>
+                                    <classifier>sources</classifier>
+                                    <groupId>${project.groupId}</groupId>
+                                    <version>${project.version}</version>
+                                    <file>${project.build.directory}/${project.artifactId}-jakarta-${project.version}-sources.jar</file>
+                                </configuration>
+                            </execution>
+					    </executions>
+					</plugin>
+				</plugins>
 	        </build>
 	    </profile>
 	</profiles>
