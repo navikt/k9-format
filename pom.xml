@@ -374,29 +374,26 @@
 					    </executions>
 					</plugin>
 					<plugin>
-		                <groupId>org.apache.maven.plugins</groupId>
-		                <artifactId>maven-dependency-plugin</artifactId>
-		                <executions>
-		                    <execution>
-		                        <id>unpack</id>
-		                        <phase>generate-sources</phase>
-		                        <goals>
-		                            <goal>unpack</goal>
-		                        </goals>
-		                        <configuration>
-		                            <artifactItems>
-		                                <artifactItem>
-		                                    <groupId>${project.groupId}</groupId>
-		                                    <artifactId>${project.artifactId}-jakarta</artifactId>
-		                                    <version>${project.version}</version>
-		                                    <outputDirectory>${project.build.directory}/jakarta</outputDirectory>
-		                                    <includes>**\/pom.xml</includes>
-		                                </artifactItem>
-		                            </artifactItems>
-		                        </configuration>
-		                    </execution>
-		                </executions>
-		            </plugin>
+					    <groupId>org.apache.maven.plugins</groupId>
+					    <artifactId>maven-antrun-plugin</artifactId>
+					    <executions>
+					        <execution>
+					            <phase>package</phase>
+					            <configuration>
+					                <target>
+					                    <unzip src="${project.build.directory}/${project.artifactId}-jakarta-${project.version}.jar" dest="${project.build.directory}/jakarta">
+					                        <patternset>
+					                            <include name="META-INF/maven/**/pom.xml"/>
+					                        </patternset>
+					                    </unzip>
+					                </target>
+					            </configuration>
+					            <goals>
+					                <goal>run</goal>
+					            </goals>
+					        </execution>
+					    </executions>
+					</plugin>
 					<plugin>
 					    <groupId>org.apache.maven.plugins</groupId>
 					    <artifactId>maven-deploy-plugin</artifactId>
