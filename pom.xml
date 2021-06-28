@@ -374,6 +374,30 @@
 					    </executions>
 					</plugin>
 					<plugin>
+		                <groupId>org.apache.maven.plugins</groupId>
+		                <artifactId>maven-dependency-plugin</artifactId>
+		                <executions>
+		                    <execution>
+		                        <id>unpack</id>
+		                        <phase>generate-sources</phase>
+		                        <goals>
+		                            <goal>unpack</goal>
+		                        </goals>
+		                        <configuration>
+		                            <artifactItems>
+		                                <artifactItem>
+		                                    <groupId>${project.groupId}</groupId>
+		                                    <artifactId>${project.artifactId}-jakarta</artifactId>
+		                                    <version>${project.version}</version>
+		                                    <outputDirectory>${project.build.directory}/jakarta</outputDirectory>
+		                                    <includes>**\/pom.xml</includes>
+		                                </artifactItem>
+		                            </artifactItems>
+		                        </configuration>
+		                    </execution>
+		                </executions>
+		            </plugin>
+					<plugin>
 					    <groupId>org.apache.maven.plugins</groupId>
 					    <artifactId>maven-deploy-plugin</artifactId>
 					    <executions>
@@ -384,11 +408,9 @@
 					            </goals>
 					            <configuration>
 							        <repositoryId>github</repositoryId>
-					                <packaging>jar</packaging>
+							        <!-- må matche unpacked pom.xml fra over (disse endrer ikke path ved transform p.t.) -->
+					                <pomFile>${project.build.directory}/jakarta/META-INF/maven/${project.groupId}/${project.artifactId}/pom.xml</pomFile>
 					                <url>${project.distributionManagement.repository.url}</url>
-					                <artifactId>${project.artifactId}-jakarta</artifactId>
-					                <groupId>${project.groupId}</groupId>
-					                <version>${project.version}</version>
 					                <file>${project.build.directory}/${project.artifactId}-jakarta-${project.version}.jar</file>
 					            </configuration>
 					        </execution>
