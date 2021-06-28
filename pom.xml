@@ -392,6 +392,22 @@
 					                <goal>run</goal>
 					            </goals>
 					        </execution>
+					        <execution>
+					           <id>antrun-delete-file</id>
+					           <phase>package</phase>
+					           <configuration>
+					               <target>
+					                <!-- ompakker jar fil uten pom.xml -->
+					                <jar destfile="${project.build.directory}/${project.artifactId}-jakarta-${project.version}-TOBEDEPLOYED.jar">
+								        <zipfileset src="${project.build.directory}/${project.artifactId}-jakarta-${project.version}.jar" excludes="META-INF/maven/**"/>
+								    </jar>
+					               </target>
+					           </configuration>
+					           <goals>
+					               <goal>run</goal>
+					           </goals>
+					        </execution>
+					        
 					    </executions>
 					</plugin>
 					<plugin>
@@ -408,7 +424,7 @@
 							        <!-- må matche unpacked pom.xml fra over (disse endrer ikke path ved transform p.t.) -->
 					                <pomFile>${project.build.directory}/jakarta/META-INF/maven/${project.groupId}/${project.artifactId}/pom.xml</pomFile>
 					                <url>${project.distributionManagement.repository.url}</url>
-					                <file>${project.build.directory}/${project.artifactId}-jakarta-${project.version}.jar</file>
+					                <file>${project.build.directory}/${project.artifactId}-jakarta-${project.version}-TOBEDEPLOYED.jar</file>
 					            </configuration>
 					        </execution>
 					    </executions>
