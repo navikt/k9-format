@@ -357,6 +357,7 @@
 					<plugin>
 					    <groupId>org.apache.maven.plugins</groupId>
 					    <artifactId>maven-antrun-plugin</artifactId>
+					    <version>3.0.0</version>
 					    <executions>
 					        <execution>
 					            <phase>package</phase>
@@ -394,6 +395,7 @@
 					<plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-install-plugin</artifactId>
+                        <version>3.0.0-M1</version>
                         <executions>
                             <execution>
                                 <phase>install</phase>
@@ -410,6 +412,7 @@
 					<plugin>
 					    <groupId>org.apache.maven.plugins</groupId>
 					    <artifactId>maven-deploy-plugin</artifactId>
+					    <version>3.0.0-M1</version>
 					    <executions>
 					        <execution>
 					            <phase>deploy</phase>
