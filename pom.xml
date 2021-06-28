@@ -365,7 +365,6 @@
 					            </goals>
 					            <configuration>
 					                <packaging>jar</packaging>
-					                <generatePom>true</generatePom>
 					                <artifactId>${project.artifactId}-jakarta</artifactId>
 					                <groupId>${project.groupId}</groupId>
 					                <version>${project.version}</version>
@@ -386,7 +385,6 @@
 					            <configuration>
 							        <repositoryId>github</repositoryId>
 					                <packaging>jar</packaging>
-					                <generatePom>true</generatePom>
 					                <url>${project.distributionManagement.repository.url}</url>
 					                <artifactId>${project.artifactId}-jakarta</artifactId>
 					                <groupId>${project.groupId}</groupId>
