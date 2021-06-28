@@ -370,7 +370,6 @@
 					                <groupId>${project.groupId}</groupId>
 					                <version>${project.version}</version>
 					                <file>${project.build.directory}/${project.artifactId}-jakarta-${project.version}.jar</file>
-					                <sources>${project.build.directory}/${project.artifactId}-jakarta-${project.version}-sources.jar</sources>
 					            </configuration>
 					        </execution>
 					    </executions>
