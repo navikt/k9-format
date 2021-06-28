@@ -385,6 +385,7 @@
 					                <goal>deploy-file</goal>
 					            </goals>
 					            <configuration>
+							<repositoryId>github</repositoryId>
 					                <packaging>jar</packaging>
 					                <generatePom>true</generatePom>
 					                <url>${project.distributionManagement.repository.url}</url>
