@@ -385,7 +385,7 @@
 					                <goal>deploy-file</goal>
 					            </goals>
 					            <configuration>
-							<repositoryId>github</repositoryId>
+							        <repositoryId>github</repositoryId>
 					                <packaging>jar</packaging>
 					                <generatePom>true</generatePom>
 					                <url>${project.distributionManagement.repository.url}</url>
@@ -393,9 +393,26 @@
 					                <groupId>${project.groupId}</groupId>
 					                <version>${project.version}</version>
 					                <file>${project.build.directory}/${project.artifactId}-jakarta-${project.version}.jar</file>
-					                <sources>${project.build.directory}/${project.artifactId}-jakarta-${project.version}-sources.jar</sources>
 					            </configuration>
 					        </execution>
+					        <execution>
+                                <phase>deploy</phase>
+                                <id>deploy-file-sources</id>
+                                <goals>
+                                    <goal>deploy-file</goal>
+                                </goals>
+                                <configuration>
+                                    <repositoryId>github</repositoryId>
+                                    <packaging>jar</packaging>
+                                    <generatePom>true</generatePom>
+                                    <url>${project.distributionManagement.repository.url}</url>
+                                    <artifactId>${project.artifactId}-jakarta</artifactId>
+                                    <groupId>${project.groupId}</groupId>
+                                    <version>${project.version}</version>
+                                    <classifier>sources</classifier>
+                                    <file>${project.build.directory}/${project.artifactId}-jakarta-${project.version}-sources.jar</file>
+                                </configuration>
+                            </execution>
 					    </executions>
 					</plugin>
 				</plugins>
