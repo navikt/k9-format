@@ -1,453 +1,457 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>no.nav.k9</groupId>
-	<artifactId>k9-format</artifactId>
-	<version>${revision}${sha1}${changelist}</version>
-	<packaging>pom</packaging>
-	<name>k9-format</name>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>no.nav.k9</groupId>
+    <artifactId>k9-format</artifactId>
+    <version>${revision}${sha1}${changelist}</version>
+    <packaging>pom</packaging>
+    <name>k9-format</name>
 
-	<modules>
-		<module>soknad-omsorgspenger</module>
-		<module>soknad</module>
-		<module>inntektsmelding</module>
-		<module>soknad-omsorgspenger-utbetaling</module>
-		<module>soknad-frisinn</module>
-		<module>ettersendelse</module>
-	</modules>
+    <modules>
+        <module>soknad-omsorgspenger</module>
+        <module>soknad</module>
+        <module>inntektsmelding</module>
+        <module>soknad-omsorgspenger-utbetaling</module>
+        <module>soknad-frisinn</module>
+        <module>ettersendelse</module>
+    </modules>
 
-	<properties>
-		<revision>5.2.0</revision>
-		<sha1></sha1>
-		<changelist>-SNAPSHOT</changelist>
-		<java.version>11</java.version>
-		<junit.version>5.7.2</junit.version>
+    <properties>
+        <revision>5.2.0</revision>
+        <sha1></sha1>
+        <changelist>-SNAPSHOT</changelist>
+        <java.version>11</java.version>
+        <junit.version>5.7.2</junit.version>
 
-		<maven.compiler.source>${java.version}</maven.compiler.source>
-		<maven.compiler.target>${java.version}</maven.compiler.target>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-	</properties>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
 
-	<repositories>
-		<repository>
-			<id>github</id>
-			<name>GitHub Apache Maven Packages</name>
-			<url>https://maven.pkg.github.com/navikt/k9-format/</url>
-		</repository>
-	</repositories>
+    <repositories>
+        <repository>
+            <id>github</id>
+            <name>GitHub Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/navikt/k9-format/</url>
+        </repository>
+    </repositories>
 
-	<scm>
-		<connection>scm:git:https://github.com/navikt/k9-format.git</connection>
-		<developerConnection>scm:git:https://github.com/navikt/k9-format.git</developerConnection>
-		<url>https://github.com/navikt/k9-format</url>
-	</scm>
+    <scm>
+        <connection>scm:git:https://github.com/navikt/k9-format.git</connection>
+        <developerConnection>scm:git:https://github.com/navikt/k9-format.git</developerConnection>
+        <url>https://github.com/navikt/k9-format</url>
+    </scm>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.glassfish</groupId>
-				<artifactId>jakarta.el</artifactId>
-				<version>3.0.3</version>
-			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson</groupId>
-				<artifactId>jackson-bom</artifactId>
-				<version>2.12.3</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.hibernate.validator</groupId>
-				<artifactId>hibernate-validator</artifactId>
-				<version>6.2.0.Final</version>
-			</dependency>
-			<dependency>
-				<groupId>no.nav.k9</groupId>
-				<artifactId>soknad</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.assertj</groupId>
-				<artifactId>assertj-core</artifactId>
-				<version>3.20.2</version>
-			</dependency>
-			<dependency>
-				<groupId>org.junit.jupiter</groupId>
-				<artifactId>junit-jupiter-params</artifactId>
-				<version>${junit.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.junit.jupiter</groupId>
-				<artifactId>junit-jupiter-api</artifactId>
-				<version>${junit.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.skyscreamer</groupId>
-				<artifactId>jsonassert</artifactId>
-				<version>1.5.0</version>
-			</dependency>
-			<dependency>
-				<groupId>no.nav.fpsak.tidsserie</groupId>
-				<artifactId>fpsak-tidsserie</artifactId>
-				<version>2.5.5</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.glassfish</groupId>
+                <artifactId>jakarta.el</artifactId>
+                <version>3.0.3</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
+                <version>2.12.3</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate.validator</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>6.2.0.Final</version>
+            </dependency>
+            <dependency>
+                <groupId>no.nav.k9</groupId>
+                <artifactId>soknad</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>3.20.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-params</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.skyscreamer</groupId>
+                <artifactId>jsonassert</artifactId>
+                <version>1.5.0</version>
+            </dependency>
+            <dependency>
+                <groupId>no.nav.fpsak.tidsserie</groupId>
+                <artifactId>fpsak-tidsserie</artifactId>
+                <version>2.5.5</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-params</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.assertj</groupId>
-			<artifactId>assertj-core</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.skyscreamer</groupId>
-			<artifactId>jsonassert</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish</groupId>
-			<artifactId>jakarta.el</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>no.nav.fpsak.tidsserie</groupId>
-			<artifactId>fpsak-tidsserie</artifactId>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.skyscreamer</groupId>
+            <artifactId>jsonassert</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>jakarta.el</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.fpsak.tidsserie</groupId>
+            <artifactId>fpsak-tidsserie</artifactId>
+        </dependency>
+    </dependencies>
 
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>flatten-maven-plugin</artifactId>
-					<version>1.2.7</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-clean-plugin</artifactId>
-					<version>3.1.0</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.8.1</version>
-					<configuration>
-						<source>${java.version}</source>
-						<target>${java.version}</target>
-						<encoding>UTF-8</encoding>
-						<release>${java.version}</release>
-						<compilerArgs>
-							<arg>-parameters</arg>
-						</compilerArgs>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-source-plugin</artifactId>
-					<version>3.2.1</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-antrun-plugin</artifactId>
-					<version>3.0.0</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-deploy-plugin</artifactId>
-					<version>3.0.0-M1</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-install-plugin</artifactId>
-					<version>3.0.0-M1</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-jar-plugin</artifactId>
-					<version>3.2.0</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.22.2</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-failsafe-plugin</artifactId>
-					<version>2.22.2</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-resources-plugin</artifactId>
-					<version>3.2.0</version>
-				</plugin>
-			</plugins>
-		</pluginManagement>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>flatten-maven-plugin</artifactId>
+                    <version>1.2.7</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <encoding>UTF-8</encoding>
+                        <release>${java.version}</release>
+                        <compilerArgs>
+                            <arg>-parameters</arg>
+                        </compilerArgs>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.2.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>3.0.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>3.0.0-M1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>3.0.0-M1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.2.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.22.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>2.22.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.2.0</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
 
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>flatten-maven-plugin</artifactId>
-				<configuration>
-					<flattenMode>bom</flattenMode>
-					<flattenedPomFilename>.flattened</flattenedPomFilename>
-				</configuration>
-				<executions>
-					<execution>
-						<id>flatten</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>flatten</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>flatten.clean</id>
-						<phase>clean</phase>
-						<goals>
-							<goal>clean</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>failsafe-integration-test</id>
-						<goals>
-							<goal>integration-test</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>failsafe-verify</id>
-						<goals>
-							<goal>verify</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<reuseForks>true</reuseForks>
-					<useFile>true</useFile>
-					<argLine>-Dfile.encoding=UTF-8 -Dlog.level.no.nav=WARN</argLine>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<executions>
-					<execution>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <configuration>
+                    <flattenMode>bom</flattenMode>
+                    <flattenedPomFilename>.flattened</flattenedPomFilename>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>failsafe-integration-test</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>failsafe-verify</id>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <reuseForks>true</reuseForks>
+                    <useFile>true</useFile>
+                    <argLine>-Dfile.encoding=UTF-8 -Dlog.level.no.nav=WARN</argLine>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
                          			<?m2e ignore?>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>transform-jar</id>
-						<phase>package</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<target>
-								<property name="plugin_classpath" refid="maven.plugin.classpath" />
-								<java classname="org.eclipse.transformer.jakarta.JakartaTransformer">
-									<arg value="${project.build.directory}/${project.build.finalName}.jar" />
-									<arg value="${project.build.directory}/${project.artifactId}-jakarta-${project.version}.jar" />
-									<arg value="-q" />
-									<arg value="-o" />
-									<arg value="-tr" />
-									<arg value="${maven.multiModuleProjectDirectory}/rules/jakarta-renames.properties" />
-									<arg value="-tv" />
-									<arg value="${maven.multiModuleProjectDirectory}/rules/jakarta-versions.properties" />
-									<arg value="-td" />
-									<arg value="${maven.multiModuleProjectDirectory}/rules/jakarta-direct.properties" />
-									<arg value="-tf" />
-									<arg value="${maven.multiModuleProjectDirectory}/rules/pom.properties" />
-									<classpath>
-										<pathelement path="${plugin_classpath}" />
-									</classpath>
-								</java>
-							</target>
-						</configuration>
-					</execution>
-					<execution>
-						<id>transform-sources-jar</id>
-						<phase>package</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<target>
-								<property name="plugin_classpath" refid="maven.plugin.classpath" />
-								<java classname="org.eclipse.transformer.jakarta.JakartaTransformer">
-									<arg value="${project.build.directory}/${project.build.finalName}-sources.jar" />
-									<arg value="${project.build.directory}/${project.artifactId}-jakarta-${project.version}-sources.jar" />
-									<arg value="-q" />
-									<arg value="-o" />
-									<arg value="-tr" />
-									<arg value="${maven.multiModuleProjectDirectory}/rules/jakarta-renames.properties" />
-									<arg value="-tv" />
-									<arg value="${maven.multiModuleProjectDirectory}/rules/jakarta-versions.properties" />
-									<arg value="-td" />
-									<arg value="${maven.multiModuleProjectDirectory}/rules/jakarta-direct.properties" />
-									<arg value="-tf" />
-									<arg value="${maven.multiModuleProjectDirectory}/rules/pom.properties" />
-									<classpath>
-										<pathelement path="${plugin_classpath}" />
-									</classpath>
-								</java>
-							</target>
-						</configuration>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>org.eclipse.transformer</groupId>
-						<artifactId>org.eclipse.transformer.cli</artifactId>
-						<version>0.2.0</version>
-					</dependency>
-					<dependency>
-						<groupId>ant-contrib</groupId>
-						<artifactId>ant-contrib</artifactId>
-						<version>1.0b3</version>
-						<exclusions>
-							<exclusion>
-								<groupId>ant</groupId>
-								<artifactId>ant</artifactId>
-							</exclusion>
-						</exclusions>
-					</dependency>
-				</dependencies>
-			</plugin>
-		</plugins>
-	</build>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>transform-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <property name="plugin_classpath" refid="maven.plugin.classpath" />
+                                <java classname="org.eclipse.transformer.jakarta.JakartaTransformer">
+                                    <arg value="${project.build.directory}/${project.build.finalName}.jar" />
+                                    <arg value="${project.build.directory}/${project.artifactId}-jakarta-${project.version}.jar" />
+                                    <arg value="-q" />
+                                    <arg value="-o" />
+                                    <arg value="-tr" />
+                                    <arg value="${maven.multiModuleProjectDirectory}/rules/jakarta-renames.properties" />
+                                    <arg value="-tv" />
+                                    <arg value="${maven.multiModuleProjectDirectory}/rules/jakarta-versions.properties" />
+                                    <arg value="-td" />
+                                    <arg value="${maven.multiModuleProjectDirectory}/rules/jakarta-direct.properties" />
+                                    <arg value="-tf" />
+                                    <arg value="${maven.multiModuleProjectDirectory}/rules/pom.properties" />
+                                    <classpath>
+                                        <pathelement path="${plugin_classpath}" />
+                                    </classpath>
+                                </java>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>transform-sources-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <property name="plugin_classpath" refid="maven.plugin.classpath" />
+                                <java classname="org.eclipse.transformer.jakarta.JakartaTransformer">
+                                    <arg value="${project.build.directory}/${project.build.finalName}-sources.jar" />
+                                    <arg value="${project.build.directory}/${project.artifactId}-jakarta-${project.version}-sources.jar" />
+                                    <arg value="-q" />
+                                    <arg value="-o" />
+                                    <arg value="-tr" />
+                                    <arg value="${maven.multiModuleProjectDirectory}/rules/jakarta-renames.properties" />
+                                    <arg value="-tv" />
+                                    <arg value="${maven.multiModuleProjectDirectory}/rules/jakarta-versions.properties" />
+                                    <arg value="-td" />
+                                    <arg value="${maven.multiModuleProjectDirectory}/rules/jakarta-direct.properties" />
+                                    <arg value="-tf" />
+                                    <arg value="${maven.multiModuleProjectDirectory}/rules/pom.properties" />
+                                    <classpath>
+                                        <pathelement path="${plugin_classpath}" />
+                                    </classpath>
+                                </java>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.eclipse.transformer</groupId>
+                        <artifactId>org.eclipse.transformer.cli</artifactId>
+                        <version>0.2.0</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>ant-contrib</groupId>
+                        <artifactId>ant-contrib</artifactId>
+                        <version>1.0b3</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>ant</groupId>
+                                <artifactId>ant</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
 
-	<profiles>
-		<profile>
-			<id>jar-module</id>
-			<activation>
-				<file>
-					<exists>src/main/java/</exists>
-				</file>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<executions>
-							<execution>
-								<phase>package</phase>
-								<configuration>
-									<target>
-										<unzip src="${project.build.directory}/${project.artifactId}-jakarta-${project.version}.jar"
-											dest="${project.build.directory}/jakarta">
-											<patternset>
-												<include name="META-INF/maven/**/pom.xml" />
-											</patternset>
-										</unzip>
-									</target>
-								</configuration>
-								<goals>
-									<goal>run</goal>
-								</goals>
-							</execution>
-							<execution>
-								<id>antrun-delete-file</id>
-								<phase>package</phase>
-								<configuration>
-									<target>
-										<!-- ompakker jar fil uten pom.xml -->
-										<jar destfile="${project.build.directory}/${project.artifactId}-jakarta-${project.version}-TOBEDEPLOYED.jar">
-											<zipfileset src="${project.build.directory}/${project.artifactId}-jakarta-${project.version}.jar"
-												excludes="META-INF/maven/**" />
-										</jar>
-										<jar destfile="${project.build.directory}/${project.artifactId}-jakarta-${project.version}-sources-TOBEDEPLOYED.jar">
-                                            <zipfileset src="${project.build.directory}/${project.artifactId}-jakarta-${project.version}-sources.jar"
+    <profiles>
+        <profile>
+            <id>jar-module</id>
+            <activation>
+                <file>
+                    <exists>src/main/java/</exists>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <configuration>
+                                    <target>
+                                        <unzip src="${project.build.directory}/${project.artifactId}-jakarta-${project.version}.jar"
+                                            dest="${project.build.directory}/jakarta">
+                                            <patternset>
+                                                <include name="META-INF/maven/**/pom.xml" />
+                                            </patternset>
+                                        </unzip>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>antrun-delete-file</id>
+                                <phase>package</phase>
+                                <configuration>
+                                    <target>
+                                        <!-- ompakker jar fil uten pom.xml -->
+                                        <jar
+                                            destfile="${project.build.directory}/${project.artifactId}-jakarta-${project.version}-TOBEDEPLOYED.jar">
+                                            <zipfileset
+                                                src="${project.build.directory}/${project.artifactId}-jakarta-${project.version}.jar"
                                                 excludes="META-INF/maven/**" />
                                         </jar>
-									</target>
-								</configuration>
-								<goals>
-									<goal>run</goal>
-								</goals>
-							</execution>
+                                        <jar
+                                            destfile="${project.build.directory}/${project.artifactId}-jakarta-${project.version}-sources-TOBEDEPLOYED.jar">
+                                            <zipfileset
+                                                src="${project.build.directory}/${project.artifactId}-jakarta-${project.version}-sources.jar"
+                                                excludes="META-INF/maven/**" />
+                                        </jar>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
 
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-install-plugin</artifactId>
-						<executions>
-							<execution>
-								<phase>install</phase>
-								<goals>
-									<goal>install-file</goal>
-								</goals>
-								<configuration>
-									<pomFile>${project.build.directory}/jakarta/META-INF/maven/${project.groupId}/${project.artifactId}/pom.xml</pomFile>
-									<file>${project.build.directory}/${project.artifactId}-jakarta-${project.version}-TOBEDEPLOYED.jar</file>
-									<sources>${project.build.directory}/${project.artifactId}-jakarta-${project.version}-sources-TOBEDEPLOYED.jar</sources>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-deploy-plugin</artifactId>
-						<executions>
-							<execution>
-								<phase>deploy</phase>
-								<goals>
-									<goal>deploy-file</goal>
-								</goals>
-								<configuration>
-									<repositoryId>github</repositoryId>
-									<!-- må matche unpacked pom.xml fra over (disse endrer ikke path ved transform p.t.) -->
-									<pomFile>${project.build.directory}/jakarta/META-INF/maven/${project.groupId}/${project.artifactId}/pom.xml</pomFile>
-									<url>${project.distributionManagement.repository.url}</url>
-									<file>${project.build.directory}/${project.artifactId}-jakarta-${project.version}-TOBEDEPLOYED.jar</file>
-									<sources>${project.build.directory}/${project.artifactId}-jakarta-${project.version}-sources-TOBEDEPLOYED.jar</sources>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-install-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <configuration>
+                                    <pomFile>${project.build.directory}/jakarta/META-INF/maven/${project.groupId}/${project.artifactId}/pom.xml</pomFile>
+                                    <file>${project.build.directory}/${project.artifactId}-jakarta-${project.version}-TOBEDEPLOYED.jar</file>
+                                    <sources>${project.build.directory}/${project.artifactId}-jakarta-${project.version}-sources-TOBEDEPLOYED.jar</sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>deploy-file</goal>
+                                </goals>
+                                <configuration>
+                                    <repositoryId>github</repositoryId>
+                                    <!-- må matche unpacked pom.xml fra over (disse endrer ikke path ved transform p.t.) -->
+                                    <pomFile>${project.build.directory}/jakarta/META-INF/maven/${project.groupId}/${project.artifactId}/pom.xml</pomFile>
+                                    <url>${project.distributionManagement.repository.url}</url>
+                                    <file>${project.build.directory}/${project.artifactId}-jakarta-${project.version}-TOBEDEPLOYED.jar</file>
+                                    <sources>${project.build.directory}/${project.artifactId}-jakarta-${project.version}-sources-TOBEDEPLOYED.jar</sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
-	<distributionManagement>
-		<repository>
-			<id>github</id>
-			<name>GitHub navikt Apache Maven Packages</name>
-			<url>https://maven.pkg.github.com/navikt/k9-format</url>
-		</repository>
-	</distributionManagement>
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub navikt Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/navikt/k9-format</url>
+        </repository>
+    </distributionManagement>
 </project>
 
