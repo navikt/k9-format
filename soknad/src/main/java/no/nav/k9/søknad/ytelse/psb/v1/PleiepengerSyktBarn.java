@@ -9,7 +9,6 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -17,8 +16,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-import no.nav.k9.søknad.PeriodeValidator;
-import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
@@ -292,20 +289,6 @@ public class PleiepengerSyktBarn implements Ytelse {
     @Override
     public YtelseValidator getValidator() {
         return new PleiepengerSyktBarnValidator();
-    }
-
-    @Size(max=0, message="${validatedValue}")
-    private List<Feil> getValiderAngittUtenlandsopphold() {
-        return utenlandsopphold.getPerioder().isEmpty()
-            ? List.of()
-            : new PeriodeValidator().validerIkkeTillattOverlapp(utenlandsopphold.getPerioder(), "utenlandsopphold.perioder");
-    }
-
-    @Size(max=0, message="${validatedValue}")
-    private List<Feil> getValiderAngittBosteder() {
-        return bosteder.getPerioder().isEmpty()
-            ? List.of()
-            : new PeriodeValidator().validerIkkeTillattOverlapp(bosteder.getPerioder(), "bosteder.perioder");
     }
 
 }

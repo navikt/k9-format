@@ -1,18 +1,15 @@
 package no.nav.k9.søknad.ytelse.psb.v1.arbeidstid;
 
-import java.util.List;
-
 import javax.validation.Valid;
+import javax.validation.constraints.AssertFalse;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -51,13 +48,13 @@ public class Arbeidstaker {
         return (this.norskIdentitetsnummer == null && this.organisasjonsnummer == null);
     }
 
-    public void valider(String felt, List<Feil> feilList) {
-        if (erEntydigPåID()) {
-            feilList.add(new Feil(felt, "illegalArgument",  "Ikke entydig ID på Arbeidsgiver, må oppgi enten norskIdentitetsnummer eller organisasjonsnummer."));
-        }
-        if (manglerIkkeID()) {
-            feilList.add(new Feil(felt, "illegalArgument",  "Mangler ID på Arbeidsgiver, må oppgi en av norskIdentitetsnummer eller organisasjonsnummer."));
-        }
+    @AssertFalse(message = "Ikke entydig ID på Arbeidsgiver, må oppgi enten norskIdentitetsnummer eller organisasjonsnummer.")
+    private boolean isUniquelyIdentified() {
+        return erEntydigPåID();
+    }
+    @AssertFalse(message = "Mangler ID på Arbeidsgiver, må oppgi en av norskIdentitetsnummer eller organisasjonsnummer.")
+    private boolean isIdentified() {
+        return manglerIkkeID();
     }
 
     public NorskIdentitetsnummer getNorskIdentitetsnummer() {

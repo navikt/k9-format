@@ -1,16 +1,18 @@
 package no.nav.k9.søknad.ytelse.psb.v1.arbeidstid;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import static java.util.Collections.unmodifiableList;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import java.util.*;
-
-import static java.util.Collections.*;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -21,12 +23,10 @@ public class Arbeidstid {
     @NotNull
     private List<Arbeidstaker> arbeidstakerList = new ArrayList<>();
 
-    //TODO endre til Optional
     @Valid
     @JsonProperty(value = "frilanserArbeidstidInfo")
     private ArbeidstidInfo frilanserArbeidstidInfo;
 
-    //TODO endre til Optional
     @Valid
     @JsonProperty(value = "selvstendigNæringsdrivendeArbeidstidInfo")
     private ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo;

@@ -301,7 +301,7 @@ public class PleiepengerBarnSøknadValidatorTest {
         var søknadsperiode = new Periode(LocalDate.now(), null);
         var psb = TestUtils.minimumSøknadPleiepengerSyktBarn(søknadsperiode);
         var feil = verifyHarFeil(psb);
-        feilInneholderFeilkode(feil, "NullPointerException");
+        feilInneholderFeilkode(feil, "påkrevd");
     }
 
     @Test
@@ -310,7 +310,7 @@ public class PleiepengerBarnSøknadValidatorTest {
         var psb = TestUtils.minimumSøknadPleiepengerSyktBarn(søknadsperiode);
         psb.medTilsynsordning(new Tilsynsordning().medPerioder(Map.of(new Periode(LocalDate.now(), null), new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7)))));
         var feil = verifyHarFeil(psb);
-        feilInneholderFeilkode(feil, "NullPointerException");
+        feilInneholderFeilkode(feil, "påkrevd");
     }
 
     @Test
@@ -344,7 +344,7 @@ public class PleiepengerBarnSøknadValidatorTest {
         psb.medSøknadsperiode(new Periode(LocalDate.now().plusDays(2), LocalDate.now()));
 
         var feil = verifyHarFeil(psb);
-        assertThat(feil.size()).isEqualTo(7);
+        feilInneholderFeilkode(feil, "ugyldigPeriode");
     }
 
     @Test
@@ -358,14 +358,38 @@ public class PleiepengerBarnSøknadValidatorTest {
     }
 
     @Test
-    public void feilIUttaksperidodeFomTom() {
+    public void feilIUttaksperiodeFomTom() {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now());
         var psb = TestUtils.komplettYtelsePsb(søknadsperiode);
         psb.medUttak(new Uttak().medPerioder(Map.of(new Periode(LocalDate.now().plusDays(2), LocalDate.now()), new UttakPeriodeInfo(Duration.ofHours(8)))));
 
         var feil = verifyHarFeil(psb);
-        feilInneholderFeilkode(feil, "IllegalArgumentException");
+        feilInneholderFeilkode(feil, "ugyldigPeriode");
     }
+
+    @Test
+    public void feilITrePerioderISammeObjekt() {
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now());
+        var stpEn = LocalDate.now();
+        var periodeEn = new Periode(stpEn.plusDays(2), stpEn.minusDays(2));
+
+        var stpTo = LocalDate.now().plusWeeks(1);
+        var periodeTo = new Periode(stpTo.plusDays(2), stpTo.minusDays(2));
+
+        var stpTre = LocalDate.now().plusWeeks(2);
+        var periodeTre = new Periode(stpTre.plusDays(2), stpTre.minusDays(2));
+
+        var psb = TestUtils.komplettYtelsePsb(søknadsperiode);
+        psb.medArbeidstid(new Arbeidstid().medArbeidstaker(List.of(new Arbeidstaker(null, Organisasjonsnummer.of("1122"), new ArbeidstidInfo(Map.of(
+                periodeEn, new ArbeidstidPeriodeInfo(Duration.ofHours(8), Duration.ZERO),
+                periodeTo, new ArbeidstidPeriodeInfo(Duration.ofHours(8), Duration.ZERO),
+                periodeTre, new ArbeidstidPeriodeInfo(Duration.ofHours(8), Duration.ZERO)))))));
+
+        var feil = verifyHarFeil(psb);
+        feilInneholderFeilkode(feil, "ugyldigPeriode");
+        assertThat(feil.size()).isEqualTo(3);
+    }
+
 
     private void feilInneholderFeilkode(List<Feil> feil, String feilkode) {
         assertThat(feil

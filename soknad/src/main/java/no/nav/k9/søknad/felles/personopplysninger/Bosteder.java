@@ -1,6 +1,5 @@
 package no.nav.k9.søknad.felles.personopplysninger;
 
-import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableMap;
 import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPeriode;
 import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPerioder;
