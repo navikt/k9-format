@@ -51,11 +51,4 @@ public class Tilsynsordning {
         this.perioderSomSkalSlettes = (perioderSomSkalSlettes == null) ? new TreeMap<>() : new TreeMap<>(perioderSomSkalSlettes);
         return this;
     }
-
-//    @Size(max=0, message="${validatedValue}")
-//    private List<Feil> getValiderPerioder() {
-//        return perioder.isEmpty()
-//                ? List.of()
-//                : validerPerioder(perioder);
-//    }
 }
