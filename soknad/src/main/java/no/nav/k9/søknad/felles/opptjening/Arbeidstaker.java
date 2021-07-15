@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
+import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -27,11 +28,18 @@ public class Arbeidstaker {
     @Valid
     private Organisasjonsnummer organisasjonsnummer;
 
+    @JsonProperty("ansettelsePeriode")
+    @Valid
+    private Periode ansettelsePeriode;
+
     @JsonCreator
     public Arbeidstaker(@JsonProperty(value = "norskIdentitetsnummer") @Valid NorskIdentitetsnummer norskIdentitetsnummer,
-                        @JsonProperty(value = "organisasjonsnummer") @Valid Organisasjonsnummer organisasjonsnummer) {
+                        @JsonProperty(value = "organisasjonsnummer") @Valid Organisasjonsnummer organisasjonsnummer,
+                        @JsonProperty(value = "ansettelsePeriode") @Valid Periode ansettelsePeriode
+                        ) {
         this.norskIdentitetsnummer = norskIdentitetsnummer;
         this.organisasjonsnummer = organisasjonsnummer;
+        this.ansettelsePeriode = ansettelsePeriode;
     }
 
     public Arbeidstaker() {
@@ -68,5 +76,13 @@ public class Arbeidstaker {
 
     public void setOrganisasjonsnummer(Organisasjonsnummer organisasjonsnummer) {
         this.organisasjonsnummer = organisasjonsnummer;
+    }
+
+    public Periode getAnsettelsePeriode() {
+        return ansettelsePeriode;
+    }
+
+    public void setAnsettelsePeriode(Periode ansettelsePeriode) {
+        this.ansettelsePeriode = ansettelsePeriode;
     }
 }
