@@ -1,13 +1,18 @@
 package no.nav.k9.søknad.felles.opptjening;
 
-import com.fasterxml.jackson.annotation.*;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.unmodifiableList;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Collections.emptyList;
-import static java.util.Collections.unmodifiableList;
+import javax.validation.Valid;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -28,17 +33,24 @@ public class OpptjeningAktivitet {
     @JsonProperty(value = "arbeidstaker")
     private List<Arbeidstaker> arbeidstaker;
 
+    @Valid
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    @JsonProperty(value = "utenlandskeArbeidsforhold")
+    private List<UtenlandskArbeidsforhold> utenlandskeArbeidsforhold;
+
     public OpptjeningAktivitet() {
         //
     }
 
     @JsonCreator
     public OpptjeningAktivitet(@JsonProperty(value = "arbeidstaker") @Valid List<Arbeidstaker> arbeidstaker,
-                           @JsonProperty(value = "selvstendigNæringsdrivende") List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende,
-                           @JsonProperty(value = "frilanser") Frilanser frilanser) {
+                           @JsonProperty(value = "selvstendigNæringsdrivende") @Valid List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende,
+                           @JsonProperty(value = "frilanser") @Valid Frilanser frilanser,
+                           @JsonProperty(value = "utenlandskeArbeidsforhold") List<UtenlandskArbeidsforhold> utenlandskeArbeidsforhold) {
         this.arbeidstaker = arbeidstaker;
         this.selvstendigNæringsdrivende = (selvstendigNæringsdrivende == null) ? emptyList() : unmodifiableList(selvstendigNæringsdrivende);
         this.frilanser = frilanser;
+        this.utenlandskeArbeidsforhold = utenlandskeArbeidsforhold;
     }
 
     @Deprecated
@@ -91,11 +103,30 @@ public class OpptjeningAktivitet {
         return this;
     }
 
+    public List<UtenlandskArbeidsforhold> getUtenlandskeArbeidsforhold() {
+        return utenlandskeArbeidsforhold;
+    }
+
+    public OpptjeningAktivitet medUtenlandskArbeidsforhold(UtenlandskArbeidsforhold utenlandskArbeidsforhold) {
+        if (this.utenlandskeArbeidsforhold == null)
+            this.utenlandskeArbeidsforhold = new ArrayList<>();
+        this.utenlandskeArbeidsforhold.add(utenlandskArbeidsforhold);
+        return this;
+    }
+
+    public OpptjeningAktivitet medUtenlandskeArbeidsforhold(List<UtenlandskArbeidsforhold> utenlandskeArbeidsforhold) {
+        if (this.utenlandskeArbeidsforhold == null)
+            this.utenlandskeArbeidsforhold = new ArrayList<>();
+        this.utenlandskeArbeidsforhold.addAll(utenlandskeArbeidsforhold);
+        return this;
+    }
+
     @Deprecated
     public static final class Builder {
         private List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende = new ArrayList<>();
         private Frilanser frilanser;
         private List<Arbeidstaker> arbeidstaker = new ArrayList<>();
+        private List<UtenlandskArbeidsforhold> utenlandskeArbeidsforhold = new ArrayList<>();
 
         private Builder() {
         }
@@ -115,6 +146,11 @@ public class OpptjeningAktivitet {
             return this;
         }
 
+        public Builder utenlandskeArbeidsforhold(List<UtenlandskArbeidsforhold> utenlandskeArbeidsforhold) {
+            this.utenlandskeArbeidsforhold.addAll(utenlandskeArbeidsforhold);
+            return this;
+        }
+
         public Builder selvstendigNæringsdrivende(SelvstendigNæringsdrivende selvstendigNæringsdrivende) {
             this.selvstendigNæringsdrivende.add(selvstendigNæringsdrivende);
             return this;
@@ -126,7 +162,7 @@ public class OpptjeningAktivitet {
         }
 
         public OpptjeningAktivitet build() {
-            return new OpptjeningAktivitet(arbeidstaker, selvstendigNæringsdrivende, frilanser);
+            return new OpptjeningAktivitet(arbeidstaker, selvstendigNæringsdrivende, frilanser, utenlandskeArbeidsforhold);
         }
     }
 }
