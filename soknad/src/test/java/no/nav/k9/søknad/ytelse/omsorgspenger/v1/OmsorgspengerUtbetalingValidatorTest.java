@@ -7,15 +7,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-import no.nav.k9.søknad.felles.fravær.AktivitetFravær;
 import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
+import no.nav.k9.søknad.felles.fravær.AktivitetFravær;
 import no.nav.k9.søknad.felles.fravær.FraværPeriode;
 import no.nav.k9.søknad.felles.fravær.FraværÅrsak;
+import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 
@@ -105,7 +105,7 @@ class OmsorgspengerUtbetalingValidatorTest {
         static OmsorgspengerUtbetaling minimumSøknad() {
             return new OmsorgspengerUtbetaling(
                     null,
-                    new OpptjeningAktivitet(null,null, null),
+                    new OpptjeningAktivitet(null,null, null, null),
                     List.of(
                             new FraværPeriode(
                                     null,
