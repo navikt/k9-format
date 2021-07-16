@@ -105,7 +105,7 @@ class OmsorgspengerUtbetalingValidatorTest {
         static OmsorgspengerUtbetaling minimumSøknad() {
             return new OmsorgspengerUtbetaling(
                     null,
-                    new OpptjeningAktivitet(null,null, null, null),
+                    new OpptjeningAktivitet(null,null, null, null, null),
                     List.of(
                             new FraværPeriode(
                                     null,
