@@ -8,8 +8,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import no.nav.k9.søknad.felles.type.AnnenAktivitetType;
 import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.felles.type.VirksomhetType;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -21,17 +21,17 @@ public class AnnenAktivitet {
     @NotNull
     private Periode periode;
 
-    @JsonProperty(value = "virksomhetstype")
+    @JsonProperty(value = "annenAktivitetType")
     @Valid
     @NotNull
-    private VirksomhetType virksomhetType;
+    private AnnenAktivitetType annenAktivitetType;
 
 
     @JsonCreator
     public AnnenAktivitet(@JsonProperty(value = "periode") @Valid @NotNull Periode periode,
-                          @JsonProperty(value = "virksomhetstype") @Valid @NotNull VirksomhetType virksomhetType) {
+                          @JsonProperty(value = "annenAktivitetType") @Valid @NotNull AnnenAktivitetType annenAktivitetType) {
         this.periode = periode;
-        this.virksomhetType = virksomhetType;
+        this.annenAktivitetType = annenAktivitetType;
     }
 
     public AnnenAktivitet() {
@@ -45,11 +45,11 @@ public class AnnenAktivitet {
         this.periode = periode;
     }
 
-    public VirksomhetType getVirksomhetType() {
-        return virksomhetType;
+    public AnnenAktivitetType getAnnenAktivitetType() {
+        return annenAktivitetType;
     }
 
-    public void setVirksomhetType(VirksomhetType virksomhetType) {
-        this.virksomhetType = virksomhetType;
+    public void setAnnenAktivitetType(AnnenAktivitetType annenAktivitetType) {
+        this.annenAktivitetType = annenAktivitetType;
     }
 }
