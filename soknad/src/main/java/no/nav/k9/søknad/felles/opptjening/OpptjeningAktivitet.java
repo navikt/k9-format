@@ -132,6 +132,20 @@ public class OpptjeningAktivitet {
         return this;
     }
 
+    public OpptjeningAktivitet medAnnenAktivitet(AnnenAktivitet annenAktivitet) {
+        if (this.andreAktiviteter == null)
+            this.andreAktiviteter = new ArrayList<>();
+        this.andreAktiviteter.add(annenAktivitet);
+        return this;
+    }
+
+    public OpptjeningAktivitet medAndreAktiviteter(List<AnnenAktivitet> andreAktiviteter) {
+        if (this.andreAktiviteter == null)
+            this.andreAktiviteter = new ArrayList<>();
+        this.andreAktiviteter.addAll(andreAktiviteter);
+        return this;
+    }
+
     @Deprecated
     public static final class Builder {
         private List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende = new ArrayList<>();
