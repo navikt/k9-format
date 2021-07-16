@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -27,11 +26,10 @@ import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.felles.type.Språk;
 import no.nav.k9.søknad.felles.type.SøknadId;
 import no.nav.k9.søknad.ytelse.Ytelse;
-import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-public class Søknad implements Innsending {
+public class Søknad<Y extends Ytelse> implements Innsending {
 
     @Valid
     @NotNull
@@ -67,7 +65,7 @@ public class Søknad implements Innsending {
     @Valid
     @NotNull
     @JsonProperty(value = "ytelse", required = true)
-    private Ytelse ytelse;
+    private Y ytelse;
 
     public Søknad() {
         //
@@ -79,7 +77,7 @@ public class Søknad implements Innsending {
                   @JsonProperty(value = "mottattDato", required = true) @Valid @NotNull ZonedDateTime mottattDato,
                   @JsonProperty(value = "søker", required = true) @Valid @NotNull Søker søker,
                   @JsonProperty(value = "språk", required = false) @Valid Språk språk,
-                  @JsonProperty(value = "ytelse", required = true) @Valid @NotNull Ytelse ytelse) {
+                  @JsonProperty(value = "ytelse", required = true) @Valid @NotNull Y ytelse) {
         this.søknadId = søknadId;
         this.versjon = versjon;
         this.mottattDato = mottattDato;
@@ -92,7 +90,7 @@ public class Søknad implements Innsending {
                   @JsonProperty(value = "versjon", required = true) @Valid @NotNull Versjon versjon,
                   @JsonProperty(value = "mottattDato", required = true) @Valid @NotNull ZonedDateTime mottattDato,
                   @JsonProperty(value = "søker", required = true) @Valid @NotNull Søker søker,
-                  @JsonProperty(value = "ytelse", required = true) @Valid @NotNull Ytelse ytelse) {
+                  @JsonProperty(value = "ytelse", required = true) @Valid @NotNull Y ytelse) {
         this(søknadId, versjon, mottattDato, søker, Språk.NORSK_BOKMÅL, ytelse);
     }
 
@@ -127,42 +125,42 @@ public class Søknad implements Innsending {
         this.mottattDato = mottattDato;
     }
 
-    public Søknad medMottattDato(ZonedDateTime mottattDato) {
+    public Søknad<Y> medMottattDato(ZonedDateTime mottattDato) {
         this.mottattDato = mottattDato;
         return this;
     }
 
-    public Søknad medSpråk(Språk språk) {
+    public Søknad<Y> medSpråk(Språk språk) {
         this.språk = språk;
         return this;
     }
 
-    public Søknad medSøknadId(String søknadId) {
+    public Søknad<Y> medSøknadId(String søknadId) {
         this.søknadId = new SøknadId(søknadId);
         return this;
     }
 
-    public Søknad medSøknadId(SøknadId søknadId) {
+    public Søknad<Y> medSøknadId(SøknadId søknadId) {
         this.søknadId = søknadId;
         return this;
     }
 
-    public Søknad medVersjon(String versjon) {
+    public Søknad<Y> medVersjon(String versjon) {
         this.versjon = new Versjon(versjon);
         return this;
     }
 
-    public Søknad medVersjon(Versjon versjon) {
+    public Søknad<Y> medVersjon(Versjon versjon) {
         this.versjon = versjon;
         return this;
     }
 
-    public Søknad medSøker(Søker søker) {
+    public Søknad<Y> medSøker(Søker søker) {
         this.søker = søker;
         return this;
     }
 
-    public Søknad medYtelse(Ytelse ytelse) {
+    public Søknad<Y> medYtelse(Y ytelse) {
         this.ytelse = ytelse;
         return this;
     }
@@ -184,22 +182,22 @@ public class Søknad implements Innsending {
         return journalposter;
     }
 
-    public Søknad medJournalpost(Journalpost journalpost) {
+    public Søknad<Y> medJournalpost(Journalpost journalpost) {
         this.journalposter.add(Objects.requireNonNull(journalpost, "journalpost"));
         return this;
     }
 
-    public Søknad medJournalposter(List<Journalpost> journalposter) {
+    public Søknad<Y> medJournalposter(List<Journalpost> journalposter) {
         this.journalposter.addAll(Objects.requireNonNull(journalposter, "journalposter"));
         return this;
     }
 
     @SuppressWarnings("unchecked")
-    public <Y extends Ytelse> Y getYtelse() {
-        return (Y) ytelse;
+    public Y getYtelse() {
+        return ytelse;
     }
 
-    public void setYtelse(Ytelse ytelse) {
+    public void setYtelse (Y ytelse) {
         this.ytelse = ytelse;
     }
 
@@ -207,15 +205,15 @@ public class Søknad implements Innsending {
         private SerDes() {
         }
 
-        public static String serialize(Søknad søknad) {
+        public static String serialize(Søknad<?> søknad) {
             return JsonUtils.toString(søknad);
         }
 
-        public static Søknad deserialize(String søknad) {
+        public static Søknad<?> deserialize(String søknad) {
             return JsonUtils.fromString(søknad, Søknad.class);
         }
 
-        public static Søknad deserialize(ObjectNode node) {
+        public static Søknad<?> deserialize(ObjectNode node) {
             try {
                 return JsonUtils.getObjectMapper().treeToValue(node, Søknad.class);
             } catch (IOException e) {

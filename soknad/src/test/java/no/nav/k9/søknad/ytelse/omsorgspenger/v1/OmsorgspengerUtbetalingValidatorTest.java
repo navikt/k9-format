@@ -71,7 +71,7 @@ class OmsorgspengerUtbetalingValidatorTest {
         assertThat(feil).isEmpty();
     }
 
-    private void verifyIngenFeil(Søknad søknad) {
+    private void verifyIngenFeil(Søknad<?> søknad) {
         final List<Feil> feil = validator.valider(søknad.getYtelse());
         assertThat(feil).isEmpty();
     }
@@ -94,11 +94,11 @@ class OmsorgspengerUtbetalingValidatorTest {
             }
         }
 
-        static Søknad komplettJsonSøknad() {
+        static Søknad<?> komplettJsonSøknad() {
             return Søknad.SerDes.deserialize(jsonFromFile("komplett-søknad-omp-utbetaling-snf.json"));
         }
 
-        static Søknad minimumJsonSøknad() {
+        static Søknad<?> minimumJsonSøknad() {
             return Søknad.SerDes.deserialize(jsonFromFile("minimum-søknad-omp-utbetaling-snf.json"));
         }
 
