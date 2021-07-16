@@ -38,6 +38,11 @@ public class OpptjeningAktivitet {
     @JsonProperty(value = "utenlandskeArbeidsforhold")
     private List<UtenlandskArbeidsforhold> utenlandskeArbeidsforhold;
 
+    @Valid
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    @JsonProperty(value = "andreAktiviteter")
+    private List<AnnenAktivitet> andreAktiviteter;
+
     public OpptjeningAktivitet() {
         //
     }
@@ -46,11 +51,13 @@ public class OpptjeningAktivitet {
     public OpptjeningAktivitet(@JsonProperty(value = "arbeidstaker") @Valid List<Arbeidstaker> arbeidstaker,
                            @JsonProperty(value = "selvstendigNæringsdrivende") @Valid List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende,
                            @JsonProperty(value = "frilanser") @Valid Frilanser frilanser,
-                           @JsonProperty(value = "utenlandskeArbeidsforhold") List<UtenlandskArbeidsforhold> utenlandskeArbeidsforhold) {
+                           @JsonProperty(value = "utenlandskeArbeidsforhold") @Valid List<UtenlandskArbeidsforhold> utenlandskeArbeidsforhold,
+                           @JsonProperty(value = "andreAktiviteter") @Valid List<AnnenAktivitet> andreAktiviteter) {
         this.arbeidstaker = arbeidstaker;
         this.selvstendigNæringsdrivende = (selvstendigNæringsdrivende == null) ? emptyList() : unmodifiableList(selvstendigNæringsdrivende);
         this.frilanser = frilanser;
         this.utenlandskeArbeidsforhold = utenlandskeArbeidsforhold;
+        this.andreAktiviteter = andreAktiviteter;
     }
 
     @Deprecated
@@ -68,6 +75,10 @@ public class OpptjeningAktivitet {
 
     public List<Arbeidstaker> getArbeidstaker() {
         return arbeidstaker;
+    }
+
+    public List<AnnenAktivitet> getAndreAktiviteter() {
+        return andreAktiviteter;
     }
 
     public OpptjeningAktivitet medSelvstendigNæringsdrivende(List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende) {
@@ -127,6 +138,7 @@ public class OpptjeningAktivitet {
         private Frilanser frilanser;
         private List<Arbeidstaker> arbeidstaker = new ArrayList<>();
         private List<UtenlandskArbeidsforhold> utenlandskeArbeidsforhold = new ArrayList<>();
+        private List<AnnenAktivitet> andreAktiviteter = new ArrayList<>();
 
         private Builder() {
         }
@@ -161,8 +173,13 @@ public class OpptjeningAktivitet {
             return this;
         }
 
+        public Builder andreAktiviteter(List<AnnenAktivitet> andreAktiviteter) {
+            this.andreAktiviteter.addAll(andreAktiviteter);
+            return this;
+        }
+
         public OpptjeningAktivitet build() {
-            return new OpptjeningAktivitet(arbeidstaker, selvstendigNæringsdrivende, frilanser, utenlandskeArbeidsforhold);
+            return new OpptjeningAktivitet(arbeidstaker, selvstendigNæringsdrivende, frilanser, utenlandskeArbeidsforhold, andreAktiviteter);
         }
     }
 }
