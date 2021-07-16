@@ -51,8 +51,8 @@ public class OpptjeningAktivitet {
     public OpptjeningAktivitet(@JsonProperty(value = "arbeidstaker") @Valid List<Arbeidstaker> arbeidstaker,
                            @JsonProperty(value = "selvstendigNæringsdrivende") @Valid List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende,
                            @JsonProperty(value = "frilanser") @Valid Frilanser frilanser,
-                           @JsonProperty(value = "utenlandskeArbeidsforhold") List<UtenlandskArbeidsforhold> utenlandskeArbeidsforhold,
-                           @JsonProperty(value = "utenlandskeArbeidsforhold") List<AnnenAktivitet> andreAktiviteter) {
+                           @JsonProperty(value = "utenlandskeArbeidsforhold") @Valid List<UtenlandskArbeidsforhold> utenlandskeArbeidsforhold,
+                           @JsonProperty(value = "andreAktiviteter") @Valid List<AnnenAktivitet> andreAktiviteter) {
         this.arbeidstaker = arbeidstaker;
         this.selvstendigNæringsdrivende = (selvstendigNæringsdrivende == null) ? emptyList() : unmodifiableList(selvstendigNæringsdrivende);
         this.frilanser = frilanser;
