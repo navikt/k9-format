@@ -20,7 +20,7 @@ public class LovbestemtFerie {
 
     @JsonProperty(value="perioder", required = true)
     @Valid
-    private Map<Periode, LovbestemtFeriePeriodeInfo> perioder = new TreeMap<>();
+    private Map<@Valid Periode, @Valid LovbestemtFeriePeriodeInfo> perioder = new TreeMap<>();
 
     public LovbestemtFerie() {
     }
