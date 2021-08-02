@@ -57,24 +57,24 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
         feil.addAll(validerPerioder(psb.getUtenlandsopphold().getPerioder(), "utenlandsopphold.perioder"));
         feil.addAll(validerPerioder(psb.getBosteder().getPerioder(), "bosteder.perioder"));
         feil.addAll(validerPerioder(psb.getSøknadsperiodeList(), "søknadsperiode"));
-        feil.addAll(validerPerioder(psb.getEndringsperiode(), "endringsperiode"));
+//        feil.addAll(validerPerioder(psb.getEndringsperiode(), "endringsperiode"));
         feil.addAll(validerPerioder(psb.getBeredskap().getPerioder(), "beredskap.perioder"));
         feil.addAll(validerPerioder(psb.getNattevåk().getPerioder(), "nattevåk.perioder"));
         feil.addAll(validerPerioder(psb.getTilsynsordning().getPerioder(), "tilsynsordning.perioder"));
         feil.addAll(validerPerioder(psb.getLovbestemtFerie().getPerioder(), "lovbestemtFerie.perioder"));
-        feil.addAll(validerPerioder(psb.getUttak().getPerioder(), "uttak.perioder"));
+//        feil.addAll(validerPerioder(psb.getUttak().getPerioder(), "uttak.perioder"));
         feil.addAll(validerArbeidstid(psb.getArbeidstid()));
 
     }
 
     private void validerPerioderErKomplettOgGyldig(PleiepengerSyktBarn psb, List<Feil> feil) {
-        var tidsserier = new TidsserieValidator.Perioder(psb.getSøknadsperiodeList(), psb.getEndringsperiode(), feil);
-        feil.addAll(innenforGyldigperiode(tidsserier, psb.getBeredskap().getPerioder(), "beredskap.perioder"));
-        feil.addAll(innenforGyldigperiode(tidsserier, psb.getNattevåk().getPerioder(), "nattevåk.perioder"));
-        feil.addAll(innenforGyldigperiode(tidsserier, psb.getTilsynsordning().getPerioder(), "tilsynsordning.perioder"));
-        feil.addAll(innenforGyldigperiode(tidsserier, psb.getLovbestemtFerie().getPerioder(), "lovbestemtFerie.perioder"));
-        feil.addAll(komplettOginnenforGyldigperiode(tidsserier, psb.getUttak().getPerioder(), "uttak.perioder"));
-        feil.addAll(validerArbeidstidPerioderKomplettOgInnenforGyldigperiode(psb, tidsserier));
+//        var tidsserier = new TidsserieValidator.Perioder(psb.getSøknadsperiodeList(), psb.getEndringsperiode(), feil);
+//        feil.addAll(innenforGyldigperiode(tidsserier, psb.getBeredskap().getPerioder(), "beredskap.perioder"));
+//        feil.addAll(innenforGyldigperiode(tidsserier, psb.getNattevåk().getPerioder(), "nattevåk.perioder"));
+//        feil.addAll(innenforGyldigperiode(tidsserier, psb.getTilsynsordning().getPerioder(), "tilsynsordning.perioder"));
+//        feil.addAll(innenforGyldigperiode(tidsserier, psb.getLovbestemtFerie().getPerioder(), "lovbestemtFerie.perioder"));
+//        feil.addAll(komplettOginnenforGyldigperiode(tidsserier, psb.getUttak().getPerioder(), "uttak.perioder"));
+//        feil.addAll(validerArbeidstidPerioderKomplettOgInnenforGyldigperiode(psb, tidsserier));
     }
 
     private List<Feil> validerArbeidstidPerioderKomplettOgInnenforGyldigperiode(PleiepengerSyktBarn psb, TidsserieValidator.Perioder tidsserier) {

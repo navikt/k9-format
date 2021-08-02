@@ -24,8 +24,6 @@ import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie.LovbestemtFeriePeriodeInf
 import no.nav.k9.søknad.ytelse.psb.v1.Nattevåk;
 import no.nav.k9.søknad.ytelse.psb.v1.Omsorg;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
-import no.nav.k9.søknad.ytelse.psb.v1.Uttak;
-import no.nav.k9.søknad.ytelse.psb.v1.UttakPeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
@@ -102,8 +100,8 @@ final class TestUtils {
 
     static PleiepengerSyktBarn komplettYtelsePsb(Periode søknadsperiode) {
 
-        var uttak = new Uttak().medPerioder(Map.of(
-                søknadsperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
+//        var uttak = new Uttak().medPerioder(Map.of(
+//                søknadsperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
 
         var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("999999999"),
                 new ArbeidstidInfo(
@@ -154,7 +152,7 @@ final class TestUtils {
                 .medNattevåk(nattevåk)
                 .medTilsynsordning(tilsynsordning)
                 .medArbeidstid(arbeidstid)
-                .medUttak(uttak)
+//                .medUttak(uttak)
                 .medOmsorg(omsorg)
                 .medLovbestemtFerie(lovbestemtFerie)
                 .medBosteder(bosteder);
@@ -169,28 +167,30 @@ final class TestUtils {
         var uttakperiode = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-02-20"));
         var uttakperiode2 = new Periode(LocalDate.parse("2019-02-21"), LocalDate.parse("2019-10-20"));
 
-        var uttak = new Uttak().medPerioder(Map.of(
-            uttakperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30)),
-            uttakperiode2, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
+//        var uttak = new Uttak().medPerioder(Map.of(
+//            uttakperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30)),
+//            uttakperiode2, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
 
         var barn = new Barn(null, LocalDate.now());
 
         return new PleiepengerSyktBarn()
                 .medSøknadsperiode(søknadsperiode)
                 .medBarn(barn)
-                .medUttak(uttak);
+//                .medUttak(uttak)
+                ;
     }
 
     static PleiepengerSyktBarn minimumSøknadPleiepengerSyktBarn(Periode søknadsperiode) {
-        var uttak = new Uttak().medPerioder(Map.of(
-                søknadsperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
+//        var uttak = new Uttak().medPerioder(Map.of(
+//                søknadsperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
 
         var barn = new Barn(null, LocalDate.now());
 
         return new PleiepengerSyktBarn()
                 .medSøknadsperiode(søknadsperiode)
                 .medBarn(barn)
-                .medUttak(uttak);
+//                .medUttak(uttak)
+                ;
     }
 
     /*
@@ -199,7 +199,7 @@ final class TestUtils {
 
     static PleiepengerSyktBarn minimumEndringssøknad(Periode endringsperiode) {
         return new PleiepengerSyktBarn()
-                .medEndringsperiode(endringsperiode)
+//                .medEndringsperiode(endringsperiode)
                 .medBarn(new Barn(NorskIdentitetsnummer.of("11111111111"), null));
     }
 
@@ -213,7 +213,8 @@ final class TestUtils {
                 .medArbeidstid(new Arbeidstid().medArbeidstaker(List.of(
                         new Arbeidstaker(null, Organisasjonsnummer.of("999999999"), new ArbeidstidInfo(
                                 Map.of(periode, new ArbeidstidPeriodeInfo(Duration.ofHours(8), Duration.ofHours(4))))))))
-                .medUttak(new Uttak().medPerioder(Map.of(periode, new UttakPeriodeInfo(Duration.ofHours(3)))));
+//                .medUttak(new Uttak().medPerioder(Map.of(periode, new UttakPeriodeInfo(Duration.ofHours(3)))))
+                ;
     }
 
     static PleiepengerSyktBarn minimumSøknadOgEndringsSøknad(Periode søknadsperiode, Periode endringsperiode) {

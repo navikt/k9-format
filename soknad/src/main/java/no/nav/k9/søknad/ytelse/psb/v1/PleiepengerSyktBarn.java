@@ -45,7 +45,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     @Valid
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     @JsonProperty(value = "endringsperiode", required = true)
-    private List<@Valid Periode> endringsperiode = new ArrayList<>();
+    private List<@Valid LukketPeriode> endringsperiode = new ArrayList<>();
 
     @Valid
     @JsonProperty(value = "opptjeningAktivitet")
@@ -121,7 +121,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     @Override
     public Periode getSøknadsperiode() {
         final List<Periode> perioder = new ArrayList<>(søknadsperiode);
-        perioder.addAll(endringsperiode);
+//        perioder.addAll(endringsperiode);
 
         final var fom = perioder
                 .stream()
@@ -150,18 +150,18 @@ public class PleiepengerSyktBarn implements Ytelse {
         return this;
     }
 
-    public List<Periode> getEndringsperiode() {
+    public List<LukketPeriode> getEndringsperiode() {
         return (endringsperiode == null) ? null : Collections.unmodifiableList(endringsperiode);
     }
 
-    public PleiepengerSyktBarn medEndringsperiode(List<Periode> endringsperiodeList) {
+    public PleiepengerSyktBarn medEndringsperiode(List<LukketPeriode> endringsperiodeList) {
         if (this.endringsperiode == null)
             this.endringsperiode = new ArrayList<>();
         this.endringsperiode.addAll(endringsperiodeList);
         return this;
     }
 
-    public PleiepengerSyktBarn medEndringsperiode(Periode endringsperiode) {
+    public PleiepengerSyktBarn medEndringsperiode(LukketPeriode endringsperiode) {
         if (this.endringsperiode == null)
             this.endringsperiode = new ArrayList<>();
         this.endringsperiode.add(endringsperiode);

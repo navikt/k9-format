@@ -8,6 +8,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import javax.validation.constraints.AssertFalse;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
@@ -72,7 +73,10 @@ public class Periode implements Comparable<Periode> {
         return new Periode(periode.fraOgMed, periode.tilOgMed != null ? periode.tilOgMed : fallbackTilOgMed);
     }
 
-
+    @AssertFalse(message = "Fra og med (FOM) må være før eller lik til og med (TOM).")
+    private boolean isValid() {
+        return tilOgMed.isBefore(fraOgMed);
+    }
 
     @Override
     public int compareTo(Periode o) {
