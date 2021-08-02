@@ -21,7 +21,7 @@ public class Arbeidstid {
     @JsonProperty(value = "arbeidstakerList", required = true)
     @Valid
     @NotNull
-    private List<Arbeidstaker> arbeidstakerList = new ArrayList<>();
+    private List<@Valid Arbeidstaker> arbeidstakerList = new ArrayList<>();
 
     @Valid
     @JsonProperty(value = "frilanserArbeidstidInfo")

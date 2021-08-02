@@ -20,11 +20,11 @@ public class Tilsynsordning {
 
     @JsonProperty(value="perioder", required = true)
     @Valid
-    private Map<Periode, TilsynPeriodeInfo> perioder = new TreeMap<>();
+    private Map<@Valid Periode, @Valid TilsynPeriodeInfo> perioder = new TreeMap<>();
 
     @JsonProperty(value="perioderSomSkalSlettes", required = true)
     @Valid
-    private Map<Periode, TilsynPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
+    private Map<@Valid Periode, @Valid TilsynPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
     public Tilsynsordning() {
     }

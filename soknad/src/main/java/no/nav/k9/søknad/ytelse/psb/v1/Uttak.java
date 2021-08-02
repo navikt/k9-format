@@ -20,11 +20,11 @@ public class Uttak {
 
     @Valid
     @JsonProperty(value = "perioder")
-    private Map<Periode, UttakPeriodeInfo> perioder = new TreeMap<>();
+    private Map<@Valid Periode, @Valid UttakPeriodeInfo> perioder = new TreeMap<>();
 
     @JsonProperty(value="perioderSomSkalSlettes")
     @Valid
-    private Map<Periode, UttakPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
+    private Map<@Valid Periode, @Valid UttakPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
     public Uttak() {
     }
