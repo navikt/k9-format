@@ -36,7 +36,23 @@
             <name>GitHub Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/navikt/k9-format/</url>
         </repository>
+        <repository>
+            <!-- bruker SNAPSHOT versjon av eclipse-transformer (0.3.0-SNAPSHOT) -->
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
     </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/navikt/dev-jakarta-transform/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <scm>
         <connection>scm:git:https://github.com/navikt/k9-format.git</connection>
@@ -253,7 +269,6 @@
                 <artifactId>maven-source-plugin</artifactId>
                 <executions>
                     <execution>
-                         			<?m2e ignore?>
                         <id>attach-sources</id>
                         <goals>
                             <goal>jar</goal>
@@ -275,19 +290,11 @@
                         <configuration>
                             <target>
                                 <property name="plugin_classpath" refid="maven.plugin.classpath" />
-                                <java classname="org.eclipse.transformer.jakarta.JakartaTransformer">
+                                <java classname="no.nav.k9.dev.jakarta.App">
                                     <arg value="${project.build.directory}/${project.build.finalName}.jar" />
                                     <arg value="${project.build.directory}/${project.artifactId}-jakarta-${project.version}.jar" />
                                     <arg value="-q" />
                                     <arg value="-o" />
-                                    <arg value="-tr" />
-                                    <arg value="${maven.multiModuleProjectDirectory}/rules/jakarta-renames.properties" />
-                                    <arg value="-tv" />
-                                    <arg value="${maven.multiModuleProjectDirectory}/rules/jakarta-versions.properties" />
-                                    <arg value="-td" />
-                                    <arg value="${maven.multiModuleProjectDirectory}/rules/jakarta-direct.properties" />
-                                    <arg value="-tf" />
-                                    <arg value="${maven.multiModuleProjectDirectory}/rules/pom.properties" />
                                     <classpath>
                                         <pathelement path="${plugin_classpath}" />
                                     </classpath>
@@ -304,19 +311,11 @@
                         <configuration>
                             <target>
                                 <property name="plugin_classpath" refid="maven.plugin.classpath" />
-                                <java classname="org.eclipse.transformer.jakarta.JakartaTransformer">
+                                <java classname="no.nav.k9.dev.jakarta.App">
                                     <arg value="${project.build.directory}/${project.build.finalName}-sources.jar" />
                                     <arg value="${project.build.directory}/${project.artifactId}-jakarta-${project.version}-sources.jar" />
                                     <arg value="-q" />
                                     <arg value="-o" />
-                                    <arg value="-tr" />
-                                    <arg value="${maven.multiModuleProjectDirectory}/rules/jakarta-renames.properties" />
-                                    <arg value="-tv" />
-                                    <arg value="${maven.multiModuleProjectDirectory}/rules/jakarta-versions.properties" />
-                                    <arg value="-td" />
-                                    <arg value="${maven.multiModuleProjectDirectory}/rules/jakarta-direct.properties" />
-                                    <arg value="-tf" />
-                                    <arg value="${maven.multiModuleProjectDirectory}/rules/pom.properties" />
                                     <classpath>
                                         <pathelement path="${plugin_classpath}" />
                                     </classpath>
@@ -327,9 +326,9 @@
                 </executions>
                 <dependencies>
                     <dependency>
-                        <groupId>org.eclipse.transformer</groupId>
-                        <artifactId>org.eclipse.transformer.cli</artifactId>
-                        <version>0.2.0</version>
+                        <groupId>no.nav.k9.dev</groupId>
+                        <artifactId>dev-jakarta-transform</artifactId>
+                        <version>0.3.2</version>
                     </dependency>
                     <dependency>
                         <groupId>ant-contrib</groupId>
