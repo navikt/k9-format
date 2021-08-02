@@ -11,8 +11,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import no.nav.k9.søknad.felles.type.Periode;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class LovbestemtFerie {
@@ -20,21 +18,21 @@ public class LovbestemtFerie {
 
     @JsonProperty(value="perioder", required = true)
     @Valid
-    private Map<@Valid Periode, @Valid LovbestemtFeriePeriodeInfo> perioder = new TreeMap<>();
+    private Map<@Valid LukketPeriode, @Valid LovbestemtFeriePeriodeInfo> perioder = new TreeMap<>();
 
     public LovbestemtFerie() {
     }
 
-    public Map<Periode, LovbestemtFeriePeriodeInfo> getPerioder() {
+    public Map<LukketPeriode, LovbestemtFeriePeriodeInfo> getPerioder() {
         return unmodifiableMap(perioder);
     }
 
-    public LovbestemtFerie medPerioder(Map<Periode, LovbestemtFeriePeriodeInfo> perioder) {
+    public LovbestemtFerie medPerioder(Map<LukketPeriode, LovbestemtFeriePeriodeInfo> perioder) {
         this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
         return this;
     }
 
-    public LovbestemtFerie leggeTilPeriode(Periode periode, LovbestemtFeriePeriodeInfo tilsynPeriodeInfo) {
+    public LovbestemtFerie leggeTilPeriode(LukketPeriode periode, LovbestemtFeriePeriodeInfo tilsynPeriodeInfo) {
         this.perioder.put(periode, tilsynPeriodeInfo);
         return this;
     }

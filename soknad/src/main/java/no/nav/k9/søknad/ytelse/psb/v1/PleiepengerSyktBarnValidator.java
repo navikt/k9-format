@@ -99,7 +99,7 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
         return feil;
     }
 
-    private List<Feil> innenforGyldigperiode(TidsserieValidator.Perioder tidsserier, Map<Periode, ?> periodeMap, String felt) {
+    private List<Feil> innenforGyldigperiode(TidsserieValidator.Perioder tidsserier, Map<LukketPeriode, ?> periodeMap, String felt) {
         var feil = new ArrayList<Feil>();
         finnPerioderUtenfor(
                 toLocalDateTimeline(periodeMap, felt, feil), tidsserier)
@@ -107,7 +107,7 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
         return feil;
     }
 
-    private List<Feil> komplettOginnenforGyldigperiode(TidsserieValidator.Perioder tidsserier, Map<Periode, ?> periodeMap, String felt) {
+    private List<Feil> komplettOginnenforGyldigperiode(TidsserieValidator.Perioder tidsserier, Map<LukketPeriode, ?> periodeMap, String felt) {
         var feil = new ArrayList<Feil>();
         finnIkkeKomplettePerioderOgPerioderUtenfor(
                 toLocalDateTimeline(periodeMap, felt, feil), tidsserier)

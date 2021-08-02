@@ -13,8 +13,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import no.nav.k9.søknad.felles.type.Periode;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Beredskap {
@@ -22,34 +20,34 @@ public class Beredskap {
     @JsonProperty(value="perioder", required = true)
     @Valid
     @NotNull
-    private Map<@Valid Periode, @Valid BeredskapPeriodeInfo> perioder = new TreeMap<>();
+    private Map<@Valid LukketPeriode, @Valid BeredskapPeriodeInfo> perioder = new TreeMap<>();
 
     @JsonProperty(value="perioderSomSkalSlettes")
     @Valid
-    private Map<@Valid Periode, @Valid BeredskapPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
+    private Map<@Valid LukketPeriode, @Valid BeredskapPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
     public Beredskap() {
     }
 
-    public Map<Periode, BeredskapPeriodeInfo> getPerioder() {
+    public Map<LukketPeriode, BeredskapPeriodeInfo> getPerioder() {
         return unmodifiableMap(perioder);
     }
 
-    public Beredskap medPerioder(Map<Periode, BeredskapPeriodeInfo> perioder) {
+    public Beredskap medPerioder(Map<LukketPeriode, BeredskapPeriodeInfo> perioder) {
         this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
         return this;
     }
 
-    public Map<Periode, BeredskapPeriodeInfo> getPerioderSomSkalSlettes() {
+    public Map<LukketPeriode, BeredskapPeriodeInfo> getPerioderSomSkalSlettes() {
         return unmodifiableMap(perioderSomSkalSlettes);
     }
 
-    public Beredskap medPerioderSomSkalSlettes(Map<Periode, BeredskapPeriodeInfo> perioderSomSkalSlettes) {
+    public Beredskap medPerioderSomSkalSlettes(Map<LukketPeriode, BeredskapPeriodeInfo> perioderSomSkalSlettes) {
         this.perioderSomSkalSlettes = (perioderSomSkalSlettes == null) ? new TreeMap<>() : new TreeMap<>(perioderSomSkalSlettes);
         return this;
     }
 
-    public Beredskap leggeTilPeriode(Periode periode, BeredskapPeriodeInfo beredskapPeriodeInfo) {
+    public Beredskap leggeTilPeriode(LukketPeriode periode, BeredskapPeriodeInfo beredskapPeriodeInfo) {
         this.perioder.put(periode, beredskapPeriodeInfo);
         return this;
     }

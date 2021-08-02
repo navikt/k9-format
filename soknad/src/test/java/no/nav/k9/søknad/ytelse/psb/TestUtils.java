@@ -21,6 +21,7 @@ import no.nav.k9.søknad.ytelse.psb.v1.DataBruktTilUtledning;
 import no.nav.k9.søknad.ytelse.psb.v1.InfoFraPunsj;
 import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie;
 import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie.LovbestemtFeriePeriodeInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.LukketPeriode;
 import no.nav.k9.søknad.ytelse.psb.v1.Nattevåk;
 import no.nav.k9.søknad.ytelse.psb.v1.Omsorg;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
@@ -70,11 +71,11 @@ final class TestUtils {
 
     static PleiepengerSyktBarn komplettYtelsePsbMedDelperioder() {
 
-        var søknadsperiode = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-10-20"));
+        var søknadsperiode = new LukketPeriode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-10-20"));
         var psb = komplettYtelsePsb(søknadsperiode);
 
-        var delperiodeEn = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-02-20"));
-        var delperiodeTo = new Periode(LocalDate.parse("2019-02-21"), LocalDate.parse("2019-10-20"));
+        var delperiodeEn = new LukketPeriode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-02-20"));
+        var delperiodeTo = new LukketPeriode(LocalDate.parse("2019-02-21"), LocalDate.parse("2019-10-20"));
 
         psb.medBeredskap(new Beredskap().medPerioder(Map.of(
                 delperiodeEn, new Beredskap.BeredskapPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()),
@@ -85,11 +86,11 @@ final class TestUtils {
                 delperiodeTo, new Nattevåk.NattevåkPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()))));
 
         psb.medTilsynsordning( new Tilsynsordning().medPerioder(Map.of(
-                new Periode(LocalDate.parse("2019-01-01"), LocalDate.parse("2019-01-01")),
+                new LukketPeriode(LocalDate.parse("2019-01-01"), LocalDate.parse("2019-01-01")),
                 new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7).plusMinutes(30)),
-                new Periode(LocalDate.parse("2019-01-02"), LocalDate.parse("2019-01-02")),
+                new LukketPeriode(LocalDate.parse("2019-01-02"), LocalDate.parse("2019-01-02")),
                 new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7).plusMinutes(30)),
-                new Periode(LocalDate.parse("2019-01-03"), LocalDate.parse("2019-01-09")),
+                new LukketPeriode(LocalDate.parse("2019-01-03"), LocalDate.parse("2019-01-09")),
                 new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7).plusMinutes(30)))));
 
         psb.medLovbestemtFerie(new LovbestemtFerie().medPerioder(
@@ -98,7 +99,7 @@ final class TestUtils {
         return psb;
     }
 
-    static PleiepengerSyktBarn komplettYtelsePsb(Periode søknadsperiode) {
+    static PleiepengerSyktBarn komplettYtelsePsb(LukketPeriode søknadsperiode) {
 
 //        var uttak = new Uttak().medPerioder(Map.of(
 //                søknadsperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
@@ -126,11 +127,11 @@ final class TestUtils {
         var barn = new Barn(NorskIdentitetsnummer.of("11111111111"), null);
 
         var bosteder = new Bosteder().medPerioder(Map.of(
-                søknadsperiode,
+                tilPeriode(søknadsperiode),
                 new Bosteder.BostedPeriodeInfo().medLand(Landkode.NORGE)));
 
         var utenlandsopphold = new Utenlandsopphold().medPerioder(Map.of(
-                søknadsperiode, new Utenlandsopphold
+                tilPeriode(søknadsperiode), new Utenlandsopphold
                         .UtenlandsoppholdPeriodeInfo()
                         .medLand(Landkode.FINLAND)
                         .medÅrsak(Utenlandsopphold.UtenlandsoppholdÅrsak.BARNET_INNLAGT_I_HELSEINSTITUSJON_FOR_NORSK_OFFENTLIG_REGNING)));
@@ -163,9 +164,9 @@ final class TestUtils {
      */
 
     static PleiepengerSyktBarn minimumSøknadPleiepengerSyktBarnMedDelperioder() {
-        var søknadsperiode = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-10-20"));
-        var uttakperiode = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-02-20"));
-        var uttakperiode2 = new Periode(LocalDate.parse("2019-02-21"), LocalDate.parse("2019-10-20"));
+        var søknadsperiode = new LukketPeriode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-10-20"));
+        var uttakperiode = new LukketPeriode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-02-20"));
+        var uttakperiode2 = new LukketPeriode(LocalDate.parse("2019-02-21"), LocalDate.parse("2019-10-20"));
 
 //        var uttak = new Uttak().medPerioder(Map.of(
 //            uttakperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30)),
@@ -180,7 +181,7 @@ final class TestUtils {
                 ;
     }
 
-    static PleiepengerSyktBarn minimumSøknadPleiepengerSyktBarn(Periode søknadsperiode) {
+    static PleiepengerSyktBarn minimumSøknadPleiepengerSyktBarn(LukketPeriode søknadsperiode) {
 //        var uttak = new Uttak().medPerioder(Map.of(
 //                søknadsperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
 
@@ -197,13 +198,13 @@ final class TestUtils {
     Endring
      */
 
-    static PleiepengerSyktBarn minimumEndringssøknad(Periode endringsperiode) {
+    static PleiepengerSyktBarn minimumEndringssøknad(LukketPeriode endringsperiode) {
         return new PleiepengerSyktBarn()
 //                .medEndringsperiode(endringsperiode)
                 .medBarn(new Barn(NorskIdentitetsnummer.of("11111111111"), null));
     }
 
-    static PleiepengerSyktBarn fullEndringssøknad(Periode periode, Periode endringsperiode) {
+    static PleiepengerSyktBarn fullEndringssøknad(LukketPeriode periode, LukketPeriode endringsperiode) {
         return TestUtils.minimumEndringssøknad(endringsperiode)
                 .medBeredskap(new Beredskap().medPerioder(Map.of(
                         periode, new Beredskap.BeredskapPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()))))
@@ -217,7 +218,7 @@ final class TestUtils {
                 ;
     }
 
-    static PleiepengerSyktBarn minimumSøknadOgEndringsSøknad(Periode søknadsperiode, Periode endringsperiode) {
+    static PleiepengerSyktBarn minimumSøknadOgEndringsSøknad(LukketPeriode søknadsperiode, LukketPeriode endringsperiode) {
         return TestUtils.fullEndringssøknad(søknadsperiode, endringsperiode)
                 .medSøknadsperiode(søknadsperiode)
                 .medOmsorg(new Omsorg()
@@ -230,6 +231,10 @@ final class TestUtils {
     /*
     Util
      */
+
+    private static Periode tilPeriode(LukketPeriode lukketPeriode) {
+        return new Periode(lukketPeriode.getFraOgMed(), lukketPeriode.getTilOgMed());
+    }
 
     static String testTekst() {
         return "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";

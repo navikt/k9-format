@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.ytelse.psb.v1.LukketPeriode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -24,27 +24,27 @@ public class ArbeidstidInfo {
     @JsonProperty(value = "perioder", required = true)
     @Valid
     @NotNull
-    private Map<@Valid Periode, @Valid ArbeidstidPeriodeInfo> perioder;
+    private Map<@Valid LukketPeriode, @Valid ArbeidstidPeriodeInfo> perioder;
 
     @JsonCreator
     public ArbeidstidInfo(
-            @JsonProperty(value = "perioder", required = true) @Valid @NotNull Map<@Valid Periode, @Valid ArbeidstidPeriodeInfo> perioder) {
+            @JsonProperty(value = "perioder", required = true) @Valid @NotNull Map<@Valid LukketPeriode, @Valid ArbeidstidPeriodeInfo> perioder) {
         this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
     }
 
     public ArbeidstidInfo() {
     }
 
-    public Map<Periode, ArbeidstidPeriodeInfo> getPerioder() {
+    public Map<LukketPeriode, ArbeidstidPeriodeInfo> getPerioder() {
         return unmodifiableMap(perioder);
     }
 
-    public ArbeidstidInfo medPerioder(Map<Periode, ArbeidstidPeriodeInfo> perioder) {
+    public ArbeidstidInfo medPerioder(Map<LukketPeriode, ArbeidstidPeriodeInfo> perioder) {
         this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
         return this;
     }
 
-    public ArbeidstidInfo leggeTilPeriode(Periode periode, ArbeidstidPeriodeInfo arbeidstidPeriodeInfo) {
+    public ArbeidstidInfo leggeTilPeriode(LukketPeriode periode, ArbeidstidPeriodeInfo arbeidstidPeriodeInfo) {
         this.perioder.put(periode, arbeidstidPeriodeInfo);
         return this;
     }

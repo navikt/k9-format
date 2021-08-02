@@ -40,7 +40,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     @Valid
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     @JsonProperty(value = "søknadsperiode", required = true)
-    private List<@Valid Periode> søknadsperiode = new ArrayList<>();
+    private List<@Valid LukketPeriode> søknadsperiode = new ArrayList<>();
 
     @Valid
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
@@ -120,32 +120,32 @@ public class PleiepengerSyktBarn implements Ytelse {
 
     @Override
     public Periode getSøknadsperiode() {
-        final List<Periode> perioder = new ArrayList<>(søknadsperiode);
+        final List<LukketPeriode> perioder = new ArrayList<>(søknadsperiode);
 //        perioder.addAll(endringsperiode);
 
         final var fom = perioder
                 .stream()
-                .map(Periode::getFraOgMed)
+                .map(LukketPeriode::getFraOgMed)
                 .min(LocalDate::compareTo)
                 .orElseThrow();
         final var tom = perioder
                 .stream()
-                .map(Periode::getTilOgMed)
+                .map(LukketPeriode::getTilOgMed)
                 .max(LocalDate::compareTo)
                 .orElseThrow();
         return new Periode(fom, tom);
     }
 
-    public List<Periode> getSøknadsperiodeList() {
+    public List<LukketPeriode> getSøknadsperiodeList() {
         return søknadsperiode == null? null: Collections.unmodifiableList(søknadsperiode);
     }
 
-    public PleiepengerSyktBarn medSøknadsperiode(List<Periode> søknadsperiodeList) {
+    public PleiepengerSyktBarn medSøknadsperiode(List<LukketPeriode> søknadsperiodeList) {
         this.søknadsperiode.addAll(Objects.requireNonNull(søknadsperiodeList, "søknadsperiodeList"));
         return this;
     }
 
-    public PleiepengerSyktBarn medSøknadsperiode(Periode søknadsperiode) {
+    public PleiepengerSyktBarn medSøknadsperiode(LukketPeriode søknadsperiode) {
         this.søknadsperiode.add(Objects.requireNonNull(søknadsperiode, "søknadsperiode"));
         return this;
     }
