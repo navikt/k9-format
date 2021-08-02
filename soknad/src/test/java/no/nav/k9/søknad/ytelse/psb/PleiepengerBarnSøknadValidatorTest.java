@@ -359,14 +359,14 @@ public class PleiepengerBarnSøknadValidatorTest {
     }
 
     @Test
-    public void feilIUttaksperiodeFomTom() {
+    public void feilIUttaksperiodeTomErNull() {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now());
         var psb = TestUtils.komplettYtelsePsb(søknadsperiode);
         var uttakPeriode = new LukketPeriode(LocalDate.now().plusDays(2), null);
         psb.medUttak(new Uttak().medPerioder(Map.of(uttakPeriode, new UttakPeriodeInfo(Duration.ofHours(8)))));
 
         var feil = valider(psb);
-        feilInneholderFeilkode(feil, "ugyldigPeriode");
+        feilInneholderFeilkode(feil, "påkrevd");
     }
 
     @Test
