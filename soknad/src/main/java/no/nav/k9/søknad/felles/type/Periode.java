@@ -1,30 +1,36 @@
 package no.nav.k9.søknad.felles.type;
 
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.Map;
 import java.util.Objects;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
 
+import javax.validation.Valid;
 import javax.validation.constraints.AssertFalse;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+
 
 public class Periode implements Comparable<Periode> {
     static final String ÅPEN = "..";
     static final String SKILLE = "/";
 
+    @Valid
+    @NotNull
     private LocalDate fraOgMed;
 
+    @Valid
+    @NotNull
     private LocalDate tilOgMed;
 
+
+    @Valid
+    @NotNull
     @JsonValue
     private String iso8601;
 
     @JsonCreator
-    public Periode(String iso8601) {
+    public Periode(@Valid @NotNull String iso8601) {
         verifiserKanVæreGyldigPeriode(iso8601);
         String[] split = iso8601.split(SKILLE);
         this.fraOgMed = parseLocalDate(split[0]);
@@ -32,10 +38,22 @@ public class Periode implements Comparable<Periode> {
         this.iso8601 = iso8601;
     }
 
-    public Periode(LocalDate fraOgMed, LocalDate tilOgMed) {
+    public Periode(@Valid @NotNull LocalDate fraOgMed, @Valid @NotNull LocalDate tilOgMed) {
         this.fraOgMed = fraOgMed;
         this.tilOgMed = tilOgMed;
         this.iso8601 = toIso8601(fraOgMed) + SKILLE + toIso8601(tilOgMed);
+    }
+
+    @AssertFalse(message = "Fra og med (FOM) må være før eller lik til og med (TOM).")
+    private boolean isValidPeriode() {
+        return fomErFørTom();
+    }
+
+    private boolean fomErFørTom() {
+        if (tilOgMed == null || fraOgMed == null) {
+            return false;
+        }
+        return tilOgMed.isBefore(fraOgMed);
     }
 
     public LocalDate getFraOgMed() {
@@ -66,18 +84,6 @@ public class Periode implements Comparable<Periode> {
         return new Periode(iso8601);
     }
 
-    public static Periode forsikreLukketPeriode(Periode periode, LocalDate fallbackTilOgMed) {
-        Objects.requireNonNull(periode);
-        Objects.requireNonNull(periode.fraOgMed);
-        Objects.requireNonNull(fallbackTilOgMed);
-        return new Periode(periode.fraOgMed, periode.tilOgMed != null ? periode.tilOgMed : fallbackTilOgMed);
-    }
-
-    @AssertFalse(message = "Fra og med (FOM) må være før eller lik til og med (TOM).")
-    private boolean isValid() {
-        return tilOgMed.isBefore(fraOgMed);
-    }
-
     @Override
     public int compareTo(Periode o) {
         return this.iso8601.compareTo(o.iso8601);
@@ -104,12 +110,6 @@ public class Periode implements Comparable<Periode> {
         return iso8601;
     }
 
-    /** Sjekk om denne perioden inneholder (omslutter) angitt periode. */
-    public boolean inneholder(Periode periode) {
-        return (this.fraOgMed == null || (periode.fraOgMed != null && !this.fraOgMed.isAfter(periode.fraOgMed)))
-            && (this.tilOgMed == null || (periode.tilOgMed != null && !this.tilOgMed.isBefore(periode.tilOgMed)));
-    }
-
     private static void verifiserKanVæreGyldigPeriode(String iso8601) {
         if (iso8601 == null || iso8601.split(SKILLE).length != 2) {
             throw new IllegalArgumentException("Periode på ugylig format '" + iso8601 + "'.");
@@ -123,80 +123,13 @@ public class Periode implements Comparable<Periode> {
             return LocalDate.parse(iso8601);
     }
 
-    public static final class Utils {
-        private Utils() {
-        }
-
-        private static final Comparator<Periode> tilOgMedComparator = Comparator.comparing(periode -> periode.tilOgMed);
-
-        public static <PERIODE_INFO> void leggTilPeriode(
-                                                         Map<Periode, PERIODE_INFO> perioder,
-                                                         Periode nyPeriode,
-                                                         PERIODE_INFO nyPeriodeInfo) {
-            Objects.requireNonNull(perioder, "perioder");
-            Objects.requireNonNull(nyPeriode, "nyPeriode");
-            Objects.requireNonNull(nyPeriodeInfo, "nyPeriodeInfo");
-
-            if (perioder.containsKey(nyPeriode)) {
-                throw new IllegalArgumentException("Inneholder allerede " + nyPeriode.iso8601);
-            }
-
-            perioder.put(nyPeriode, nyPeriodeInfo);
-        }
-
-        public static <PERIODE_INFO> void leggTilPerioder(
-                                                          Map<Periode, PERIODE_INFO> perioder,
-                                                          Map<Periode, PERIODE_INFO> nyePerioder) {
-            Objects.requireNonNull(perioder);
-            Objects.requireNonNull(nyePerioder);
-            var nyeKeys = nyePerioder.keySet();
-
-            var duplikater = perioder
-                .keySet()
-                .stream()
-                .filter(nyeKeys::contains)
-                .collect(Collectors.toSet());
-
-            if (!duplikater.isEmpty()) {
-                var duplikatePerioder = String.join(", ", duplikater
-                    .stream()
-                    .map(it -> it.iso8601)
-                    .collect(Collectors.toSet()));
-                throw new IllegalArgumentException("Inneholder allerede " + duplikatePerioder);
-            }
-
-            perioder.putAll(nyePerioder);
-        }
-
-        public static LocalDate sisteTilOgMedTillatÅpnePerioder(Map<Periode, ?> periodeMap) {
-            return sisteTilOgMed(periodeMap);
-        }
-
-        public static LocalDate sisteTilOgMedBlantLukkedePerioder(Map<Periode, ?> periodeMap) {
-            LocalDate sisteTilOgMed = sisteTilOgMed(periodeMap);
-            if (sisteTilOgMed == null)
-                throw new IllegalStateException("En eller fler av periodene er åpne (uten tilOgMed satt).");
-            return sisteTilOgMed;
-        }
-
-        private static LocalDate sisteTilOgMed(Map<Periode, ?> periodeMap) {
-            if (periodeMap == null || periodeMap.isEmpty()) {
-                throw new IllegalStateException("Må være minst en periode for å finne siste tilOgMed");
-            }
-            if (periodeMap.keySet().stream().anyMatch(periode -> periode.tilOgMed == null)) {
-                return null;
-            }
-            SortedSet<Periode> perioder = new TreeSet<>(tilOgMedComparator);
-            perioder.addAll(periodeMap.keySet());
-            return perioder.last().tilOgMed;
-        }
-    }
-
     private static String toIso8601(LocalDate dato) {
         if (dato == null)
             return Periode.ÅPEN;
         else
             return dato.toString();
     }
+
+
 
 }

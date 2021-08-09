@@ -10,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.k9.søknad.felles.type.Landkode;
-import no.nav.k9.søknad.felles.type.Periode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -20,7 +19,7 @@ public class UtenlandskArbeidsforhold {
     @JsonProperty("ansettelsePeriode")
     @Valid
     @NotNull
-    private Periode ansettelsePeriode;
+    private ÅpenPeriode ansettelsePeriode;
 
     @JsonProperty(value = "land", required = true)
     @Valid
@@ -33,7 +32,7 @@ public class UtenlandskArbeidsforhold {
 
 
     @JsonCreator
-    public UtenlandskArbeidsforhold(@JsonProperty(value = "ansettelsePeriode") @Valid @NotNull Periode ansettelsePeriode,
+    public UtenlandskArbeidsforhold(@JsonProperty(value = "ansettelsePeriode") @Valid @NotNull ÅpenPeriode ansettelsePeriode,
                                     @JsonProperty(value = "land") @Valid @NotNull Landkode land,
                                     @JsonProperty(value = "arbeidsgiversnavn") String arbeidsgiversnavn
     ) {
@@ -45,11 +44,11 @@ public class UtenlandskArbeidsforhold {
     public UtenlandskArbeidsforhold() {
     }
 
-    public Periode getAnsettelsePeriode() {
+    public ÅpenPeriode getAnsettelsePeriode() {
         return ansettelsePeriode;
     }
 
-    public void setAnsettelsePeriode(Periode ansettelsePeriode) {
+    public void setAnsettelsePeriode(ÅpenPeriode ansettelsePeriode) {
         this.ansettelsePeriode = ansettelsePeriode;
     }
 

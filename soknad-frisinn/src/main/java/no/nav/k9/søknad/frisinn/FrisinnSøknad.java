@@ -1,20 +1,26 @@
 package no.nav.k9.søknad.frisinn;
 
-import com.fasterxml.jackson.annotation.*;
-import no.nav.k9.søknad.Innsending;
-import no.nav.k9.søknad.JsonUtils;
-import no.nav.k9.søknad.felles.Versjon;
-import no.nav.k9.søknad.felles.personopplysninger.Søker;
-import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.felles.type.Språk;
-import no.nav.k9.søknad.felles.type.SøknadId;
+import java.time.ZonedDateTime;
+import java.util.Objects;
 
 import javax.validation.Valid;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotNull;
-import java.time.ZonedDateTime;
-import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import no.nav.k9.søknad.Innsending;
+import no.nav.k9.søknad.JsonUtils;
+import no.nav.k9.søknad.felles.Versjon;
+import no.nav.k9.søknad.felles.personopplysninger.Søker;
+import no.nav.k9.søknad.felles.type.Språk;
+import no.nav.k9.søknad.felles.type.SøknadId;
+import no.nav.k9.søknad.felles.type.ÅpenPeriode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -48,7 +54,7 @@ public class FrisinnSøknad implements Innsending {
     @JsonProperty(value = "søknadsperiode", required = true)
     @Valid
     @NotNull
-    private Periode søknadsperiode;
+    private ÅpenPeriode søknadsperiode;
 
     @JsonProperty(value = "inntekter", required = true)
     @Valid
@@ -57,7 +63,7 @@ public class FrisinnSøknad implements Innsending {
 
     @JsonCreator
     private FrisinnSøknad(@JsonProperty(value = "søknadId", required = true) SøknadId søknadId,
-                          @JsonProperty(value = "søknadsperiode", required = true) Periode søknadsperiode,
+                          @JsonProperty(value = "søknadsperiode", required = true) ÅpenPeriode søknadsperiode,
                           @JsonProperty(value = "versjon", required = true) Versjon versjon,
                           @JsonProperty(value = "mottattDato", required = true) ZonedDateTime mottattDato,
                           @JsonProperty(value = "søker", required = true) Søker søker,
@@ -85,14 +91,14 @@ public class FrisinnSøknad implements Innsending {
         }
     }
 
-    private void validerSøknadInntektPeriode(String tekst, Periode inntektPeriode) {
+    private void validerSøknadInntektPeriode(String tekst, ÅpenPeriode inntektPeriode) {
         if (inntektPeriode==null) {
             throw new IllegalArgumentException("Mangler inntektperiode for " + tekst);
         }
         validerInnenforSøknadsperiode(tekst, inntektPeriode);
     }
 
-    private void validerInnenforSøknadsperiode(String tekst, Periode inntektPeriode) {
+    private void validerInnenforSøknadsperiode(String tekst, ÅpenPeriode inntektPeriode) {
         if (!søknadsperiode.inneholder(inntektPeriode)) {
             throw new IllegalArgumentException(
                     "Inntektperiode [" + inntektPeriode + "] må være innenfor søknadsperiode [" + søknadsperiode + " for " + tekst + "]");
@@ -136,7 +142,7 @@ public class FrisinnSøknad implements Innsending {
             ", søknadsperiode=" + søknadsperiode + ">";
     }
 
-    public Periode getSøknadsperiode() {
+    public ÅpenPeriode getSøknadsperiode() {
         return søknadsperiode;
     }
 
@@ -168,7 +174,7 @@ public class FrisinnSøknad implements Innsending {
         private ZonedDateTime mottattDato;
         private Språk språk = Språk.NORSK_BOKMÅL;
         private Søker søker;
-        private Periode søknadsperiode;
+        private ÅpenPeriode søknadsperiode;
         private Inntekter inntekter;
 
         private Builder() {
@@ -189,13 +195,13 @@ public class FrisinnSøknad implements Innsending {
             return this;
         }
 
-        public Builder søknadsperiode(Periode periode) {
+        public Builder søknadsperiode(ÅpenPeriode periode) {
             this.søknadsperiode = periode;
             return this;
         }
 
         public Builder søknadsperiode(String iso8601) {
-            return søknadsperiode(new Periode(iso8601));
+            return søknadsperiode(new ÅpenPeriode(iso8601));
         }
 
         public Builder søker(Søker søker) {

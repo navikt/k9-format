@@ -1,6 +1,5 @@
 package no.nav.k9.søknad.ytelse.psb.v1;
 
-import static no.nav.k9.søknad.PeriodeValidator.validerGyldigPeriode;
 import static no.nav.k9.søknad.TidsserieValidator.TidsserieUtils.toLocalDateTimeline;
 import static no.nav.k9.søknad.TidsserieValidator.finnIkkeKomplettePerioderOgPerioderUtenfor;
 import static no.nav.k9.søknad.TidsserieValidator.finnPerioderUtenfor;
@@ -19,8 +18,6 @@ import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 
 public class PleiepengerSyktBarnValidator extends YtelseValidator {
 
@@ -34,47 +31,21 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
         List<Feil> feil = validate.stream()
                 .map(this::toFeil)
                 .collect(Collectors.toList());
-        manglerIkkeSøknadEllerEndringsPerioder(psb, feil);
-        validerKomplettSøknad(psb, feil);
-        validerAllePerioder(psb, feil);
 
-
-        if(feil.isEmpty()) {
-            validerPerioderErKomplettOgGyldig(psb, feil);
-        }
-
-        //TODO valider OpptjeningAktivitet ??
-        //TODO valider Omsorg
-        //TODO valider Bosterder
-        //TODO valider Utlandsopphold
-
-        //TODO validere at felter som bare kan være i en søknad er satt hvis det er en søknadsperiode.
+        validerPerioderErKomplettOgGyldig(psb, feil);
 
         return feil;
     }
 
-    private void validerAllePerioder(PleiepengerSyktBarn psb, List<Feil> feil) {
-        feil.addAll(validerPerioder(psb.getUtenlandsopphold().getPerioder(), "utenlandsopphold.perioder"));
-        feil.addAll(validerPerioder(psb.getBosteder().getPerioder(), "bosteder.perioder"));
-        feil.addAll(validerPerioder(psb.getSøknadsperiodeList(), "søknadsperiode"));
-//        feil.addAll(validerPerioder(psb.getEndringsperiode(), "endringsperiode"));
-        feil.addAll(validerPerioder(psb.getBeredskap().getPerioder(), "beredskap.perioder"));
-        feil.addAll(validerPerioder(psb.getNattevåk().getPerioder(), "nattevåk.perioder"));
-        feil.addAll(validerPerioder(psb.getTilsynsordning().getPerioder(), "tilsynsordning.perioder"));
-        feil.addAll(validerPerioder(psb.getLovbestemtFerie().getPerioder(), "lovbestemtFerie.perioder"));
-//        feil.addAll(validerPerioder(psb.getUttak().getPerioder(), "uttak.perioder"));
-        feil.addAll(validerArbeidstid(psb.getArbeidstid()));
-
-    }
-
     private void validerPerioderErKomplettOgGyldig(PleiepengerSyktBarn psb, List<Feil> feil) {
-//        var tidsserier = new TidsserieValidator.Perioder(psb.getSøknadsperiodeList(), psb.getEndringsperiode(), feil);
-//        feil.addAll(innenforGyldigperiode(tidsserier, psb.getBeredskap().getPerioder(), "beredskap.perioder"));
-//        feil.addAll(innenforGyldigperiode(tidsserier, psb.getNattevåk().getPerioder(), "nattevåk.perioder"));
-//        feil.addAll(innenforGyldigperiode(tidsserier, psb.getTilsynsordning().getPerioder(), "tilsynsordning.perioder"));
-//        feil.addAll(innenforGyldigperiode(tidsserier, psb.getLovbestemtFerie().getPerioder(), "lovbestemtFerie.perioder"));
-//        feil.addAll(komplettOginnenforGyldigperiode(tidsserier, psb.getUttak().getPerioder(), "uttak.perioder"));
-//        feil.addAll(validerArbeidstidPerioderKomplettOgInnenforGyldigperiode(psb, tidsserier));
+        var tidsserier = new TidsserieValidator.Perioder(psb.getSøknadsperiodeList(), psb.getEndringsperiode(), feil);
+        feil.addAll(innenforGyldigperiode(tidsserier, psb.getBeredskap().getPerioder(), "beredskap.perioder"));
+        feil.addAll(innenforGyldigperiode(tidsserier, psb.getNattevåk().getPerioder(), "nattevåk.perioder"));
+        feil.addAll(innenforGyldigperiode(tidsserier, psb.getTilsynsordning().getPerioder(), "tilsynsordning.perioder"));
+        feil.addAll(innenforGyldigperiode(tidsserier, psb.getLovbestemtFerie().getPerioder(), "lovbestemtFerie.perioder"));
+        feil.addAll(komplettOginnenforGyldigperiode(tidsserier, psb.getUttak().getPerioder(), "uttak.perioder"));
+        feil.addAll(validerArbeidstidPerioderKomplettOgInnenforGyldigperiode(psb, tidsserier));
+
     }
 
     private List<Feil> validerArbeidstidPerioderKomplettOgInnenforGyldigperiode(PleiepengerSyktBarn psb, TidsserieValidator.Perioder tidsserier) {
@@ -99,80 +70,36 @@ public class PleiepengerSyktBarnValidator extends YtelseValidator {
         return feil;
     }
 
-    private List<Feil> innenforGyldigperiode(TidsserieValidator.Perioder tidsserier, Map<LukketPeriode, ?> periodeMap, String felt) {
+    private List<Feil> innenforGyldigperiode(TidsserieValidator.Perioder tidsserier, Map<Periode, ?> periodeMap, String felt) {
         var feil = new ArrayList<Feil>();
-        finnPerioderUtenfor(
-                toLocalDateTimeline(periodeMap, felt, feil), tidsserier)
-                .valider("beredskap", feil);
+        var test = toLocalDateTimeline(periodeMap, felt, feil);
+        if (feil.isEmpty()) {
+            finnPerioderUtenfor(test, tidsserier).valider("beredskap", feil);
+        }
+
         return feil;
     }
 
-    private List<Feil> komplettOginnenforGyldigperiode(TidsserieValidator.Perioder tidsserier, Map<LukketPeriode, ?> periodeMap, String felt) {
+    private List<Feil> komplettOginnenforGyldigperiode(TidsserieValidator.Perioder tidsserier, Map<Periode, ?> periodeMap, String felt) {
         var feil = new ArrayList<Feil>();
-        finnIkkeKomplettePerioderOgPerioderUtenfor(
-                toLocalDateTimeline(periodeMap, felt, feil), tidsserier)
-                .valider("uttak", feil);
+        var test = toLocalDateTimeline(periodeMap, felt, feil);
+        if (feil.isEmpty()) {
+            finnIkkeKomplettePerioderOgPerioderUtenfor(test, tidsserier)
+                    .valider("uttak", feil);
+        }
         return feil;
     }
 
     private Feil toFeil(ConstraintViolation<PleiepengerSyktBarn> constraintViolation) {
+        if (constraintViolation.getInvalidValue() == null) {
+            return new Feil(
+                    constraintViolation.getPropertyPath().toString(),
+                    PÅKREVD,
+                    constraintViolation.getMessage());
+        }
         return new Feil(
-                constraintViolation.getPropertyPath().toString(),
-                PÅKREVD,
-                constraintViolation.getMessage());
-    }
-
-    private void validerKomplettSøknad(PleiepengerSyktBarn psb, List<Feil> feil) {
-        if (psb.getBarn() == null) {
-            feil.add(new Feil("barn", "missingArgument","Barn kan ikke være null."));
-        }
-    }
-
-    private void manglerIkkeSøknadEllerEndringsPerioder(PleiepengerSyktBarn psb, List<Feil> feil) {
-        if ( (psb.getSøknadsperiodeList().isEmpty() && psb.getEndringsperiode().isEmpty())) {
-            feil.add(new Feil("søknadsperiode/endringsperiode", "missingArgument","Mangler søknadsperiode eller endringsperiode."));
-        }
-    }
-
-    public static List<Feil> validerArbeidstid(Arbeidstid arbeidstid) {
-        var feil = new ArrayList<Feil>();
-        if (!arbeidstid.getArbeidstakerList().isEmpty()) {
-            feil.addAll(validerArbeidstakerList(arbeidstid.getArbeidstakerList()));
-        }
-        if (arbeidstid.getFrilanserArbeidstidInfo().isPresent()) {
-            feil.addAll(validerPerioder(arbeidstid.getFrilanserArbeidstidInfo().get().getPerioder(),
-                    "arbeidstid.frilanserArbeidstidInfo.perioder"));
-        }
-        if (arbeidstid.getSelvstendigNæringsdrivendeArbeidstidInfo().isPresent()) {
-            feil.addAll(validerPerioder(arbeidstid.getSelvstendigNæringsdrivendeArbeidstidInfo().get().getPerioder(),
-                    "arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo.perioder"));
-        }
-        return feil;
-    }
-
-    public static ArrayList<Feil> validerArbeidstakerList(List<Arbeidstaker> arbeidstakers) {
-        var feil = new ArrayList<Feil>();
-        for (int i = 0; i < arbeidstakers.size(); i++) {
-            feil.addAll(validerPerioder(arbeidstakers.get(i).getArbeidstidInfo().getPerioder(),
-                    "arbeidstid.arbeidstaker[" + i + "].perioder"));
-        }
-        return feil;
-    }
-
-    public static List<Feil> validerPerioder(List<Periode> perioder, String felt) {
-        var feil = new ArrayList<Feil>();
-        for (int i = 0; i < perioder.size(); i++ ) {
-            validerGyldigPeriode(perioder.get(i), felt + "[" + i + "]", false, feil);
-        }
-        return feil;
-    }
-
-    public static List<Feil> validerPerioder(Map<Periode, ?> periodeMap, String felt) {
-        var feil = new ArrayList<Feil>();
-        var i = 0;
-        periodeMap.forEach((periode, o) -> {
-            validerGyldigPeriode(periode, felt + "[" + i + "]", false, feil);
-        });
-        return feil;
+                    constraintViolation.getPropertyPath().toString(),
+                    UGYLDIG_ARGUMENT,
+                    constraintViolation.getMessage());
     }
 }

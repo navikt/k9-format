@@ -1,25 +1,35 @@
 package no.nav.k9.søknad.felles.opptjening;
 
-import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.type.Landkode;
-import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
-import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.felles.type.VirksomhetType;
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.unmodifiableMap;
 
-import javax.validation.Valid;
-import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.unmodifiableMap;
-import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPeriode;
-import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPerioder;
+import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import no.nav.k9.søknad.felles.Feil;
+import no.nav.k9.søknad.felles.type.Landkode;
+import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
+import no.nav.k9.søknad.felles.type.VirksomhetType;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(value = Include.NON_EMPTY)
@@ -30,7 +40,7 @@ public class SelvstendigNæringsdrivende {
     @Valid
     @NotNull
     @NotEmpty
-    private final Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> perioder;
+    private final Map<@Valid ÅpenPeriode, @Valid SelvstendigNæringsdrivendePeriodeInfo> perioder;
 
     /** Orgnummer - påkrevd for norske selskaper, ikke for utenlandske enn så lenge. */
     @JsonProperty(value = "organisasjonsnummer")
@@ -46,7 +56,7 @@ public class SelvstendigNæringsdrivende {
         return new SelvstendigNæringsdrivende.Builder();
     }
 
-    public Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> getPerioder() {
+    public Map<ÅpenPeriode, SelvstendigNæringsdrivendePeriodeInfo> getPerioder() {
         return perioder;
     }
 
@@ -60,7 +70,7 @@ public class SelvstendigNæringsdrivende {
 
     @JsonCreator
     public SelvstendigNæringsdrivende(
-                                      @JsonProperty(value = "perioder", required = true) Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> perioder,
+                                      @JsonProperty(value = "perioder", required = true) Map<@Valid ÅpenPeriode, @Valid SelvstendigNæringsdrivendePeriodeInfo> perioder,
                                       @JsonProperty(value = "organisasjonsnummer", required = false) Organisasjonsnummer organisasjonsnummer,
                                       @JsonProperty(value = "virksomhetNavn", required = false) String virksomhetNavn) {
         this.perioder = (perioder == null) ? emptyMap() : unmodifiableMap(perioder);
@@ -82,7 +92,7 @@ public class SelvstendigNæringsdrivende {
     }
 
     public static final class Builder {
-        private Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> perioder;
+        private Map<ÅpenPeriode, SelvstendigNæringsdrivendePeriodeInfo> perioder;
         private Organisasjonsnummer organisasjonsnummer;
         private String virksomhetNavn;
 
@@ -90,13 +100,13 @@ public class SelvstendigNæringsdrivende {
             perioder = new HashMap<>();
         }
 
-        public Builder perioder(Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> perioder) {
-            leggTilPerioder(this.perioder, perioder);
+        public Builder perioder(Map<ÅpenPeriode, SelvstendigNæringsdrivendePeriodeInfo> perioder) {
+            this.perioder.putAll(perioder);
             return this;
         }
 
-        public Builder periode(Periode periode, SelvstendigNæringsdrivendePeriodeInfo selvstendigNæringsdrivendePeriodeInfo) {
-            leggTilPeriode(this.perioder, periode, selvstendigNæringsdrivendePeriodeInfo);
+        public Builder periode(ÅpenPeriode periode, SelvstendigNæringsdrivendePeriodeInfo selvstendigNæringsdrivendePeriodeInfo) {
+            this.perioder.put(periode, selvstendigNæringsdrivendePeriodeInfo);
             return this;
         }
 

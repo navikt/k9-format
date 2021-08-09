@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.felles.type.ÅpenPeriode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -31,10 +31,10 @@ public class Frilanser {
      */
     @JsonProperty(value = "inntekterSøknadsperiode")
     @Valid
-    private NavigableMap<Periode, PeriodeInntekt> inntekterSøknadsperiode;
+    private NavigableMap<ÅpenPeriode, PeriodeInntekt> inntekterSøknadsperiode;
 
     @JsonCreator
-    public Frilanser(@JsonProperty(value = "inntekterSøknadsperiode") Map<Periode, PeriodeInntekt> inntekterSøknadsperiode,
+    public Frilanser(@JsonProperty(value = "inntekterSøknadsperiode") Map<ÅpenPeriode, PeriodeInntekt> inntekterSøknadsperiode,
                      @JsonProperty(value = "søkerKompensasjon") Boolean søkerKompensasjon) {
         this.inntekterSøknadsperiode = (inntekterSøknadsperiode == null) ? Collections.emptyNavigableMap()
                 : Collections.unmodifiableNavigableMap(new TreeMap<>(inntekterSøknadsperiode));
@@ -45,7 +45,7 @@ public class Frilanser {
         return new Builder();
     }
 
-    public NavigableMap<Periode, PeriodeInntekt> getInntekterSøknadsperiode() {
+    public NavigableMap<ÅpenPeriode, PeriodeInntekt> getInntekterSøknadsperiode() {
         return inntekterSøknadsperiode;
     }
 
@@ -53,22 +53,22 @@ public class Frilanser {
         return søkerKompensasjon;
     }
 
-    public Periode getMaksSøknadsperiode() {
+    public ÅpenPeriode getMaksSøknadsperiode() {
         if (inntekterSøknadsperiode.isEmpty()) {
             return null;
         } else {
-            return new Periode(inntekterSøknadsperiode.firstKey().getFraOgMed(), inntekterSøknadsperiode.lastKey().getTilOgMed());
+            return new ÅpenPeriode(inntekterSøknadsperiode.firstKey().getFraOgMed(), inntekterSøknadsperiode.lastKey().getTilOgMed());
         }
     }
 
     public static final class Builder {
-        private Map<Periode, PeriodeInntekt> inntekterSøknadsperiode = new LinkedHashMap<>();
+        private Map<ÅpenPeriode, PeriodeInntekt> inntekterSøknadsperiode = new LinkedHashMap<>();
         private boolean søkerKompensasjon = true;
 
         private Builder() {
         }
 
-        public Builder inntekterSøknadsperiode(Map<Periode, PeriodeInntekt> inntekter) {
+        public Builder inntekterSøknadsperiode(Map<ÅpenPeriode, PeriodeInntekt> inntekter) {
             inntekterSøknadsperiode.putAll(inntekter);
             return this;
         }

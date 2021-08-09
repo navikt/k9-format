@@ -1,16 +1,5 @@
 package no.nav.k9.søknad.omsorgspenger.utbetaling.snf;
 
-import no.nav.k9.søknad.felles.opptjening.Frilanser;
-import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende;
-import no.nav.k9.søknad.felles.personopplysninger.Barn;
-import no.nav.k9.søknad.felles.personopplysninger.Søker;
-import no.nav.k9.søknad.felles.type.Landkode;
-import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
-import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
-import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.felles.type.SøknadId;
-import no.nav.k9.søknad.felles.type.VirksomhetType;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
@@ -19,6 +8,17 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
+
+import no.nav.k9.søknad.felles.opptjening.Frilanser;
+import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende;
+import no.nav.k9.søknad.felles.opptjening.ÅpenPeriode;
+import no.nav.k9.søknad.felles.personopplysninger.Barn;
+import no.nav.k9.søknad.felles.personopplysninger.Søker;
+import no.nav.k9.søknad.felles.type.Landkode;
+import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
+import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
+import no.nav.k9.søknad.felles.type.SøknadId;
+import no.nav.k9.søknad.felles.type.VirksomhetType;
 
 class TestUtils {
 
@@ -63,7 +63,7 @@ class TestUtils {
                                 .organisasjonsnummer(Organisasjonsnummer.of("816338352"))
                                 .virksomhetNavn("Alibaba Expresstoget")
                                 .perioder(Collections.singletonMap(
-                                        new Periode(LocalDate.parse("2018-11-11"), LocalDate.parse("2018-11-30")),
+                                        new ÅpenPeriode(LocalDate.parse("2018-11-11"), LocalDate.parse("2018-11-30")),
                                         SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
                                                 .virksomhetstyper(List.of(VirksomhetType.DAGMAMMA, VirksomhetType.FISKE, VirksomhetType.JORDBRUK_SKOGBRUK, VirksomhetType.ANNEN, VirksomhetType.UDEFINERT))
                                                 .bruttoInntekt(BigDecimal.valueOf(1_000_000))
@@ -101,7 +101,7 @@ class TestUtils {
                                 .organisasjonsnummer(Organisasjonsnummer.of("816338352"))
                                 .virksomhetNavn("Alibaba Expresstoget")
                                 .perioder(Collections.singletonMap(
-                                        new Periode(LocalDate.parse("2018-11-11"), LocalDate.parse("2018-11-30")),
+                                        new ÅpenPeriode(LocalDate.parse("2018-11-11"), LocalDate.parse("2018-11-30")),
                                         SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
                                                 .virksomhetstyper(List.of(VirksomhetType.DAGMAMMA, VirksomhetType.FISKE, VirksomhetType.JORDBRUK_SKOGBRUK, VirksomhetType.ANNEN, VirksomhetType.UDEFINERT))
                                                 .endringBegrunnelse("fordi")

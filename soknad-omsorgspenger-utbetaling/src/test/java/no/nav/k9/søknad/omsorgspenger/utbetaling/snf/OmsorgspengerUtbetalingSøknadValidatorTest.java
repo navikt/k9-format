@@ -18,11 +18,11 @@ import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.opptjening.Frilanser;
 import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende;
+import no.nav.k9.søknad.felles.opptjening.ÅpenPeriode;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.type.Landkode;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
-import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.VirksomhetType;
 
 @SuppressWarnings("removal")
@@ -88,7 +88,7 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
                 SelvstendigNæringsdrivende.builder()
                         .organisasjonsnummer(Organisasjonsnummer.of("816338352"))
                         .periode(
-                                new Periode(LocalDate.now().minusMonths(2), LocalDate.now()),
+                                new ÅpenPeriode(LocalDate.now().minusMonths(2), LocalDate.now()),
                                 SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder().build()
                         ).build()
         );
@@ -104,7 +104,7 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
                         .organisasjonsnummer(Organisasjonsnummer.of("816338352"))
                         .virksomhetNavn("ABC")
                         .periode(
-                                new Periode(LocalDate.now().minusMonths(2), LocalDate.now()),
+                                new ÅpenPeriode(LocalDate.now().minusMonths(2), LocalDate.now()),
                                 SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
                                         .bruttoInntekt(BigDecimal.valueOf(500_00))
                                         .virksomhetstyper(of(VirksomhetType.JORDBRUK_SKOGBRUK))
@@ -124,7 +124,7 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
                         .organisasjonsnummer(Organisasjonsnummer.of("816338352"))
                         .virksomhetNavn("ABC")
                         .periode(
-                                new Periode(LocalDate.now().minusMonths(2), LocalDate.now()),
+                                new ÅpenPeriode(LocalDate.now().minusMonths(2), LocalDate.now()),
                                 SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
                                         .bruttoInntekt(BigDecimal.valueOf(500_000))
                                         .virksomhetstyper(of(VirksomhetType.JORDBRUK_SKOGBRUK))
@@ -144,7 +144,7 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
                         .organisasjonsnummer(Organisasjonsnummer.of("816338352"))
                         .virksomhetNavn("ABC")
                         .periode(
-                                new Periode(LocalDate.now().minusMonths(2), LocalDate.now()),
+                                new ÅpenPeriode(LocalDate.now().minusMonths(2), LocalDate.now()),
                                 SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
                                         .bruttoInntekt(BigDecimal.valueOf(500_000))
                                         .virksomhetstyper(of(VirksomhetType.JORDBRUK_SKOGBRUK))
@@ -165,7 +165,7 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
                         .organisasjonsnummer(Organisasjonsnummer.of("816338352"))
                         .virksomhetNavn("ABC")
                         .periode(
-                                new Periode(LocalDate.now().minusMonths(2), LocalDate.now()),
+                                new ÅpenPeriode(LocalDate.now().minusMonths(2), LocalDate.now()),
                                 SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
                                         .bruttoInntekt(BigDecimal.valueOf(500_000))
                                         .virksomhetstyper(of(VirksomhetType.JORDBRUK_SKOGBRUK))

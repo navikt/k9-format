@@ -16,7 +16,7 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
-import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.felles.type.ÅpenPeriode;
 import no.nav.k9.søknad.felles.type.Språk;
 import no.nav.k9.søknad.felles.type.SøknadId;
 
@@ -69,15 +69,15 @@ public class FrisinnSøknadTest {
         var dato = LocalDate.of(2020, 03, 13);
         var datoSøknad = LocalDate.of(2020, 04, 01);
         var beløp = new BigDecimal("1000000.00");
-        var periodeFør = new Periode(dato.minusDays(20), dato.minusDays(1));
-        var periodeEtter = new Periode(datoSøknad, datoSøknad.plusDays(20));
+        var periodeFør = new ÅpenPeriode(dato.minusDays(20), dato.minusDays(1));
+        var periodeEtter = new ÅpenPeriode(datoSøknad, datoSøknad.plusDays(20));
         var periodeInntekt = new PeriodeInntekt(beløp);
 
         var frilanser = new Frilanser(Map.of(periodeEtter, periodeInntekt), true);
 
         var selvstendig = new SelvstendigNæringsdrivende(
-            medInntektFørSelvstendig ? Map.of(periodeFør, periodeInntekt, new Periode(null, dato.minusDays(21)), periodeInntekt)  : null,
-            Map.of(periodeEtter, periodeInntekt, new Periode(datoSøknad, null), periodeInntekt),
+            medInntektFørSelvstendig ? Map.of(periodeFør, periodeInntekt, new ÅpenPeriode(null, dato.minusDays(21)), periodeInntekt)  : null,
+            Map.of(periodeEtter, periodeInntekt, new ÅpenPeriode(datoSøknad, null), periodeInntekt),
             true,
             medRegnskapsførerNavn ? "Ola" : null,
             medRegnskapsførerTelefon ? "11111111" : null
@@ -85,7 +85,7 @@ public class FrisinnSøknadTest {
 
         var arbeidstaker = new Arbeidstaker(
                 Map.of(
-                        Periode.parse("2020-04-01/2020-04-22"),
+                        ÅpenPeriode.parse("2020-04-01/2020-04-22"),
                         new PeriodeInntekt(BigDecimal.valueOf(55555.50))
                 )
         );

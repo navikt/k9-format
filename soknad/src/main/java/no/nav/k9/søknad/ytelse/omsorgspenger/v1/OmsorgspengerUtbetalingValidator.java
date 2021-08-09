@@ -1,15 +1,17 @@
 package no.nav.k9.søknad.ytelse.omsorgspenger.v1;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import no.nav.k9.søknad.PeriodeValidator;
 import no.nav.k9.søknad.Validator;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.opptjening.Frilanser;
 import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende;
+import no.nav.k9.søknad.felles.opptjening.ÅpenPeriode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
     private final PeriodeValidator periodeValidator;
@@ -61,13 +63,14 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
         }
     }
 
+    @Deprecated
     private void validerSelvstendingNæringsdrivende(List<SelvstendigNæringsdrivende> selvstendigeVirksomheter, List<Feil> feil) {
         if (selvstendigeVirksomheter == null || selvstendigeVirksomheter.isEmpty())
             return;
         var index = 0;
         for (SelvstendigNæringsdrivende sn : selvstendigeVirksomheter) {
             String snFelt = "selvstendigNæringsdrivende[" + index + "]";
-            feil.addAll(this.periodeValidator.validerTillattOverlappOgÅpnePerioder(sn.getPerioder(), snFelt + ".perioder"));
+            feil.addAll(validerÅpenPerioder(sn.getPerioder(), snFelt + ".perioder"));
 
             sn.getPerioder().forEach((periode, snInfo) -> {
                 String periodeString = periode.getFraOgMed() + "-" + periode.getTilOgMed();
@@ -93,6 +96,35 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
                 }
             });
             index++;
+        }
+    }
+
+    @Deprecated
+    private List<Feil> validerÅpenPerioder(Map<ÅpenPeriode, ?> perioder,
+                                                  String felt) {
+        List<Feil> feil = new ArrayList<>();
+        perioder.forEach((periode, value) -> validerGyldigPeriode(periode, felt(felt, periode), feil));
+        return feil;
+    }
+
+    @Deprecated
+    private String felt(String felt, ÅpenPeriode periode) {
+        return felt + "[" + periode.getIso8601() + "]";
+    }
+
+    @Deprecated
+    private void validerGyldigPeriode(ÅpenPeriode periode,
+                                            String felt,
+                                            List<Feil> feil) {
+        if (periode == null) {
+            return;
+        }
+
+        if (periode.getFraOgMed() == null) {
+            feil.add(new Feil(felt, "påkrevd", "Fra og med (FOM) må være satt."));
+        }
+        else if (periode.getTilOgMed() != null && periode.getTilOgMed().isBefore(periode.getFraOgMed())) {
+            feil.add(new Feil(felt, "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM)."));
         }
     }
 }

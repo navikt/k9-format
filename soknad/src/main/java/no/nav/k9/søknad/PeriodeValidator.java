@@ -1,13 +1,15 @@
 package no.nav.k9.søknad;
 
-import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.type.Periode;
-
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.constraints.NotNull;
+
+import no.nav.k9.søknad.felles.Feil;
+import no.nav.k9.søknad.felles.type.Periode;
+
+@Deprecated
 public class PeriodeValidator {
 
     private static List<Feil> valider(Map<Periode, ?> perioder,

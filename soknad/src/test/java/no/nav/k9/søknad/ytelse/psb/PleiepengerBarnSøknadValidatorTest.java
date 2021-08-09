@@ -1,5 +1,9 @@
 package no.nav.k9.søknad.ytelse.psb;
 
+import static no.nav.k9.søknad.ytelse.psb.TestUtils.IKKE_KOMPLETT_PERIODE;
+import static no.nav.k9.søknad.ytelse.psb.TestUtils.PÅKREVD;
+import static no.nav.k9.søknad.ytelse.psb.TestUtils.UGYLDIG_ARGUMENT;
+import static no.nav.k9.søknad.ytelse.psb.TestUtils.UGYLDIG_PERIODE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.Duration;
@@ -17,16 +21,18 @@ import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.opptjening.Frilanser;
 import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
 import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende;
+import no.nav.k9.søknad.felles.opptjening.ÅpenPeriode;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
+import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.VirksomhetType;
 import no.nav.k9.søknad.ytelse.psb.v1.Beredskap;
-import no.nav.k9.søknad.ytelse.psb.v1.LukketPeriode;
 import no.nav.k9.søknad.ytelse.psb.v1.Nattevåk;
 import no.nav.k9.søknad.ytelse.psb.v1.Omsorg;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnValidator;
 import no.nav.k9.søknad.ytelse.psb.v1.Uttak;
+import no.nav.k9.søknad.ytelse.psb.v1.Uttak.UttakPeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
@@ -37,6 +43,9 @@ import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
 public class PleiepengerBarnSøknadValidatorTest {
     private static final PleiepengerSyktBarnValidator validator = new PleiepengerSyktBarnValidator();
 
+    /*
+    Json validering
+     */
     @Test
     public void minimumSøknadNullTest() {
         var psb = TestUtils.minimumSøknadPleiepengerSyktBarnMedDelperioder();
@@ -68,9 +77,13 @@ public class PleiepengerBarnSøknadValidatorTest {
         verifyIngenFeil(søknad);
     }
 
+    /*
+    Java validering
+     */
+
     @Test
     public void komplettSøknadSkalIkkeHaFeil() {
-        var søknadsperiode = new LukketPeriode(LocalDate.now(), LocalDate.now().plusMonths(3));
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(3));
         var psb = TestUtils.komplettYtelsePsb(søknadsperiode);
         verifyIngenFeil(psb);
     }
@@ -82,8 +95,33 @@ public class PleiepengerBarnSøknadValidatorTest {
         verifyIngenFeil(psb);
     }
 
+    @Test void overlappendePerioderForSøknadsperiodelist() {
+        var søknadsperiodeEn = new Periode(LocalDate.now(), LocalDate.now().plusDays(20));
+        var søknadsperiodeTo = new Periode(LocalDate.now().plusDays(2), LocalDate.now().plusDays(5));
+        var søknadsperiodeTre = new Periode(LocalDate.now().plusDays(1), LocalDate.now().plusDays(4));
+        var psb = TestUtils.komplettYtelsePsb(søknadsperiodeEn);
+        UttakPeriodeInfo uttakPeriodeInfo = new UttakPeriodeInfo().setTimerPleieAvBarnetPerDag(Duration.ofHours(7));
+        psb.medSøknadsperiode(List.of(søknadsperiodeTo, søknadsperiodeTre));
+
+        var feil = verifyHarFeil(psb);
+        feilInneholderFeilkode(feil, UGYLDIG_ARGUMENT);
+    }
+
+    @Test void overlappendePerioderForUttaksperiodeMap() {
+        var søknadsperiodeEn = new Periode(LocalDate.now(), LocalDate.now().plusDays(20));
+        var søknadsperiodeTo = new Periode(LocalDate.now().plusDays(2), LocalDate.now().plusDays(5));
+        var psb = TestUtils.komplettYtelsePsb(søknadsperiodeEn);
+        psb.medUttak(new Uttak().medPerioder(Map.of(
+                søknadsperiodeEn, new UttakPeriodeInfo().setTimerPleieAvBarnetPerDag(Duration.ofHours(7)),
+                søknadsperiodeTo, new UttakPeriodeInfo().setTimerPleieAvBarnetPerDag(Duration.ofHours(7))
+        )));
+
+        var feil = verifyHarFeil(psb);
+        feilInneholderFeilkode(feil, UGYLDIG_ARGUMENT);
+    }
+
     @Test void søknadPerioderFeilFomFørTom() {
-        var søknadperiode = new LukketPeriode(LocalDate.now().plusDays(10), LocalDate.now().minusDays(10));
+        var søknadperiode = new Periode(LocalDate.now().plusDays(10), LocalDate.now().minusDays(10));
         var psb = TestUtils.minimumSøknadPleiepengerSyktBarn(søknadperiode);
 
         final List<Feil> feil = valider(psb);
@@ -99,17 +137,17 @@ public class PleiepengerBarnSøknadValidatorTest {
 
     @Test
     public void endringssøknadUtenFeil() {
-        var endringsperiode = new LukketPeriode(LocalDate.now().minusMonths(1), LocalDate.now().plusMonths(1));
-        var periode = new LukketPeriode(LocalDate.now(), LocalDate.now().plusMonths(1));
-        var ytelse = TestUtils.fullEndringssøknad(periode, endringsperiode);
+        var endringsperiode = new Periode(LocalDate.now().minusMonths(1), LocalDate.now().plusMonths(1));
+        var periode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(1));
+        var ytelse = TestUtils.fullstendigEndringssøknad(periode, endringsperiode);
 
         verifyIngenFeil(ytelse);
     }
 
     @Test
     public void søknadOgEndringUtenFeil() {
-        var søknadsperiode = new LukketPeriode(LocalDate.now(), LocalDate.now().plusMonths(2));
-        var endringsperiode = new LukketPeriode(LocalDate.now().minusMonths(2), LocalDate.now().minusDays(1));
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
+        var endringsperiode = new Periode(LocalDate.now().minusMonths(2), LocalDate.now().minusDays(1));
 
         var endringssøknad = TestUtils.minimumSøknadOgEndringsSøknad(søknadsperiode, endringsperiode);
         verifyIngenFeil(endringssøknad);
@@ -118,16 +156,16 @@ public class PleiepengerBarnSøknadValidatorTest {
 
     @Test
     public void søknadOgEndringMedFeil() {
-        var søknadsperiode = new LukketPeriode(LocalDate.now(), LocalDate.now().plusMonths(2));
-        var endringsperiode = new LukketPeriode(LocalDate.now().minusMonths(2), LocalDate.now().minusDays(1));
-        var periodeUtenfor = new LukketPeriode(endringsperiode.getFraOgMed().minusMonths(1), endringsperiode.getFraOgMed().minusDays(1));
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
+        var endringsperiode = new Periode(LocalDate.now().minusMonths(2), LocalDate.now().minusDays(1));
+        var periodeUtenfor = new Periode(endringsperiode.getFraOgMed().minusMonths(1), endringsperiode.getFraOgMed().minusDays(1));
 
         var ytelse = TestUtils.komplettYtelsePsb(søknadsperiode);
-//        ytelse.medUttak(new Uttak().medPerioder(Map.of(
-//                periodeUtenfor, new UttakPeriodeInfo(Duration.ofHours(8)),
-//                endringsperiode, new UttakPeriodeInfo(Duration.ofHours(8)))));
-//
-//        ytelse.medEndringsperiode(endringsperiode);
+        ytelse.medUttak(new Uttak().medPerioder(Map.of(
+                periodeUtenfor, new UttakPeriodeInfo(Duration.ofHours(8)),
+                endringsperiode, new UttakPeriodeInfo(Duration.ofHours(8)))));
+
+        ytelse.medEndringsperiode(endringsperiode);
         ytelse.getTilsynsordning().leggeTilPeriode(periodeUtenfor, new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7)));
         ytelse.getBeredskap().leggeTilPeriode(periodeUtenfor, new Beredskap.BeredskapPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()));
         ytelse.getNattevåk().leggeTilPeriode(periodeUtenfor, new Nattevåk.NattevåkPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()));
@@ -140,8 +178,8 @@ public class PleiepengerBarnSøknadValidatorTest {
 
         final List<Feil> feil = valider(ytelse);
         assertThat(feil).isNotEmpty();
-        feilInneholderFeilkode(feil, "ugyldigPeriode");
-        feilInneholderFeilkode(feil, "ikkeKomplettPeriode");
+        feilInneholderFeilkode(feil, UGYLDIG_PERIODE);
+        feilInneholderFeilkode(feil, IKKE_KOMPLETT_PERIODE);
     }
 
     @Test
@@ -150,11 +188,11 @@ public class PleiepengerBarnSøknadValidatorTest {
         var søknadsperiodeTom = LocalDate.of(2021, 01, 31);
 
         var arbeidstidPeriode = List.of(
-                new LukketPeriode(søknadsperiodeFom, søknadsperiodeFom.plusDays(4)),
-                new LukketPeriode(søknadsperiodeFom.plusDays(7), søknadsperiodeFom.plusDays(4+7)),
-                new LukketPeriode(søknadsperiodeFom.plusDays(14), søknadsperiodeTom));
+                new Periode(søknadsperiodeFom, søknadsperiodeFom.plusDays(4)),
+                new Periode(søknadsperiodeFom.plusDays(7), søknadsperiodeFom.plusDays(4+7)),
+                new Periode(søknadsperiodeFom.plusDays(14), søknadsperiodeTom));
 
-        var ytelse = TestUtils.komplettYtelsePsb(new LukketPeriode(søknadsperiodeFom, søknadsperiodeTom));
+        var ytelse = TestUtils.komplettYtelsePsb(new Periode(søknadsperiodeFom, søknadsperiodeTom));
         var arbeidstaker = new Arbeidstaker(
                 null,
                 Organisasjonsnummer.of("999999999"),
@@ -176,12 +214,12 @@ public class PleiepengerBarnSøknadValidatorTest {
         var søknadsperiodeTom = LocalDate.of(2021, 01, 31);
 
         var arbeidstidPeriode = List.of(
-                new LukketPeriode(søknadsperiodeFom, søknadsperiodeFom.plusDays(3)),
-                new LukketPeriode(søknadsperiodeFom.plusDays(7), søknadsperiodeFom.plusDays(4+7)),
-                new LukketPeriode(søknadsperiodeFom.plusDays(14), søknadsperiodeFom.plusDays(4+14)),
-                new LukketPeriode(søknadsperiodeFom.plusDays(22), søknadsperiodeTom));
+                new Periode(søknadsperiodeFom, søknadsperiodeFom.plusDays(3)),
+                new Periode(søknadsperiodeFom.plusDays(7), søknadsperiodeFom.plusDays(4+7)),
+                new Periode(søknadsperiodeFom.plusDays(14), søknadsperiodeFom.plusDays(4+14)),
+                new Periode(søknadsperiodeFom.plusDays(22), søknadsperiodeTom));
 
-        var ytelse = TestUtils.komplettYtelsePsb(new LukketPeriode(søknadsperiodeFom, søknadsperiodeTom));
+        var ytelse = TestUtils.komplettYtelsePsb(new Periode(søknadsperiodeFom, søknadsperiodeTom));
         var arbeidstaker = new Arbeidstaker(
                 null,
                 Organisasjonsnummer.of("999999999"),
@@ -201,7 +239,7 @@ public class PleiepengerBarnSøknadValidatorTest {
     public void søknadMedTilsynsordningOppholdLengreEnnPerioden() {
         var søknad = TestUtils.komplettYtelsePsbMedDelperioder();
         Tilsynsordning tilsynsordning = new Tilsynsordning().medPerioder(Map.of(
-                new LukketPeriode(søknad.getSøknadsperiode().getFraOgMed(), søknad.getSøknadsperiode().getTilOgMed().plusDays(10)),
+                new Periode(søknad.getSøknadsperiode().getFraOgMed(), søknad.getSøknadsperiode().getTilOgMed().plusDays(10)),
                 new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7).plusMinutes(30))));
         søknad.medTilsynsordning(tilsynsordning);
 
@@ -216,7 +254,7 @@ public class PleiepengerBarnSøknadValidatorTest {
                 Map.of(
                         søknadsperiode,
                         new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30), Duration.ofHours(7).plusMinutes(30)),
-                        new LukketPeriode(søknadsperiode.getFraOgMed().plusDays(7), søknadsperiode.getTilOgMed().minusDays(7)),
+                        new Periode(søknadsperiode.getFraOgMed().plusDays(7), søknadsperiode.getTilOgMed().minusDays(7)),
                         new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30), Duration.ofHours(7).plusMinutes(30))));
 
         var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), arbeidstidInfo);
@@ -234,7 +272,8 @@ public class PleiepengerBarnSøknadValidatorTest {
 
         var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), arbeidstidInfo);
         søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
-        verifyHarFeil(søknad);
+        var feil = verifyHarFeil(søknad);
+        feilInneholderFeilkode(feil, PÅKREVD);
     }
 
     @Test
@@ -292,24 +331,27 @@ public class PleiepengerBarnSøknadValidatorTest {
                         new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30), Duration.ofHours(7).plusMinutes(30))));
         var arbeidstaker = new Arbeidstaker(NorskIdentitetsnummer.of("29099012345"), Organisasjonsnummer.of("88888888"), arbeidstidInfo);
         søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
-        verifyHarFeil(søknad);
+
+        var feil = verifyHarFeil(søknad);
+        feilInneholderFeilkode(feil, UGYLDIG_ARGUMENT);
     }
 
     @Test
     public void søknadsperiodeInneholderÅpnePerioder() {
-        var søknadsperiode = new LukketPeriode(LocalDate.now(), null);
+        var søknadsperiode = new Periode(LocalDate.now(), null);
         var psb = TestUtils.minimumSøknadPleiepengerSyktBarn(søknadsperiode);
         var feil = verifyHarFeil(psb);
-        feilInneholderFeilkode(feil, "påkrevd");
+        feilInneholderFeilkode(feil, PÅKREVD);
     }
 
     @Test
     public void tilsynnInneholderÅpnePerioder() {
-        var søknadsperiode = new LukketPeriode(LocalDate.now(), LocalDate.now().plusMonths(2));
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
         var psb = TestUtils.minimumSøknadPleiepengerSyktBarn(søknadsperiode);
-        psb.medTilsynsordning(new Tilsynsordning().medPerioder(Map.of(new LukketPeriode(LocalDate.now(), null), new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7)))));
+        psb.medTilsynsordning(new Tilsynsordning().medPerioder(Map.of(new Periode(LocalDate.now(), null), new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7)))));
+
         var feil = verifyHarFeil(psb);
-        feilInneholderFeilkode(feil, "påkrevd");
+        feilInneholderFeilkode(feil, PÅKREVD);
     }
 
     @Test
@@ -325,59 +367,70 @@ public class PleiepengerBarnSøknadValidatorTest {
                         .jobberFortsattSomFrilans(true)
                         .build())
                 .selvstendigNæringsdrivende(SelvstendigNæringsdrivende.builder()
-                        .periode(Periode.parse("2020-01-01/2020-02-02"), selvstendig)
-                        .periode(Periode.parse("2020-01-05/2020-02-01"), selvstendig)
-                        .periode(Periode.parse("2020-01-01/.."), selvstendig)
-                        .periode(Periode.parse("2020-01-05/.."), selvstendig)
+                        .periode(ÅpenPeriode.parse("2020-01-01/2020-02-02"), selvstendig)
+                        .periode(ÅpenPeriode.parse("2020-01-05/2020-02-01"), selvstendig)
+                        .periode(ÅpenPeriode.parse("2020-01-01/.."), selvstendig)
+                        .periode(ÅpenPeriode.parse("2020-01-05/.."), selvstendig)
                         .virksomhetNavn("testUlf")
                         .build()
                 ).build();
         søknad.medOpptjeningAktivitet(arbeidAktivitet);
-        verifyIngenFeil(søknad);
-    }
+        final List<Feil> feil = valider(søknad);
+        assertThat(feil).isEmpty();    }
 
     @Test
-    public void feilISøknadsperidodeFomTom() {
-        var søknadsperiode = new LukketPeriode(LocalDate.now(), LocalDate.now());
-        var psb = TestUtils.komplettYtelsePsb(søknadsperiode);
-        psb.medSøknadsperiode(new LukketPeriode(LocalDate.now().plusDays(2), LocalDate.now()));
+    public void feilISøknadsperidodeFomErEtterTom() {
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now());
+        var psb = TestUtils.minimumSøknadPleiepengerSyktBarn(søknadsperiode);
+        psb.medSøknadsperiode(new Periode(LocalDate.now().plusDays(2), LocalDate.now()));
 
         var feil = verifyHarFeil(psb);
-        feilInneholderFeilkode(feil, "ugyldigPeriode");
+        feilInneholderFeilkode(feil, UGYLDIG_ARGUMENT);
     }
 
     @Test
     public void feilIEndringsperiodeFomTom() {
-        var søknadsperiode = new LukketPeriode(LocalDate.now(), LocalDate.now());
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now());
         var psb = TestUtils.komplettYtelsePsb(søknadsperiode);
-//        psb.medEndringsperiode(new LukketPeriode(LocalDate.now().plusDays(2), LocalDate.now()));
+        psb.medEndringsperiode(new Periode(LocalDate.now().plusDays(2), LocalDate.now()));
 
         var feil = verifyHarFeil(psb);
-        assertThat(feil.size()).isEqualTo(1);
+        feilInneholderFeilkode(feil, UGYLDIG_ARGUMENT);
     }
 
     @Test
     public void feilIUttaksperiodeTomErNull() {
-        var søknadsperiode = new LukketPeriode(LocalDate.now(), LocalDate.now());
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now());
         var psb = TestUtils.komplettYtelsePsb(søknadsperiode);
-        var uttakPeriode = new LukketPeriode(LocalDate.now().plusDays(2), null);
+        var uttakPeriode = new Periode(LocalDate.now().plusDays(2), null);
         psb.medUttak(new Uttak().medPerioder(Map.of(uttakPeriode, new Uttak.UttakPeriodeInfo(Duration.ofHours(8)))));
 
         var feil = valider(psb);
-        feilInneholderFeilkode(feil, "påkrevd");
+        feilInneholderFeilkode(feil, PÅKREVD);
+    }
+
+    @Test
+    public void feilIUttaksperiodeFomErNull() {
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now());
+        var psb = TestUtils.komplettYtelsePsb(søknadsperiode);
+        var uttakPeriode = new Periode(null, LocalDate.now());
+        psb.medUttak(new Uttak().medPerioder(Map.of(uttakPeriode, new Uttak.UttakPeriodeInfo(Duration.ofHours(8)))));
+
+        var feil = valider(psb);
+        feilInneholderFeilkode(feil, PÅKREVD);
     }
 
     @Test
     public void feilITrePerioderISammeObjekt() {
-        var søknadsperiode = new LukketPeriode(LocalDate.now(), LocalDate.now());
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now());
         var stpEn = LocalDate.now();
-        var periodeEn = new LukketPeriode(stpEn.plusDays(2), stpEn.minusDays(2));
+        var periodeEn = new Periode(stpEn.plusDays(2), stpEn.minusDays(2));
 
         var stpTo = LocalDate.now().plusWeeks(1);
-        var periodeTo = new LukketPeriode(stpTo.plusDays(2), stpTo.minusDays(2));
+        var periodeTo = new Periode(stpTo.plusDays(2), stpTo.minusDays(2));
 
         var stpTre = LocalDate.now().plusWeeks(2);
-        var periodeTre = new LukketPeriode(stpTre.plusDays(2), stpTre.minusDays(2));
+        var periodeTre = new Periode(stpTre.plusDays(2), stpTre.minusDays(2));
 
         var psb = TestUtils.komplettYtelsePsb(søknadsperiode);
         psb.medArbeidstid(new Arbeidstid().medArbeidstaker(List.of(new Arbeidstaker(null, Organisasjonsnummer.of("1122"), new ArbeidstidInfo(Map.of(
@@ -386,8 +439,7 @@ public class PleiepengerBarnSøknadValidatorTest {
                 periodeTre, new ArbeidstidPeriodeInfo(Duration.ofHours(8), Duration.ZERO)))))));
 
         var feil = verifyHarFeil(psb);
-        feilInneholderFeilkode(feil, "ugyldigPeriode");
-        assertThat(feil.size()).isEqualTo(3);
+        feilInneholderFeilkode(feil, UGYLDIG_ARGUMENT);
     }
 
 

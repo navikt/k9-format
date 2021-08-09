@@ -70,4 +70,6 @@ public class Arbeidstid {
         this.selvstendigNæringsdrivendeArbeidstidInfo = Objects.requireNonNull(selvstendigNæringsdrivendeArbeidstidInfo, "Arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo");
         return this;
     }
+
+    //TODO Validere ArbeidstakerList, ikke duplikater.
 }

@@ -16,6 +16,16 @@ import no.nav.k9.søknad.felles.type.Periode;
 
 public class TidsserieValidator {
 
+    public static List<Feil> validerOverlappendePerioder(Map<Periode, ?> perioder, String felt) {
+        return validerOverlappendePerioder(new ArrayList<>(perioder.keySet()), felt);
+    }
+
+    public static List<Feil> validerOverlappendePerioder(List<Periode> perioder, String felt) {
+        List<Feil> feil = new ArrayList<>();
+        TidsserieUtils.toLocalDateTimeline(perioder, felt, feil);
+        return feil;
+    }
+
     public static PerioderMedFeil finnIkkeKomplettePerioderOgPerioderUtenfor(LocalDateTimeline<Boolean> test, Perioder perioder) {
         return new PerioderMedFeil(
                 getPerioderSomIkkeOverlapperMedHovedperiode(test, perioder),
@@ -53,7 +63,7 @@ public class TidsserieValidator {
         }
 
         public static LocalDateTimeline<Boolean> toLocalDateTimeline(List<Periode> perioder, String felt, List<Feil> feil) throws IllegalArgumentException{
-            perioder.forEach(p -> validerPeriode(p, felt, feil));
+//            perioder.forEach(p -> validerPeriode(p, felt, feil));
             try {
                 return new LocalDateTimeline<Boolean>(perioder
                         .stream()
@@ -73,11 +83,11 @@ public class TidsserieValidator {
                     true);
         }
 
-        private static void validerPeriode(Periode periode, String felt, List<Feil> feil) {
-            if (periode.getTilOgMed() == null || periode.getFraOgMed() == null) {
-                feil.add(new Feil (felt, "NullPointerException", "Null"));
-            }
-        }
+//        private static void validerPeriode(Periode periode, String felt, List<Feil> feil) {
+//            if (periode.getTilOgMed() == null || periode.getFraOgMed() == null) {
+//                feil.add(new Feil (felt, "NullPointerException", "Null"));
+//            }
+//        }
 
         public static LocalDateTimeline<Boolean> toLocalDateTimeline(Map<Periode, ?> periodeMap, String felt, List<Feil> feil) {
             return toLocalDateTimeline(new ArrayList<>(periodeMap.keySet()), felt, feil);
@@ -97,7 +107,7 @@ public class TidsserieValidator {
             return søknadsperiode;
         }
 
-        public LocalDateTimeline<Boolean> getPerioderDerEndringerErTillatt() {
+        public LocalDateTimeline<Boolean> getGyldigInterval() {
             return gyldigInterval;
         }
     }

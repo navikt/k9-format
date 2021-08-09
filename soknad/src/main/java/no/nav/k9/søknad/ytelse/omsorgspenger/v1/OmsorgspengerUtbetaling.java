@@ -14,15 +14,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-import no.nav.k9.søknad.PeriodeValidator;
 import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
 import no.nav.k9.søknad.felles.fravær.FraværPeriode;
+import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
-import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 
@@ -151,20 +150,6 @@ public class OmsorgspengerUtbetaling implements Ytelse {
     public OmsorgspengerUtbetaling medUtenlandsopphold(Utenlandsopphold utenlandsopphold) {
         this.utenlandsopphold = utenlandsopphold;
         return this;
-    }
-
-    @Size(max = 0, message = "${validatedValue}")
-    private List<Feil> validerAngittUtenlandsopphold() {
-        if (utenlandsopphold == null)
-            List.of();
-        return new PeriodeValidator().validerIkkeTillattOverlapp(utenlandsopphold.getPerioder(), "utenlandsopphold.perioder");
-    }
-
-    @Size(max = 0, message = "${validatedValue}")
-    private List<Feil> validerAngittBosteder() {
-        if (bosteder == null)
-            return List.of();
-        return new PeriodeValidator().validerIkkeTillattOverlapp(bosteder.getPerioder(), "bosteder.perioder");
     }
 
     @Size(max = 0, message = "${validatedValue}")

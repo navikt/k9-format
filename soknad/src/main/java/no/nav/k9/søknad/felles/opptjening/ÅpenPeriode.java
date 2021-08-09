@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.ytelse.psb.v1;
+package no.nav.k9.søknad.felles.opptjening;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 
-public class LukketPeriode implements Comparable<LukketPeriode> {
+public class ÅpenPeriode implements Comparable<ÅpenPeriode> {
     static final String ÅPEN = "..";
     static final String SKILLE = "/";
 
@@ -20,7 +20,6 @@ public class LukketPeriode implements Comparable<LukketPeriode> {
     private LocalDate fraOgMed;
 
     @Valid
-    @NotNull
     private LocalDate tilOgMed;
 
     @Valid
@@ -29,7 +28,7 @@ public class LukketPeriode implements Comparable<LukketPeriode> {
     private String iso8601;
 
     @JsonCreator
-    public LukketPeriode(@Valid @NotNull String iso8601) {
+    public ÅpenPeriode(@Valid @NotNull String iso8601) {
         verifiserKanVæreGyldigPeriode(iso8601);
         String[] split = iso8601.split(SKILLE);
         this.fraOgMed = parseLocalDate(split[0]);
@@ -37,7 +36,7 @@ public class LukketPeriode implements Comparable<LukketPeriode> {
         this.iso8601 = iso8601;
     }
 
-    public LukketPeriode(@Valid @NotNull LocalDate fraOgMed, @Valid @NotNull LocalDate tilOgMed) {
+    public ÅpenPeriode(@Valid @NotNull LocalDate fraOgMed, @Valid LocalDate tilOgMed) {
         this.fraOgMed = fraOgMed;
         this.tilOgMed = tilOgMed;
         this.iso8601 = toIso8601(fraOgMed) + SKILLE + toIso8601(tilOgMed);
@@ -79,14 +78,13 @@ public class LukketPeriode implements Comparable<LukketPeriode> {
         this.iso8601 = iso8601;
     }
 
-    public static LukketPeriode parse(String iso8601) {
-        return new LukketPeriode(iso8601);
+    public static ÅpenPeriode parse(String iso8601) {
+        return new ÅpenPeriode(iso8601);
     }
 
 
-
     @Override
-    public int compareTo(LukketPeriode o) {
+    public int compareTo(ÅpenPeriode o) {
         return this.iso8601.compareTo(o.iso8601);
     }
 
@@ -96,7 +94,7 @@ public class LukketPeriode implements Comparable<LukketPeriode> {
             return true;
         if (o == null || getClass() != o.getClass())
             return false;
-        var periode = (LukketPeriode) o;
+        var periode = (ÅpenPeriode) o;
         return Objects.equals(fraOgMed, periode.fraOgMed)
             && Objects.equals(tilOgMed, periode.tilOgMed);
     }
@@ -126,7 +124,7 @@ public class LukketPeriode implements Comparable<LukketPeriode> {
 
     private static String toIso8601(LocalDate dato) {
         if (dato == null)
-            return LukketPeriode.ÅPEN;
+            return ÅpenPeriode.ÅPEN;
         else
             return dato.toString();
     }

@@ -40,6 +40,7 @@ public class Arbeidstaker {
     public Arbeidstaker() {
 
     }
+
     protected boolean erEntydigPåID() {
         return this.norskIdentitetsnummer != null && this.organisasjonsnummer != null;
     }
@@ -52,6 +53,7 @@ public class Arbeidstaker {
     private boolean isUniquelyIdentified() {
         return erEntydigPåID();
     }
+
     @AssertFalse(message = "Mangler ID på Arbeidsgiver, må oppgi en av norskIdentitetsnummer eller organisasjonsnummer.")
     private boolean isIdentified() {
         return manglerIkkeID();

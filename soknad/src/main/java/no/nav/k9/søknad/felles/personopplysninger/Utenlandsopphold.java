@@ -1,15 +1,16 @@
 package no.nav.k9.søknad.felles.personopplysninger;
 
 import static java.util.Collections.unmodifiableMap;
-import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPeriode;
-import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPerioder;
+import static no.nav.k9.søknad.TidsserieValidator.validerOverlappendePerioder;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -19,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.type.Landkode;
 import no.nav.k9.søknad.felles.type.Periode;
 
@@ -28,18 +30,11 @@ public class Utenlandsopphold {
 
     @JsonInclude(value = Include.ALWAYS)
     @JsonProperty(value = "perioder")
-    private Map<Periode, UtenlandsoppholdPeriodeInfo> perioder = new TreeMap<>();
+    private Map<@Valid Periode, @Valid UtenlandsoppholdPeriodeInfo> perioder = new TreeMap<>();
 
     @JsonInclude(value = Include.ALWAYS)
     @JsonProperty(value = "perioderSomSkalSlettes")
-    private Map<Periode, UtenlandsoppholdPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
-
-    /**@deprecated brukt tom ctor.*/
-    @JsonCreator
-    public Utenlandsopphold(
-                            @JsonProperty("perioder") Map<Periode, UtenlandsoppholdPeriodeInfo> perioder) {
-        this.perioder = (perioder == null ) ? new TreeMap<>() : new TreeMap<>(perioder);
-    }
+    private Map<@Valid Periode, UtenlandsoppholdPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
     public Utenlandsopphold() {
 
@@ -63,35 +58,11 @@ public class Utenlandsopphold {
         return this;
     }
 
-    /**@deprecated brukt ctor.*/
-    @Deprecated(forRemoval = true)
-    public static Utenlandsopphold.Builder builder() {
-        return new Builder();
-    }
-
-    /**@deprecated brukt ctor.*/
-    @Deprecated(forRemoval = true)
-    public static final class Builder {
-        private Map<Periode, UtenlandsoppholdPeriodeInfo> perioder;
-
-        private Builder() {
-            perioder = new HashMap<>();
-        }
-
-        public Builder perioder(Map<Periode, UtenlandsoppholdPeriodeInfo> perioder) {
-            leggTilPerioder(this.perioder, perioder);
-            return this;
-        }
-
-        public Builder periode(Periode periode, UtenlandsoppholdPeriodeInfo utenlandsoppholdPeriodeInfo) {
-            leggTilPeriode(this.perioder, periode, utenlandsoppholdPeriodeInfo);
-            return this;
-        }
-
-        public Utenlandsopphold build() {
-            return new Utenlandsopphold(
-                perioder);
-        }
+    @Size(max = 0, message = "${validatedValue}")
+    private List<Feil> getValiderUtenlandsoppholdPerioder() {
+        if (perioder == null)
+            List.of();
+        return validerOverlappendePerioder(perioder, "utenlandsopphold.perioder");
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

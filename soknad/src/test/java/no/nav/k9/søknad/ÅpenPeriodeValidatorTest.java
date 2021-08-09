@@ -9,7 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.felles.type.Periode;
 
-public class PeriodeValidatorTest {
+@Deprecated
+public class ÅpenPeriodeValidatorTest {
 
     private static final PeriodeValidator validator = new PeriodeValidator();
     private static final String felt = "test";

@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.k9.søknad.felles.type.AnnenAktivitetType;
-import no.nav.k9.søknad.felles.type.Periode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -19,7 +18,7 @@ public class AnnenAktivitet {
     @JsonProperty("periode")
     @Valid
     @NotNull
-    private Periode periode;
+    private ÅpenPeriode periode;
 
     @JsonProperty(value = "annenAktivitetType")
     @Valid
@@ -28,7 +27,7 @@ public class AnnenAktivitet {
 
 
     @JsonCreator
-    public AnnenAktivitet(@JsonProperty(value = "periode") @Valid @NotNull Periode periode,
+    public AnnenAktivitet(@JsonProperty(value = "periode") @Valid @NotNull ÅpenPeriode periode,
                           @JsonProperty(value = "annenAktivitetType") @Valid @NotNull AnnenAktivitetType annenAktivitetType) {
         this.periode = periode;
         this.annenAktivitetType = annenAktivitetType;
@@ -37,11 +36,11 @@ public class AnnenAktivitet {
     public AnnenAktivitet() {
     }
 
-    public Periode getPeriode() {
+    public ÅpenPeriode getPeriode() {
         return periode;
     }
 
-    public void setPeriode(Periode periode) {
+    public void setPeriode(ÅpenPeriode periode) {
         this.periode = periode;
     }
 

@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.felles.type.ÅpenPeriode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -34,7 +34,7 @@ public class SelvstendigNæringsdrivende {
     @JsonInclude(value = Include.NON_EMPTY)
     @JsonProperty(value = "inntekterFør")
     @Valid
-    private NavigableMap<Periode, PeriodeInntekt> inntekterFør;
+    private NavigableMap<ÅpenPeriode, PeriodeInntekt> inntekterFør;
     /**
      * Inntekter i periode som skal kompenseres. Periode må være innenfor søknadsperiode. Hvis ingen inntekt i periode som kompenseres, sett
      * inntekt = 0
@@ -42,7 +42,7 @@ public class SelvstendigNæringsdrivende {
     @JsonInclude(value = Include.ALWAYS)
     @JsonProperty(value = "inntekterSøknadsperiode", required = true)
     @Valid
-    private NavigableMap<Periode, PeriodeInntekt> inntekterSøknadsperiode;
+    private NavigableMap<ÅpenPeriode, PeriodeInntekt> inntekterSøknadsperiode;
     @JsonProperty("regnskapsførerNavn")
     @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message = "'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     private String regnskapsførerNavn;
@@ -52,8 +52,8 @@ public class SelvstendigNæringsdrivende {
     private String regnskapsførerTlf;
 
     @JsonCreator
-    public SelvstendigNæringsdrivende(@JsonProperty(value = "inntekterFør") Map<Periode, PeriodeInntekt> inntekterFør,
-                                      @JsonProperty(value = "inntekterSøknadsperiode") Map<Periode, PeriodeInntekt> inntekterSøknadsperiode,
+    public SelvstendigNæringsdrivende(@JsonProperty(value = "inntekterFør") Map<ÅpenPeriode, PeriodeInntekt> inntekterFør,
+                                      @JsonProperty(value = "inntekterSøknadsperiode") Map<ÅpenPeriode, PeriodeInntekt> inntekterSøknadsperiode,
                                       @JsonProperty(value = "søkerKompensasjon") Boolean søkerKompensasjon,
                                       @JsonProperty(value = "regnskapsførerNavn") String regnskapsførerNavn,
                                       @JsonProperty(value = "regnskapsførerTlf") String regnskapsførerTlf) {
@@ -71,8 +71,8 @@ public class SelvstendigNæringsdrivende {
         return new Builder();
     }
 
-    private void validerPerioder(@Valid NavigableMap<Periode, PeriodeInntekt> inntekterFør,
-                                 @Valid NavigableMap<Periode, PeriodeInntekt> inntekterSøknadsperiode) {
+    private void validerPerioder(@Valid NavigableMap<ÅpenPeriode, PeriodeInntekt> inntekterFør,
+                                 @Valid NavigableMap<ÅpenPeriode, PeriodeInntekt> inntekterSøknadsperiode) {
         if (!inntekterFør.isEmpty() && !inntekterSøknadsperiode.isEmpty()) {
             LocalDate førTom = inntekterFør.lastKey().getTilOgMed();
             LocalDate søkFom = inntekterSøknadsperiode.firstKey().getFraOgMed();
@@ -82,27 +82,27 @@ public class SelvstendigNæringsdrivende {
         }
     }
 
-    public Periode getMaksSøknadsperiode() {
+    public ÅpenPeriode getMaksSøknadsperiode() {
         if (inntekterSøknadsperiode.isEmpty()) {
             return null;
         } else {
-            return new Periode(inntekterSøknadsperiode.firstKey().getFraOgMed(), inntekterSøknadsperiode.lastKey().getTilOgMed());
+            return new ÅpenPeriode(inntekterSøknadsperiode.firstKey().getFraOgMed(), inntekterSøknadsperiode.lastKey().getTilOgMed());
         }
     }
 
-    public Periode getMaksPeriodeInntekterFør() {
+    public ÅpenPeriode getMaksPeriodeInntekterFør() {
         if (inntekterFør.isEmpty()) {
             return null;
         } else {
-            return new Periode(inntekterFør.firstKey().getFraOgMed(), inntekterFør.lastKey().getTilOgMed());
+            return new ÅpenPeriode(inntekterFør.firstKey().getFraOgMed(), inntekterFør.lastKey().getTilOgMed());
         }
     }
 
-    public Map<Periode, PeriodeInntekt> getInntekterSøknadsperiode() {
+    public Map<ÅpenPeriode, PeriodeInntekt> getInntekterSøknadsperiode() {
         return inntekterSøknadsperiode;
     }
 
-    public Map<Periode, PeriodeInntekt> getInntekterFør() {
+    public Map<ÅpenPeriode, PeriodeInntekt> getInntekterFør() {
         return inntekterFør;
     }
 
@@ -119,8 +119,8 @@ public class SelvstendigNæringsdrivende {
     }
 
     public static final class Builder {
-        private Map<Periode, PeriodeInntekt> inntekterFør = new LinkedHashMap<>();
-        private Map<Periode, PeriodeInntekt> inntekterSøknadsperiode = new LinkedHashMap<>();
+        private Map<ÅpenPeriode, PeriodeInntekt> inntekterFør = new LinkedHashMap<>();
+        private Map<ÅpenPeriode, PeriodeInntekt> inntekterSøknadsperiode = new LinkedHashMap<>();
         private boolean søkerKompensasjon = true;
         private String regnskapsførerNavn;
         private String regnskapsførerTlf;
@@ -128,12 +128,12 @@ public class SelvstendigNæringsdrivende {
         private Builder() {
         }
 
-        public Builder inntekterFør(Map<Periode, PeriodeInntekt> inntekter) {
+        public Builder inntekterFør(Map<ÅpenPeriode, PeriodeInntekt> inntekter) {
             inntekterFør.putAll(inntekter);
             return this;
         }
 
-        public Builder inntekterSøknadsperiode(Map<Periode, PeriodeInntekt> inntekter) {
+        public Builder inntekterSøknadsperiode(Map<ÅpenPeriode, PeriodeInntekt> inntekter) {
             inntekterSøknadsperiode.putAll(inntekter);
             return this;
         }

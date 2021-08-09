@@ -1,5 +1,7 @@
 package no.nav.k9.søknad.ytelse.psb.v1;
 
+import static no.nav.k9.søknad.TidsserieValidator.validerOverlappendePerioder;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,7 +10,9 @@ import java.util.Objects;
 import java.util.Optional;
 
 import javax.validation.Valid;
+import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -16,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
+import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
@@ -40,12 +45,12 @@ public class PleiepengerSyktBarn implements Ytelse {
     @Valid
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     @JsonProperty(value = "søknadsperiode", required = true)
-    private List<@Valid LukketPeriode> søknadsperiode = new ArrayList<>();
+    private List<@Valid Periode> søknadsperiode = new ArrayList<>();
 
     @Valid
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     @JsonProperty(value = "endringsperiode", required = true)
-    private List<@Valid LukketPeriode> endringsperiode = new ArrayList<>();
+    private List<@Valid Periode> endringsperiode = new ArrayList<>();
 
     @Valid
     @JsonProperty(value = "opptjeningAktivitet")
@@ -98,6 +103,11 @@ public class PleiepengerSyktBarn implements Ytelse {
     public PleiepengerSyktBarn() {
     }
 
+    @AssertFalse(message = "Mangler søknadsperiode eller endringsperiode.")
+    private boolean isAtLeastOnePeriode() {
+        return (søknadsperiode.isEmpty() && endringsperiode.isEmpty());
+    }
+
     public Barn getBarn() {
         return barn;
     }
@@ -120,48 +130,48 @@ public class PleiepengerSyktBarn implements Ytelse {
 
     @Override
     public Periode getSøknadsperiode() {
-        final List<LukketPeriode> perioder = new ArrayList<>(søknadsperiode);
+        final List<Periode> perioder = new ArrayList<>(søknadsperiode);
 //        perioder.addAll(endringsperiode);
 
         final var fom = perioder
                 .stream()
-                .map(LukketPeriode::getFraOgMed)
+                .map(Periode::getFraOgMed)
                 .min(LocalDate::compareTo)
                 .orElseThrow();
         final var tom = perioder
                 .stream()
-                .map(LukketPeriode::getTilOgMed)
+                .map(Periode::getTilOgMed)
                 .max(LocalDate::compareTo)
                 .orElseThrow();
         return new Periode(fom, tom);
     }
 
-    public List<LukketPeriode> getSøknadsperiodeList() {
+    public List<Periode> getSøknadsperiodeList() {
         return søknadsperiode == null? null: Collections.unmodifiableList(søknadsperiode);
     }
 
-    public PleiepengerSyktBarn medSøknadsperiode(List<LukketPeriode> søknadsperiodeList) {
+    public PleiepengerSyktBarn medSøknadsperiode(List<Periode> søknadsperiodeList) {
         this.søknadsperiode.addAll(Objects.requireNonNull(søknadsperiodeList, "søknadsperiodeList"));
         return this;
     }
 
-    public PleiepengerSyktBarn medSøknadsperiode(LukketPeriode søknadsperiode) {
+    public PleiepengerSyktBarn medSøknadsperiode(Periode søknadsperiode) {
         this.søknadsperiode.add(Objects.requireNonNull(søknadsperiode, "søknadsperiode"));
         return this;
     }
 
-    public List<LukketPeriode> getEndringsperiode() {
+    public List<Periode> getEndringsperiode() {
         return (endringsperiode == null) ? null : Collections.unmodifiableList(endringsperiode);
     }
 
-    public PleiepengerSyktBarn medEndringsperiode(List<LukketPeriode> endringsperiodeList) {
+    public PleiepengerSyktBarn medEndringsperiode(List<Periode> endringsperiodeList) {
         if (this.endringsperiode == null)
             this.endringsperiode = new ArrayList<>();
         this.endringsperiode.addAll(endringsperiodeList);
         return this;
     }
 
-    public PleiepengerSyktBarn medEndringsperiode(LukketPeriode endringsperiode) {
+    public PleiepengerSyktBarn medEndringsperiode(Periode endringsperiode) {
         if (this.endringsperiode == null)
             this.endringsperiode = new ArrayList<>();
         this.endringsperiode.add(endringsperiode);
@@ -289,6 +299,20 @@ public class PleiepengerSyktBarn implements Ytelse {
     @Override
     public YtelseValidator getValidator() {
         return new PleiepengerSyktBarnValidator();
+    }
+
+    @Size(max = 0, message = "${validatedValue}")
+    private List<Feil> getValiderSøknadsperiode() {
+        if (søknadsperiode == null)
+            List.of();
+        return validerOverlappendePerioder(søknadsperiode, "søknadsperiode.perioder");
+    }
+
+    @Size(max = 0, message = "${validatedValue}")
+    private List<Feil> getValiderEndringsperiode() {
+        if (endringsperiode == null)
+            List.of();
+        return validerOverlappendePerioder(endringsperiode, "endringsperiode.perioder");
     }
 
 }
