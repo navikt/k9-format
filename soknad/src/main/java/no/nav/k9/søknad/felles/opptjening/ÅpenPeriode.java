@@ -129,6 +129,4 @@ public class ÅpenPeriode implements Comparable<ÅpenPeriode> {
             return dato.toString();
     }
 
-
-
 }
