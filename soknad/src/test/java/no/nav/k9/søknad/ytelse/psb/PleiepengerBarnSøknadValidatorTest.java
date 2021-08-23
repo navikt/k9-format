@@ -117,6 +117,7 @@ public class PleiepengerBarnSøknadValidatorTest {
 
     }
 
+    //TODO bedre navn
     @Test
     public void søknadOgEndringMedFeil() {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
@@ -132,7 +133,7 @@ public class PleiepengerBarnSøknadValidatorTest {
         ytelse.getTilsynsordning().leggeTilPeriode(periodeUtenfor, new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7)));
         ytelse.getBeredskap().leggeTilPeriode(periodeUtenfor, new Beredskap.BeredskapPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()));
         ytelse.getNattevåk().leggeTilPeriode(periodeUtenfor, new Nattevåk.NattevåkPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()));
-        ytelse.getArbeidstid().leggeTilArbeidstaker(new Arbeidstaker(null, Organisasjonsnummer.of("199999999"),
+        ytelse.getArbeidstid().leggeTilArbeidstaker(new Arbeidstaker(null, Organisasjonsnummer.of("999999999"),
                 new ArbeidstidInfo(Map.of(
                         endringsperiode, new ArbeidstidPeriodeInfo(Duration.ofHours(8), Duration.ofHours(4)),
                         søknadsperiode, new ArbeidstidPeriodeInfo(Duration.ofHours(8), Duration.ofHours(0)),
@@ -380,7 +381,7 @@ public class PleiepengerBarnSøknadValidatorTest {
         var periodeTre = new Periode(stpTre.plusDays(2), stpTre.minusDays(2));
 
         var psb = TestUtils.komplettYtelsePsb(søknadsperiode);
-        psb.medArbeidstid(new Arbeidstid().medArbeidstaker(List.of(new Arbeidstaker(null, Organisasjonsnummer.of("1122"), new ArbeidstidInfo(Map.of(
+        psb.medArbeidstid(new Arbeidstid().medArbeidstaker(List.of(new Arbeidstaker(null, Organisasjonsnummer.of(TestUtils.okOrgnummer()), new ArbeidstidInfo(Map.of(
                 periodeEn, new ArbeidstidPeriodeInfo(Duration.ofHours(8), Duration.ZERO),
                 periodeTo, new ArbeidstidPeriodeInfo(Duration.ofHours(8), Duration.ZERO),
                 periodeTre, new ArbeidstidPeriodeInfo(Duration.ofHours(8), Duration.ZERO)))))));

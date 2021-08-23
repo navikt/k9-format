@@ -1,12 +1,14 @@
 package no.nav.k9.søknad.felles.type;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.Objects;
 
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 public class Organisasjonsnummer {
 
@@ -31,6 +33,13 @@ public class Organisasjonsnummer {
         }
         return new Organisasjonsnummer(verdi);
     }
+
+
+    @AssertTrue(message="Organisasjonsnummer må være gyldig")
+    private boolean isValid() {
+        return OrganisasjonsNummerValidator.erGyldig(verdi);
+    }
+
 
     @Override
     public boolean equals(Object obj) {

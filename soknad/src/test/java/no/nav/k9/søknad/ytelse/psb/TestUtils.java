@@ -234,6 +234,14 @@ final class TestUtils {
         return "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
     }
 
+    static String okOrgnummer() {
+        return "999999999";
+    }
+
+    static String ikkeOkOrgnummer() {
+        return "199999999";
+    }
+
     static String journalpostId() {
         return "sajhdasd83724234";
     }
