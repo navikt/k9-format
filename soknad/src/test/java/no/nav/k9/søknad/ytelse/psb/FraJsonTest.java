@@ -25,7 +25,6 @@ class FraJsonTest {
         }
     }
 
-    @Disabled
     @Test
     public void komplettSøknadSkalIkkeHaValideringsfeil() {
         var søknad = SøknadJsonEksempel.komplettSøknadJson();

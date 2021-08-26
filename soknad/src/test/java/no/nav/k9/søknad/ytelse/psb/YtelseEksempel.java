@@ -89,7 +89,7 @@ public class YtelseEksempel {
         var lovbestemtFerie = new LovbestemtFerie().medPerioder(Map.of(
                 søknadsperiode, new LovbestemtFerie.LovbestemtFeriePeriodeInfo()));
 
-        var barn = new Barn(NorskIdentitetsnummer.of("11111111111"), null);
+        var barn = new Barn(NorskIdentitetsnummer.of("22211111111"), null);
 
         var bosteder = new Bosteder().medPerioder(Map.of(
                 søknadsperiode,

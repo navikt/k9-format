@@ -35,7 +35,7 @@ class SøknadTest {
 
         var feil = valider(søknad);
         assertThat(feil).isNotEmpty();
-        feilListInneholderFeil(feil, new Feil("søker", UGYLDIG_ARGUMENT, "Søker kan ikke være barn." ));
+        feilListInneholderFeil(feil, new Feil("søker", "søkerSammeSomBarn", "Søker kan ikke være barn." ));
 
     }
 
