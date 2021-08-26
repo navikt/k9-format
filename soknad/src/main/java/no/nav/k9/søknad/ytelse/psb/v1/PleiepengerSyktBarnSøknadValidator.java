@@ -34,7 +34,7 @@ public class PleiepengerSyktBarnSøknadValidator extends SøknadValidator<Søkna
             return;
         }
         if (barnList.stream().anyMatch(person -> person.getPersonIdent() != null && person.getPersonIdent().equals(søker.getPersonIdent()))) {
-            feil.add(new Feil("søker", UGYLDIG_ARGUMENT, "Søker kan ikke være barn."));
+            feil.add(new Feil("søker", "søkerSammeSomBarn", "Søker kan ikke være barn."));
         }
     }
 
