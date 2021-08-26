@@ -6,6 +6,7 @@ import no.nav.k9.søknad.felles.Feil;
 
 public abstract class SøknadValidator<S> {
     protected static final String PÅKREVD = "påkrevd";
+    protected static final String UGYLDIG_ARGUMENT = "ugyldig argument";
 
     public abstract List<Feil> valider(S søknad);
 

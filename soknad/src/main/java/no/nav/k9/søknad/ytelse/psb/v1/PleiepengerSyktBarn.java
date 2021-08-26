@@ -288,7 +288,9 @@ public class PleiepengerSyktBarn implements Ytelse {
 
     @Override
     public YtelseValidator getValidator() {
-        return new PleiepengerSyktBarnValidator();
+        return new PleiepengerSyktBarnYtelseValidator();
     }
+
+
 
 }
