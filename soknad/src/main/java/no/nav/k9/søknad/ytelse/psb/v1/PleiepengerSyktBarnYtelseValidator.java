@@ -22,7 +22,7 @@ import no.nav.k9.søknad.ytelse.YtelseValidator;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 
-public class PleiepengerSyktBarnValidator extends YtelseValidator {
+public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
 
     private static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
 
