@@ -72,6 +72,10 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
         return årsak;
     }
 
+    public SøknadÅrsak getSøknadÅrsak() {
+        return søknadÅrsak;
+    }
+
     public List<AktivitetFravær> getAktivitetFravær() {
         return aktivitetFravær;
     }
