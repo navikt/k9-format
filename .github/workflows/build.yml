@@ -16,18 +16,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-java@v1
+      - uses: actions/setup-java@v2
         with:
-          java-version: '11.x'
-      - name: Set cache key
-        run: |
-          echo "CACHE_KEY=$(expr $(date +%V) - 1 + 1)" >> $GITHUB_ENV
-          echo "TIMESTAMP=$(expr $(date +%Y%m%d%H%M%S))" >> $GITHUB_ENV
-      - uses: actions/cache@v2
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ env.CACHE_KEY }}
-          
+          java-version: '11'
+          distribution: 'adopt'
+          cache: 'maven'          
       - name: Build & Deploy
         run: |
              mvn install -e --batch-mode --settings .github/settings.xml --file pom.xml -DtrimStackTrace=false
