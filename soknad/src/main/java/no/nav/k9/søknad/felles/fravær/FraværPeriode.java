@@ -31,6 +31,10 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
     @JsonProperty(value = "årsak", required = true)
     private final FraværÅrsak årsak;
 
+    @Valid
+    @JsonProperty(value = "søknadÅrsak")
+    private SøknadÅrsak søknadÅrsak;
+
     @NotNull
     @Size(min = 1, max = 2)
     @JsonProperty(value = "aktivitetFravær", required = true)
@@ -45,11 +49,13 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
             @JsonProperty("periode") @Valid Periode periode,
             @JsonProperty("duration") Duration duration,
             @JsonProperty("årsak") FraværÅrsak årsak,
+            @JsonProperty("søknadÅrsak") SøknadÅrsak søknadÅrsak,
             @JsonProperty("aktivitetFravær") List<AktivitetFravær> aktivitetFravær,
             @JsonProperty("organisasjonsnummer") Organisasjonsnummer arbeidsgiverOrgNr) {
         this.periode = periode;
         this.duration = duration;
         this.årsak = årsak;
+        this.søknadÅrsak = søknadÅrsak;
         this.aktivitetFravær = aktivitetFravær.stream().sorted().collect(Collectors.toList()); //sorterer for å få enklere equals og hashcode
         this.arbeidsgiverOrgNr = arbeidsgiverOrgNr;
     }
@@ -102,6 +108,7 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
                 "periode=" + periode +
                 ", duration=" + duration +
                 ", årsak=" + årsak +
+                ", søknadÅrsak=" + søknadÅrsak +
                 ", fraværFraAktivitet=" + aktivitetFravær +
                 (arbeidsgiverOrgNr != null ? ", arbeidsgiverOrgNr=MASKERT" : "") +
                 '}';
