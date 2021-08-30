@@ -29,8 +29,18 @@ public class TestUtils {
         assertThat(feil
                 .stream()
                 .filter(f -> f.getFeilkode().equals(feilkode))
-                .collect(Collectors.toList())
-        ).isNotEmpty();
+                .collect(Collectors.toList()))
+                .withFailMessage("Finner ikke feilkode: " + feilkode)
+                .isNotEmpty();
+    }
+
+    public static void feilInneholderFeltOgFeilkode(List<Feil> feil, String felt, String feilkode) {
+        assertThat(feil
+                .stream()
+                .filter(f -> f.getFeilkode().equals(feilkode) && f.getFelt().equals(felt))
+                .collect(Collectors.toList()))
+                .withFailMessage("Finner ikke fetl og feilkode: " + felt + ", " + feilkode)
+                .isNotEmpty();
     }
 
     public static void feilListInneholderFeil(List<Feil> feilList, Feil feil) {
@@ -42,7 +52,9 @@ public class TestUtils {
                     f.getFeilmelding().equals(feil.getFeilmelding())
                 )
                 .collect(Collectors.toList())
-        ).isNotEmpty();
+        )
+                .withFailMessage("Finner ikke Feil: " + feil.toString())
+                .isNotEmpty();
     }
 
 }
