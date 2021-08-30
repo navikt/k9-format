@@ -103,7 +103,7 @@ public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         var feil = new ArrayList<Feil>();
         finnPerioderUtenfor(
                 toLocalDateTimeline(periodeMap, felt, feil), tidsserier)
-                .valider("beredskap", feil);
+                .valider(felt, feil);
         return feil;
     }
 
@@ -111,7 +111,7 @@ public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         var feil = new ArrayList<Feil>();
         finnIkkeKomplettePerioderOgPerioderUtenfor(
                 toLocalDateTimeline(periodeMap, felt, feil), tidsserier)
-                .valider("uttak", feil);
+                .valider(felt, feil);
         return feil;
     }
 

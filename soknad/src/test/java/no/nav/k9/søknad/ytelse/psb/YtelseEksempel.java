@@ -34,10 +34,10 @@ public class YtelseEksempel {
     Komplett
      */
 
-    public static PleiepengerSyktBarn komplettYtelsePsbMedDelperioder() {
+    public static PleiepengerSyktBarn komplettYtelseMedDelperioder() {
 
         var søknadsperiode = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-10-20"));
-        var psb = komplettYtelsePsb(søknadsperiode);
+        var psb = komplettYtelse(søknadsperiode);
 
         var delperiodeEn = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-02-20"));
         var delperiodeTo = new Periode(LocalDate.parse("2019-02-21"), LocalDate.parse("2019-10-20"));
@@ -64,7 +64,7 @@ public class YtelseEksempel {
         return psb;
     }
 
-    public static PleiepengerSyktBarn komplettYtelsePsb(Periode søknadsperiode) {
+    public static PleiepengerSyktBarn komplettYtelse(Periode søknadsperiode) {
 
         var uttak = new Uttak().medPerioder(Map.of(
                 søknadsperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
@@ -128,7 +128,7 @@ public class YtelseEksempel {
     Minimum
      */
 
-    public static PleiepengerSyktBarn minimumSøknadPleiepengerSyktBarnMedDelperioder() {
+    public static PleiepengerSyktBarn minimumYtelseMedDelperioder() {
         var søknadsperiode = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-10-20"));
         var uttakperiode = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-02-20"));
         var uttakperiode2 = new Periode(LocalDate.parse("2019-02-21"), LocalDate.parse("2019-10-20"));
@@ -145,7 +145,7 @@ public class YtelseEksempel {
                 .medUttak(uttak);
     }
 
-    public static PleiepengerSyktBarn minimumSøknadPleiepengerSyktBarn(Periode søknadsperiode) {
+    public static PleiepengerSyktBarn minimumYtelse(Periode søknadsperiode) {
         var uttak = new Uttak().medPerioder(Map.of(
                 søknadsperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
 
@@ -167,7 +167,7 @@ public class YtelseEksempel {
                 .medBarn(new Barn(NorskIdentitetsnummer.of("11111111111"), null));
     }
 
-    public static PleiepengerSyktBarn fullEndringssøknad(Periode periode, Periode endringsperiode) {
+    public static PleiepengerSyktBarn komplettEndringssøknad(Periode periode, Periode endringsperiode) {
         return YtelseEksempel.minimumEndringssøknad(endringsperiode)
                 .medBeredskap(new Beredskap().medPerioder(Map.of(
                         periode, new Beredskap.BeredskapPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()))))
@@ -180,8 +180,8 @@ public class YtelseEksempel {
                 .medUttak(new Uttak().medPerioder(Map.of(periode, new UttakPeriodeInfo(Duration.ofHours(3)))));
     }
 
-    public static PleiepengerSyktBarn minimumSøknadOgEndringsSøknad(Periode søknadsperiode, Periode endringsperiode) {
-        return YtelseEksempel.fullEndringssøknad(søknadsperiode, endringsperiode)
+    public static PleiepengerSyktBarn minimumYtelseMedEndring(Periode søknadsperiode, Periode endringsperiode) {
+        return YtelseEksempel.komplettEndringssøknad(søknadsperiode, endringsperiode)
                 .medSøknadsperiode(søknadsperiode)
                 .medOmsorg(new Omsorg()
                         .medBeskrivelseAvOmsorgsrollen(TestUtils.testTekst())

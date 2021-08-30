@@ -33,6 +33,14 @@ public class TestUtils {
         ).isNotEmpty();
     }
 
+    public static void feilInneholderFeltOgFeilkode(List<Feil> feil, String felt, String feilkode) {
+        assertThat(feil
+                .stream()
+                .filter(f -> f.getFeilkode().equals(feilkode) && f.getFelt().equals(felt))
+                .collect(Collectors.toList())
+        ).isNotEmpty();
+    }
+
     public static void feilListInneholderFeil(List<Feil> feilList, Feil feil) {
         assertThat(feilList
                 .stream()

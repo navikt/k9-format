@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.Søknad;
@@ -39,7 +38,6 @@ class FraJsonTest {
         assertThat(feil).isEmpty();
     }
 
-    @Disabled
     @Test
     public void komplettSøknadGammelVersjonSkalIkkeHaValideringsfeil() {
         var søknad = SøknadJsonEksempel.komplettGammelVersjonSøknadJson();

@@ -32,7 +32,6 @@ public class Omsorg {
         return this;
     }
 
-    //TODO optional returverdi
     public Optional<String> getBeskrivelseAvOmsorgsrollen() {
         return Optional.ofNullable(beskrivelseAvOmsorgsrollen);
     }
