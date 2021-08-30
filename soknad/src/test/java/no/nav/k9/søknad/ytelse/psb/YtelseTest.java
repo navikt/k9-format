@@ -32,8 +32,6 @@ import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
 
 public class YtelseTest {
     private ArbeidstidPeriodeInfo ARBEIDSTID_PERIODE_INFO_STANDARD = new ArbeidstidPeriodeInfo(Duration.ofHours(8), Duration.ofHours(0));
-    private static final String UGYLDIG_ARGUMENT = "ugyldig argument";
-
 
     /*
     Verdier er satt riktig Tester
