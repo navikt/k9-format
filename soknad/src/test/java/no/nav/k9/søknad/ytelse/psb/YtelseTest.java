@@ -1,5 +1,6 @@
 package no.nav.k9.søknad.ytelse.psb;
 
+import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholderFeilkode;
 import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyHarFeil;
 import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyIngenFeil;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,6 +32,8 @@ import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
 
 public class YtelseTest {
     private ArbeidstidPeriodeInfo ARBEIDSTID_PERIODE_INFO_STANDARD = new ArbeidstidPeriodeInfo(Duration.ofHours(8), Duration.ofHours(0));
+    private static final String UGYLDIG_ARGUMENT = "ugyldig argument";
+
 
     /*
     Verdier er satt riktig Tester
@@ -59,7 +62,7 @@ public class YtelseTest {
         var psb = YtelseEksempel.minimumYtelse(søknadperiode);
 
         final List<Feil> feil = verifyHarFeil(psb);
-        TestUtils.feilInneholderFeilkode(feil, "ugyldigPeriode");
+        feilInneholderFeilkode(feil, "ugyldigPeriode");
     }
 
     @Test
@@ -70,7 +73,7 @@ public class YtelseTest {
         psb.medUttak(new Uttak().medPerioder(Map.of(periodeUttak, new UttakPeriodeInfo(Duration.ofHours(8)))));
 
         var feil = verifyHarFeil(psb);
-        TestUtils.feilInneholderFeilkode(feil, "ugyldigPeriode");
+        feilInneholderFeilkode(feil, "ugyldigPeriode");
     }
 
     @Test
@@ -78,7 +81,7 @@ public class YtelseTest {
         var søknadsperiode = new Periode(LocalDate.now(), null);
         var psb = YtelseEksempel.minimumYtelse(søknadsperiode);
         var feil = verifyHarFeil(psb);
-        TestUtils.feilInneholderFeilkode(feil, "påkrevd");
+        feilInneholderFeilkode(feil, "påkrevd");
     }
 
     @Test
@@ -87,7 +90,36 @@ public class YtelseTest {
         var psb = YtelseEksempel.minimumYtelse(søknadsperiode);
         psb.medTilsynsordning(new Tilsynsordning().medPerioder(Map.of(new Periode(LocalDate.now(), null), new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7)))));
         var feil = verifyHarFeil(psb);
-        TestUtils.feilInneholderFeilkode(feil, "påkrevd");
+        feilInneholderFeilkode(feil, "påkrevd");
+    }
+
+    @Test
+    public void overlappendePerioderForSøknadsperiodelist() {
+        var søknadsperiodeEn = new Periode(LocalDate.now(), LocalDate.now().plusDays(20));
+        var søknadsperiodeTo = new Periode(LocalDate.now().plusDays(2), LocalDate.now().plusDays(5));
+        var søknadsperiodeTre = new Periode(LocalDate.now().plusDays(1), LocalDate.now().plusDays(4));
+        var psb = YtelseEksempel.komplettYtelse(søknadsperiodeEn);
+        UttakPeriodeInfo uttakPeriodeInfo = new UttakPeriodeInfo().setTimerPleieAvBarnetPerDag(Duration.ofHours(7));
+        psb.medSøknadsperiode(List.of(søknadsperiodeTo, søknadsperiodeTre));
+
+        var feil = verifyHarFeil(psb);
+        feilInneholderFeilkode(feil, "IllegalArgumentException");
+    }
+
+    @Test
+    public void overlappendePerioderForUttaksperiodeMap() {
+        var søknadsperiodeEn = new Periode(LocalDate.now(), LocalDate.now().plusDays(20));
+        var søknadsperiodeTo = new Periode(LocalDate.now().plusDays(2), LocalDate.now().plusDays(5));
+        var psb = YtelseEksempel.komplettYtelse(søknadsperiodeEn);
+
+        var UTTAK_PERIODE_INFO = new UttakPeriodeInfo().setTimerPleieAvBarnetPerDag(Duration.ofHours(7));
+        psb.medUttak(new Uttak().medPerioder(Map.of(
+                søknadsperiodeEn, UTTAK_PERIODE_INFO,
+                søknadsperiodeTo, UTTAK_PERIODE_INFO
+        )));
+
+        var feil = verifyHarFeil(psb);
+        feilInneholderFeilkode(feil, "IllegalArgumentException");
     }
 
 

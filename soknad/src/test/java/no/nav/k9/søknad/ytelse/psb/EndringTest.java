@@ -72,7 +72,7 @@ class EndringTest {
         feilInneholderFeltOgFeilkode(feil, "beredskap.perioder", "ugyldigPeriode");
         feilInneholderFeltOgFeilkode(feil, "nattevåk.perioder", "ugyldigPeriode");
         feilInneholderFeltOgFeilkode(feil, "tilsynsordning.perioder", "ugyldigPeriode");
-        feilInneholderFeltOgFeilkode(feil, "uttak", "ugyldigPeriode");
+        feilInneholderFeltOgFeilkode(feil, "uttak.perioder", "ugyldigPeriode");
     }
 
     @Test

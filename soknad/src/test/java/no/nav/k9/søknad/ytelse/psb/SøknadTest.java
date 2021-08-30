@@ -19,7 +19,6 @@ class SøknadTest {
     private static final Søknad KOMPLETT_SØKNAD = SøknadEksempel.komplettSøknad(TEST_PERIODE);
     private static final Søknad MINIMUM_SØKNAD = SøknadEksempel.minimumSøknad(TEST_PERIODE);
     private static final String PÅKREVD = "påkrevd";
-    private static final String UGYLDIG_ARGUMENT = "ugyldig argument";
 
     @Test
     public void komplettSøknadHarIngenValideringFeil() {

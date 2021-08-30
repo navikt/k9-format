@@ -37,18 +37,7 @@ public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         manglerIkkeSøknadEllerEndringsPerioder(psb, feil);
         validerKomplettSøknad(psb, feil);
         validerAllePerioder(psb, feil);
-
-
-        if(feil.isEmpty()) {
-            validerPerioderErKomplettOgGyldig(psb, feil);
-        }
-
-        //TODO valider OpptjeningAktivitet ??
-        //TODO valider Omsorg
-        //TODO valider Bosterder
-        //TODO valider Utlandsopphold
-
-        //TODO validere at felter som bare kan være i en søknad er satt hvis det er en søknadsperiode.
+        validerPerioderErKomplettOgGyldig(psb, feil);
 
         return feil;
     }
