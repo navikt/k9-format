@@ -55,6 +55,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     @JsonProperty(value = "dataBruktTilUtledning")
     private DataBruktTilUtledning dataBruktTilUtledning;
 
+    @Deprecated
     @Valid
     @JsonProperty(value = "infoFraPunsj")
     private InfoFraPunsj infoFraPunsj;
@@ -186,10 +187,12 @@ public class PleiepengerSyktBarn implements Ytelse {
         return this;
     }
 
+    @Deprecated
     public Optional<InfoFraPunsj> getInfoFraPunsj() {
         return Optional.ofNullable(infoFraPunsj);
     }
 
+    @Deprecated
     public PleiepengerSyktBarn medInfoFraPunsj(InfoFraPunsj infoFraPunsj) {
         this.infoFraPunsj = Objects.requireNonNull(infoFraPunsj, "infoFraPunsj");
         return this;
