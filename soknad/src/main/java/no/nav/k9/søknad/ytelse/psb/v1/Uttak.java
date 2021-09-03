@@ -43,6 +43,11 @@ public class Uttak {
         return this;
     }
 
+    public Uttak leggeTilPeriode(Map<Periode, UttakPeriodeInfo> perioder) {
+        this.perioder.putAll(perioder);
+        return this;
+    }
+
     public Map<Periode, UttakPeriodeInfo> getPerioderSomSkalSlettes() {
         return unmodifiableMap(perioderSomSkalSlettes);
     }

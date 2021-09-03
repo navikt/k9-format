@@ -12,16 +12,15 @@ import no.nav.k9.søknad.SøknadValidator;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
+import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
 
 public class PleiepengerSyktBarnSøknadValidator extends SøknadValidator<Søknad> {
 
     private static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
 
-
     public PleiepengerSyktBarnSøknadValidator() {
     }
-
 
     private static void validerVersjon(Versjon versjon, List<Feil> feil) {
         if (versjon != null && !versjon.erGyldig()) {
@@ -38,7 +37,6 @@ public class PleiepengerSyktBarnSøknadValidator extends SøknadValidator<Søkna
         }
     }
 
-
     private Feil toFeil(ConstraintViolation<Søknad> constraintViolation) {
         return new Feil(
                 constraintViolation.getPropertyPath().toString(),
@@ -48,6 +46,10 @@ public class PleiepengerSyktBarnSøknadValidator extends SøknadValidator<Søkna
 
     @Override
     public List<Feil> valider(Søknad søknad) {
+        return valider(søknad, List.of());
+    }
+
+    public List<Feil> valider(Søknad søknad, List<Periode> gyldigEndringsPerioder) {
         var validate = VALIDATOR_FACTORY.getValidator().validate(søknad);
 
         List<Feil> feil = validate.stream()
@@ -56,7 +58,7 @@ public class PleiepengerSyktBarnSøknadValidator extends SøknadValidator<Søkna
 
         validerVersjon(søknad.getVersjon(), feil);
         validerBarnIkkeErSøker(søknad.getSøker(), søknad.getBerørtePersoner(), feil);
-        feil.addAll(new PleiepengerSyktBarnYtelseValidator().valider(søknad.getYtelse()));
+        feil.addAll(new PleiepengerSyktBarnYtelseValidator().valider(søknad.getYtelse(), gyldigEndringsPerioder));
 
         return feil;
     }
