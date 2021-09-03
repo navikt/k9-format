@@ -44,10 +44,4 @@ public class TidsserieUtils {
                 true);
     }
 
-    private static void validerPeriode(Periode periode, String felt, List<Feil> feil) {
-        if (periode.getTilOgMed() == null || periode.getFraOgMed() == null) {
-            feil.add(new Feil (felt, "NullPointerException", "Null"));
-        }
-    }
-
 }
