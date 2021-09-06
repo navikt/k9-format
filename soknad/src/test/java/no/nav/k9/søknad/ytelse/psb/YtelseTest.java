@@ -3,7 +3,6 @@ package no.nav.k9.søknad.ytelse.psb;
 import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholderFeilkode;
 import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyHarFeil;
 import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyIngenFeil;
-import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -24,7 +23,6 @@ import no.nav.k9.søknad.ytelse.psb.v1.Omsorg;
 import no.nav.k9.søknad.ytelse.psb.v1.Uttak;
 import no.nav.k9.søknad.ytelse.psb.v1.UttakPeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo;
@@ -125,57 +123,8 @@ public class YtelseTest {
     Komplette Perioder Test
      */
 
-    @Test
-    public void arbeidstidPerioderErKomplettNårHelgMangler() {
-        var søknadsperiodeFom = LocalDate.of(2021, 01, 04);
-        var søknadsperiodeTom = LocalDate.of(2021, 01, 31);
-
-
-        var p1 = new Periode(søknadsperiodeFom, søknadsperiodeFom.plusDays(4));
-        var p2 = new Periode(søknadsperiodeFom.plusDays(7), søknadsperiodeFom.plusDays(4 + 7));
-        var p3 = new Periode(søknadsperiodeFom.plusDays(14), søknadsperiodeTom);
-
-        var ytelse = YtelseEksempel.komplettYtelse(new Periode(søknadsperiodeFom, søknadsperiodeTom));
-        var arbeidstaker = new Arbeidstaker(
-                null,
-                Organisasjonsnummer.of("999999999"),
-                new ArbeidstidInfo(Map.of(
-                                p1, ARBEIDSTID_PERIODE_INFO_STANDARD,
-                                p2, ARBEIDSTID_PERIODE_INFO_STANDARD,
-                                p3, ARBEIDSTID_PERIODE_INFO_STANDARD
-                        )
-                )
-        );
-        ytelse.medArbeidstid(new Arbeidstid().medArbeidstaker(List.of(arbeidstaker)));
-        verifyIngenFeil(ytelse);
-    }
-
-    @Test
-    public void arbeidstidPerioderErIkkeKomplettNårDagerSomIkkeErHelgMangler() {
-        var søknadsperiodeFom = LocalDate.of(2021, 01, 04);
-        var søknadsperiodeTom = LocalDate.of(2021, 01, 31);
-
-        var arbeidstidPeriode = List.of(
-                new Periode(søknadsperiodeFom, søknadsperiodeFom.plusDays(3)),
-                new Periode(søknadsperiodeFom.plusDays(7), søknadsperiodeFom.plusDays(4+7)),
-                new Periode(søknadsperiodeFom.plusDays(14), søknadsperiodeFom.plusDays(4+14)),
-                new Periode(søknadsperiodeFom.plusDays(22), søknadsperiodeTom));
-
-        var ytelse = YtelseEksempel.komplettYtelse(new Periode(søknadsperiodeFom, søknadsperiodeTom));
-        var arbeidstaker = new Arbeidstaker(
-                null,
-                Organisasjonsnummer.of("999999999"),
-                new ArbeidstidInfo(Map.of(
-                        arbeidstidPeriode.get(0), ARBEIDSTID_PERIODE_INFO_STANDARD,
-                        arbeidstidPeriode.get(1), ARBEIDSTID_PERIODE_INFO_STANDARD,
-                        arbeidstidPeriode.get(2), ARBEIDSTID_PERIODE_INFO_STANDARD
-                ))
-        );
-        ytelse.medArbeidstid(new Arbeidstid().medArbeidstaker(List.of(arbeidstaker)));
-
-        var feil = verifyHarFeil(ytelse);
-        assertThat(feil).size().isEqualTo(2);
-    }
+    //TODO legge på uttaktest
+    //TODO legge på arbeidsid innenfor gyildig periode test
 
     /*
     Perioder utenfor gyldigperiode
