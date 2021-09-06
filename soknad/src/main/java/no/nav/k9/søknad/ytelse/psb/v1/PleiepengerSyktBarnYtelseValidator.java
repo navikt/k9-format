@@ -63,25 +63,25 @@ public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         feil.addAll(innenforGyldigperiode(tidsserier, psb.getTilsynsordning().getPerioder(), "tilsynsordning.perioder"));
         feil.addAll(innenforGyldigperiode(tidsserier, psb.getLovbestemtFerie().getPerioder(), "lovbestemtFerie.perioder"));
         feil.addAll(komplettOginnenforGyldigperiode(tidsserier, psb.getUttak().getPerioder(), "uttak.perioder"));
-        feil.addAll(validerArbeidstidPerioderKomplettOgInnenforGyldigperiode(psb, tidsserier));
+        feil.addAll(validerArbeidstidPerioderInnenforGyldigperiode(psb, tidsserier));
     }
 
-    private List<Feil> validerArbeidstidPerioderKomplettOgInnenforGyldigperiode(PleiepengerSyktBarn psb, TidsserieValidator.Perioder tidsserier) {
+    private List<Feil> validerArbeidstidPerioderInnenforGyldigperiode(PleiepengerSyktBarn psb, TidsserieValidator.Perioder tidsserier) {
         var feil = new ArrayList<Feil>();
         if (!psb.getArbeidstid().getArbeidstakerList().isEmpty()){
             for (int i = 0; i < psb.getArbeidstid().getArbeidstakerList().size(); i++) {
-                feil.addAll(komplettOginnenforGyldigperiode(tidsserier,
+                feil.addAll(innenforGyldigperiode(tidsserier,
                         psb.getArbeidstid().getArbeidstakerList().get(i).getArbeidstidInfo().getPerioder(),
                         "arbeidstid.arbeidstaker[" + i + "]"));
             }
         }
         if (psb.getArbeidstid().getFrilanserArbeidstidInfo().isPresent()) {
-            feil.addAll(komplettOginnenforGyldigperiode(tidsserier,
+            feil.addAll(innenforGyldigperiode(tidsserier,
                     psb.getArbeidstid().getFrilanserArbeidstidInfo().get().getPerioder(),
                     "arbeidstid.frilanserArbeidstidInfo.perioder"));
         }
         if (psb.getArbeidstid().getSelvstendigNæringsdrivendeArbeidstidInfo().isPresent()) {
-            feil.addAll(komplettOginnenforGyldigperiode(tidsserier,
+            feil.addAll(innenforGyldigperiode(tidsserier,
                     psb.getArbeidstid().getSelvstendigNæringsdrivendeArbeidstidInfo().get().getPerioder(),
                     "arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo.perioder"));
         }
