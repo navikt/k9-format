@@ -49,7 +49,7 @@ public class PleiepengerSyktBarnSøknadValidator extends SøknadValidator<Søkna
         return valider(søknad, List.of());
     }
 
-    public List<Feil> valider(Søknad søknad, List<Periode> gyldigEndringsPerioder) {
+    public List<Feil> valider(Søknad søknad, List<Periode> gyldigeEndringsperioder) {
         var validate = VALIDATOR_FACTORY.getValidator().validate(søknad);
 
         List<Feil> feil = validate.stream()
@@ -58,7 +58,7 @@ public class PleiepengerSyktBarnSøknadValidator extends SøknadValidator<Søkna
 
         validerVersjon(søknad.getVersjon(), feil);
         validerBarnIkkeErSøker(søknad.getSøker(), søknad.getBerørtePersoner(), feil);
-        feil.addAll(new PleiepengerSyktBarnYtelseValidator().valider(søknad.getYtelse(), gyldigEndringsPerioder));
+        feil.addAll(new PleiepengerSyktBarnYtelseValidator().valider(søknad.getYtelse(), gyldigeEndringsperioder));
 
         return feil;
     }

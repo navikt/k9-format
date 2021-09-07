@@ -30,7 +30,7 @@ public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         return valider(ytelse, List.of());
     }
 
-    public List<Feil> valider(Ytelse ytelse, List<Periode> gyldigEndringsPerioder) {
+    public List<Feil> valider(Ytelse ytelse, List<Periode> gyldigeEndringsperioder) {
         var psb = (PleiepengerSyktBarn) ytelse;
         var validate = VALIDATOR_FACTORY.getValidator().validate(psb);
 
@@ -38,17 +38,17 @@ public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
                 .map(this::toFeil)
                 .collect(Collectors.toList());
 
-        feil.addAll(manglerIkkeSøknadEllerEndringsPerioder(psb, gyldigEndringsPerioder));
+        feil.addAll(manglerIkkeSøknadEllerEndringsPerioder(psb, gyldigeEndringsperioder));
         feil.addAll(validerKomplettSøknad(psb));
 
         var ytelsePerioder = EndringsperiodeKalkulator.getYtelsePerioder(psb);
         feil.addAll(validerPerioderErGyldig(psb.getSøknadsperiodeList(), "søknadsperiode"));
-        feil.addAll(validerPerioderErGyldig(gyldigEndringsPerioder, "gyldigEndringsPerioder"));
+        feil.addAll(validerPerioderErGyldig(gyldigeEndringsperioder, "gyldigeEndringsperioder"));
         feil.addAll(validerPerioderErGyldig(ytelsePerioder));
 
         var søknadsperiode = toLocalDateTimeline(psb.getSøknadsperiodeList(), "søknadsperiode", feil);
         var gyldigInterval = søknadsperiode.union(
-                toLocalDateTimeline(gyldigEndringsPerioder, "gyldigEndringsPerioder", feil),
+                toLocalDateTimeline(gyldigeEndringsperioder, "gyldigeEndringsperioder", feil),
                 StandardCombinators::coalesceLeftHandSide);
 
         feil.addAll(innenforGyldigPeriode(gyldigInterval, ytelsePerioder));
