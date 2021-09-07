@@ -4,84 +4,110 @@ import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholderFeilkode;
 import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholderFeltOgFeilkode;
 import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyHarFeil;
 import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyIngenFeil;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.Duration;
 import java.time.LocalDate;
-import java.util.Map;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.ytelse.psb.v1.Beredskap;
-import no.nav.k9.søknad.ytelse.psb.v1.Nattevåk;
-import no.nav.k9.søknad.ytelse.psb.v1.Uttak;
-import no.nav.k9.søknad.ytelse.psb.v1.UttakPeriodeInfo;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.EndringsperiodeKalkulator;
 
 class EndringTest {
 
     @Test
-    public void endringssøknadUtenFeil() {
-        var endringsperiode = new Periode(LocalDate.now().minusMonths(1), LocalDate.now().plusMonths(1));
-        var ytelse = YtelseEksempel.minimumEndringssøknad(endringsperiode);
+    public void komplettEndringssøknadUtenFeil() {
+        var gyldigEndringsInterval = new Periode(LocalDate.now().minusMonths(2), LocalDate.now().plusWeeks(3));
+        var endringsperiode = new Periode(LocalDate.now().minusWeeks(2), LocalDate.now().plusWeeks(3));
 
-        verifyIngenFeil(ytelse);
+        var psb = YtelseEksempel.komplettEndringssøknad(endringsperiode);
+        verifyIngenFeil(psb, List.of(gyldigEndringsInterval));
     }
 
     @Test
     public void endringssøknadMedSøknadsperioderUtenFeil() {
-        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusWeeks(2));
         var endringsperiode = new Periode(LocalDate.now().minusMonths(2), LocalDate.now().minusDays(1));
 
-        var endringssøknad = YtelseEksempel.minimumYtelseMedEndring(søknadsperiode, endringsperiode);
-        verifyIngenFeil(endringssøknad);
+        var psb = YtelseEksempel.standardYtelseMedEndring(søknadsperiode, endringsperiode);
+        verifyIngenFeil(psb, List.of(endringsperiode));
+    }
+
+    @Test
+    public void endringssøknadMedMinimumSøknadsperioderUtenFeil() {
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusWeeks(2));
+        var endringsperiode = new Periode(LocalDate.now().minusMonths(2), LocalDate.now().minusDays(1));
+
+        var psb = YtelseEksempel.standardYtelseMedEndring(søknadsperiode, endringsperiode);
+        verifyIngenFeil(psb, List.of(endringsperiode));
 
     }
 
     @Test
-    public void endringssøknadMedIkkeKomplettUttak() {
+    public void søknadMedEndringAvUttakUtenGyldigIntervalForEndring() {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
-        var endringsperiode = new Periode(LocalDate.now().minusMonths(2), LocalDate.now().minusDays(1));
+        var endringsperiodeList = List.of(new Periode(LocalDate.now().minusMonths(2), LocalDate.now().minusDays(1)));
 
-        var ytelse = YtelseEksempel.komplettYtelse(søknadsperiode);
-        ytelse.medUttak(new Uttak().medPerioder(Map.of(
-                endringsperiode, new UttakPeriodeInfo(Duration.ofHours(8)))));
+        var psb = YtelseEksempel.komplettYtelse(søknadsperiode);
+        psb.getUttak().leggeTilPeriode(YtelseEksempel.lagUttak(endringsperiodeList).getPerioder());
 
-        ytelse.medEndringsperiode(endringsperiode);
-
-        var feil = verifyHarFeil(ytelse);
-        feilInneholderFeltOgFeilkode(feil, "uttak.perioder", "ikkeKomplettPeriode");
+        var feil = verifyHarFeil(psb, List.of());
+        feilInneholderFeltOgFeilkode(feil, "uttak.perioder", "ugyldigPeriode");
+        assertThat(feil).size().isEqualTo(1);
+        assertThat(endringsperiodeList).isEqualTo(psb.getEndringsperiode());
     }
 
     @Test
     public void endringssøknadMedPerioderUtenforGyldigperiode() {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
-        var endringsperiode = new Periode(LocalDate.now().minusMonths(2), LocalDate.now().minusDays(1));
-        var periodeUtenfor = new Periode(endringsperiode.getFraOgMed().minusMonths(1), endringsperiode.getFraOgMed().minusDays(1));
+        var endringsperiode = List.of(new Periode(LocalDate.now().minusMonths(2), LocalDate.now().minusDays(1)));
+        var periodeUtenfor = List.of(new Periode(LocalDate.now().minusMonths(2).minusMonths(1), LocalDate.now().minusDays(1).minusDays(1)));
 
         var ytelse = YtelseEksempel.komplettYtelse(søknadsperiode);
 
-        ytelse.medEndringsperiode(endringsperiode);
-        ytelse.getUttak().leggeTilPeriode(periodeUtenfor, new UttakPeriodeInfo(Duration.ofHours(8)));
-        ytelse.getTilsynsordning().leggeTilPeriode(periodeUtenfor, new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7)));
-        ytelse.getBeredskap().leggeTilPeriode(periodeUtenfor, new Beredskap.BeredskapPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()));
-        ytelse.getNattevåk().leggeTilPeriode(periodeUtenfor, new Nattevåk.NattevåkPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()));
+        YtelseEksempel.leggPåKomplettEndringsøknad(periodeUtenfor.get(0), ytelse);
 
-        var feil = verifyHarFeil(ytelse);
+        var feil = verifyHarFeil(ytelse, endringsperiode);
         feilInneholderFeilkode(feil, "ugyldigPeriode");
         feilInneholderFeltOgFeilkode(feil, "beredskap.perioder", "ugyldigPeriode");
         feilInneholderFeltOgFeilkode(feil, "nattevåk.perioder", "ugyldigPeriode");
         feilInneholderFeltOgFeilkode(feil, "tilsynsordning.perioder", "ugyldigPeriode");
         feilInneholderFeltOgFeilkode(feil, "uttak.perioder", "ugyldigPeriode");
+        feilInneholderFeltOgFeilkode(feil, "arbeidstid.arbeidstaker[1].perioder", "ugyldigPeriode");
     }
 
     @Test
     public void endringssøknadPeriodeKanIkkeHaFomFørTom() {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now());
         var psb = YtelseEksempel.komplettYtelse(søknadsperiode);
-        psb.medEndringsperiode(new Periode(LocalDate.now().plusDays(2), LocalDate.now()));
 
-        var feil = verifyHarFeil(psb);
+        var feil = verifyHarFeil(psb, List.of(new Periode(LocalDate.now().plusDays(2), LocalDate.now())));
         feilInneholderFeilkode(feil, "ugyldigPeriode");    }
+
+    @Test
+    public void kalkulertEndringsperiodeFinnerFlereSøknadsperioder() {
+        var søknadsperiodeEN = new Periode(LocalDate.now(), LocalDate.now().plusWeeks(2));
+        var søknadsperiodeTo = new Periode(LocalDate.now().plusWeeks(4), LocalDate.now().plusWeeks(6));
+        var søknadsperiodeTre = new Periode(LocalDate.now().plusWeeks(7), LocalDate.now().plusWeeks(10));
+        var søknadsperiodeFire = new Periode(LocalDate.now().plusWeeks(12), LocalDate.now().plusWeeks(13));
+
+        var gyldigIntervalForEndring = List.of(søknadsperiodeEN, søknadsperiodeTo, søknadsperiodeTre, søknadsperiodeFire);
+
+        var ytelse = YtelseEksempel.komplettEndringssøknad(gyldigIntervalForEndring);
+
+        verifyIngenFeil(ytelse, gyldigIntervalForEndring);
+
+        var endringsperiode = EndringsperiodeKalkulator.getEndringsperiode(ytelse);
+        assertThat(endringsperiode)
+                .isNotEmpty()
+                .size().isEqualTo(4);
+        assertThat(endringsperiode).contains(søknadsperiodeEN);
+        assertThat(endringsperiode).contains(søknadsperiodeTo);
+        assertThat(endringsperiode).contains(søknadsperiodeTre);
+        assertThat(endringsperiode).contains(søknadsperiodeFire);
+
+
+    }
 
 }

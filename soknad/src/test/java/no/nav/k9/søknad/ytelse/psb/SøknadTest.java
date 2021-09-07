@@ -25,6 +25,7 @@ class SøknadTest {
         verifyIngenFeil(KOMPLETT_SØKNAD);
     }
 
+
     @Test
     public void minimumSøknadHarIngenValideringsFeil() {
         verifyIngenFeil(MINIMUM_SØKNAD);

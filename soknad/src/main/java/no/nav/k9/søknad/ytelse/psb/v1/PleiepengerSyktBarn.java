@@ -46,7 +46,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     @JsonProperty(value = "endringsperiode", required = true)
     private List<@Valid Periode> endringsperiode = new ArrayList<>();
-    
+
     @Valid
     @JsonProperty(value = "trekkKravPerioder", required = true)
     private List<@Valid Periode> trekkKravPerioder = new ArrayList<>();
@@ -156,30 +156,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     }
 
     public List<Periode> getEndringsperiode() {
-        return (endringsperiode == null) ? null : Collections.unmodifiableList(endringsperiode);
-    }
-
-    public PleiepengerSyktBarn medEndringsperiode(List<Periode> endringsperiodeList) {
-        if (this.endringsperiode == null)
-            this.endringsperiode = new ArrayList<>();
-        this.endringsperiode.addAll(endringsperiodeList);
-        return this;
-    }
-
-    public PleiepengerSyktBarn medEndringsperiode(Periode endringsperiode) {
-        if (this.endringsperiode == null)
-            this.endringsperiode = new ArrayList<>();
-        this.endringsperiode.add(endringsperiode);
-        return this;
-    }
-    
-    public List<Periode> getTrekkKravPerioder() {
-        return Collections.unmodifiableList(trekkKravPerioder);
-    }
-    
-    public PleiepengerSyktBarn medTrekkKravPerioder(List<Periode> trekkKravPerioder) {
-        this.trekkKravPerioder = new ArrayList<>(trekkKravPerioder);
-        return this;
+        return EndringsperiodeKalkulator.getEndringsperiode(this);
     }
 
     public OpptjeningAktivitet getOpptjeningAktivitet() {

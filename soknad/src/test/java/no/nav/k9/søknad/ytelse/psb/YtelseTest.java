@@ -1,14 +1,18 @@
 package no.nav.k9.søknad.ytelse.psb;
 
 import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholderFeilkode;
+import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilListInneholderFeil;
 import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyHarFeil;
 import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyIngenFeil;
+import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagArbeidstaker;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.felles.Feil;

@@ -43,6 +43,11 @@ public class Tilsynsordning {
         return this;
     }
 
+    public Tilsynsordning leggeTilPeriode(Map<Periode, TilsynPeriodeInfo> perioder) {
+        this.perioder.putAll(perioder);
+        return this;
+    }
+
     public Map<Periode, TilsynPeriodeInfo> getPerioderSomSkalSlettes() {
         return Collections.unmodifiableMap(perioderSomSkalSlettes);
     }

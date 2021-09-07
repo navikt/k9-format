@@ -54,6 +54,11 @@ public class Beredskap {
         return this;
     }
 
+    public Beredskap leggeTilPeriode(Map<Periode, BeredskapPeriodeInfo> perioder) {
+        this.perioder.putAll(perioder);
+        return this;
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class BeredskapPeriodeInfo {
 
