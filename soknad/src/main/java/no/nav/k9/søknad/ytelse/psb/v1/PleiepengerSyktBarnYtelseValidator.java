@@ -16,6 +16,7 @@ import javax.validation.ValidatorFactory;
 
 import no.nav.fpsak.tidsserie.LocalDateTimeline;
 import no.nav.fpsak.tidsserie.StandardCombinators;
+import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
@@ -28,6 +29,13 @@ public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
     @Override
     public List<Feil> valider(Ytelse ytelse) {
         return valider(ytelse, List.of());
+    }
+
+    public void forsikreValidert(Ytelse ytelse, List<Periode> gyldigeEndringsperioder) {
+        List<Feil> feil = valider(ytelse, gyldigeEndringsperioder);
+        if (!feil.isEmpty()) {
+            throw new ValideringsFeil(feil);
+        }
     }
 
     public List<Feil> valider(Ytelse ytelse, List<Periode> gyldigeEndringsperioder) {

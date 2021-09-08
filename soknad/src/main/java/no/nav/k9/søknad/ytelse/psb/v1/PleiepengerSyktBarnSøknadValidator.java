@@ -9,6 +9,7 @@ import javax.validation.ValidatorFactory;
 
 import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.SøknadValidator;
+import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
@@ -63,5 +64,11 @@ public class PleiepengerSyktBarnSøknadValidator extends SøknadValidator<Søkna
         return feil;
     }
 
+    public void forsikreValidert(Søknad søknad, List<Periode> gyldigeEndringsperioder) {
+        List<Feil> feil = valider(søknad, gyldigeEndringsperioder);
+        if (!feil.isEmpty()) {
+            throw new ValideringsFeil(feil);
+        }
+    }
 
 }
