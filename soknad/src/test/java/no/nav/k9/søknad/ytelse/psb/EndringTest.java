@@ -16,7 +16,6 @@ import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
 import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.ytelse.psb.v1.EndringsperiodeKalkulator;
 
 class EndringTest {
 
@@ -106,7 +105,7 @@ class EndringTest {
 
         verifyIngenFeil(ytelse, gyldigIntervalForEndring);
 
-        var endringsperiode = EndringsperiodeKalkulator.getEndringsperiode(ytelse);
+        var endringsperiode = ytelse.getEndringsperiode();
         assertThat(endringsperiode)
                 .isNotEmpty()
                 .size().isEqualTo(4);
