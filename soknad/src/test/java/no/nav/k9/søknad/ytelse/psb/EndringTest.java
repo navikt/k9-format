@@ -27,7 +27,7 @@ class EndringTest {
 
         var psb = YtelseEksempel.komplettEndringssøknad(endringsperiode);
         verifyIngenFeil(psb, List.of(gyldigEndringsInterval));
-        assertEndringsperioderIJson(psb, List.of(endringsperiode));
+        assertEndringsperioderIJson(psb);
     }
 
     @Test
@@ -37,7 +37,7 @@ class EndringTest {
 
         var psb = YtelseEksempel.standardYtelseMedEndring(søknadsperiode, endringsperiode);
         verifyIngenFeil(psb, List.of(endringsperiode));
-        assertEndringsperioderIJson(psb, List.of(endringsperiode));
+        assertEndringsperioderIJson(psb);
     }
 
     @Test
@@ -47,7 +47,7 @@ class EndringTest {
 
         var psb = YtelseEksempel.standardYtelseMedEndring(søknadsperiode, endringsperiode);
         verifyIngenFeil(psb, List.of(endringsperiode));
-        assertEndringsperioderIJson(psb, List.of(endringsperiode));
+        assertEndringsperioderIJson(psb);
     }
 
     @Test
@@ -62,7 +62,7 @@ class EndringTest {
         feilInneholderFeltOgFeilkode(feil, "uttak.perioder", "ugyldigPeriode");
         assertThat(feil).size().isEqualTo(1);
         assertThat(endringsperiodeList).isEqualTo(psb.getEndringsperiode());
-        assertEndringsperioderIJson(psb, endringsperiodeList);
+        assertEndringsperioderIJson(psb);
     }
 
     @Test
@@ -114,10 +114,10 @@ class EndringTest {
         assertThat(endringsperiode).contains(søknadsperiodeTo);
         assertThat(endringsperiode).contains(søknadsperiodeTre);
         assertThat(endringsperiode).contains(søknadsperiodeFire);
-        assertEndringsperioderIJson(ytelse, List.of(søknadsperiodeEN, søknadsperiodeTo, søknadsperiodeTre, søknadsperiodeFire));
+        assertEndringsperioderIJson(ytelse);
     }
 
-    private void assertEndringsperioderIJson(PleiepengerSyktBarn ytelse, List<Periode> forventetEndringsperioder) {
+    private void assertEndringsperioderIJson(PleiepengerSyktBarn ytelse) {
         var endringsperioder = new ArrayList<Periode>();
         try {
             var jsonArray = (ArrayNode) JsonUtils.getObjectMapper()
@@ -128,6 +128,6 @@ class EndringTest {
         } catch (Exception ex) {
             throw new IllegalStateException("Feil ved sjekk på endringsperioder i JSON", ex);
         }
-        assertThat(endringsperioder).containsExactlyElementsOf(forventetEndringsperioder);
+        assertThat(endringsperioder).containsExactlyElementsOf(ytelse.getEndringsperiode());
     }
 }
