@@ -7,8 +7,12 @@ import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyIngenFeil;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import no.nav.k9.søknad.JsonUtils;
+import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
 import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.felles.type.Periode;
@@ -23,6 +27,7 @@ class EndringTest {
 
         var psb = YtelseEksempel.komplettEndringssøknad(endringsperiode);
         verifyIngenFeil(psb, List.of(gyldigEndringsInterval));
+        assertEndringsperioderIJson(psb, List.of(endringsperiode));
     }
 
     @Test
@@ -32,6 +37,7 @@ class EndringTest {
 
         var psb = YtelseEksempel.standardYtelseMedEndring(søknadsperiode, endringsperiode);
         verifyIngenFeil(psb, List.of(endringsperiode));
+        assertEndringsperioderIJson(psb, List.of(endringsperiode));
     }
 
     @Test
@@ -41,7 +47,7 @@ class EndringTest {
 
         var psb = YtelseEksempel.standardYtelseMedEndring(søknadsperiode, endringsperiode);
         verifyIngenFeil(psb, List.of(endringsperiode));
-
+        assertEndringsperioderIJson(psb, List.of(endringsperiode));
     }
 
     @Test
@@ -56,6 +62,7 @@ class EndringTest {
         feilInneholderFeltOgFeilkode(feil, "uttak.perioder", "ugyldigPeriode");
         assertThat(feil).size().isEqualTo(1);
         assertThat(endringsperiodeList).isEqualTo(psb.getEndringsperiode());
+        assertEndringsperioderIJson(psb, endringsperiodeList);
     }
 
     @Test
@@ -83,7 +90,8 @@ class EndringTest {
         var psb = YtelseEksempel.komplettYtelse(søknadsperiode);
 
         var feil = verifyHarFeil(psb, List.of(new Periode(LocalDate.now().plusDays(2), LocalDate.now())));
-        feilInneholderFeilkode(feil, "ugyldigPeriode");    }
+        feilInneholderFeilkode(feil, "ugyldigPeriode");
+    }
 
     @Test
     public void kalkulertEndringsperiodeFinnerFlereSøknadsperioder() {
@@ -106,8 +114,20 @@ class EndringTest {
         assertThat(endringsperiode).contains(søknadsperiodeTo);
         assertThat(endringsperiode).contains(søknadsperiodeTre);
         assertThat(endringsperiode).contains(søknadsperiodeFire);
-
-
+        assertEndringsperioderIJson(ytelse, List.of(søknadsperiodeEN, søknadsperiodeTo, søknadsperiodeTre, søknadsperiodeFire));
     }
 
+    private void assertEndringsperioderIJson(PleiepengerSyktBarn ytelse, List<Periode> forventetEndringsperioder) {
+        var endringsperioder = new ArrayList<Periode>();
+        try {
+            var jsonArray = (ArrayNode) JsonUtils.getObjectMapper()
+                    .readTree(JsonUtils.toString(ytelse))
+                    .get("endringsperiode");
+
+            jsonArray.forEach(jsonNode -> endringsperioder.add(new Periode(jsonNode.asText())));
+        } catch (Exception ex) {
+            throw new IllegalStateException("Feil ved sjekk på endringsperioder i JSON", ex);
+        }
+        assertThat(endringsperioder).containsExactlyElementsOf(forventetEndringsperioder);
+    }
 }
