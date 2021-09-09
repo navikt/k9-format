@@ -43,11 +43,6 @@ public class PleiepengerSyktBarn implements Ytelse {
     private List<@Valid Periode> søknadsperiode = new ArrayList<>();
 
     @Valid
-    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
-    @JsonProperty(value = "endringsperiode", required = true)
-    private List<@Valid Periode> endringsperiode = new ArrayList<>();
-
-    @Valid
     @JsonProperty(value = "trekkKravPerioder", required = true)
     private List<@Valid Periode> trekkKravPerioder = new ArrayList<>();
 
@@ -126,7 +121,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     @Override
     public Periode getSøknadsperiode() {
         final List<Periode> perioder = new ArrayList<>(søknadsperiode);
-        perioder.addAll(endringsperiode);
+        perioder.addAll(getEndringsperiode());
 
         final var fom = perioder
                 .stream()
@@ -155,6 +150,7 @@ public class PleiepengerSyktBarn implements Ytelse {
         return this;
     }
 
+    @JsonProperty(value = "endringsperiode")
     public List<Periode> getEndringsperiode() {
         return EndringsperiodeKalkulator.getEndringsperiode(this);
     }
@@ -283,7 +279,4 @@ public class PleiepengerSyktBarn implements Ytelse {
     public YtelseValidator getValidator() {
         return new PleiepengerSyktBarnYtelseValidator();
     }
-
-
-
 }
