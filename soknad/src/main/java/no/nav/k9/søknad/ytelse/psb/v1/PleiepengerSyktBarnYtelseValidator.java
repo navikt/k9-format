@@ -26,6 +26,37 @@ public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
 
     private static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
 
+    public static List<Feil> validerPerioderErGyldig(List<Periode> perioder, String felt) {
+        var feil = new ArrayList<Feil>();
+        for (int i = 0; i < perioder.size(); i++) {
+            validerGyldigPeriode(perioder.get(i), felt + "[" + i + "]", feil);
+        }
+        return feil;
+    }
+
+    public static List<Feil> validerPerioderErGyldig(List<YtelsePerioder> ytelsePerioderList) {
+        var feil = new ArrayList<Feil>();
+        for (var ytelsePerioder : ytelsePerioderList) {
+            feil.addAll(validerPerioderErGyldig(ytelsePerioder.getPeriodeList(), ytelsePerioder.getFelt()));
+        }
+        return feil;
+    }
+
+    public static void validerGyldigPeriode(Periode periode, String felt, List<Feil> feil) {
+        if (periode == null) {
+            return;
+        }
+        if (periode.getTilOgMed() == null) {
+            feil.add(new Feil(felt, "påkrevd", "Til og med (TOM) må være satt."));
+        }
+        if (periode.getFraOgMed() == null) {
+            feil.add(new Feil(felt, "påkrevd", "Fra og med (FOM) må være satt."));
+        }
+        if (periode.getFraOgMed() != null && periode.getTilOgMed() != null && periode.getTilOgMed().isBefore(periode.getFraOgMed())) {
+            feil.add(new Feil(felt, "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM)."));
+        }
+    }
+
     @Override
     public List<Feil> valider(Ytelse ytelse) {
         return valider(ytelse, List.of());
@@ -55,11 +86,13 @@ public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         feil.addAll(validerPerioderErGyldig(ytelsePerioder));
 
         var søknadsperiode = toLocalDateTimeline(psb.getSøknadsperiodeList(), "søknadsperiode", feil);
-        var gyldigInterval = søknadsperiode.union(
-                toLocalDateTimeline(gyldigeEndringsperioder, "gyldigeEndringsperioder", feil),
-                StandardCombinators::coalesceLeftHandSide);
+        if (gyldigeEndringsperioder.isEmpty()) {
+            var gyldigInterval = søknadsperiode.union(
+                    toLocalDateTimeline(gyldigeEndringsperioder, "gyldigeEndringsperioder", feil),
+                    StandardCombinators::coalesceLeftHandSide);
 
-        feil.addAll(innenforGyldigPeriode(gyldigInterval, ytelsePerioder));
+            feil.addAll(innenforGyldigPeriode(gyldigInterval, ytelsePerioder));
+        }
         feil.addAll(periodeneErKomplett(søknadsperiode, psb.getUttak().getPerioder(), "uttak"));
 
         return feil;
@@ -104,47 +137,16 @@ public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
     private List<Feil> validerKomplettSøknad(PleiepengerSyktBarn psb) {
         var feil = new ArrayList<Feil>();
         if (psb.getBarn() == null) {
-            feil.add(new Feil("barn", "missingArgument","Barn kan ikke være null."));
+            feil.add(new Feil("barn", "missingArgument", "Barn kan ikke være null."));
         }
         return feil;
     }
 
     private List<Feil> manglerIkkeSøknadEllerEndringsPerioder(PleiepengerSyktBarn psb, List<Periode> gyldigEndringsPerioder) {
         var feil = new ArrayList<Feil>();
-        if ( (psb.getSøknadsperiodeList().isEmpty() && gyldigEndringsPerioder.isEmpty())) {
-            feil.add(new Feil("søknadsperiode/gyldigEndringsPerioder", "missingArgument","Mangler søknadsperiode eller gyldigEndringsPerioder."));
+        if ((psb.getSøknadsperiodeList().isEmpty() && gyldigEndringsPerioder.isEmpty())) {
+            feil.add(new Feil("søknadsperiode/gyldigEndringsPerioder", "missingArgument", "Mangler søknadsperiode eller gyldigEndringsPerioder."));
         }
         return feil;
-    }
-
-    public static List<Feil> validerPerioderErGyldig(List<Periode> perioder, String felt) {
-        var feil = new ArrayList<Feil>();
-        for (int i = 0; i < perioder.size(); i++ ) {
-            validerGyldigPeriode(perioder.get(i), felt + "[" + i + "]", feil);
-        }
-        return feil;
-    }
-
-    public static List<Feil> validerPerioderErGyldig(List<YtelsePerioder> ytelsePerioderList) {
-        var feil = new ArrayList<Feil>();
-        for (var ytelsePerioder : ytelsePerioderList) {
-            feil.addAll(validerPerioderErGyldig(ytelsePerioder.getPeriodeList(), ytelsePerioder.getFelt()));
-        }
-        return feil;
-    }
-
-    public static void validerGyldigPeriode(Periode periode, String felt, List<Feil> feil) {
-        if (periode == null) {
-            return;
-        }
-        if (periode.getTilOgMed() == null) {
-            feil.add(new Feil(felt, "påkrevd", "Til og med (TOM) må være satt."));
-        }
-        if (periode.getFraOgMed() == null) {
-            feil.add(new Feil(felt, "påkrevd", "Fra og med (FOM) må være satt."));
-        }
-        if (periode.getFraOgMed() != null && periode.getTilOgMed() != null && periode.getTilOgMed().isBefore(periode.getFraOgMed())) {
-            feil.add(new Feil(felt, "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM)."));
-        }
     }
 }
