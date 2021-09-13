@@ -152,7 +152,21 @@ public class PleiepengerSyktBarn implements Ytelse {
 
     @JsonProperty(value = "endringsperiode")
     public List<Periode> getEndringsperiode() {
-        return EndringsperiodeKalkulator.getEndringsperiode(this);
+        return Collections.unmodifiableList(PerioderMedEndringUtil.getEndringsperiode(this));
+    }
+
+    public PleiepengerSyktBarn addAllTrekkKravPerioder(List<Periode> trekkKravPerioder) {
+        this.trekkKravPerioder.addAll(Objects.requireNonNull(trekkKravPerioder, "trekkKravPerioder"));
+        return this;
+    }
+
+    public PleiepengerSyktBarn addTrekkKravPeriode(Periode trekkKravPeriode) {
+        this.trekkKravPerioder.add(Objects.requireNonNull(trekkKravPeriode, "trekkKravPeriode"));
+        return this;
+    }
+
+    public List<Periode> getTrekkKravPerioder() {
+        return Collections.unmodifiableList(trekkKravPerioder);
     }
 
     public OpptjeningAktivitet getOpptjeningAktivitet() {

@@ -1,13 +1,13 @@
 package no.nav.k9.ettersendelse;
 
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import no.nav.k9.søknad.SøknadValidator;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
-
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class EttersendelseValidator extends SøknadValidator<Ettersendelse> {
     @Override

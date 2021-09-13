@@ -25,7 +25,7 @@ public class TestUtils {
         return "sajhdasd83724234";
     }
 
-    public static void feilInneholderFeilkode(List<Feil> feil, String feilkode) {
+    public static void feilInneholder(List<Feil> feil, String feilkode) {
         assertThat(feil
                 .stream()
                 .filter(f -> f.getFeilkode().equals(feilkode))
@@ -34,7 +34,7 @@ public class TestUtils {
                 .isNotEmpty();
     }
 
-    public static void feilInneholderFeltOgFeilkode(List<Feil> feil, String felt, String feilkode) {
+    public static void feilInneholder(List<Feil> feil, String felt, String feilkode) {
         assertThat(feil
                 .stream()
                 .filter(f -> f.getFeilkode().equals(feilkode) && f.getFelt().equals(felt))
@@ -43,7 +43,7 @@ public class TestUtils {
                 .isNotEmpty();
     }
 
-    public static void feilListInneholderFeil(List<Feil> feilList, Feil feil) {
+    public static void feilInneholder(List<Feil> feilList, Feil feil) {
         assertThat(feilList
                 .stream()
                 .filter(f ->
