@@ -1,6 +1,6 @@
 package no.nav.k9.søknad.ytelse.psb;
 
-import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilListInneholderFeil;
+import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholder;
 import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyHarFeil;
 import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyIngenFeil;
 
@@ -37,7 +37,7 @@ class SøknadTest {
         søknad.medSøker(new Søker(NorskIdentitetsnummer.of(søknad.getBerørtePersoner().get(0).getPersonIdent().getVerdi())));
 
         var feil = verifyHarFeil(søknad);
-        feilListInneholderFeil(feil, new Feil("søker", "søkerSammeSomBarn", "Søker kan ikke være barn." ));
+        feilInneholder(feil, new Feil("søker", "søkerSammeSomBarn", "Søker kan ikke være barn." ));
 
     }
 
@@ -47,7 +47,7 @@ class SøknadTest {
         søknad.medSøker(null);
 
         var feil = verifyHarFeil(søknad);
-        feilListInneholderFeil(feil, new Feil("søker", PÅKREVD, "must not be null"));
+        feilInneholder(feil, new Feil("søker", PÅKREVD, "must not be null"));
     }
 
     //TODO legge på getSøknadsperioder test

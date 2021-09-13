@@ -1,7 +1,7 @@
 package no.nav.k9.søknad.ytelse.psb;
 
-import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholderFeilkode;
-import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholderFeltOgFeilkode;
+import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholder;
+import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholder;
 import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyHarFeil;
 import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyIngenFeil;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -58,7 +58,7 @@ class EndringTest {
         psb.getUttak().leggeTilPeriode(YtelseEksempel.lagUttak(endringsperiodeList).getPerioder());
 
         var feil = verifyHarFeil(psb, List.of());
-        feilInneholderFeltOgFeilkode(feil, "uttak.perioder", "ugyldigPeriode");
+        TestUtils.feilInneholder(feil, "uttak.perioder", "ugyldigPeriode");
         assertThat(feil).size().isEqualTo(1);
         assertThat(endringsperiodeList).isEqualTo(psb.getEndringsperiode());
         assertEndringsperioderIJson(psb);
@@ -75,12 +75,12 @@ class EndringTest {
         YtelseEksempel.leggPåKomplettEndringsøknad(periodeUtenfor.get(0), ytelse);
 
         var feil = verifyHarFeil(ytelse, endringsperiode);
-        feilInneholderFeilkode(feil, "ugyldigPeriode");
-        feilInneholderFeltOgFeilkode(feil, "beredskap.perioder", "ugyldigPeriode");
-        feilInneholderFeltOgFeilkode(feil, "nattevåk.perioder", "ugyldigPeriode");
-        feilInneholderFeltOgFeilkode(feil, "tilsynsordning.perioder", "ugyldigPeriode");
-        feilInneholderFeltOgFeilkode(feil, "uttak.perioder", "ugyldigPeriode");
-        feilInneholderFeltOgFeilkode(feil, "arbeidstid.arbeidstaker[1].perioder", "ugyldigPeriode");
+        feilInneholder(feil, "ugyldigPeriode");
+        TestUtils.feilInneholder(feil, "beredskap.perioder", "ugyldigPeriode");
+        TestUtils.feilInneholder(feil, "nattevåk.perioder", "ugyldigPeriode");
+        TestUtils.feilInneholder(feil, "tilsynsordning.perioder", "ugyldigPeriode");
+        TestUtils.feilInneholder(feil, "uttak.perioder", "ugyldigPeriode");
+        TestUtils.feilInneholder(feil, "arbeidstid.arbeidstaker[1].perioder", "ugyldigPeriode");
     }
 
     @Test
@@ -89,8 +89,7 @@ class EndringTest {
         var psb = YtelseEksempel.komplettYtelse(søknadsperiode);
 
         var feil = verifyHarFeil(psb, List.of(new Periode(LocalDate.now().plusDays(2), LocalDate.now())));
-        feilInneholderFeilkode(feil, "ugyldigPeriode");
-    }
+        feilInneholder(feil, "ugyldigPeriode");    }
 
     @Test
     public void kalkulertEndringsperiodeFinnerFlereSøknadsperioder() {
