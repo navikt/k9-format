@@ -1,6 +1,6 @@
 package no.nav.k9.søknad.ytelse.psb;
 
-import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilListInneholderFeil;
+import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholder;
 import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyHarFeil;
 import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyIngenFeil;
 
@@ -24,6 +24,6 @@ public class UtenPeriodisertDataTest {
 
         // K9-Sak på sin side validerer uten å bruke gyldig endringsperiode
         var feil = verifyHarFeil(søknad);
-        feilListInneholderFeil(feil, new Feil("søknadsperiode/gyldigEndringsPerioder", "missingArgument", "Mangler søknadsperiode eller gyldigEndringsPerioder."));
+        feilInneholder(feil, new Feil("søknadsperiode/gyldigEndringsPerioder", "missingArgument", "Mangler søknadsperiode eller gyldigEndringsPerioder."));
     }
 }
