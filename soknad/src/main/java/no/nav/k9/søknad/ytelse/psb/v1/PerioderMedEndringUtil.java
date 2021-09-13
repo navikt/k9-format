@@ -17,7 +17,7 @@ class PerioderMedEndringUtil {
 
     public static List<Periode> getEndringsperiode(PleiepengerSyktBarn psb) {
         var allePerioderMedEndringTidsserie =
-                ytelsePerioderTilTidsserie(getAllePerioderMedEndring(psb));
+                tilTidsserie(getAllePerioderMedEndring(psb));
         var søknadsperiode = toLocalDateTimeline(psb.getSøknadsperiodeList());
         var endringsperiodeTidsserie = allePerioderMedEndringTidsserie.disjoint(søknadsperiode);
         return TidsserieUtils.toPeriodeList(endringsperiodeTidsserie);
@@ -59,7 +59,7 @@ class PerioderMedEndringUtil {
         return listen;
     }
 
-    public static LocalDateTimeline<Boolean> ytelsePerioderTilTidsserie(List<PerioderMedEndring> listen) {
+    public static LocalDateTimeline<Boolean> tilTidsserie(List<PerioderMedEndring> listen) {
         var temp = new LocalDateTimeline<Boolean>(Collections.emptyList());
         for (PerioderMedEndring yp: listen) {
             temp = temp.union(
