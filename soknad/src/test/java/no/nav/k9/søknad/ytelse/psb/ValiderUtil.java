@@ -19,7 +19,10 @@ class ValiderUtil {
 
 
     public static List<Feil> verifyHarFeil(Søknad søknad) {
-        final List<Feil> feil = valider(søknad);
+        return verifyHarFeil(søknad, List.of());
+    }
+    public static List<Feil> verifyHarFeil(Søknad søknad, List<Periode> gyldigEndringsInterval) {
+        final List<Feil> feil = valider(søknad, gyldigEndringsInterval);
         assertThat(feil).isNotEmpty();
         return feil;
     }
@@ -35,7 +38,11 @@ class ValiderUtil {
     }
 
     public static List<Feil> verifyIngenFeil(Søknad søknad) {
-        final List<Feil> feil = valider(søknad);
+        return verifyIngenFeil(søknad, List.of());
+    }
+
+    public static List<Feil> verifyIngenFeil(Søknad søknad, List<Periode> gyldigEndringsInterval) {
+        final List<Feil> feil = valider(søknad, gyldigEndringsInterval);
         assertThat(feil).isEmpty();
         return feil;
     }
@@ -50,9 +57,9 @@ class ValiderUtil {
         return feil;
     }
 
-    public static List<Feil> valider(Søknad søknad) {
+    public static List<Feil> valider(Søknad søknad, List<Periode> gyldigEndringsInterval) {
         try {
-            return validatorSøknad.valider(søknad);
+            return validatorSøknad.valider(søknad, gyldigEndringsInterval);
         } catch (ValideringsFeil ex) {
             return ex.getFeil();
         }

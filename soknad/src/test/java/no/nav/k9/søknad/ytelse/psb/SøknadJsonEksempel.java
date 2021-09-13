@@ -32,4 +32,7 @@ public class SøknadJsonEksempel {
         return Søknad.SerDes.deserialize(jsonFromFile("5.1.33/minimum-søknad.json"));
     }
 
+    public static Søknad utenPeriodisertDataJson() {
+        return Søknad.SerDes.deserialize(jsonFromFile("uten-periodisert-data.json"));
+    }
 }
