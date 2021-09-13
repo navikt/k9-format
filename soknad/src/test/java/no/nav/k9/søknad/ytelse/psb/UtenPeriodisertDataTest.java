@@ -24,6 +24,6 @@ public class UtenPeriodisertDataTest {
 
         // K9-Sak på sin side validerer uten å bruke gyldig endringsperiode
         var feil = verifyHarFeil(søknad);
-        feilInneholder(feil, new Feil("søknadsperiode/gyldigEndringsPerioder", "missingArgument", "Mangler søknadsperiode eller gyldigEndringsPerioder."));
+        feilInneholder(feil, new Feil("søknadsperiode/gyldigeEndringsperioder", "missingArgument", "Mangler søknadsperiode eller gyldigeEndringsperioder."));
     }
 }
