@@ -50,7 +50,6 @@ class SøknadTest {
         feilListInneholderFeil(feil, new Feil("søker", PÅKREVD, "must not be null"));
     }
 
-
-
+    //TODO legge på getSøknadsperioder test
 
 }

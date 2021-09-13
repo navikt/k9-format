@@ -62,7 +62,7 @@ public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
                 StandardCombinators::coalesceLeftHandSide);
         var trekkKravPerioder = toLocalDateTimeline(psb.getTrekkKravPerioder(), "trekkKravPerioder", feil);
 
-        //TODO teste at søknadsperiode og gyldigeEndringsperioder ikke er innenfor trekkKrav
+        feil.addAll(finnPerioderInnenforTrekkKrav(trekkKravPerioder, søknadsperiode, "søknadperiode"));
 
         feil.addAll(innenforGyldigIntervalForEndringOgIkkeInnenforTrekkAvKrav(gyldigeIntervalForEndring, trekkKravPerioder, perioderMedEndring));
         feil.addAll(periodeneErKomplett(søknadsperiode, psb.getUttak().getPerioder(), "uttak"));
@@ -108,7 +108,7 @@ public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         var perioderInnenforTrekkKrav = toPeriodeList(trekkKravPerioder.intersection(test));
 
         return perioderInnenforTrekkKrav.stream()
-                .map(p -> toFeil(p, felt + ".perioder", "ugyldigTrekkKrav", "Søknaden inneholder perioder med endring innenfor søker ønsker å trekke kravet: "))
+                .map(p -> toFeil(p, felt + ".perioder", "ugyldigTrekkKrav", "Overlapper med trekk krav periode: "))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
