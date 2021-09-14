@@ -75,8 +75,8 @@ class TrekkKravTest
         ((PleiepengerSyktBarn)søknad.getYtelse()).addTrekkKravPeriode(trekkKravPerioderSomOverlapper);
 
         var feil = verifyHarFeil(søknad);
-        feilInneholder(feil,"søknadperiode.perioder", "ugyldigTrekkKrav");
-        feilInneholder(feil,"uttak.perioder", "ugyldigTrekkKrav");
+        feilInneholder(feil, "søknadperiode.perioder", "ugyldigTrekkKrav");
+        feilInneholder(feil, "uttak.perioder", "ugyldigTrekkKrav");
     }
 
 }

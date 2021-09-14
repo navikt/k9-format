@@ -50,11 +50,8 @@ public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         feil.addAll(inneholderSøknadsperiodeEllerGyldigeEndringsperioder(psb, gyldigeEndringsperioder));
         feil.addAll(validerKomplettSøknad(psb));
 
-        var perioderMedEndring = PerioderMedEndringUtil.getAllePerioderMedEndring(psb);
-        feil.addAll(validerPerioderErLukketOgIkkeFeilRekkefølge(psb.getSøknadsperiodeList(), "søknadsperiode"));
         feil.addAll(validerPerioderErLukketOgIkkeFeilRekkefølge(gyldigeEndringsperioder, "gyldigeEndringsperioder"));
-        feil.addAll(validerPerioderErLukketOgIkkeFeilRekkefølge(psb.getTrekkKravPerioder(), "trekkKravPerioder"));
-        feil.addAll(validerPerioderErLukketOgIkkeFeilRekkefølge(perioderMedEndring));
+        feil.addAll(validerPerioderErLukketOgIkkeFeilRekkefølge(PerioderMedEndringUtil.getAllePerioderISøknad(psb)));
 
         var søknadsperiode = toLocalDateTimeline(psb.getSøknadsperiodeList(), "søknadsperiode", feil);
         var gyldigeIntervalForEndring = søknadsperiode.union(
@@ -64,7 +61,9 @@ public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
 
         feil.addAll(finnPerioderInnenforTrekkKrav(trekkKravPerioder, søknadsperiode, "søknadperiode"));
 
-        feil.addAll(innenforGyldigIntervalForEndringOgIkkeInnenforTrekkAvKrav(gyldigeIntervalForEndring, trekkKravPerioder, perioderMedEndring));
+        feil.addAll(innenforGyldigIntervalForEndringOgIkkeInnenforTrekkAvKrav(gyldigeIntervalForEndring,
+                trekkKravPerioder,
+                PerioderMedEndringUtil.getAllePerioderSomMåVæreInnenforSøknadsperiode(psb)));
         feil.addAll(periodeneErKomplett(søknadsperiode, psb.getUttak().getPerioder(), "uttak"));
 
         return feil;
@@ -166,6 +165,10 @@ public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
             feil.addAll(validerPerioderErLukketOgIkkeFeilRekkefølge(ytelsePerioder.getPeriodeList(), ytelsePerioder.getFelt()));
         }
         return feil;
+    }
+
+    private static List<Feil> validerPerioderErLukketOgIkkeFeilRekkefølge(Map<Periode, ?> perioder, String felt) {
+        return validerPerioderErLukketOgIkkeFeilRekkefølge(new ArrayList<>(perioder.keySet()), felt);
     }
 
     private static List<Feil> validerPerioderErLukketOgIkkeFeilRekkefølge(List<Periode> perioder, String felt) {
