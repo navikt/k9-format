@@ -17,16 +17,15 @@ class PerioderMedEndringUtil {
 
     public static List<Periode> getEndringsperiode(PleiepengerSyktBarn psb) {
         var allePerioderMedEndringTidsserie =
-                tilTidsserie(getAllePerioderMedEndring(psb));
+                tilTidsserie(getAllePerioderSomMåVæreInnenforSøknadsperiode(psb));
         var søknadsperiode = toLocalDateTimeline(psb.getSøknadsperiodeList());
         var endringsperiodeTidsserie = allePerioderMedEndringTidsserie.disjoint(søknadsperiode);
         return TidsserieUtils.toPeriodeList(endringsperiodeTidsserie);
     }
 
-    public static List<PerioderMedEndring> getAllePerioderMedEndring(PleiepengerSyktBarn psb) {
+    public static List<PerioderMedEndring> getAllePerioderSomMåVæreInnenforSøknadsperiode(PleiepengerSyktBarn psb) {
         var listen = new ArrayList<PerioderMedEndring>();
         listen.add(new PerioderMedEndring().medPerioder("utenlandsopphold", psb.getUtenlandsopphold().getPerioder()));
-        listen.add(new PerioderMedEndring().medPerioder("bosteder", psb.getBosteder().getPerioder()));
         listen.add(new PerioderMedEndring().medPerioder("beredskap", psb.getBeredskap().getPerioder()));
         listen.add(new PerioderMedEndring().medPerioder("nattevåk", psb.getNattevåk().getPerioder()));
         listen.add(new PerioderMedEndring().medPerioder("tilsynsordning", psb.getTilsynsordning().getPerioder()));
@@ -43,8 +42,8 @@ class PerioderMedEndringUtil {
         }
         if (arbeidstid.getArbeidstakerList() != null && !arbeidstid.getArbeidstakerList().isEmpty()) {
             int i = 0;
-            for (var at: arbeidstid.getArbeidstakerList()) {
-                listen.add(new PerioderMedEndring().medPerioder("arbeidstid.arbeidstaker[" + i + "]" , at.getArbeidstidInfo().getPerioder()));
+            for (var at : arbeidstid.getArbeidstakerList()) {
+                listen.add(new PerioderMedEndring().medPerioder("arbeidstid.arbeidstaker[" + i + "]", at.getArbeidstidInfo().getPerioder()));
                 i++;
             }
         }
@@ -61,7 +60,7 @@ class PerioderMedEndringUtil {
 
     public static LocalDateTimeline<Boolean> tilTidsserie(List<PerioderMedEndring> listen) {
         var temp = new LocalDateTimeline<Boolean>(Collections.emptyList());
-        for (PerioderMedEndring yp: listen) {
+        for (PerioderMedEndring yp : listen) {
             temp = temp.union(
                     toLocalDateTimeline(yp.getPeriodeList()),
                     StandardCombinators::coalesceLeftHandSide);
@@ -88,6 +87,12 @@ class PerioderMedEndringUtil {
         PerioderMedEndring medPerioder(String felt, Map<Periode, ?> periodeMap) {
             this.felt = felt;
             this.periodeList = new ArrayList<>(periodeMap.keySet());
+            return this;
+        }
+
+        PerioderMedEndring medPerioder(String felt, List<Periode> periodeList) {
+            this.felt = felt;
+            this.periodeList = periodeList;
             return this;
         }
     }

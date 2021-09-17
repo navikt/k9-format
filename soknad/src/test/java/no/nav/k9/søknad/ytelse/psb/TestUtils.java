@@ -43,6 +43,15 @@ public class TestUtils {
                 .isNotEmpty();
     }
 
+    public static void feilInneholder(List<Feil> feil, String felt, String feilkode, String feilmelding) {
+        assertThat(feil
+                .stream()
+                .filter(f -> f.getFeilkode().equals(feilkode) && f.getFelt().equals(felt) && f.getFeilmelding().equals(feilmelding))
+                .collect(Collectors.toList()))
+                .withFailMessage("Finner ikke fetl og feilkode: " + felt + ", " + feilkode + ", " + feilmelding)
+                .isNotEmpty();
+    }
+
     public static void feilInneholder(List<Feil> feilList, Feil feil) {
         assertThat(feilList
                 .stream()
