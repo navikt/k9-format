@@ -1,7 +1,6 @@
 package no.nav.k9.søknad.ytelse.psb;
 
 import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholder;
-import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholder;
 import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyHarFeil;
 import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyIngenFeil;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -10,12 +9,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import no.nav.k9.søknad.JsonUtils;
-import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
 import org.junit.jupiter.api.Test;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
+
+import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
 
 class EndringTest {
 
@@ -56,6 +56,9 @@ class EndringTest {
 
         var psb = YtelseEksempel.komplettYtelse(søknadsperiode);
         psb.getUttak().leggeTilPeriode(YtelseEksempel.lagUttak(endringsperiodeList).getPerioder());
+
+        //TODO Ta bort når endringsperioder utregnes
+        psb.medEndringsperiode(endringsperiodeList);
 
         var feil = verifyHarFeil(psb, List.of());
         TestUtils.feilInneholder(feil, "uttak.perioder", "ugyldigPeriode");
@@ -101,6 +104,9 @@ class EndringTest {
         var gyldigIntervalForEndring = List.of(søknadsperiodeEN, søknadsperiodeTo, søknadsperiodeTre, søknadsperiodeFire);
 
         var ytelse = YtelseEksempel.komplettEndringssøknad(gyldigIntervalForEndring);
+
+        //TODO Ta bort når endringsperioder utregnes
+        ytelse.medEndringsperiode(gyldigIntervalForEndring);
 
         verifyIngenFeil(ytelse, gyldigIntervalForEndring);
 
