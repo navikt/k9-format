@@ -162,15 +162,11 @@ public class PleiepengerSyktBarn implements Ytelse {
     }
 
     public PleiepengerSyktBarn medEndringsperiode(List<Periode> endringsperiodeList) {
-        if (this.endringsperiode == null)
-            this.endringsperiode = new ArrayList<>();
         this.endringsperiode.addAll(endringsperiodeList);
         return this;
     }
 
     public PleiepengerSyktBarn medEndringsperiode(Periode endringsperiode) {
-        if (this.endringsperiode == null)
-            this.endringsperiode = new ArrayList<>();
         this.endringsperiode.add(endringsperiode);
         return this;
     }
