@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
 
@@ -76,8 +75,8 @@ class TrekkKravTest
         ((PleiepengerSyktBarn)søknad.getYtelse()).addTrekkKravPeriode(trekkKravPerioderSomOverlapper);
 
         var feil = verifyHarFeil(søknad);
-        feilInneholder(feil, new Feil("søknadperiode.perioder", "ugyldigTrekkKrav", "Overlapper med trekk krav periode: 2021-09-13/2021-09-13"));
-        feilInneholder(feil, new Feil("uttak.perioder", "ugyldigTrekkKrav", "Overlapper med trekk krav periode: 2021-09-13/2021-09-13"));
+        feilInneholder(feil,"søknadperiode.perioder", "ugyldigTrekkKrav");
+        feilInneholder(feil,"uttak.perioder", "ugyldigTrekkKrav");
     }
 
 }
