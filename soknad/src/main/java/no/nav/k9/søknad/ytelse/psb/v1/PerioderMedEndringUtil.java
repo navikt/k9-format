@@ -35,14 +35,6 @@ class PerioderMedEndringUtil {
         return listen;
     }
 
-    public static List<PerioderMedEndring> getAllePerioderISøknad(PleiepengerSyktBarn psb) {
-        var listen = new ArrayList<>(getAllePerioderSomMåVæreInnenforSøknadsperiode(psb));
-        listen.add(new PerioderMedEndring().medPerioder("bosteder", psb.getBosteder().getPerioder()));
-        listen.add(new PerioderMedEndring().medPerioder("søknadsperioder", psb.getSøknadsperiodeList()));
-        listen.add(new PerioderMedEndring().medPerioder("trekkKravPerioder", psb.getTrekkKravPerioder()));
-        return listen;
-    }
-
     public static List<PerioderMedEndring> getArbeidstidPerioder(Arbeidstid arbeidstid) {
         var listen = new ArrayList<PerioderMedEndring>();
         if (arbeidstid == null) {

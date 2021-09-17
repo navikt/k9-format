@@ -51,7 +51,10 @@ public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         feil.addAll(validerKomplettSøknad(psb));
 
         feil.addAll(validerPerioderErLukketOgIkkeFeilRekkefølge(gyldigeEndringsperioder, "gyldigeEndringsperioder"));
-        feil.addAll(validerPerioderErLukketOgIkkeFeilRekkefølge(PerioderMedEndringUtil.getAllePerioderISøknad(psb)));
+        feil.addAll(validerPerioderErLukketOgIkkeFeilRekkefølge(psb.getSøknadsperiodeList(), "søknadsperioder"));
+        feil.addAll(validerPerioderErLukketOgIkkeFeilRekkefølge(psb.getTrekkKravPerioder(), "trekkKravPerioder"));
+        feil.addAll(validerPerioderErLukketOgIkkeFeilRekkefølge(psb.getBosteder().getPerioder(), "bosteder"));
+        feil.addAll(validerPerioderErLukketOgIkkeFeilRekkefølge(PerioderMedEndringUtil.getAllePerioderSomMåVæreInnenforSøknadsperiode(psb)));
 
         var søknadsperiode = toLocalDateTimeline(psb.getSøknadsperiodeList(), "søknadsperiode", feil);
         var gyldigeIntervalForEndring = søknadsperiode.union(
