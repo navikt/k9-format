@@ -3,6 +3,7 @@ package no.nav.k9.søknad.ytelse.psb;
 import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholder;
 import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyHarFeil;
 import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyIngenFeil;
+import static org.assertj.core.api.Assertions.assertThat;
 import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagArbeidstaker;
 import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagBeredskap;
 import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagBosteder;
@@ -35,6 +36,7 @@ class SøknadTest {
     private static final Søknad KOMPLETT_SØKNAD = SøknadEksempel.komplettSøknad(TEST_PERIODE);
     private static final Søknad MINIMUM_SØKNAD = SøknadEksempel.minimumSøknad(TEST_PERIODE);
     private static final String PÅKREVD = "påkrevd";
+    private String feilkode;
 
     @Test
     public void komplettSøknadHarIngenValideringFeil() {
@@ -85,7 +87,7 @@ class SøknadTest {
         ((PleiepengerSyktBarn) søknad.getYtelse()).medBosteder(lagBosteder(List.of(bostedperiode)));
 
         var feil = verifyHarFeil(søknad);
-        feilInneholder(feil, "bosteder[0]", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "ytelse.bosteder.perioder[0]", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
     }
 
     @Test
@@ -97,8 +99,113 @@ class SøknadTest {
         ((PleiepengerSyktBarn) søknad.getYtelse()).medUtenlandsopphold(lagUtenlandsopphold(List.of(bostedperiode)));
 
         var feil = verifyHarFeil(søknad);
-        feilInneholder(feil, "utenlandsopphold.perioder", "ugyldigPeriode");
+        feilInneholder(feil, "ytelse.utenlandsopphold.perioder", "ugyldigPeriode");
     }
+
+    @Test
+    public void alleFelterISøknadFeilRekkefølge() {
+        var søknadsperiode = new Periode(LocalDate.now().plusWeeks(2), LocalDate.now().minusWeeks(2));
+        var søknad = SøknadEksempel.komplettSøknad(søknadsperiode);
+        ((PleiepengerSyktBarn)søknad.getYtelse()).medEndringsperiode(søknadsperiode);
+        ((PleiepengerSyktBarn)søknad.getYtelse()).addTrekkKravPeriode(new Periode(LocalDate.now().minusMonths(2), LocalDate.now().minusMonths(3)));
+
+        var feil = verifyHarFeil(søknad, List.of(søknadsperiode));
+        feilInneholder(feil, "ytelse.utenlandsopphold.perioder[0]", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "ytelse.beredskap.perioder[0]", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "ytelse.nattevåk.perioder[0]", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "ytelse.tilsynsordning.perioder[0]", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "ytelse.lovbestemtFerie.perioder[0]", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "ytelse.uttak.perioder[0]", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "ytelse.søknadsperiode.perioder[0]", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "ytelse.bosteder.perioder[0]", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "ytelse.endringsperiode.perioder[0]", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "ytelse.trekkKravPerioder.perioder[0]", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "ytelse.arbeidstid.arbeidstaker[0].perioder[0]", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "gyldigeEndringsperioder.perioder[0]", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        assertThat(feil).size().isEqualTo(10);
+    }
+
+    @Test
+    public void alleFelterISøknadFeilRekkefølge2() {
+        var søknadsperiode = new Periode(LocalDate.now().plusWeeks(2), LocalDate.now().minusWeeks(2));
+        var søknad = SøknadEksempel.komplettSøknad(søknadsperiode);
+        ((PleiepengerSyktBarn)søknad.getYtelse()).medEndringsperiode(søknadsperiode);
+        ((PleiepengerSyktBarn)søknad.getYtelse()).addTrekkKravPeriode(new Periode(LocalDate.now().minusMonths(2), LocalDate.now().minusMonths(3)));
+
+        var feil = verifyHarFeil(søknad, List.of(søknadsperiode));
+        feilkode = "IllegalArgumentException";
+//        feilInneholder(feil, "ytelse.utenlandsopphold.perioder[0]", feilkode);
+        feilInneholder(feil, feilkode);
+//        feilInneholder(feil, "ytelse.beredskap.perioder[0]", feilkode);
+//        feilInneholder(feil, "ytelse.nattevåk.perioder[0]", feilkode);
+//        feilInneholder(feil, "ytelse.tilsynsordning.perioder[0]", feilkode);
+//        feilInneholder(feil, "ytelse.lovbestemtFerie.perioder[0]", feilkode);
+//        feilInneholder(feil, "ytelse.uttak.perioder[0]", feilkode);
+//        feilInneholder(feil, "ytelse.søknadsperiode.perioder[0]", feilkode);
+//        feilInneholder(feil, "ytelse.bosteder.perioder[0]", feilkode);
+//        feilInneholder(feil, "ytelse.endringsperiode.perioder[0]", feilkode);
+//        feilInneholder(feil, "ytelse.trekkKravPerioder.perioder[0]", feilkode);
+//        feilInneholder(feil, "ytelse.arbeidstid.arbeidstaker[0].perioder[0]", feilkode);
+//        feilInneholder(feil, "gyldigeEndringsperioder.perioder[0]", feilkode);
+
+        feilInneholder(feil, "ytelse.søknadsperiode", feilkode);
+        feilInneholder(feil, "gyldigeEndringsperioder", feilkode);
+        feilInneholder(feil, "ytelse.endringsperiode", feilkode);
+        feilInneholder(feil, "ytelse.trekkKravPerioder", feilkode);
+
+        feilInneholder(feil, "ytelse.utenlandsopphold", feilkode);
+        feilInneholder(feil, "ytelse.beredskap", feilkode);
+        feilInneholder(feil, "ytelse.nattevåk", feilkode);
+        feilInneholder(feil, "ytelse.tilsynsordning", feilkode);
+
+        feilInneholder(feil, "ytelse.lovbestemtFerie", feilkode);
+        feilInneholder(feil, "ytelse.uttak", feilkode);
+        feilInneholder(feil, "ytelse.arbeidstid.arbeidstaker[0]", feilkode);
+//        feilInneholder(feil, "ytelse.bosteder", feilkode);
+        assertThat(feil).size().isEqualTo(11);
+    }
+
+    @Test
+    public void alleFelterISøknadFeilRekkefølge3() {
+        var søknadsperiode = new Periode(LocalDate.now().plusWeeks(2), null);
+        var søknad = SøknadEksempel.komplettSøknad(søknadsperiode);
+        ((PleiepengerSyktBarn)søknad.getYtelse()).medEndringsperiode(søknadsperiode);
+        ((PleiepengerSyktBarn)søknad.getYtelse()).addTrekkKravPeriode(
+                new Periode(LocalDate.now().minusMonths(2), null));
+
+        var feil = verifyHarFeil(søknad, List.of(søknadsperiode));
+        feilkode = "IllegalArgumentException";
+//        feilInneholder(feil, "ytelse.utenlandsopphold.perioder[0]", feilkode);
+        feilInneholder(feil, feilkode);
+//        feilInneholder(feil, "ytelse.beredskap.perioder[0]", feilkode);
+//        feilInneholder(feil, "ytelse.nattevåk.perioder[0]", feilkode);
+//        feilInneholder(feil, "ytelse.tilsynsordning.perioder[0]", feilkode);
+//        feilInneholder(feil, "ytelse.lovbestemtFerie.perioder[0]", feilkode);
+//        feilInneholder(feil, "ytelse.uttak.perioder[0]", feilkode);
+//        feilInneholder(feil, "ytelse.søknadsperiode.perioder[0]", feilkode);
+//        feilInneholder(feil, "ytelse.bosteder.perioder[0]", feilkode);
+//        feilInneholder(feil, "ytelse.endringsperiode.perioder[0]", feilkode);
+//        feilInneholder(feil, "ytelse.trekkKravPerioder.perioder[0]", feilkode);
+//        feilInneholder(feil, "ytelse.arbeidstid.arbeidstaker[0].perioder[0]", feilkode);
+//        feilInneholder(feil, "gyldigeEndringsperioder.perioder[0]", feilkode);
+
+        feilInneholder(feil, "ytelse.søknadsperiode", feilkode);
+        feilInneholder(feil, "gyldigeEndringsperioder", feilkode);
+        feilInneholder(feil, "ytelse.endringsperiode", feilkode);
+        feilInneholder(feil, "ytelse.trekkKravPerioder", feilkode);
+
+        feilInneholder(feil, "ytelse.utenlandsopphold", feilkode);
+        feilInneholder(feil, "ytelse.beredskap", feilkode);
+        feilInneholder(feil, "ytelse.nattevåk", feilkode);
+        feilInneholder(feil, "ytelse.tilsynsordning", feilkode);
+
+        feilInneholder(feil, "ytelse.lovbestemtFerie", feilkode);
+        feilInneholder(feil, "ytelse.uttak", feilkode);
+        feilInneholder(feil, "ytelse.arbeidstid.arbeidstaker[0]", feilkode);
+//        feilInneholder(feil, "ytelse.bosteder", feilkode);
+        assertThat(feil).size().isEqualTo(11);
+    }
+
 
     @Test
     public void søknadHarIkkeIntervalForEndring() {

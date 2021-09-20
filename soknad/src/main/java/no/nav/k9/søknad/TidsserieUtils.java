@@ -24,12 +24,14 @@ public class TidsserieUtils {
         try {
             return toLocalDateTimeline(perioder);
         } catch (IllegalArgumentException e) {
-            feil.add(new Feil(felt, "IllegalArgumentException", e.getMessage()));
+            if (!feil.contains(new Feil(felt, "IllegalArgumentException", e.getMessage()))) {
+                feil.add(new Feil(felt, "IllegalArgumentException", e.getMessage()));
+            }
         }
         return new LocalDateTimeline<>(Collections.emptyList());
     }
 
-    public static LocalDateTimeline<Boolean> toLocalDateTimeline(List<Periode> perioder) throws IllegalArgumentException{
+    public static LocalDateTimeline<Boolean> toLocalDateTimeline(List<Periode> perioder) {
         return new LocalDateTimeline<Boolean>(perioder
                 .stream()
                 .map(no.nav.k9.søknad.TidsserieUtils::mapLocalDateSegment)
