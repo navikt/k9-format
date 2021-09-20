@@ -57,13 +57,12 @@ class EndringTest {
         var psb = YtelseEksempel.komplettYtelse(søknadsperiode);
         psb.getUttak().leggeTilPeriode(YtelseEksempel.lagUttak(endringsperiodeList).getPerioder());
 
-        //TODO Ta bort når endringsperioder utregnes
-        psb.medEndringsperiode(endringsperiodeList);
-
         var feil = verifyHarFeil(psb, List.of());
         TestUtils.feilInneholder(feil, "uttak.perioder", "ugyldigPeriode");
         assertThat(feil).size().isEqualTo(1);
-        assertThat(endringsperiodeList).isEqualTo(psb.getEndringsperiode());
+
+        //TODO Ta med når endringsperioder utregnes
+//        assertThat(endringsperiodeList).isEqualTo(psb.getEndringsperiode());
         assertEndringsperioderIJson(psb);
     }
 
