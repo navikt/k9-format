@@ -60,6 +60,14 @@ public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         var gyldigeIntervalForEndring = søknadsperiode.union(
                 toLocalDateTimeline(gyldigeEndringsperioder, "gyldigeEndringsperioder", feil),
                 StandardCombinators::coalesceLeftHandSide);
+
+        //TODO: Slette når endringerperioder utledes.
+        gyldigeIntervalForEndring = gyldigeIntervalForEndring.union(
+                toLocalDateTimeline(psb.getEndringsperiode(), "endringsperioder", feil),
+                StandardCombinators::coalesceLeftHandSide);
+        //TODO: Slette når endringerperioder utledes.
+
+
         var trekkKravPerioder = toLocalDateTimeline(psb.getTrekkKravPerioder(), "trekkKravPerioder", feil);
 
         feil.addAll(finnPerioderInnenforTrekkKrav(trekkKravPerioder, søknadsperiode, "søknadperiode"));

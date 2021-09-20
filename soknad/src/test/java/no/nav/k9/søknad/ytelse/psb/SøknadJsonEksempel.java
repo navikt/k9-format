@@ -35,4 +35,8 @@ public class SøknadJsonEksempel {
     public static Søknad utenPeriodisertDataJson() {
         return Søknad.SerDes.deserialize(jsonFromFile("uten-periodisert-data.json"));
     }
+
+    public static Søknad søknadMedEndring() {
+        return Søknad.SerDes.deserialize(jsonFromFile("søknad-med-endring.json"));
+    }
 }

@@ -1,5 +1,6 @@
 package no.nav.k9.søknad.ytelse.psb;
 
+import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyIngenFeil;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
@@ -27,8 +28,7 @@ class FraJsonTest {
     @Test
     public void komplettSøknadSkalIkkeHaValideringsfeil() {
         var søknad = SøknadJsonEksempel.komplettSøknadJson();
-        final List<Feil> feil = valider(søknad);
-        assertThat(feil).isEmpty();
+        verifyIngenFeil(søknad);
     }
 
     @Test
@@ -41,15 +41,19 @@ class FraJsonTest {
     @Test
     public void komplettSøknadGammelVersjonSkalIkkeHaValideringsfeil() {
         var søknad = SøknadJsonEksempel.komplettGammelVersjonSøknadJson();
-        final List<Feil> feil = valider(søknad);
-        assertThat(feil).isEmpty();
+        verifyIngenFeil(søknad);
     }
 
     @Test
     public void minimumSøknadGammelVersjonSkalIkkeHaValideringsfeil() {
         var søknad = SøknadJsonEksempel.minimumGammelVersjonSøknadJson();
-        final List<Feil> feil = valider(søknad);
-        assertThat(feil).isEmpty();
+        verifyIngenFeil(søknad);
+    }
+
+    @Test
+    public void søknadMedEndringSkalIkkeHaFeil() {
+        var søknad = SøknadJsonEksempel.søknadMedEndring();
+        verifyIngenFeil(søknad);
     }
 
 }
