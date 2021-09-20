@@ -1,0 +1,147 @@
+{
+  "søknadId": "1",
+  "versjon": "2.0.0",
+  "mottattDato": "2020-10-12T12:53:21.046Z",
+  "søker": {
+    "norskIdentitetsnummer": "11111111111"
+  },
+  "ytelse": {
+    "type": "PLEIEPENGER_SYKT_BARN",
+    "barn": {
+      "norskIdentitetsnummer": "22222222222",
+      "fødselsdato": "2018-10-30"
+    },
+    "søknadsperiode": ["2018-12-30/2019-09-20"],
+    "endringsperiode": ["2019-09-21/2020-02-20"],
+    "trekkKravPerioder": [],
+    "opptjeningAktivitet": {
+      "arbeidstaker": [{
+        "norskIdentitetsnummer": null,
+        "organisasjonsnummer": "999999999"
+      }],
+      "selvstendigNæringsdrivende": [{
+        "perioder": {
+          "2018-12-30/..": {
+            "virksomhetstyper": ["FISKE", "JORDBRUK_SKOGBRUK", "DAGMAMMA", "ANNEN"],
+            "regnskapsførerNavn": "Regskapsfører",
+            "regnskapsførerTlf": "88888889",
+            "erVarigEndring": true,
+            "endringDato": "2018-12-30",
+            "endringBegrunnelse": "Dota2 er best",
+            "bruttoInntekt": 1300000,
+            "erNyoppstartet": true,
+            "registrertIUtlandet": false
+          }
+        },
+        "organisasjonsnummer": "890508087",
+        "virksomhetNavn": "FiskerAS"
+      }],
+      "frilanser": {
+        "startdato": "2019-10-10",
+        "sluttdato": "2019-11-10",
+        "jobberFortsattSomFrilans": true
+      }
+    },
+    "dataBruktTilUtledning": {
+      "harForståttRettigheterOgPlikter": null,
+      "harBekreftetOpplysninger": null,
+      "samtidigHjemme": true,
+      "harMedsøker": true,
+      "bekrefterPeriodeOver8Uker": null
+    },
+    "infoFraPunsj": null,
+    "bosteder": {
+      "perioder": {
+        "2018-12-30/2019-10-20": {
+          "land": "RU"
+        }
+      },
+      "perioderSomSkalSlettes": {}
+    },
+    "utenlandsopphold": {
+      "perioder": {
+        "2018-12-30/2019-10-20": {
+          "land": "RU",
+          "årsak": null
+        }
+      },
+      "perioderSomSkalSlettes": {}
+    },
+    "beredskap": {
+      "perioder": {
+        "2018-12-30/2019-10-20": {
+          "tilleggsinformasjon": "FÅ SLUTT PÅ COVID!!!"
+        }
+      },
+      "perioderSomSkalSlettes": {}
+    },
+    "nattevåk": {
+      "perioder": {
+        "2018-12-30/2019-10-20": {
+          "tilleggsinformasjon": "FÅ SLUTT PÅ COVID!!!"
+        }
+      },
+      "perioderSomSkalSlettes": {}
+    },
+    "tilsynsordning": {
+      "perioder": {
+        "2018-12-30/2019-10-20": {
+          "etablertTilsynTimerPerDag": "PT7H30M"
+        }
+      },
+      "perioderSomSkalSlettes": {}
+    },
+    "lovbestemtFerie": {
+      "perioder": {
+        "2018-12-30/2019-06-20": {
+          "skalHaFerie": true
+        },
+        "2019-06-21/2019-10-20": {
+          "skalHaFerie": false
+        }
+      }
+    },
+    "arbeidstid": {
+      "arbeidstakerList": [{
+        "norskIdentitetsnummer": null,
+        "organisasjonsnummer": "999999999",
+        "arbeidstidInfo": {
+          "perioder": {
+            "2018-12-30/2019-10-20": {
+              "jobberNormaltTimerPerDag": "PT7H28M",
+              "faktiskArbeidTimerPerDag": "PT37H30M"
+            }
+          }
+        }
+      }],
+      "frilanserArbeidstidInfo": {
+        "perioder": {
+          "2018-12-30/2019-10-20": {
+            "jobberNormaltTimerPerDag": "PT5H",
+            "faktiskArbeidTimerPerDag": "PT6H"
+          }
+        }
+      },
+      "selvstendigNæringsdrivendeArbeidstidInfo": {
+        "perioder": {
+          "2018-12-30/2019-10-20": {
+            "jobberNormaltTimerPerDag": "PT4H",
+            "faktiskArbeidTimerPerDag": "PT7H"
+          }
+        }
+      }
+    },
+    "uttak": {
+      "perioder": {
+        "2018-12-30/2019-10-20": {
+          "timerPleieAvBarnetPerDag": "PT37H30M"
+        }
+      },
+      "perioderSomSkalSlettes": {}
+    },
+    "omsorg": {
+      "relasjonTilBarnet": "MOR",
+      "beskrivelseAvOmsorgsrollen": "Noe tilleggsinformasjon. Lorem ipsum æÆøØåÅ."
+    }
+  }
+}
