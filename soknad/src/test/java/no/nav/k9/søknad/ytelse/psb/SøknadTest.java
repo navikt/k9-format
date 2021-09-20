@@ -3,6 +3,15 @@ package no.nav.k9.søknad.ytelse.psb;
 import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholder;
 import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyHarFeil;
 import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyIngenFeil;
+import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagArbeidstaker;
+import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagBeredskap;
+import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagBosteder;
+import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagLovbestemtFerie;
+import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagNattevåk;
+import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagTilsynsordning;
+import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagUtenlandsopphold;
+import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagUttak;
+import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.leggPåKomplettEndringsøknad;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -11,10 +20,15 @@ import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.felles.Feil;
+import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.ytelse.psb.v1.DataBruktTilUtledning;
+import no.nav.k9.søknad.ytelse.psb.v1.InfoFraPunsj;
+import no.nav.k9.søknad.ytelse.psb.v1.Omsorg;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 
 class SøknadTest {
     private static final Periode TEST_PERIODE = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
@@ -57,7 +71,7 @@ class SøknadTest {
         var bostedperiode = new Periode(LocalDate.now().minusMonths(2), søknadsperiode.getTilOgMed());
 
         var søknad = SøknadEksempel.komplettSøknad(søknadsperiode);
-        ((PleiepengerSyktBarn)søknad.getYtelse()).medBosteder(YtelseEksempel.lagBosteder(List.of(bostedperiode)));
+        ((PleiepengerSyktBarn) søknad.getYtelse()).medBosteder(lagBosteder(List.of(bostedperiode)));
 
         verifyIngenFeil(søknad);
     }
@@ -68,7 +82,7 @@ class SøknadTest {
         var bostedperiode = new Periode(søknadsperiode.getTilOgMed(), LocalDate.now().minusMonths(2));
 
         var søknad = SøknadEksempel.komplettSøknad(søknadsperiode);
-        ((PleiepengerSyktBarn)søknad.getYtelse()).medBosteder(YtelseEksempel.lagBosteder(List.of(bostedperiode)));
+        ((PleiepengerSyktBarn) søknad.getYtelse()).medBosteder(lagBosteder(List.of(bostedperiode)));
 
         var feil = verifyHarFeil(søknad);
         feilInneholder(feil, "bosteder[0]", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
@@ -80,12 +94,58 @@ class SøknadTest {
         var bostedperiode = new Periode(LocalDate.now().minusMonths(2), søknadsperiode.getTilOgMed());
 
         var søknad = SøknadEksempel.komplettSøknad(søknadsperiode);
-        ((PleiepengerSyktBarn)søknad.getYtelse()).medUtenlandsopphold(YtelseEksempel.lagUtenlandsopphold(List.of(bostedperiode)));
+        ((PleiepengerSyktBarn) søknad.getYtelse()).medUtenlandsopphold(lagUtenlandsopphold(List.of(bostedperiode)));
 
         var feil = verifyHarFeil(søknad);
         feilInneholder(feil, "utenlandsopphold.perioder", "ugyldigPeriode");
     }
 
+    @Test
+    public void søknadHarIkkeIntervalForEndring() {
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusWeeks(2));
+        var endringsperiode = new Periode(LocalDate.now().minusWeeks(2), søknadsperiode.getFraOgMed().minusDays(1));
+        var ytese = ytelseUtenSøknadsperiode(List.of(søknadsperiode));
+        leggPåKomplettEndringsøknad(endringsperiode, ytese);
+        var søknad = SøknadEksempel.søknad(ytese);
+
+        var feil = verifyHarFeil(søknad);
+        feilInneholder(feil, "missingArgument");
+    }
+
     //TODO legge på getSøknadsperioder test
+
+    private PleiepengerSyktBarn ytelseUtenSøknadsperiode(List<Periode> ytelsePeriode ){
+        var barn = new Barn(NorskIdentitetsnummer.of("22211111111"), null);
+        var omsorg = new Omsorg().medRelasjonTilBarnet(Omsorg.BarnRelasjon.MOR);
+        var søknadInfo = new DataBruktTilUtledning( true, true,
+                false, false, true );
+        var infoFraPunsj = new InfoFraPunsj()
+                .medSøknadenInneholderInfomasjonSomIkkeKanPunsjes(false);
+        var uttak = lagUttak(ytelsePeriode);
+        var nattevåk = lagNattevåk(ytelsePeriode);
+        var beredskap = lagBeredskap(ytelsePeriode);
+        var tilsynsordning = lagTilsynsordning(ytelsePeriode);
+        var lovbestemtFerie = lagLovbestemtFerie(ytelsePeriode);
+        var bosteder = lagBosteder(ytelsePeriode);
+        var utenlandsopphold = lagUtenlandsopphold(ytelsePeriode);
+        var arbeidstaker = lagArbeidstaker(ytelsePeriode);
+        var arbeidstid = new Arbeidstid().medArbeidstaker(List.of(
+                arbeidstaker));
+
+        return new PleiepengerSyktBarn()
+                .medSøknadInfo(søknadInfo)
+                .medInfoFraPunsj(infoFraPunsj)
+                .medBarn(barn)
+                .medBeredskap(beredskap)
+                .medNattevåk(nattevåk)
+                .medTilsynsordning(tilsynsordning)
+                .medArbeidstid(arbeidstid)
+                .medUttak(uttak)
+                .medUtenlandsopphold(utenlandsopphold)
+                .medOmsorg(omsorg)
+                .medLovbestemtFerie(lovbestemtFerie)
+                .medBosteder(bosteder);
+    }
+
 
 }
