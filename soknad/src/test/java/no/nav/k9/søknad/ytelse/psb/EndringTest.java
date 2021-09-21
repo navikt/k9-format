@@ -25,6 +25,9 @@ class EndringTest {
         var endringsperiode = new Periode(LocalDate.now().minusWeeks(2), LocalDate.now().plusWeeks(3));
 
         var psb = YtelseEksempel.komplettEndringssøknad(endringsperiode);
+
+        //TODO ta bort nå endringsperiode funker
+        psb.medEndringsperiode(endringsperiode);
         verifyIngenFeil(psb, List.of(gyldigEndringsInterval));
         assertEndringsperioderIJson(psb);
     }

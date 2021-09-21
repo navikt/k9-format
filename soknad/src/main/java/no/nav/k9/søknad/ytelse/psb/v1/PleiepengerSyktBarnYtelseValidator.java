@@ -47,7 +47,8 @@ public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
                 .map(this::toFeil)
                 .collect(Collectors.toList());
 
-        feil.addAll(inneholderSøknadsperiodeEllerGyldigeEndringsperioder(psb, gyldigeEndringsperioder));
+        //TODO endre getEndringsperioder til gyldigeEndringsperioder
+        feil.addAll(inneholderSøknadsperiodeEllerGyldigeEndringsperioder(psb, psb.getEndringsperiode()));
         feil.addAll(validerKomplettSøknad(psb));
 
         feil.addAll(validerPerioderErLukketOgIkkeFeilRekkefølge(gyldigeEndringsperioder, "gyldigeEndringsperioder"));
