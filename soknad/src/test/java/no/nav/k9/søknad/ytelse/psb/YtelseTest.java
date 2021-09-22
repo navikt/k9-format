@@ -153,8 +153,7 @@ public class YtelseTest {
 
         var arbeidAktivitet = new OpptjeningAktivitet()
                 .medFrilanser(new Frilanser()
-                        .medStartDato(LocalDate.parse("2020-01-01"))
-                        .medJobberFortsattSomFrilans(true));
+                        .medStartDato(LocalDate.parse("2020-01-01")));
         søknad.medOpptjeningAktivitet(arbeidAktivitet);
         verifyIngenFeil(søknad);
     }

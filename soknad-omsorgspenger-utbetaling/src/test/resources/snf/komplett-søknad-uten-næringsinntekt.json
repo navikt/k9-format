@@ -31,7 +31,6 @@
     }
   }],
   "frilanser": {
-    "startdato": "2019-01-01",
-    "jobberFortsattSomFrilans": false
+    "startdato": "2019-01-01"
   }
 }
