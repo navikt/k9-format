@@ -20,6 +20,7 @@ import no.nav.k9.søknad.felles.type.Periode;
 public class Tilsynsordning {
 
     @JsonProperty(value="perioder", required = true)
+    @NotNull
     @Valid
     private Map<@NotNull Periode, @NotNull TilsynPeriodeInfo> perioder = new TreeMap<>();
 
