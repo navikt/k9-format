@@ -1,5 +1,14 @@
 package no.nav.k9.søknad.omsorgspenger.utbetaling.snf;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.util.Collections;
+import java.util.List;
+
 import no.nav.k9.søknad.felles.opptjening.Frilanser;
 import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
@@ -10,15 +19,6 @@ import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.SøknadId;
 import no.nav.k9.søknad.felles.type.VirksomhetType;
-
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.util.Collections;
-import java.util.List;
 
 class TestUtils {
 
@@ -81,7 +81,6 @@ class TestUtils {
                 .frilanser(Frilanser.builder()
                         .startdato(LocalDate.parse("2019-01-01"))
                         .sluttdato(LocalDate.parse("2020-01-01"))
-                        .jobberFortsattSomFrilans(false)
                         .build())
                 .søker(Søker.builder()
                         .norskIdentitetsnummer(NorskIdentitetsnummer.of("11111111111"))
@@ -91,7 +90,7 @@ class TestUtils {
                 .mottattDato(ZonedDateTime.parse("2019-10-20T07:15:36.124Z"))
                 .søknadId(SøknadId.of("123-123-123"));
     }
-    
+
     @SuppressWarnings("removal")
     static OmsorgspengerUtbetalingSøknad.Builder komplettBuilderUtenNæringsinntekt() {
         return OmsorgspengerUtbetalingSøknad
@@ -117,7 +116,6 @@ class TestUtils {
                 ))
                 .frilanser(Frilanser.builder()
                         .startdato(LocalDate.parse("2019-01-01"))
-                        .jobberFortsattSomFrilans(false)
                         .build())
                 .søker(Søker.builder()
                         .norskIdentitetsnummer(NorskIdentitetsnummer.of("11111111111"))
