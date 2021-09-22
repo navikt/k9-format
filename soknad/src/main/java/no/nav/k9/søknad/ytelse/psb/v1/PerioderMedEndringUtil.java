@@ -15,25 +15,21 @@ import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 
 class PerioderMedEndringUtil {
 
-    private static final String YTELSE_FELT = "ytelse.";
-
-
     public static List<Periode> getEndringsperiode(PleiepengerSyktBarn psb) {
         var allePerioderMedEndringTidsserie =
                 tilTidsserie(getAllePerioderSomMåVæreInnenforSøknadsperiode(psb));
         var søknadsperiode = toLocalDateTimeline(psb.getSøknadsperiodeList());
         var endringsperiodeTidsserie = allePerioderMedEndringTidsserie.disjoint(søknadsperiode);
-        return TidsserieUtils.toPeriodeList(endringsperiodeTidsserie);
+        return TidsserieUtils.tilPeriodeList(endringsperiodeTidsserie);
     }
 
     public static List<PerioderMedEndring> getAllePerioderSomMåVæreInnenforSøknadsperiode(PleiepengerSyktBarn psb) {
         var listen = new ArrayList<PerioderMedEndring>();
-        listen.add(new PerioderMedEndring().medPerioder(YTELSE_FELT + "utenlandsopphold", psb.getUtenlandsopphold().getPerioder()));
-        listen.add(new PerioderMedEndring().medPerioder(YTELSE_FELT + "beredskap", psb.getBeredskap().getPerioder()));
-        listen.add(new PerioderMedEndring().medPerioder(YTELSE_FELT + "nattevåk", psb.getNattevåk().getPerioder()));
-        listen.add(new PerioderMedEndring().medPerioder(YTELSE_FELT + "tilsynsordning", psb.getTilsynsordning().getPerioder()));
-        listen.add(new PerioderMedEndring().medPerioder(YTELSE_FELT + "lovbestemtFerie", psb.getLovbestemtFerie().getPerioder()));
-        listen.add(new PerioderMedEndring().medPerioder(YTELSE_FELT + "uttak", psb.getUttak().getPerioder()));
+        listen.add(new PerioderMedEndring().medPerioder("beredskap", psb.getBeredskap().getPerioder()));
+        listen.add(new PerioderMedEndring().medPerioder("nattevåk", psb.getNattevåk().getPerioder()));
+        listen.add(new PerioderMedEndring().medPerioder("tilsynsordning", psb.getTilsynsordning().getPerioder()));
+        listen.add(new PerioderMedEndring().medPerioder("lovbestemtFerie", psb.getLovbestemtFerie().getPerioder()));
+        listen.add(new PerioderMedEndring().medPerioder("uttak", psb.getUttak().getPerioder()));
         listen.addAll(getArbeidstidPerioder(psb.getArbeidstid()));
         return listen;
     }
@@ -46,16 +42,16 @@ class PerioderMedEndringUtil {
         if (arbeidstid.getArbeidstakerList() != null && !arbeidstid.getArbeidstakerList().isEmpty()) {
             int i = 0;
             for (var at : arbeidstid.getArbeidstakerList()) {
-                listen.add(new PerioderMedEndring().medPerioder(YTELSE_FELT + "arbeidstid.arbeidstaker[" + i + "]", at.getArbeidstidInfo().getPerioder()));
+                listen.add(new PerioderMedEndring().medPerioder("arbeidstid.arbeidstaker[" + i + "]", at.getArbeidstidInfo().getPerioder()));
                 i++;
             }
         }
         if (arbeidstid.getFrilanserArbeidstidInfo().isPresent()) {
-            listen.add(new PerioderMedEndring().medPerioder(YTELSE_FELT + "arbeidstid.frilanser",
+            listen.add(new PerioderMedEndring().medPerioder("arbeidstid.frilanser",
                     arbeidstid.getFrilanserArbeidstidInfo().get().getPerioder()));
         }
         if (arbeidstid.getSelvstendigNæringsdrivendeArbeidstidInfo().isPresent()) {
-            listen.add(new PerioderMedEndring().medPerioder(YTELSE_FELT + "arbeidstid.selvstendigNæringsdrivende",
+            listen.add(new PerioderMedEndring().medPerioder("arbeidstid.selvstendigNæringsdrivende",
                     arbeidstid.getSelvstendigNæringsdrivendeArbeidstidInfo().get().getPerioder()));
         }
         return listen;

@@ -27,7 +27,7 @@ class TrekkKravTest
     }
 
     @Test
-    public void søknadMedTrekkKravMedFeil() {
+    public void søknadMedNattevåkInnenforTrekKKravPeriode() {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
         var trekkKravPeriode = new Periode(LocalDate.now().minusWeeks(1), LocalDate.now().minusDays(1));
         Periode periodeMedFeil = new Periode(LocalDate.now().minusWeeks(1), LocalDate.now().plusMonths(2));
@@ -35,10 +35,11 @@ class TrekkKravTest
         var søknad = SøknadEksempel.komplettSøknad(søknadsperiode);
 
         ((PleiepengerSyktBarn)søknad.getYtelse()).addTrekkKravPeriode(trekkKravPeriode);
-        ((PleiepengerSyktBarn)søknad.getYtelse()).medNattevåk(YtelseEksempel.lagNattevåk(List.of(periodeMedFeil)));
+        ((PleiepengerSyktBarn)søknad.getYtelse()).medNattevåk(YtelseEksempel.lagNattevåk(periodeMedFeil));
+        ((PleiepengerSyktBarn)søknad.getYtelse()).medEndringsperiode(periodeMedFeil);
 
         var feil = verifyHarFeil(søknad);
-        feilInneholder(feil, "ugyldigTrekkKrav");
+        feilInneholder(feil, "ytelse.nattevåk.perioder", "ugyldigPeriodeInterval");
     }
 
     @Test
@@ -50,7 +51,7 @@ class TrekkKravTest
         ((PleiepengerSyktBarn)søknad.getYtelse()).addTrekkKravPeriode(trekkKravPeriodeMedFeil);
 
         var feil = verifyHarFeil(søknad);
-        feilInneholder(feil, "ugyldigTrekkKrav");
+        feilInneholder(feil, "ytelse.søknadperiode.perioder", "ugyldigPeriodeInterval");
     }
 
     @Test
@@ -75,8 +76,8 @@ class TrekkKravTest
         ((PleiepengerSyktBarn)søknad.getYtelse()).addTrekkKravPeriode(trekkKravPerioderSomOverlapper);
 
         var feil = verifyHarFeil(søknad);
-        feilInneholder(feil, "søknadperiode.perioder", "ugyldigTrekkKrav");
-        feilInneholder(feil, "uttak.perioder", "ugyldigTrekkKrav");
+        feilInneholder(feil, "ytelse.søknadperiode.perioder", "ugyldigPeriodeInterval");
+        feilInneholder(feil, "ytelse.uttak.perioder", "ugyldigPeriodeInterval");
     }
 
 }

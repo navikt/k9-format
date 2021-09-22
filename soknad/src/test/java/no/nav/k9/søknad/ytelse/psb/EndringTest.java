@@ -55,17 +55,17 @@ class EndringTest {
     @Test
     public void søknadMedEndringAvUttakUtenGyldigIntervalForEndring() {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
-        var endringsperiodeList = List.of(new Periode(LocalDate.now().minusMonths(2), LocalDate.now().minusDays(1)));
+        var endringsperiode = new Periode(LocalDate.now().minusMonths(2), LocalDate.now().minusDays(1));
 
         var psb = YtelseEksempel.komplettYtelse(søknadsperiode);
-        psb.getUttak().leggeTilPeriode(YtelseEksempel.lagUttak(endringsperiodeList).getPerioder());
+        psb.getUttak().leggeTilPeriode(YtelseEksempel.lagUttak(endringsperiode).getPerioder());
 
         var feil = verifyHarFeil(psb, List.of());
-        TestUtils.feilInneholder(feil, "uttak.perioder", "ugyldigPeriode");
+        TestUtils.feilInneholder(feil, "ytelse.uttak.perioder", "ugyldigPeriode");
         assertThat(feil).size().isEqualTo(1);
 
         //TODO Ta med når endringsperioder utregnes
-//        assertThat(endringsperiodeList).isEqualTo(psb.getEndringsperiode());
+//        assertThat(endringsperiode).isEqualTo(psb.getEndringsperiode());
         assertEndringsperioderIJson(psb);
     }
 
@@ -81,11 +81,11 @@ class EndringTest {
 
         var feil = verifyHarFeil(ytelse, endringsperiode);
         feilInneholder(feil, "ugyldigPeriode");
-        TestUtils.feilInneholder(feil, "beredskap.perioder", "ugyldigPeriode");
-        TestUtils.feilInneholder(feil, "nattevåk.perioder", "ugyldigPeriode");
-        TestUtils.feilInneholder(feil, "tilsynsordning.perioder", "ugyldigPeriode");
-        TestUtils.feilInneholder(feil, "uttak.perioder", "ugyldigPeriode");
-        TestUtils.feilInneholder(feil, "arbeidstid.arbeidstaker[1].perioder", "ugyldigPeriode");
+        TestUtils.feilInneholder(feil, "ytelse.beredskap.perioder", "ugyldigPeriode");
+        TestUtils.feilInneholder(feil, "ytelse.nattevåk.perioder", "ugyldigPeriode");
+        TestUtils.feilInneholder(feil, "ytelse.tilsynsordning.perioder", "ugyldigPeriode");
+        TestUtils.feilInneholder(feil, "ytelse.uttak.perioder", "ugyldigPeriode");
+        TestUtils.feilInneholder(feil, "ytelse.arbeidstid.arbeidstaker[1].perioder", "ugyldigPeriode");
     }
 
     @Test
@@ -105,7 +105,7 @@ class EndringTest {
 
         var gyldigIntervalForEndring = List.of(søknadsperiodeEN, søknadsperiodeTo, søknadsperiodeTre, søknadsperiodeFire);
 
-        var ytelse = YtelseEksempel.komplettEndringssøknad(gyldigIntervalForEndring);
+        var ytelse = YtelseEksempel.komplettEndringssøknad(søknadsperiodeEN, søknadsperiodeTo, søknadsperiodeTre, søknadsperiodeFire);
 
         //TODO Ta bort når endringsperioder utregnes
         ytelse.medEndringsperiode(gyldigIntervalForEndring);
