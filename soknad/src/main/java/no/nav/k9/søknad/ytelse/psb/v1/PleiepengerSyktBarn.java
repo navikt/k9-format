@@ -40,16 +40,16 @@ public class PleiepengerSyktBarn implements Ytelse {
     @Valid
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     @JsonProperty(value = "søknadsperiode", required = true)
-    private List<@Valid Periode> søknadsperiode = new ArrayList<>();
+    private List<Periode> søknadsperiode = new ArrayList<>();
 
     @Valid
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     @JsonProperty(value = "endringsperiode", required = true)
-    private List<@Valid Periode> endringsperiode = new ArrayList<>();
+    private List<Periode> endringsperiode = new ArrayList<>();
 
     @Valid
     @JsonProperty(value = "trekkKravPerioder", required = true)
-    private List<@Valid Periode> trekkKravPerioder = new ArrayList<>();
+    private List<Periode> trekkKravPerioder = new ArrayList<>();
 
     @Valid
     @JsonProperty(value = "opptjeningAktivitet")
@@ -142,7 +142,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     }
 
     public List<Periode> getSøknadsperiodeList() {
-        return søknadsperiode == null? null: Collections.unmodifiableList(søknadsperiode);
+        return søknadsperiode == null ? null : Collections.unmodifiableList(søknadsperiode);
     }
 
     public PleiepengerSyktBarn medSøknadsperiode(List<Periode> søknadsperiodeList) {
@@ -299,7 +299,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     public Type getType() {
         return Type.PLEIEPENGER_SYKT_BARN;
     }
-    
+
     @Override
     public List<Person> getBerørtePersoner() {
         return List.of(barn); // kjenner ikke de andre søkerne her, kun pleietrengende som er identifisert

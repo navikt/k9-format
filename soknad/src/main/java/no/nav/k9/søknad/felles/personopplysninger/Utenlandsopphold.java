@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -26,13 +27,15 @@ import no.nav.k9.søknad.felles.type.Periode;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Utenlandsopphold {
 
+    @Valid
     @JsonInclude(value = Include.ALWAYS)
     @JsonProperty(value = "perioder")
-    private Map<Periode, UtenlandsoppholdPeriodeInfo> perioder = new TreeMap<>();
+    private Map<Periode, @NotNull UtenlandsoppholdPeriodeInfo> perioder = new TreeMap<>();
 
+    @Valid
     @JsonInclude(value = Include.ALWAYS)
     @JsonProperty(value = "perioderSomSkalSlettes")
-    private Map<Periode, UtenlandsoppholdPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
+    private Map<Periode, @NotNull UtenlandsoppholdPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
     /**@deprecated brukt tom ctor.*/
     @JsonCreator
@@ -126,7 +129,7 @@ public class Utenlandsopphold {
             this.land = Objects.requireNonNull(land, "UtenlandsoppholdPeriodeInfo.land");
             return this;
         }
-        
+
         public UtenlandsoppholdÅrsak getÅrsak() {
             return årsak;
         }
@@ -181,7 +184,7 @@ public class Utenlandsopphold {
         public String getÅrsak() {
             return årsak;
         }
-        
+
         @JsonCreator
         public static UtenlandsoppholdÅrsak of(String value) {
             if (value == null || value.isBlank()) {
