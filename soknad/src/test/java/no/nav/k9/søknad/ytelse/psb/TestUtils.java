@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import no.nav.k9.søknad.felles.Feil;
+import no.nav.k9.søknad.felles.type.Periode;
 
 public class TestUtils {
 
@@ -64,6 +65,13 @@ public class TestUtils {
         )
                 .withFailMessage("Finner ikke Feil: " + feil.toString())
                 .isNotEmpty();
+    }
+
+    public static String periodeString(int i) {
+        return "[" + i + "]";
+    }
+    public static String periodeString(Periode periode) {
+        return "[" + periode + "]";
     }
 
 }

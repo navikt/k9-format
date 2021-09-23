@@ -55,34 +55,34 @@ public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         if (psb.getSøknadsperiodeList().isEmpty() && psb.getEndringsperiode().isEmpty()) {
             feil.add(lagFeil("søknadsperiode", "missingArgument", "Mangler søknadsperiode eller gyldigeEndringsperioder."));
         }
-        feil.addAll(validerPerioderErLukketGyldigOgIkkeOverlapper(psb.getBosteder().getPerioder(), "bosteder"));
-        feil.addAll(validerPerioderErLukketGyldigOgIkkeOverlapper(psb.getUtenlandsopphold().getPerioder(), "utenlandsopphold"));
+        feil.addAll(validerPerioderErLukketOgGyldig(psb.getBosteder().getPerioder(), "bosteder.perioder"));
+        feil.addAll(validerPerioderErLukketOgGyldig(psb.getUtenlandsopphold().getPerioder(), "utenlandsopphold.perioder"));
 
         try {
-            var søknadsperiodeTidslinje = lagTidslinjeOgValider(psb.getSøknadsperiodeList(), "søknadsperiode");
-            var gyldigEndringsperiodeTidslinje = lagTidslinjeOgValider(gyldigeEndringsperioder, "gyldigeEndringsperioder");
-            var endringsperiodeTidslinje = lagTidslinjeOgValider(psb.getEndringsperiode(),"endringsperiode");
+            var søknadsperiodeTidslinje = lagTidslinjeOgValider(psb.getSøknadsperiodeList(), "søknadsperiode.perioder");
+            var gyldigEndringsperiodeTidslinje = lagTidslinjeOgValider(gyldigeEndringsperioder, "gyldigeEndringsperioder.perioder");
+            var endringsperiodeTidslinje = lagTidslinjeOgValider(psb.getEndringsperiode(),"endringsperiode.perioder");
             var intervalForEndringTidslinje = søknadsperiodeTidslinje.union(gyldigEndringsperiodeTidslinje, StandardCombinators::coalesceLeftHandSide);
 
             //TODO: Slette når endringerperioder utledes.
             intervalForEndringTidslinje = intervalForEndringTidslinje.union(endringsperiodeTidslinje, StandardCombinators::coalesceLeftHandSide);
             //TODO: Slette når endringerperioder utledes.
 
-            var trekkKravPerioderTidslinje = lagTidslinjeOgValider(psb.getTrekkKravPerioder(), "trekkKravPerioder");
+            var trekkKravPerioderTidslinje = lagTidslinjeOgValider(psb.getTrekkKravPerioder(), "trekkKravPerioder.perioder");
 
             // Validerer at trekkKravPerioder ikke er innenfor søknadsperioden
-            feil.addAll(validerAtIngenPerioderOverlapperMedTrekkKravPerioder(trekkKravPerioderTidslinje, søknadsperiodeTidslinje, "søknadperiode"));
+            feil.addAll(validerAtIngenPerioderOverlapperMedTrekkKravPerioder(trekkKravPerioderTidslinje, søknadsperiodeTidslinje, "søknadperiode.perioder"));
 
             for (var ytelsePeriode : PerioderMedEndringUtil.getAllePerioderSomMåVæreInnenforSøknadsperiode(psb)) {
-                var ytelsePeriodeTidsserie = lagTidslinjeOgValider(ytelsePeriode.getPeriodeList(), ytelsePeriode.getFelt());
-                feil.addAll(validerAtYtelsePerioderErInnenforIntervalForEndring(intervalForEndringTidslinje, ytelsePeriodeTidsserie, ytelsePeriode.getFelt()));
-                feil.addAll(validerAtIngenPerioderOverlapperMedTrekkKravPerioder(trekkKravPerioderTidslinje, ytelsePeriodeTidsserie, ytelsePeriode.getFelt()));
+                var ytelsePeriodeTidsserie = lagTidslinjeOgValider(ytelsePeriode.getPeriodeList(), ytelsePeriode.getFelt() + ".perioder");
+                feil.addAll(validerAtYtelsePerioderErInnenforIntervalForEndring(intervalForEndringTidslinje, ytelsePeriodeTidsserie, ytelsePeriode.getFelt() + ".perioder"));
+                feil.addAll(validerAtIngenPerioderOverlapperMedTrekkKravPerioder(trekkKravPerioderTidslinje, ytelsePeriodeTidsserie, ytelsePeriode.getFelt() + ".perioder"));
             }
 
             validerAtYtelsePeriodenErKomplettMedSøknad(søknadsperiodeTidslinje, psb.getUttak().getPerioder(), "uttak");
 
-        } catch (ValideringsAvbrytendeFeilException e) {
-            feil.addAll(e.getFeilList());
+        } catch (ValideringsAvbrytendeFeilException valideringsAvbrytendeFeilException) {
+            feil.addAll(valideringsAvbrytendeFeilException.getFeilList());
         }
 
         return feil;
@@ -93,7 +93,7 @@ public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
                                                                            String felt) {
         return tilPeriodeList(
                 testTidsserie.disjoint(gyldigInterval)).stream()
-                .map(p -> toFeil(p, felt + ".perioder", "ugyldigPeriode", "Perioden er utenfor gyldig interval(" + gyldigInterval.toString() + ") : "))
+                .map(p -> toFeil(p, felt, "ugyldigPeriode", "Perioden er utenfor gyldig interval(" + gyldigInterval.toString() + ") : "))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -102,7 +102,7 @@ public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
                                                                   String felt) {
         return tilPeriodeList(søknadsperiode.disjoint(lagTidslinjeOgValider(new ArrayList<>(ytelsePeriode.keySet()), felt))).stream()
                 .filter(this::periodeInneholderDagerSomIkkeErHelg)
-                .map(p -> toFeil(p, felt + ".perioder", "ikkeKomplettPeriode", "Periodene er ikke komplett, periode som mangler er: "))
+                .map(p -> toFeil(p, felt, "ikkeKomplettPeriode", "Periodene er ikke komplett, periode som mangler er: "))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -110,7 +110,7 @@ public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
                                                                             LocalDateTimeline<Boolean> test,
                                                                             String felt) {
         return tilPeriodeList(trekkKravPerioder.intersection(test)).stream()
-                .map(p -> toFeil(p, felt + ".perioder", "ugyldigPeriodeInterval", "Overlapper med trekk krav periode: "))
+                .map(p -> toFeil(p, felt, "ugyldigPeriodeInterval", "Overlapper med trekk krav periode: "))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -142,54 +142,35 @@ public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
 
     private LocalDateTimeline<Boolean> lagTidslinjeOgValider(List<Periode> periodeList, String felt)
             throws ValideringsAvbrytendeFeilException {
-        var feil = validerPerioderErLukketGyldigOgIkkeOverlapper(periodeList, felt);
+        var feil = validerPerioderErLukketOgGyldig(periodeList, felt);
         if (!feil.isEmpty()) {
             throw new ValideringsAvbrytendeFeilException(feil);
         }
-        return toLocalDateTimeline(periodeList);
-    }
-
-    private List<Feil> validerPerioderErLukketGyldigOgIkkeOverlapper(Map<Periode, ?> perioder, String felt) {
-        return validerPerioderErLukketGyldigOgIkkeOverlapper(new ArrayList<>(perioder.keySet()), felt);
-    }
-
-    private List<Feil> validerPerioderErLukketGyldigOgIkkeOverlapper(List<Periode> periodeList, String felt) {
-        var feil = new ArrayList<Feil>();
-        var tempPeriodeList = new ArrayList<Periode>();
-        for (int i = 0; i < periodeList.size(); i++ ) {
-            var periode = periodeList.get(i);
-            if (periode != null) {
-                validerPerioderErLukket(periode, felt + ".perioder[" + i + "]", feil);
-                validerPerioderIkkeErInvertert(periode, felt + ".perioder[" + i + "]", feil);
-                for (int j = 0; j < tempPeriodeList.size(); j++) {
-                    if (overlapper(periode, periodeList.get(j))) {
-                        feil.add(lagFeil(
-                                felt + ".perioder[" + i + "]",
-                                "overlappendePeriode",
-                                "Periode i listen overlapper: " + periode.toString() + " med " + periodeList.get(j)));
-                        throw new ValideringsAvbrytendeFeilException(feil);
-                    }
-                }
-                tempPeriodeList.add(periode);
-            }
+        try {
+            return toLocalDateTimeline(periodeList);
+        } catch (IllegalArgumentException e) {
+            throw new ValideringsAvbrytendeFeilException(List.of(lagFeil(felt, "IllegalArgumentException", e.getMessage())));
         }
+    }
+
+    private List<Feil> validerPerioderErLukketOgGyldig(Map<Periode, ?> perioder, String felt) {
+        var feil = new ArrayList<Feil>();
+        perioder.keySet().forEach(p -> {
+            validerPerioderErLukket(p, felt + "[" + p + "]", feil);
+            validerPerioderIkkeErInvertert(p, felt + "[" + p + "]", feil);});
         return feil;
     }
 
-    private static boolean overlapper(Periode periode1, Periode periode2) {
-
-        // Hele dager; Kan ikke føre opp fler perioder samme dag
-        if ((periode2.getFraOgMed().equals(periode1.getTilOgMed())) || (periode1.getFraOgMed().equals(periode2.getFraOgMed()))) {
-            return true;
+    private List<Feil> validerPerioderErLukketOgGyldig(List<Periode> periodeList, String felt) {
+        var feil = new ArrayList<Feil>();
+        for (int i = 0; i < periodeList.size(); i++ ) {
+            var periode = periodeList.get(i);
+            if (periode != null) {
+                validerPerioderErLukket(periode, felt + "[" + i + "]", feil);
+                validerPerioderIkkeErInvertert(periode, felt + "[" + i + "]", feil);
+            }
         }
-
-        // Om ingen av periodene har en tilOgMed (Flere åpne perioder) vil de alltid overlappe
-        if (periode1.getTilOgMed() == null && periode2.getTilOgMed() == null) {
-            return true;
-        }
-
-        return (periode1.getTilOgMed() == null || !periode1.getTilOgMed().isBefore(periode2.getFraOgMed()))
-                && (periode2.getTilOgMed() == null || !periode1.getFraOgMed().isAfter(periode2.getTilOgMed()));
+        return feil;
     }
 
     private void validerPerioderErLukket(Periode periode, String felt, List<Feil> feil) {

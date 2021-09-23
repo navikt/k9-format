@@ -99,7 +99,7 @@ public class YtelseTest {
         psb.medSøknadsperiode(søknadsperiodeTo);
 
         var feil = verifyHarFeil(psb);
-        feilInneholder(feil, "ytelse.søknadsperiode.perioder[1]", "overlappendePeriode");
+        feilInneholder(feil, "ytelse.søknadsperiode.perioder", "IllegalArgumentException");
     }
 
     @Test
@@ -112,7 +112,7 @@ public class YtelseTest {
         psb.medUttak(YtelseEksempel.lagUttak(periodeEn, peridoeTo, periodeTre));
 
         var feil = verifyHarFeil(psb);
-        feilInneholder(feil, "ytelse.uttak.perioder[1]", "overlappendePeriode");
+        feilInneholder(feil, "ytelse.uttak.perioder", "IllegalArgumentException");
     }
 
 

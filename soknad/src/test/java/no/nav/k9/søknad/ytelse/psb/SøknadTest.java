@@ -80,7 +80,7 @@ class SøknadTest {
     }
 
     @Test
-    public void bostederKanIkkeHaFeilRekkefølgeIPerioden() {
+    public void bostederKanIkkeHaInvertertePerioder() {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
         var bostedperiode = new Periode(søknadsperiode.getTilOgMed(), LocalDate.now().minusMonths(2));
 
@@ -88,7 +88,7 @@ class SøknadTest {
         ((PleiepengerSyktBarn) søknad.getYtelse()).medBosteder(lagBosteder(bostedperiode));
 
         var feil = verifyHarFeil(søknad);
-        feilInneholder(feil, "ytelse.bosteder.perioder[0]", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "ytelse.bosteder.perioder" + TestUtils.periodeString(bostedperiode), "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
     }
 
     @Disabled("Trenger avklaring om dette er ønsket")
@@ -105,16 +105,17 @@ class SøknadTest {
     }
 
     @Test
-    public void alleFelterISøknadFeilRekkefølge() {
+    public void alleFelterISøknadInvertertPeriode() {
         var søknadsperiode = new Periode(LocalDate.now().plusWeeks(2), LocalDate.now().minusWeeks(2));
         var søknad = SøknadEksempel.komplettSøknad(søknadsperiode);
         ((PleiepengerSyktBarn)søknad.getYtelse()).medEndringsperiode(søknadsperiode);
         ((PleiepengerSyktBarn)søknad.getYtelse()).addTrekkKravPeriode(new Periode(LocalDate.now().minusMonths(2), LocalDate.now().minusMonths(3)));
 
         var feil = verifyHarFeil(søknad, List.of(søknadsperiode));
-        feilInneholder(feil, "ytelse.søknadsperiode.perioder[0]", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
-        feilInneholder(feil, "ytelse.bosteder.perioder[0]", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
-        feilInneholder(feil, "ytelse.utenlandsopphold.perioder[0]", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        var periodeString = "[" + søknadsperiode + "]";
+        feilInneholder(feil, "ytelse.søknadsperiode.perioder" + TestUtils.periodeString(0), "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "ytelse.bosteder.perioder" + TestUtils.periodeString(søknadsperiode), "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "ytelse.utenlandsopphold.perioder" + TestUtils.periodeString(søknadsperiode), "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
         assertThat(feil).size().isEqualTo(3);
     }
 
