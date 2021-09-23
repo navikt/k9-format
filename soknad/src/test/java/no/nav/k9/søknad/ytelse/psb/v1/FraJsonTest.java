@@ -1,6 +1,6 @@
-package no.nav.k9.søknad.ytelse.psb;
+package no.nav.k9.søknad.ytelse.psb.v1;
 
-import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyIngenFeil;
+import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyIngenFeil;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnSøknadValidator;
+import no.nav.k9.søknad.ytelse.psb.SøknadJsonEksempel;
 
 class FraJsonTest {
 

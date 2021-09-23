@@ -1,8 +1,8 @@
-package no.nav.k9.søknad.ytelse.psb;
+package no.nav.k9.søknad.ytelse.psb.v1;
 
 import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholder;
-import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyHarFeil;
-import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyIngenFeil;
+import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyHarFeil;
+import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyIngenFeil;
 import static org.assertj.core.api.Assertions.assertThat;
 import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagArbeidstaker;
 import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagBeredskap;
@@ -26,10 +26,8 @@ import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.ytelse.psb.v1.DataBruktTilUtledning;
-import no.nav.k9.søknad.ytelse.psb.v1.InfoFraPunsj;
-import no.nav.k9.søknad.ytelse.psb.v1.Omsorg;
-import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
+import no.nav.k9.søknad.ytelse.psb.SøknadEksempel;
+import no.nav.k9.søknad.ytelse.psb.TestUtils;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 
 class SøknadTest {
@@ -37,7 +35,6 @@ class SøknadTest {
     private static final Søknad KOMPLETT_SØKNAD = SøknadEksempel.komplettSøknad(TEST_PERIODE);
     private static final Søknad MINIMUM_SØKNAD = SøknadEksempel.minimumSøknad(TEST_PERIODE);
     private static final String PÅKREVD = "påkrevd";
-    private String feilkode;
 
     @Test
     public void komplettSøknadHarIngenValideringFeil() {

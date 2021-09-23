@@ -22,11 +22,9 @@ import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 
-public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
+class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
 
     private final String YTELSE_FELT = "ytelse.";
-
-    //PleiepengerSyktBarnValidator
 
     private static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
 
@@ -35,6 +33,7 @@ public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         return valider(ytelse, List.of());
     }
 
+    //For å overload forsikreValidert(Ytelse ytelse)
     public void forsikreValidert(Ytelse ytelse, List<Periode> gyldigeEndringsperioder) {
         List<Feil> feil = valider(ytelse, gyldigeEndringsperioder);
         if (!feil.isEmpty()) {
@@ -70,7 +69,7 @@ public class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
 
             var trekkKravPerioderTidslinje = lagTidslinjeOgValider(psb.getTrekkKravPerioder(), "trekkKravPerioder.perioder");
 
-            // Validerer at trekkKravPerioder ikke er innenfor søknadsperioden
+            //Validerer at trekkKravPerioder ikke er innenfor søknadsperioden
             feil.addAll(validerAtIngenPerioderOverlapperMedTrekkKravPerioder(trekkKravPerioderTidslinje, søknadsperiodeTidslinje, "søknadperiode.perioder"));
 
             for (var ytelsePeriode : PerioderMedEndringUtil.getAllePerioderSomMåVæreInnenforSøknadsperiode(psb)) {

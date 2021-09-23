@@ -1,8 +1,8 @@
-package no.nav.k9.søknad.ytelse.psb;
+package no.nav.k9.søknad.ytelse.psb.v1;
 
 import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholder;
-import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyHarFeil;
-import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyIngenFeil;
+import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyHarFeil;
+import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyIngenFeil;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
@@ -15,7 +15,8 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
+import no.nav.k9.søknad.ytelse.psb.TestUtils;
+import no.nav.k9.søknad.ytelse.psb.YtelseEksempel;
 
 class EndringTest {
 

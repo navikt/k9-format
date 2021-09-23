@@ -1,8 +1,8 @@
-package no.nav.k9.søknad.ytelse.psb;
+package no.nav.k9.søknad.ytelse.psb.v1;
 
 import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholder;
-import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyHarFeil;
-import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyIngenFeil;
+import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyHarFeil;
+import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyIngenFeil;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -20,9 +20,7 @@ import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.VirksomhetType;
-import no.nav.k9.søknad.ytelse.psb.v1.Omsorg;
-import no.nav.k9.søknad.ytelse.psb.v1.Uttak;
-import no.nav.k9.søknad.ytelse.psb.v1.UttakPeriodeInfo;
+import no.nav.k9.søknad.ytelse.psb.YtelseEksempel;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;

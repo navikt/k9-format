@@ -1,8 +1,8 @@
-package no.nav.k9.søknad.ytelse.psb;
+package no.nav.k9.søknad.ytelse.psb.v1;
 
 import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholder;
-import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyHarFeil;
-import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyIngenFeil;
+import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyHarFeil;
+import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyIngenFeil;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -10,10 +10,10 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
+import no.nav.k9.søknad.ytelse.psb.SøknadEksempel;
+import no.nav.k9.søknad.ytelse.psb.YtelseEksempel;
 
-class TrekkKravTest
-{
+class TrekkKravTest {
 
     @Test
     public void søknadMedTrekkKravUtenFeil() {
@@ -78,6 +78,18 @@ class TrekkKravTest
         var feil = verifyHarFeil(søknad);
         feilInneholder(feil, "ytelse.søknadperiode.perioder", "ugyldigPeriodeInterval");
         feilInneholder(feil, "ytelse.uttak.perioder", "ugyldigPeriodeInterval");
+    }
+
+    //TODO avklar om dette er riktig.
+    @Test
+    public void endringssøknadMedTrekkKravPerioderOverlapper() {
+        var endringsperiode = new Periode(LocalDate.now(), LocalDate.now().plusDays(30));
+        var trekkKravPeriode = new Periode(LocalDate.now().plusDays(5), LocalDate.now().plusDays(20));
+
+        var søknad = SøknadEksempel.søknad(YtelseEksempel.komplettEndringssøknad(endringsperiode));
+        ((PleiepengerSyktBarn) søknad.getYtelse()).medEndringsperiode(endringsperiode);
+
+        var feil = verifyIngenFeil(søknad);
     }
 
 }
