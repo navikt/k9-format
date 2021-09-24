@@ -48,7 +48,7 @@ public class Arbeidstaker {
         return (this.norskIdentitetsnummer == null && this.organisasjonsnummer == null);
     }
 
-    @AssertFalse(message = "Ikke entydig ID på Arbeidsgiver, må oppgi enten norskIdentitetsnummer eller organisasjonsnummer.@ikkeEntydigId")
+    @AssertFalse(message = "[ikkeEntydigId] Ikke entydig ID på Arbeidsgiver, må oppgi enten norskIdentitetsnummer eller organisasjonsnummer.")
     private boolean isUniquelyIdentified() {
         return erEntydigPåID();
     }
