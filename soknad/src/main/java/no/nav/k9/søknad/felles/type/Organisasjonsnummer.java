@@ -35,7 +35,7 @@ public class Organisasjonsnummer {
     }
 
 
-    @AssertTrue(message="Organisasjonsnummer må være gyldig")
+    @AssertTrue(message="Organisasjonsnummer må være gyldig.@ugyldigOrgNummer")
     private boolean isValid() {
         return OrganisasjonsNummerValidator.erGyldig(verdi);
     }

@@ -43,11 +43,7 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
 
     public List<Feil> valider(Ytelse ytelse, List<Periode> gyldigeEndringsperioder) {
         var psb = (PleiepengerSyktBarn) ytelse;
-        var validate = VALIDATOR_FACTORY.getValidator().validate(psb);
-
-        List<Feil> feil = validate.stream()
-                .map(this::toFeil)
-                .collect(Collectors.toList());
+        var feil = new ArrayList<Feil>();
 
 
         //TODO endre getEndringsperioder til gyldigeEndringsperioder

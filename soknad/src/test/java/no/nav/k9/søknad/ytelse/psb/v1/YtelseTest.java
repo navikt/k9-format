@@ -20,6 +20,7 @@ import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.VirksomhetType;
+import no.nav.k9.søknad.ytelse.psb.SøknadEksempel;
 import no.nav.k9.søknad.ytelse.psb.YtelseEksempel;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
@@ -207,72 +208,73 @@ public class YtelseTest {
 
     @Test
     public void søknadMedNullJobberNormaltTimerPerDag() {
-        var søknad = YtelseEksempel.komplettYtelseMedDelperioder();
-        var søknadsperiode = søknad.getSøknadsperiode();
+        var søknad = SøknadEksempel.søknad(YtelseEksempel.komplettYtelseMedDelperioder());
+        var søknadsperiode = søknad.getYtelse().getSøknadsperiode();
         var arbeidstidInfo = new ArbeidstidInfo(
                 Map.of(søknadsperiode, new ArbeidstidPeriodeInfo(null, Duration.ofHours(7).plusMinutes(30))));
 
         var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), arbeidstidInfo);
-        søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
+        ((PleiepengerSyktBarn) søknad.getYtelse()).getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
         verifyHarFeil(søknad);
     }
 
     @Test
     public void søknadMedNullFaktiskArbeidTimerPerDag() {
-        var søknad = YtelseEksempel.komplettYtelseMedDelperioder();
-        var søknadsperiode = søknad.getSøknadsperiode();
+        var søknad = (SøknadEksempel.søknad(YtelseEksempel.komplettYtelseMedDelperioder()));
+        var søknadsperiode = søknad.getYtelse().getSøknadsperiode();
         var arbeidstidInfo = new ArbeidstidInfo(
                 Map.of(søknadsperiode, new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30), null)));
         var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), arbeidstidInfo);
-        søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
+        ((PleiepengerSyktBarn) søknad.getYtelse()).getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
         verifyHarFeil(søknad);
     }
 
     @Test
     public void søknadMedNegativNormaltArbeidTimerPerDag() {
-        var søknad = YtelseEksempel.komplettYtelseMedDelperioder();
-        var søknadsperiode = søknad.getSøknadsperiode();
+        var søknad = SøknadEksempel.søknad(YtelseEksempel.komplettYtelseMedDelperioder());
+        var søknadsperiode = søknad.getYtelse().getSøknadsperiode();
         var arbeidstidInfo = new ArbeidstidInfo(
                 Map.of( søknadsperiode,
                         new ArbeidstidPeriodeInfo(Duration.ofHours(-8), Duration.ofHours(7).plusMinutes(30))));
         var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), arbeidstidInfo);
-        søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
+        ((PleiepengerSyktBarn) søknad.getYtelse()).getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
         verifyHarFeil(søknad);
     }
 
     @Test
     public void søknadMedNegativFaktiskArbeidTimerPerDag() {
-        var søknad = YtelseEksempel.komplettYtelseMedDelperioder();
-        var søknadsperiode = søknad.getSøknadsperiode();
+        var søknad = SøknadEksempel.søknad(YtelseEksempel.komplettYtelseMedDelperioder());
+        var søknadsperiode = søknad.getYtelse().getSøknadsperiode();
         var arbeidstidInfo = new ArbeidstidInfo(
                 Map.of( søknadsperiode,
                         new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30), Duration.ofHours(-7).plusMinutes(30))));
         var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), arbeidstidInfo);
-        søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
+        ((PleiepengerSyktBarn) søknad.getYtelse()).getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
         verifyHarFeil(søknad);
     }
 
     @Test
     public void søknadMedNullFeilArbeidstaker() {
-        var søknad = YtelseEksempel.komplettYtelseMedDelperioder();
-        var søknadsperiode = søknad.getSøknadsperiode();
+        var søknad = SøknadEksempel.søknad(YtelseEksempel.komplettYtelseMedDelperioder());
+        var søknadsperiode = søknad.getYtelse().getSøknadsperiode();
         var arbeidstidInfo = new ArbeidstidInfo(
                 Map.of(søknadsperiode, new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30), Duration.ofHours(7).plusMinutes(30))));
         var arbeidstaker = new Arbeidstaker(null, null, arbeidstidInfo);
-        søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
+        ((PleiepengerSyktBarn) søknad.getYtelse()).getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
         verifyHarFeil(søknad);
     }
 
     @Test
     public void søknadMedIkkeEntydigInfoForArbeidstaker() {
-        var søknad = YtelseEksempel.komplettYtelseMedDelperioder();
-        var søknadsperiode = søknad.getSøknadsperiode();
+        var søknad = SøknadEksempel.søknad(YtelseEksempel.komplettYtelseMedDelperioder());
+        var søknadsperiode = søknad.getYtelse().getSøknadsperiode();
         var arbeidstidInfo = new ArbeidstidInfo(
                 Map.of( søknadsperiode,
                         new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30), Duration.ofHours(7).plusMinutes(30))));
         var arbeidstaker = new Arbeidstaker(NorskIdentitetsnummer.of("29099012345"), Organisasjonsnummer.of("88888888"), arbeidstidInfo);
-        søknad.getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
-        verifyHarFeil(søknad);
+        ((PleiepengerSyktBarn) søknad.getYtelse()).getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
+        var feil = verifyHarFeil(søknad);
+        feilInneholder(feil, "ikkeEntydigId");
     }
 
 }

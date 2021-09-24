@@ -85,7 +85,9 @@ class SøknadTest {
         ((PleiepengerSyktBarn) søknad.getYtelse()).medBosteder(lagBosteder(bostedperiode));
 
         var feil = verifyHarFeil(søknad);
-        feilInneholder(feil, "ytelse.bosteder.perioder" + TestUtils.periodeString(bostedperiode), "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "ytelse.bosteder.perioder" + TestUtils.periodeString(bostedperiode),
+                "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        var json = Søknad.SerDes.serialize(søknad);
     }
 
     @Disabled("Trenger avklaring om dette er ønsket")

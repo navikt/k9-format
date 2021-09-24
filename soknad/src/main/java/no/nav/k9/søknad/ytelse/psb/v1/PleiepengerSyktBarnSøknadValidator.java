@@ -39,10 +39,16 @@ public class PleiepengerSyktBarnSøknadValidator extends SøknadValidator<Søkna
     }
 
     private Feil toFeil(ConstraintViolation<Søknad> constraintViolation) {
+        String[] constraintMessage = constraintViolation.getMessage().split("@");
+        var feilmelding = constraintMessage[0];
+        var feilkode = "påkrevd";
+        if (constraintMessage.length > 1 && !constraintMessage[1].isEmpty()) {
+            feilkode = constraintMessage[1];
+        }
         return new Feil(
                 constraintViolation.getPropertyPath().toString(),
-                PÅKREVD,
-                constraintViolation.getMessage());
+                feilkode,
+                feilmelding);
     }
 
     @Override
