@@ -53,10 +53,6 @@ public class PleiepengerSyktBarnSøknadValidator extends SøknadValidator<Søkna
         if (feilkodeMatcher.matches() && feilkodeMatcher.groupCount() >= 2) {
             feilkode = feilkodeMatcher.group(1).trim();
             feilmelding = feilkodeMatcher.group(2).trim();
-            return new Feil(
-                    constraintViolation.getPropertyPath().toString(),
-                    feilkode,
-                    feilmelding);
         } else {
             feilkode = "påkrevd";
             feilmelding = constraintMessage;
