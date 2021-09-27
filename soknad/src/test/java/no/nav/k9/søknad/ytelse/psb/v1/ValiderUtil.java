@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.ytelse.psb;
+package no.nav.k9.søknad.ytelse.psb.v1;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -8,11 +8,8 @@ import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
-import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnSøknadValidator;
-import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnYtelseValidator;
 
-class ValiderUtil {
+public class ValiderUtil {
 
     private static final PleiepengerSyktBarnSøknadValidator validatorSøknad = new PleiepengerSyktBarnSøknadValidator();
     private static final PleiepengerSyktBarnYtelseValidator validatorYtelse = new PleiepengerSyktBarnYtelseValidator();
