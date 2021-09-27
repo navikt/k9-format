@@ -7,6 +7,7 @@ import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyIngenFeil;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.felles.type.Periode;
@@ -80,16 +81,17 @@ class TrekkKravTest {
         feilInneholder(feil, "ytelse.uttak.perioder", "ugyldigPeriodeInterval");
     }
 
-    //TODO avklar om dette er riktig.
+    @Disabled
     @Test
-    public void endringssøknadMedTrekkKravPerioderOverlapper() {
+    public void endringssøknadMedTrekkKravPerioderOverlapperGirFeil() {
         var endringsperiode = new Periode(LocalDate.now(), LocalDate.now().plusDays(30));
         var trekkKravPeriode = new Periode(LocalDate.now().plusDays(5), LocalDate.now().plusDays(20));
 
         var søknad = SøknadEksempel.søknad(YtelseEksempel.komplettEndringssøknad(endringsperiode));
         ((PleiepengerSyktBarn) søknad.getYtelse()).medEndringsperiode(endringsperiode);
 
-        var feil = verifyIngenFeil(søknad);
+        var feil = verifyHarFeil(søknad);
+        feilInneholder(feil, "", "");
     }
 
 }
