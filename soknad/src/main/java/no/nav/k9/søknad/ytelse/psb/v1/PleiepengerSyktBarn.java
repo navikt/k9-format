@@ -160,6 +160,11 @@ public class PleiepengerSyktBarn implements Ytelse {
         //TODO endre til å bruke PerioderMedEndringUtil.getEndringsperiode(this)
         return (endringsperiode == null) ? null : Collections.unmodifiableList(endringsperiode);
     }
+    
+    @Deprecated
+    public List<Periode> getUtledetEndringsperiode() {
+        return PerioderMedEndringUtil.getEndringsperiode(this);
+    }
 
     public PleiepengerSyktBarn medEndringsperiode(List<Periode> endringsperiodeList) {
         this.endringsperiode.addAll(endringsperiodeList);
