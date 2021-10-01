@@ -1,5 +1,8 @@
 package no.nav.k9.søknad.ytelse.omsorgspenger.v1;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import no.nav.k9.søknad.PeriodeValidator;
 import no.nav.k9.søknad.Validator;
 import no.nav.k9.søknad.felles.Feil;
@@ -7,9 +10,6 @@ import no.nav.k9.søknad.felles.opptjening.Frilanser;
 import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
     private final PeriodeValidator periodeValidator;
@@ -49,12 +49,9 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
         }
     }
 
+    // Spennende at denne ikke er i bruk .....
     private void validerFrilanser(Frilanser frilanser, List<Feil> feil) {
         if (frilanser == null) return;
-
-        if (!frilanser.getJobberFortsattSomFrilans() && frilanser.getSluttdato() == null) {
-            feil.add(new Feil("frilanser.sluttdato", PÅKREVD, "'sluttdato' kan ikke være null, dersom 'jobberFortsattSomFrilans' er false."));
-        }
 
         if (frilanser.getSluttdato() != null && frilanser.getStartdato().isAfter(frilanser.getSluttdato())) {
             feil.add(new Feil("frilanser.startdato", UGYLDIG_ARGUMENT, "'startdato' kan ikke være etter 'sluttdato'"));

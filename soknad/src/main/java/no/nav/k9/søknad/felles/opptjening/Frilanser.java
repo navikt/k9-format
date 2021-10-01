@@ -20,9 +20,6 @@ public class Frilanser {
     @JsonProperty(value = "sluttdato")
     private LocalDate sluttdato;
 
-    @JsonProperty(value = "jobberFortsattSomFrilans")
-    private Boolean jobberFortsattSomFrilans;
-
     /**@deprecated brukt ctor.*/
     @Deprecated(forRemoval = true)
     public static Frilanser.Builder builder() {
@@ -32,13 +29,10 @@ public class Frilanser {
     public Frilanser() {}
 
     @JsonCreator
-    public Frilanser(
-                     @JsonProperty("startdato") LocalDate startdato,
-                     @JsonProperty("sluttdato") LocalDate sluttdato,
-                     @JsonProperty("jobberFortsattSomFrilans") Boolean jobberFortsattSomFrilans) {
+    public Frilanser(@JsonProperty("startdato") LocalDate startdato,
+                     @JsonProperty("sluttdato") LocalDate sluttdato) {
         this.startdato = startdato;
         this.sluttdato = sluttdato;
-        this.jobberFortsattSomFrilans = jobberFortsattSomFrilans;
     }
 
     public Frilanser medStartDato(LocalDate startdato) {
@@ -51,26 +45,16 @@ public class Frilanser {
         return this;
     }
 
-    public Frilanser medJobberFortsattSomFrilans(Boolean jobberFortsattSomFrilans) {
-        this.jobberFortsattSomFrilans = jobberFortsattSomFrilans;
-        return this;
-    }
-
     public LocalDate getStartdato() {
         return startdato;
     }
     public LocalDate getSluttdato() { return sluttdato; }
-    public Boolean getJobberFortsattSomFrilans() {
-        return jobberFortsattSomFrilans;
-    }
 
     /**@deprecated brukt ctor.*/
     @Deprecated(forRemoval = true)
     public static final class Builder {
         private LocalDate startdato;
         private LocalDate sluttdato;
-        private Boolean jobberFortsattSomFrilans;
-
 
         private Builder() {
         }
@@ -85,13 +69,8 @@ public class Frilanser {
             return this;
         }
 
-        public Frilanser.Builder jobberFortsattSomFrilans(Boolean jobberFortsattSomFrilans) {
-            this.jobberFortsattSomFrilans = jobberFortsattSomFrilans;
-            return this;
-        }
-
         public Frilanser build() {
-            return new Frilanser(startdato, sluttdato, jobberFortsattSomFrilans);
+            return new Frilanser(startdato, sluttdato);
         }
     }
 }

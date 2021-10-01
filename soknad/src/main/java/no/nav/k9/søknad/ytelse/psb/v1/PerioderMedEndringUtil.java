@@ -20,12 +20,11 @@ class PerioderMedEndringUtil {
                 tilTidsserie(getAllePerioderSomMåVæreInnenforSøknadsperiode(psb));
         var søknadsperiode = toLocalDateTimeline(psb.getSøknadsperiodeList());
         var endringsperiodeTidsserie = allePerioderMedEndringTidsserie.disjoint(søknadsperiode);
-        return TidsserieUtils.toPeriodeList(endringsperiodeTidsserie);
+        return TidsserieUtils.tilPeriodeList(endringsperiodeTidsserie);
     }
 
     public static List<PerioderMedEndring> getAllePerioderSomMåVæreInnenforSøknadsperiode(PleiepengerSyktBarn psb) {
         var listen = new ArrayList<PerioderMedEndring>();
-        listen.add(new PerioderMedEndring().medPerioder("utenlandsopphold", psb.getUtenlandsopphold().getPerioder()));
         listen.add(new PerioderMedEndring().medPerioder("beredskap", psb.getBeredskap().getPerioder()));
         listen.add(new PerioderMedEndring().medPerioder("nattevåk", psb.getNattevåk().getPerioder()));
         listen.add(new PerioderMedEndring().medPerioder("tilsynsordning", psb.getTilsynsordning().getPerioder()));

@@ -1,8 +1,9 @@
-package no.nav.k9.søknad.ytelse.psb;
+package no.nav.k9.søknad.ytelse.psb.v1;
 
 import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholder;
-import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyHarFeil;
-import static no.nav.k9.søknad.ytelse.psb.ValiderUtil.verifyIngenFeil;
+import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyHarFeil;
+import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyIngenFeil;
+import static org.assertj.core.api.Assertions.assertThat;
 import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagArbeidstaker;
 import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagBeredskap;
 import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagBosteder;
@@ -16,6 +17,7 @@ import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.leggPåKomplettEndring
 import java.time.LocalDate;
 import java.util.List;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.Søknad;
@@ -24,10 +26,8 @@ import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.ytelse.psb.v1.DataBruktTilUtledning;
-import no.nav.k9.søknad.ytelse.psb.v1.InfoFraPunsj;
-import no.nav.k9.søknad.ytelse.psb.v1.Omsorg;
-import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
+import no.nav.k9.søknad.ytelse.psb.SøknadEksempel;
+import no.nav.k9.søknad.ytelse.psb.TestUtils;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 
 class SøknadTest {
@@ -71,40 +71,58 @@ class SøknadTest {
         var bostedperiode = new Periode(LocalDate.now().minusMonths(2), søknadsperiode.getTilOgMed());
 
         var søknad = SøknadEksempel.komplettSøknad(søknadsperiode);
-        ((PleiepengerSyktBarn) søknad.getYtelse()).medBosteder(lagBosteder(List.of(bostedperiode)));
+        ((PleiepengerSyktBarn) søknad.getYtelse()).medBosteder(lagBosteder(bostedperiode));
 
         verifyIngenFeil(søknad);
     }
 
     @Test
-    public void bostederKanIkkeHaFeilRekkefølgeIPerioden() {
+    public void bostederKanIkkeHaInvertertePerioder() {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
         var bostedperiode = new Periode(søknadsperiode.getTilOgMed(), LocalDate.now().minusMonths(2));
 
         var søknad = SøknadEksempel.komplettSøknad(søknadsperiode);
-        ((PleiepengerSyktBarn) søknad.getYtelse()).medBosteder(lagBosteder(List.of(bostedperiode)));
+        ((PleiepengerSyktBarn) søknad.getYtelse()).medBosteder(lagBosteder(bostedperiode));
 
         var feil = verifyHarFeil(søknad);
-        feilInneholder(feil, "bosteder[0]", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "ytelse.bosteder.perioder" + TestUtils.periodeString(bostedperiode),
+                "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        var json = Søknad.SerDes.serialize(søknad);
     }
 
+    @Disabled("Trenger avklaring om dette er ønsket")
     @Test
     public void utenlandsoppholdKanIkkeVæreUtenforSøknadsperiode() {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
         var bostedperiode = new Periode(LocalDate.now().minusMonths(2), søknadsperiode.getTilOgMed());
 
         var søknad = SøknadEksempel.komplettSøknad(søknadsperiode);
-        ((PleiepengerSyktBarn) søknad.getYtelse()).medUtenlandsopphold(lagUtenlandsopphold(List.of(bostedperiode)));
+        ((PleiepengerSyktBarn) søknad.getYtelse()).medUtenlandsopphold(lagUtenlandsopphold(bostedperiode));
 
         var feil = verifyHarFeil(søknad);
-        feilInneholder(feil, "utenlandsopphold.perioder", "ugyldigPeriode");
+        feilInneholder(feil, "ytelse.utenlandsopphold.perioder", "ugyldigPeriode");
+    }
+
+    @Test
+    public void alleFelterISøknadInvertertPeriode() {
+        var søknadsperiode = new Periode(LocalDate.now().plusWeeks(2), LocalDate.now().minusWeeks(2));
+        var søknad = SøknadEksempel.komplettSøknad(søknadsperiode);
+        ((PleiepengerSyktBarn)søknad.getYtelse()).medEndringsperiode(søknadsperiode);
+        ((PleiepengerSyktBarn)søknad.getYtelse()).addTrekkKravPeriode(new Periode(LocalDate.now().minusMonths(2), LocalDate.now().minusMonths(3)));
+
+        var feil = verifyHarFeil(søknad, List.of(søknadsperiode));
+        var periodeString = "[" + søknadsperiode + "]";
+        feilInneholder(feil, "ytelse.søknadsperiode.perioder" + TestUtils.periodeString(0), "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "ytelse.bosteder.perioder" + TestUtils.periodeString(søknadsperiode), "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "ytelse.utenlandsopphold.perioder" + TestUtils.periodeString(søknadsperiode), "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        assertThat(feil).size().isEqualTo(3);
     }
 
     @Test
     public void søknadHarIkkeIntervalForEndring() {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusWeeks(2));
         var endringsperiode = new Periode(LocalDate.now().minusWeeks(2), søknadsperiode.getFraOgMed().minusDays(1));
-        var ytese = ytelseUtenSøknadsperiode(List.of(søknadsperiode));
+        var ytese = ytelseUtenSøknadsperiode(søknadsperiode);
         leggPåKomplettEndringsøknad(endringsperiode, ytese);
         var søknad = SøknadEksempel.søknad(ytese);
 
@@ -114,7 +132,7 @@ class SøknadTest {
 
     //TODO legge på getSøknadsperioder test
 
-    private PleiepengerSyktBarn ytelseUtenSøknadsperiode(List<Periode> ytelsePeriode ){
+    private PleiepengerSyktBarn ytelseUtenSøknadsperiode(Periode... ytelsePeriode ){
         var barn = new Barn(NorskIdentitetsnummer.of("22211111111"), null);
         var omsorg = new Omsorg().medRelasjonTilBarnet(Omsorg.BarnRelasjon.MOR);
         var søknadInfo = new DataBruktTilUtledning( true, true,

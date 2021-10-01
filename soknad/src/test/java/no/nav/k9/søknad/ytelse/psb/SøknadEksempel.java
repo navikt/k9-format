@@ -10,14 +10,14 @@ import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.SøknadId;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
 
-class SøknadEksempel {
+public class SøknadEksempel {
 
     public static Søknad søknad(PleiepengerSyktBarn ytelse) {
         return new Søknad(
                 new SøknadId("1"),
                 new Versjon("5.4.8"),
                 ZonedDateTime.now(),
-                new Søker(NorskIdentitetsnummer.of("11111111111")),
+                new Søker(NorskIdentitetsnummer.of("22222222222")),
                 ytelse
         );
     }

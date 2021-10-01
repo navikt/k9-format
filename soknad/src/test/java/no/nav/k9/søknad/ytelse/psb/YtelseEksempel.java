@@ -65,11 +65,7 @@ public class YtelseEksempel {
         return psb;
     }
 
-    public static PleiepengerSyktBarn komplettYtelse(Periode periode) {
-        return komplettYtelse(List.of(periode));
-    }
-
-    public static PleiepengerSyktBarn komplettYtelse(List<Periode> periodeList) {
+    public static PleiepengerSyktBarn komplettYtelse(Periode... perioder) {
 
         var barn = new Barn(NorskIdentitetsnummer.of("22211111111"), null);
         var omsorg = new Omsorg().medRelasjonTilBarnet(Omsorg.BarnRelasjon.MOR);
@@ -77,19 +73,19 @@ public class YtelseEksempel {
                 false, false, true );
         var infoFraPunsj = new InfoFraPunsj()
                 .medSøknadenInneholderInfomasjonSomIkkeKanPunsjes(false);
-        var uttak = lagUttak(periodeList);
-        var nattevåk = lagNattevåk(periodeList);
-        var beredskap = lagBeredskap(periodeList);
-        var tilsynsordning = lagTilsynsordning(periodeList);
-        var lovbestemtFerie = lagLovbestemtFerie(periodeList);
-        var bosteder = lagBosteder(periodeList);
-        var utenlandsopphold = lagUtenlandsopphold(periodeList);
-        var arbeidstaker = lagArbeidstaker(periodeList);
+        var uttak = lagUttak(perioder);
+        var nattevåk = lagNattevåk(perioder);
+        var beredskap = lagBeredskap(perioder);
+        var tilsynsordning = lagTilsynsordning(perioder);
+        var lovbestemtFerie = lagLovbestemtFerie(perioder);
+        var bosteder = lagBosteder(perioder);
+        var utenlandsopphold = lagUtenlandsopphold(perioder);
+        var arbeidstaker = lagArbeidstaker(perioder);
         var arbeidstid = new Arbeidstid().medArbeidstaker(List.of(
                 arbeidstaker));
 
         return new PleiepengerSyktBarn()
-                .medSøknadsperiode(periodeList)
+                .medSøknadsperiode(List.of(perioder))
                 .medSøknadInfo(søknadInfo)
                 .medInfoFraPunsj(infoFraPunsj)
                 .medBarn(barn)
@@ -108,19 +104,16 @@ public class YtelseEksempel {
     Standard
      */
 
-    public static PleiepengerSyktBarn standardYtelse(Periode periode) {
-        return standardYtelse(List.of(periode));
-    }
-
-    public static PleiepengerSyktBarn standardYtelse(List<Periode> periodeList) {
-        return minimumYtelse(periodeList)
+    public static PleiepengerSyktBarn standardYtelse(Periode... perioder) {
+        return minimumYtelse(perioder)
                 .medArbeidstid(new Arbeidstid().medArbeidstaker(List.of(
-                        lagArbeidstaker(periodeList))));
+                        lagArbeidstaker(perioder))));
     }
 
     /*
     Minimum
      */
+
     public static PleiepengerSyktBarn minimumYtelseMedDelperioder() {
         var søknadsperiode = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-10-20"));
         var uttakperiode = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-02-20"));
@@ -138,15 +131,11 @@ public class YtelseEksempel {
                 .medUttak(uttak);
     }
 
-    public static PleiepengerSyktBarn minimumYtelse(Periode søknadsperiode) {
-        return minimumYtelse(List.of(søknadsperiode));
-    }
-
-    public static PleiepengerSyktBarn minimumYtelse(List<Periode> periodeList) {
+    public static PleiepengerSyktBarn minimumYtelse(Periode... perioder) {
         return new PleiepengerSyktBarn()
-                .medSøknadsperiode(periodeList)
+                .medSøknadsperiode(List.of(perioder))
                 .medBarn(new Barn(null, LocalDate.now()))
-                .medUttak(lagUttak(periodeList));
+                .medUttak(lagUttak(perioder));
     }
 
 
@@ -158,17 +147,13 @@ public class YtelseEksempel {
                 .medBarn(new Barn(NorskIdentitetsnummer.of("11111111111"), null));
     }
 
-    public static PleiepengerSyktBarn komplettEndringssøknad(Periode periode) {
-        return komplettEndringssøknad(List.of(periode));
-    }
-
-    public static PleiepengerSyktBarn komplettEndringssøknad(List<Periode> periodeList) {
+    public static PleiepengerSyktBarn komplettEndringssøknad(Periode... perioder) {
         return YtelseEksempel.lagEndringssøknad()
-                .medBeredskap(lagBeredskap(periodeList))
-                .medNattevåk(lagNattevåk(periodeList))
-                .medTilsynsordning(lagTilsynsordning(periodeList))
-                .medArbeidstid(new Arbeidstid().leggeTilArbeidstaker(lagArbeidstaker(periodeList)))
-                .medUttak(lagUttak(periodeList));
+                .medBeredskap(lagBeredskap(perioder))
+                .medNattevåk(lagNattevåk(perioder))
+                .medTilsynsordning(lagTilsynsordning(perioder))
+                .medArbeidstid(new Arbeidstid().leggeTilArbeidstaker(lagArbeidstaker(perioder)))
+                .medUttak(lagUttak(perioder));
     }
 
     public static PleiepengerSyktBarn standardYtelseMedEndring(Periode søknadsperiode, Periode endringsperiode) {
@@ -196,60 +181,60 @@ public class YtelseEksempel {
     Util
      */
 
-    public static Utenlandsopphold lagUtenlandsopphold(List<Periode> periodeList) {
+    public static Utenlandsopphold lagUtenlandsopphold(Periode... perioder) {
         Utenlandsopphold.UtenlandsoppholdPeriodeInfo utenlandsoppholdPeriodeInfo = new Utenlandsopphold
                 .UtenlandsoppholdPeriodeInfo()
                 .medLand(Landkode.FINLAND)
                 .medÅrsak(Utenlandsopphold.UtenlandsoppholdÅrsak.BARNET_INNLAGT_I_HELSEINSTITUSJON_FOR_NORSK_OFFENTLIG_REGNING);
         return new Utenlandsopphold().medPerioder(
-                lagPerioder(periodeList, utenlandsoppholdPeriodeInfo));
+                lagPerioder(perioder, utenlandsoppholdPeriodeInfo));
     }
 
-    public static Bosteder lagBosteder(List<Periode> periodeList) {
+    public static Bosteder lagBosteder(Periode... perioder) {
         Bosteder.BostedPeriodeInfo bostedPeriodeInfo = new Bosteder.BostedPeriodeInfo()
                 .medLand(Landkode.NORGE);
         return new Bosteder().medPerioder(
-                lagPerioder(periodeList, bostedPeriodeInfo));
+                lagPerioder(perioder, bostedPeriodeInfo));
     }
 
-    public static LovbestemtFerie lagLovbestemtFerie(List<Periode> periodeList) {
+    public static LovbestemtFerie lagLovbestemtFerie(Periode... perioder) {
         LovbestemtFerie.LovbestemtFeriePeriodeInfo lovbestemtFeriePeriodeInfo = new LovbestemtFerie.LovbestemtFeriePeriodeInfo();
         return new LovbestemtFerie().medPerioder(
-                lagPerioder(periodeList, lovbestemtFeriePeriodeInfo));
+                lagPerioder(perioder, lovbestemtFeriePeriodeInfo));
     }
 
-    public static Tilsynsordning lagTilsynsordning(List<Periode> periodeList) {
+    public static Tilsynsordning lagTilsynsordning(Periode... perioder) {
         TilsynPeriodeInfo tilsynPeriodeInfo = new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7).plusMinutes(30));
         return new Tilsynsordning().medPerioder(
-                lagPerioder(periodeList, tilsynPeriodeInfo));
+                lagPerioder(perioder, tilsynPeriodeInfo));
     }
 
-    public static Nattevåk lagNattevåk(List<Periode> periodeList) {
+    public static Nattevåk lagNattevåk(Periode... perioder) {
         Nattevåk.NattevåkPeriodeInfo nattevåkPeriodeInfo = new Nattevåk.NattevåkPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst());
         return new Nattevåk().medPerioder(
-                lagPerioder(periodeList, nattevåkPeriodeInfo));
+                lagPerioder(perioder, nattevåkPeriodeInfo));
     }
 
-    public static Beredskap lagBeredskap(List<Periode> periodeList) {
+    public static Beredskap lagBeredskap(Periode... perioder) {
         Beredskap.BeredskapPeriodeInfo beredskapPeriodeInfo = new Beredskap.BeredskapPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst());
         return new Beredskap().medPerioder(
-                lagPerioder(periodeList, beredskapPeriodeInfo));
+                lagPerioder(perioder, beredskapPeriodeInfo));
     }
 
-    public static Arbeidstaker lagArbeidstaker(List<Periode> periodeList) {
+    public static Arbeidstaker lagArbeidstaker(Periode... perioder) {
         ArbeidstidPeriodeInfo arbeidstidPeriodeInfo = new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30), Duration.ofHours(7).plusMinutes(30));
         var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("999999999"),
                 new ArbeidstidInfo(
-                        lagPerioder(periodeList, arbeidstidPeriodeInfo)));
+                        lagPerioder(perioder, arbeidstidPeriodeInfo)));
         return arbeidstaker;
     }
 
-    public static Uttak lagUttak(List<Periode> periodeList) {
+    public static Uttak lagUttak(Periode... perioder) {
         UttakPeriodeInfo uttakPeriodeInfo = new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30));
-        return new Uttak().medPerioder(lagPerioder(periodeList, uttakPeriodeInfo));
+        return new Uttak().medPerioder(lagPerioder(perioder, uttakPeriodeInfo));
     }
 
-    public static <T> HashMap<Periode, T> lagPerioder(List<Periode> periodeList, T periodeInfo) {
+    public static <T> HashMap<Periode, T> lagPerioder(Periode[] periodeList, T periodeInfo) {
         var resultatMap = new HashMap<Periode, T>();
         for (Periode periode : periodeList) {
             resultatMap.put(periode, periodeInfo);
