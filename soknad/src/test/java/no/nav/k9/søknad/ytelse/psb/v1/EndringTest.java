@@ -108,12 +108,9 @@ class EndringTest {
 
         var ytelse = YtelseEksempel.komplettEndringssøknad(søknadsperiodeEN, søknadsperiodeTo, søknadsperiodeTre, søknadsperiodeFire);
 
-        //TODO Ta bort når endringsperioder utregnes
-        ytelse.medEndringsperiode(gyldigIntervalForEndring);
-
         verifyIngenFeil(ytelse, gyldigIntervalForEndring);
 
-        var endringsperiode = ytelse.getEndringsperiode();
+        var endringsperiode = ytelse.getUtledetEndringsperiode();
         assertThat(endringsperiode)
                 .isNotEmpty()
                 .size().isEqualTo(4);

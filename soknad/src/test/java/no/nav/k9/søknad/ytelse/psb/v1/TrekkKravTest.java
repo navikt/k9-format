@@ -52,7 +52,7 @@ class TrekkKravTest {
         ((PleiepengerSyktBarn)søknad.getYtelse()).addTrekkKravPeriode(trekkKravPeriodeMedFeil);
 
         var feil = verifyHarFeil(søknad);
-        feilInneholder(feil, "ytelse.søknadperiode.perioder", "ugyldigPeriodeInterval");
+        feilInneholder(feil, "ytelse.trekkKravPerioder", "ugyldigPeriodeInterval");
     }
 
     @Test
@@ -77,7 +77,7 @@ class TrekkKravTest {
         ((PleiepengerSyktBarn)søknad.getYtelse()).addTrekkKravPeriode(trekkKravPerioderSomOverlapper);
 
         var feil = verifyHarFeil(søknad);
-        feilInneholder(feil, "ytelse.søknadperiode.perioder", "ugyldigPeriodeInterval");
+        feilInneholder(feil, "ytelse.trekkKravPerioder", "ugyldigPeriodeInterval");
         feilInneholder(feil, "ytelse.uttak.perioder", "ugyldigPeriodeInterval");
     }
 

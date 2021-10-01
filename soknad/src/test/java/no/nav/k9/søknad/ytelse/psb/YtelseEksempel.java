@@ -149,6 +149,7 @@ public class YtelseEksempel {
 
     public static PleiepengerSyktBarn komplettEndringssøknad(Periode... perioder) {
         return YtelseEksempel.lagEndringssøknad()
+                .medEndringsperiode(List.of(perioder))
                 .medBeredskap(lagBeredskap(perioder))
                 .medNattevåk(lagNattevåk(perioder))
                 .medTilsynsordning(lagTilsynsordning(perioder))
@@ -170,6 +171,7 @@ public class YtelseEksempel {
 
     public static void leggPåKomplettEndringsøknad(Periode endringsperiode, PleiepengerSyktBarn søknad) {
         var endringssøknad = komplettEndringssøknad(endringsperiode);
+        søknad.medEndringsperiode(endringssøknad.getEndringsperiode());
         søknad.getBeredskap().leggeTilPeriode(endringssøknad.getBeredskap().getPerioder());
         søknad.getNattevåk().leggeTilPeriode(endringssøknad.getNattevåk().getPerioder());
         søknad.getTilsynsordning().leggeTilPeriode(endringssøknad.getTilsynsordning().getPerioder());
