@@ -66,10 +66,14 @@ public class PleiepengerSyktBarnSøknadValidator extends SøknadValidator<Søkna
 
     @Override
     public List<Feil> valider(Søknad søknad) {
-        return valider(søknad, List.of());
+        return valider(søknad, List.of(), false);
+    }
+    
+    public List<Feil> valider(Søknad søknad, List<Periode> gyldigeEndringsperioder) {
+        return valider(søknad, gyldigeEndringsperioder, true);
     }
 
-    public List<Feil> valider(Søknad søknad, List<Periode> gyldigeEndringsperioder) {
+    public List<Feil> valider(Søknad søknad, List<Periode> gyldigeEndringsperioder, boolean brukValideringMedUtledetEndringsperiode) {
         var validate = VALIDATOR_FACTORY.getValidator().validate(søknad);
 
         List<Feil> feil = validate.stream()
@@ -78,7 +82,7 @@ public class PleiepengerSyktBarnSøknadValidator extends SøknadValidator<Søkna
 
         validerVersjon(søknad.getVersjon(), feil);
         validerBarnIkkeErSøker(søknad.getSøker(), søknad.getBerørtePersoner(), feil);
-        feil.addAll(new PleiepengerSyktBarnYtelseValidator().valider(søknad.getYtelse(), gyldigeEndringsperioder));
+        feil.addAll(new PleiepengerSyktBarnYtelseValidator().validerMedGyldigEndringsperodeHvisDenFinnes(søknad.getYtelse(), gyldigeEndringsperioder, brukValideringMedUtledetEndringsperiode));
 
         return feil;
     }

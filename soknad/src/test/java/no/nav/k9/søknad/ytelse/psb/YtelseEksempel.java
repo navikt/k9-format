@@ -149,6 +149,7 @@ public class YtelseEksempel {
 
     public static PleiepengerSyktBarn komplettEndringssøknad(Periode... perioder) {
         return YtelseEksempel.lagEndringssøknad()
+                .medEndringsperiode(List.of(perioder))
                 .medBeredskap(lagBeredskap(perioder))
                 .medNattevåk(lagNattevåk(perioder))
                 .medTilsynsordning(lagTilsynsordning(perioder))
