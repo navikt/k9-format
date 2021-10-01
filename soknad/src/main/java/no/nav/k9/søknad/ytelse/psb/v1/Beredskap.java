@@ -22,11 +22,12 @@ public class Beredskap {
     @JsonProperty(value="perioder", required = true)
     @Valid
     @NotNull
-    private Map<@Valid Periode, @Valid BeredskapPeriodeInfo> perioder = new TreeMap<>();
+    private Map<@NotNull Periode, @NotNull BeredskapPeriodeInfo> perioder = new TreeMap<>();
 
+    // Hvorfor er dette et map? Dette er vel egentlig en liste med perioder?
     @JsonProperty(value="perioderSomSkalSlettes")
     @Valid
-    private Map<@Valid Periode, @Valid BeredskapPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
+    private Map<@NotNull Periode, @NotNull BeredskapPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
     public Beredskap() {
     }

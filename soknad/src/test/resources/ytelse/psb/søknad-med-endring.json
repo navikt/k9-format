@@ -33,7 +33,7 @@
             "registrertIUtlandet": false
           }
         },
-        "organisasjonsnummer": "890508087",
+        "organisasjonsnummer": "890508081",
         "virksomhetNavn": "FiskerAS"
       }],
       "frilanser": {
@@ -134,7 +134,7 @@
     "uttak": {
       "perioder": {
         "2018-12-30/2019-10-20": {
-          "timerPleieAvBarnetPerDag": "PT37H30M"
+          "timerPleieAvBarnetPerDag": "PT7H30M"
         }
       },
       "perioderSomSkalSlettes": {}

@@ -13,23 +13,22 @@ import no.nav.k9.søknad.felles.type.Periode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-
 public class AnnenAktivitet {
 
-    @JsonProperty("periode")
+    @JsonProperty(value = "periode", required = true)
     @Valid
     @NotNull
     private Periode periode;
 
-    @JsonProperty(value = "annenAktivitetType")
+    @JsonProperty(value = "annenAktivitetType", required = true)
     @Valid
     @NotNull
     private AnnenAktivitetType annenAktivitetType;
 
 
     @JsonCreator
-    public AnnenAktivitet(@JsonProperty(value = "periode") @Valid @NotNull Periode periode,
-                          @JsonProperty(value = "annenAktivitetType") @Valid @NotNull AnnenAktivitetType annenAktivitetType) {
+    public AnnenAktivitet(@JsonProperty(value = "periode", required = true) @Valid @NotNull Periode periode,
+                          @JsonProperty(value = "annenAktivitetType", required = true) @Valid @NotNull AnnenAktivitetType annenAktivitetType) {
         this.periode = periode;
         this.annenAktivitetType = annenAktivitetType;
     }

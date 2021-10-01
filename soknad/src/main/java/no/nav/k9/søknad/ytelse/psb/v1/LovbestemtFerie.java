@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -17,10 +18,9 @@ import no.nav.k9.søknad.felles.type.Periode;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class LovbestemtFerie {
 
-
     @JsonProperty(value="perioder", required = true)
     @Valid
-    private Map<@Valid Periode, @Valid LovbestemtFeriePeriodeInfo> perioder = new TreeMap<>();
+    private Map<@NotNull Periode, @NotNull LovbestemtFeriePeriodeInfo> perioder = new TreeMap<>();
 
     public LovbestemtFerie() {
     }

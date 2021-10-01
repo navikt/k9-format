@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -19,12 +20,14 @@ import no.nav.k9.søknad.felles.type.Periode;
 public class Uttak {
 
     @Valid
+    @NotNull
     @JsonProperty(value = "perioder")
-    private Map<@Valid Periode, @Valid UttakPeriodeInfo> perioder = new TreeMap<>();
+    private Map<@NotNull Periode, @NotNull UttakPeriodeInfo> perioder = new TreeMap<>();
 
-    @JsonProperty(value="perioderSomSkalSlettes")
+    @JsonProperty(value = "perioderSomSkalSlettes")
+    @NotNull
     @Valid
-    private Map<@Valid Periode, @Valid UttakPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
+    private Map<@NotNull Periode, @NotNull UttakPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
     public Uttak() {
     }
@@ -34,7 +37,7 @@ public class Uttak {
     }
 
     public Uttak medPerioder(Map<Periode, UttakPeriodeInfo> perioder) {
-        this.perioder = (perioder == null ) ? new TreeMap<>() : new TreeMap<>(perioder);
+        this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
         return this;
     }
 

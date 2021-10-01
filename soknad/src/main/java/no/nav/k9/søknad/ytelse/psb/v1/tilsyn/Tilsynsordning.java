@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -19,12 +20,14 @@ import no.nav.k9.søknad.felles.type.Periode;
 public class Tilsynsordning {
 
     @JsonProperty(value="perioder", required = true)
+    @NotNull
     @Valid
-    private Map<@Valid Periode, @Valid TilsynPeriodeInfo> perioder = new TreeMap<>();
+    private Map<@NotNull Periode, @NotNull TilsynPeriodeInfo> perioder = new TreeMap<>();
 
+    // Hvorfor er dette et map? Dette er vel egentlig en liste med perioder?
     @JsonProperty(value="perioderSomSkalSlettes", required = true)
     @Valid
-    private Map<@Valid Periode, @Valid TilsynPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
+    private Map<@NotNull Periode, @NotNull TilsynPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
     public Tilsynsordning() {
     }

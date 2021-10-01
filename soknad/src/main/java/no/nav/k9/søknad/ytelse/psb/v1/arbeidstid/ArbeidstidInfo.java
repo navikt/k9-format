@@ -24,11 +24,11 @@ public class ArbeidstidInfo {
     @JsonProperty(value = "perioder", required = true)
     @Valid
     @NotNull
-    private Map<@Valid Periode, @Valid ArbeidstidPeriodeInfo> perioder;
+    private Map<@NotNull Periode, @NotNull ArbeidstidPeriodeInfo> perioder;
 
     @JsonCreator
     public ArbeidstidInfo(
-            @JsonProperty(value = "perioder", required = true) @Valid @NotNull Map<@Valid Periode, @Valid ArbeidstidPeriodeInfo> perioder) {
+            @JsonProperty(value = "perioder", required = true) @Valid @NotNull Map<@NotNull Periode, @NotNull ArbeidstidPeriodeInfo> perioder) {
         this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
     }
 
