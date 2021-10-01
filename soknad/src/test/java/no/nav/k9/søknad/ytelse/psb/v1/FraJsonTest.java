@@ -37,7 +37,7 @@ class FraJsonTest {
     @Test
     public void søknadMedEndringSkalIkkeHaFeil() {
         var søknad = SøknadJsonEksempel.søknadMedEndring();
-        verifyIngenFeil(søknad);
+        verifyIngenFeil(søknad, ((PleiepengerSyktBarn) søknad.getYtelse()).getUtledetEndringsperiode());
     }
 
 }

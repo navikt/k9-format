@@ -56,7 +56,7 @@ public class ValiderUtil {
 
     public static List<Feil> valider(Søknad søknad, List<Periode> gyldigEndringsInterval) {
         try {
-            return validatorSøknad.valider(søknad, gyldigEndringsInterval, false);
+            return validatorSøknad.valider(søknad, gyldigEndringsInterval, true);
         } catch (ValideringsFeil ex) {
             return ex.getFeil();
         }
@@ -64,8 +64,7 @@ public class ValiderUtil {
 
     public static List<Feil> valider(PleiepengerSyktBarn ytelse, List<Periode> gyldigEndringsInterval) {
         try {
-            //return validatorYtelse.valider(ytelse, gyldigEndringsInterval);
-            return validatorYtelse.valider(ytelse);
+            return validatorYtelse.valider(ytelse, gyldigEndringsInterval);
         } catch (ValideringsFeil ex) {
             return ex.getFeil();
         }

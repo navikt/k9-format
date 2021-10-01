@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import no.nav.fpsak.tidsserie.LocalDateSegment;
 import no.nav.fpsak.tidsserie.LocalDateTimeline;
 import no.nav.fpsak.tidsserie.StandardCombinators;
 import no.nav.k9.søknad.TidsserieUtils;
@@ -57,12 +58,14 @@ class PerioderMedEndringUtil {
         return listen;
     }
 
-    public static LocalDateTimeline<Boolean> tilTidsserie(List<PerioderMedEndring> listen) {
+    private static LocalDateTimeline<Boolean> tilTidsserie(List<PerioderMedEndring> listen) {
         var temp = new LocalDateTimeline<Boolean>(Collections.emptyList());
         for (PerioderMedEndring yp : listen) {
-            temp = temp.union(
-                    toLocalDateTimeline(yp.getPeriodeList()),
-                    StandardCombinators::coalesceLeftHandSide);
+            for (Periode p : yp.getPeriodeList()) {
+                temp = temp.union(
+                        new LocalDateTimeline<>(p.getFraOgMed(), p.getTilOgMed(), Boolean.TRUE),
+                        StandardCombinators::coalesceLeftHandSide);
+            }
         }
         return temp;
     }

@@ -72,15 +72,13 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         feilene.addAll(validerPerioderErLukketOgGyldig(psb.getUtenlandsopphold().getPerioder(), "utenlandsopphold.perioder"));
         
         final LocalDateTimeline<Boolean> søknadsperiodeTidslinje = lagTidslinjeOgValider(psb.getSøknadsperiodeList(), "søknadsperiode.perioder");
-        final LocalDateTimeline<Boolean> endringsperiodeTidslinje;
         final LocalDateTimeline<Boolean> intervalForEndringTidslinje;
         
         if (brukValideringMedUtledetEndringsperiode) {
-            endringsperiodeTidslinje = toLocalDateTimeline(psb.getUtledetEndringsperiode());
             final LocalDateTimeline<Boolean> gyldigEndringsperiodeTidslinje = lagTidslinjeOgValider(gyldigeEndringsperioder, "gyldigeEndringsperioder.perioder");
             intervalForEndringTidslinje = søknadsperiodeTidslinje.union(gyldigEndringsperiodeTidslinje, StandardCombinators::coalesceLeftHandSide);
         } else {
-            endringsperiodeTidslinje = lagTidslinjeOgValider(psb.getEndringsperiode(), "endringsperiode.perioder");
+            final LocalDateTimeline<Boolean> endringsperiodeTidslinje = lagTidslinjeOgValider(psb.getEndringsperiode(), "endringsperiode.perioder");
             intervalForEndringTidslinje = søknadsperiodeTidslinje.union(endringsperiodeTidslinje, StandardCombinators::coalesceLeftHandSide);
         }
 
