@@ -52,7 +52,6 @@ public class SelvstendigNæringsdrivende {
 
     /** Virsomhetsnavn - påkrevd for norske og utenlandske selskaper. */
     @JsonProperty(value = "virksomhetNavn")
-    @NotBlank(message = "Virksomhetnavn er påkrevd")
     @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message = "'${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     private final String virksomhetNavn;
 

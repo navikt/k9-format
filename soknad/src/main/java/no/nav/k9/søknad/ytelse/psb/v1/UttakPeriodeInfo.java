@@ -19,14 +19,13 @@ public class UttakPeriodeInfo {
 
     @Valid
     @NotNull
-    @DurationMin
-    @DurationMax
+    @DurationMin(hours = 0)
+    @DurationMax(hours = 7, minutes = 30)
     @JsonProperty(value = "timerPleieAvBarnetPerDag", required = true)
     private Duration timerPleieAvBarnetPerDag;
 
-    @JsonCreator
-    public UttakPeriodeInfo(
-            @JsonProperty(value = "timerPleieAvBarnetPerDag", required = true) @Valid @NotNull Duration timerPleieAvBarnetPerDag) {
+
+    public UttakPeriodeInfo(Duration timerPleieAvBarnetPerDag) {
         this.timerPleieAvBarnetPerDag = timerPleieAvBarnetPerDag;
     }
 

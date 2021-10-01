@@ -77,7 +77,7 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
                         .build()
         );
         builder.selvstendigNæringsdrivende(selvstendingeVirksomheter);
-        Assertions.assertThat(verifyHarFeil(builder)).hasSize(3);
+        Assertions.assertThat(verifyHarFeil(builder)).hasSize(2);
 
     }
 
@@ -89,7 +89,8 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
                         .organisasjonsnummer(Organisasjonsnummer.of("816338352"))
                         .periode(
                                 new Periode(LocalDate.now().minusMonths(2), LocalDate.now()),
-                                SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder().build()
+                                SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
+                                    .build()
                         ).build()
         );
         builder.selvstendigNæringsdrivende(selvstendingeVirksomheter);
