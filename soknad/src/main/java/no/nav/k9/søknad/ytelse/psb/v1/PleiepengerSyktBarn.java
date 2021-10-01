@@ -158,7 +158,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     //@JsonProperty(value = "endringsperiode")
     public List<Periode> getEndringsperiode() {
         //TODO endre til å bruke PerioderMedEndringUtil.getEndringsperiode(this)
-        return (endringsperiode == null) ? null : Collections.unmodifiableList(endringsperiode);
+        return (endringsperiode == null) ? List.of() : Collections.unmodifiableList(endringsperiode);
     }
     
     @Deprecated
