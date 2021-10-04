@@ -152,6 +152,9 @@ public class SelvstendigNæringsdrivende {
         @JsonProperty("erVarigEndring")
         private final Boolean erVarigEndring;
 
+        @JsonProperty("erNyIArbeidslivet")
+        private final Boolean erNyIArbeidslivet;
+
         @JsonProperty("endringDato")
         private final LocalDate endringDato;
 
@@ -186,6 +189,10 @@ public class SelvstendigNæringsdrivende {
             return erVarigEndring;
         }
 
+        public Boolean getErNyIArbeidslivet() {
+            return erNyIArbeidslivet;
+        }
+
         public LocalDate getEndringDato() {
             return endringDato;
         }
@@ -216,6 +223,7 @@ public class SelvstendigNæringsdrivende {
                                                       @JsonProperty("regnskapsførerNavn") String regnskapsførerNavn,
                                                       @JsonProperty("regnskapsførerTlf") String regnskapsførerTlf,
                                                       @JsonProperty("erVarigEndring") Boolean erVarigEndring,
+                                                      @JsonProperty("erNyIArbeidslivet") Boolean erNyIArbeidslivet,
                                                       @JsonProperty("endringDato") LocalDate endringDato,
                                                       @JsonProperty("endringBegrunnelse") String endringBegrunnelse,
                                                       @JsonProperty("bruttoInntekt") BigDecimal bruttoInntekt,
@@ -226,6 +234,7 @@ public class SelvstendigNæringsdrivende {
             this.regnskapsførerNavn = regnskapsførerNavn;
             this.regnskapsførerTlf = regnskapsførerTlf;
             this.erVarigEndring = erVarigEndring;
+            this.erNyIArbeidslivet = erNyIArbeidslivet;
             this.endringDato = endringDato;
             this.endringBegrunnelse = endringBegrunnelse;
             this.bruttoInntekt = bruttoInntekt;
@@ -273,6 +282,7 @@ public class SelvstendigNæringsdrivende {
             private String regnskapsførerNavn;
             private String regnskapsførerTelefon;
             private Boolean erVarigEndring;
+            private Boolean erNyIArbeidslivet;
             private LocalDate endringDato;
             private String endringBegrunnelse;
             private BigDecimal bruttoInntekt;
@@ -308,6 +318,11 @@ public class SelvstendigNæringsdrivende {
                 return this;
             }
 
+            public Builder erNyIArbeidslivet(Boolean erNyIArbeidslivet) {
+                this.erNyIArbeidslivet = erNyIArbeidslivet;
+                return this;
+            }
+
             public Builder endringBegrunnelse(String endringBegrunnelse) {
                 this.endringBegrunnelse = endringBegrunnelse;
                 return this;
@@ -339,6 +354,7 @@ public class SelvstendigNæringsdrivende {
                     regnskapsførerNavn,
                     regnskapsførerTelefon,
                     erVarigEndring,
+                    erNyIArbeidslivet,
                     endringDato,
                     endringBegrunnelse,
                     bruttoInntekt,
