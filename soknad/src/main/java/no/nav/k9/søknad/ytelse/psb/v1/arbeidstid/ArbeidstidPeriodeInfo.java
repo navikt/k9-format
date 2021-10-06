@@ -3,8 +3,10 @@ package no.nav.k9.søknad.ytelse.psb.v1.arbeidstid;
 import java.time.Duration;
 
 import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.time.DurationMax;
 import org.hibernate.validator.constraints.time.DurationMin;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -19,12 +21,14 @@ public class ArbeidstidPeriodeInfo {
     @Valid
     @NotNull
     @DurationMin
+    @DurationMax(hours = 24)
     @JsonProperty(value = "jobberNormaltTimerPerDag", required = true)
     private Duration jobberNormaltTimerPerDag;
 
     @Valid
     @NotNull
     @DurationMin
+    @DurationMax(hours = 24)
     @JsonProperty(value = "faktiskArbeidTimerPerDag", required = true)
     private Duration faktiskArbeidTimerPerDag;
 
@@ -55,5 +59,13 @@ public class ArbeidstidPeriodeInfo {
     public ArbeidstidPeriodeInfo medJobberNormaltTimerPerDag(Duration jobberNormaltTimerPerDag) {
         this.jobberNormaltTimerPerDag = jobberNormaltTimerPerDag;
         return this;
+    }
+
+    @AssertTrue(message="[ugyldigArbeidstid] Faktisk arbeid er større enn jobber normalt")
+    private boolean isValid() {
+        if (jobberNormaltTimerPerDag == null || faktiskArbeidTimerPerDag == null) {
+            return true;
+        }
+        return jobberNormaltTimerPerDag.compareTo(faktiskArbeidTimerPerDag) >= 0;
     }
 }

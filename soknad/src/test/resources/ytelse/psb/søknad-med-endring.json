@@ -108,8 +108,8 @@
         "arbeidstidInfo": {
           "perioder": {
             "2018-12-30/2019-10-20": {
-              "jobberNormaltTimerPerDag": "PT7H28M",
-              "faktiskArbeidTimerPerDag": "PT37H30M"
+              "jobberNormaltTimerPerDag": "PT7H30M",
+              "faktiskArbeidTimerPerDag": "PT3H"
             }
           }
         }
@@ -117,16 +117,16 @@
       "frilanserArbeidstidInfo": {
         "perioder": {
           "2018-12-30/2019-10-20": {
-            "jobberNormaltTimerPerDag": "PT5H",
-            "faktiskArbeidTimerPerDag": "PT6H"
+            "jobberNormaltTimerPerDag": "PT6H",
+            "faktiskArbeidTimerPerDag": "PT5H"
           }
         }
       },
       "selvstendigNæringsdrivendeArbeidstidInfo": {
         "perioder": {
           "2018-12-30/2019-10-20": {
-            "jobberNormaltTimerPerDag": "PT4H",
-            "faktiskArbeidTimerPerDag": "PT7H"
+            "jobberNormaltTimerPerDag": "PT7H",
+            "faktiskArbeidTimerPerDag": "PT4H"
           }
         }
       }

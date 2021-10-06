@@ -225,10 +225,13 @@ public class YtelseEksempel {
 
     public static Arbeidstaker lagArbeidstaker(Periode... perioder) {
         ArbeidstidPeriodeInfo arbeidstidPeriodeInfo = new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30), Duration.ofHours(7).plusMinutes(30));
-        var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("999999999"),
+        return lagArbeidstaker(arbeidstidPeriodeInfo, perioder);
+    }
+
+    public static Arbeidstaker lagArbeidstaker(ArbeidstidPeriodeInfo arbeidstidPeriodeInfo, Periode... perioder) {
+        return new Arbeidstaker(null, Organisasjonsnummer.of("999999999"),
                 new ArbeidstidInfo(
                         lagPerioder(perioder, arbeidstidPeriodeInfo)));
-        return arbeidstaker;
     }
 
     public static Uttak lagUttak(Periode... perioder) {

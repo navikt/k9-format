@@ -23,6 +23,7 @@ import no.nav.k9.søknad.felles.type.VirksomhetType;
 import no.nav.k9.søknad.ytelse.psb.SøknadEksempel;
 import no.nav.k9.søknad.ytelse.psb.YtelseEksempel;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo;
@@ -215,7 +216,8 @@ public class YtelseTest {
 
         var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), arbeidstidInfo);
         ((PleiepengerSyktBarn) søknad.getYtelse()).getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
-        verifyHarFeil(søknad);
+        var feil = verifyHarFeil(søknad);
+        feilInneholder(feil, "påkrevd");
     }
 
     @Test
@@ -275,6 +277,19 @@ public class YtelseTest {
         ((PleiepengerSyktBarn) søknad.getYtelse()).getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
         var feil = verifyHarFeil(søknad);
         feilInneholder(feil, "ikkeEntydigId");
+    }
+
+    @Test
+    public void søknadMedFaktisArbeidStørreEnnFaktisArbeid() {
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
+        var søknad = SøknadEksempel.søknad(YtelseEksempel.komplettYtelse(søknadsperiode));
+        var jobberNormalt = Duration.ofHours(3);
+        var jobberFaktisk = Duration.ofHours(7);
+        var arbeidstaker = YtelseEksempel.lagArbeidstaker(new ArbeidstidPeriodeInfo(jobberNormalt, jobberFaktisk), søknadsperiode);
+
+        ((PleiepengerSyktBarn) søknad.getYtelse()).medArbeidstid(new Arbeidstid().medArbeidstaker(List.of(arbeidstaker)));
+        var feil = verifyHarFeil(søknad);
+        feilInneholder(feil, "ugyldigArbeidstid");
     }
 
 }
