@@ -113,6 +113,7 @@ class OmsorgspengerUtbetalingValidatorTest {
                                     FraværÅrsak.ORDINÆRT_FRAVÆR,
                                     null,
                                     List.of(AktivitetFravær.SELVSTENDIG_VIRKSOMHET),
+                                    null,
                                     null
                             )
                     ),
