@@ -64,6 +64,10 @@ public class OmsorgspengerFraværskorrigeringInntektsmeldingValidator extends Yt
                 feil.add(new Feil("fraværsperioder[" + index + "]", "nullingPeriodeOversteget", "Nulling av periode kan ikke ha lenger varighet enn én dag"));
             }
 
+            if (fraværPeriode.getDuration() != null && fraværPeriode.getDuration().compareTo(Duration.parse("PT7H30M")) == 1) {
+                feil.add(new Feil("fraværsperioder[" + index + "]", "varighetOversteget", "Delvis fravær kan ikke overstige 7 timer og 30 min"));
+            }
+
             index++;
         }
         return feil;

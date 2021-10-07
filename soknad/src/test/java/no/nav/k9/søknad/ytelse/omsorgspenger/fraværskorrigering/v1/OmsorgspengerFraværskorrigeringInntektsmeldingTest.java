@@ -50,6 +50,19 @@ class OmsorgspengerFraværskorrigeringInntektsmeldingTest {
     }
 
     @Test
+    public void skal_returnere_feil_for_delvis_fravær_som_overstiger_7h_30m() {
+        var fraværPeriode = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-01"));
+        var ytelse = new OmsorgspengerFraværskorrigeringInntektsmelding(List.of(
+                lagFraværsperiode(orgnr1, fraværPeriode, Duration.parse("PT7H31M"))
+        ));
+
+        var feil = validatorSøknad.valider(ytelse);;
+
+        assertThat(feil).hasSize(1);
+        feilInneholder(feil, "fraværsperioder[0]", "varighetOversteget");
+    }
+
+    @Test
     public void skal_returnere_feil_for_overlappende_perioder() {
         var fraværPeriode1 = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
         var fraværPeriode2 = new Periode(LocalDate.parse("2021-09-02"), LocalDate.parse("2021-09-03"));
