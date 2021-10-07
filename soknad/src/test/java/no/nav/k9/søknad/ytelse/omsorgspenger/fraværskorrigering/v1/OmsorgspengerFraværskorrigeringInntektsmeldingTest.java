@@ -37,16 +37,16 @@ class OmsorgspengerFraværskorrigeringInntektsmeldingTest {
     }
 
     @Test
-    public void skal_returnere_feil_for_periode_over_7_dager() {
-        var fraværPeriode = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-09"));
+    public void skal_returnere_feil_for_nulling_som_overstiger_enkeltdag() {
+        var fraværPeriode = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
         var ytelse = new OmsorgspengerFraværskorrigeringInntektsmelding(List.of(
-                lagFraværsperiode(orgnr1, fraværPeriode, null)
+                lagFraværsperiode(orgnr1, fraværPeriode, Duration.ofHours(0))
         ));
 
         var feil = validatorSøknad.valider(ytelse);;
 
         assertThat(feil).hasSize(1);
-        feilInneholder(feil, "fraværsperioder[0]", "langAktivitetPeriode");
+        feilInneholder(feil, "fraværsperioder[0]", "nullingPeriodeOversteget");
     }
 
     @Test

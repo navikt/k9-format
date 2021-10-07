@@ -1,6 +1,6 @@
 package no.nav.k9.søknad.ytelse.omsorgspenger.fraværskorrigering.v1;
 
-import java.time.Period;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,8 +60,8 @@ public class OmsorgspengerFraværskorrigeringInntektsmeldingValidator extends Yt
                 feil.add(new Feil("fraværsperioder[" + index + "]", "ikkeGyldigAktivitet", "Aktivitet må være av type Arbeidstaker"));
             }
 
-            if (Period.between(fraværPeriode.getPeriode().getFraOgMed(), fraværPeriode.getPeriode().getTilOgMed()).getDays() > 7) {
-                feil.add(new Feil("fraværsperioder[" + index + "]", "langAktivitetPeriode", "Aktivitetsperiode kan ikke være lenger enn 7 dager"));
+            if (Duration.ZERO.equals(fraværPeriode.getDuration()) && !fraværPeriode.getPeriode().getFraOgMed().equals(fraværPeriode.getPeriode().getTilOgMed())) {
+                feil.add(new Feil("fraværsperioder[" + index + "]", "nullingPeriodeOversteget", "Nulling av periode kan ikke ha lenger varighet enn én dag"));
             }
 
             index++;
