@@ -21,14 +21,15 @@ class OmsorgspengerFraværskorrigeringInntektsmeldingTest {
 
     private Organisasjonsnummer orgnr1 = Organisasjonsnummer.of("999999999");
     private Organisasjonsnummer orgnr2 = Organisasjonsnummer.of("816338352");
+    private String arbforholdId1 = "123";
 
     @Test
     public void skal_returnere_ingen_feil_for_komplett_søknad() {
         var fulltFraværPeriode = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
         var delvisFraværPeriode = new Periode(LocalDate.parse("2021-09-03"), LocalDate.parse("2021-09-04"));
         var ytelse = new OmsorgspengerFraværskorrigeringInntektsmelding(List.of(
-                lagFraværsperiode(orgnr1, fulltFraværPeriode, null),
-                lagFraværsperiode(orgnr1, delvisFraværPeriode, Duration.ofHours(4)))
+                lagFraværsperiode(orgnr1, arbforholdId1, fulltFraværPeriode, null),
+                lagFraværsperiode(orgnr1, arbforholdId1, delvisFraværPeriode, Duration.ofHours(4)))
         );
 
         var feil = validatorSøknad.valider(ytelse);;
@@ -40,7 +41,7 @@ class OmsorgspengerFraværskorrigeringInntektsmeldingTest {
     public void skal_returnere_feil_for_nulling_som_overstiger_enkeltdag() {
         var fraværPeriode = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
         var ytelse = new OmsorgspengerFraværskorrigeringInntektsmelding(List.of(
-                lagFraværsperiode(orgnr1, fraværPeriode, Duration.ofHours(0))
+                lagFraværsperiode(orgnr1, arbforholdId1, fraværPeriode, Duration.ofHours(0))
         ));
 
         var feil = validatorSøknad.valider(ytelse);;
@@ -53,7 +54,7 @@ class OmsorgspengerFraværskorrigeringInntektsmeldingTest {
     public void skal_returnere_feil_for_delvis_fravær_som_overstiger_7h_30m() {
         var fraværPeriode = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-01"));
         var ytelse = new OmsorgspengerFraværskorrigeringInntektsmelding(List.of(
-                lagFraværsperiode(orgnr1, fraværPeriode, Duration.parse("PT7H31M"))
+                lagFraværsperiode(orgnr1, arbforholdId1, fraværPeriode, Duration.parse("PT7H31M"))
         ));
 
         var feil = validatorSøknad.valider(ytelse);;
@@ -67,8 +68,8 @@ class OmsorgspengerFraværskorrigeringInntektsmeldingTest {
         var fraværPeriode1 = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
         var fraværPeriode2 = new Periode(LocalDate.parse("2021-09-02"), LocalDate.parse("2021-09-03"));
         var ytelse = new OmsorgspengerFraværskorrigeringInntektsmelding(List.of(
-                lagFraværsperiode(orgnr1, fraværPeriode1, null),
-                lagFraværsperiode(orgnr1, fraværPeriode2, null)
+                lagFraværsperiode(orgnr1, arbforholdId1, fraværPeriode1, null),
+                lagFraværsperiode(orgnr1, arbforholdId1, fraværPeriode2, null)
         ));
 
         var feil = validatorSøknad.valider(ytelse);;
@@ -82,8 +83,8 @@ class OmsorgspengerFraværskorrigeringInntektsmeldingTest {
         var fraværPeriode1 = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
         var fraværPeriode2 = new Periode(LocalDate.parse("2021-09-03"), LocalDate.parse("2021-09-04"));
         var ytelse = new OmsorgspengerFraværskorrigeringInntektsmelding(List.of(
-                lagFraværsperiode(orgnr1, fraværPeriode1, null),
-                lagFraværsperiode(orgnr2, fraværPeriode2, null)
+                lagFraværsperiode(orgnr1, arbforholdId1, fraværPeriode1, null),
+                lagFraværsperiode(orgnr2, arbforholdId1, fraværPeriode2, null)
         ));
 
         var feil = validatorSøknad.valider(ytelse);;
@@ -92,14 +93,30 @@ class OmsorgspengerFraværskorrigeringInntektsmeldingTest {
         feilInneholder(feil, "fraværsperioder[1]", "ikkeUniktOrgNr");
     }
 
-    private FraværPeriode lagFraværsperiode(Organisasjonsnummer organisasjonsnummer, Periode søknadsperiode, Duration duration) {
+    @Test
+    public void skal_returnere_feil_for_flere_arbeidsforhold_id() {
+        var fraværPeriode1 = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
+        var fraværPeriode2 = new Periode(LocalDate.parse("2021-09-03"), LocalDate.parse("2021-09-04"));
+        var ytelse = new OmsorgspengerFraværskorrigeringInntektsmelding(List.of(
+                lagFraværsperiode(orgnr1, arbforholdId1, fraværPeriode1, null),
+                lagFraværsperiode(orgnr1, null, fraværPeriode2, null)
+        ));
+
+        var feil = validatorSøknad.valider(ytelse);;
+
+        assertThat(feil).hasSize(1);
+        feilInneholder(feil, "fraværsperioder[1]", "ikkeUnikArbeidsforholdId");
+    }
+
+    private FraværPeriode lagFraværsperiode(Organisasjonsnummer organisasjonsnummer, String arbeidsforholdId, Periode søknadsperiode, Duration duration) {
         return new FraværPeriode(
                 søknadsperiode,
                 duration,
                 FraværÅrsak.ORDINÆRT_FRAVÆR,
                 null,
                 List.of(AktivitetFravær.ARBEIDSTAKER),
-                organisasjonsnummer
+                organisasjonsnummer,
+                arbeidsforholdId
         );
     }
 

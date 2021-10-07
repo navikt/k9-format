@@ -3,6 +3,7 @@ package no.nav.k9.søknad.ytelse.omsorgspenger.fraværskorrigering.v1;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import no.nav.k9.søknad.PeriodeValidator;
@@ -39,18 +40,22 @@ public class OmsorgspengerFraværskorrigeringInntektsmeldingValidator extends Yt
         var fraværsperioder = ytelse.getFraværsperioder();
         var index = 0;
         Organisasjonsnummer uniktOrgnr = null;
+        String unikArbeidsforholdId = null;
         List<Feil> feil = new ArrayList<>();
 
         for (FraværPeriode fraværPeriode : fraværsperioder) {
-            Organisasjonsnummer orgNr = fraværPeriode.getArbeidsgiverOrgNr();
-            if (orgNr == null) {
+            if (index == 0) {
+                // Initier verdier for arbeidsforhold som skal være konsistente for alle fraværsperioder
+                uniktOrgnr = fraværPeriode.getArbeidsgiverOrgNr();
+                unikArbeidsforholdId = fraværPeriode.getArbeidsforholdId();
+            }
+            if (fraværPeriode.getArbeidsgiverOrgNr() == null) {
                 feil.add(new Feil("fraværsperioder[" + index + "]", "ikkeSpesifisertOrgNr", "Må oppgi orgnr for aktivitet"));
-            } else {
-                if (uniktOrgnr == null) {
-                    uniktOrgnr = orgNr;
-                } else if(!uniktOrgnr.equals(orgNr)) {
-                    feil.add(new Feil("fraværsperioder[" + index + "]", "ikkeUniktOrgNr", "Alle aktiviteter må ha samme orgnr"));
-                }
+            } else if (!Objects.equals(fraværPeriode.getArbeidsgiverOrgNr(), uniktOrgnr)) {
+                feil.add(new Feil("fraværsperioder[" + index + "]", "ikkeUniktOrgNr", "Alle aktiviteter må ha samme orgnr"));
+            }
+            if (!Objects.equals(fraværPeriode.getArbeidsforholdId(), unikArbeidsforholdId)) {
+                feil.add(new Feil("fraværsperioder[" + index + "]", "ikkeUnikArbeidsforholdId", "Alle aktiviteter må ha samme orgnr"));
             }
 
             var aktiviteterFravær = fraværPeriode.getAktivitetFravær();
