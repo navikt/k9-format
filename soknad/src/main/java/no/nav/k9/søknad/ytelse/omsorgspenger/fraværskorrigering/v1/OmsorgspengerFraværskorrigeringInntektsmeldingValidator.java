@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import no.nav.k9.søknad.PeriodeValidator;
@@ -40,7 +41,7 @@ public class OmsorgspengerFraværskorrigeringInntektsmeldingValidator extends Yt
         var fraværsperioder = ytelse.getFraværsperioder();
         var index = 0;
         Organisasjonsnummer uniktOrgnr = null;
-        String unikArbeidsforholdId = null;
+        UUID unikArbeidsforholdId = null;
         List<Feil> feil = new ArrayList<>();
 
         for (FraværPeriode fraværPeriode : fraværsperioder) {

@@ -3,6 +3,7 @@ package no.nav.k9.søknad.felles.fravær;
 import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -44,9 +45,9 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
     @Valid
     private Organisasjonsnummer arbeidsgiverOrgNr;
 
-    @JsonProperty(value = "arbeidsforholdId")
     @Valid
-    private String arbeidsforholdId;
+    @JsonProperty(value = "internArbeidsforholdId")
+    private UUID internArbeidsforholdId;
 
     @JsonCreator
     public FraværPeriode(
@@ -56,14 +57,14 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
             @JsonProperty("søknadÅrsak") SøknadÅrsak søknadÅrsak,
             @JsonProperty("aktivitetFravær") List<AktivitetFravær> aktivitetFravær,
             @JsonProperty("organisasjonsnummer") Organisasjonsnummer arbeidsgiverOrgNr,
-            @JsonProperty("arbeidsforholdId") String arbeidsforholdId) {
+            @JsonProperty("internArbeidsforholdId") @Valid UUID internArbeidsforholdId) {
         this.periode = periode;
         this.duration = duration;
         this.årsak = årsak;
         this.søknadÅrsak = søknadÅrsak;
         this.aktivitetFravær = aktivitetFravær.stream().sorted().collect(Collectors.toList()); //sorterer for å få enklere equals og hashcode
         this.arbeidsgiverOrgNr = arbeidsgiverOrgNr;
-        this.arbeidsforholdId = arbeidsforholdId;
+        this.internArbeidsforholdId = internArbeidsforholdId;
     }
 
     public Periode getPeriode() {
@@ -90,8 +91,8 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
         return arbeidsgiverOrgNr;
     }
 
-    public String getArbeidsforholdId() {
-        return arbeidsforholdId;
+    public UUID getArbeidsforholdId() {
+        return internArbeidsforholdId;
     }
 
     @Override
@@ -104,12 +105,12 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
                 Objects.equals(årsak, that.årsak) &&
                 Objects.equals(aktivitetFravær, that.aktivitetFravær) &&
                 Objects.equals(arbeidsgiverOrgNr, that.arbeidsgiverOrgNr) &&
-                Objects.equals(aktivitetFravær, that.arbeidsforholdId);
+                Objects.equals(internArbeidsforholdId, that.internArbeidsforholdId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(periode, duration, årsak, aktivitetFravær, arbeidsgiverOrgNr, arbeidsforholdId);
+        return Objects.hash(periode, duration, årsak, aktivitetFravær, arbeidsgiverOrgNr, internArbeidsforholdId);
     }
 
     @Override
@@ -126,7 +127,7 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
                 ", søknadÅrsak=" + søknadÅrsak +
                 ", fraværFraAktivitet=" + aktivitetFravær +
                 (arbeidsgiverOrgNr != null ? ", arbeidsgiverOrgNr=MASKERT" : "") +
-                (arbeidsforholdId != null ? ", arbeidsforholdId=MASKERT" : "") +
+                (internArbeidsforholdId != null ? ", internArbeidsforholdId=MASKERT" : "") +
                 '}';
     }
 
