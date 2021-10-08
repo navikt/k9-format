@@ -211,13 +211,23 @@ public class YtelseTest {
     public void søknadMedNullJobberNormaltTimerPerDag() {
         var søknad = SøknadEksempel.søknad(YtelseEksempel.komplettYtelseMedDelperioder());
         var søknadsperiode = søknad.getYtelse().getSøknadsperiode();
-        var arbeidstidInfo = new ArbeidstidInfo(
-                Map.of(søknadsperiode, new ArbeidstidPeriodeInfo(null, Duration.ofHours(7).plusMinutes(30))));
 
-        var arbeidstaker = new Arbeidstaker(null, Organisasjonsnummer.of("88888888"), arbeidstidInfo);
+        var arbeidstaker = YtelseEksempel.lagArbeidstaker(new ArbeidstidPeriodeInfo(null, Duration.ofHours(7).plusMinutes(30)), søknadsperiode);
         ((PleiepengerSyktBarn) søknad.getYtelse()).getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
         var feil = verifyHarFeil(søknad);
-        feilInneholder(feil, "påkrevd");
+        feilInneholder(feil, "ytelse.arbeidstid.arbeidstakerList[1].arbeidstidInfo.perioder[" + søknadsperiode + "].jobberNormaltTimerPerDag", "påkrevd");
+    }
+
+    @Test
+    public void invertertPeriodeForArbeidstakerPeriode() {
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
+        var søknad = SøknadEksempel.søknad(YtelseEksempel.komplettYtelse(søknadsperiode));
+        var arbeidstidperiode = new Periode(LocalDate.now().plusDays(2), LocalDate.now().minusDays(2));
+        var arbeidstaker = YtelseEksempel.lagArbeidstaker(arbeidstidperiode);
+        ((PleiepengerSyktBarn) søknad.getYtelse()).medArbeidstid(new Arbeidstid().medArbeidstaker(List.of(arbeidstaker)));
+
+        var feil = verifyHarFeil(søknad);
+        feilInneholder(feil, "ytelse.arbeidstid.arbeidstakerList[0].perioder[" + arbeidstidperiode + "]", "ugyldigPeriode");
     }
 
     @Test

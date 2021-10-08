@@ -81,17 +81,20 @@ class TrekkKravTest {
         feilInneholder(feil, "ytelse.uttak.perioder", "ugyldigPeriodeInterval");
     }
 
-    @Disabled
     @Test
     public void endringssøknadMedTrekkKravPerioderOverlapperGirFeil() {
         var endringsperiode = new Periode(LocalDate.now(), LocalDate.now().plusDays(30));
         var trekkKravPeriode = new Periode(LocalDate.now().plusDays(5), LocalDate.now().plusDays(20));
 
         var søknad = SøknadEksempel.søknad(YtelseEksempel.komplettEndringssøknad(endringsperiode));
-        ((PleiepengerSyktBarn) søknad.getYtelse()).medEndringsperiode(endringsperiode);
+        ((PleiepengerSyktBarn) søknad.getYtelse()).addTrekkKravPeriode(trekkKravPeriode);
 
-        var feil = verifyHarFeil(søknad);
-        feilInneholder(feil, "", "");
+        var feil = verifyHarFeil(søknad, List.of(endringsperiode));
+        feilInneholder(feil, "ytelse.beredskap.perioder", "ugyldigPeriodeInterval");
+        feilInneholder(feil, "ytelse.nattevåk.perioder", "ugyldigPeriodeInterval");
+        feilInneholder(feil, "ytelse.tilsynsordning.perioder", "ugyldigPeriodeInterval");
+        feilInneholder(feil, "ytelse.uttak.perioder", "ugyldigPeriodeInterval");
+        feilInneholder(feil, "ytelse.arbeidstid.arbeidstakerList[0].perioder", "ugyldigPeriodeInterval");
     }
 
 }

@@ -86,7 +86,7 @@ class EndringTest {
         TestUtils.feilInneholder(feil, "ytelse.nattevåk.perioder", "ugyldigPeriode");
         TestUtils.feilInneholder(feil, "ytelse.tilsynsordning.perioder", "ugyldigPeriode");
         TestUtils.feilInneholder(feil, "ytelse.uttak.perioder", "ugyldigPeriode");
-        TestUtils.feilInneholder(feil, "ytelse.arbeidstid.arbeidstaker[1].perioder", "ugyldigPeriode");
+        TestUtils.feilInneholder(feil, "ytelse.arbeidstid.arbeidstakerList[1].perioder", "ugyldigPeriode");
     }
 
     @Test

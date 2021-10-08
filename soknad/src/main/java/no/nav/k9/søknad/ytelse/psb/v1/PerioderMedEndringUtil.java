@@ -43,7 +43,7 @@ class PerioderMedEndringUtil {
         if (arbeidstid.getArbeidstakerList() != null && !arbeidstid.getArbeidstakerList().isEmpty()) {
             int i = 0;
             for (var at : arbeidstid.getArbeidstakerList()) {
-                listen.add(new PerioderMedEndring().medPerioder("arbeidstid.arbeidstaker[" + i + "]", at.getArbeidstidInfo().getPerioder()));
+                listen.add(new PerioderMedEndring().medPerioder("arbeidstid.arbeidstakerList[" + i + "]", at.getArbeidstidInfo().getPerioder()));
                 i++;
             }
         }

@@ -15,7 +15,6 @@ import no.nav.k9.søknad.ytelse.psb.SøknadJsonEksempel;
 
 public class UtenPeriodisertDataTest {
 
-    @Disabled("Slå på når endringsperioder funker")
     @Test
     public void søknad_uten_periodisert_data() {
         var validator = new PleiepengerSyktBarnSøknadValidator();
@@ -28,6 +27,6 @@ public class UtenPeriodisertDataTest {
 
         // K9-Sak på sin side validerer uten å bruke gyldig endringsperiode
         var feil = verifyHarFeil(søknad);
-        feilInneholder(feil, new Feil("søknadsperiode/gyldigeEndringsperioder", "missingArgument", "Mangler søknadsperiode eller gyldigeEndringsperioder."));
+        feilInneholder(feil, new Feil("ytelse.søknadsperiode", "missingArgument", "Mangler søknadsperiode eller gyldigeEndringsperioder."));
     }
 }
