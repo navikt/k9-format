@@ -175,6 +175,7 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         }
     }
 
+    //TODO skrive om sånn at det ikke trengs en metode for list og en annen for map
     private LocalDateTimeline<Boolean> lagTidslinjeOgValiderForYtelseperioder(List<Periode> periodeList, String felt) throws ValideringsAvbrytendeFeilException {
         var feil = validerPerioderErLukketOgGyldigForYtelseperioder(periodeList, felt);
         if (!feil.isEmpty()) {
