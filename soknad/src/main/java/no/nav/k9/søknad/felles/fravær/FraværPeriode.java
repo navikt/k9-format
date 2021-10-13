@@ -6,7 +6,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -27,7 +26,7 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
     @JsonProperty("duration")
     private final Duration duration;
 
-    @NotNull
+    @Valid
     @JsonProperty(value = "årsak", required = true)
     private final FraværÅrsak årsak;
 
@@ -35,7 +34,7 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
     @JsonProperty(value = "søknadÅrsak")
     private SøknadÅrsak søknadÅrsak;
 
-    @NotNull
+    @Valid
     @Size(min = 1, max = 2)
     @JsonProperty(value = "aktivitetFravær", required = true)
     private final List<AktivitetFravær> aktivitetFravær;
