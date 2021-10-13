@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -21,6 +22,7 @@ import no.nav.k9.søknad.felles.type.Periode;
 public class FraværPeriode implements Comparable<FraværPeriode> {
 
     @Valid
+    @NotNull
     @JsonProperty("periode")
     private final Periode periode;
     @JsonProperty("duration")
@@ -34,8 +36,9 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
     @JsonProperty(value = "søknadÅrsak")
     private SøknadÅrsak søknadÅrsak;
 
+    //TODO konverter fra liste til enkeltelement
     @Valid
-    @Size(min = 1, max = 2)
+    @Size(min = 1, max = 1)
     @JsonProperty(value = "aktivitetFravær", required = true)
     private final List<AktivitetFravær> aktivitetFravær;
 
@@ -102,13 +105,14 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
                 Objects.equals(duration, that.duration) &&
                 Objects.equals(årsak, that.årsak) &&
                 Objects.equals(aktivitetFravær, that.aktivitetFravær) &&
+                Objects.equals(søknadÅrsak, that.søknadÅrsak) &&
                 Objects.equals(arbeidsgiverOrgNr, that.arbeidsgiverOrgNr) &&
-                Objects.equals(aktivitetFravær, that.arbeidsforholdId);
+                Objects.equals(arbeidsforholdId, that.arbeidsforholdId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(periode, duration, årsak, aktivitetFravær, arbeidsgiverOrgNr, arbeidsforholdId);
+        return Objects.hash(periode, duration, årsak, aktivitetFravær, søknadÅrsak, arbeidsgiverOrgNr, arbeidsforholdId);
     }
 
     @Override
