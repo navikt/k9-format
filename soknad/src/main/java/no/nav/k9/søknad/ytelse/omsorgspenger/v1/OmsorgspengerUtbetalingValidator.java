@@ -226,8 +226,8 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
             if (fraværPeriode.getÅrsak() == null) {
                 feil.add(new Feil("fraværsperioder[" + index + "]", "påkrevd", "Fraværsårsak må være satt"));
             }
-            if (fraværPeriode.getSøknadÅrsak() == null) {
-                feil.add(new Feil("fraværsperioder[" + index + "]", "påkrevd", "Søknadårsak må være satt"));
+            if (fraværPeriode.getSøknadÅrsak() == null && fraværPeriode.getAktivitetFravær().contains(AktivitetFravær.ARBEIDSTAKER)) {
+                feil.add(new Feil("fraværsperioder[" + index + "]", "påkrevd", "Søknadårsak må være satt for arbeidstaker"));
             }
             index++;
         }
