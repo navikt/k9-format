@@ -15,6 +15,7 @@ import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerAleneO
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerKroniskSyktBarn;
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerMidlertidigAlene;
 import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetaling;
+import no.nav.k9.søknad.ytelse.pls.v1.PleipengerLivetsSluttfase;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
 
 @Valid
@@ -25,6 +26,7 @@ import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
         @JsonSubTypes.Type(name = Ytelse.OMSORGSPENGER_UTVIDETRETT_MIDLERTIDIG_ALENE, value = OmsorgspengerMidlertidigAlene.class),
         @JsonSubTypes.Type(name = Ytelse.OMSORGSPENGER_UTVIDETRETT_ALENE_OMSORG, value = OmsorgspengerAleneOmsorg.class),
         @JsonSubTypes.Type(name = Ytelse.PLEIEPENGER_SYKT_BARN, value = PleiepengerSyktBarn.class),
+        @JsonSubTypes.Type(name = Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE, value = PleipengerLivetsSluttfase.class),
 })
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public interface Ytelse {
