@@ -47,6 +47,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     @JsonProperty(value = "endringsperiode", required = true)
     private List<Periode> endringsperiode = new ArrayList<>();
 
+    @Deprecated
     @Valid
     @JsonProperty(value = "trekkKravPerioder", required = true)
     private List<Periode> trekkKravPerioder = new ArrayList<>();

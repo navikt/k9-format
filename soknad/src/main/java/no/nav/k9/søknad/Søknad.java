@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
+import no.nav.k9.søknad.felles.type.BegrunnelseForInnsending;
 import no.nav.k9.søknad.felles.type.Journalpost;
 import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.felles.type.Språk;
@@ -60,6 +61,10 @@ public class Søknad implements Innsending {
     @Size(max=1000)
     @JsonProperty(value = "journalposter")
     private List<Journalpost> journalposter = new ArrayList<>();
+
+    @Valid
+    @JsonProperty(required = false)
+    BegrunnelseForInnsending begrunnelseForInnsending;
 
     @JsonManagedReference
     @Valid
@@ -125,6 +130,10 @@ public class Søknad implements Innsending {
         this.mottattDato = mottattDato;
     }
 
+    public BegrunnelseForInnsending getBegrunnelseForInnsending() {
+        return begrunnelseForInnsending;
+    }
+
     public Søknad medMottattDato(ZonedDateTime mottattDato) {
         this.mottattDato = mottattDato;
         return this;
@@ -162,6 +171,11 @@ public class Søknad implements Innsending {
 
     public Søknad medYtelse(Ytelse ytelse) {
         this.ytelse = ytelse;
+        return this;
+    }
+
+    public Søknad medBegrunnelseForInnsending(BegrunnelseForInnsending begrunnelseForInnsending) {
+        this.begrunnelseForInnsending = Objects.requireNonNull(begrunnelseForInnsending);
         return this;
     }
 
