@@ -21,6 +21,10 @@ public class Journalpost {
     @Valid
     private Boolean inneholderInfomasjonSomIkkeKanPunsjes;
 
+    @JsonProperty(value = "grunnForFjerningAvSøknadsperiode")
+    @Valid
+    private String grunnForFjerningAvSøknadsperiode;
+
     @JsonProperty(value = "inneholderMedisinskeOpplysninger")
     @Valid
     private Boolean inneholderMedisinskeOpplysninger;
@@ -40,6 +44,15 @@ public class Journalpost {
 
     public Journalpost medInfomasjonSomIkkeKanPunsjes(Boolean søknadenInneholderInfomasjonSomIkkeKanPunsjes) {
         this.inneholderInfomasjonSomIkkeKanPunsjes = søknadenInneholderInfomasjonSomIkkeKanPunsjes;
+        return this;
+    }
+
+    public String getGrunnForFjerningAvSøknadsperiode() {
+        return grunnForFjerningAvSøknadsperiode;
+    }
+
+    public Journalpost medGrunnForFjerningAvSøknadsperiode(String grunnForFjerningAvSøknadsperiode) {
+        this.grunnForFjerningAvSøknadsperiode = grunnForFjerningAvSøknadsperiode;
         return this;
     }
 
