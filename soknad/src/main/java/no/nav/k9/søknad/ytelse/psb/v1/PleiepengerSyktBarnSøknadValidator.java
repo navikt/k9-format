@@ -1,6 +1,7 @@
 package no.nav.k9.søknad.ytelse.psb.v1;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -80,7 +81,8 @@ public class PleiepengerSyktBarnSøknadValidator extends SøknadValidator<Søkna
                 .map(this::toFeil)
                 .collect(Collectors.toList());
 
-        validerInneholderBegrunnelseForInnsending(søknad, feil);
+        PleiepengerSyktBarn ytelse = (PleiepengerSyktBarn) søknad.getYtelse();
+        validerInneholderBegrunnelseForInnsending(søknad, ytelse, feil);
 
         validerVersjon(søknad.getVersjon(), feil);
         validerBarnIkkeErSøker(søknad.getSøker(), søknad.getBerørtePersoner(), feil);
@@ -89,9 +91,9 @@ public class PleiepengerSyktBarnSøknadValidator extends SøknadValidator<Søkna
         return feil;
     }
 
-    private void validerInneholderBegrunnelseForInnsending(Søknad søknad, List<Feil> feil) {
-        if (((PleiepengerSyktBarn) søknad.getYtelse()).getTrekkKravPerioder() != null &&
-                !((PleiepengerSyktBarn) søknad.getYtelse()).getTrekkKravPerioder().isEmpty()) {
+    private void validerInneholderBegrunnelseForInnsending(Søknad søknad, PleiepengerSyktBarn psb, List<Feil> feil) {
+        if ((psb).getTrekkKravPerioder() != null &&
+                !(psb).getTrekkKravPerioder().isEmpty()) {
             if (søknad.getBegrunnelseForInnsending().getTekst() == null ||
                     søknad.getBegrunnelseForInnsending().getTekst().isEmpty()) {
                 feil.add(new Feil("begrunnelseForInnsending", "påkrevd", "Søknad inneholder trekk krav perioder uten begrunnelse for innsending."));

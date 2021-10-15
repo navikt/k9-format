@@ -42,6 +42,19 @@ class TrekkKravTest {
     }
 
     @Test
+    public void søknadMedTrekkKravBegrunnelseErTom() {
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
+        var trekkKravPeriode = new Periode(LocalDate.now().minusWeeks(1), LocalDate.now().minusDays(1));
+
+        var søknad = SøknadEksempel.komplettSøknad(søknadsperiode);
+        ((PleiepengerSyktBarn)søknad.getYtelse()).addTrekkKravPeriode(trekkKravPeriode);
+        søknad.getBegrunnelseForInnsending().medBegrunnelseForInnsending("");
+
+        var feil = verifyHarFeil(søknad);
+        feilInneholder(feil, "begrunnelseForInnsending", "påkrevd");
+    }
+
+    @Test
     public void søknadMedNattevåkInnenforTrekKKravPeriode() {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
         var trekkKravPeriode = new Periode(LocalDate.now().minusWeeks(1), LocalDate.now().minusDays(1));
