@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import no.nav.k9.søknad.felles.type.BegrunnelseForInnsending;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.psb.SøknadEksempel;
 import no.nav.k9.søknad.ytelse.psb.YtelseEksempel;
@@ -23,8 +24,21 @@ class TrekkKravTest {
 
         var søknad = SøknadEksempel.komplettSøknad(søknadsperiode);
         ((PleiepengerSyktBarn)søknad.getYtelse()).addTrekkKravPeriode(trekkKravPeriode);
+        søknad.getBegrunnelseForInnsending().medBegrunnelseForInnsending("Jeg er søker");
 
         verifyIngenFeil(søknad);
+    }
+
+    @Test
+    public void søknadMedTrekkKravManglerBegrunnelse() {
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
+        var trekkKravPeriode = new Periode(LocalDate.now().minusWeeks(1), LocalDate.now().minusDays(1));
+
+        var søknad = SøknadEksempel.komplettSøknad(søknadsperiode);
+        ((PleiepengerSyktBarn)søknad.getYtelse()).addTrekkKravPeriode(trekkKravPeriode);
+
+        var feil = verifyHarFeil(søknad);
+        feilInneholder(feil, "begrunnelseForInnsending", "påkrevd");
     }
 
     @Test
@@ -36,6 +50,7 @@ class TrekkKravTest {
         var søknad = SøknadEksempel.komplettSøknad(søknadsperiode);
 
         ((PleiepengerSyktBarn)søknad.getYtelse()).addTrekkKravPeriode(trekkKravPeriode);
+        søknad.getBegrunnelseForInnsending().medBegrunnelseForInnsending("Jeg er søker");
         ((PleiepengerSyktBarn)søknad.getYtelse()).medNattevåk(YtelseEksempel.lagNattevåk(periodeMedFeil));
         ((PleiepengerSyktBarn)søknad.getYtelse()).medEndringsperiode(periodeMedFeil);
 
@@ -50,6 +65,7 @@ class TrekkKravTest {
 
         var søknad = SøknadEksempel.komplettSøknad(søknadsperiode);
         ((PleiepengerSyktBarn)søknad.getYtelse()).addTrekkKravPeriode(trekkKravPeriodeMedFeil);
+        søknad.getBegrunnelseForInnsending().medBegrunnelseForInnsending("Jeg er søker");
 
         var feil = verifyHarFeil(søknad);
         feilInneholder(feil, "ytelse.trekkKravPerioder", "ugyldigPeriodeInterval");
@@ -64,8 +80,10 @@ class TrekkKravTest {
 
         var psb = YtelseEksempel.standardYtelseMedEndring(søknadsperiode, endringsperiode);
         psb.addTrekkKravPeriode(trekkKravPeriode);
+        var søknad = SøknadEksempel.søknad(psb);
+        søknad.getBegrunnelseForInnsending().medBegrunnelseForInnsending("Jeg er søker");
 
-        verifyIngenFeil(psb, List.of(gyldigEndringsInterval));
+        verifyIngenFeil(søknad, List.of(gyldigEndringsInterval));
     }
 
     @Test
@@ -75,6 +93,7 @@ class TrekkKravTest {
 
         var søknad = SøknadEksempel.minimumSøknad(søknadsperiode);
         ((PleiepengerSyktBarn)søknad.getYtelse()).addTrekkKravPeriode(trekkKravPerioderSomOverlapper);
+        søknad.getBegrunnelseForInnsending().medBegrunnelseForInnsending("Jeg er søker");
 
         var feil = verifyHarFeil(søknad);
         feilInneholder(feil, "ytelse.trekkKravPerioder", "ugyldigPeriodeInterval");
@@ -88,6 +107,7 @@ class TrekkKravTest {
 
         var søknad = SøknadEksempel.søknad(YtelseEksempel.komplettEndringssøknad(endringsperiode));
         ((PleiepengerSyktBarn) søknad.getYtelse()).addTrekkKravPeriode(trekkKravPeriode);
+        søknad.getBegrunnelseForInnsending().medBegrunnelseForInnsending("Jeg er søker");
 
         var feil = verifyHarFeil(søknad, List.of(endringsperiode));
         feilInneholder(feil, "ytelse.beredskap.perioder", "ugyldigPeriodeInterval");

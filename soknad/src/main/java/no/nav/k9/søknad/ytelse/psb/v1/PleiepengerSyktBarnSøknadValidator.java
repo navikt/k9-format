@@ -80,11 +80,23 @@ public class PleiepengerSyktBarnSøknadValidator extends SøknadValidator<Søkna
                 .map(this::toFeil)
                 .collect(Collectors.toList());
 
+        validerInneholderBegrunnelseForInnsending(søknad, feil);
+
         validerVersjon(søknad.getVersjon(), feil);
         validerBarnIkkeErSøker(søknad.getSøker(), søknad.getBerørtePersoner(), feil);
         feil.addAll(new PleiepengerSyktBarnYtelseValidator().validerMedGyldigEndringsperodeHvisDenFinnes(søknad.getYtelse(), gyldigeEndringsperioder, brukValideringMedUtledetEndringsperiode));
 
         return feil;
+    }
+
+    private void validerInneholderBegrunnelseForInnsending(Søknad søknad, List<Feil> feil) {
+        if (((PleiepengerSyktBarn) søknad.getYtelse()).getTrekkKravPerioder() != null &&
+                !((PleiepengerSyktBarn) søknad.getYtelse()).getTrekkKravPerioder().isEmpty()) {
+            if (søknad.getBegrunnelseForInnsending().getTekst() == null ||
+                    søknad.getBegrunnelseForInnsending().getTekst().isEmpty()) {
+                feil.add(new Feil("begrunnelseForInnsending", "påkrevd", "Søknad inneholder trekk krav perioder uten begrunnelse for innsending."));
+            }
+        }
     }
 
     public void forsikreValidert(Søknad søknad, List<Periode> gyldigeEndringsperioder) {
