@@ -63,8 +63,8 @@ public class Søknad implements Innsending {
     private List<Journalpost> journalposter = new ArrayList<>();
 
     @Valid
-    @JsonProperty(required = false)
-    BegrunnelseForInnsending begrunnelseForInnsending;
+    @JsonProperty(value = "begrunnelseForInnsending", required = false)
+    private BegrunnelseForInnsending begrunnelseForInnsending;
 
     @JsonManagedReference
     @Valid
