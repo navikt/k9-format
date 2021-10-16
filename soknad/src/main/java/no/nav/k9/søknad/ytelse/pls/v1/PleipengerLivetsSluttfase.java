@@ -1,7 +1,10 @@
 package no.nav.k9.søknad.ytelse.pls.v1;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -18,12 +21,14 @@ import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 @JsonTypeName(Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE)
-public class PleipengerLivetsSluttfase implements Ytelse{
+public class PleipengerLivetsSluttfase implements Ytelse {
 
     @Valid
     @NotNull
@@ -74,8 +79,18 @@ public class PleipengerLivetsSluttfase implements Ytelse{
 
     @Override
     public Periode getSøknadsperiode() {
-        //TODO utlede omsluttende periode
-        return null;
+        List<ArbeidstidInfo> arbeidstidsinfo = new ArrayList<>();
+        arbeidstid.getArbeidstakerList().stream().map(Arbeidstaker::getArbeidstidInfo).forEach(arbeidstidsinfo::add);
+        arbeidstid.getFrilanserArbeidstidInfo().ifPresent(arbeidstidsinfo::add);
+        arbeidstid.getSelvstendigNæringsdrivendeArbeidstidInfo().ifPresent(arbeidstidsinfo::add);
+        if (arbeidstidsinfo.isEmpty()) {
+            return null; //eller kast exception??
+        }
+        List<Periode> perioder = arbeidstidsinfo.stream().flatMap(a -> a.getPerioder().keySet().stream()).collect(Collectors.toList());
+        return new Periode(
+                perioder.stream().map(Periode::getFraOgMed).min(Comparator.naturalOrder()).orElseThrow(),
+                perioder.stream().map(Periode::getTilOgMed).max(Comparator.naturalOrder()).orElseThrow()
+        );
     }
 
     public Arbeidstid getArbeidstid() {
