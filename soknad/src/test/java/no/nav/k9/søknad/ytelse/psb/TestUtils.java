@@ -70,8 +70,9 @@ public class TestUtils {
     public static String periodeString(int i) {
         return "[" + i + "]";
     }
+
     public static String periodeString(Periode periode) {
-        return "[" + periode + "]";
+        return "['" + periode + "']";
     }
 
 }

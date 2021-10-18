@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import no.nav.fpsak.tidsserie.LocalDateSegment;
 import no.nav.fpsak.tidsserie.LocalDateTimeline;
 import no.nav.fpsak.tidsserie.StandardCombinators;
 import no.nav.k9.søknad.TidsserieUtils;
@@ -61,7 +60,7 @@ class PerioderMedEndringUtil {
     private static LocalDateTimeline<Boolean> tilTidsserie(List<PerioderMedEndring> listen) {
         var temp = new LocalDateTimeline<Boolean>(Collections.emptyList());
         for (PerioderMedEndring yp : listen) {
-            for (Periode p : yp.getPeriodeList()) {
+            for (Periode p : yp.getPeriodeMap().keySet()) {
                 temp = temp.union(
                         new LocalDateTimeline<>(p.getFraOgMed(), p.getTilOgMed(), Boolean.TRUE),
                         StandardCombinators::coalesceLeftHandSide);
@@ -72,7 +71,7 @@ class PerioderMedEndringUtil {
 
     public static class PerioderMedEndring {
         private String felt;
-        private List<Periode> periodeList;
+        private Map<Periode, ?> periodeMap;
 
         public PerioderMedEndring() {
 
@@ -82,20 +81,19 @@ class PerioderMedEndringUtil {
             return felt;
         }
 
+        public Map<Periode, ?> getPeriodeMap() {
+            return periodeMap;
+        }
+
         public List<Periode> getPeriodeList() {
-            return periodeList;
+            return new ArrayList<>(periodeMap.keySet());
         }
 
         PerioderMedEndring medPerioder(String felt, Map<Periode, ?> periodeMap) {
             this.felt = felt;
-            this.periodeList = new ArrayList<>(periodeMap.keySet());
+            this.periodeMap = periodeMap;
             return this;
         }
 
-        PerioderMedEndring medPerioder(String felt, List<Periode> periodeList) {
-            this.felt = felt;
-            this.periodeList = periodeList;
-            return this;
-        }
     }
 }

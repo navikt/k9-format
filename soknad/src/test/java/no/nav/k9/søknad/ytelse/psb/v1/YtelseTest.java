@@ -21,6 +21,7 @@ import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.VirksomhetType;
 import no.nav.k9.søknad.ytelse.psb.SøknadEksempel;
+import no.nav.k9.søknad.ytelse.psb.TestUtils;
 import no.nav.k9.søknad.ytelse.psb.YtelseEksempel;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
@@ -227,7 +228,7 @@ public class YtelseTest {
         ((PleiepengerSyktBarn) søknad.getYtelse()).medArbeidstid(new Arbeidstid().medArbeidstaker(List.of(arbeidstaker)));
 
         var feil = verifyHarFeil(søknad);
-        feilInneholder(feil, "ytelse.arbeidstid.arbeidstakerList[0].perioder[" + arbeidstidperiode + "]", "ugyldigPeriode");
+        feilInneholder(feil, "ytelse.arbeidstid.arbeidstakerList" + TestUtils.periodeString(0) + ".perioder" + TestUtils.periodeString(arbeidstidperiode) , "ugyldigPeriode");
     }
 
     @Test
