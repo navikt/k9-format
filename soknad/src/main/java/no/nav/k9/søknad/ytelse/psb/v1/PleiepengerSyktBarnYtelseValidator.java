@@ -89,7 +89,7 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         }
 
         for (var ytelsePeriode : PerioderMedEndringUtil.getAllePerioderSomMåVæreInnenforSøknadsperiode(psb)) {
-            var ytelsePeriodeTidsserie = lagTidslinjeOgValiderForYtelseperioder(ytelsePeriode.getPeriodeList(), ytelsePeriode.getFelt() + ".perioder");
+            var ytelsePeriodeTidsserie = lagTidslinjeOgValider(ytelsePeriode.getPeriodeMap(), ytelsePeriode.getFelt() + ".perioder");
             feilene.addAll(validerAtYtelsePerioderErInnenforIntervalForEndring(intervalForEndringTidslinje, ytelsePeriodeTidsserie, ytelsePeriode.getFelt() + ".perioder"));
             feilene.addAll(validerAtIngenPerioderOverlapperMedTrekkKravPerioder(trekkKravPerioderTidslinje, ytelsePeriodeTidsserie, ytelsePeriode.getFelt() + ".perioder"));
         }
@@ -175,32 +175,23 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         }
     }
 
-    //TODO skrive om sånn at det ikke trengs en metode for list og en annen for map
-    private LocalDateTimeline<Boolean> lagTidslinjeOgValiderForYtelseperioder(List<Periode> periodeList, String felt) throws ValideringsAvbrytendeFeilException {
-        var feil = validerPerioderErLukketOgGyldigForYtelseperioder(periodeList, felt);
+    private LocalDateTimeline<Boolean> lagTidslinjeOgValider(Map<Periode, ? > periodeMap, String felt) throws ValideringsAvbrytendeFeilException {
+        var feil = validerPerioderErLukketOgGyldig(periodeMap, felt);
         if (!feil.isEmpty()) {
             throw new ValideringsAvbrytendeFeilException(feil);
         }
         try {
-            return toLocalDateTimeline(periodeList);
+            return toLocalDateTimeline(new ArrayList<>(periodeMap.keySet()));
         } catch (IllegalArgumentException e) {
             throw new ValideringsAvbrytendeFeilException(List.of(lagFeil(felt, "IllegalArgumentException", e.getMessage())));
         }
     }
 
-    private List<Feil> validerPerioderErLukketOgGyldigForYtelseperioder(List<Periode> perioder, String felt) {
-        var feil = new ArrayList<Feil>();
-        perioder.forEach(p -> {
-            validerPerioderErLukket(p, felt + "[" + p + "]", feil);
-            validerPerioderIkkeErInvertert(p, felt + "[" + p + "]", feil);});
-        return feil;
-    }
-
     private List<Feil> validerPerioderErLukketOgGyldig(Map<Periode, ?> perioder, String felt) {
         var feil = new ArrayList<Feil>();
         perioder.keySet().forEach(p -> {
-            validerPerioderErLukket(p, felt + "[" + p + "]", feil);
-            validerPerioderIkkeErInvertert(p, felt + "[" + p + "]", feil);});
+            validerPerioderErLukket(p, felt + "['" + p + "']", feil);
+            validerPerioderIkkeErInvertert(p, felt + "['" + p + "']", feil);});
         return feil;
     }
 
