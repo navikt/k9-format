@@ -6,6 +6,7 @@ import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyIngenFeil;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,14 @@ import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import no.nav.k9.søknad.JsonUtils;
+import no.nav.k9.søknad.Søknad;
+import no.nav.k9.søknad.felles.Versjon;
+import no.nav.k9.søknad.felles.personopplysninger.Barn;
+import no.nav.k9.søknad.felles.personopplysninger.Søker;
+import no.nav.k9.søknad.felles.type.Journalpost;
+import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.felles.type.SøknadId;
 import no.nav.k9.søknad.ytelse.psb.TestUtils;
 import no.nav.k9.søknad.ytelse.psb.YtelseEksempel;
 
@@ -119,6 +127,16 @@ class EndringTest {
         assertThat(endringsperiode).contains(søknadsperiodeTre);
         assertThat(endringsperiode).contains(søknadsperiodeFire);
         assertEndringsperioderIJson(ytelse);
+    }
+    
+    @Test
+    public void kunDokumentklassifiseringSkalFungere() {
+        var gyldigIntervalForEndring = List.of(new Periode(LocalDate.now(), LocalDate.now().plusWeeks(2)));
+
+        var ytelse = new PleiepengerSyktBarn().medBarn(new Barn(NorskIdentitetsnummer.of("22211111111")));
+        var søknad = new Søknad(SøknadId.of("lala"), Versjon.of("1.0.0"), ZonedDateTime.now(), new Søker(NorskIdentitetsnummer.of("22222222222")), ytelse);
+
+        verifyIngenFeil(søknad, gyldigIntervalForEndring);
     }
 
     private void assertEndringsperioderIJson(PleiepengerSyktBarn ytelse) {
