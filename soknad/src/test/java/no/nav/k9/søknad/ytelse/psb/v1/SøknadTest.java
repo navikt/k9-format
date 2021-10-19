@@ -1,9 +1,6 @@
 package no.nav.k9.søknad.ytelse.psb.v1;
 
 import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholder;
-import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyHarFeil;
-import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyIngenFeil;
-import static org.assertj.core.api.Assertions.assertThat;
 import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagArbeidstaker;
 import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagBeredskap;
 import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagBosteder;
@@ -13,6 +10,8 @@ import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagTilsynsordning;
 import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagUtenlandsopphold;
 import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagUttak;
 import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.leggPåKomplettEndringsøknad;
+import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyHarFeil;
+import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyIngenFeil;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -87,7 +86,7 @@ class SøknadTest {
         var feil = verifyHarFeil(søknad);
         feilInneholder(feil, "ytelse.bosteder.perioder" + TestUtils.periodeString(bostedperiode),
                 "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
-        var json = Søknad.SerDes.serialize(søknad);
+        Søknad.SerDes.serialize(søknad);
     }
 
     @Disabled("Trenger avklaring om dette er ønsket")
@@ -111,7 +110,6 @@ class SøknadTest {
         //(((PleiepengerSyktBarn)søknad.getYtelse()).addTrekkKravPeriode(new Periode(LocalDate.now().minusMonths(2), LocalDate.now().minusMonths(3)));
 
         var feil = verifyHarFeil(søknad, List.of(søknadsperiode));
-        var periodeString = "[" + søknadsperiode + "]";
         feilInneholder(feil, "ytelse.søknadsperiode.perioder" + TestUtils.periodeString(0), "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
         //feilInneholder(feil, "ytelse.bosteder.perioder" + TestUtils.periodeString(søknadsperiode), "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
         //feilInneholder(feil, "ytelse.utenlandsopphold.perioder" + TestUtils.periodeString(søknadsperiode), "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");

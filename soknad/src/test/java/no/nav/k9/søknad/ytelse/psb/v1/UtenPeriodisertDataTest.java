@@ -6,7 +6,6 @@ import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyIngenFeil;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.felles.Feil;
@@ -17,7 +16,6 @@ public class UtenPeriodisertDataTest {
 
     @Test
     public void søknad_uten_periodisert_data() {
-        var validator = new PleiepengerSyktBarnSøknadValidator();
         var søknad = SøknadJsonEksempel.utenPeriodisertDataJson();
         var endringsPerioderFraK9Sak = List.of(new Periode("2021-01-01/2021-01-01"));
 

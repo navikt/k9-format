@@ -31,7 +31,6 @@ import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
 
 public class YtelseTest {
-    private ArbeidstidPeriodeInfo ARBEIDSTID_PERIODE_INFO_STANDARD = new ArbeidstidPeriodeInfo(Duration.ofHours(8), Duration.ofHours(0));
 
     /*
     Verdier er satt riktig Tester
@@ -146,8 +145,6 @@ public class YtelseTest {
     @Test
     public void frilanserKanHaÅpenPeriode() {
         var søknad = YtelseEksempel.komplettYtelseMedDelperioder();
-        var selvstendig = SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
-                .virksomhetstyper(List.of(VirksomhetType.ANNEN)).build();
 
         var arbeidAktivitet = new OpptjeningAktivitet()
                 .medFrilanser(new Frilanser()

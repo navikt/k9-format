@@ -7,10 +7,8 @@ import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyIngenFeil;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import no.nav.k9.søknad.felles.type.BegrunnelseForInnsending;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.psb.SøknadEksempel;
 import no.nav.k9.søknad.ytelse.psb.YtelseEksempel;

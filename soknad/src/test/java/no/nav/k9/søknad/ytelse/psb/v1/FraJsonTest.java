@@ -8,8 +8,6 @@ import no.nav.k9.søknad.ytelse.psb.SøknadJsonEksempel;
 
 class FraJsonTest {
 
-    private static final PleiepengerSyktBarnSøknadValidator validator = new PleiepengerSyktBarnSøknadValidator();
-
     @Test
     public void komplettSøknadSkalIkkeHaValideringsfeil() {
         var søknad = SøknadJsonEksempel.komplettSøknadJson();
