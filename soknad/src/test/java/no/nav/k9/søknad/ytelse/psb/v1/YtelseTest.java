@@ -296,8 +296,7 @@ public class YtelseTest {
         var arbeidstaker = YtelseEksempel.lagArbeidstaker(new ArbeidstidPeriodeInfo(jobberNormalt, jobberFaktisk), søknadsperiode);
 
         ((PleiepengerSyktBarn) søknad.getYtelse()).medArbeidstid(new Arbeidstid().medArbeidstaker(List.of(arbeidstaker)));
-        var feil = verifyHarFeil(søknad);
-        feilInneholder(feil, "ugyldigArbeidstid");
+        var feil = verifyIngenFeil(søknad);
     }
 
 }

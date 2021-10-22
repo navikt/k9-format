@@ -62,39 +62,39 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         return feilene;
     }
 
-    private List<Feil> validerOgLeggTilFeilene(PleiepengerSyktBarn psb,
-            List<Periode> gyldigeEndringsperioder,
-            boolean brukValideringMedUtledetEndringsperiode) {
+    List<Feil> validerOgLeggTilFeilene(PleiepengerSyktBarn psb,
+                                       List<Periode> gyldigeEndringsperioder,
+                                       boolean brukValideringMedUtledetEndringsperiode) {
         final List<Feil> feilene = new ArrayList<Feil>();
 
         feilene.addAll(validerLovligEndring(psb, gyldigeEndringsperioder, brukValideringMedUtledetEndringsperiode));
         feilene.addAll(validerPerioderErLukketOgGyldig(psb.getBosteder().getPerioder(), "bosteder.perioder"));
         feilene.addAll(validerPerioderErLukketOgGyldig(psb.getUtenlandsopphold().getPerioder(), "utenlandsopphold.perioder"));
         
-        final LocalDateTimeline<Boolean> søknadsperiodeTidslinje = lagTidslinjeOgValider(psb.getSøknadsperiodeList(), "søknadsperiode.perioder");
+        final LocalDateTimeline<Boolean> søknadsperiodeTidslinje = lagTidslinjeOgValider(psb.getSøknadsperiodeList(), "søknadsperiode.perioder", feilene);
         final LocalDateTimeline<Boolean> intervalForEndringTidslinje;
         
         if (brukValideringMedUtledetEndringsperiode) {
-            final LocalDateTimeline<Boolean> gyldigEndringsperiodeTidslinje = lagTidslinjeOgValider(gyldigeEndringsperioder, "gyldigeEndringsperioder.perioder");
+            final LocalDateTimeline<Boolean> gyldigEndringsperiodeTidslinje = lagTidslinjeOgValider(gyldigeEndringsperioder, "gyldigeEndringsperioder.perioder", feilene);
             intervalForEndringTidslinje = søknadsperiodeTidslinje.union(gyldigEndringsperiodeTidslinje, StandardCombinators::coalesceLeftHandSide);
         } else {
-            final LocalDateTimeline<Boolean> endringsperiodeTidslinje = lagTidslinjeOgValider(psb.getEndringsperiode(), "endringsperiode.perioder");
+            final LocalDateTimeline<Boolean> endringsperiodeTidslinje = lagTidslinjeOgValider(psb.getEndringsperiode(), "endringsperiode.perioder", feilene);
             intervalForEndringTidslinje = søknadsperiodeTidslinje.union(endringsperiodeTidslinje, StandardCombinators::coalesceLeftHandSide);
         }
 
-        final LocalDateTimeline<Boolean> trekkKravPerioderTidslinje = lagTidslinjeOgValider(psb.getTrekkKravPerioder(), "trekkKravPerioder.perioder");
+        final LocalDateTimeline<Boolean> trekkKravPerioderTidslinje = lagTidslinjeOgValider(psb.getTrekkKravPerioder(), "trekkKravPerioder.perioder", feilene);
 
         if (brukValideringMedUtledetEndringsperiode) {
             feilene.addAll(validerAtIngenPerioderOverlapperMedTrekkKravPerioder(trekkKravPerioderTidslinje, søknadsperiodeTidslinje, "trekkKravPerioder"));
         }
 
         for (var ytelsePeriode : PerioderMedEndringUtil.getAllePerioderSomMåVæreInnenforSøknadsperiode(psb)) {
-            var ytelsePeriodeTidsserie = lagTidslinjeOgValider(ytelsePeriode.getPeriodeMap(), ytelsePeriode.getFelt() + ".perioder");
+            var ytelsePeriodeTidsserie = lagTidslinjeOgValider(ytelsePeriode.getPeriodeMap(), ytelsePeriode.getFelt() + ".perioder", feilene);
             feilene.addAll(validerAtYtelsePerioderErInnenforIntervalForEndring(intervalForEndringTidslinje, ytelsePeriodeTidsserie, ytelsePeriode.getFelt() + ".perioder"));
             feilene.addAll(validerAtIngenPerioderOverlapperMedTrekkKravPerioder(trekkKravPerioderTidslinje, ytelsePeriodeTidsserie, ytelsePeriode.getFelt() + ".perioder"));
         }
 
-        feilene.addAll(validerAtYtelsePeriodenErKomplettMedSøknad(søknadsperiodeTidslinje, psb.getUttak().getPerioder(), "uttak"));
+        validerAtYtelsePeriodenErKomplettMedSøknad(søknadsperiodeTidslinje, psb.getUttak().getPerioder(), "uttak", feilene);
         
         return feilene;
     }
@@ -120,13 +120,14 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    private List<Feil> validerAtYtelsePeriodenErKomplettMedSøknad(LocalDateTimeline<Boolean> søknadsperiode,
+    private void validerAtYtelsePeriodenErKomplettMedSøknad(LocalDateTimeline<Boolean> søknadsperiode,
                                                                   Map<Periode, ?> ytelsePeriode,
-                                                                  String felt) {
-        return tilPeriodeList(søknadsperiode.disjoint(lagTidslinjeOgValider(new ArrayList<>(ytelsePeriode.keySet()), felt))).stream()
+                                                                  String felt,
+                                                                  List<Feil> feil) {
+        feil.addAll( tilPeriodeList(søknadsperiode.disjoint(lagTidslinjeOgValider(new ArrayList<>(ytelsePeriode.keySet()), felt, feil))).stream()
                 .filter(this::periodeInneholderDagerSomIkkeErHelg)
                 .map(p -> toFeil(p, felt, "ikkeKomplettPeriode", "Periodene er ikke komplett, periode som mangler er: "))
-                .collect(Collectors.toCollection(ArrayList::new));
+                .collect(Collectors.toCollection(ArrayList::new)));
     }
 
     private List<Feil> validerAtIngenPerioderOverlapperMedTrekkKravPerioder(LocalDateTimeline<Boolean> trekkKravPerioder,
@@ -152,38 +153,35 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         return lagFeil(felt, feilkode, feilmelding + periode.toString());
     }
 
-    private Feil toFeil(ConstraintViolation<PleiepengerSyktBarn> constraintViolation) {
-        return lagFeil(
-                constraintViolation.getPropertyPath().toString(),
-                PÅKREVD,
-                constraintViolation.getMessage());
-    }
-
     private Feil lagFeil(String felt, String feilkode, String feilmelding) {
         return new Feil(YTELSE_FELT + felt, feilkode, feilmelding);
     }
 
-    private LocalDateTimeline<Boolean> lagTidslinjeOgValider(List<Periode> periodeList, String felt) throws ValideringsAvbrytendeFeilException {
-        var feil = validerPerioderErLukketOgGyldig(periodeList, felt);
-        if (!feil.isEmpty()) {
+    private LocalDateTimeline<Boolean> lagTidslinjeOgValider(List<Periode> periodeList, String felt, List<Feil> feil) throws ValideringsAvbrytendeFeilException {
+        var nyFeil = validerPerioderErLukketOgGyldig(periodeList, felt);
+        if (!nyFeil.isEmpty()) {
+            feil.addAll(nyFeil);
             throw new ValideringsAvbrytendeFeilException(feil);
         }
         try {
             return toLocalDateTimeline(periodeList);
         } catch (IllegalArgumentException e) {
-            throw new ValideringsAvbrytendeFeilException(List.of(lagFeil(felt, "IllegalArgumentException", e.getMessage())));
+            feil.add(lagFeil(felt, "IllegalArgumentException", e.getMessage()));
+            throw new ValideringsAvbrytendeFeilException(feil);
         }
     }
 
-    private LocalDateTimeline<Boolean> lagTidslinjeOgValider(Map<Periode, ? > periodeMap, String felt) throws ValideringsAvbrytendeFeilException {
-        var feil = validerPerioderErLukketOgGyldig(periodeMap, felt);
-        if (!feil.isEmpty()) {
+    private LocalDateTimeline<Boolean> lagTidslinjeOgValider(Map<Periode, ? > periodeMap, String felt, List<Feil> feil) throws ValideringsAvbrytendeFeilException {
+        var nyFeil = validerPerioderErLukketOgGyldig(periodeMap, felt);
+        if (!nyFeil.isEmpty()) {
+            feil.addAll(nyFeil);
             throw new ValideringsAvbrytendeFeilException(feil);
         }
         try {
             return toLocalDateTimeline(new ArrayList<>(periodeMap.keySet()));
         } catch (IllegalArgumentException e) {
-            throw new ValideringsAvbrytendeFeilException(List.of(lagFeil(felt, "IllegalArgumentException", e.getMessage())));
+            feil.add(lagFeil(felt, "IllegalArgumentException", e.getMessage()));
+            throw new ValideringsAvbrytendeFeilException(feil);
         }
     }
 
@@ -222,7 +220,7 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         }
     }
 
-    private static class ValideringsAvbrytendeFeilException extends RuntimeException {
+    static class ValideringsAvbrytendeFeilException extends RuntimeException {
 
         private final List<Feil> feilList;
 
