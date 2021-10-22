@@ -142,7 +142,7 @@ public class YtelseEksempel {
     /*
     Endring
      */
-    private static PleiepengerSyktBarn lagEndringssøknad() {
+    public static PleiepengerSyktBarn lagEndringssøknad() {
         return new PleiepengerSyktBarn()
                 .medBarn(new Barn(NorskIdentitetsnummer.of("11111111111"), null));
     }

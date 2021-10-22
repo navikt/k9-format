@@ -34,10 +34,18 @@ class EndringTest {
 
         var psb = YtelseEksempel.komplettEndringssøknad(endringsperiode);
 
-        //TODO ta bort nå endringsperiode funker
-        psb.medEndringsperiode(endringsperiode);
         verifyIngenFeil(psb, List.of(gyldigEndringsInterval));
         assertEndringsperioderIJson(psb);
+    }
+
+    @Test
+    public void endringssøknadMedBareTilsyn() {
+        var gyldigIntervalForEndring = new Periode(LocalDate.now(), LocalDate.now().plusWeeks(4));
+        var endringsperiode = new Periode(LocalDate.now().plusDays(2), LocalDate.now().plusWeeks(2));
+
+        var psb = YtelseEksempel.lagEndringssøknad()
+                .medTilsynsordning(YtelseEksempel.lagTilsynsordning(endringsperiode));
+        verifyIngenFeil(psb, List.of(gyldigIntervalForEndring));
     }
 
     @Test

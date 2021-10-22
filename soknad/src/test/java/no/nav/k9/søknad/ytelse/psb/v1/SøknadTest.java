@@ -12,6 +12,8 @@ import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagUttak;
 import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.leggPåKomplettEndringsøknad;
 import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyHarFeil;
 import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyIngenFeil;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -89,31 +91,41 @@ class SøknadTest {
         Søknad.SerDes.serialize(søknad);
     }
 
-    @Disabled("Trenger avklaring om dette er ønsket")
     @Test
-    public void utenlandsoppholdKanIkkeVæreUtenforSøknadsperiode() {
+    public void utenlandsoppholdKanVæreUtenforSøknadsperiode() {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
         var bostedperiode = new Periode(LocalDate.now().minusMonths(2), søknadsperiode.getTilOgMed());
 
         var søknad = SøknadEksempel.komplettSøknad(søknadsperiode);
         ((PleiepengerSyktBarn) søknad.getYtelse()).medUtenlandsopphold(lagUtenlandsopphold(bostedperiode));
 
-        var feil = verifyHarFeil(søknad);
-        feilInneholder(feil, "ytelse.utenlandsopphold.perioder", "ugyldigPeriode");
+        var feil = verifyIngenFeil(søknad);
     }
 
     @Test
     public void alleFelterISøknadInvertertPeriode() {
         var søknadsperiode = new Periode(LocalDate.now().plusWeeks(2), LocalDate.now().minusWeeks(2));
         var søknad = SøknadEksempel.komplettSøknad(søknadsperiode);
-        ((PleiepengerSyktBarn)søknad.getYtelse()).medEndringsperiode(søknadsperiode);
-        //(((PleiepengerSyktBarn)søknad.getYtelse()).addTrekkKravPeriode(new Periode(LocalDate.now().minusMonths(2), LocalDate.now().minusMonths(3)));
+
 
         var feil = verifyHarFeil(søknad, List.of(søknadsperiode));
+
         feilInneholder(feil, "ytelse.søknadsperiode.perioder" + TestUtils.periodeString(0), "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
-        //feilInneholder(feil, "ytelse.bosteder.perioder" + TestUtils.periodeString(søknadsperiode), "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
-        //feilInneholder(feil, "ytelse.utenlandsopphold.perioder" + TestUtils.periodeString(søknadsperiode), "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
-        //assertThat(feil).size().isEqualTo(3);
+        feilInneholder(feil, "ytelse.bosteder.perioder" + TestUtils.periodeString(søknadsperiode), "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "ytelse.utenlandsopphold.perioder" + TestUtils.periodeString(søknadsperiode), "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        assertThat(feil).size().isEqualTo(3);
+    }
+
+    @Test
+    public void alleFelterISøknadInvertertPeriodeKasterException() {
+        PleiepengerSyktBarnYtelseValidator pleiepengerSyktBarnYtelseValidator = new PleiepengerSyktBarnYtelseValidator();
+        var søknadsperiode = new Periode(LocalDate.now().plusWeeks(2), LocalDate.now().minusWeeks(2));
+        var søknad = SøknadEksempel.komplettSøknad(søknadsperiode);
+
+        assertThrows(PleiepengerSyktBarnYtelseValidator.ValideringsAvbrytendeFeilException.class, () -> {
+                    pleiepengerSyktBarnYtelseValidator.validerOgLeggTilFeilene(søknad.getYtelse(), List.of(), true);
+                }
+        );
     }
 
     @Test

@@ -60,12 +60,4 @@ public class ArbeidstidPeriodeInfo {
         this.jobberNormaltTimerPerDag = jobberNormaltTimerPerDag;
         return this;
     }
-
-    @AssertTrue(message="[ugyldigArbeidstid] Faktisk arbeid er større enn jobber normalt")
-    private boolean isValid() {
-        if (jobberNormaltTimerPerDag == null || faktiskArbeidTimerPerDag == null) {
-            return true;
-        }
-        return jobberNormaltTimerPerDag.compareTo(faktiskArbeidTimerPerDag) >= 0;
-    }
 }
