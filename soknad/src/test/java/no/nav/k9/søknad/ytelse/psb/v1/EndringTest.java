@@ -173,7 +173,6 @@ class EndringTest {
         var søknad = SøknadEksempel.søknad(psb);
 
         var feil = verifyHarFeil(søknad, gyldigIntervalForEndring);
-        var periodeMedFeil = new Periode(stpTre.plusDays(5), stpTre.plusDays(7));
         feilInneholder(feil, "ytelse.beredskap.perioder", "ugyldigPeriode");
         feilInneholder(feil, "ytelse.nattevåk.perioder", "ugyldigPeriode");
         feilInneholder(feil, "ytelse.tilsynsordning.perioder", "ugyldigPeriode");
