@@ -156,6 +156,30 @@ class EndringTest {
 
         verifyIngenFeil(søknad, gyldigIntervalForEndring);
     }
+    @Test
+    public void endringsperioderIkkeInneholdeDagerSomErUtenforGyldigIntervalOgIkkeErHelg() {
+        var stp = mandagenFør(LocalDate.now());
+        var stpTo = mandagenFør(LocalDate.now().plusWeeks(1));
+        var stpTre = mandagenFør(LocalDate.now().plusWeeks(2));
+
+        var gyldigIntervalForEndring = List.of(
+                new Periode(stp, stp.plusDays(4)),
+                new Periode(stpTo, stpTo.plusDays(4)),
+                new Periode(stpTre, stpTre.plusDays(4))
+        );
+        var endringsperiode = new Periode(stp, stpTre.plusDays(7));
+
+        var psb = YtelseEksempel.komplettEndringssøknad(endringsperiode);
+        var søknad = SøknadEksempel.søknad(psb);
+
+        var feil = verifyHarFeil(søknad, gyldigIntervalForEndring);
+        var periodeMedFeil = new Periode(stpTre.plusDays(5), stpTre.plusDays(7));
+        feilInneholder(feil, "ytelse.beredskap.perioder", "ugyldigPeriode");
+        feilInneholder(feil, "ytelse.nattevåk.perioder", "ugyldigPeriode");
+        feilInneholder(feil, "ytelse.tilsynsordning.perioder", "ugyldigPeriode");
+        feilInneholder(feil, "ytelse.uttak.perioder", "ugyldigPeriode");
+        feilInneholder(feil, "ytelse.arbeidstid.arbeidstakerList[0].perioder", "ugyldigPeriode");
+    }
     
     @Test
     public void kunDokumentklassifiseringSkalFungere() {
