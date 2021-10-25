@@ -1,6 +1,7 @@
 package no.nav.k9.søknad.ytelse.psb.v1;
 
 import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholder;
+import static no.nav.k9.søknad.ytelse.psb.TestUtils.mandagenFør;
 import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyHarFeil;
 import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyIngenFeil;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,6 +23,7 @@ import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.SøknadId;
+import no.nav.k9.søknad.ytelse.psb.SøknadEksempel;
 import no.nav.k9.søknad.ytelse.psb.TestUtils;
 import no.nav.k9.søknad.ytelse.psb.YtelseEksempel;
 
@@ -134,6 +136,25 @@ class EndringTest {
         assertThat(endringsperiode).contains(søknadsperiodeTre);
         assertThat(endringsperiode).contains(søknadsperiodeFire);
         assertEndringsperioderIJson(ytelse);
+    }
+
+    @Test
+    public void endringsperioderKanInneholdeHelgSomIkkeErMedIGyldigIntervalForEndring() {
+        var stp = mandagenFør(LocalDate.now());
+        var stpTo = mandagenFør(LocalDate.now().plusWeeks(1));
+        var stpTre = mandagenFør(LocalDate.now().plusWeeks(2));
+
+        var gyldigIntervalForEndring = List.of(
+                new Periode(stp, stp.plusDays(4)),
+                new Periode(stpTo, stpTo.plusDays(4)),
+                new Periode(stpTre, stpTre.plusDays(4))
+        );
+        var endringsperiode = new Periode(stp, stpTre.plusDays(6));
+
+        var psb = YtelseEksempel.komplettEndringssøknad(endringsperiode);
+        var søknad = SøknadEksempel.søknad(psb);
+
+        verifyIngenFeil(søknad, gyldigIntervalForEndring);
     }
     
     @Test

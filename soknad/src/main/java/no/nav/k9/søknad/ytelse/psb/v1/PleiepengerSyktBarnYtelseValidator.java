@@ -116,6 +116,7 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
                                                                            String felt) {
         return tilPeriodeList(
                 testTidsserie.disjoint(gyldigInterval)).stream()
+                .filter(this::periodeInneholderDagerSomIkkeErHelg)
                 .map(p -> toFeil(p, felt, "ugyldigPeriode", "Perioden er utenfor gyldig interval. Gyldig interva: (" + gyldigInterval.toString() + "), Periode: "))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
