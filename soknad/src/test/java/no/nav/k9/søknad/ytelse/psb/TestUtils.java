@@ -2,6 +2,7 @@ package no.nav.k9.søknad.ytelse.psb;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,6 +13,10 @@ public class TestUtils {
 
     public static String testTekst() {
         return "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+    }
+
+    public static LocalDate mandagenFør(LocalDate d) {
+        return d.minusDays(d.getDayOfWeek().getValue() - 1);
     }
 
     public static String okOrgnummer() {

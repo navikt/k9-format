@@ -11,8 +11,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import javax.validation.ConstraintViolation;
-
 import no.nav.fpsak.tidsserie.LocalDateTimeline;
 import no.nav.fpsak.tidsserie.StandardCombinators;
 import no.nav.k9.søknad.ValideringsFeil;
@@ -116,7 +114,9 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
                                                                            String felt) {
         return tilPeriodeList(
                 testTidsserie.disjoint(gyldigInterval)).stream()
-                .map(p -> toFeil(p, felt, "ugyldigPeriode", "Perioden er utenfor gyldig interval. Gyldig interva: (" + gyldigInterval.toString() + "), Periode: "))
+                .filter(this::periodeInneholderDagerSomIkkeErHelg)
+                .map(p -> toFeil(p, felt, "ugyldigPeriode",
+                        "Perioden er utenfor gyldig interval. Gyldig interva: (" + gyldigInterval.getLocalDateIntervals() + "), Ugyldig periode: "))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
