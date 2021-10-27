@@ -1,6 +1,6 @@
 package no.nav.k9.søknad.ytelse.psb.v1;
 
-import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholder;
+import static no.nav.k9.søknad.TestUtils.feilInneholder;
 import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagArbeidstaker;
 import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagBeredskap;
 import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagBosteder;
@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.Søknad;
@@ -28,7 +27,7 @@ import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.psb.SøknadEksempel;
-import no.nav.k9.søknad.ytelse.psb.TestUtils;
+import no.nav.k9.søknad.TestUtils;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 
 class SøknadTest {
@@ -60,10 +59,9 @@ class SøknadTest {
     @Test
     public void søkerKanIkkeVæreNull() {
         var søknad = KOMPLETT_SØKNAD;
-        søknad.medSøker(null);
-
-        var feil = verifyHarFeil(søknad);
-        feilInneholder(feil, new Feil("søker", PÅKREVD, "must not be null"));
+        assertThrows(NullPointerException.class, () -> {
+            søknad.medSøker(null);
+        });
     }
 
     @Test

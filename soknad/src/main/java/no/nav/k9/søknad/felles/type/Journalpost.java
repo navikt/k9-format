@@ -1,5 +1,6 @@
 package no.nav.k9.søknad.felles.type;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import javax.validation.Valid;
@@ -17,11 +18,16 @@ public class Journalpost {
 
     private static final String GYLDIG = "^[\\p{Alnum}]+$";
 
-    @JsonProperty(value = "inneholderInfomasjonSomIkkeKanPunsjes")
+    @Deprecated
+    @JsonProperty(value = "inneholderInfomasjonSomIkkeKanPunsjes", required = true)
     @Valid
     private Boolean inneholderInfomasjonSomIkkeKanPunsjes;
 
-    @JsonProperty(value = "inneholderMedisinskeOpplysninger")
+    @JsonProperty(value = "inneholderInformasjonSomIkkeKanPunsjes", required = true)
+    @Valid
+    private Boolean inneholderInformasjonSomIkkeKanPunsjes;
+
+    @JsonProperty(value = "inneholderMedisinskeOpplysninger", required = true)
     @Valid
     private Boolean inneholderMedisinskeOpplysninger;
 
@@ -34,12 +40,12 @@ public class Journalpost {
     public Journalpost() {
     }
 
-    public Boolean getInneholderInfomasjonSomIkkeKanPunsjes() {
-        return inneholderInfomasjonSomIkkeKanPunsjes;
+    public Boolean getInneholderInformasjonSomIkkeKanPunsjes() {
+        return (inneholderInformasjonSomIkkeKanPunsjes != null) ? inneholderInformasjonSomIkkeKanPunsjes : inneholderInfomasjonSomIkkeKanPunsjes;
     }
 
-    public Journalpost medInfomasjonSomIkkeKanPunsjes(Boolean søknadenInneholderInfomasjonSomIkkeKanPunsjes) {
-        this.inneholderInfomasjonSomIkkeKanPunsjes = søknadenInneholderInfomasjonSomIkkeKanPunsjes;
+    public Journalpost medInformasjonSomIkkeKanPunsjes(Boolean søknadenInneholderInformasjonSomIkkeKanPunsjes) {
+        this.inneholderInformasjonSomIkkeKanPunsjes = Objects.requireNonNull(søknadenInneholderInformasjonSomIkkeKanPunsjes, "søknadenInneholderInformasjonSomIkkeKanPunsjes");
         return this;
     }
 
@@ -57,7 +63,7 @@ public class Journalpost {
     }
 
     public Journalpost medJournalpostId(String journalpostId) {
-        this.journalpostId = Objects.requireNonNull(journalpostId);
+        this.journalpostId = Objects.requireNonNull(journalpostId, "journalpostId");
         return this;
     }
 }

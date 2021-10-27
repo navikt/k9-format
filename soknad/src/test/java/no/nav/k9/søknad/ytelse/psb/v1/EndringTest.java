@@ -1,7 +1,7 @@
 package no.nav.k9.søknad.ytelse.psb.v1;
 
-import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholder;
-import static no.nav.k9.søknad.ytelse.psb.TestUtils.mandagenFør;
+import static no.nav.k9.søknad.TestUtils.feilInneholder;
+import static no.nav.k9.søknad.TestUtils.mandagenFør;
 import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyHarFeil;
 import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyIngenFeil;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,7 +24,7 @@ import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.SøknadId;
 import no.nav.k9.søknad.ytelse.psb.SøknadEksempel;
-import no.nav.k9.søknad.ytelse.psb.TestUtils;
+import no.nav.k9.søknad.TestUtils;
 import no.nav.k9.søknad.ytelse.psb.YtelseEksempel;
 
 class EndringTest {
@@ -82,9 +82,8 @@ class EndringTest {
         TestUtils.feilInneholder(feil, "ytelse.uttak.perioder", "ugyldigPeriode");
         assertThat(feil).size().isEqualTo(1);
 
-        //TODO Ta med når endringsperioder utregnes
-//        assertThat(endringsperiode).isEqualTo(psb.getEndringsperiode());
-        assertEndringsperioderIJson(psb);
+        assertThat(List.of(endringsperiode)).isEqualTo(psb.getEndringsperiode());
+//        assertEndringsperioderIJson(psb);
     }
 
     @Test

@@ -1,6 +1,7 @@
 package no.nav.k9.søknad.ytelse.psb.v1;
 
-import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholder;
+import static no.nav.k9.søknad.TestUtils.feilInneholder;
+import static no.nav.k9.søknad.TestUtils.okNorskIdentitetsnummer;
 import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyHarFeil;
 import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyIngenFeil;
 
@@ -16,12 +17,13 @@ import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.opptjening.Frilanser;
 import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
 import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende;
+import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.VirksomhetType;
 import no.nav.k9.søknad.ytelse.psb.SøknadEksempel;
-import no.nav.k9.søknad.ytelse.psb.TestUtils;
+import no.nav.k9.søknad.TestUtils;
 import no.nav.k9.søknad.ytelse.psb.YtelseEksempel;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
@@ -113,6 +115,45 @@ public class YtelseTest {
 
         var feil = verifyHarFeil(psb);
         feilInneholder(feil, "ytelse.uttak.perioder", "IllegalArgumentException");
+    }
+
+    @Test
+    public void barnKanIkkeVæreFødtIFremtiden() {
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusWeeks(3));
+        var søknad = SøknadEksempel.søknad(YtelseEksempel.standardYtelse(søknadsperiode));
+
+        ((PleiepengerSyktBarn) søknad.getYtelse()).medBarn(new Barn(
+                okNorskIdentitetsnummer(), LocalDate.now().plusMonths(2)));
+        var feil = verifyHarFeil(søknad);
+        feilInneholder(feil, "ytelse.barn.fødselsdato", "ugyldigFødselsdato" , "Fødselsdato kan ikke være fremtidig");
+    }
+
+    @Test
+    public void barnKanVæreFødtIFortiden() {
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusWeeks(3));
+        var søknad = SøknadEksempel.søknad(YtelseEksempel.standardYtelse(søknadsperiode));
+
+        ((PleiepengerSyktBarn) søknad.getYtelse()).medBarn(new Barn().medFødselsdato(LocalDate.now().minusMonths(2)));
+        verifyIngenFeil(søknad);
+    }
+
+    @Test
+    public void barnKanVæreFødtIDag() {
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusWeeks(3));
+        var søknad = SøknadEksempel.søknad(YtelseEksempel.standardYtelse(søknadsperiode));
+
+        ((PleiepengerSyktBarn) søknad.getYtelse()).medBarn(new Barn().medFødselsdato(LocalDate.now()));
+        verifyIngenFeil(søknad);
+    }
+
+    @Test
+    public void barnKanMangleFødselsdato() {
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusWeeks(3));
+        var søknad = SøknadEksempel.søknad(YtelseEksempel.standardYtelse(søknadsperiode));
+
+        ((PleiepengerSyktBarn) søknad.getYtelse()).medBarn(new Barn(
+                okNorskIdentitetsnummer()));
+        verifyIngenFeil(søknad);
     }
 
 
@@ -213,7 +254,7 @@ public class YtelseTest {
         var arbeidstaker = YtelseEksempel.lagArbeidstaker(new ArbeidstidPeriodeInfo(null, Duration.ofHours(7).plusMinutes(30)), søknadsperiode);
         ((PleiepengerSyktBarn) søknad.getYtelse()).getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
         var feil = verifyHarFeil(søknad);
-        feilInneholder(feil, "ytelse.arbeidstid.arbeidstakerList[1].arbeidstidInfo.perioder[" + søknadsperiode + "].jobberNormaltTimerPerDag", "påkrevd");
+        feilInneholder(feil, "ytelse.arbeidstid.arbeidstakerList[1].arbeidstidInfo.perioder[" + søknadsperiode + "].jobberNormaltTimerPerDag", "nullFeil");
     }
 
     @Test

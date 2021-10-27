@@ -1,15 +1,15 @@
 package no.nav.k9.søknad.felles.opptjening;
 
-import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,9 +19,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class OpptjeningAktivitet {
 
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-    @JsonProperty(value = "selvstendigNæringsdrivende")
+    @JsonProperty(value = "selvstendigNæringsdrivende", required = true)
     @Valid
-    private List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende;
+    @NotNull
+    private List<@NotNull SelvstendigNæringsdrivende> selvstendigNæringsdrivende = new ArrayList<>();
 
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     @JsonProperty(value = "frilanser")
@@ -31,26 +32,27 @@ public class OpptjeningAktivitet {
     @Valid
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     @JsonProperty(value = "utenlandskeArbeidsforhold")
-    private List<UtenlandskArbeidsforhold> utenlandskeArbeidsforhold;
+    @NotNull
+    private List<UtenlandskArbeidsforhold> utenlandskeArbeidsforhold = new ArrayList<>();
 
     @Valid
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-    @JsonProperty(value = "andreAktiviteter")
-    private List<AnnenAktivitet> andreAktiviteter;
+    @JsonProperty(value = "andreAktiviteter", required = true)
+    private List<AnnenAktivitet> andreAktiviteter = new ArrayList<>();
 
     public OpptjeningAktivitet() {
-        //
+
     }
 
-    @JsonCreator
+    @Deprecated
     public OpptjeningAktivitet(@JsonProperty(value = "selvstendigNæringsdrivende") @Valid List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende,
                            @JsonProperty(value = "frilanser") @Valid Frilanser frilanser,
                            @JsonProperty(value = "utenlandskeArbeidsforhold") @Valid List<UtenlandskArbeidsforhold> utenlandskeArbeidsforhold,
                            @JsonProperty(value = "andreAktiviteter") @Valid List<AnnenAktivitet> andreAktiviteter) {
-        this.selvstendigNæringsdrivende = (selvstendigNæringsdrivende == null) ? emptyList() : unmodifiableList(selvstendigNæringsdrivende);
+        this.selvstendigNæringsdrivende = unmodifiableList(Objects.requireNonNull(selvstendigNæringsdrivende, "selvstendigNæringsdrivende"));
         this.frilanser = frilanser;
-        this.utenlandskeArbeidsforhold = utenlandskeArbeidsforhold;
-        this.andreAktiviteter = andreAktiviteter;
+        this.utenlandskeArbeidsforhold = unmodifiableList(Objects.requireNonNull(utenlandskeArbeidsforhold, "utenlandskeArbeidsforhold"));
+        this.andreAktiviteter = unmodifiableList(Objects.requireNonNull(andreAktiviteter, "andreAktiviteter"));
     }
 
     @Deprecated
@@ -70,17 +72,18 @@ public class OpptjeningAktivitet {
         return andreAktiviteter;
     }
 
+    public List<UtenlandskArbeidsforhold> getUtenlandskeArbeidsforhold() {
+        return utenlandskeArbeidsforhold;
+    }
+
     public OpptjeningAktivitet medSelvstendigNæringsdrivende(List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende) {
-        if (this.selvstendigNæringsdrivende == null)
-            this.selvstendigNæringsdrivende = new ArrayList<>();
-        this.selvstendigNæringsdrivende.addAll(selvstendigNæringsdrivende);
+        this.selvstendigNæringsdrivende = unmodifiableList(Objects.requireNonNull(selvstendigNæringsdrivende, "selvstendigNæringsdrivende"));
         return this;
     }
 
     public OpptjeningAktivitet medSelvstendigNæringsdrivende(SelvstendigNæringsdrivende selvstendigNæringsdrivende) {
-        if (this.selvstendigNæringsdrivende == null)
-            this.selvstendigNæringsdrivende = new ArrayList<>();
-        this.selvstendigNæringsdrivende.add(selvstendigNæringsdrivende);
+        Objects.requireNonNull(selvstendigNæringsdrivende, "selvstendigNæringsdrivende");
+        this.selvstendigNæringsdrivende = List.of(selvstendigNæringsdrivende);
         return this;
     }
 
@@ -89,35 +92,23 @@ public class OpptjeningAktivitet {
         return this;
     }
 
-    public List<UtenlandskArbeidsforhold> getUtenlandskeArbeidsforhold() {
-        return utenlandskeArbeidsforhold;
-    }
-
     public OpptjeningAktivitet medUtenlandskArbeidsforhold(UtenlandskArbeidsforhold utenlandskArbeidsforhold) {
-        if (this.utenlandskeArbeidsforhold == null)
-            this.utenlandskeArbeidsforhold = new ArrayList<>();
-        this.utenlandskeArbeidsforhold.add(utenlandskArbeidsforhold);
+        this.utenlandskeArbeidsforhold = unmodifiableList(Objects.requireNonNull(utenlandskeArbeidsforhold, "utenlandskeArbeidsforhold"));
         return this;
     }
 
     public OpptjeningAktivitet medUtenlandskeArbeidsforhold(List<UtenlandskArbeidsforhold> utenlandskeArbeidsforhold) {
-        if (this.utenlandskeArbeidsforhold == null)
-            this.utenlandskeArbeidsforhold = new ArrayList<>();
-        this.utenlandskeArbeidsforhold.addAll(utenlandskeArbeidsforhold);
+        this.utenlandskeArbeidsforhold = unmodifiableList(Objects.requireNonNull(utenlandskeArbeidsforhold, "utenlandskeArbeidsforhold"));
         return this;
     }
 
     public OpptjeningAktivitet medAnnenAktivitet(AnnenAktivitet annenAktivitet) {
-        if (this.andreAktiviteter == null)
-            this.andreAktiviteter = new ArrayList<>();
-        this.andreAktiviteter.add(annenAktivitet);
+        this.andreAktiviteter = unmodifiableList(Objects.requireNonNull(andreAktiviteter, "andreAktiviteter"));
         return this;
     }
 
     public OpptjeningAktivitet medAndreAktiviteter(List<AnnenAktivitet> andreAktiviteter) {
-        if (this.andreAktiviteter == null)
-            this.andreAktiviteter = new ArrayList<>();
-        this.andreAktiviteter.addAll(andreAktiviteter);
+        this.andreAktiviteter = unmodifiableList(Objects.requireNonNull(andreAktiviteter, "andreAktiviteter"));
         return this;
     }
 
@@ -132,7 +123,7 @@ public class OpptjeningAktivitet {
         }
 
         public Builder selvstendigNæringsdrivende(List<SelvstendigNæringsdrivende> selvstendigNæringsdrivende) {
-            this.selvstendigNæringsdrivende.addAll(selvstendigNæringsdrivende);
+            this.selvstendigNæringsdrivende.addAll(Objects.requireNonNull(selvstendigNæringsdrivende, "selvstendigNæringsdrivende"));
             return this;
         }
 

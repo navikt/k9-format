@@ -1,6 +1,6 @@
 package no.nav.k9.søknad.ytelse.omsorgspenger.v1;
 
-import static no.nav.k9.søknad.ytelse.psb.TestUtils.feilInneholder;
+import static no.nav.k9.søknad.TestUtils.feilInneholder;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
@@ -138,7 +138,7 @@ class OmsorgspengerUtbetalingValidatorTest {
     private OmsorgspengerUtbetaling byggOmsorgspengerUtbetalingMedFraværskorrigeringIm(FraværPeriode... fraværPerioder) {
         return new OmsorgspengerUtbetaling(
                 null,
-                new OpptjeningAktivitet(null, null, null, null),
+                new OpptjeningAktivitet(),
                 List.of(),
                 Arrays.asList(fraværPerioder),
                 null,

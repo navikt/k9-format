@@ -1,11 +1,8 @@
 package no.nav.k9.søknad.ytelse.psb.v1;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 
@@ -41,29 +38,6 @@ public class PleiepengerSyktBarnSøknadValidator extends SøknadValidator<Søkna
         }
     }
 
-    private Feil toFeil(ConstraintViolation<Søknad> constraintViolation) {
-        var constraintMessage = constraintViolation.getMessage();
-
-        final Pattern feilkodePattern = Pattern.compile("^[^\\[]*\\[([^]]*)\\](.*)$");
-        final Matcher feilkodeMatcher = feilkodePattern.matcher(constraintMessage);
-
-        final String feilkode;
-        final String feilmelding;
-
-        if (feilkodeMatcher.matches() && feilkodeMatcher.groupCount() >= 2) {
-            feilkode = feilkodeMatcher.group(1).trim();
-            feilmelding = feilkodeMatcher.group(2).trim();
-        } else {
-            feilkode = "påkrevd";
-            feilmelding = constraintMessage;
-        }
-
-        return new Feil(
-                constraintViolation.getPropertyPath().toString(),
-                feilkode,
-                feilmelding);
-    }
-
     @Override
     public List<Feil> valider(Søknad søknad) {
         return valider(søknad, List.of(), false);
@@ -77,7 +51,7 @@ public class PleiepengerSyktBarnSøknadValidator extends SøknadValidator<Søkna
         var validate = VALIDATOR_FACTORY.getValidator().validate(søknad);
 
         List<Feil> feil = validate.stream()
-                .map(this::toFeil)
+                .map(Feil::toFeil)
                 .collect(Collectors.toList());
 
         PleiepengerSyktBarn ytelse = (PleiepengerSyktBarn) søknad.getYtelse();

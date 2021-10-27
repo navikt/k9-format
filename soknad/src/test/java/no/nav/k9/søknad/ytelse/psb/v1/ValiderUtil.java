@@ -18,6 +18,7 @@ public class ValiderUtil {
     public static List<Feil> verifyHarFeil(Søknad søknad) {
         return verifyHarFeil(søknad, List.of());
     }
+
     public static List<Feil> verifyHarFeil(Søknad søknad, List<Periode> gyldigEndringsInterval) {
         final List<Feil> feil = valider(søknad, gyldigEndringsInterval);
         assertThat(feil).isNotEmpty();

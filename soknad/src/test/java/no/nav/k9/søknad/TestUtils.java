@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.ytelse.psb;
+package no.nav.k9.søknad;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import no.nav.k9.søknad.felles.Feil;
+import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 
 public class TestUtils {
@@ -21,6 +22,14 @@ public class TestUtils {
 
     public static String okOrgnummer() {
         return "999999999";
+    }
+
+    public static String okPersonnummer() {
+        return "33333333333";
+    }
+
+    public static NorskIdentitetsnummer okNorskIdentitetsnummer() {
+        return NorskIdentitetsnummer.of("33333333333");
     }
 
     public static String ikkeOkOrgnummer() {

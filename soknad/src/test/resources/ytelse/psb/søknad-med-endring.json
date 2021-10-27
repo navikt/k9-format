@@ -8,8 +8,7 @@
   "ytelse": {
     "type": "PLEIEPENGER_SYKT_BARN",
     "barn": {
-      "norskIdentitetsnummer": "22222222222",
-      "fødselsdato": "2018-10-30"
+      "norskIdentitetsnummer": "22222222222"
     },
     "søknadsperiode": ["2018-12-30/2019-09-20"],
     "endringsperiode": ["2019-09-21/2020-02-20"],
