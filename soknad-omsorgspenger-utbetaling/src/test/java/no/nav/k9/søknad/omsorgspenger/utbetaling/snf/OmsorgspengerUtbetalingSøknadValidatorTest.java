@@ -4,6 +4,7 @@ import static java.util.List.of;
 import static no.nav.k9.søknad.omsorgspenger.utbetaling.snf.TestUtils.jsonForKomplettSøknad;
 import static no.nav.k9.søknad.omsorgspenger.utbetaling.snf.TestUtils.komplettBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -84,17 +85,17 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
     @Test
     public void selvstending_næringsdrivende_mangler_påkrevde_felter() {
         var builder = komplettBuilder();
-        List<SelvstendigNæringsdrivende> selvstendingeVirksomheter = of(
-                SelvstendigNæringsdrivende.builder()
-                        .organisasjonsnummer(Organisasjonsnummer.of("816338352"))
-                        .periode(
-                                new Periode(LocalDate.now().minusMonths(2), LocalDate.now()),
-                                SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
-                                    .build()
-                        ).build()
-        );
-        builder.selvstendigNæringsdrivende(selvstendingeVirksomheter);
-        Assertions.assertThat(verifyHarFeil(builder)).hasSize(2);
+        assertThrows(NullPointerException.class, () -> {
+                    List<SelvstendigNæringsdrivende> selvstendingeVirksomheter = of(
+                            SelvstendigNæringsdrivende.builder()
+                                    .organisasjonsnummer(Organisasjonsnummer.of("816338352"))
+                                    .periode(
+                                            new Periode(LocalDate.now().minusMonths(2), LocalDate.now()),
+                                            SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
+                                                    .build()
+                                    ).build()
+                    );
+        });
     }
 
     @Test
