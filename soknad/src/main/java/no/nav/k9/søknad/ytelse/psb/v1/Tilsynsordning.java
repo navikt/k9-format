@@ -19,36 +19,35 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.k9.søknad.felles.type.Periode;
 
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-public class Uttak {
+public class Tilsynsordning {
 
-    @Valid
+    @JsonProperty(value="perioder", required = true)
     @NotNull
-    @JsonProperty(value = "perioder")
-    private Map<@NotNull Periode, @NotNull UttakPeriodeInfo> perioder = new TreeMap<>();
+    @Valid
+    private Map<@NotNull Periode, @NotNull TilsynPeriodeInfo> perioder = new TreeMap<>();
 
-    public Uttak() {
+    public Tilsynsordning() {
     }
 
-    public Map<Periode, UttakPeriodeInfo> getPerioder() {
+    public Map<Periode, TilsynPeriodeInfo> getPerioder() {
         return unmodifiableMap(perioder);
     }
 
-    public Uttak medPerioder(Map<Periode, UttakPeriodeInfo> perioder) {
+    public Tilsynsordning medPerioder(Map<Periode, TilsynPeriodeInfo> perioder) {
         this.perioder = Objects.requireNonNull(perioder, "perioder");
         return this;
     }
 
-    public Uttak leggeTilPeriode(Periode periode, UttakPeriodeInfo uttakPeriodeInfo) {
+    public Tilsynsordning leggeTilPeriode(Periode periode, TilsynPeriodeInfo tilsynPeriodeInfo) {
         Objects.requireNonNull(periode, "periode");
-        Objects.requireNonNull(uttakPeriodeInfo, "uttakPeriodeInfo");
-        this.perioder.put(periode, uttakPeriodeInfo);
+        Objects.requireNonNull(tilsynPeriodeInfo, "tilsynPeriodeInfo");
+        this.perioder.put(periode, tilsynPeriodeInfo);
         return this;
     }
 
-    public Uttak leggeTilPeriode(Map<Periode, UttakPeriodeInfo> perioder) {
+    public Tilsynsordning leggeTilPeriode(Map<Periode, TilsynPeriodeInfo> perioder) {
         Objects.requireNonNull(perioder, "perioder");
         this.perioder.putAll(perioder);
         return this;
@@ -56,28 +55,23 @@ public class Uttak {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-    public static class UttakPeriodeInfo {
+    public static class TilsynPeriodeInfo {
 
         @Valid
-        @NotNull
         @DurationMin(hours = 0, message = "[ugyldigVerdi] Må være større eller lik 0.")
         @DurationMax(hours = 7, minutes = 30, message = "[ugyldigVerdi] Må være lavere eller lik 7 timer 30 minutter.")
-        @JsonProperty(value = "timerPleieAvBarnetPerDag", required = true)
-        private Duration timerPleieAvBarnetPerDag;
+        @JsonProperty(value = "etablertTilsynTimerPerDag", required = true)
+        private Duration etablertTilsynTimerPerDag;
 
-        public UttakPeriodeInfo(Duration timerPleieAvBarnetPerDag) {
-            this.timerPleieAvBarnetPerDag = Objects.requireNonNull(timerPleieAvBarnetPerDag, "timerPleieAvBarnetPerDag");
+        public TilsynPeriodeInfo() {
         }
 
-        public UttakPeriodeInfo() {
+        public Duration getEtablertTilsynTimerPerDag() {
+            return etablertTilsynTimerPerDag;
         }
 
-        public Duration getTimerPleieAvBarnetPerDag() {
-            return timerPleieAvBarnetPerDag;
-        }
-
-        public UttakPeriodeInfo medTimerPleieAvBarnetPerDag(Duration timerPleieAvBarnetPerDag) {
-            this.timerPleieAvBarnetPerDag = Objects.requireNonNull(timerPleieAvBarnetPerDag, "timerPleieAvBarnetPerDag");
+        public TilsynPeriodeInfo medEtablertTilsynTimerPerDag(Duration etablertTilsynTimerPerDag) {
+            this.etablertTilsynTimerPerDag = Objects.requireNonNull(etablertTilsynTimerPerDag, "TilsynPeriodeInfo.etablertTilsynTimerPerDag");
             return this;
         }
     }

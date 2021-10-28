@@ -39,17 +39,18 @@ public class Arbeidstid {
     }
 
     public Arbeidstid medArbeidstaker(List<Arbeidstaker> arbeidstakerList) {
-        this.arbeidstakerList = (arbeidstakerList == null ) ? new ArrayList<>() : new ArrayList<>(arbeidstakerList);
+        this.arbeidstakerList = Objects.requireNonNull(arbeidstakerList, "arbeidstakerList");
         return this;
     }
 
     public Arbeidstid leggeTilArbeidstaker(List<Arbeidstaker> arbeidstakerList) {
+        Objects.requireNonNull(arbeidstakerList, "arbeidstakerList");
         this.arbeidstakerList.addAll(arbeidstakerList);
         return this;
     }
 
     public Arbeidstid leggeTilArbeidstaker(Arbeidstaker arbeidstaker) {
-        this.arbeidstakerList.add(arbeidstaker);
+        this.arbeidstakerList.add(Objects.requireNonNull(arbeidstaker, "arbeidstaker"));
         return this;
     }
 

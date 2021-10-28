@@ -1,16 +1,15 @@
 package no.nav.k9.søknad.ytelse.psb.v1.arbeidstid;
 
 import java.time.Duration;
+import java.util.Objects;
 
 import javax.validation.Valid;
-import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.time.DurationMax;
 import org.hibernate.validator.constraints.time.DurationMin;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -19,25 +18,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ArbeidstidPeriodeInfo {
 
     @Valid
-    @NotNull
-    @DurationMin
-    @DurationMax(hours = 24)
+    @DurationMin(hours = 0, message = "[ugyldigVerdi] Må være større eller lik 0.")
+    @DurationMax(hours = 24, message = "[ugyldigVerdi] Må være lavere eller lik 24 timer.")
     @JsonProperty(value = "jobberNormaltTimerPerDag", required = true)
     private Duration jobberNormaltTimerPerDag;
 
     @Valid
-    @NotNull
-    @DurationMin
-    @DurationMax(hours = 24)
+    @DurationMin(hours = 0, message = "[ugyldigVerdi] Må være større eller lik 0.")
+    @DurationMax(hours = 24, message = "[ugyldigVerdi] Må være lavere eller lik 24 timer.")
     @JsonProperty(value = "faktiskArbeidTimerPerDag", required = true)
     private Duration faktiskArbeidTimerPerDag;
 
-    @JsonCreator
+    @Deprecated
     public ArbeidstidPeriodeInfo(
             @JsonProperty(value = "jobberNormaltTimerPerDag", required = true) @Valid @NotNull @DurationMin Duration jobberNormaltTimerPerDag,
             @JsonProperty(value = "faktiskArbeidTimerPerDag", required = true) @Valid @NotNull @DurationMin Duration faktiskArbeidTimerPerDag) {
-        this.jobberNormaltTimerPerDag = jobberNormaltTimerPerDag;
-        this.faktiskArbeidTimerPerDag = faktiskArbeidTimerPerDag;
+        this.jobberNormaltTimerPerDag = Objects.requireNonNull(jobberNormaltTimerPerDag, "jobberNormaltTimerPerDag");
+        this.faktiskArbeidTimerPerDag = Objects.requireNonNull(faktiskArbeidTimerPerDag, "faktiskArbeidTimerPerDag");
     }
 
     public ArbeidstidPeriodeInfo() {
@@ -48,7 +45,7 @@ public class ArbeidstidPeriodeInfo {
     }
 
     public ArbeidstidPeriodeInfo medFaktiskArbeidTimerPerDag(Duration faktiskArbeidTimerPerDag) {
-        this.faktiskArbeidTimerPerDag = faktiskArbeidTimerPerDag;
+        this.faktiskArbeidTimerPerDag = Objects.requireNonNull(faktiskArbeidTimerPerDag, "faktiskArbeidTimerPerDag");
         return this;
     }
 
@@ -57,7 +54,8 @@ public class ArbeidstidPeriodeInfo {
     }
 
     public ArbeidstidPeriodeInfo medJobberNormaltTimerPerDag(Duration jobberNormaltTimerPerDag) {
-        this.jobberNormaltTimerPerDag = jobberNormaltTimerPerDag;
+        this.jobberNormaltTimerPerDag = Objects.requireNonNull(jobberNormaltTimerPerDag, "jobberNormaltTimerPerDag");
         return this;
     }
+
 }

@@ -20,7 +20,7 @@ class TrekkKravTest {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
         var trekkKravPeriode = new Periode(LocalDate.now().minusWeeks(1), LocalDate.now().minusDays(1));
 
-        var søknad = SøknadEksempel.komplettSøknad(søknadsperiode);
+        var søknad = SøknadEksempel.søknadMedArbeidstid(søknadsperiode);
         ((PleiepengerSyktBarn)søknad.getYtelse()).addTrekkKravPeriode(trekkKravPeriode);
         søknad.getBegrunnelseForInnsending().medBegrunnelseForInnsending("Jeg er søker");
 
@@ -32,7 +32,7 @@ class TrekkKravTest {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
         var trekkKravPeriode = new Periode(LocalDate.now().minusWeeks(1), LocalDate.now().minusDays(1));
 
-        var søknad = SøknadEksempel.komplettSøknad(søknadsperiode);
+        var søknad = SøknadEksempel.søknadMedArbeidstid(søknadsperiode);
         ((PleiepengerSyktBarn)søknad.getYtelse()).addTrekkKravPeriode(trekkKravPeriode);
 
         var feil = verifyHarFeil(søknad);
@@ -44,7 +44,7 @@ class TrekkKravTest {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
         var trekkKravPeriode = new Periode(LocalDate.now().minusWeeks(1), LocalDate.now().minusDays(1));
 
-        var søknad = SøknadEksempel.komplettSøknad(søknadsperiode);
+        var søknad = SøknadEksempel.søknadMedArbeidstid(søknadsperiode);
         ((PleiepengerSyktBarn)søknad.getYtelse()).addTrekkKravPeriode(trekkKravPeriode);
         søknad.getBegrunnelseForInnsending().medBegrunnelseForInnsending("");
 
@@ -58,7 +58,7 @@ class TrekkKravTest {
         var trekkKravPeriode = new Periode(LocalDate.now().minusWeeks(1), LocalDate.now().minusDays(1));
         Periode periodeMedFeil = new Periode(LocalDate.now().minusWeeks(1), LocalDate.now().plusMonths(2));
 
-        var søknad = SøknadEksempel.komplettSøknad(søknadsperiode);
+        var søknad = SøknadEksempel.søknadMedArbeidstid(søknadsperiode);
 
         ((PleiepengerSyktBarn)søknad.getYtelse()).addTrekkKravPeriode(trekkKravPeriode);
         søknad.getBegrunnelseForInnsending().medBegrunnelseForInnsending("Jeg er søker");
@@ -74,7 +74,7 @@ class TrekkKravTest {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
         var trekkKravPeriodeMedFeil = new Periode(LocalDate.now().plusWeeks(3), søknadsperiode.getTilOgMed());
 
-        var søknad = SøknadEksempel.komplettSøknad(søknadsperiode);
+        var søknad = SøknadEksempel.søknadMedArbeidstid(søknadsperiode);
         ((PleiepengerSyktBarn)søknad.getYtelse()).addTrekkKravPeriode(trekkKravPeriodeMedFeil);
         søknad.getBegrunnelseForInnsending().medBegrunnelseForInnsending("Jeg er søker");
 
@@ -85,13 +85,15 @@ class TrekkKravTest {
     @Test
     public void søknadMedEndringOgTrekkKravUtenFeil() {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
-        var gyldigEndringsInterval = new Periode(LocalDate.now().minusMonths(2), LocalDate.now().minusDays(1));
         var endringsperiode = new Periode(LocalDate.now().minusWeeks(2), LocalDate.now().minusDays(1));
+        var gyldigEndringsInterval = new Periode(LocalDate.now().minusMonths(2), LocalDate.now().minusDays(1));
         var trekkKravPeriode = new Periode(gyldigEndringsInterval.getFraOgMed(), endringsperiode.getFraOgMed().minusDays(1));
 
-        var psb = YtelseEksempel.standardYtelseMedEndring(søknadsperiode, endringsperiode);
-        psb.addTrekkKravPeriode(trekkKravPeriode);
-        var søknad = SøknadEksempel.søknad(psb);
+        var ytelse = YtelseEksempel.ytelseMedSøknadsperideOgArbeidstid(søknadsperiode, endringsperiode)
+                .medTilsynsordning(YtelseEksempel.lagTilsynsordning(søknadsperiode, endringsperiode))
+                .medBeredskap(YtelseEksempel.lagBeredskap(søknadsperiode, endringsperiode))
+                .addTrekkKravPeriode(trekkKravPeriode);
+        var søknad = SøknadEksempel.søknad(ytelse);
         søknad.getBegrunnelseForInnsending().medBegrunnelseForInnsending("Jeg er søker");
 
         verifyIngenFeil(søknad, List.of(gyldigEndringsInterval));
@@ -116,7 +118,7 @@ class TrekkKravTest {
         var endringsperiode = new Periode(LocalDate.now(), LocalDate.now().plusDays(30));
         var trekkKravPeriode = new Periode(LocalDate.now().plusDays(5), LocalDate.now().plusDays(20));
 
-        var søknad = SøknadEksempel.søknad(YtelseEksempel.komplettEndringssøknad(endringsperiode));
+        var søknad = SøknadEksempel.søknad(YtelseEksempel.komplettYtelseMedEndring(endringsperiode));
         ((PleiepengerSyktBarn) søknad.getYtelse()).addTrekkKravPeriode(trekkKravPeriode);
         søknad.getBegrunnelseForInnsending().medBegrunnelseForInnsending("Jeg er søker");
 

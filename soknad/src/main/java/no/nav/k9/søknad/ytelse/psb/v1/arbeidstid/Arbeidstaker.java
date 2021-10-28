@@ -1,10 +1,12 @@
 package no.nav.k9.søknad.ytelse.psb.v1.arbeidstid;
 
+import java.util.Objects;
+
 import javax.validation.Valid;
 import javax.validation.constraints.AssertFalse;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -23,17 +25,18 @@ public class Arbeidstaker {
     @Valid
     private Organisasjonsnummer organisasjonsnummer;
 
-    @JsonProperty(value = "arbeidstidInfo")
+    @JsonProperty(value = "arbeidstidInfo", required = true)
     @Valid
+    @NotNull
     private ArbeidstidInfo arbeidstidInfo;
 
-    @JsonCreator
+    @Deprecated
     public Arbeidstaker(@JsonProperty(value = "norskIdentitetsnummer") @Valid NorskIdentitetsnummer norskIdentitetsnummer,
                         @JsonProperty(value = "organisasjonsnummer") @Valid Organisasjonsnummer organisasjonsnummer,
                         @JsonProperty(value = "arbeidstidInfo") @Valid ArbeidstidInfo arbeidstidInfo) {
         this.norskIdentitetsnummer = norskIdentitetsnummer;
         this.organisasjonsnummer = organisasjonsnummer;
-        this.arbeidstidInfo = arbeidstidInfo;
+        this.arbeidstidInfo = Objects.requireNonNull(arbeidstidInfo, "arbeidstidInfo");
     }
 
     public Arbeidstaker() {
@@ -47,36 +50,39 @@ public class Arbeidstaker {
         return (this.norskIdentitetsnummer == null && this.organisasjonsnummer == null);
     }
 
-    @AssertFalse(message = "[ikkeEntydigId] Ikke entydig ID på Arbeidsgiver, må oppgi enten norskIdentitetsnummer eller organisasjonsnummer.")
-    private boolean isUniquelyIdentified() {
-        return erEntydigPåID();
-    }
-    @AssertFalse(message = "Mangler ID på Arbeidsgiver, må oppgi en av norskIdentitetsnummer eller organisasjonsnummer.")
-    private boolean isIdentified() {
-        return manglerIkkeID();
-    }
-
     public NorskIdentitetsnummer getNorskIdentitetsnummer() {
         return norskIdentitetsnummer;
     }
 
-    public void setNorskIdentitetsnummer(NorskIdentitetsnummer norskIdentitetsnummer) {
-        this.norskIdentitetsnummer = norskIdentitetsnummer;
+    public Arbeidstaker medNorskIdentitetsnummer(NorskIdentitetsnummer norskIdentitetsnummer) {
+        this.norskIdentitetsnummer = Objects.requireNonNull(norskIdentitetsnummer, "norskIdentitetsnummer");
+        return this;
     }
 
     public Organisasjonsnummer getOrganisasjonsnummer() {
         return organisasjonsnummer;
     }
 
-    public void setOrganisasjonsnummer(Organisasjonsnummer organisasjonsnummer) {
-        this.organisasjonsnummer = organisasjonsnummer;
+    public Arbeidstaker medOrganisasjonsnummer(Organisasjonsnummer organisasjonsnummer) {
+        this.organisasjonsnummer = Objects.requireNonNull(organisasjonsnummer, "organisasjonsnummer");
+        return this;
     }
 
     public ArbeidstidInfo getArbeidstidInfo() {
         return arbeidstidInfo;
     }
 
-    public void setArbeidstidInfo(ArbeidstidInfo arbeidstidInfo) {
-        this.arbeidstidInfo = arbeidstidInfo;
+    public Arbeidstaker medArbeidstidInfo(ArbeidstidInfo arbeidstidInfo) {
+        this.arbeidstidInfo = Objects.requireNonNull(arbeidstidInfo, "arbeidstidInfo");
+        return this;
+    }
+
+    @AssertFalse(message = "[ikkeEntydig] Ikke entydig ID på Arbeidsgiver, må oppgi enten norskIdentitetsnummer eller organisasjonsnummer.")
+    private boolean isUniquelyIdentified() {
+        return erEntydigPåID();
+    }
+    @AssertFalse(message = "[påkrevd] Mangler ID på Arbeidsgiver, må oppgi en av norskIdentitetsnummer eller organisasjonsnummer.")
+    private boolean isIdentified() {
+        return manglerIkkeID();
     }
 }

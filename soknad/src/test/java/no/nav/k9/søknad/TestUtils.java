@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
+import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 
 public class TestUtils {
@@ -20,8 +21,12 @@ public class TestUtils {
         return d.minusDays(d.getDayOfWeek().getValue() - 1);
     }
 
-    public static String okOrgnummer() {
+    public static String okOrgnummerString() {
         return "999999999";
+    }
+
+    public static Organisasjonsnummer okOrgnummer() {
+        return Organisasjonsnummer.of(okOrgnummerString());
     }
 
     public static String okPersonnummer() {
@@ -30,6 +35,9 @@ public class TestUtils {
 
     public static NorskIdentitetsnummer okNorskIdentitetsnummer() {
         return NorskIdentitetsnummer.of("33333333333");
+    }
+    public static NorskIdentitetsnummer okNorskIdentitetsnummerBarn() {
+        return NorskIdentitetsnummer.of("44444444444");
     }
 
     public static String ikkeOkOrgnummer() {

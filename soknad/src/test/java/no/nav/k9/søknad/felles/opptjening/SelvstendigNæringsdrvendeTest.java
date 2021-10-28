@@ -80,5 +80,31 @@ class SelvstendigNæringsdrvendeTest {
         var sn = new SelvstendigNæringsdrivende().medPerioder(Map.of(periode, snInfo));
         validator.verifyIngenFeil(sn);
     }
+
+    @Test
+    public void selvstendigNæringsdrivendeKanHaÅpnePerioder() {
+        var snInfo = new SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo()
+                .medVirksomhetstyper(List.of(VirksomhetType.ANNEN));
+
+        var sn = new SelvstendigNæringsdrivende()
+                .medPerioder(Map.of(Periode.parse("2020-01-01/.."), snInfo))
+                .medVirksomhetNavn("testUlf");
+
+        validator.verifyIngenFeil(sn);
+    }
+
+    @Test
+    public void selvstendigNæringsdrivendeKanHaOverlappendePerioder() {
+        var snInfo = new SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo()
+                .medVirksomhetstyper(List.of(VirksomhetType.ANNEN));
+        var sn = new SelvstendigNæringsdrivende()
+                .medPerioder(Map.of(
+                        Periode.parse("2020-01-01/2020-02-02"), snInfo,
+                        Periode.parse("2020-01-05/2020-02-01"), snInfo))
+                .medVirksomhetNavn("testUlf");
+        var opptjeningAktivitet = new OpptjeningAktivitet().medSelvstendigNæringsdrivende(sn);
+
+        validator.verifyIngenFeil(opptjeningAktivitet);
+    }
 }
 

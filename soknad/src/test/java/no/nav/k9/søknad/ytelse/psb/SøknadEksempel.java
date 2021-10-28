@@ -22,11 +22,12 @@ public class SøknadEksempel {
         );
     }
 
-    public static Søknad komplettSøknad(Periode søknadsperiode) {
-        return søknad(YtelseEksempel.komplettYtelse(søknadsperiode));
+
+    public static Søknad søknadMedArbeidstid(Periode søknadsperiode) {
+        return søknad(YtelseEksempel.ytelseMedSøknadsperideOgArbeidstid(søknadsperiode));
     }
 
     public static Søknad minimumSøknad(Periode søknadsperiode) {
-        return søknad(YtelseEksempel.minimumYtelse(søknadsperiode));
+        return søknad(YtelseEksempel.minimumYtelseMedSøknadsperiode(søknadsperiode));
     }
 }
