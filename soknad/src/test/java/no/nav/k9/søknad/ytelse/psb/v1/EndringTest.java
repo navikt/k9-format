@@ -93,7 +93,7 @@ class EndringTest {
         var søknad = SøknadEksempel.søknad(ytelse);
 
         var feil = verifyHarFeil(søknad, List.of());
-        TestUtils.feilInneholder(feil, "ytelse.uttak.perioder", "ugyldigPeriode");
+        TestUtils.feilInneholder(feil, "ytelse.søknadsperiode", "missingArgument");
         assertThat(feil).size().isEqualTo(1);
     }
 

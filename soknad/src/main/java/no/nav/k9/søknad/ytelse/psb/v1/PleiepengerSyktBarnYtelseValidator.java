@@ -65,7 +65,8 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
                                        boolean brukValideringMedUtledetEndringsperiode) {
         final List<Feil> feilene = new ArrayList<Feil>();
 
-        feilene.addAll(validerLovligEndring(psb, gyldigeEndringsperioder, brukValideringMedUtledetEndringsperiode));
+        validerLovligEndring(psb, gyldigeEndringsperioder, brukValideringMedUtledetEndringsperiode, feilene);
+
         feilene.addAll(validerPerioderErLukketOgGyldig(psb.getBosteder().getPerioder(), "bosteder.perioder"));
         feilene.addAll(validerPerioderErLukketOgGyldig(psb.getUtenlandsopphold().getPerioder(), "utenlandsopphold.perioder"));
         
@@ -97,16 +98,16 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         return feilene;
     }
 
-    private List<Feil> validerLovligEndring(PleiepengerSyktBarn psb, List<Periode> gyldigeEndringsperioder,
-            boolean brukValideringMedUtledetEndringsperiode) {
+    private void validerLovligEndring(PleiepengerSyktBarn psb, List<Periode> gyldigeEndringsperioder,
+            boolean brukValideringMedUtledetEndringsperiode, List<Feil> feil) {
         if (psb.getSøknadsperiodeList().isEmpty()
                 && (
                     !brukValideringMedUtledetEndringsperiode && psb.getEndringsperiode().isEmpty()
                     || brukValideringMedUtledetEndringsperiode && gyldigeEndringsperioder.isEmpty()
                 )) {
-            return List.of(lagFeil("søknadsperiode", "missingArgument", "Mangler søknadsperiode eller gyldigeEndringsperioder."));
+            feil.add(lagFeil("søknadsperiode", "missingArgument", "Mangler søknadsperiode eller gyldigeEndringsperioder."));
+            throw new ValideringsAvbrytendeFeilException(feil);
         }
-        return List.of();
     }
 
     private List<Feil> validerAtYtelsePerioderErInnenforIntervalForEndring(LocalDateTimeline<Boolean> gyldigInterval,
