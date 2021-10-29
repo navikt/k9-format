@@ -152,6 +152,13 @@ public class OmsorgspengerUtbetaling implements Ytelse {
         return this;
     }
 
+    public OmsorgspengerUtbetaling medFraværsperioderKorrigeringIm(List<FraværPeriode> fraværsperioder) {
+        if (this.fraværsperioderKorrigeringIm == null)
+            this.fraværsperioderKorrigeringIm = new ArrayList<>();
+        this.fraværsperioderKorrigeringIm.addAll(fraværsperioder);
+        return this;
+    }
+
     public OmsorgspengerUtbetaling medAktivitet(OpptjeningAktivitet arbeidAktivitet) {
         this.aktivitet = arbeidAktivitet;
         return this;
