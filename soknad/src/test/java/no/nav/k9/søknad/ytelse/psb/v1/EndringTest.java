@@ -43,8 +43,21 @@ class EndringTest {
         var endringsperiode = new Periode(LocalDate.now().minusWeeks(2), LocalDate.now().plusWeeks(3));
 
         var psb = komplettYtelseMedEndring(endringsperiode);
+        var søknad = SøknadEksempel.søknad(psb);
 
-        verifyIngenFeil(psb, List.of(gyldigEndringsInterval));
+        verifyIngenFeil(søknad, List.of(gyldigEndringsInterval));
+    }
+
+    @Test
+    public void komplettEndringssøknadUtenFeilUtenGyldigPeriode() {
+        var gyldigEndringsInterval = new Periode(LocalDate.now().minusMonths(2), LocalDate.now().plusWeeks(3));
+        var endringsperiode = new Periode(LocalDate.now().minusWeeks(2), LocalDate.now().plusWeeks(3));
+
+        var psb = komplettYtelseMedEndring(endringsperiode);
+        var søknad = SøknadEksempel.søknad(psb);
+
+        var feil = verifyHarFeil(søknad, List.of());
+        feilInneholder(feil, "ytelse.søknadsperiode", "missingArgument", "Mangler søknadsperiode eller gyldigeEndringsperioder.");
     }
 
     @Test

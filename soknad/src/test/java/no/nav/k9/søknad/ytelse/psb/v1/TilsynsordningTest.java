@@ -10,7 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.TestValidator;
 import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.ytelse.psb.v1.Tilsynsordning.TilsynPeriodeInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo;
 
 class TilsynsordningTest {
 
