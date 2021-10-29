@@ -1,6 +1,7 @@
 package no.nav.k9.søknad.ytelse.psb;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,39 +34,22 @@ public class YtelseEksempel {
     Komplett
      */
 
-/*    @Deprecated
-    public static PleiepengerSyktBarn ytelseKomplettMedFlerePerioder() {
-
+    public static PleiepengerSyktBarn ytelseMedSøknadOgDelperioder() {
         var søknadsperiode = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-10-20"));
-        var psb = ytelseKomplett(søknadsperiode);
-
         var delperiodeEn = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-02-20"));
         var delperiodeTo = new Periode(LocalDate.parse("2019-02-21"), LocalDate.parse("2019-10-20"));
+        return ytelseMedSøknadOgDelperioder(søknadsperiode, delperiodeEn, delperiodeTo);
+    }
 
-        psb.medBeredskap(new Beredskap().medPerioder(Map.of(
-                delperiodeEn, new Beredskap.BeredskapPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()),
-                delperiodeTo, new Beredskap.BeredskapPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()))));
-
-        psb.medNattevåk(new Nattevåk().medPerioder(Map.of(
-                delperiodeEn, new Nattevåk.NattevåkPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()),
-                delperiodeTo, new Nattevåk.NattevåkPeriodeInfo().medTilleggsinformasjon(TestUtils.testTekst()))));
-
-        psb.medTilsynsordning( new Tilsynsordning().medPerioder(Map.of(
-                new Periode(LocalDate.parse("2019-01-01"), LocalDate.parse("2019-01-01")),
-                new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7).plusMinutes(30)),
-                new Periode(LocalDate.parse("2019-01-02"), LocalDate.parse("2019-01-02")),
-                new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7).plusMinutes(30)),
-                new Periode(LocalDate.parse("2019-01-03"), LocalDate.parse("2019-01-09")),
-                new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7).plusMinutes(30)))));
-
-        psb.medLovbestemtFerie(new LovbestemtFerie().medPerioder(
-                Map.of(delperiodeTo, new LovbestemtFerie.LovbestemtFeriePeriodeInfo())));
-
-        return psb;
-    }*/
+    public static PleiepengerSyktBarn ytelseMedSøknadOgDelperioder(Periode søknadsperiode, Periode... delperioder) {
+        return minimumYtelseMedSøknadsperiode(søknadsperiode)
+                .medBeredskap(lagBeredskap(delperioder))
+                .medNattevåk(lagNattevåk(delperioder))
+                .medTilsynsordning(lagTilsynsordning(delperioder))
+                .medArbeidstid(new Arbeidstid().medArbeidstaker(List.of(lagArbeidstaker(delperioder))));
+    }
 
     public static PleiepengerSyktBarn komplettYtelseMedSøknadsperiode(Periode søknadsperiode, Periode lovbestemtFeriePeriode, Periode utenlandsperiode, Periode bostedperiode) {
-
         var søknadInfo = new DataBruktTilUtledning( true, true,
                 false, false, true );
         var infoFraPunsj = new InfoFraPunsj()
@@ -73,6 +57,7 @@ public class YtelseEksempel {
 
         return ytelseMedSøknadsperideOgArbeidstid((Periode) søknadsperiode)
                 .medSøknadInfo(søknadInfo)
+                .medInfoFraPunsj(infoFraPunsj)
                 .medTilsynsordning(lagTilsynsordning((Periode) søknadsperiode))
                 .medBeredskap(lagBeredskap((Periode) søknadsperiode))
                 .medNattevåk(lagNattevåk((Periode) søknadsperiode))
@@ -96,24 +81,6 @@ public class YtelseEksempel {
                         lagArbeidstaker(perioder))));
     }
 
-/*    @Deprecated
-    public static PleiepengerSyktBarn ytelseMinimumMedFlerePerioder() {
-        var søknadsperiode = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-10-20"));
-        var uttakperiode = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-02-20"));
-        var uttakperiode2 = new Periode(LocalDate.parse("2019-02-21"), LocalDate.parse("2019-10-20"));
-
-        var uttak = new Uttak().medPerioder(Map.of(
-                uttakperiode, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30)),
-                uttakperiode2, new UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))));
-
-        var barn = new Barn(null, LocalDate.now());
-
-        return new PleiepengerSyktBarn()
-                .medSøknadsperiode(søknadsperiode)
-                .medBarn(barn)
-                .medUttak(uttak);
-    }*/
-
     public static PleiepengerSyktBarn komplettYtelseMedEndring(Periode... perioder) {
         return YtelseEksempel.lagYtelse()
                 .medBeredskap(lagBeredskap(perioder))
@@ -122,17 +89,6 @@ public class YtelseEksempel {
                 .medArbeidstid(new Arbeidstid().leggeTilArbeidstaker(lagArbeidstaker(perioder)))
                 .medUttak(lagUttak(perioder));
     }
-
-
-//    public static void leggPåKomplettEndringsøknad(Periode endringsperiode, PleiepengerSyktBarn søknad) {
-//        var endringssøknad = komplettEndringssøknad(endringsperiode);
-//        søknad.medEndringsperiode(endringssøknad.getEndringsperiode());
-//        søknad.getBeredskap().leggeTilPeriode(endringssøknad.getBeredskap().getPerioder());
-//        søknad.getNattevåk().leggeTilPeriode(endringssøknad.getNattevåk().getPerioder());
-//        søknad.getTilsynsordning().leggeTilPeriode(endringssøknad.getTilsynsordning().getPerioder());
-//        søknad.getArbeidstid().leggeTilArbeidstaker(endringssøknad.getArbeidstid().getArbeidstakerList());
-//        søknad.getUttak().leggeTilPeriode(endringssøknad.getUttak().getPerioder());
-//    }
 
     public static PleiepengerSyktBarn lagYtelse() {
         return new PleiepengerSyktBarn()

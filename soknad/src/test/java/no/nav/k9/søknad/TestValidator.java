@@ -11,10 +11,9 @@ import javax.validation.ValidatorFactory;
 
 import no.nav.k9.søknad.felles.Feil;
 
-public class TestValidator extends SøknadValidator{
+public class TestValidator {
     private static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
 
-    @Override
     public List<Feil> valider(Object test) {
 
         var validate = VALIDATOR_FACTORY.getValidator().validate(test);
