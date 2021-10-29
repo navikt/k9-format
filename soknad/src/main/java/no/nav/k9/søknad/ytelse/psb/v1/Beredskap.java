@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.TreeMap;
 
 import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -25,6 +26,7 @@ public class Beredskap {
     private Map<@NotNull Periode, @NotNull BeredskapPeriodeInfo> perioder = new TreeMap<>();
 
     // Hvorfor er dette et map? Dette er vel egentlig en liste med perioder?
+    //TODO gjøre om til List
     @JsonProperty(value="perioderSomSkalSlettes")
     @Valid
     private Map<@NotNull Periode, @NotNull BeredskapPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
@@ -46,16 +48,19 @@ public class Beredskap {
     }
 
     public Beredskap medPerioderSomSkalSlettes(Map<Periode, BeredskapPeriodeInfo> perioderSomSkalSlettes) {
-        this.perioderSomSkalSlettes = (perioderSomSkalSlettes == null) ? new TreeMap<>() : new TreeMap<>(perioderSomSkalSlettes);
+        this.perioderSomSkalSlettes = Objects.requireNonNull(perioderSomSkalSlettes, "perioderSomSkalSlettes");
         return this;
     }
 
     public Beredskap leggeTilPeriode(Periode periode, BeredskapPeriodeInfo beredskapPeriodeInfo) {
+        Objects.requireNonNull(periode, "periode");
+        Objects.requireNonNull(beredskapPeriodeInfo, "beredskapPeriodeInfo");
         this.perioder.put(periode, beredskapPeriodeInfo);
         return this;
     }
 
     public Beredskap leggeTilPeriode(Map<Periode, BeredskapPeriodeInfo> perioder) {
+        Objects.requireNonNull(perioder, "perioder");
         this.perioder.putAll(perioder);
         return this;
     }
@@ -65,7 +70,6 @@ public class Beredskap {
 
         @JsonProperty(value = "tilleggsinformasjon", required = true)
         @Valid
-        @NotNull
         private String tilleggsinformasjon;
 
         public BeredskapPeriodeInfo() {
@@ -76,8 +80,16 @@ public class Beredskap {
         }
 
         public BeredskapPeriodeInfo medTilleggsinformasjon(String tilleggsinformasjon) {
-            this.tilleggsinformasjon = Objects.requireNonNull(tilleggsinformasjon, "BeredskapPeriodeInfo.tilleggsinformasjon");
+            this.tilleggsinformasjon = Objects.requireNonNull(tilleggsinformasjon, "tilleggsinformasjon");
             return this;
+        }
+
+        @AssertTrue(message = "[tomFeil] Feltet kan ikke være tomt")
+        private boolean isNotEmpty() {
+            if (tilleggsinformasjon == null) {
+                return true;
+            }
+            return !tilleggsinformasjon.isEmpty();
         }
     }
 }

@@ -3,13 +3,13 @@ package no.nav.k9.søknad.ytelse.psb.v1.arbeidstid;
 import static java.util.Collections.unmodifiableMap;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,12 +24,12 @@ public class ArbeidstidInfo {
     @JsonProperty(value = "perioder", required = true)
     @Valid
     @NotNull
-    private Map<@NotNull Periode, @NotNull ArbeidstidPeriodeInfo> perioder;
+    private Map<@NotNull Periode, @NotNull ArbeidstidPeriodeInfo> perioder = new TreeMap<>();
 
-    @JsonCreator
+    @Deprecated
     public ArbeidstidInfo(
             @JsonProperty(value = "perioder", required = true) @Valid @NotNull Map<@NotNull Periode, @NotNull ArbeidstidPeriodeInfo> perioder) {
-        this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
+        this.perioder = Objects.requireNonNull(perioder, "perioder");
     }
 
     public ArbeidstidInfo() {
@@ -40,11 +40,13 @@ public class ArbeidstidInfo {
     }
 
     public ArbeidstidInfo medPerioder(Map<Periode, ArbeidstidPeriodeInfo> perioder) {
-        this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
+        this.perioder = Objects.requireNonNull(perioder, "perioder");
         return this;
     }
 
     public ArbeidstidInfo leggeTilPeriode(Periode periode, ArbeidstidPeriodeInfo arbeidstidPeriodeInfo) {
+        Objects.requireNonNull(periode, "periode");
+        Objects.requireNonNull(arbeidstidPeriodeInfo, "arbeidstidPeriodeInfo");
         this.perioder.put(periode, arbeidstidPeriodeInfo);
         return this;
     }

@@ -1,6 +1,10 @@
 package no.nav.k9.søknad.felles;
 
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.validation.ConstraintViolation;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -35,6 +39,38 @@ public class Feil {
     public String getFelt() {
         return felt;
     }
+
+    public static <O> Feil toFeil(ConstraintViolation<O> constraintViolation) {
+        var constraintMessage = constraintViolation.getMessage();
+
+        final Pattern feilkodePattern = Pattern.compile("^[^\\[]*\\[([^]]*)\\](.*)$");
+        final Matcher feilkodeMatcher = feilkodePattern.matcher(constraintMessage);
+
+        final String feilkode;
+        final String feilmelding;
+
+        if (feilkodeMatcher.matches() && feilkodeMatcher.groupCount() >= 2) {
+            feilkode = feilkodeMatcher.group(1).trim();
+            feilmelding = feilkodeMatcher.group(2).trim();
+        } else if (constraintMessage.equals("must not be null")){
+            feilkode = "nullFeil";
+            feilmelding = "Feltet kan ikke være tomt, null feil";
+
+        }else if (constraintMessage.equals("must not be empty")){
+            feilkode = "tomFeil";
+            feilmelding = "Feltet kan ikke være tomt";
+
+        } else {
+            feilkode = "påkrevd";
+            feilmelding = constraintMessage;
+        }
+
+        return new Feil(
+                constraintViolation.getPropertyPath().toString(),
+                feilkode,
+                feilmelding);
+    }
+
 
     @Override
     public boolean equals(Object o) {

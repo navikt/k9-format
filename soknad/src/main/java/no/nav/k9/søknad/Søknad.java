@@ -83,11 +83,11 @@ public class Søknad implements Innsending {
                   @JsonProperty(value = "søker", required = true) @Valid @NotNull Søker søker,
                   @JsonProperty(value = "språk", required = false) @Valid Språk språk,
                   @JsonProperty(value = "ytelse", required = true) @Valid @NotNull Ytelse ytelse) {
-        this.søknadId = søknadId;
-        this.versjon = versjon;
-        this.mottattDato = mottattDato;
-        this.søker = søker;
-        this.ytelse = ytelse;
+        this.søknadId = Objects.requireNonNull(søknadId, "søknadId");
+        this.versjon = Objects.requireNonNull(versjon, "versjon");
+        this.mottattDato = Objects.requireNonNull(mottattDato, "mottattDato");
+        this.søker = Objects.requireNonNull(søker, "søker");
+        this.ytelse = Objects.requireNonNull(ytelse, "ytelse");
         this.språk = språk;
     }
 
@@ -104,17 +104,9 @@ public class Søknad implements Innsending {
         return søknadId;
     }
 
-    public void setSøknadId(SøknadId søknadId) {
-        this.søknadId = søknadId;
-    }
-
     @Override
     public Versjon getVersjon() {
         return versjon;
-    }
-
-    public void setVersjon(Versjon versjon) {
-        this.versjon = versjon;
     }
 
     @Override
@@ -126,57 +118,8 @@ public class Søknad implements Innsending {
         return språk;
     }
 
-    public void setMottattDato(ZonedDateTime mottattDato) {
-        this.mottattDato = mottattDato;
-    }
-
     public BegrunnelseForInnsending getBegrunnelseForInnsending() {
         return begrunnelseForInnsending;
-    }
-
-    public Søknad medMottattDato(ZonedDateTime mottattDato) {
-        this.mottattDato = mottattDato;
-        return this;
-    }
-
-    public Søknad medSpråk(Språk språk) {
-        this.språk = språk;
-        return this;
-    }
-
-    public Søknad medSøknadId(String søknadId) {
-        this.søknadId = new SøknadId(søknadId);
-        return this;
-    }
-
-    public Søknad medSøknadId(SøknadId søknadId) {
-        this.søknadId = søknadId;
-        return this;
-    }
-
-    public Søknad medVersjon(String versjon) {
-        this.versjon = new Versjon(versjon);
-        return this;
-    }
-
-    public Søknad medVersjon(Versjon versjon) {
-        this.versjon = versjon;
-        return this;
-    }
-
-    public Søknad medSøker(Søker søker) {
-        this.søker = søker;
-        return this;
-    }
-
-    public Søknad medYtelse(Ytelse ytelse) {
-        this.ytelse = ytelse;
-        return this;
-    }
-
-    public Søknad medBegrunnelseForInnsending(BegrunnelseForInnsending begrunnelseForInnsending) {
-        this.begrunnelseForInnsending = Objects.requireNonNull(begrunnelseForInnsending);
-        return this;
     }
 
     public List<Person> getBerørtePersoner() {
@@ -188,12 +131,78 @@ public class Søknad implements Innsending {
         return søker;
     }
 
-    public void setSøker(Søker søker) {
-        this.søker = søker;
-    }
-
     public List<Journalpost> getJournalposter() {
         return journalposter;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <Y extends Ytelse> Y getYtelse() {
+        return (Y) ytelse;
+    }
+
+    public void setSøknadId(SøknadId søknadId) {
+        this.søknadId = Objects.requireNonNull(søknadId, "søknadId");
+    }
+
+    public void setVersjon(Versjon versjon) {
+        this.versjon = Objects.requireNonNull(versjon);;
+    }
+
+    public void setMottattDato(ZonedDateTime mottattDato) {
+        this.mottattDato = Objects.requireNonNull(mottattDato, "mottattDato");
+    }
+
+    public void setSøker(Søker søker) {
+        this.søker = Objects.requireNonNull(søker, "søker");
+    }
+
+    public void setYtelse(Ytelse ytelse) {
+        this.ytelse = Objects.requireNonNull(ytelse, "ytelse");
+    }
+
+    public Søknad medMottattDato(ZonedDateTime mottattDato) {
+        this.mottattDato = Objects.requireNonNull(mottattDato, "mottattDato");
+        return this;
+    }
+
+    public Søknad medSpråk(Språk språk) {
+        this.språk = språk;
+        return this;
+    }
+
+    public Søknad medSøknadId(String søknadId) {
+        this.søknadId = new SøknadId(Objects.requireNonNull(søknadId, "søknadId"));
+        return this;
+    }
+
+    public Søknad medSøknadId(SøknadId søknadId) {
+        this.søknadId = Objects.requireNonNull(søknadId, "søknadId");
+        return this;
+    }
+
+    public Søknad medVersjon(String versjon) {
+        this.versjon = new Versjon(Objects.requireNonNull(versjon, "versjon"));
+        return this;
+    }
+
+    public Søknad medVersjon(Versjon versjon) {
+        this.versjon = Objects.requireNonNull(versjon, "versjon");
+        return this;
+    }
+
+    public Søknad medSøker(Søker søker) {
+        this.søker = Objects.requireNonNull(søker, "søker");
+        return this;
+    }
+
+    public Søknad medYtelse(Ytelse ytelse) {
+        this.ytelse = Objects.requireNonNull(ytelse, "ytelse");
+        return this;
+    }
+
+    public Søknad medBegrunnelseForInnsending(BegrunnelseForInnsending begrunnelseForInnsending) {
+        this.begrunnelseForInnsending = Objects.requireNonNull(begrunnelseForInnsending, "begrunnelseForInnsending");
+        return this;
     }
 
     public Søknad medJournalpost(Journalpost journalpost) {
@@ -204,15 +213,6 @@ public class Søknad implements Innsending {
     public Søknad medJournalposter(List<Journalpost> journalposter) {
         this.journalposter.addAll(Objects.requireNonNull(journalposter, "journalposter"));
         return this;
-    }
-
-    @SuppressWarnings("unchecked")
-    public <Y extends Ytelse> Y getYtelse() {
-        return (Y) ytelse;
-    }
-
-    public void setYtelse(Ytelse ytelse) {
-        this.ytelse = ytelse;
     }
 
     public static final class SerDes {

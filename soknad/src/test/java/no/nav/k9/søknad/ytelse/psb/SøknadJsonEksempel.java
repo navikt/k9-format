@@ -39,4 +39,8 @@ public class SøknadJsonEksempel {
     public static Søknad søknadMedEndring() {
         return Søknad.SerDes.deserialize(jsonFromFile("søknad-med-endring.json"));
     }
+
+    public static Søknad søknadMedNullFeil() {
+        return Søknad.SerDes.deserialize(jsonFromFile("søknad-null-feil.json"));
+    }
 }

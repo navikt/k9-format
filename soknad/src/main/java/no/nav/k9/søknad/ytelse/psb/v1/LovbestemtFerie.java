@@ -3,6 +3,7 @@ package no.nav.k9.søknad.ytelse.psb.v1;
 import static java.util.Collections.unmodifiableMap;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 import javax.validation.Valid;
@@ -20,6 +21,7 @@ public class LovbestemtFerie {
 
     @JsonProperty(value="perioder", required = true)
     @Valid
+    @NotNull
     private Map<@NotNull Periode, @NotNull LovbestemtFeriePeriodeInfo> perioder = new TreeMap<>();
 
     public LovbestemtFerie() {
@@ -30,11 +32,13 @@ public class LovbestemtFerie {
     }
 
     public LovbestemtFerie medPerioder(Map<Periode, LovbestemtFeriePeriodeInfo> perioder) {
-        this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
+        this.perioder = Objects.requireNonNull(perioder, "perioder");
         return this;
     }
 
     public LovbestemtFerie leggeTilPeriode(Periode periode, LovbestemtFeriePeriodeInfo tilsynPeriodeInfo) {
+        Objects.requireNonNull(periode, "periode");
+        Objects.requireNonNull(tilsynPeriodeInfo, "tilsynPeriodeInfo");
         this.perioder.put(periode, tilsynPeriodeInfo);
         return this;
     }
@@ -50,7 +54,7 @@ public class LovbestemtFerie {
         }
 
         public LovbestemtFeriePeriodeInfo medSkalHaFerie(Boolean skalHaFerie) {
-            this.skalHaFerie = skalHaFerie;
+            this.skalHaFerie = Objects.requireNonNull(skalHaFerie, "skalHaFerie");
             return this;
         }
 

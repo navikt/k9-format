@@ -4,18 +4,22 @@ import java.time.Duration;
 import java.util.Objects;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.time.DurationMax;
+import org.hibernate.validator.constraints.time.DurationMin;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class TilsynPeriodeInfo {
 
     @Valid
-    @NotNull
+    @DurationMin(hours = 0, message = "[ugyldigVerdi] Må være større eller lik 0.")
+    @DurationMax(hours = 7, minutes = 30, message = "[ugyldigVerdi] Må være lavere eller lik 7 timer 30 minutter.")
     @JsonProperty(value = "etablertTilsynTimerPerDag", required = true)
     private Duration etablertTilsynTimerPerDag;
 
@@ -30,4 +34,5 @@ public class TilsynPeriodeInfo {
         this.etablertTilsynTimerPerDag = Objects.requireNonNull(etablertTilsynTimerPerDag, "TilsynPeriodeInfo.etablertTilsynTimerPerDag");
         return this;
     }
+
 }

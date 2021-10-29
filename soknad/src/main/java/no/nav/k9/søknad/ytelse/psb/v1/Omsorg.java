@@ -3,6 +3,7 @@ package no.nav.k9.søknad.ytelse.psb.v1;
 import java.util.Optional;
 
 import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -12,11 +13,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Omsorg {
 
-    @JsonProperty(value = "relasjonTilBarnet", required = true)
+    @JsonProperty(value = "relasjonTilBarnet", required = false)
     @Valid
     private BarnRelasjon relasjonTilBarnet;
 
-    @JsonProperty(value = "beskrivelseAvOmsorgsrollen", required = true)
+    @JsonProperty(value = "beskrivelseAvOmsorgsrollen", required = false)
     @Valid
     private String beskrivelseAvOmsorgsrollen;
 
@@ -39,6 +40,14 @@ public class Omsorg {
     public Omsorg medBeskrivelseAvOmsorgsrollen(String beskrivelseAvOmsorgsrollen) {
         this.beskrivelseAvOmsorgsrollen = beskrivelseAvOmsorgsrollen;
         return this;
+    }
+
+    @AssertTrue(message = "[påkrevd] Kan ikke være tom når relasjon er Annet")
+    private boolean isNotEmptyBeskrivesleWhenAnnet() {
+        if (relasjonTilBarnet == null || relasjonTilBarnet != BarnRelasjon.ANNET) {
+            return true;
+        }
+        return beskrivelseAvOmsorgsrollen != null && !beskrivelseAvOmsorgsrollen.isEmpty();
     }
 
     public enum BarnRelasjon {

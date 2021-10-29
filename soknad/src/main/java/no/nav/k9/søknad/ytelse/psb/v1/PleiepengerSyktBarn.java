@@ -40,8 +40,10 @@ public class PleiepengerSyktBarn implements Ytelse {
     @Valid
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     @JsonProperty(value = "søknadsperiode", required = true)
+    @NotNull
     private List<Periode> søknadsperiode = new ArrayList<>();
 
+    @Deprecated
     @Valid
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     @JsonProperty(value = "endringsperiode", required = true)
@@ -49,10 +51,12 @@ public class PleiepengerSyktBarn implements Ytelse {
 
     @Valid
     @JsonProperty(value = "trekkKravPerioder", required = true)
+    @NotNull
     private List<Periode> trekkKravPerioder = new ArrayList<>();
 
     @Valid
-    @JsonProperty(value = "opptjeningAktivitet")
+    @JsonProperty(value = "opptjeningAktivitet", required = true)
+    @NotNull
     private OpptjeningAktivitet opptjeningAktivitet = new OpptjeningAktivitet();
 
     @Valid
@@ -157,22 +161,23 @@ public class PleiepengerSyktBarn implements Ytelse {
 
     //@JsonProperty(value = "endringsperiode")
     public List<Periode> getEndringsperiode() {
-        //TODO endre til å bruke PerioderMedEndringUtil.getEndringsperiode(this)
-        return (endringsperiode == null) ? List.of() : Collections.unmodifiableList(endringsperiode);
+        return PerioderMedEndringUtil.getEndringsperiode(this);
     }
-    
+
     @Deprecated
     public List<Periode> getUtledetEndringsperiode() {
         return PerioderMedEndringUtil.getEndringsperiode(this);
     }
 
+    @Deprecated
     public PleiepengerSyktBarn medEndringsperiode(List<Periode> endringsperiodeList) {
-        this.endringsperiode.addAll(endringsperiodeList);
+        this.endringsperiode.addAll(Objects.requireNonNull(endringsperiodeList, "endringsperiodeList"));
         return this;
     }
 
+    @Deprecated
     public PleiepengerSyktBarn medEndringsperiode(Periode endringsperiode) {
-        this.endringsperiode.add(endringsperiode);
+        this.endringsperiode.add(Objects.requireNonNull(endringsperiode, "endringsperiode"));
         return this;
     }
 

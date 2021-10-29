@@ -4,11 +4,12 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 import javax.validation.Valid;
+import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.PastOrPresent;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -22,15 +23,21 @@ import no.nav.k9.søknad.felles.type.PersonIdent;
 public class Barn implements Person {
 
     @JsonAlias({ "fødselsnummer", "norskIdentifikator", "identitetsnummer", "fnr" })
-    @JsonProperty(value = "norskIdentitetsnummer")
+    @JsonProperty(value = "norskIdentitetsnummer", required = true)
     @Valid
-    private final NorskIdentitetsnummer norskIdentitetsnummer;
+    private NorskIdentitetsnummer norskIdentitetsnummer;
 
-    @JsonProperty(value = "fødselsdato")
+    @JsonProperty(value = "fødselsdato", required = false)
     @Valid
-    private final LocalDate fødselsdato;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Oslo")
+    @PastOrPresent(message = "[ugyldigFødselsdato] Fødselsdato kan ikke være fremtidig")
+    private LocalDate fødselsdato;
 
-    @JsonCreator
+    public Barn() {
+
+    }
+
+    @Deprecated
     public Barn(
                 @JsonProperty("norskIdentitetsnummer") @JsonAlias({ "fødselsnummer", "norskIdentifikator", "identitetsnummer",
                         "fnr" }) NorskIdentitetsnummer norskIdentitetsnummer,
@@ -39,15 +46,10 @@ public class Barn implements Person {
         this.fødselsdato = fødselsdato;
     }
 
+    @Deprecated
     public Barn(NorskIdentitetsnummer norskIdentitetsnummer) {
         this.norskIdentitetsnummer = Objects.requireNonNull(norskIdentitetsnummer);
         this.fødselsdato = null;
-    }
-
-    @AssertTrue(message = "norskIdentitetsnummer eller fødselsdato må være satt")
-    private boolean isOk() {
-        return (norskIdentitetsnummer != null && norskIdentitetsnummer.getVerdi() != null)
-            || (fødselsdato != null);
     }
 
     @Override
@@ -59,9 +61,25 @@ public class Barn implements Person {
         return fødselsdato;
     }
 
-    @AssertTrue(message = "Enten fnr/dnr eller fødselsdato må oppgis")
-    private boolean isFnrEllerFødselsdato() {
-        return getPersonIdent() != null || fødselsdato != null;
+    public Barn medNorskIdentitetsnummer(NorskIdentitetsnummer norskIdentitetsnummer) {
+        this.norskIdentitetsnummer = Objects.requireNonNull(norskIdentitetsnummer, "norskIdentitetsnummer");
+        return this;
+    }
+
+    public Barn medFødselsdato(LocalDate fødselsdato) {
+        this.fødselsdato = Objects.requireNonNull(fødselsdato, "fødselsdato");
+        return this;
+    }
+
+    @AssertTrue(message = "norskIdentitetsnummer eller fødselsdato må være satt")
+    private boolean isOk() {
+        return (norskIdentitetsnummer != null && norskIdentitetsnummer.getVerdi() != null)
+                || (fødselsdato != null);
+    }
+
+    @AssertFalse(message = "[ikkeEntydig] Ikke entydig, må oppgi enten fnr/dnr eller fødselsdato.")
+    private boolean isEntydig() {
+        return this.getPersonIdent() != null && this.fødselsdato != null;
     }
 
     /** @deprecated brukt ctor. */

@@ -1,11 +1,11 @@
 package no.nav.k9.søknad.felles.opptjening;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -26,9 +26,10 @@ public class Frilanser {
         return new Frilanser.Builder();
     }
 
-    public Frilanser() {}
+    public Frilanser() {
 
-    @JsonCreator
+    }
+
     public Frilanser(@JsonProperty("startdato") LocalDate startdato,
                      @JsonProperty("sluttdato") LocalDate sluttdato) {
         this.startdato = startdato;
@@ -36,12 +37,12 @@ public class Frilanser {
     }
 
     public Frilanser medStartDato(LocalDate startdato) {
-        this.startdato = startdato;
+        this.startdato = Objects.requireNonNull(startdato, "startdato");
         return this;
     }
 
     public Frilanser medSluttDato(LocalDate sluttdato) {
-        this.sluttdato = sluttdato;
+        this.sluttdato = Objects.requireNonNull(sluttdato, "sluttdato");
         return this;
     }
 

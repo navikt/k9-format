@@ -2,8 +2,8 @@ package no.nav.k9.søknad.ytelse.psb.v1.tilsyn;
 
 import static java.util.Collections.unmodifiableMap;
 
-import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 import javax.validation.Valid;
@@ -24,11 +24,6 @@ public class Tilsynsordning {
     @Valid
     private Map<@NotNull Periode, @NotNull TilsynPeriodeInfo> perioder = new TreeMap<>();
 
-    // Hvorfor er dette et map? Dette er vel egentlig en liste med perioder?
-    @JsonProperty(value="perioderSomSkalSlettes", required = true)
-    @Valid
-    private Map<@NotNull Periode, @NotNull TilsynPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
-
     public Tilsynsordning() {
     }
 
@@ -37,26 +32,21 @@ public class Tilsynsordning {
     }
 
     public Tilsynsordning medPerioder(Map<Periode, TilsynPeriodeInfo> perioder) {
-        this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
+        this.perioder = Objects.requireNonNull(perioder, "perioder");
         return this;
     }
 
     public Tilsynsordning leggeTilPeriode(Periode periode, TilsynPeriodeInfo tilsynPeriodeInfo) {
+        Objects.requireNonNull(periode, "periode");
+        Objects.requireNonNull(tilsynPeriodeInfo, "tilsynPeriodeInfo");
         this.perioder.put(periode, tilsynPeriodeInfo);
         return this;
     }
 
     public Tilsynsordning leggeTilPeriode(Map<Periode, TilsynPeriodeInfo> perioder) {
+        Objects.requireNonNull(perioder, "perioder");
         this.perioder.putAll(perioder);
         return this;
     }
 
-    public Map<Periode, TilsynPeriodeInfo> getPerioderSomSkalSlettes() {
-        return Collections.unmodifiableMap(perioderSomSkalSlettes);
-    }
-
-    public Tilsynsordning medPerioderSomSkalSlettes(Map<Periode, TilsynPeriodeInfo> perioderSomSkalSlettes) {
-        this.perioderSomSkalSlettes = (perioderSomSkalSlettes == null) ? new TreeMap<>() : new TreeMap<>(perioderSomSkalSlettes);
-        return this;
-    }
 }

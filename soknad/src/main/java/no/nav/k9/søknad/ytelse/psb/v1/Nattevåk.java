@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.TreeMap;
 
 import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -23,6 +24,7 @@ public class Nattevåk {
     @NotNull
     private Map<@NotNull Periode, @NotNull NattevåkPeriodeInfo> perioder = new TreeMap<>();
 
+    //TODO list?
     @JsonProperty(value="perioderSomSkalSlettes", required = true)
     @Valid
     private Map<@NotNull Periode, @NotNull NattevåkPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
@@ -35,16 +37,19 @@ public class Nattevåk {
     }
 
     public Nattevåk medPerioder(Map<Periode, NattevåkPeriodeInfo> perioder) {
-        this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
+        this.perioder = Objects.requireNonNull(perioder, "perioder");
         return this;
     }
 
     public Nattevåk leggeTilPeriode(Periode periode, NattevåkPeriodeInfo nattevåkPeriodeInfo) {
+        Objects.requireNonNull(periode, "periode");
+        Objects.requireNonNull(nattevåkPeriodeInfo, "nattevåkPeriodeInfo");
         this.perioder.put(periode, nattevåkPeriodeInfo);
         return this;
     }
 
     public Nattevåk leggeTilPeriode(Map<Periode, NattevåkPeriodeInfo> perioder) {
+        Objects.requireNonNull(perioder, "perioder");
         this.perioder.putAll(perioder);
         return this;
     }
@@ -54,7 +59,7 @@ public class Nattevåk {
     }
 
     public Nattevåk medPerioderSomSkalSlettes(Map<Periode, NattevåkPeriodeInfo> perioderSomSkalSlettes) {
-        this.perioderSomSkalSlettes = (perioderSomSkalSlettes == null) ? new TreeMap<>() : new TreeMap<>(perioderSomSkalSlettes);
+        this.perioderSomSkalSlettes = Objects.requireNonNull(perioderSomSkalSlettes, "perioderSomSkalSlettes");
         return this;
     }
 
@@ -63,7 +68,6 @@ public class Nattevåk {
 
         @JsonProperty(value="tilleggsinformasjon", required = true)
         @Valid
-        @NotNull
         private String tilleggsinformasjon;
 
         public NattevåkPeriodeInfo() {
@@ -76,6 +80,14 @@ public class Nattevåk {
         public NattevåkPeriodeInfo medTilleggsinformasjon(String tilleggsinformasjon) {
             this.tilleggsinformasjon = Objects.requireNonNull(tilleggsinformasjon, "NattevåkPeriodeInfo.tilleggsinformasjon");
             return this;
+        }
+
+        @AssertTrue(message = "[tomFeil] Feltet kan ikke være tomt")
+        private boolean isNotEmpty() {
+            if (tilleggsinformasjon == null) {
+                return true;
+            }
+            return !tilleggsinformasjon.isEmpty();
         }
     }
 }
