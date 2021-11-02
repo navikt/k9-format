@@ -1,5 +1,6 @@
 package no.nav.k9.søknad.ytelse.pls.v1;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -21,9 +23,6 @@ import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -31,14 +30,15 @@ import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 public class PleipengerLivetsSluttfase implements Ytelse {
 
     @Valid
-    @NotNull
+    @NotNull //kan sannsynligvis bli utvidet til å også sende uspesifisert (null)
     @JsonProperty(value = "pleietrengende", required = true)
     private Pleietrengende pleietrengende;
 
     @Valid
     @NotNull
-    @JsonProperty(value = "arbeidstid", required = true)
-    private Arbeidstid arbeidstid = new Arbeidstid();
+    @Size(min = 1, max = 120)
+    @JsonProperty(value = "fraværsperioder", required = true)
+    private List<FraværPeriode> fraværsperioder = new ArrayList<>();
 
     @Valid
     @JsonProperty(value = "opptjeningAktivitet")
@@ -79,22 +79,17 @@ public class PleipengerLivetsSluttfase implements Ytelse {
 
     @Override
     public Periode getSøknadsperiode() {
-        List<ArbeidstidInfo> arbeidstidsinfo = new ArrayList<>();
-        arbeidstid.getArbeidstakerList().stream().map(Arbeidstaker::getArbeidstidInfo).forEach(arbeidstidsinfo::add);
-        arbeidstid.getFrilanserArbeidstidInfo().ifPresent(arbeidstidsinfo::add);
-        arbeidstid.getSelvstendigNæringsdrivendeArbeidstidInfo().ifPresent(arbeidstidsinfo::add);
-        if (arbeidstidsinfo.isEmpty()) {
-            return null; //eller kast exception??
+        List<Periode> perioder = fraværsperioder.stream().map(FraværPeriode::getPeriode).collect(Collectors.toList());
+        if (perioder.isEmpty()) {
+            throw new IllegalStateException("Har ingen søknadsperiode");
         }
-        List<Periode> perioder = arbeidstidsinfo.stream().flatMap(a -> a.getPerioder().keySet().stream()).collect(Collectors.toList());
-        return new Periode(
-                perioder.stream().map(Periode::getFraOgMed).min(Comparator.naturalOrder()).orElseThrow(),
-                perioder.stream().map(Periode::getTilOgMed).max(Comparator.naturalOrder()).orElseThrow()
-        );
+        LocalDate fom = perioder.stream().map(Periode::getFraOgMed).min(Comparator.naturalOrder()).orElseThrow();
+        LocalDate tom = perioder.stream().map(Periode::getTilOgMed).max(Comparator.naturalOrder()).orElseThrow();
+        return new Periode(fom, tom);
     }
 
-    public Arbeidstid getArbeidstid() {
-        return arbeidstid;
+    public List<FraværPeriode> getFraværsperioder() {
+        return fraværsperioder;
     }
 
     public OpptjeningAktivitet getOpptjeningAktivitet() {
@@ -114,8 +109,9 @@ public class PleipengerLivetsSluttfase implements Ytelse {
         return this;
     }
 
-    public PleipengerLivetsSluttfase medArbeidstid(Arbeidstid arbeidstid) {
-        this.arbeidstid = Objects.requireNonNull(arbeidstid, "arbeidstid");
+    public PleipengerLivetsSluttfase leggTilFravær(FraværPeriode fraværPeriode) {
+        Objects.requireNonNull(fraværPeriode, "fraværPeriode");
+        fraværsperioder.add(fraværPeriode);
         return this;
     }
 
