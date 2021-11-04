@@ -2,10 +2,11 @@ package no.nav.k9.søknad.ytelse.omsorgspenger.v1;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import no.nav.k9.søknad.PeriodeValidator;
 import no.nav.k9.søknad.felles.Feil;
@@ -15,6 +16,7 @@ import no.nav.k9.søknad.felles.opptjening.Frilanser;
 import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
+import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 
@@ -27,6 +29,7 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
 
     @Override
     public List<Feil> valider(Ytelse ytelse) {
+
         var omsorgspengerUtbetaling = (OmsorgspengerUtbetaling) ytelse;
 
         List<Feil> feil = new ArrayList<>();
@@ -203,9 +206,21 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
             index++;
         }
 
-        // Valider perioder på tvers
-        var perioder = fraværsperioderKorrigeringIm.stream().collect(Collectors.toMap(e -> e.getPeriode(), e -> e.getArbeidsgiverOrgNr()));
-        feil.addAll(periodeValidator.validerIkkeTillattOverlapp(perioder, "fraværsperioderKorrigeringIm.perioder"));
+
+
+        Map<Periode, Organisasjonsnummer> perioder = new LinkedHashMap<>();
+        for (FraværPeriode fraværPeriode : fraværsperioderKorrigeringIm) {
+            if (perioder.containsKey(fraværPeriode.getPeriode())) {
+                feil.add(new Feil("fraværsperioderKorrigeringIm.perioder[" + fraværPeriode.getPeriode().getIso8601() + "]", "likePerioder", "To identiske perioder oppgitt"));
+            } else {
+                perioder.put(fraværPeriode.getPeriode(), fraværPeriode.getArbeidsgiverOrgNr());
+            }
+            index++;
+        }
+        if (feil.stream().noneMatch(it -> it.getFeilkode().equals("likePerioder"))) {
+            // Valider perioder på tvers
+            feil.addAll(periodeValidator.validerIkkeTillattOverlapp(perioder, "fraværsperioderKorrigeringIm.perioder"));
+        }
 
         return feil;
     }
