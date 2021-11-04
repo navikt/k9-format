@@ -32,7 +32,7 @@ class OmsorgspengerUtbetalingValidatorTest {
     void skal_returnere_ingen_feil_for_minimum_json_søknad() {
         var søknad = TestUtils.minimumJsonSøknad();
 
-        var feil = validatorSøknad.valider(søknad.getYtelse());
+        var feil = new OmsorgspengerUtbetalingSøknadValidator().valider(søknad);
 
         assertThat(feil).isEmpty();
     }
@@ -104,6 +104,22 @@ class OmsorgspengerUtbetalingValidatorTest {
 
         assertThat(feil).hasSize(2);
         feilInneholder(feil, "fraværsperioderKorrigeringIm.perioder[2021-09-01/2021-09-02]", "overlappendePerioder");
+    }
+
+    @Test
+    public void skal_returnere_feil_for_identiske_perioder() {
+        var fraværPeriode1 = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
+        var fraværPeriode2 = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
+
+        OmsorgspengerUtbetaling ytelse = byggOmsorgspengerUtbetalingMedFraværskorrigeringIm(
+                lagFraværskorrigeringIm(orgnr1, arbforholdId1, fraværPeriode1, null),
+                lagFraværskorrigeringIm(orgnr1, arbforholdId1, fraværPeriode2, null));
+
+        var feil = validatorSøknad.valider(ytelse);
+
+
+        assertThat(feil).hasSize(1);
+        feilInneholder(feil, "fraværsperioderKorrigeringIm.perioder[2021-09-01/2021-09-02]", "likePerioder");
     }
 
     @Test

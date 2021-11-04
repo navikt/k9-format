@@ -1,5 +1,5 @@
 {
-  "søknadId": "$søknadId",
+  "søknadId": "123",
   "mottattDato": "2018-01-02T03:04:05.000Z",
   "versjon": "1.0.0",
   "språk": "nb",
@@ -10,8 +10,10 @@
     "type": "OMP_UT",
     "fosterbarn": null,
     "aktivitet": {
-      "selvstendigNæringsdrivende": null,
-      "frilanser": null
+      "frilanser": {
+        "startdato": "2020-01-01",
+        "jobberFortsattSomFrilans": true
+      }
     },
     "fraværsperioder": [
       {
