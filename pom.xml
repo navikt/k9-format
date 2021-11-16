@@ -9,6 +9,7 @@
     <name>k9-format</name>
 
     <modules>
+        <module>innsyn</module>
         <module>soknad-omsorgspenger</module>
         <module>soknad</module>
         <module>inntektsmelding</module>
