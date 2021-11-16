@@ -12,10 +12,18 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import no.nav.k9.søknad.Søknad;
 
+/**
+ * Innholdet til en ny søknad som har kommet inn i k9-sak.
+ * 
+ * {@code PsbSøknadsinnhold} identifiseres av {@code journalpostId}.
+ * 
+ * Merk at man skal bruke {@code søkerAktørId} og {@code pleietrengendeAktørId} fremfor å hente
+ * identene direkte fra søknaden. Dette er for å støtte bytte av D-/fødselsnummer.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 @JsonTypeName(InnsynHendelseData.PSB_SØKNADSDATA)
-public class PsbSøknadsdataHendelse implements InnsynHendelseData {
+public class PsbSøknadsinnhold implements InnsynHendelseData {
 
     @JsonProperty(value = "journalpostId", required = true)
     @Valid
@@ -44,11 +52,11 @@ public class PsbSøknadsdataHendelse implements InnsynHendelseData {
     private Søknad søknad;
     
     
-    protected PsbSøknadsdataHendelse() {
+    protected PsbSøknadsinnhold() {
         
     }
     
-    public PsbSøknadsdataHendelse(String journalpostId, String søkerAktørId, String pleietrengendeAktørId, Søknad søknad) {
+    public PsbSøknadsinnhold(String journalpostId, String søkerAktørId, String pleietrengendeAktørId, Søknad søknad) {
         this.journalpostId = journalpostId;
         this.søkerAktørId = søkerAktørId;
         this.pleietrengendeAktørId = pleietrengendeAktørId;
