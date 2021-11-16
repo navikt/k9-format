@@ -8,11 +8,10 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-public class InnsynHendelse<T> {
+public class InnsynHendelse<T extends InnsynHendelseData> {
     
     @Valid
     @NotNull
@@ -20,7 +19,6 @@ public class InnsynHendelse<T> {
     @JsonProperty(value = "oppdateringstidspunkt", required = true)
     private ZonedDateTime oppdateringstidspunkt;
     
-    @JsonManagedReference
     @Valid
     @NotNull
     @JsonProperty(value = "data", required = true)

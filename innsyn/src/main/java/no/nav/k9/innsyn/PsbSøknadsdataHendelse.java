@@ -15,7 +15,7 @@ import no.nav.k9.søknad.Søknad;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 @JsonTypeName(InnsynHendelseData.PSB_SØKNADSDATA)
-public class PsbSøknadsdataHendelse {
+public class PsbSøknadsdataHendelse implements InnsynHendelseData {
 
     @JsonProperty(value = "journalpostId", required = true)
     @Valid
@@ -44,12 +44,17 @@ public class PsbSøknadsdataHendelse {
     private Søknad søknad;
     
     
+    protected PsbSøknadsdataHendelse() {
+        
+    }
+    
     public PsbSøknadsdataHendelse(String journalpostId, String søkerAktørId, String pleietrengendeAktørId, Søknad søknad) {
         this.journalpostId = journalpostId;
         this.søkerAktørId = søkerAktørId;
         this.pleietrengendeAktørId = pleietrengendeAktørId;
         this.søknad = søknad;
     }
+    
     
     public String getJournalpostId() {
         return journalpostId;
