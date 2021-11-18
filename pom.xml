@@ -405,23 +405,6 @@
                         </executions>
                     </plugin>
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-install-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <phase>install</phase>
-                                <goals>
-                                    <goal>install-file</goal>
-                                </goals>
-                                <configuration>
-                                    <pomFile>${project.build.directory}/jakarta/META-INF/maven/${project.groupId}/${project.artifactId}/pom.xml</pomFile>
-                                    <file>${project.build.directory}/${project.artifactId}-jakarta-${project.version}-TOBEDEPLOYED.jar</file>
-                                    <sources>${project.build.directory}/${project.artifactId}-jakarta-${project.version}-sources-TOBEDEPLOYED.jar</sources>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>build-helper-maven-plugin</artifactId>
                         <version>3.2.0</version>
