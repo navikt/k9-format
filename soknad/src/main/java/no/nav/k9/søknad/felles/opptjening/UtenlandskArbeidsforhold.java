@@ -92,7 +92,7 @@ public class UtenlandskArbeidsforhold {
         return ansettelsePeriode.getFraOgMed().isBefore(ansettelsePeriode.getTilOgMed());
     }
 
-
+    /* Deaktivet pga søknader med feil
     @AssertTrue(message = "[ugyldigVerdi] Norge kan ikke være en landkode")
     private boolean isLandNotNor() {
         if (land == null) {
@@ -100,4 +100,5 @@ public class UtenlandskArbeidsforhold {
         }
         return !land.equals(Landkode.NORGE);
     }
+     */
 }
