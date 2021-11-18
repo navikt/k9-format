@@ -371,6 +371,7 @@ public class SelvstendigNæringsdrivende {
             return !regnskapsførerTlf.isEmpty();
         }
 
+        /* Deaktivert pga søknader med feil
         @AssertTrue(message = "[ugyldigVerdi] Norge kan ikke være en landkode")
         private boolean isLandkodeNotNor() {
             if (landkode == null) {
@@ -378,6 +379,7 @@ public class SelvstendigNæringsdrivende {
             }
             return !landkode.equals(Landkode.NORGE);
         }
+         */
 
         @Deprecated (forRemoval = true)
         public static final class Builder {

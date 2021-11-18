@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 import javax.validation.Valid;
-import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.PastOrPresent;
 
@@ -77,10 +76,12 @@ public class Barn implements Person {
                 || (fødselsdato != null);
     }
 
+    /* Deaktivert pga søknader med feil
     @AssertFalse(message = "[ikkeEntydig] Ikke entydig, må oppgi enten fnr/dnr eller fødselsdato.")
     private boolean isEntydig() {
         return this.getPersonIdent() != null && this.fødselsdato != null;
     }
+     */
 
     /** @deprecated brukt ctor. */
     @Deprecated(forRemoval = true)
