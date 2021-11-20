@@ -405,29 +405,38 @@
                         </executions>
                     </plugin>
                     <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>build-helper-maven-plugin</artifactId>
-                        <version>3.2.0</version>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-install-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>attach-artifacts</id>
-                                <phase>package</phase>
+                                <phase>install</phase>
                                 <goals>
-                                    <goal>attach-artifact</goal>
+                                    <goal>install-file</goal>
                                 </goals>
                                 <configuration>
-                                    <artifacts>
-                                        <artifact>
-                                            <file>${project.build.directory}/${project.artifactId}-jakarta-${project.version}-TOBEDEPLOYED.jar</file>
-                                            <type>jar</type>
-                                            <classifier>jakarta</classifier>
-                                        </artifact>
-                                        <artifact>
-                                            <file>${project.build.directory}/${project.artifactId}-jakarta-${project.version}-sources-TOBEDEPLOYED.jar</file>
-                                            <type>jar</type>
-                                            <classifier>jakarta-sources</classifier>
-                                        </artifact>
-                                    </artifacts>
+                                    <pomFile>${project.build.directory}/jakarta/META-INF/maven/${project.groupId}/${project.artifactId}/pom.xml</pomFile>
+                                    <file>${project.build.directory}/${project.artifactId}-jakarta-${project.version}-TOBEDEPLOYED.jar</file>
+                                    <sources>${project.build.directory}/${project.artifactId}-jakarta-${project.version}-sources-TOBEDEPLOYED.jar</sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>deploy-file</goal>
+                                </goals>
+                                <configuration>
+                                    <repositoryId>github</repositoryId>
+                                    <!-- må matche unpacked pom.xml fra over (disse endrer ikke path ved transform p.t.) -->
+                                    <pomFile>${project.build.directory}/jakarta/META-INF/maven/${project.groupId}/${project.artifactId}/pom.xml</pomFile>
+                                    <url>${project.distributionManagement.repository.url}</url>
+                                    <file>${project.build.directory}/${project.artifactId}-jakarta-${project.version}-TOBEDEPLOYED.jar</file>
+                                    <sources>${project.build.directory}/${project.artifactId}-jakarta-${project.version}-sources-TOBEDEPLOYED.jar</sources>
                                 </configuration>
                             </execution>
                         </executions>
