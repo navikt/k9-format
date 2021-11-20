@@ -18,7 +18,7 @@ jobs:
       - name: Publish artifacts
         shell: bash
         run: |
-           mvn deploy -e -B --file pom.xml --settings .github/settings.xml -DtrimStackTrace=false -Dchangelist= -Dsha1= -Drevision=$NEW_VERSION -Dfile.encoding=UTF-8 -Dmaven.wagon.http.pool=false -DdeployAtEnd=true -Dtoken=${GITHUB_TOKEN}
+           mvn deploy -e -B --file pom.xml --settings .github/settings.xml -DtrimStackTrace=false -Dchangelist= -Dsha1= -Drevision=$NEW_VERSION -Dfile.encoding=UTF-8 -Dtoken=${GITHUB_TOKEN}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_ACCESS_TOKEN }}
           NEW_VERSION: ${{ github.event.release.tag_name }}
