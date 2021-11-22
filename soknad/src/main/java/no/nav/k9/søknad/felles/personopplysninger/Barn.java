@@ -61,12 +61,12 @@ public class Barn implements Person {
     }
 
     public Barn medNorskIdentitetsnummer(NorskIdentitetsnummer norskIdentitetsnummer) {
-        this.norskIdentitetsnummer = Objects.requireNonNull(norskIdentitetsnummer, "norskIdentitetsnummer");
+        this.norskIdentitetsnummer = norskIdentitetsnummer;
         return this;
     }
 
     public Barn medFødselsdato(LocalDate fødselsdato) {
-        this.fødselsdato = Objects.requireNonNull(fødselsdato, "fødselsdato");
+        this.fødselsdato = fødselsdato;
         return this;
     }
 
