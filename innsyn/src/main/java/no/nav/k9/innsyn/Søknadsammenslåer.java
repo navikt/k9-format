@@ -1,11 +1,15 @@
 package no.nav.k9.innsyn;
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import no.nav.fpsak.tidsserie.LocalDateTimeline;
+import no.nav.fpsak.tidsserie.StandardCombinators;
 import no.nav.k9.innsyn.søknadsammeslåer.Arbeidstidsammenslåer;
 import no.nav.k9.innsyn.søknadsammeslåer.Tilsynsammenslåer;
 import no.nav.k9.søknad.Søknad;
+import no.nav.k9.søknad.TidsserieUtils;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo;
@@ -53,6 +57,8 @@ public class Søknadsammenslåer {
         final PleiepengerSyktBarn s2Ytelse = (PleiepengerSyktBarn) nySøknad.getYtelse();
         
         final PleiepengerSyktBarn ytelse = new PleiepengerSyktBarn();
+        ytelse.medSøknadsperiode(slåSammenSøknadsperioder(s1Ytelse, s2Ytelse));
+        
         /* Bruk aktørId fra PsbSøknadsinnhold fremfor:
         ytelse.medBarn(new Barn()
             .medNorskIdentitetsnummer(NorskIdentitetsnummer.of(s2Ytelse.getBarn().getPersonIdent().getVerdi()))
@@ -75,5 +81,15 @@ public class Søknadsammenslåer {
                 .medSpråk(nySøknad.getSpråk())
                 .medYtelse(ytelse);
         return s;
+    }
+
+    private static List<Periode> slåSammenSøknadsperioder(final PleiepengerSyktBarn s1Ytelse, final PleiepengerSyktBarn s2Ytelse) {
+        final LocalDateTimeline<Boolean> t1 = TidsserieUtils.toLocalDateTimeline(s1Ytelse.getSøknadsperiodeList());
+        final LocalDateTimeline<Boolean> t2 = TidsserieUtils.toLocalDateTimeline(s2Ytelse.getSøknadsperiodeList());
+        final List<Periode> søknadsperioder = TidsserieUtils.tilPeriodeList(t1
+                .union(t2, StandardCombinators::coalesceRightHandSide)
+                .disjoint(TidsserieUtils.toLocalDateTimeline(s2Ytelse.getTrekkKravPerioder()))
+                .compress());
+        return søknadsperioder;
     }
 }
