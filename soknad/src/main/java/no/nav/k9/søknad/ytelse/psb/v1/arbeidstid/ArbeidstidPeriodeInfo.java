@@ -37,6 +37,11 @@ public class ArbeidstidPeriodeInfo {
         this.faktiskArbeidTimerPerDag = Objects.requireNonNull(faktiskArbeidTimerPerDag, "faktiskArbeidTimerPerDag");
     }
 
+    public ArbeidstidPeriodeInfo(ArbeidstidPeriodeInfo info) {
+        this.jobberNormaltTimerPerDag = info.jobberNormaltTimerPerDag;
+        this.faktiskArbeidTimerPerDag = info.faktiskArbeidTimerPerDag;
+    }
+
     public ArbeidstidPeriodeInfo() {
     }
 

@@ -74,7 +74,8 @@ public class Arbeidstidsammenslåer {
 
     private static ArbeidstidInfo slåSammenArbeidstidInfo(PleiepengerSyktBarn s2Ytelse, final LocalDateTimeline<ArbeidstidPeriodeInfo> t1, final LocalDateTimeline<ArbeidstidPeriodeInfo> t2) {
         final Map<Periode, ArbeidstidPeriodeInfo> periodeMap = SøknadsammenslåerUtils.slåSammenOgHåndterTrukkedeKrav(s2Ytelse, t1, t2);
-        return new ArbeidstidInfo().medPerioder(periodeMap);
+        // Defensiv kopiering av ArbeidstidInfo for å få nye Periode- og ArbeidstidPeriodeInfo-objekter:
+        return new ArbeidstidInfo(new ArbeidstidInfo().medPerioder(periodeMap));
     }
 
     @SuppressWarnings("unchecked")

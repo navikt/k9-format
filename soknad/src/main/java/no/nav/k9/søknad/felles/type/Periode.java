@@ -30,6 +30,10 @@ public class Periode implements Comparable<Periode> {
         this.tilOgMed = parseLocalDate(split[1]);
         this.iso8601 = iso8601;
     }
+    
+    public Periode(Periode p) {
+        this(p.getFraOgMed(), p.getTilOgMed());
+    }
 
     public Periode(LocalDate fraOgMed, LocalDate tilOgMed) {
         this.fraOgMed = fraOgMed;

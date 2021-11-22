@@ -25,6 +25,10 @@ public class TilsynPeriodeInfo {
 
     public TilsynPeriodeInfo() {
     }
+    
+    public TilsynPeriodeInfo(TilsynPeriodeInfo t) {
+        this.etablertTilsynTimerPerDag = t.getEtablertTilsynTimerPerDag();
+    }
 
     public Duration getEtablertTilsynTimerPerDag() {
         return etablertTilsynTimerPerDag;

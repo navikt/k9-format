@@ -30,13 +30,15 @@ public class Søknadsammenslåer {
         /* 
          * Advarsel: Data som returneres her deles på tvers av søkere. Ikke legg inn
          *           flere felter i mappingen hvis de ikke skal deles.
+         *           
+         *           Av denne grunn brukes ikke standard copy-contructor for Map/Tilsynordning
          */
         return ytelse.getTilsynsordning()
                 .getPerioder()
                 .entrySet()
                 .stream()
                 .map(e -> Map.entry(
-                    new Periode(e.getKey().getFraOgMed(), e.getKey().getTilOgMed()),
+                    new Periode(e.getKey()),
                     new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(e.getValue().getEtablertTilsynTimerPerDag())
                 ))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
