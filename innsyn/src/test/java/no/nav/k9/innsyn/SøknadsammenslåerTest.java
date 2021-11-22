@@ -25,6 +25,8 @@ import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
 
 public class SøknadsammenslåerTest {
 
@@ -213,6 +215,32 @@ public class SøknadsammenslåerTest {
             new ArbeidstidPeriodeInfo().medFaktiskArbeidTimerPerDag(Duration.ofHours(2)).medJobberNormaltTimerPerDag(Duration.ofHours(8))
         ));
     }
+    
+    @Test
+    public void kanSlåSammenTilsyn() {
+        final Søknad søknad1 = lagGyldigSøknad();
+        final PleiepengerSyktBarn ytelse1 = søknad1.getYtelse();
+        ytelse1.medTilsynsordning(new Tilsynsordning().medPerioder(Map.of(
+            new Periode(LocalDate.of(2021, 8, 1), LocalDate.of(2021, 10, 11)),
+            new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(4))
+        )));
+        
+        final Søknad søknad2 = lagGyldigSøknad();
+        final PleiepengerSyktBarn ytelse2 = søknad2.getYtelse();
+        ytelse2.medTilsynsordning(new Tilsynsordning().medPerioder(Map.of(
+                new Periode(LocalDate.of(2021, 9, 25), LocalDate.of(2021, 12, 1)),
+                new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(2).plusMinutes(30))
+        )));        
+        final Søknad resultat = Søknadsammenslåer.slåSammen(søknad1, Søknadsammenslåer.kunPleietrengendedata(søknad2));
+        final PleiepengerSyktBarn resultatYtelse = resultat.getYtelse();
+        
+        assertResultet(resultatYtelse.getTilsynsordning().getPerioder(), Map.of(
+            new Periode(LocalDate.of(2021, 8, 1), LocalDate.of(2021, 9, 24)),
+            new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(4)),
+            new Periode(LocalDate.of(2021, 9, 25), LocalDate.of(2021, 12, 1)),
+            new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(2).plusMinutes(30))
+        ));
+    }
 
     private List<Arbeidstaker> sortertArbeidstakere(final PleiepengerSyktBarn resultatYtelse) {
         return resultatYtelse.getArbeidstid()
@@ -227,13 +255,12 @@ public class SøknadsammenslåerTest {
         assertResultet(actual.getArbeidstidInfo().getPerioder(), expectedPerioder);
     }
     
-    private void assertResultet(Map<Periode, ArbeidstidPeriodeInfo> actualPerioder, Map<Periode, ArbeidstidPeriodeInfo> expectedPerioder) {
+    private <T> void assertResultet(Map<Periode, T> actualPerioder, Map<Periode, T> expectedPerioder) {
         assertThat(actualPerioder.size()).isEqualTo(expectedPerioder.size());
-        for (Entry<Periode, ArbeidstidPeriodeInfo> p : expectedPerioder.entrySet()) {
-            final ArbeidstidPeriodeInfo actualArbeidstidPeriodeInfo = actualPerioder.get(p.getKey());
-            assertThat(actualArbeidstidPeriodeInfo).isNotNull();
-            assertThat(actualArbeidstidPeriodeInfo.getFaktiskArbeidTimerPerDag()).isEqualTo(p.getValue().getFaktiskArbeidTimerPerDag());
-            assertThat(actualArbeidstidPeriodeInfo.getJobberNormaltTimerPerDag()).isEqualTo(p.getValue().getJobberNormaltTimerPerDag());
+        for (Entry<Periode, T> p : expectedPerioder.entrySet()) {
+            final T data = actualPerioder.get(p.getKey());
+            assertThat(data).isNotNull();
+            assertThat(data).isEqualTo(p.getValue());
         }
     }
 
