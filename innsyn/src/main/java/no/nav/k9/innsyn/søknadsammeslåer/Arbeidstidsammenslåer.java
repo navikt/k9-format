@@ -39,8 +39,8 @@ public class Arbeidstidsammenslåer {
     private static ArbeidstidInfo slåSammenSelvstendigNæringsdrivendeArbeidstidInfo(PleiepengerSyktBarn s2Ytelse, Arbeidstid a1, Arbeidstid a2) {
         final LocalDateTimeline<ArbeidstidPeriodeInfo> t1 = lagArbeidstidTidslinje(a1.getSelvstendigNæringsdrivendeArbeidstidInfo().orElse(null));
         final LocalDateTimeline<ArbeidstidPeriodeInfo> t2 = lagArbeidstidTidslinje(a2.getSelvstendigNæringsdrivendeArbeidstidInfo().orElse(null));
-        final ArbeidstidInfo frilanserArbeidstidInfo = slåSammenArbeidstidInfo(s2Ytelse, t1, t2);
-        return frilanserArbeidstidInfo;
+        final ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo = slåSammenArbeidstidInfo(s2Ytelse, t1, t2);
+        return selvstendigNæringsdrivendeArbeidstidInfo;
     }
     
     private static ArbeidstidInfo slåSammenFrilanserArbeidstid(PleiepengerSyktBarn s2Ytelse, final Arbeidstid a1, final Arbeidstid a2) {
