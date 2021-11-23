@@ -1,5 +1,7 @@
 package no.nav.k9.innsyn;
 
+import java.util.Objects;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -10,28 +12,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-import no.nav.k9.søknad.Søknad;
-
-/**
- * Innholdet til en ny søknad som har kommet inn i k9-sak.
- * 
- * {@code PsbSøknadsinnhold} identifiseres av {@code journalpostId}.
- * 
- * Merk at man skal bruke {@code søkerAktørId} og {@code pleietrengendeAktørId} fremfor å hente
- * identene direkte fra søknaden. Dette er for å støtte bytte av D-/fødselsnummer.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-@JsonTypeName(InnsynHendelseData.PSB_SØKNADSINNHOLD)
-public class PsbSøknadsinnhold implements InnsynHendelseData {
+@JsonTypeName(InnsynHendelseData.OMSORG)
+public class Omsorg implements InnsynHendelseData {
 
-    @JsonProperty(value = "journalpostId", required = true)
-    @Valid
-    @NotNull
-    @Size(max = 50, min = 3)
-    @Pattern(regexp = "^[\\\\p{Alnum}]+$", message = "journalpostId [${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
-    private String journalpostId;
-    
     @JsonProperty(value = "søkerAktørId", required = true)
     @Valid
     @NotNull
@@ -46,27 +31,22 @@ public class PsbSøknadsinnhold implements InnsynHendelseData {
     @Pattern(regexp = "^\\d+$", message = "pleietrengendeAktørId [${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
     private String pleietrengendeAktørId;
     
-    @JsonProperty(value = "søknad", required = true)
+    @JsonProperty(value = "harOmsorgen", required = true)
     @Valid
     @NotNull
-    private Søknad søknad;
+    private boolean harOmsorgen;
     
     
-    protected PsbSøknadsinnhold() {
+    protected Omsorg() {
         
     }
     
-    public PsbSøknadsinnhold(String journalpostId, String søkerAktørId, String pleietrengendeAktørId, Søknad søknad) {
-        this.journalpostId = journalpostId;
-        this.søkerAktørId = søkerAktørId;
-        this.pleietrengendeAktørId = pleietrengendeAktørId;
-        this.søknad = søknad;
+    public Omsorg(String søkerAktørId, String pleietrengendeAktørId, boolean harOmsorgen) {
+        this.søkerAktørId = Objects.requireNonNull(søkerAktørId, "søkerAktørId");
+        this.pleietrengendeAktørId = Objects.requireNonNull(søkerAktørId, "pleietrengendeAktørId");
+        this.harOmsorgen = harOmsorgen;
     }
     
-    
-    public String getJournalpostId() {
-        return journalpostId;
-    }
     
     public String getSøkerAktørId() {
         return søkerAktørId;
@@ -76,7 +56,7 @@ public class PsbSøknadsinnhold implements InnsynHendelseData {
         return pleietrengendeAktørId;
     }
     
-    public Søknad getSøknad() {
-        return søknad;
+    public boolean isHarOmsorgen() {
+        return harOmsorgen;
     }
 }
