@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-@JsonTypeName(InnsynHendelseData.OMSORG)
+@JsonTypeName(InnsynHendelseData.SØKNAD_TRUKKET)
 public class SøknadTrukket implements InnsynHendelseData {
 
     @JsonProperty(value = "journalpostId", required = true)
