@@ -5,6 +5,7 @@ import static java.util.Collections.unmodifiableMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -25,6 +26,17 @@ public class Tilsynsordning {
     private Map<@NotNull Periode, @NotNull TilsynPeriodeInfo> perioder = new TreeMap<>();
 
     public Tilsynsordning() {
+    }
+    
+    public Tilsynsordning(Tilsynsordning t) {
+        this.perioder = new TreeMap<>(t.getPerioder().entrySet()
+                .stream()
+                .map(e -> Map.entry(
+                    new Periode(e.getKey()),
+                    new TilsynPeriodeInfo(e.getValue())
+                ))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
     }
 
     public Map<Periode, TilsynPeriodeInfo> getPerioder() {

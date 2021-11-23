@@ -25,6 +25,10 @@ public class TilsynPeriodeInfo {
 
     public TilsynPeriodeInfo() {
     }
+    
+    public TilsynPeriodeInfo(TilsynPeriodeInfo t) {
+        this.etablertTilsynTimerPerDag = t.getEtablertTilsynTimerPerDag();
+    }
 
     public Duration getEtablertTilsynTimerPerDag() {
         return etablertTilsynTimerPerDag;
@@ -34,5 +38,26 @@ public class TilsynPeriodeInfo {
         this.etablertTilsynTimerPerDag = Objects.requireNonNull(etablertTilsynTimerPerDag, "TilsynPeriodeInfo.etablertTilsynTimerPerDag");
         return this;
     }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(etablertTilsynTimerPerDag);
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        TilsynPeriodeInfo other = (TilsynPeriodeInfo) obj;
+        return Objects.equals(etablertTilsynTimerPerDag, other.etablertTilsynTimerPerDag);
+    }
+
+    @Override
+    public String toString() {
+        return "TilsynPeriodeInfo [etablertTilsynTimerPerDag=" + etablertTilsynTimerPerDag + "]";
+    }
 }

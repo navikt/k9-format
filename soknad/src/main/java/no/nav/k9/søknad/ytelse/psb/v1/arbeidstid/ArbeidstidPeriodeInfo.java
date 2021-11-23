@@ -37,6 +37,11 @@ public class ArbeidstidPeriodeInfo {
         this.faktiskArbeidTimerPerDag = Objects.requireNonNull(faktiskArbeidTimerPerDag, "faktiskArbeidTimerPerDag");
     }
 
+    public ArbeidstidPeriodeInfo(ArbeidstidPeriodeInfo info) {
+        this.jobberNormaltTimerPerDag = info.jobberNormaltTimerPerDag;
+        this.faktiskArbeidTimerPerDag = info.faktiskArbeidTimerPerDag;
+    }
+
     public ArbeidstidPeriodeInfo() {
     }
 
@@ -58,4 +63,21 @@ public class ArbeidstidPeriodeInfo {
         return this;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(faktiskArbeidTimerPerDag, jobberNormaltTimerPerDag);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ArbeidstidPeriodeInfo other = (ArbeidstidPeriodeInfo) obj;
+        return Objects.equals(faktiskArbeidTimerPerDag, other.faktiskArbeidTimerPerDag)
+                && Objects.equals(jobberNormaltTimerPerDag, other.jobberNormaltTimerPerDag);
+    }
 }
