@@ -18,12 +18,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ArbeidstidPeriodeInfo {
 
     @Valid
+    @NotNull
     @DurationMin(hours = 0, message = "[ugyldigVerdi] Må være større eller lik 0.")
     @DurationMax(hours = 24, message = "[ugyldigVerdi] Må være lavere eller lik 24 timer.")
     @JsonProperty(value = "jobberNormaltTimerPerDag", required = true)
     private Duration jobberNormaltTimerPerDag;
 
     @Valid
+    @NotNull
     @DurationMin(hours = 0, message = "[ugyldigVerdi] Må være større eller lik 0.")
     @DurationMax(hours = 24, message = "[ugyldigVerdi] Må være lavere eller lik 24 timer.")
     @JsonProperty(value = "faktiskArbeidTimerPerDag", required = true)
