@@ -1,5 +1,6 @@
 package no.nav.k9.innsyn;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -10,7 +11,11 @@ import no.nav.k9.innsyn.søknadsammeslåer.Arbeidstidsammenslåer;
 import no.nav.k9.innsyn.søknadsammeslåer.Tilsynsammenslåer;
 import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.TidsserieUtils;
+import no.nav.k9.søknad.felles.personopplysninger.Barn;
+import no.nav.k9.søknad.felles.personopplysninger.Søker;
+import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.felles.type.SøknadId;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
@@ -59,25 +64,20 @@ public class Søknadsammenslåer {
         final PleiepengerSyktBarn ytelse = new PleiepengerSyktBarn();
         ytelse.medSøknadsperiode(slåSammenSøknadsperioder(s1Ytelse, s2Ytelse));
         
-        /* Bruk aktørId fra PsbSøknadsinnhold fremfor:
+        /* Bruk pleietrengendeAktørId fra PsbSøknadsinnhold fremfor: */
         ytelse.medBarn(new Barn()
-            .medNorskIdentitetsnummer(NorskIdentitetsnummer.of(s2Ytelse.getBarn().getPersonIdent().getVerdi()))
-            .medFødselsdato(s2Ytelse.getBarn().getFødselsdato())
+            .medNorskIdentitetsnummer(NorskIdentitetsnummer.of("00000000000"))
         );
-        */
+
         ytelse.medArbeidstid(Arbeidstidsammenslåer.slåSammenArbeidstid(s1Ytelse, s2Ytelse));
         ytelse.medTilsynsordning(Tilsynsammenslåer.slåsammen(s1Ytelse, s2Ytelse));
         
-        /* Bruk aktørId fra PsbSøknadsinnhold fremfor:
-        final Søknad s = new Søknad(
-                SøknadId.of("generert"),
-                Versjon.of("1.0.0"),
-                nySøknad.getMottattDato(),
-                new Søker(NorskIdentitetsnummer.of(nySøknad.getSøker().getPersonIdent().getVerdi())),
-                nySøknad.getSpråk(),
-                ytelse);
-        */
         final Søknad s = new Søknad()
+                .medSøknadId(SøknadId.of("generert"))
+                .medVersjon("1.0.0.")
+                .medMottattDato(ZonedDateTime.now())
+                /* Bruk aktørId fra PsbSøknadsinnhold fremfor: */
+                .medSøker(new Søker(NorskIdentitetsnummer.of("00000000000")))
                 .medSpråk(nySøknad.getSpråk())
                 .medYtelse(ytelse);
         return s;
