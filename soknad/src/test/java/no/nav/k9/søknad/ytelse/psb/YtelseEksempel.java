@@ -1,7 +1,6 @@
 package no.nav.k9.søknad.ytelse.psb;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,27 +18,16 @@ import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie;
 import no.nav.k9.søknad.ytelse.psb.v1.Nattevåk;
 import no.nav.k9.søknad.ytelse.psb.v1.Omsorg;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.Uttak;
 import no.nav.k9.søknad.ytelse.psb.v1.Uttak.UttakPeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo;
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
 
 public class YtelseEksempel {
-
-    /*
-    Komplett
-     */
-
-    public static PleiepengerSyktBarn ytelseMedSøknadOgDelperioder() {
-        var søknadsperiode = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-10-20"));
-        var delperiodeEn = new Periode(LocalDate.parse("2018-12-30"), LocalDate.parse("2019-02-20"));
-        var delperiodeTo = new Periode(LocalDate.parse("2019-02-21"), LocalDate.parse("2019-10-20"));
-        return ytelseMedSøknadOgDelperioder(søknadsperiode, delperiodeEn, delperiodeTo);
-    }
 
     public static PleiepengerSyktBarn ytelseMedSøknadOgDelperioder(Periode søknadsperiode, Periode... delperioder) {
         return minimumYtelseMedSøknadsperiode(søknadsperiode)
@@ -50,23 +38,22 @@ public class YtelseEksempel {
     }
 
     public static PleiepengerSyktBarn komplettYtelseMedSøknadsperiode(Periode søknadsperiode, Periode lovbestemtFeriePeriode, Periode utenlandsperiode, Periode bostedperiode) {
-        var søknadInfo = new DataBruktTilUtledning( true, true,
-                false, false, true );
+        var søknadInfo = new DataBruktTilUtledning(true, true,
+                false, false, true);
         var infoFraPunsj = new InfoFraPunsj()
                 .medSøknadenInneholderInfomasjonSomIkkeKanPunsjes(false);
 
-        return ytelseMedSøknadsperideOgArbeidstid((Periode) søknadsperiode)
+        return ytelseMedSøknadsperideOgArbeidstid(søknadsperiode)
                 .medSøknadInfo(søknadInfo)
                 .medInfoFraPunsj(infoFraPunsj)
-                .medTilsynsordning(lagTilsynsordning((Periode) søknadsperiode))
-                .medBeredskap(lagBeredskap((Periode) søknadsperiode))
-                .medNattevåk(lagNattevåk((Periode) søknadsperiode))
+                .medTilsynsordning(lagTilsynsordning(søknadsperiode))
+                .medBeredskap(lagBeredskap(søknadsperiode))
+                .medNattevåk(lagNattevåk(søknadsperiode))
                 .medOmsorg(lagOmsorg())
-                .medLovbestemtFerie(lagLovbestemtFerie((Periode) lovbestemtFeriePeriode))
-                .medUtenlandsopphold(lagUtenlandsopphold((Periode) utenlandsperiode))
-                .medBosteder(lagBosteder((Periode) bostedperiode));
+                .medLovbestemtFerie(lagLovbestemtFerie(lovbestemtFeriePeriode))
+                .medUtenlandsopphold(lagUtenlandsopphold(utenlandsperiode))
+                .medBosteder(lagBosteder(bostedperiode));
     }
-
 
 
     public static PleiepengerSyktBarn minimumYtelseMedSøknadsperiode(Periode... perioder) {
@@ -140,13 +127,16 @@ public class YtelseEksempel {
     }
 
     public static Arbeidstaker lagArbeidstaker(Periode... perioder) {
-        ArbeidstidPeriodeInfo arbeidstidPeriodeInfo = new ArbeidstidPeriodeInfo(Duration.ofHours(7).plusMinutes(30), Duration.ofHours(7).plusMinutes(30));
+        ArbeidstidPeriodeInfo arbeidstidPeriodeInfo = new ArbeidstidPeriodeInfo()
+                .medJobberNormaltTimerPerDag(Duration.ofHours(7).plusMinutes(30))
+                .medFaktiskArbeidTimerPerDag(Duration.ofHours(7).plusMinutes(30));
         return lagArbeidstaker(arbeidstidPeriodeInfo, perioder);
     }
 
     public static Arbeidstaker lagArbeidstaker(ArbeidstidPeriodeInfo arbeidstidPeriodeInfo, Periode... perioder) {
-        return new Arbeidstaker(null, Organisasjonsnummer.of("999999999"),
-                new ArbeidstidInfo(
+        return new Arbeidstaker()
+                .medOrganisasjonsnummer(Organisasjonsnummer.of("999999999"))
+                .medArbeidstidInfo(new ArbeidstidInfo().medPerioder(
                         lagPerioder(perioder, arbeidstidPeriodeInfo)));
     }
 
