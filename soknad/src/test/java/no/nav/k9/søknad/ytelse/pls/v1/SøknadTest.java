@@ -102,7 +102,8 @@ class SøknadTest {
 
     @Test
     public void alleFelterISøknadInvertertPeriode() {
-        var søknadsperiode = new Periode(LocalDate.now().plusWeeks(2), LocalDate.now().minusWeeks(2));
+        LocalDate startdato = LocalDate.of(2021, 12, 14);
+        var søknadsperiode = new Periode(startdato.plusWeeks(2), startdato.minusWeeks(2));
         var ytelse = YtelseEksempel.ytelseForArbeidstaker(søknadsperiode)
                 .medBosteder(YtelseEksempel.lagBosteder(søknadsperiode))
                 .medUtenlandsopphold(YtelseEksempel.lagUtenlandsopphold(søknadsperiode));
