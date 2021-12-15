@@ -1,7 +1,12 @@
 package no.nav.k9.søknad.ytelse.pls.v1;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -18,12 +23,14 @@ import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 @JsonTypeName(Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE)
-public class PleipengerLivetsSluttfase implements Ytelse{
+public class PleipengerLivetsSluttfase implements Ytelse {
 
     @Valid
     @NotNull
@@ -54,8 +61,7 @@ public class PleipengerLivetsSluttfase implements Ytelse{
 
     @Override
     public YtelseValidator getValidator() {
-        //TODO lage validator
-        return null;
+        return new PleiepengerLivetsSluttfaseYtelseValidator();
     }
 
     @Override
@@ -74,7 +80,28 @@ public class PleipengerLivetsSluttfase implements Ytelse{
 
     @Override
     public Periode getSøknadsperiode() {
-        //TODO utlede omsluttende periode
+        List<ArbeidstidInfo> fraværsperioder = new ArrayList<>();
+        arbeidstid.getFrilanserArbeidstidInfo().ifPresent(fraværsperioder::add);
+        arbeidstid.getSelvstendigNæringsdrivendeArbeidstidInfo().ifPresent(fraværsperioder::add);
+        arbeidstid.getArbeidstakerList().stream()
+                .map(Arbeidstaker::getArbeidstidInfo)
+                .forEach(fraværsperioder::add);
+
+        List<Periode> allePerioder = fraværsperioder.stream()
+                .flatMap(ai -> ai.getPerioder().keySet().stream())
+                .collect(Collectors.toList());
+        Optional<LocalDate> fom = allePerioder.stream()
+                .map(Periode::getFraOgMed)
+                .filter(Objects::nonNull)
+                .min(Comparator.naturalOrder());
+        Optional<LocalDate> tom = allePerioder.stream()
+                .map(Periode::getTilOgMed)
+                .filter(Objects::nonNull)
+                .max(Comparator.naturalOrder());
+
+        if (fom.isPresent() && tom.isPresent()) {
+            return new Periode(fom.get(), tom.get());
+        }
         return null;
     }
 
