@@ -19,7 +19,7 @@ public class UtenPeriodisertDataTest {
         var søknad = SøknadJsonEksempel.utenPeriodisertDataJson();
         var endringsPerioderFraK9Sak = List.of(new Periode("2021-01-01/2021-01-01"));
 
-        ((PleiepengerSyktBarn) søknad.getYtelse()).medEndringsperiode(endringsPerioderFraK9Sak);
+//        ((PleiepengerSyktBarn) søknad.getYtelse()).medEndringsperiode(endringsPerioderFraK9Sak);
         // K9-Punsj validerer søknaden uten periodsert data med en gyldig endringsperiode hentet fra K9-Sak og får ingen valideringsfeil
         verifyIngenFeil(søknad, endringsPerioderFraK9Sak);
 
