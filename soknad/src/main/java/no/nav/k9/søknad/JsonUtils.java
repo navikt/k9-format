@@ -1,21 +1,23 @@
 package no.nav.k9.søknad;
 
+import java.io.IOException;
+import java.util.TimeZone;
+
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetaling;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
-
-import java.io.IOException;
-import java.util.TimeZone;
 
 public final class JsonUtils {
 
@@ -60,7 +62,8 @@ public final class JsonUtils {
                 .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                 .configure(JsonGenerator.Feature.WRITE_BIGDECIMAL_AS_PLAIN, true)
                 .enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY)
-                .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+                .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
 
         objectMapper.registerSubtypes(OmsorgspengerUtbetaling.class, PleiepengerSyktBarn.class);
 
