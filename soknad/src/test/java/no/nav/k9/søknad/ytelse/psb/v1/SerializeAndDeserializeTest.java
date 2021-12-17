@@ -28,13 +28,8 @@ class SerializeAndDeserializeTest {
 
         var serializedSøknad = Søknad.SerDes.serialize(søknad);
         var deserilizedSøknad = Søknad.SerDes.deserialize(serializedSøknad);
+
         verifyIngenFeil(deserilizedSøknad);
         assertEquals(Søknad.SerDes.serialize(deserilizedSøknad), serializedSøknad);
-
     }
-
-
-
-
-
 }
