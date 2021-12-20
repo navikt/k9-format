@@ -9,6 +9,7 @@ import java.util.Map;
 import no.nav.fpsak.tidsserie.LocalDateTimeline;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.opptjening.AnnenAktivitet;
+import no.nav.k9.søknad.felles.opptjening.Frilanser;
 import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
@@ -31,7 +32,7 @@ public class PleiepengerLivetsSluttfaseYtelseValidator extends YtelseValidator {
             feilene.addAll(validerPerioderErLukketOgGyldig(søknad.getBosteder().getPerioderSomSkalSlettes(), "bosteder.perioderSomSkalSlettes"));
             feilene.addAll(validerPerioderErLukketOgGyldig(søknad.getUtenlandsopphold().getPerioder(), "utenlandsopphold.perioder"));
             feilene.addAll(validerPerioderErLukketOgGyldig(søknad.getUtenlandsopphold().getPerioderSomSkalSlettes(), "utenlandsopphold.perioderSomSkalSlettes"));
-            validerArbeidstid(søknad, feilene);
+            validerArbeidstid(søknad);
             validerOpptjening(søknad, feilene);
         } catch (ValideringsAvbrytendeFeilException valideringsAvbrytendeFeilException) {
             feilene.addAll(valideringsAvbrytendeFeilException.getFeilList());
@@ -39,29 +40,45 @@ public class PleiepengerLivetsSluttfaseYtelseValidator extends YtelseValidator {
         return feilene;
     }
 
-    private void validerArbeidstid(PleipengerLivetsSluttfase søknad, List<Feil> feilene) {
+    private void validerArbeidstid(PleipengerLivetsSluttfase søknad) throws ValideringsAvbrytendeFeilException {
         List<Arbeidstaker> arbeidstakerList = søknad.getArbeidstid().getArbeidstakerList();
         for (int i = 0; i < arbeidstakerList.size(); i++) {
-            lagTidslinjeOgValider(arbeidstakerList.get(i).getArbeidstidInfo().getPerioder(), "arbeidstid.arbeidstakerList[" + i + "].perioder", feilene);
+            lagTidslinjeOgValider(arbeidstakerList.get(i).getArbeidstidInfo().getPerioder(), "arbeidstid.arbeidstakerList[" + i + "].perioder");
         }
-        søknad.getArbeidstid().getSelvstendigNæringsdrivendeArbeidstidInfo().ifPresent(sn -> lagTidslinjeOgValider(sn.getPerioder(), "arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo", feilene));
-        søknad.getArbeidstid().getFrilanserArbeidstidInfo().ifPresent(fl -> lagTidslinjeOgValider(fl.getPerioder(), "arbeidstid.frilanserArbeidstidInfo", feilene));
+        søknad.getArbeidstid().getSelvstendigNæringsdrivendeArbeidstidInfo().ifPresent(sn -> lagTidslinjeOgValider(sn.getPerioder(), "arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo"));
+        søknad.getArbeidstid().getFrilanserArbeidstidInfo().ifPresent(fl -> lagTidslinjeOgValider(fl.getPerioder(), "arbeidstid.frilanserArbeidstidInfo"));
     }
 
     private void validerOpptjening(PleipengerLivetsSluttfase søknad, List<Feil> feilene) {
         List<SelvstendigNæringsdrivende> snAktiviteter = søknad.getOpptjeningAktivitet().getSelvstendigNæringsdrivende();
         for (int i = 0; i < snAktiviteter.size(); i++) {
-            lagTidslinjeOgValider(snAktiviteter.get(i).getPerioder(), "opptjeningAktivitet.selvstendigNæringsdrivende[" + i + "].perioder", feilene);
+            lagTidslinjeMedStøtteForÅpenPeriodeOgValider(snAktiviteter.get(i).getPerioder(), "opptjeningAktivitet.selvstendigNæringsdrivende[" + i + "].perioder");
         }
 
         List<AnnenAktivitet> andreAktiviteter = søknad.getOpptjeningAktivitet().getAndreAktiviteter();
         for (int i = 0; i < andreAktiviteter.size(); i++) {
-            validerPeriodeErLukketOgGyldig(andreAktiviteter.get(i).getPeriode(), "opptjeningAktivitet.andreAktiviteter[" + i + "].perioder", feilene);
+            validerPerioderIkkeErInvertert(andreAktiviteter.get(i).getPeriode(), "opptjeningAktivitet.andreAktiviteter[" + i + "].perioder", feilene);
         }
+        Frilanser fl = søknad.getOpptjeningAktivitet().getFrilanser();
+        if (fl != null) {
+            validerPerioderIkkeErInvertert(new Periode(fl.getStartdato(), fl.getSluttdato()), "opptjeningAktivitet.frilanser.startdato/sluttdato", feilene);
+        }
+
     }
 
-    private LocalDateTimeline<Boolean> lagTidslinjeOgValider(Map<Periode, ?> periodeMap, String felt, List<Feil> feil) throws ValideringsAvbrytendeFeilException {
-        var nyFeil = validerPerioderErLukketOgGyldig(periodeMap, felt);
+    private LocalDateTimeline<Boolean> lagTidslinjeMedStøtteForÅpenPeriodeOgValider(Map<Periode, ?> periodeMap, String felt) throws ValideringsAvbrytendeFeilException {
+        return lagTidslinjeOgValider(periodeMap, felt, true);
+    }
+
+    private LocalDateTimeline<Boolean> lagTidslinjeOgValider(Map<Periode, ?> periodeMap, String felt) throws ValideringsAvbrytendeFeilException {
+        return lagTidslinjeOgValider(periodeMap, felt, false);
+    }
+
+    private LocalDateTimeline<Boolean> lagTidslinjeOgValider(Map<Periode, ?> periodeMap, String felt, boolean godtaÅpenPeriode) throws ValideringsAvbrytendeFeilException {
+        var nyFeil = godtaÅpenPeriode
+                ? validerPerioderGyldig(periodeMap, felt)
+                : validerPerioderErLukketOgGyldig(periodeMap, felt);
+
         if (!nyFeil.isEmpty()) {
             throw new ValideringsAvbrytendeFeilException(nyFeil);
         }
@@ -81,21 +98,10 @@ public class PleiepengerLivetsSluttfaseYtelseValidator extends YtelseValidator {
         return feil;
     }
 
-    private List<Feil> validerPerioderErLukketOgGyldig(List<Periode> periodeList, String felt) {
+    private List<Feil> validerPerioderGyldig(Map<Periode, ?> perioder, String felt) {
         var feil = new ArrayList<Feil>();
-        for (int i = 0; i < periodeList.size(); i++) {
-            var periode = periodeList.get(i);
-            if (periode != null) {
-                validerPerioderErLukket(periode, felt + "[" + i + "]", feil);
-                validerPerioderIkkeErInvertert(periode, felt + "[" + i + "]", feil);
-            }
-        }
+        perioder.keySet().forEach(p -> validerPerioderIkkeErInvertert(p, felt + "['" + p + "']", feil));
         return feil;
-    }
-
-    private void validerPeriodeErLukketOgGyldig(Periode periode, String felt, List<Feil> feil) {
-        validerPerioderErLukket(periode, felt, feil);
-        validerPerioderIkkeErInvertert(periode, felt, feil);
     }
 
     private void validerPerioderErLukket(Periode periode, String felt, List<Feil> feil) {
