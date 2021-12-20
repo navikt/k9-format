@@ -10,6 +10,7 @@ import static no.nav.k9.søknad.ytelse.psb.v1.ValiderUtil.verifyIngenFeil;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.psb.SøknadEksempel;
 import no.nav.k9.søknad.ytelse.psb.YtelseEksempel;
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
 
 class SøknadTest {
     private static final Periode TEST_PERIODE = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
@@ -142,6 +144,24 @@ class SøknadTest {
 
         var feil = verifyHarFeil(søknad, List.of());
         feilInneholder(feil, "missingArgument");
+    }
+    
+    @Test
+    public void søknadLagerRiktigFeilmeldingPathForNullFeil() {
+        var søknadsperiode = new Periode(LocalDate.now().minusWeeks(2), LocalDate.now().plusWeeks(2));
+        var ytelse = YtelseEksempel.minimumYtelseMedSøknadsperiode(søknadsperiode);
+
+        var arbeidstidPeriodeInfo = new ArbeidstidPeriodeInfo().medFaktiskArbeidTimerPerDag(Duration.ofHours(5));
+        var arbeidstaker = YtelseEksempel.lagArbeidstaker(arbeidstidPeriodeInfo, søknadsperiode);
+        ytelse.getArbeidstid().leggeTilArbeidstaker(arbeidstaker);
+        var feil = verifyHarFeil(SøknadEksempel.søknad(ytelse));
+
+        var forventetPath =
+                "ytelse.arbeidstid.arbeidstakerList[0].arbeidstidInfo.perioder['"
+                + søknadsperiode
+                + "'].jobberNormaltTimerPerDag";
+        feilInneholder(feil, forventetPath, "nullFeil");
+
     }
 
     //TODO legge på getSøknadsperioder test

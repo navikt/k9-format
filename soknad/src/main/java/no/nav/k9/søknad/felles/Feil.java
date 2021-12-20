@@ -64,13 +64,30 @@ public class Feil {
             feilkode = "påkrevd";
             feilmelding = constraintMessage;
         }
+        var path = constraintViolation.getPropertyPath().toString();
+        path = leggTilFnutterIPathHvorSøkeordFinnes(path, "perioder[");
 
         return new Feil(
-                constraintViolation.getPropertyPath().toString(),
+                path,
                 feilkode,
                 feilmelding);
     }
 
+    private static String leggTilFnutterIPathHvorSøkeordFinnes(String path, String søkeord) {
+        var positionStart = path.indexOf(søkeord);
+        if (positionStart != -1) {
+            var positionEnd = path.indexOf("]", positionStart);
+            path = addChar(path, '\'', positionStart+ søkeord.length());
+            path = addChar(path, '\'', positionEnd+1);
+        }
+        return path;
+    }
+
+    public static String addChar(String str, char ch, int position) {
+        StringBuilder sb = new StringBuilder(str);
+        sb.insert(position, ch);
+        return sb.toString();
+    }
 
     @Override
     public boolean equals(Object o) {
