@@ -131,7 +131,7 @@ class SøknadTest {
         var ytelse = ytelseMedSøknadsperideOgArbeidstid(søknadsperiode);
         var søknad = SøknadEksempel.søknad(ytelse);
 
-        assertThrows(PleiepengerSyktBarnYtelseValidator.ValideringsAvbrytendeFeilException.class, () -> pleiepengerSyktBarnYtelseValidator.validerOgLeggTilFeilene(søknad.getYtelse(), List.of(), true)
+        assertThrows(PleiepengerSyktBarnYtelseValidator.ValideringsAvbrytendeFeilException.class, () -> pleiepengerSyktBarnYtelseValidator.validerOgLeggTilFeilene(søknad.getYtelse(), List.of())
         );
     }
 

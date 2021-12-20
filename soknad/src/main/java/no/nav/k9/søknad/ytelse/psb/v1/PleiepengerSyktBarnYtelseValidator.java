@@ -25,26 +25,33 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
 
     @Override
     public List<Feil> valider(Ytelse ytelse) {
-        return validerMedGyldigEndringsperodeHvisDenFinnes(ytelse, List.of(), false);
+        return validerMedGyldigEndringsperodeHvisDenFinnes(ytelse, List.of());
     }
 
-    //For å overload forsikreValidert(Ytelse ytelse)
-    public void forsikreValidert(Ytelse ytelse, List<Periode> gyldigeEndringsperioder) {
+    public List<Feil> valider(Ytelse ytelse, List<Periode> gyldigeEndringsperioder) {
         Objects.requireNonNull(gyldigeEndringsperioder, "gyldigeEndringsperioder");
-        
-        List<Feil> feil = validerMedGyldigEndringsperodeHvisDenFinnes(ytelse, gyldigeEndringsperioder, true);
+        return validerMedGyldigEndringsperodeHvisDenFinnes(ytelse, gyldigeEndringsperioder);
+    }
+
+    @Override
+    public void forsikreValidert(Ytelse ytelse) {
+        List<Feil> feil = validerMedGyldigEndringsperodeHvisDenFinnes(ytelse, List.of());
         if (!feil.isEmpty()) {
             throw new ValideringsFeil(feil);
         }
     }
 
-    public List<Feil> valider(Ytelse ytelse, List<Periode> gyldigeEndringsperioder) {
-        return validerMedGyldigEndringsperodeHvisDenFinnes(ytelse, gyldigeEndringsperioder, true);
+    public void forsikreValidert(Ytelse ytelse, List<Periode> gyldigeEndringsperioder) {
+        Objects.requireNonNull(gyldigeEndringsperioder, "gyldigeEndringsperioder");
+        
+        List<Feil> feil = validerMedGyldigEndringsperodeHvisDenFinnes(ytelse, gyldigeEndringsperioder);
+        if (!feil.isEmpty()) {
+            throw new ValideringsFeil(feil);
+        }
     }
     
     List<Feil> validerMedGyldigEndringsperodeHvisDenFinnes(Ytelse ytelse,
-            List<Periode> gyldigeEndringsperioder,
-            boolean brukValideringMedUtledetEndringsperiode) {
+            List<Periode> gyldigeEndringsperioder) {
         
         Objects.requireNonNull(gyldigeEndringsperioder, "gyldigeEndringsperioder");
         
@@ -52,7 +59,7 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         var feilene = new ArrayList<Feil>();
 
         try {
-            feilene.addAll(validerOgLeggTilFeilene(psb, gyldigeEndringsperioder, brukValideringMedUtledetEndringsperiode));
+            feilene.addAll(validerOgLeggTilFeilene(psb, gyldigeEndringsperioder));
         } catch (ValideringsAvbrytendeFeilException valideringsAvbrytendeFeilException) {
             feilene.addAll(valideringsAvbrytendeFeilException.getFeilList());
         }
@@ -61,11 +68,10 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
     }
 
     List<Feil> validerOgLeggTilFeilene(PleiepengerSyktBarn psb,
-                                       List<Periode> gyldigeEndringsperioder,
-                                       boolean brukValideringMedUtledetEndringsperiode) {
+                                       List<Periode> gyldigeEndringsperioder) {
         final List<Feil> feilene = new ArrayList<Feil>();
 
-        validerLovligEndring(psb, gyldigeEndringsperioder, brukValideringMedUtledetEndringsperiode, feilene);
+        validerLovligEndring(psb, gyldigeEndringsperioder, feilene);
 
         feilene.addAll(validerPerioderErLukketOgGyldig(psb.getBosteder().getPerioder(), "bosteder.perioder"));
         feilene.addAll(validerPerioderErLukketOgGyldig(psb.getUtenlandsopphold().getPerioder(), "utenlandsopphold.perioder"));
@@ -73,19 +79,16 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         final LocalDateTimeline<Boolean> søknadsperiodeTidslinje = lagTidslinjeOgValider(psb.getSøknadsperiodeList(), "søknadsperiode.perioder", feilene);
         final LocalDateTimeline<Boolean> intervalForEndringTidslinje;
         
-        if (brukValideringMedUtledetEndringsperiode) {
-            final LocalDateTimeline<Boolean> gyldigEndringsperiodeTidslinje = lagTidslinjeOgValider(gyldigeEndringsperioder, "gyldigeEndringsperioder.perioder", feilene);
-            intervalForEndringTidslinje = søknadsperiodeTidslinje.union(gyldigEndringsperiodeTidslinje, StandardCombinators::coalesceLeftHandSide);
-        } else {
-            final LocalDateTimeline<Boolean> endringsperiodeTidslinje = lagTidslinjeOgValider(psb.getEndringsperiode(), "endringsperiode.perioder", feilene);
-            intervalForEndringTidslinje = søknadsperiodeTidslinje.union(endringsperiodeTidslinje, StandardCombinators::coalesceLeftHandSide);
-        }
+
+        final LocalDateTimeline<Boolean> gyldigEndringsperiodeTidslinje = lagTidslinjeOgValider(gyldigeEndringsperioder, "gyldigeEndringsperioder.perioder", feilene);
+        intervalForEndringTidslinje = søknadsperiodeTidslinje.union(gyldigEndringsperiodeTidslinje, StandardCombinators::coalesceLeftHandSide);
+//        else {
+////            final LocalDateTimeline<Boolean> endringsperiodeTidslinje = lagTidslinjeOgValider(psb.getEndringsperiode(), "endringsperiode.perioder", feilene);
+////            intervalForEndringTidslinje = søknadsperiodeTidslinje.union(endringsperiodeTidslinje, StandardCombinators::coalesceLeftHandSide);
+//        }
 
         final LocalDateTimeline<Boolean> trekkKravPerioderTidslinje = lagTidslinjeOgValider(psb.getTrekkKravPerioder(), "trekkKravPerioder.perioder", feilene);
-
-        if (brukValideringMedUtledetEndringsperiode) {
-            feilene.addAll(validerAtIngenPerioderOverlapperMedTrekkKravPerioder(trekkKravPerioderTidslinje, søknadsperiodeTidslinje, "trekkKravPerioder"));
-        }
+        feilene.addAll(validerAtIngenPerioderOverlapperMedTrekkKravPerioder(trekkKravPerioderTidslinje, søknadsperiodeTidslinje, "trekkKravPerioder"));
 
         for (var ytelsePeriode : PerioderMedEndringUtil.getAllePerioderSomMåVæreInnenforSøknadsperiode(psb)) {
             var ytelsePeriodeTidsserie = lagTidslinjeOgValider(ytelsePeriode.getPeriodeMap(), ytelsePeriode.getFelt() + ".perioder", feilene);
@@ -98,13 +101,8 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         return feilene;
     }
 
-    private void validerLovligEndring(PleiepengerSyktBarn psb, List<Periode> gyldigeEndringsperioder,
-            boolean brukValideringMedUtledetEndringsperiode, List<Feil> feil) {
-        if (psb.getSøknadsperiodeList().isEmpty()
-                && (
-                    !brukValideringMedUtledetEndringsperiode && psb.getEndringsperiode().isEmpty()
-                    || brukValideringMedUtledetEndringsperiode && gyldigeEndringsperioder.isEmpty()
-                )) {
+    private void validerLovligEndring(PleiepengerSyktBarn psb, List<Periode> gyldigeEndringsperioder, List<Feil> feil) {
+        if (psb.getSøknadsperiodeList().isEmpty() && gyldigeEndringsperioder.isEmpty()) {
             feil.add(lagFeil("søknadsperiode", "missingArgument", "Mangler søknadsperiode eller gyldigeEndringsperioder."));
             throw new ValideringsAvbrytendeFeilException(feil);
         }
