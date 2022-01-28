@@ -28,6 +28,7 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         return validerMedGyldigEndringsperodeHvisDenFinnes(ytelse, List.of());
     }
 
+    @Override
     public List<Feil> valider(Ytelse ytelse, List<Periode> gyldigeEndringsperioder) {
         Objects.requireNonNull(gyldigeEndringsperioder, "gyldigeEndringsperioder");
         return validerMedGyldigEndringsperodeHvisDenFinnes(ytelse, gyldigeEndringsperioder);
