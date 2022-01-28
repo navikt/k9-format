@@ -22,4 +22,11 @@ public abstract class YtelseValidator {
             throw new ValideringsFeil(feil);
         }
     }
+    
+    public void forsikreValidert(Ytelse ytelse, List<Periode> gyldigeEndringsperioder) {
+        List<Feil> feil = valider(ytelse, gyldigeEndringsperioder);
+        if (!feil.isEmpty()) {
+            throw new ValideringsFeil(feil);
+        }
+    }
 }
