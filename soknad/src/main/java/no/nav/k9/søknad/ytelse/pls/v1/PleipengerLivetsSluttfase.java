@@ -2,6 +2,7 @@ package no.nav.k9.søknad.ytelse.pls.v1;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -41,6 +42,12 @@ public class PleipengerLivetsSluttfase implements Ytelse {
     @NotNull
     @JsonProperty(value = "arbeidstid", required = true)
     private Arbeidstid arbeidstid = new Arbeidstid();
+
+
+    @Valid
+    @JsonProperty(value = "trekkKravPerioder", required = true)
+    @NotNull
+    private List<Periode> trekkKravPerioder = new ArrayList<>();
 
     @Valid
     @JsonProperty(value = "opptjeningAktivitet")
@@ -121,6 +128,10 @@ public class PleipengerLivetsSluttfase implements Ytelse {
         return utenlandsopphold;
     }
 
+    public List<Periode> getTrekkKravPerioder() {
+        return Collections.unmodifiableList(trekkKravPerioder);
+    }
+
     public PleipengerLivetsSluttfase medPleietrengende(Pleietrengende pleietrengende) {
         this.pleietrengende = Objects.requireNonNull(pleietrengende, "pleietrengende");
         return this;
@@ -143,6 +154,11 @@ public class PleipengerLivetsSluttfase implements Ytelse {
 
     public PleipengerLivetsSluttfase medUtenlandsopphold(Utenlandsopphold utenlandsopphold) {
         this.utenlandsopphold = Objects.requireNonNull(utenlandsopphold, "utenlandsopphold");
+        return this;
+    }
+
+    public PleipengerLivetsSluttfase addAllTrekkKravPerioder(List<Periode> trekkKravPerioder) {
+        this.trekkKravPerioder.addAll(Objects.requireNonNull(trekkKravPerioder, "trekkKravPerioder"));
         return this;
     }
 }
