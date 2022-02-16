@@ -69,12 +69,11 @@ public class PleiepengerLivetsSluttfaseYtelseValidator extends YtelseValidator {
 
     }
 
-
     private void validerTrekkKravPerioder(PleipengerLivetsSluttfase søknad, List<Feil> feilene) {
         LocalDateTimeline<Boolean> trekkKravPerioderTidslinje = lagTidslinjeOgValider(søknad.getTrekkKravPerioder(), "trekkKravPerioder.perioder", feilene);
-        var fraværPerioder = søknad.getArbeidstid().getArbeidstakerList().stream().flatMap(it -> it.getArbeidstidInfo().getPerioder().keySet().stream()).collect(Collectors.toList());
-        var fraværTidslinje = toLocalDateTimeline(fraværPerioder);
-        feilene.addAll(validerAtIngenPerioderOverlapperMedTrekkKravPerioder(trekkKravPerioderTidslinje, fraværTidslinje, "trekkKravPerioder"));
+        var søktePerioder = søknad.getArbeidstid().getArbeidstakerList().stream().flatMap(it -> it.getArbeidstidInfo().getPerioder().keySet().stream()).collect(Collectors.toList());
+        var tidslinjeSøktPeriode = toLocalDateTimeline(søktePerioder);
+        feilene.addAll(validerAtIngenPerioderOverlapperMedTrekkKravPerioder(trekkKravPerioderTidslinje, tidslinjeSøktPeriode, "trekkKravPerioder"));
     }
 
     private LocalDateTimeline<Boolean> lagTidslinjeMedStøtteForÅpenPeriodeOgValider(Map<Periode, ?> periodeMap, String felt) throws ValideringsAvbrytendeFeilException {
@@ -158,10 +157,10 @@ public class PleiepengerLivetsSluttfaseYtelseValidator extends YtelseValidator {
     }
 
     private List<Feil> validerAtIngenPerioderOverlapperMedTrekkKravPerioder(LocalDateTimeline<Boolean> trekkKravPerioder,
-                                                                            LocalDateTimeline<Boolean> test,
+                                                                            LocalDateTimeline<Boolean> søktePerioder,
                                                                             String felt) {
-        return tilPeriodeList(trekkKravPerioder.intersection(test)).stream()
-                .map(p -> toFeil(p, felt, "ugyldigPeriodeInterval", "Overlapper med trekk krav periode: "))
+        return tilPeriodeList(trekkKravPerioder.intersection(søktePerioder)).stream()
+                .map(p -> toFeil(p, felt, "ugyldigPeriodeInterval", "Søkt periode overlapper med trekk krav periode: "))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 

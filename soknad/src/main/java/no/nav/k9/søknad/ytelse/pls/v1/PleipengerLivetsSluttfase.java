@@ -43,7 +43,6 @@ public class PleipengerLivetsSluttfase implements Ytelse {
     @JsonProperty(value = "arbeidstid", required = true)
     private Arbeidstid arbeidstid = new Arbeidstid();
 
-
     @Valid
     @JsonProperty(value = "trekkKravPerioder", required = true)
     @NotNull
@@ -157,7 +156,7 @@ public class PleipengerLivetsSluttfase implements Ytelse {
         return this;
     }
 
-    public PleipengerLivetsSluttfase addAllTrekkKravPerioder(List<Periode> trekkKravPerioder) {
+    public PleipengerLivetsSluttfase leggTilTrekkKravPerioder(List<Periode> trekkKravPerioder) {
         this.trekkKravPerioder.addAll(Objects.requireNonNull(trekkKravPerioder, "trekkKravPerioder"));
         return this;
     }
