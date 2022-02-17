@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import no.nav.fpsak.tidsserie.LocalDateSegment;
 import no.nav.fpsak.tidsserie.LocalDateTimeline;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.opptjening.AnnenAktivitet;
@@ -71,8 +72,11 @@ public class PleiepengerLivetsSluttfaseYtelseValidator extends YtelseValidator {
 
     private void validerTrekkKravPerioder(PleipengerLivetsSluttfase søknad, List<Feil> feilene) {
         LocalDateTimeline<Boolean> trekkKravPerioderTidslinje = lagTidslinjeOgValider(søknad.getTrekkKravPerioder(), "trekkKravPerioder.perioder", feilene);
-        var søktePerioder = søknad.getArbeidstid().getArbeidstakerList().stream().flatMap(it -> it.getArbeidstidInfo().getPerioder().keySet().stream()).collect(Collectors.toList());
-        var tidslinjeSøktPeriode = toLocalDateTimeline(søktePerioder);
+        var søktePerioder = søknad.getArbeidstid().getArbeidstakerList().stream()
+                .flatMap(it -> it.getArbeidstidInfo().getPerioder().keySet().stream())
+                .map(it -> new LocalDateSegment<>(it.getFraOgMed(), it.getTilOgMed(), Boolean.TRUE))
+                .collect(Collectors.toList());
+        var tidslinjeSøktPeriode = LocalDateTimeline.buildGroupOverlappingSegments(søktePerioder).mapValue(s -> Boolean.TRUE);
         feilene.addAll(validerAtIngenPerioderOverlapperMedTrekkKravPerioder(trekkKravPerioderTidslinje, tidslinjeSøktPeriode, "trekkKravPerioder"));
     }
 

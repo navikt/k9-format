@@ -2,28 +2,56 @@ package no.nav.k9.søknad.ytelse.pls.v1;
 
 import static no.nav.k9.søknad.TestUtils.feilInneholder;
 import static no.nav.k9.søknad.ytelse.pls.v1.ValiderUtil.verifyHarFeil;
+import static no.nav.k9.søknad.ytelse.pls.v1.ValiderUtil.verifyIngenFeil;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.TestUtils;
-import no.nav.k9.søknad.felles.Feil;
+import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
+import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.ytelse.psb.SøknadEksempel;
-import no.nav.k9.søknad.ytelse.psb.v1.Uttak;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo;
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
 
 public class YtelseTest {
+
+    @Test
+    public void skal_tolerere_flere_aktiviteter_i_samme_periode() {
+        var arbeidstid = new ArbeidstidInfo()
+                .medPerioder(
+                        Map.of(
+                                new Periode(LocalDate.parse("2021-01-01"), LocalDate.parse("2021-01-05")),
+                                new ArbeidstidPeriodeInfo()
+                                        .medFaktiskArbeidTimerPerDag(Duration.ZERO)
+                                        .medJobberNormaltTimerPerDag(Duration.ofHours(7))
+                        )
+                );
+
+        var psb = new PleipengerLivetsSluttfase()
+                .medPleietrengende(new Pleietrengende(NorskIdentitetsnummer.of("12345678911")))
+                .medArbeidstid(
+                        new Arbeidstid()
+                                .medArbeidstaker(
+                                        List.of(
+                                                new Arbeidstaker()
+                                                        .medOrganisasjonsnummer(Organisasjonsnummer.of("123456789"))
+                                                        .medArbeidstidInfo(arbeidstid),
+                                                new Arbeidstaker()
+                                                        .medOrganisasjonsnummer(Organisasjonsnummer.of("123456788"))
+                                                        .medArbeidstidInfo(arbeidstid)
+                                        )
+                                )
+                );
+
+        verifyIngenFeil(psb);
+    }
 
     @Test
     public void søknadsperiodeInneholderÅpnePerioder() {
@@ -42,6 +70,7 @@ public class YtelseTest {
         var feil = verifyHarFeil(psb);
         feilInneholder(feil, "ytelse.arbeidstid.arbeidstakerList[0].perioder", "IllegalArgumentException");
     }
+
     @Test
     public void invertertPeriodeForArbeidstakerPeriode() {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().minusMonths(2));
