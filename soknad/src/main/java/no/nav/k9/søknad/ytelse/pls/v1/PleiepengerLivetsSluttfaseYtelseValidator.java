@@ -29,7 +29,7 @@ public class PleiepengerLivetsSluttfaseYtelseValidator extends YtelseValidator {
         List<Feil> feilene = new ArrayList<>();
         try {
             if (søknad.getSøknadsperiode() == null) {
-                feilene.add(lagFeil("arbeidstid", "påkrevd", "det finnes ingen søknadsperiode"));
+                feilene.add(lagFeil("søknadsperiode", "påkrevd", "det finnes ingen søknadsperiode"));
             }
             feilene.addAll(validerPerioderErLukketOgGyldig(søknad.getBosteder().getPerioder(), "bosteder.perioder"));
             feilene.addAll(validerPerioderErLukketOgGyldig(søknad.getBosteder().getPerioderSomSkalSlettes(), "bosteder.perioderSomSkalSlettes"));
@@ -38,6 +38,7 @@ public class PleiepengerLivetsSluttfaseYtelseValidator extends YtelseValidator {
             validerArbeidstid(søknad);
             validerOpptjening(søknad, feilene);
             validerTrekkKravPerioder(søknad, feilene);
+            //TODO valider søknadsperiode(overlapp), uttak
         } catch (ValideringsAvbrytendeFeilException valideringsAvbrytendeFeilException) {
             feilene.addAll(valideringsAvbrytendeFeilException.getFeilList());
         }
