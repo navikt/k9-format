@@ -13,6 +13,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -24,6 +25,7 @@ import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
+import no.nav.k9.søknad.ytelse.psb.v1.Uttak;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
@@ -39,9 +41,10 @@ public class PleipengerLivetsSluttfase implements Ytelse {
     private Pleietrengende pleietrengende;
 
     @Valid
-    @NotNull
-    @JsonProperty(value = "arbeidstid", required = true)
-    private Arbeidstid arbeidstid = new Arbeidstid();
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+    @JsonProperty(value = "søknadsperiode" /* ,required = true TODO skal skrus på før lansering */)
+    //@NotNull --TODO skal bli NotNull før lansering
+    private List<Periode> søknadsperiode = new ArrayList<>();
 
     @Valid
     @JsonProperty(value = "trekkKravPerioder", required = true)
@@ -59,6 +62,15 @@ public class PleipengerLivetsSluttfase implements Ytelse {
     @Valid
     @JsonProperty(value = "utenlandsopphold", required = true)
     private Utenlandsopphold utenlandsopphold = new Utenlandsopphold();
+
+    @Valid
+    @NotNull
+    @JsonProperty(value = "arbeidstid", required = true)
+    private Arbeidstid arbeidstid = new Arbeidstid();
+
+    @Valid
+    @JsonProperty(value = "uttak"/* ,required = true TODO skal skrus på før lansering */)
+    private Uttak uttak = new Uttak(); //TODO vurder å lage egen variant for å ha riktigere navngiving
 
     @Override
     public Type getType() {
@@ -86,13 +98,20 @@ public class PleipengerLivetsSluttfase implements Ytelse {
 
     @Override
     public Periode getSøknadsperiode() {
+        if (!søknadsperiode.isEmpty()) {
+            return new Periode(
+                    søknadsperiode.stream().map(Periode::getFraOgMed).min(Comparator.naturalOrder()).orElseThrow(),
+                    søknadsperiode.stream().map(Periode::getTilOgMed).max(Comparator.naturalOrder()).orElseThrow()
+            );
+        }
+
+        //TODO deprecated, erstattes av søknadsperiode (se over), fjernes før lansering
         List<ArbeidstidInfo> fraværsperioder = new ArrayList<>();
         arbeidstid.getFrilanserArbeidstidInfo().ifPresent(fraværsperioder::add);
         arbeidstid.getSelvstendigNæringsdrivendeArbeidstidInfo().ifPresent(fraværsperioder::add);
         arbeidstid.getArbeidstakerList().stream()
                 .map(Arbeidstaker::getArbeidstidInfo)
                 .forEach(fraværsperioder::add);
-
         List<Periode> allePerioder = fraværsperioder.stream()
                 .flatMap(ai -> ai.getPerioder().keySet().stream())
                 .collect(Collectors.toList());
@@ -104,15 +123,14 @@ public class PleipengerLivetsSluttfase implements Ytelse {
                 .map(Periode::getTilOgMed)
                 .filter(Objects::nonNull)
                 .max(Comparator.naturalOrder());
-
         if (fom.isPresent() && tom.isPresent()) {
             return new Periode(fom.get(), tom.get());
         }
         return null;
     }
 
-    public Arbeidstid getArbeidstid() {
-        return arbeidstid;
+    public List<Periode> getSøknadsperiodeList() {
+        return søknadsperiode == null ? null : Collections.unmodifiableList(søknadsperiode);
     }
 
     public OpptjeningAktivitet getOpptjeningAktivitet() {
@@ -131,13 +149,26 @@ public class PleipengerLivetsSluttfase implements Ytelse {
         return Collections.unmodifiableList(trekkKravPerioder);
     }
 
+    public Arbeidstid getArbeidstid() {
+        return arbeidstid;
+    }
+
+    public Uttak getUttak() {
+        return uttak;
+    }
+
     public PleipengerLivetsSluttfase medPleietrengende(Pleietrengende pleietrengende) {
         this.pleietrengende = Objects.requireNonNull(pleietrengende, "pleietrengende");
         return this;
     }
 
-    public PleipengerLivetsSluttfase medArbeidstid(Arbeidstid arbeidstid) {
-        this.arbeidstid = Objects.requireNonNull(arbeidstid, "arbeidstid");
+    public PleipengerLivetsSluttfase medSøknadsperiode(List<Periode> søknadsperiodeList) {
+        this.søknadsperiode.addAll(Objects.requireNonNull(søknadsperiodeList, "søknadsperiodeList"));
+        return this;
+    }
+
+    public PleipengerLivetsSluttfase medSøknadsperiode(Periode søknadsperiode) {
+        this.søknadsperiode.add(Objects.requireNonNull(søknadsperiode, "søknadsperiode"));
         return this;
     }
 
@@ -160,4 +191,15 @@ public class PleipengerLivetsSluttfase implements Ytelse {
         this.trekkKravPerioder.addAll(Objects.requireNonNull(trekkKravPerioder, "trekkKravPerioder"));
         return this;
     }
+
+    public PleipengerLivetsSluttfase medArbeidstid(Arbeidstid arbeidstid) {
+        this.arbeidstid = Objects.requireNonNull(arbeidstid, "arbeidstid");
+        return this;
+    }
+
+    public PleipengerLivetsSluttfase medUttak(Uttak uttak) {
+        this.uttak = Objects.requireNonNull(uttak, "uttak");
+        return this;
+    }
+
 }
