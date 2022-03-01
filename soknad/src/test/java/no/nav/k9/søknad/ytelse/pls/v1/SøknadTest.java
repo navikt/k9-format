@@ -124,7 +124,7 @@ class SøknadTest {
         var søknad = SøknadEksempel.søknad(tomYtelse);
 
         var feil = verifyHarFeil(søknad);
-        feilInneholder(feil, "ytelse.arbeidstid", "påkrevd", "det finnes ingen søknadsperiode");
+        feilInneholder(feil, "ytelse.søknadsperiode", "påkrevd", "det finnes ingen søknadsperiode");
     }
 
 
