@@ -43,8 +43,6 @@ public class PleiepengerLivetsSluttfaseYtelseValidator extends YtelseValidator {
 
             var søknadsperiodeTidslinje = lagTidslinjeOgValider(søknad.getSøknadsperiodeList(), "søknadsperiode.perioder", feilene);
             var uttakTidslinje = lagTidslinjeOgValider(new ArrayList<>(søknad.getUttak().getPerioder().keySet()), "uttak.perioder", feilene);
-            var arbeidstidTidslinje = lagArbeidstidTidslinje(søknad.getArbeidstid());
-            validerAtUttakErKomplettForSøknadsperiode(søknadsperiodeTidslinje, arbeidstidTidslinje, "arbeidstid.perioder", feilene);
             validerAtUttakErKomplettForSøknadsperiode(søknadsperiodeTidslinje, uttakTidslinje, "uttak.perioder", feilene);
 
             validerTrekkKravPerioder(søknad.getTrekkKravPerioder(), søknadsperiodeTidslinje, feilene);

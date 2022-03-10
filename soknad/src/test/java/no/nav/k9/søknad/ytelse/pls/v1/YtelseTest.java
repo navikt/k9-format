@@ -152,19 +152,4 @@ public class YtelseTest {
         feilInneholder(feil, "ytelse.uttak.perioder", "ikkeKomplettPeriode");
     }
 
-    @Test
-    public void søknadsperioderUtenArbeidstid() {
-        var periodeEn = new Periode(LocalDate.now(), LocalDate.now().plusWeeks(1));
-        var periodeTo = new Periode(LocalDate.now().plusWeeks(2), LocalDate.now().plusWeeks(3));
-
-        var ytelse = YtelseEksempel.lagYtelse()
-                .medSøknadsperiode(periodeEn)
-                .medSøknadsperiode(periodeTo)
-                .medArbeidstid(new Arbeidstid().medArbeidstaker(List.of(YtelseEksempel.lagArbeidstaker(periodeEn)))) // Kun en av periodene her
-                .medUttak(lagUttak(periodeEn, periodeTo));
-
-        var feil = verifyHarFeil(ytelse);
-        feilInneholder(feil, "ytelse.arbeidstid.perioder", "ikkeKomplettPeriode");
-    }
-
 }
