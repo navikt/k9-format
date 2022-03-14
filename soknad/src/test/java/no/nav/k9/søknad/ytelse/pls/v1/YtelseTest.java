@@ -3,6 +3,7 @@ package no.nav.k9.søknad.ytelse.pls.v1;
 import static no.nav.k9.søknad.TestUtils.feilInneholder;
 import static no.nav.k9.søknad.ytelse.pls.v1.ValiderUtil.verifyHarFeil;
 import static no.nav.k9.søknad.ytelse.pls.v1.ValiderUtil.verifyIngenFeil;
+import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagUttak;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -110,6 +111,45 @@ public class YtelseTest {
         //var feil = verifyHarFeil(SøknadEksempel.søknad(ytelse));
         var feil = verifyHarFeil(ytelse);
         feilInneholder(feil, "ytelse.arbeidstid.arbeidstakerList[0].perioder", "IllegalArgumentException");
+    }
+
+    @Test
+    public void overlappendePerioderForSøknadsperiodelist() {
+        var søknadsperiodeEn = new Periode(LocalDate.now(), LocalDate.now());
+        var søknadsperiodeTo = new Periode(LocalDate.now(), LocalDate.now().plusDays(1));
+        var ytelse = YtelseEksempel.lagYtelse()
+                .medSøknadsperiode(søknadsperiodeEn)
+                .medSøknadsperiode(søknadsperiodeTo);
+
+        var feil = verifyHarFeil(ytelse);
+        feilInneholder(feil, "ytelse.søknadsperiode.perioder", "IllegalArgumentException");
+    }
+
+    @Test
+    public void overlappendePerioderForUttaksperiodeMap() {
+        var periodeEn = new Periode(LocalDate.now(), LocalDate.now());
+        var periodeTo = new Periode(LocalDate.now(), LocalDate.now().plusDays(1));
+
+        var ytelse = YtelseEksempel.ytelseForArbeidstaker(periodeEn)
+                .medUttak(lagUttak(periodeEn, periodeTo));
+
+        var feil = verifyHarFeil(ytelse);
+        feilInneholder(feil, "ytelse.uttak.perioder", "IllegalArgumentException");
+    }
+
+    @Test
+    public void søknadsperioderUtenUttak() {
+        var periodeEn = new Periode(LocalDate.now(), LocalDate.now().plusWeeks(1));
+        var periodeTo = new Periode(LocalDate.now().plusWeeks(2), LocalDate.now().plusWeeks(3));
+
+        var ytelse = YtelseEksempel.lagYtelse()
+                .medSøknadsperiode(periodeEn)
+                .medSøknadsperiode(periodeTo)
+                .medArbeidstid(new Arbeidstid().medArbeidstaker(List.of(YtelseEksempel.lagArbeidstaker(periodeEn, periodeTo))))
+                .medUttak(lagUttak(periodeEn)); // Kun en av periodene her
+
+        var feil = verifyHarFeil(ytelse);
+        feilInneholder(feil, "ytelse.uttak.perioder", "ikkeKomplettPeriode");
     }
 
 }
