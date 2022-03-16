@@ -35,7 +35,7 @@ public class YtelseEksempel {
     }
 
     public static Pleietrengende lagPleietrengende() {
-        return new Pleietrengende(TestUtils.okNorskIdentitetsnummerBarn());
+        return new Pleietrengende(TestUtils.okNorskIdentitetsnummerBarn(), null);
     }
 
     public static Bosteder lagBosteder(Periode... perioder) {
