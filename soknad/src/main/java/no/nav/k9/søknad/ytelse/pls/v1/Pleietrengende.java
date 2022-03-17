@@ -1,43 +1,40 @@
 package no.nav.k9.søknad.ytelse.pls.v1;
 
-import java.time.LocalDate;
-import java.util.Objects;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
-
-import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import com.fasterxml.jackson.annotation.*;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.felles.type.PersonIdent;
+
+import javax.validation.Valid;
+import javax.validation.constraints.AssertFalse;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.PastOrPresent;
+import java.time.LocalDate;
+import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Pleietrengende implements Person {
 
     @JsonAlias({ "fødselsnummer", "norskIdentifikator", "identitetsnummer", "fnr" })
-    @JsonProperty(value = "norskIdentitetsnummer", required = true)
-    @NotNull
+    @JsonProperty(value = "norskIdentitetsnummer")
     @Valid
     private NorskIdentitetsnummer norskIdentitetsnummer;
 
-    @JsonProperty(value = "fødselsdato", required = false)
+    @JsonProperty(value = "fødselsdato")
     @Valid
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Oslo")
     @PastOrPresent(message = "[ugyldigFødselsdato] Fødselsdato kan ikke være fremtidig")
     private LocalDate fødselsdato;
 
-    @JsonCreator
-    public Pleietrengende(@JsonProperty(value = "norskIdentitetsnummer", required = true) @JsonAlias({ "fødselsnummer", "norskIdentifikator", "identitetsnummer", "fnr" }) NorskIdentitetsnummer norskIdentitetsnummer,
+    @Deprecated
+    public Pleietrengende(@JsonProperty(value = "norskIdentitetsnummer") @JsonAlias({ "fødselsnummer", "norskIdentifikator", "identitetsnummer", "fnr" }) NorskIdentitetsnummer norskIdentitetsnummer,
                           @JsonProperty("fødselsdato") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Oslo") LocalDate fødselsdato) {
-        this.norskIdentitetsnummer = Objects.requireNonNull(norskIdentitetsnummer, "norskIdentitetsnummer");
+        this.norskIdentitetsnummer = norskIdentitetsnummer;
+        this.fødselsdato = fødselsdato;
+    }
+
+    public Pleietrengende() {
     }
 
     @Override
@@ -50,13 +47,24 @@ public class Pleietrengende implements Person {
     }
 
     public Pleietrengende medNorskIdentitetsnummer(NorskIdentitetsnummer norskIdentitetsnummer) {
-        this.norskIdentitetsnummer = norskIdentitetsnummer;
+        this.norskIdentitetsnummer = Objects.requireNonNull(norskIdentitetsnummer, "norskIdentitetsnummer");
         return this;
     }
 
     public Pleietrengende medFødselsdato(LocalDate fødselsdato) {
-        this.fødselsdato = fødselsdato;
+        this.fødselsdato = Objects.requireNonNull(fødselsdato, "fødselsdato");
         return this;
+    }
+
+    @AssertTrue(message = "norskIdentitetsnummer eller fødselsdato må være satt")
+    private boolean isOk() {
+        return (norskIdentitetsnummer != null && norskIdentitetsnummer.getVerdi() != null)
+                || (fødselsdato != null);
+    }
+
+    @AssertFalse(message = "[ikkeEntydig] Ikke entydig, må oppgi enten fnr/dnr eller fødselsdato.")
+    private boolean isEntydig() {
+        return this.getPersonIdent() != null && this.fødselsdato != null;
     }
 
     @Override
