@@ -36,7 +36,7 @@ public class YtelseTest {
                 );
 
         var psb = new PleipengerLivetsSluttfase()
-                .medPleietrengende(new Pleietrengende(NorskIdentitetsnummer.of("12345678911"), null))
+                .medPleietrengende(new Pleietrengende().medNorskIdentitetsnummer(NorskIdentitetsnummer.of("12345678911")))
                 .medArbeidstid(
                         new Arbeidstid()
                                 .medArbeidstaker(

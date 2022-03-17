@@ -19,4 +19,11 @@ public class SøknadJsonEksempel {
     public static Søknad komplettSøknad() {
         return Søknad.SerDes.deserialize(jsonFromFile("komplett-søknad.json"));
     }
+
+    public static Søknad søknadUtenPleietrengendNorskIdent() {
+        return Søknad.SerDes.deserialize(jsonFromFile("søknad-uten-pleietrengende-norskident.json"));
+    }
+    public static Søknad søknadUtenPleietrengendeInfo() {
+        return Søknad.SerDes.deserialize(jsonFromFile("søknad-uten-pleietrengende-info.json"));
+    }
 }
