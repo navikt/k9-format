@@ -53,4 +53,17 @@ class SøknadJsonTest {
         assertThat(pleietrengendeFeil.getFeilkode()).isEqualTo("påkrevd");
         assertThat(pleietrengendeFeil.getFeilmelding()).isEqualTo("norskIdentitetsnummer eller fødselsdato må være satt");
     }
+
+    @Test
+    public void søknadUtenPleietrengendeIdentOgFødselsdato() {
+        var søknad = SøknadJsonEksempel.søknadUtenPleietrengendeIdentOgFødselsdato();
+
+        List<Feil> feil = verifyHarFeil(søknad);
+
+        assertThat(feil.size()).isEqualTo(1);
+        Feil pleietrengendeFeil = feil.get(0);
+        assertThat(pleietrengendeFeil.getFelt()).isEqualTo("ytelse.pleietrengende.entydig");
+        assertThat(pleietrengendeFeil.getFeilkode()).isEqualTo("ikkeEntydig");
+        assertThat(pleietrengendeFeil.getFeilmelding()).isEqualTo("Ikke entydig, må oppgi enten fnr/dnr eller fødselsdato.");
+    }
 }

@@ -23,7 +23,12 @@ public class SøknadJsonEksempel {
     public static Søknad søknadUtenPleietrengendNorskIdent() {
         return Søknad.SerDes.deserialize(jsonFromFile("søknad-uten-pleietrengende-norskident.json"));
     }
+
     public static Søknad søknadUtenPleietrengendeInfo() {
         return Søknad.SerDes.deserialize(jsonFromFile("søknad-uten-pleietrengende-info.json"));
+    }
+
+    public static Søknad søknadUtenPleietrengendeIdentOgFødselsdato() {
+        return Søknad.SerDes.deserialize(jsonFromFile("søknad-med-pleietrengende-norskident-og-fødselsdato.json"));
     }
 }
