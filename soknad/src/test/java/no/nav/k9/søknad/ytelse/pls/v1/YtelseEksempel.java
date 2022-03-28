@@ -1,6 +1,7 @@
 package no.nav.k9.søknad.ytelse.pls.v1;
 
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
 import no.nav.k9.søknad.felles.type.Landkode;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.ytelse.psb.v1.Uttak;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
@@ -20,7 +22,9 @@ public class YtelseEksempel {
     public static PleipengerLivetsSluttfase ytelseForArbeidstaker(Periode... søknadsperioder) {
         return new PleipengerLivetsSluttfase()
                 .medPleietrengende(lagPleietrengende())
-                .medArbeidstid(new Arbeidstid().medArbeidstaker(List.of(lagArbeidstaker(søknadsperioder))));
+                .medSøknadsperiode(Arrays.asList(søknadsperioder))
+                .medUttak(lagUttak(søknadsperioder))
+                .medArbeidstid(new Arbeidstid().medArbeidstaker(List.of(YtelseEksempel.lagArbeidstaker(søknadsperioder))));
     }
 
     public static PleipengerLivetsSluttfase ytelseMedUtenlandstilsnitt(Periode søknadsperiode, Periode utenlandsperiode, Periode bostedperiode) {
@@ -79,5 +83,22 @@ public class YtelseEksempel {
             resultatMap.put(periode, periodeInfo);
         }
         return resultatMap;
+    }
+
+    public static PleipengerLivetsSluttfase komplettYtelseMedEndring(Periode... perioder) {
+        return lagYtelse()
+                .medArbeidstid(new Arbeidstid().leggeTilArbeidstaker(lagArbeidstaker(perioder)))
+                .medUttak(lagUttak(perioder));
+    }
+
+    public static Uttak lagUttak(Periode... perioder) {
+        Uttak.UttakPeriodeInfo uttakPeriodeInfo = new Uttak.UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30));
+        return new Uttak().medPerioder(lagPerioder(perioder, uttakPeriodeInfo));
+    }
+
+    public static PleipengerLivetsSluttfase minimumYtelseMedSøknadsperiode(Periode... perioder) {
+        return lagYtelse()
+                .medSøknadsperiode(List.of(perioder))
+                .medUttak(lagUttak(perioder));
     }
 }

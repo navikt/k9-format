@@ -8,10 +8,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import no.nav.fpsak.tidsserie.LocalDateSegment;
 import no.nav.fpsak.tidsserie.LocalDateTimeline;
+import no.nav.fpsak.tidsserie.StandardCombinators;
+import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.opptjening.AnnenAktivitet;
 import no.nav.k9.søknad.felles.opptjening.Frilanser;
@@ -19,21 +21,24 @@ import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
+import no.nav.k9.søknad.ytelse.psb.v1.PerioderMedEndring;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 
 public class PleiepengerLivetsSluttfaseYtelseValidator extends YtelseValidator {
     @Override
     public List<Feil> valider(Ytelse søknad) {
-        return valider((PleipengerLivetsSluttfase) søknad);
+        return valider((PleipengerLivetsSluttfase) søknad, List.of());
     }
 
-    public List<Feil> valider(PleipengerLivetsSluttfase søknad) {
+    public List<Feil> valider(PleipengerLivetsSluttfase søknad, List<Periode> gyldigeEndringsperioder) {
+        return validerMedGyldigEndringsperodeHvisDenFinnes(søknad, gyldigeEndringsperioder);
+    }
+
+    List<Feil> validerMedGyldigEndringsperodeHvisDenFinnes(PleipengerLivetsSluttfase søknad, List<Periode> gyldigeEndringsperioder) {
         List<Feil> feilene = new ArrayList<>();
         try {
-            if (søknad.getSøknadsperiode() == null) {
-                feilene.add(lagFeil("søknadsperiode", "påkrevd", "det finnes ingen søknadsperiode"));
-            }
+            validerLovligEndring(søknad, gyldigeEndringsperioder);
+
             feilene.addAll(validerPerioderErLukketOgGyldig(søknad.getBosteder().getPerioder(), "bosteder.perioder"));
             feilene.addAll(validerPerioderErLukketOgGyldig(søknad.getBosteder().getPerioderSomSkalSlettes(), "bosteder.perioderSomSkalSlettes"));
             feilene.addAll(validerPerioderErLukketOgGyldig(søknad.getUtenlandsopphold().getPerioder(), "utenlandsopphold.perioder"));
@@ -45,11 +50,39 @@ public class PleiepengerLivetsSluttfaseYtelseValidator extends YtelseValidator {
             var uttakTidslinje = lagTidslinjeOgValider(new ArrayList<>(søknad.getUttak().getPerioder().keySet()), "uttak.perioder", feilene);
             validerAtUttakErKomplettForSøknadsperiode(søknadsperiodeTidslinje, uttakTidslinje, "uttak.perioder", feilene);
 
-            validerTrekkKravPerioder(søknad.getTrekkKravPerioder(), søknadsperiodeTidslinje, feilene);
+            var trekkKravPerioderTidslinje = lagTidslinjeOgValider(søknad.getTrekkKravPerioder(), "trekkKravPerioder.perioder", feilene);
+            validerTrekkKravPerioder(trekkKravPerioderTidslinje, søknadsperiodeTidslinje, feilene);
+
+            var gyldigEndringsperiodeTidslinje = lagTidslinjeOgValider(gyldigeEndringsperioder, "gyldigeEndringsperioder.perioder", feilene);
+            var intervalForEndringTidslinje = søknadsperiodeTidslinje.union(gyldigEndringsperiodeTidslinje, StandardCombinators::coalesceLeftHandSide);
+            for (PerioderMedEndring ytelsePeriode : PerioderMedEndringUtil.getAllePerioderSomMåVæreInnenforSøknadsperiode(søknad)) {
+                var ytelsePeriodeTidslinje = lagTidslinjeOgValider(ytelsePeriode.getPeriodeMap(), ytelsePeriode.getFelt() + ".perioder", feilene);
+                feilene.addAll(validerAtYtelsePerioderErInnenforIntervalForEndring(intervalForEndringTidslinje, ytelsePeriodeTidslinje, ytelsePeriode.getFelt() + ".perioder"));
+                feilene.addAll(validerAtIngenPerioderOverlapperMedTrekkKravPerioder(trekkKravPerioderTidslinje, ytelsePeriodeTidslinje, ytelsePeriode.getFelt() + ".perioder"));
+            }
+
         } catch (ValideringsAvbrytendeFeilException valideringsAvbrytendeFeilException) {
             feilene.addAll(valideringsAvbrytendeFeilException.getFeilList());
         }
         return feilene;
+    }
+
+    // Brukes av Punsj for å sende inn endringer på allerede mottatte søknadsperioder. Komplett datasett kreves ikke for disse perioden
+    @Override
+    public void forsikreValidert(Ytelse ytelse, List<Periode> gyldigeEndringsperioder) {
+        Objects.requireNonNull(gyldigeEndringsperioder, "gyldigeEndringsperioder");
+
+        var feilene = valider((PleipengerLivetsSluttfase) ytelse, gyldigeEndringsperioder);
+        if (!feilene.isEmpty()) {
+            throw new ValideringsFeil(feilene);
+        }
+    }
+
+    private void validerLovligEndring(PleipengerLivetsSluttfase ytelse, List<Periode> gyldigeEndringsperioder) {
+        if (ytelse.getSøknadsperiodeList().isEmpty() && gyldigeEndringsperioder.isEmpty()) {
+            throw new ValideringsAvbrytendeFeilException(List.of(
+                    lagFeil("søknadsperiode", "missingArgument", "Mangler søknadsperiode eller gyldigeEndringsperioder.")));
+        }
     }
 
     private void validerArbeidstid(PleipengerLivetsSluttfase søknad) throws ValideringsAvbrytendeFeilException {
@@ -75,16 +108,6 @@ public class PleiepengerLivetsSluttfaseYtelseValidator extends YtelseValidator {
         if (fl != null) {
             validerPerioderIkkeErInvertert(new Periode(fl.getStartdato(), fl.getSluttdato()), "opptjeningAktivitet.frilanser.startdato/sluttdato", feilene);
         }
-
-    }
-
-    private LocalDateTimeline<Boolean> lagArbeidstidTidslinje(Arbeidstid arbeidstid) {
-        var arbeidstidTidslinje = arbeidstid.getArbeidstakerList().stream()
-                .flatMap(it -> it.getArbeidstidInfo().getPerioder().keySet().stream())
-                .map(it -> new LocalDateSegment<>(it.getFraOgMed(), it.getTilOgMed(), Boolean.TRUE))
-                .collect(Collectors.toList());
-        var arbeidstidTidslinjeSammenslått = LocalDateTimeline.buildGroupOverlappingSegments(arbeidstidTidslinje).mapValue(s -> Boolean.TRUE);
-        return arbeidstidTidslinjeSammenslått;
     }
 
 
@@ -94,8 +117,7 @@ public class PleiepengerLivetsSluttfaseYtelseValidator extends YtelseValidator {
                                                            List<Feil> feil) {
 
         var søknadsperioderUtenUttak = tilPeriodeList(søknadsperioderTidslinje.disjoint(uttakTidslinje));
-        feil.addAll( søknadsperioderUtenUttak.stream()
-                // TODO: Avklare om det er spesiell logikk rundt helg
+        feil.addAll(søknadsperioderUtenUttak.stream()
                 .filter(this::periodeInneholderDagerSomIkkeErHelg)
                 .map(p -> toFeil(p, felt, "ikkeKomplettPeriode", "Periodene er ikke komplett, periode som mangler er: "))
                 .collect(Collectors.toCollection(ArrayList::new)));
@@ -112,13 +134,37 @@ public class PleiepengerLivetsSluttfaseYtelseValidator extends YtelseValidator {
         return false;
     }
 
-    private void validerTrekkKravPerioder(List<Periode> trekkKravPerioder, LocalDateTimeline<Boolean> søknadsperiodeTidslinje, List<Feil> feilene) {
-        LocalDateTimeline<Boolean> trekkKravPerioderTidslinje = lagTidslinjeOgValider(trekkKravPerioder, "trekkKravPerioder.perioder", feilene);
+    private List<Feil> validerAtYtelsePerioderErInnenforIntervalForEndring(LocalDateTimeline<Boolean> intervalForEndringTidslinje,
+                                                                           LocalDateTimeline<Boolean> ytelsePeriodeLinje,
+                                                                           String felt) {
+        return tilPeriodeList(
+                ytelsePeriodeLinje.disjoint(intervalForEndringTidslinje)).stream()
+                .filter(this::periodeInneholderDagerSomIkkeErHelg)
+                .map(p -> toFeil(p, felt, "ugyldigPeriode",
+                        "Perioden er utenfor gyldig interval. Gyldig interval: (" + intervalForEndringTidslinje.getLocalDateIntervals() + "), Ugyldig periode: "))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    private void validerTrekkKravPerioder(LocalDateTimeline<Boolean> trekkKravPerioderTidslinje, LocalDateTimeline<Boolean> søknadsperiodeTidslinje, List<Feil> feilene) {
         feilene.addAll(validerAtIngenPerioderOverlapperMedTrekkKravPerioder(trekkKravPerioderTidslinje, søknadsperiodeTidslinje, "trekkKravPerioder"));
     }
 
     private LocalDateTimeline<Boolean> lagTidslinjeMedStøtteForÅpenPeriodeOgValider(Map<Periode, ?> periodeMap, String felt) throws ValideringsAvbrytendeFeilException {
         return lagTidslinjeOgValider(periodeMap, felt, true);
+    }
+
+    private LocalDateTimeline<Boolean> lagTidslinjeOgValider(Map<Periode, ? > periodeMap, String felt, List<Feil> feil) throws ValideringsAvbrytendeFeilException{
+        var nyFeil = validerPerioderErLukketOgGyldig(periodeMap, felt);
+        if (!nyFeil.isEmpty()) {
+            feil.addAll(nyFeil);
+            throw new ValideringsAvbrytendeFeilException(feil);
+        }
+        try {
+            return toLocalDateTimeline(new ArrayList<>(periodeMap.keySet()));
+        } catch (IllegalArgumentException e) {
+            feil.add(lagFeil(felt, "IllegalArgumentException", e.getMessage()));
+            throw new ValideringsAvbrytendeFeilException(feil);
+        }
     }
 
     private LocalDateTimeline<Boolean> lagTidslinjeOgValider(Map<Periode, ?> periodeMap, String felt) throws ValideringsAvbrytendeFeilException {

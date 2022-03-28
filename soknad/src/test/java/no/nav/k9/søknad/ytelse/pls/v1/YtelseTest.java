@@ -13,7 +13,6 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.TestUtils;
-import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
@@ -25,62 +24,50 @@ public class YtelseTest {
 
     @Test
     public void skal_tolerere_flere_aktiviteter_i_samme_periode() {
+        var søknadsperiode = new Periode(LocalDate.now().minusMonths(1), LocalDate.now());
         var arbeidstid = new ArbeidstidInfo()
-                .medPerioder(
-                        Map.of(
-                                new Periode(LocalDate.parse("2021-01-01"), LocalDate.parse("2021-01-05")),
-                                new ArbeidstidPeriodeInfo()
-                                        .medFaktiskArbeidTimerPerDag(Duration.ZERO)
-                                        .medJobberNormaltTimerPerDag(Duration.ofHours(7))
-                        )
-                );
+                .medPerioder(Map.of(søknadsperiode,
+                        new ArbeidstidPeriodeInfo()
+                                .medFaktiskArbeidTimerPerDag(Duration.ZERO)
+                                .medJobberNormaltTimerPerDag(Duration.ofHours(7))));
+        var arbeidstidMedFlereAktiviteter = new Arbeidstid()
+                .medArbeidstaker(List.of(
+                        new Arbeidstaker().medOrganisasjonsnummer(Organisasjonsnummer.of("123456789")).medArbeidstidInfo(arbeidstid),
+                        new Arbeidstaker().medOrganisasjonsnummer(Organisasjonsnummer.of("123456788")).medArbeidstidInfo(arbeidstid)));
 
-        var psb = new PleipengerLivetsSluttfase()
-                .medPleietrengende(new Pleietrengende().medNorskIdentitetsnummer(NorskIdentitetsnummer.of("12345678911")))
-                .medArbeidstid(
-                        new Arbeidstid()
-                                .medArbeidstaker(
-                                        List.of(
-                                                new Arbeidstaker()
-                                                        .medOrganisasjonsnummer(Organisasjonsnummer.of("123456789"))
-                                                        .medArbeidstidInfo(arbeidstid),
-                                                new Arbeidstaker()
-                                                        .medOrganisasjonsnummer(Organisasjonsnummer.of("123456788"))
-                                                        .medArbeidstidInfo(arbeidstid)
-                                        )
-                                )
-                );
+        var ytelse = YtelseEksempel.lagYtelse()
+                .medSøknadsperiode(søknadsperiode)
+                .medUttak(lagUttak(søknadsperiode))
+                .medArbeidstid(arbeidstidMedFlereAktiviteter);
 
-        verifyIngenFeil(psb);
-    }
-
-    @Test
-    public void søknadsperiodeInneholderÅpnePerioder() {
-        var søknadsperiode = new Periode(LocalDate.now(), null);
-        var psb = YtelseEksempel.ytelseForArbeidstaker(søknadsperiode);
-        var feil = verifyHarFeil(psb);
-        feilInneholder(feil, "påkrevd");
+        verifyIngenFeil(ytelse);
     }
 
     @Test
     public void overlappendePerioderForArbeidstid() {
         var søknadsperiodeEn = new Periode(LocalDate.now(), LocalDate.now().plusDays(20));
         var søknadsperiodeTo = new Periode(LocalDate.now().plusDays(2), LocalDate.now().plusDays(5));
-        var psb = YtelseEksempel.ytelseForArbeidstaker(søknadsperiodeEn, søknadsperiodeTo);
+        var ytelse = YtelseEksempel.lagYtelse()
+                .medSøknadsperiode(søknadsperiodeEn)
+                .medUttak(lagUttak(søknadsperiodeEn))
+                .medArbeidstid(new Arbeidstid().medArbeidstaker(List.of(YtelseEksempel.lagArbeidstaker(søknadsperiodeEn, søknadsperiodeTo))));
 
-        var feil = verifyHarFeil(psb);
+        var feil = verifyHarFeil(ytelse);
         feilInneholder(feil, "ytelse.arbeidstid.arbeidstakerList[0].perioder", "IllegalArgumentException");
     }
 
     @Test
     public void invertertPeriodeForArbeidstakerPeriode() {
-        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().minusMonths(2));
+        var søknadsperiode = new Periode(LocalDate.now().minusMonths(2), LocalDate.now());
+        var søknadsperiodeInvertert = new Periode(LocalDate.now(), LocalDate.now().minusMonths(2));
 
         var arbeidstidPeriodeInfo = new ArbeidstidPeriodeInfo().medFaktiskArbeidTimerPerDag(Duration.ofHours(7).plusMinutes(30));
-        var arbeidstaker = YtelseEksempel.lagArbeidstaker(arbeidstidPeriodeInfo, søknadsperiode);
+        var arbeidstaker = YtelseEksempel.lagArbeidstaker(arbeidstidPeriodeInfo, søknadsperiodeInvertert);
         var arbeidstid = new Arbeidstid().medArbeidstaker(List.of(arbeidstaker));
 
         var ytelse = YtelseEksempel.lagYtelse()
+                .medSøknadsperiode(søknadsperiode)
+                .medUttak(lagUttak(søknadsperiode))
                 .medArbeidstid(arbeidstid);
 
         var feil = verifyHarFeil(ytelse);
@@ -106,6 +93,8 @@ public class YtelseTest {
         var arbeidstid = new Arbeidstid().medArbeidstaker(List.of(arbeidstaker));
 
         var ytelse = YtelseEksempel.lagYtelse()
+                .medSøknadsperiode(List.of(periodeEn, periodeTo))
+                .medUttak(lagUttak(periodeEn, periodeTo))
                 .medArbeidstid(arbeidstid);
 
         //var feil = verifyHarFeil(SøknadEksempel.søknad(ytelse));
@@ -130,7 +119,9 @@ public class YtelseTest {
         var periodeEn = new Periode(LocalDate.now(), LocalDate.now());
         var periodeTo = new Periode(LocalDate.now(), LocalDate.now().plusDays(1));
 
-        var ytelse = YtelseEksempel.ytelseForArbeidstaker(periodeEn)
+        var ytelse = YtelseEksempel.lagYtelse()
+                .medSøknadsperiode(periodeEn)
+                .medArbeidstid(new Arbeidstid().medArbeidstaker(List.of(YtelseEksempel.lagArbeidstaker(periodeEn))))
                 .medUttak(lagUttak(periodeEn, periodeTo));
 
         var feil = verifyHarFeil(ytelse);
@@ -143,13 +134,11 @@ public class YtelseTest {
         var periodeTo = new Periode(LocalDate.now().plusWeeks(2), LocalDate.now().plusWeeks(3));
 
         var ytelse = YtelseEksempel.lagYtelse()
-                .medSøknadsperiode(periodeEn)
-                .medSøknadsperiode(periodeTo)
+                .medSøknadsperiode(List.of(periodeEn, periodeTo))
                 .medArbeidstid(new Arbeidstid().medArbeidstaker(List.of(YtelseEksempel.lagArbeidstaker(periodeEn, periodeTo))))
                 .medUttak(lagUttak(periodeEn)); // Kun en av periodene her
 
         var feil = verifyHarFeil(ytelse);
         feilInneholder(feil, "ytelse.uttak.perioder", "ikkeKomplettPeriode");
     }
-
 }

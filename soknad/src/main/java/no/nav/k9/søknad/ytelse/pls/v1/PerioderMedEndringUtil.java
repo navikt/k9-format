@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.ytelse.psb.v1;
+package no.nav.k9.søknad.ytelse.pls.v1;
 
 import static no.nav.k9.søknad.TidsserieUtils.toLocalDateTimeline;
 
@@ -10,30 +10,26 @@ import no.nav.fpsak.tidsserie.LocalDateTimeline;
 import no.nav.fpsak.tidsserie.StandardCombinators;
 import no.nav.k9.søknad.TidsserieUtils;
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.ytelse.psb.v1.PerioderMedEndring;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 
 public class PerioderMedEndringUtil {
 
-    public static List<Periode> getEndringsperiode(PleiepengerSyktBarn psb) {
+    public static List<Periode> getEndringsperiode(PleipengerLivetsSluttfase ppn) {
         var allePerioderMedEndringTidsserie =
-                tilTidsserie(getAllePerioderSomMåVæreInnenforSøknadsperiode(psb));
-        var søknadsperiode = toLocalDateTimeline(psb.getSøknadsperiodeList());
+                tilTidsserie(getAllePerioderSomMåVæreInnenforSøknadsperiode(ppn));
+        var søknadsperiode = toLocalDateTimeline(ppn.getSøknadsperiodeList());
         var endringsperiodeTidsserie = allePerioderMedEndringTidsserie.disjoint(søknadsperiode);
         return TidsserieUtils.tilPeriodeList(endringsperiodeTidsserie);
     }
 
-    public static List<PerioderMedEndring> getAllePerioderSomMåVæreInnenforSøknadsperiode(PleiepengerSyktBarn psb) {
+    public static List<PerioderMedEndring> getAllePerioderSomMåVæreInnenforSøknadsperiode(PleipengerLivetsSluttfase psb) {
         var listen = new ArrayList<PerioderMedEndring>();
-        listen.add(new PerioderMedEndring().medPerioder("beredskap", psb.getBeredskap().getPerioder()));
-        listen.add(new PerioderMedEndring().medPerioder("nattevåk", psb.getNattevåk().getPerioder()));
-        listen.add(new PerioderMedEndring().medPerioder("tilsynsordning", psb.getTilsynsordning().getPerioder()));
-        listen.add(new PerioderMedEndring().medPerioder("lovbestemtFerie", psb.getLovbestemtFerie().getPerioder()));
         listen.add(new PerioderMedEndring().medPerioder("uttak", psb.getUttak().getPerioder()));
         listen.addAll(getArbeidstidPerioder(psb.getArbeidstid()));
         return listen;
     }
 
-    // Brukes av både PSB og PPN
     public static List<PerioderMedEndring> getArbeidstidPerioder(Arbeidstid arbeidstid) {
         var listen = new ArrayList<PerioderMedEndring>();
         if (arbeidstid == null) {
@@ -68,4 +64,5 @@ public class PerioderMedEndringUtil {
         }
         return temp;
     }
+
 }

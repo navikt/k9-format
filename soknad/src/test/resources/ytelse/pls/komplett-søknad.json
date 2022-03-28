@@ -16,6 +16,8 @@
       "norskIdentitetsnummer" : "22111111111",
       "fødselsdato" : null
     },
+    "søknadsperiode" : [ "2021-12-01/2021-12-13" ],
+    "endringsperiode" : [ ],
     "arbeidAktivitet" : {
       "selvstendigNæringsdrivende" : [ {
         "perioder" : {
@@ -45,6 +47,13 @@
       } ],
       "frilanserArbeidstidInfo" : null,
       "selvstendigNæringsdrivendeArbeidstidInfo" : null
+    },
+    "uttak" : {
+      "perioder" : {
+        "2021-12-01/2021-12-13" : {
+          "timerPleieAvBarnetPerDag" : "PT7H30M"
+        }
+      }
     },
     "bosteder" : {
       "perioder" : {
