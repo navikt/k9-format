@@ -36,9 +36,9 @@ public class PleipengerLivetsSluttfase implements Ytelse {
     private Pleietrengende pleietrengende;
 
     @Valid
+    @NotNull
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
-    @JsonProperty(value = "søknadsperiode" /* ,required = true TODO skal skrus på før lansering */)
-    //@NotNull --TODO skal bli NotNull før lansering
+    @JsonProperty(value = "søknadsperiode", required = true)
     private List<Periode> søknadsperiode = new ArrayList<>();
 
     @Valid
@@ -96,12 +96,12 @@ public class PleipengerLivetsSluttfase implements Ytelse {
         final List<Periode> perioder = new ArrayList<>(søknadsperiode);
         perioder.addAll(getEndringsperiode());
 
-        final var fom = perioder
+        var fom = perioder
                 .stream()
                 .map(Periode::getFraOgMed)
                 .min(LocalDate::compareTo)
                 .orElseThrow();
-        final var tom = perioder
+        var tom = perioder
                 .stream()
                 .map(Periode::getTilOgMed)
                 .max(LocalDate::compareTo)
@@ -110,7 +110,11 @@ public class PleipengerLivetsSluttfase implements Ytelse {
     }
 
     public List<Periode> getSøknadsperiodeList() {
-        return søknadsperiode == null ? null : Collections.unmodifiableList(søknadsperiode);
+        return Collections.unmodifiableList(søknadsperiode);
+    }
+
+    public List<Periode> getEndringsperiode() {
+        return PleiepengerLivetsSluttfasePerioderMedEndringUtil.getEndringsperiode(this);
     }
 
     public OpptjeningAktivitet getOpptjeningAktivitet() {
@@ -180,9 +184,5 @@ public class PleipengerLivetsSluttfase implements Ytelse {
     public PleipengerLivetsSluttfase medUttak(Uttak uttak) {
         this.uttak = Objects.requireNonNull(uttak, "uttak");
         return this;
-    }
-
-    public List<Periode> getEndringsperiode() {
-        return PleiepengerLivetsSluttfasePerioderMedEndringUtil.getEndringsperiode(this);
     }
 }

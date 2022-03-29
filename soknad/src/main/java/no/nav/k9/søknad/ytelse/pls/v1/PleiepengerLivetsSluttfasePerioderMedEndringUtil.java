@@ -20,10 +20,10 @@ public class PleiepengerLivetsSluttfasePerioderMedEndringUtil {
         return TidsserieUtils.tilPeriodeList(endringsperiodeTidsserie);
     }
 
-    public static List<PerioderMedEndring> getAllePerioderSomMåVæreInnenforSøknadsperiode(PleipengerLivetsSluttfase psb) {
+    public static List<PerioderMedEndring> getAllePerioderSomMåVæreInnenforSøknadsperiode(PleipengerLivetsSluttfase ppn) {
         var listen = new ArrayList<PerioderMedEndring>();
-        listen.add(new PerioderMedEndring().medPerioder("uttak", psb.getUttak().getPerioder()));
-        listen.addAll(PerioderMedEndringUtil.getArbeidstidPerioder(psb.getArbeidstid()));
+        listen.add(new PerioderMedEndring().medPerioder("uttak", ppn.getUttak().getPerioder()));
+        listen.addAll(PerioderMedEndringUtil.getArbeidstidPerioder(ppn.getArbeidstid()));
         return listen;
     }
 
