@@ -55,7 +55,7 @@ public class PleiepengerLivetsSluttfaseYtelseValidator extends YtelseValidator {
 
             var gyldigEndringsperiodeTidslinje = lagTidslinjeOgValider(gyldigeEndringsperioder, "gyldigeEndringsperioder.perioder", feilene);
             var intervalForEndringTidslinje = søknadsperiodeTidslinje.union(gyldigEndringsperiodeTidslinje, StandardCombinators::coalesceLeftHandSide);
-            for (PerioderMedEndring ytelsePeriode : PerioderMedEndringUtil.getAllePerioderSomMåVæreInnenforSøknadsperiode(søknad)) {
+            for (PerioderMedEndring ytelsePeriode : PleiepengerLivetsSluttfasePerioderMedEndringUtil.getAllePerioderSomMåVæreInnenforSøknadsperiode(søknad)) {
                 var ytelsePeriodeTidslinje = lagTidslinjeOgValider(ytelsePeriode.getPeriodeMap(), ytelsePeriode.getFelt() + ".perioder", feilene);
                 feilene.addAll(validerAtYtelsePerioderErInnenforIntervalForEndring(intervalForEndringTidslinje, ytelsePeriodeTidslinje, ytelsePeriode.getFelt() + ".perioder"));
                 feilene.addAll(validerAtIngenPerioderOverlapperMedTrekkKravPerioder(trekkKravPerioderTidslinje, ytelsePeriodeTidslinje, ytelsePeriode.getFelt() + ".perioder"));

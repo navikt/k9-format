@@ -183,6 +183,6 @@ public class PleipengerLivetsSluttfase implements Ytelse {
     }
 
     public List<Periode> getEndringsperiode() {
-        return PerioderMedEndringUtil.getEndringsperiode(this);
+        return PleiepengerLivetsSluttfasePerioderMedEndringUtil.getEndringsperiode(this);
     }
 }

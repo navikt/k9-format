@@ -57,7 +57,7 @@ public class PerioderMedEndringUtil {
         return listen;
     }
 
-    private static LocalDateTimeline<Boolean> tilTidsserie(List<PerioderMedEndring> listen) {
+    public static LocalDateTimeline<Boolean> tilTidsserie(List<PerioderMedEndring> listen) {
         var temp = new LocalDateTimeline<Boolean>(Collections.emptyList());
         for (PerioderMedEndring yp : listen) {
             for (Periode p : yp.getPeriodeMap().keySet()) {
