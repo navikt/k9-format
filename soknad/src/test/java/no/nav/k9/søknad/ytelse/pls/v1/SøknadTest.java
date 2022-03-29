@@ -118,14 +118,4 @@ class SøknadTest {
     }
 
 
-    @Test
-    public void søknadUtenSøknadsperiode() {
-        var tomYtelse = YtelseEksempel.lagYtelse();
-        var søknad = SøknadEksempel.søknad(tomYtelse);
-
-        var feil = verifyHarFeil(søknad);
-        feilInneholder(feil, "ytelse.søknadsperiode", "påkrevd", "det finnes ingen søknadsperiode");
-    }
-
-
 }

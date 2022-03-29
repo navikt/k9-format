@@ -5,7 +5,6 @@ import static no.nav.k9.søknad.TidsserieUtils.toLocalDateTimeline;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import no.nav.fpsak.tidsserie.LocalDateTimeline;
 import no.nav.fpsak.tidsserie.StandardCombinators;
@@ -13,7 +12,7 @@ import no.nav.k9.søknad.TidsserieUtils;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 
-class PerioderMedEndringUtil {
+public class PerioderMedEndringUtil {
 
     public static List<Periode> getEndringsperiode(PleiepengerSyktBarn psb) {
         var allePerioderMedEndringTidsserie =
@@ -34,6 +33,7 @@ class PerioderMedEndringUtil {
         return listen;
     }
 
+    // Brukes av både PSB og PPN
     public static List<PerioderMedEndring> getArbeidstidPerioder(Arbeidstid arbeidstid) {
         var listen = new ArrayList<PerioderMedEndring>();
         if (arbeidstid == null) {
@@ -57,7 +57,7 @@ class PerioderMedEndringUtil {
         return listen;
     }
 
-    private static LocalDateTimeline<Boolean> tilTidsserie(List<PerioderMedEndring> listen) {
+    public static LocalDateTimeline<Boolean> tilTidsserie(List<PerioderMedEndring> listen) {
         var temp = new LocalDateTimeline<Boolean>(Collections.emptyList());
         for (PerioderMedEndring yp : listen) {
             for (Periode p : yp.getPeriodeMap().keySet()) {
@@ -67,33 +67,5 @@ class PerioderMedEndringUtil {
             }
         }
         return temp;
-    }
-
-    public static class PerioderMedEndring {
-        private String felt;
-        private Map<Periode, ?> periodeMap;
-
-        public PerioderMedEndring() {
-
-        }
-
-        public String getFelt() {
-            return felt;
-        }
-
-        public Map<Periode, ?> getPeriodeMap() {
-            return periodeMap;
-        }
-
-        public List<Periode> getPeriodeList() {
-            return new ArrayList<>(periodeMap.keySet());
-        }
-
-        PerioderMedEndring medPerioder(String felt, Map<Periode, ?> periodeMap) {
-            this.felt = felt;
-            this.periodeMap = periodeMap;
-            return this;
-        }
-
     }
 }

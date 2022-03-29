@@ -3,11 +3,8 @@ package no.nav.k9.søknad.ytelse.pls.v1;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -26,9 +23,7 @@ import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 import no.nav.k9.søknad.ytelse.psb.v1.Uttak;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -41,9 +36,9 @@ public class PleipengerLivetsSluttfase implements Ytelse {
     private Pleietrengende pleietrengende;
 
     @Valid
+    @NotNull
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
-    @JsonProperty(value = "søknadsperiode" /* ,required = true TODO skal skrus på før lansering */)
-    //@NotNull --TODO skal bli NotNull før lansering
+    @JsonProperty(value = "søknadsperiode", required = true)
     private List<Periode> søknadsperiode = new ArrayList<>();
 
     @Valid
@@ -98,39 +93,28 @@ public class PleipengerLivetsSluttfase implements Ytelse {
 
     @Override
     public Periode getSøknadsperiode() {
-        if (!søknadsperiode.isEmpty()) {
-            return new Periode(
-                    søknadsperiode.stream().map(Periode::getFraOgMed).min(Comparator.naturalOrder()).orElseThrow(),
-                    søknadsperiode.stream().map(Periode::getTilOgMed).max(Comparator.naturalOrder()).orElseThrow()
-            );
-        }
+        final List<Periode> perioder = new ArrayList<>(søknadsperiode);
+        perioder.addAll(getEndringsperiode());
 
-        //TODO deprecated, erstattes av søknadsperiode (se over), fjernes før lansering
-        List<ArbeidstidInfo> fraværsperioder = new ArrayList<>();
-        arbeidstid.getFrilanserArbeidstidInfo().ifPresent(fraværsperioder::add);
-        arbeidstid.getSelvstendigNæringsdrivendeArbeidstidInfo().ifPresent(fraværsperioder::add);
-        arbeidstid.getArbeidstakerList().stream()
-                .map(Arbeidstaker::getArbeidstidInfo)
-                .forEach(fraværsperioder::add);
-        List<Periode> allePerioder = fraværsperioder.stream()
-                .flatMap(ai -> ai.getPerioder().keySet().stream())
-                .collect(Collectors.toList());
-        Optional<LocalDate> fom = allePerioder.stream()
+        var fom = perioder
+                .stream()
                 .map(Periode::getFraOgMed)
-                .filter(Objects::nonNull)
-                .min(Comparator.naturalOrder());
-        Optional<LocalDate> tom = allePerioder.stream()
+                .min(LocalDate::compareTo)
+                .orElseThrow();
+        var tom = perioder
+                .stream()
                 .map(Periode::getTilOgMed)
-                .filter(Objects::nonNull)
-                .max(Comparator.naturalOrder());
-        if (fom.isPresent() && tom.isPresent()) {
-            return new Periode(fom.get(), tom.get());
-        }
-        return null;
+                .max(LocalDate::compareTo)
+                .orElseThrow();
+        return new Periode(fom, tom);
     }
 
     public List<Periode> getSøknadsperiodeList() {
-        return søknadsperiode == null ? null : Collections.unmodifiableList(søknadsperiode);
+        return Collections.unmodifiableList(søknadsperiode);
+    }
+
+    public List<Periode> getEndringsperiode() {
+        return PleiepengerLivetsSluttfasePerioderMedEndringUtil.getEndringsperiode(this);
     }
 
     public OpptjeningAktivitet getOpptjeningAktivitet() {
@@ -201,5 +185,4 @@ public class PleipengerLivetsSluttfase implements Ytelse {
         this.uttak = Objects.requireNonNull(uttak, "uttak");
         return this;
     }
-
 }

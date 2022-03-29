@@ -7,9 +7,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDate;
 import java.util.List;
 
-import no.nav.k9.søknad.felles.Feil;
 import org.junit.jupiter.api.Test;
 
+import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.pls.SøknadJsonEksempel;
 
@@ -33,8 +33,10 @@ class SøknadJsonTest {
     @Test
     public void søknadUtenPleietrengendeNorskIdent() {
         var søknad = SøknadJsonEksempel.søknadUtenPleietrengendNorskIdent();
+        // Legger inn endringsperiode for å unngå komplett json-søknad
+        var endringPeriode = new Periode(LocalDate.of(2021, 12, 1), LocalDate.of(2021, 12, 13));
 
-        verifyIngenFeil(søknad);
+        verifyIngenFeil(søknad, List.of(endringPeriode));
 
         PleipengerLivetsSluttfase ytelse = søknad.getYtelse();
 
@@ -44,8 +46,10 @@ class SøknadJsonTest {
     @Test
     public void søknadUtenPleietrengendeInfo() {
         var søknad = SøknadJsonEksempel.søknadUtenPleietrengendeInfo();
+        // Legger inn endringsperiode for å unngå komplett json-søknad
+        var endringPeriode = new Periode(LocalDate.of(2021, 12, 1), LocalDate.of(2021, 12, 13));
 
-        List<Feil> feil = verifyHarFeil(søknad);
+        List<Feil> feil = verifyHarFeil(søknad, List.of(endringPeriode));
 
         assertThat(feil.size()).isEqualTo(1);
         Feil pleietrengendeFeil = feil.get(0);
@@ -57,8 +61,10 @@ class SøknadJsonTest {
     @Test
     public void søknadUtenPleietrengendeIdentOgFødselsdato() {
         var søknad = SøknadJsonEksempel.søknadUtenPleietrengendeIdentOgFødselsdato();
+        // Legger inn endringsperiode for å unngå komplett json-søknad
+        var endringPeriode = new Periode(LocalDate.of(2021, 12, 1), LocalDate.of(2021, 12, 13));
 
-        List<Feil> feil = verifyHarFeil(søknad);
+        List<Feil> feil = verifyHarFeil(søknad, List.of(endringPeriode));
 
         assertThat(feil.size()).isEqualTo(1);
         Feil pleietrengendeFeil = feil.get(0);
