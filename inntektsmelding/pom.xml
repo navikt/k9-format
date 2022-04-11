@@ -13,7 +13,7 @@
 
 	<properties>
 		<xsd.packagename></xsd.packagename>
-		<jaxb.version>2.4.0-b180830.0438</jaxb.version>
+		<jaxb.version>4.0.0-M4</jaxb.version>
 	</properties>
 
 	<dependencies>
