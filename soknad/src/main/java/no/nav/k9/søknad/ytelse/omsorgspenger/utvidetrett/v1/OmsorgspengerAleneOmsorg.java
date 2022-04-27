@@ -39,8 +39,7 @@ public class OmsorgspengerAleneOmsorg implements OmsorgspengerUtvidetRett {
 
     @JsonCreator
     public OmsorgspengerAleneOmsorg(@JsonProperty(value = "barn", required = true) @Valid @NotNull Barn barn,
-                                    @Valid @JsonProperty(value = "periode") @NotNull Periode periode,
-                                    @JsonProperty(value = "begrunnelse") String begrunnelse) {
+                                    @Valid @JsonProperty(value = "periode") @NotNull Periode periode) {
         this.periode = Objects.requireNonNull(periode);
         this.barn = Objects.requireNonNull(barn);
     }
