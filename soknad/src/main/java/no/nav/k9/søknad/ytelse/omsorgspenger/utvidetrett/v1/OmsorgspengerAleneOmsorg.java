@@ -5,7 +5,6 @@ import java.util.Objects;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -35,10 +34,6 @@ public class OmsorgspengerAleneOmsorg implements OmsorgspengerUtvidetRett {
     @NotNull
     private Periode periode;
 
-    @JsonProperty(value = "begrunnelse")
-    @Size(max = 30000)
-    private String begrunnelse;
-
     public OmsorgspengerAleneOmsorg() {
     }
 
@@ -46,7 +41,6 @@ public class OmsorgspengerAleneOmsorg implements OmsorgspengerUtvidetRett {
     public OmsorgspengerAleneOmsorg(@JsonProperty(value = "barn", required = true) @Valid @NotNull Barn barn,
                                     @Valid @JsonProperty(value = "periode") @NotNull Periode periode,
                                     @JsonProperty(value = "begrunnelse") String begrunnelse) {
-        this.begrunnelse = begrunnelse;
         this.periode = Objects.requireNonNull(periode);
         this.barn = Objects.requireNonNull(barn);
     }
@@ -59,10 +53,6 @@ public class OmsorgspengerAleneOmsorg implements OmsorgspengerUtvidetRett {
     @Override
     public YtelseValidator getValidator() {
         return new MinValidator();
-    }
-
-    public String getBegrunnelse() {
-        return begrunnelse;
     }
 
     @Override
