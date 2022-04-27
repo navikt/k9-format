@@ -31,15 +31,15 @@ public class OmsorgspengerAleneOmsorgTest {
         var søknad = TestUtils.komplettSøknad();
         verifyIngenFeil(søknad);
     }
-    
+
     @Test
     void testKomplettSøknad() {
         var ytelse = TestUtils.komplettBuilder();
         var søker = new Søker(NorskIdentitetsnummer.of("123"));
         var søknad = new Søknad(new SøknadId("123"), new Versjon("0.1"), ZonedDateTime.now(), søker, ytelse);
-        
+
         var json = JsonUtils.toString(søknad);
-        
+
         var søknad2 = JsonUtils.fromString(json, Søknad.class);
         assertThat(JsonUtils.toString(søknad2)).isEqualTo(json);
     }
@@ -69,7 +69,7 @@ public class OmsorgspengerAleneOmsorgTest {
         static OmsorgspengerAleneOmsorg komplettBuilder() {
             var barn = new Barn(NorskIdentitetsnummer.of("11111111111"));
             var periode = new Periode(LocalDate.parse("2021-01-01"), null);
-            return new OmsorgspengerAleneOmsorg(barn, periode, "ok");
+            return new OmsorgspengerAleneOmsorg(barn, periode);
         }
 
     }
