@@ -44,6 +44,9 @@ public class Omsorg implements InnsynHendelseData {
     public Omsorg(String søkerAktørId, String pleietrengendeAktørId, boolean harOmsorgen) {
         this.søkerAktørId = Objects.requireNonNull(søkerAktørId, "søkerAktørId");
         this.pleietrengendeAktørId = Objects.requireNonNull(pleietrengendeAktørId, "pleietrengendeAktørId");
+        if (søkerAktørId.equals(pleietrengendeAktørId)) {
+            throw new IllegalArgumentException("søkerAktørId kan ikke være lik pleietrengendeAktørId");
+        }
         this.harOmsorgen = harOmsorgen;
     }
     
