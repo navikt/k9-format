@@ -43,7 +43,7 @@ public class Omsorg implements InnsynHendelseData {
     
     public Omsorg(String søkerAktørId, String pleietrengendeAktørId, boolean harOmsorgen) {
         this.søkerAktørId = Objects.requireNonNull(søkerAktørId, "søkerAktørId");
-        this.pleietrengendeAktørId = Objects.requireNonNull(søkerAktørId, "pleietrengendeAktørId");
+        this.pleietrengendeAktørId = Objects.requireNonNull(pleietrengendeAktørId, "pleietrengendeAktørId");
         this.harOmsorgen = harOmsorgen;
     }
     
