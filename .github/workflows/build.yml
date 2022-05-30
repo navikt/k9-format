@@ -18,9 +18,9 @@ jobs:
       - uses: actions/checkout@v3.0.2
       - uses: actions/setup-java@v3
         with:
-          java-version: '11'
-          distribution: 'adopt'
-          cache: 'maven'          
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
       - name: Build & Deploy
         run: |
              mvn install -e --batch-mode --settings .github/settings.xml --file pom.xml -DtrimStackTrace=false
