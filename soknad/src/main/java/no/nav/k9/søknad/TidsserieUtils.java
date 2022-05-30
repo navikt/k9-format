@@ -7,7 +7,7 @@ import no.nav.fpsak.tidsserie.LocalDateSegment;
 import no.nav.fpsak.tidsserie.LocalDateTimeline;
 import no.nav.k9.søknad.felles.type.Periode;
 
-public class TidsserieUtils {
+public final class TidsserieUtils {
     private TidsserieUtils() {
     }
 

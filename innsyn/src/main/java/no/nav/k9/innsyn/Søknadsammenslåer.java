@@ -20,7 +20,7 @@ import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning;
 
-public class Søknadsammenslåer {
+public final class Søknadsammenslåer {
 
     private Søknadsammenslåer() {
     }
