@@ -12,15 +12,14 @@ public class Tilsynsammenslåer {
         final LocalDateTimeline<TilsynPeriodeInfo> t1 = lagTidslinje(s1Ytelse.getTilsynsordning());
         final LocalDateTimeline<TilsynPeriodeInfo> t2 = lagTidslinje(s2Ytelse.getTilsynsordning());
         tilsyn.medPerioder(SøknadsammenslåerUtils.slåSammenOgHåndterTrukkedeKrav(s2Ytelse, t1, t2));
-        
+
         // Defensiv kopiering av Tilsynsordning for å få nye Periode- og TilsynPeriodeInfo-objekter:
         return new Tilsynsordning(tilsyn);
     }
 
-    @SuppressWarnings("unchecked")
     private static LocalDateTimeline<TilsynPeriodeInfo> lagTidslinje(Tilsynsordning tilsynsordning) {
         if (tilsynsordning == null) {
-            return LocalDateTimeline.EMPTY_TIMELINE;
+            return LocalDateTimeline.empty();
         }
         return SøknadsammenslåerUtils.lagTidslinje(tilsynsordning.getPerioder());
     }

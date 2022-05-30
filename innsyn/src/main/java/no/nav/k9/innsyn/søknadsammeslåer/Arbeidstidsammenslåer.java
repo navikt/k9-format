@@ -26,10 +26,10 @@ public class Arbeidstidsammenslåer {
 
         final List<Arbeidstaker> arbeidstakerliste = slåSammenArbeidstakerArbeidstid(s2Ytelse, a1, a2);
         sammenslåttArbeidstid.medArbeidstaker(arbeidstakerliste);
-        
+
         final ArbeidstidInfo frilanserArbeidstidInfo = slåSammenFrilanserArbeidstid(s2Ytelse, a1, a2);
         sammenslåttArbeidstid.medFrilanserArbeidstid(frilanserArbeidstidInfo);
-        
+
         final ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo = slåSammenSelvstendigNæringsdrivendeArbeidstidInfo(s2Ytelse, a1, a2);
         sammenslåttArbeidstid.medSelvstendigNæringsdrivendeArbeidstidInfo(selvstendigNæringsdrivendeArbeidstidInfo);
 
@@ -42,7 +42,7 @@ public class Arbeidstidsammenslåer {
         final ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo = slåSammenArbeidstidInfo(s2Ytelse, t1, t2);
         return selvstendigNæringsdrivendeArbeidstidInfo;
     }
-    
+
     private static ArbeidstidInfo slåSammenFrilanserArbeidstid(PleiepengerSyktBarn s2Ytelse, final Arbeidstid a1, final Arbeidstid a2) {
         final LocalDateTimeline<ArbeidstidPeriodeInfo> t1 = lagArbeidstidTidslinje(a1.getFrilanserArbeidstidInfo().orElse(null));
         final LocalDateTimeline<ArbeidstidPeriodeInfo> t2 = lagArbeidstidTidslinje(a2.getFrilanserArbeidstidInfo().orElse(null));
@@ -78,28 +78,26 @@ public class Arbeidstidsammenslåer {
         return new ArbeidstidInfo(new ArbeidstidInfo().medPerioder(periodeMap));
     }
 
-    @SuppressWarnings("unchecked")
     private static LocalDateTimeline<ArbeidstidPeriodeInfo> hentTidslinje(final Map<Object, LocalDateTimeline<ArbeidstidPeriodeInfo>> arbeidstakertid1, Object arbeidstakerIdent) {
         final LocalDateTimeline<ArbeidstidPeriodeInfo> tidslinje = arbeidstakertid1.get(arbeidstakerIdent);
         if (tidslinje == null) {
-            return LocalDateTimeline.EMPTY_TIMELINE;
+            return LocalDateTimeline.empty();
         }
         return tidslinje;
     }
 
     private static Map<Object, LocalDateTimeline<ArbeidstidPeriodeInfo>> byggTidslinjeMap(Arbeidstid arbeidstid) {
         return arbeidstid.getArbeidstakerList().stream()
-            .map(a -> {
-                final LocalDateTimeline<ArbeidstidPeriodeInfo> tidslinje = lagArbeidstidTidslinje(a.getArbeidstidInfo());
-                return Map.entry(hentArbeidsgiverIdent(a),tidslinje);
-            })
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .map(a -> {
+                    final LocalDateTimeline<ArbeidstidPeriodeInfo> tidslinje = lagArbeidstidTidslinje(a.getArbeidstidInfo());
+                    return Map.entry(hentArbeidsgiverIdent(a), tidslinje);
+                })
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
-    @SuppressWarnings("unchecked")
     private static LocalDateTimeline<ArbeidstidPeriodeInfo> lagArbeidstidTidslinje(ArbeidstidInfo arbeidstidInfo) {
         if (arbeidstidInfo == null) {
-            return LocalDateTimeline.EMPTY_TIMELINE;
+            return LocalDateTimeline.empty();
         }
         return SøknadsammenslåerUtils.lagTidslinje(arbeidstidInfo.getPerioder());
     }
