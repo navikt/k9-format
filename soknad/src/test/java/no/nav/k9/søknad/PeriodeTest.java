@@ -146,4 +146,24 @@ public class PeriodeTest {
         assertThat(perioder).hasSize(2);
         assertThat(perioder.keySet()).containsAll(Set.of(periode1, periode2));
     }
+
+    /*
+     * Kontrollerer at perioder som ikke overlapper får forventede resultater ved å kalle Periode#overlapper.
+     * Tester både med periode som ligger kant-til-kant og perioder som ikke ligger kant-til-kant.
+     */
+    @Test
+    public void TestOverlapperPåIkkeOverlappendePerioder() {
+        var periode1 = Periode.parse("2020-01-01/2020-01-10");
+        var periode2 = Periode.parse("2020-01-11/2020-01-20");
+        var periode3 = Periode.parse("2020-01-20/2020-01-30");
+        assertThat(periode1.overlapper(periode2)).isFalse();
+        assertThat(periode1.overlapper(periode3)).isFalse();
+    }
+
+    @Test
+    public void TestOverlapperPåOverlappendePerioder() {
+        var periode1 = Periode.parse("2020-01-01/2020-01-10");
+        var periode2 = Periode.parse("2020-01-10/2020-01-19");
+        assertThat(periode1.overlapper(periode2)).isTrue();
+    }
 }
