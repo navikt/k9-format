@@ -110,6 +110,19 @@ public class Periode implements Comparable<Periode> {
             && (this.tilOgMed == null || (periode.tilOgMed != null && !this.tilOgMed.isBefore(periode.tilOgMed)));
     }
 
+    /**
+     * Sjekk om denne perioden og annenPeriode har overlappende tidsintervaller.
+     */
+    public boolean overlapper(Periode annenPeriode) {
+        boolean starterFørEllerSamtidigSomAnnenPeriodeSlutter = this.fraOgMed == null || this.fraOgMed != null && annenPeriode.getTilOgMed() == null || this.fraOgMed != null && annenPeriode.getTilOgMed() != null && (this.fraOgMed.isEqual(annenPeriode.getTilOgMed()) || this.fraOgMed.isBefore(annenPeriode.getTilOgMed()));
+        if (!starterFørEllerSamtidigSomAnnenPeriodeSlutter) {
+            return false;
+        } else {
+            boolean slutterEtterEllerSamtidigSomPeriodeStarter = this.tilOgMed == null || this.tilOgMed != null && annenPeriode.getFraOgMed() == null || this.tilOgMed != null && annenPeriode.getFraOgMed() != null && (this.tilOgMed.isEqual(annenPeriode.getFraOgMed()) || this.tilOgMed.isAfter(annenPeriode.getFraOgMed()));
+            return slutterEtterEllerSamtidigSomPeriodeStarter;
+        }
+    }
+
     private static void verifiserKanVæreGyldigPeriode(String iso8601) {
         if (iso8601 == null || iso8601.split(SKILLE).length != 2) {
             throw new IllegalArgumentException("Periode på ugylig format '" + iso8601 + "'.");
