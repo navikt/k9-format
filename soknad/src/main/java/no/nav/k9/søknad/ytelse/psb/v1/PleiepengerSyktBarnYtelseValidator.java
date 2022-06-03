@@ -103,7 +103,10 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
     }
 
     private void validerLovligEndring(PleiepengerSyktBarn psb, List<Periode> gyldigeEndringsperioder, List<Feil> feil) {
-        if (psb.getSøknadsperiodeList().isEmpty() && gyldigeEndringsperioder.isEmpty()) {
+        /*
+         * Merk: Vi tillater trekk av periode som ikke finnes -- siden dette ikke gir noen negative konsekvenser,
+         */
+        if (psb.getSøknadsperiodeList().isEmpty() && gyldigeEndringsperioder.isEmpty() && psb.getTrekkKravPerioder().isEmpty()) {
             feil.add(lagFeil("søknadsperiode", "missingArgument", "Mangler søknadsperiode eller gyldigeEndringsperioder."));
             throw new ValideringsAvbrytendeFeilException(feil);
         }

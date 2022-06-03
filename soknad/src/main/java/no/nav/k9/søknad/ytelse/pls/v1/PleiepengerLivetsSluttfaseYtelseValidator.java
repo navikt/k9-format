@@ -79,7 +79,10 @@ public class PleiepengerLivetsSluttfaseYtelseValidator extends YtelseValidator {
     }
 
     private void validerLovligEndring(PleipengerLivetsSluttfase ytelse, List<Periode> gyldigeEndringsperioder) {
-        if (ytelse.getSøknadsperiodeList().isEmpty() && gyldigeEndringsperioder.isEmpty()) {
+        /*
+         * Merk: Vi tillater trekk av periode som ikke finnes -- siden dette ikke gir noen negative konsekvenser,
+         */
+        if (ytelse.getSøknadsperiodeList().isEmpty() && gyldigeEndringsperioder.isEmpty() && ytelse.getTrekkKravPerioder().isEmpty()) {
             throw new ValideringsAvbrytendeFeilException(List.of(
                     lagFeil("søknadsperiode", "missingArgument", "Mangler søknadsperiode eller gyldigeEndringsperioder.")));
         }
