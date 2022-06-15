@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -44,6 +45,15 @@ class SøknadTest {
     @Test
     public void minimumSøknadHarIngenValideringsFeil() {
         verifyIngenFeil(MINIMUM_SØKNAD);
+    }
+    
+    @Test
+    public void mottattDatoKanIkkeVæreIFremtiden() {
+        final Periode søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
+        final Søknad søknad = SøknadEksempel.minimumSøknad(søknadsperiode);
+        verifyIngenFeil(søknad);
+        søknad.setMottattDato(ZonedDateTime.now().plusSeconds(60));
+        verifyHarFeil(søknad);
     }
 
     @Test

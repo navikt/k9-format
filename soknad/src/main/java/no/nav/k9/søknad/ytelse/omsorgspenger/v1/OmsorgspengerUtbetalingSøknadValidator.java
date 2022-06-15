@@ -19,13 +19,6 @@ public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<S�
     public OmsorgspengerUtbetalingSøknadValidator() {
     }
 
-    private static void validerVersjon(Versjon versjon, List<Feil> feil) {
-        if (versjon != null && !versjon.erGyldig()) {
-            feil.add(new Feil("versjon", "ugyldigVersjon", "Versjonen er på ugyldig format."));
-        }
-    }
-
-
     @Override
     public List<Feil> valider(Søknad søknad) {
         var validate = VALIDATOR_FACTORY.getValidator().validate(søknad);
@@ -34,7 +27,7 @@ public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<S�
                 .map(Feil::toFeil)
                 .collect(Collectors.toList());
 
-        validerVersjon(søknad.getVersjon(), feil);
+        validerFelterPåSøknad(søknad, feil);
         feil.addAll(new OmsorgspengerUtbetalingValidator().valider(søknad.getYtelse()));
 
         return feil;

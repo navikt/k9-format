@@ -39,7 +39,7 @@ public class PleiepengerLivetsSluttfaseSøknadValidator extends SøknadValidator
                 .collect(Collectors.toList());
 
         validerInneholderBegrunnelseDersomTrekkAvPerioder(søknad, feil);
-        validerVersjon(søknad.getVersjon(), feil);
+        validerFelterPåSøknad(søknad, feil);
         validerPleietrengendeIkkeErSøker(søknad.getSøker(), søknad.getBerørtePersoner(), feil);
         validerPleietrengendeIkkeErSøker(søknad.getSøker(), List.of(((PleipengerLivetsSluttfase) søknad.getYtelse()).getPleietrengende()), feil);
         feil.addAll(new PleiepengerLivetsSluttfaseYtelseValidator().valider(søknad.getYtelse(), gyldigeEndringsperioder));
@@ -53,12 +53,6 @@ public class PleiepengerLivetsSluttfaseSøknadValidator extends SøknadValidator
             if (søknad.getBegrunnelseForInnsending().getTekst() == null || søknad.getBegrunnelseForInnsending().getTekst().isEmpty()) {
                 feil.add(new Feil("begrunnelseForInnsending", "påkrevd", "Søknad inneholder trekk krav perioder uten begrunnelse for innsending."));
             }
-        }
-    }
-
-    private static void validerVersjon(Versjon versjon, List<Feil> feil) {
-        if (versjon != null && !versjon.erGyldig()) {
-            feil.add(new Feil("versjon", "ugyldigVersjon", "Versjonen er på ugyldig format."));
         }
     }
 
