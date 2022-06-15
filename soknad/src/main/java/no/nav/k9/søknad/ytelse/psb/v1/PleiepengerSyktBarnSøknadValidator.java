@@ -1,5 +1,7 @@
 package no.nav.k9.søknad.ytelse.psb.v1;
 
+import java.time.ZonedDateTime;
+import java.time.chrono.ChronoZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,12 +25,6 @@ public class PleiepengerSyktBarnSøknadValidator extends SøknadValidator<Søkna
     public PleiepengerSyktBarnSøknadValidator() {
     }
 
-    private static void validerVersjon(Versjon versjon, List<Feil> feil) {
-        if (versjon != null && !versjon.erGyldig()) {
-            feil.add(new Feil("versjon", "ugyldigVersjon", "Versjonen er på ugyldig format."));
-        }
-    }
-
     private static void validerBarnIkkeErSøker(Søker søker, List<Person> barnList, List<Feil> feil) {
         if (søker == null || barnList == null || barnList.isEmpty()) {
             return;
@@ -49,11 +45,11 @@ public class PleiepengerSyktBarnSøknadValidator extends SøknadValidator<Søkna
         List<Feil> feil = validate.stream()
                 .map(Feil::toFeil)
                 .collect(Collectors.toList());
+        
+        validerFelterPåSøknad(søknad, feil);
 
         PleiepengerSyktBarn ytelse = (PleiepengerSyktBarn) søknad.getYtelse();
         validerInneholderBegrunnelseForInnsending(søknad, ytelse, feil);
-
-        validerVersjon(søknad.getVersjon(), feil);
         validerBarnIkkeErSøker(søknad.getSøker(), søknad.getBerørtePersoner(), feil);
         feil.addAll(new PleiepengerSyktBarnYtelseValidator().validerMedGyldigEndringsperodeHvisDenFinnes(søknad.getYtelse(), gyldigeEndringsperioder));
 
