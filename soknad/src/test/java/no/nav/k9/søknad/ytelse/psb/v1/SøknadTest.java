@@ -46,7 +46,7 @@ class SøknadTest {
     public void minimumSøknadHarIngenValideringsFeil() {
         verifyIngenFeil(MINIMUM_SØKNAD);
     }
-    
+
     @Test
     public void mottattDatoKanIkkeVæreIFremtiden() {
         final Periode søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
@@ -54,6 +54,20 @@ class SøknadTest {
         verifyIngenFeil(søknad);
         søknad.setMottattDato(ZonedDateTime.now().plusSeconds(60));
         verifyHarFeil(søknad);
+    }
+
+    @Test
+    public void oppgittOpptjeningMåVæreSattForNySøknad() {
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusWeeks(4));
+        var utelands = new Periode(LocalDate.now().minusYears(1), LocalDate.now());
+        var bosteder = new Periode(LocalDate.now().minusYears(1), LocalDate.now().plusWeeks(4));
+        var lovbestemtferie = new Periode(LocalDate.now().plusWeeks(3), LocalDate.now().plusWeeks(4));
+        var søknad = YtelseEksempel.komplettYtelseMedSøknadsperiode(søknadsperiode, lovbestemtferie, utelands, bosteder);
+        søknad.ignorerOpplysningerOmOpptjening();
+
+        assertThat(søknad.skalHaOpplysningOmOpptjeningVedNyPeriode()).isFalse();
+        var feil = verifyHarFeil(søknad);
+        feilInneholder(feil, new Feil("oppgittOpptjening", "påkrevd", "Opplysninger om opptjening må være oppgitt for ny søknadsperiode." ));
     }
 
     @Test
@@ -155,7 +169,7 @@ class SøknadTest {
         var feil = verifyHarFeil(søknad, List.of());
         feilInneholder(feil, "missingArgument");
     }
-    
+
     @Test
     public void søknadLagerRiktigFeilmeldingPathForNullFeil() {
         var søknadsperiode = new Periode(LocalDate.now().minusWeeks(2), LocalDate.now().plusWeeks(2));
@@ -176,7 +190,7 @@ class SøknadTest {
 
     //TODO legge på getSøknadsperioder test
 
-  
+
 
 
 }
