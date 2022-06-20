@@ -18,8 +18,7 @@ public abstract class SøknadValidator<S> {
             throw new ValideringsFeil(feil);
         }
     }
-    
-    
+
     /**
      * Felles validering av felter på søknad. Må kalles eksplisitt på av
      * subklassene til denne klassen hvis den skal brukes,
@@ -34,7 +33,10 @@ public abstract class SøknadValidator<S> {
     
     private void validerMottattDato(Søknad søknad, List<Feil> feil) {
         final int maximumClockSkewSeconds = 10;
-        if (søknad.getMottattDato().minusSeconds(maximumClockSkewSeconds).isAfter(ZonedDateTime.now())) {
+        if (søknad.getMottattDato() != null &&
+                søknad.getMottattDato()
+                        .minusSeconds(maximumClockSkewSeconds)
+                        .isAfter(ZonedDateTime.now())) {
             feil.add(new Feil("mottattDato", "fremtidigDatoIkkeTillat", "Mottattdato kan ikke være satt til fremtiden."));
         }
     }
