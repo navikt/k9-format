@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -55,8 +56,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     private List<Periode> trekkKravPerioder = new ArrayList<>();
 
     @Valid
-    @JsonProperty(value = "opptjeningAktivitet", required = true)
-    @NotNull
+    @JsonProperty(value = "opptjeningAktivitet")
     private OpptjeningAktivitet opptjeningAktivitet = new OpptjeningAktivitet();
 
     @Valid
@@ -204,6 +204,11 @@ public class PleiepengerSyktBarn implements Ytelse {
         return this;
     }
 
+    public PleiepengerSyktBarn ignorerOpplysningerOmOpptjening() {
+        this.opptjeningAktivitet = null;
+        return this;
+    }
+
     public Optional<DataBruktTilUtledning> getSøknadInfo() {
         return Optional.ofNullable(dataBruktTilUtledning);
     }
@@ -318,5 +323,14 @@ public class PleiepengerSyktBarn implements Ytelse {
     @Override
     public YtelseValidator getValidator() {
         return new PleiepengerSyktBarnYtelseValidator();
+    }
+
+
+    @AssertTrue
+    public boolean skalHaOpplysningOmOpptjeningVedNyPeriode() {
+        if (søknadsperiode != null && !søknadsperiode.isEmpty()) {
+            return opptjeningAktivitet != null;
+        }
+        return true;
     }
 }

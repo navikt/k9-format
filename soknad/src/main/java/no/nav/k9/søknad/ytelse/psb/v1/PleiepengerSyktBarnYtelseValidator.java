@@ -44,18 +44,18 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
 
     public void forsikreValidert(Ytelse ytelse, List<Periode> gyldigeEndringsperioder) {
         Objects.requireNonNull(gyldigeEndringsperioder, "gyldigeEndringsperioder");
-        
+
         List<Feil> feil = validerMedGyldigEndringsperodeHvisDenFinnes(ytelse, gyldigeEndringsperioder);
         if (!feil.isEmpty()) {
             throw new ValideringsFeil(feil);
         }
     }
-    
+
     List<Feil> validerMedGyldigEndringsperodeHvisDenFinnes(Ytelse ytelse,
             List<Periode> gyldigeEndringsperioder) {
-        
+
         Objects.requireNonNull(gyldigeEndringsperioder, "gyldigeEndringsperioder");
-        
+
         var psb = (PleiepengerSyktBarn) ytelse;
         var feilene = new ArrayList<Feil>();
 
@@ -74,12 +74,16 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
 
         validerLovligEndring(psb, gyldigeEndringsperioder, feilene);
 
+        if (!psb.skalHaOpplysningOmOpptjeningVedNyPeriode()) {
+            feilene.add(new Feil("oppgittOpptjening", "påkrevd", "Opplysninger om opptjening må være oppgitt for ny søknadsperiode."));
+        }
+
         feilene.addAll(validerPerioderErLukketOgGyldig(psb.getBosteder().getPerioder(), "bosteder.perioder"));
         feilene.addAll(validerPerioderErLukketOgGyldig(psb.getUtenlandsopphold().getPerioder(), "utenlandsopphold.perioder"));
-        
+
         final LocalDateTimeline<Boolean> søknadsperiodeTidslinje = lagTidslinjeOgValider(psb.getSøknadsperiodeList(), "søknadsperiode.perioder", feilene);
         final LocalDateTimeline<Boolean> intervalForEndringTidslinje;
-        
+
 
         final LocalDateTimeline<Boolean> gyldigEndringsperiodeTidslinje = lagTidslinjeOgValider(gyldigeEndringsperioder, "gyldigeEndringsperioder.perioder", feilene);
         intervalForEndringTidslinje = søknadsperiodeTidslinje.union(gyldigEndringsperiodeTidslinje, StandardCombinators::coalesceLeftHandSide);
@@ -98,7 +102,7 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         }
 
         validerAtYtelsePeriodenErKomplettMedSøknad(søknadsperiodeTidslinje, psb.getUttak().getPerioder(), "uttak", feilene);
-        
+
         return feilene;
     }
 

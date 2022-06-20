@@ -161,6 +161,11 @@ public class PleipengerLivetsSluttfase implements Ytelse {
         return this;
     }
 
+    public PleipengerLivetsSluttfase ignorerOpplysningerOmOpptjening() {
+        this.opptjeningAktivitet = null;
+        return this;
+    }
+
     public PleipengerLivetsSluttfase medBosteder(Bosteder bosteder) {
         this.bosteder = Objects.requireNonNull(bosteder, "bosteder");
         return this;

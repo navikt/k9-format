@@ -194,7 +194,7 @@ class EndringTest {
         feilInneholder(feil, "ytelse.uttak.perioder", "ugyldigPeriode");
         feilInneholder(feil, "ytelse.arbeidstid.arbeidstakerList[0].perioder", "ugyldigPeriode");
     }
-    
+
     @Test
     public void kunDokumentklassifiseringSkalFungere() {
         var gyldigIntervalForEndring = List.of(new Periode(LocalDate.now(), LocalDate.now().plusWeeks(2)));
@@ -204,6 +204,19 @@ class EndringTest {
 
         verifyIngenFeil(søknad, gyldigIntervalForEndring);
     }
+
+    @Test
+    public void komplettEndringssøknadIgnorererOpplysningOmOpptjening() {
+        var gyldigEndringsInterval = new Periode(LocalDate.now().minusMonths(2), LocalDate.now().plusWeeks(3));
+        var endringsperiode = new Periode(LocalDate.now().minusWeeks(2), LocalDate.now().plusWeeks(3));
+
+        var psb = komplettYtelseMedEndring(endringsperiode);
+        psb.ignorerOpplysningerOmOpptjening();
+        var søknad = SøknadEksempel.søknad(psb);
+
+        verifyIngenFeil(søknad, List.of(gyldigEndringsInterval));
+    }
+
 
     private void assertEndringsperioderIJson(PleiepengerSyktBarn ytelse) {
         var endringsperioder = new ArrayList<Periode>();
