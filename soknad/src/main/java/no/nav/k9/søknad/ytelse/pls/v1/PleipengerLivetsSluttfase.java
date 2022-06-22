@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -190,4 +191,13 @@ public class PleipengerLivetsSluttfase implements Ytelse {
         this.uttak = Objects.requireNonNull(uttak, "uttak");
         return this;
     }
+
+    @AssertTrue
+    public boolean skalHaOpplysningOmOpptjeningVedNyPeriode() {
+        if (søknadsperiode != null && !søknadsperiode.isEmpty()) {
+            return opptjeningAktivitet != null;
+        }
+        return true;
+    }
+
 }

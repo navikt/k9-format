@@ -17,6 +17,7 @@ import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.opptjening.AnnenAktivitet;
 import no.nav.k9.søknad.felles.opptjening.Frilanser;
+import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
 import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
@@ -98,18 +99,24 @@ public class PleiepengerLivetsSluttfaseYtelseValidator extends YtelseValidator {
     }
 
     private void validerOpptjening(PleipengerLivetsSluttfase søknad, List<Feil> feilene) {
-        List<SelvstendigNæringsdrivende> snAktiviteter = søknad.getOpptjeningAktivitet().getSelvstendigNæringsdrivende();
-        for (int i = 0; i < snAktiviteter.size(); i++) {
-            lagTidslinjeMedStøtteForÅpenPeriodeOgValider(snAktiviteter.get(i).getPerioder(), "opptjeningAktivitet.selvstendigNæringsdrivende[" + i + "].perioder");
+        if (!søknad.skalHaOpplysningOmOpptjeningVedNyPeriode()) {
+            feilene.add(new Feil("oppgittOpptjening", "påkrevd", "Opplysninger om opptjening må være oppgitt for ny søknadsperiode."));
         }
+        var opptjeningAktivitet = søknad.getOpptjeningAktivitet();
+        if (opptjeningAktivitet != null) {
+            List<SelvstendigNæringsdrivende> snAktiviteter = opptjeningAktivitet.getSelvstendigNæringsdrivende();
+            for (int i = 0; i < snAktiviteter.size(); i++) {
+                lagTidslinjeMedStøtteForÅpenPeriodeOgValider(snAktiviteter.get(i).getPerioder(), "opptjeningAktivitet.selvstendigNæringsdrivende[" + i + "].perioder");
+            }
 
-        List<AnnenAktivitet> andreAktiviteter = søknad.getOpptjeningAktivitet().getAndreAktiviteter();
-        for (int i = 0; i < andreAktiviteter.size(); i++) {
-            validerPerioderIkkeErInvertert(andreAktiviteter.get(i).getPeriode(), "opptjeningAktivitet.andreAktiviteter[" + i + "].perioder", feilene);
-        }
-        Frilanser fl = søknad.getOpptjeningAktivitet().getFrilanser();
-        if (fl != null) {
-            validerPerioderIkkeErInvertert(new Periode(fl.getStartdato(), fl.getSluttdato()), "opptjeningAktivitet.frilanser.startdato/sluttdato", feilene);
+            List<AnnenAktivitet> andreAktiviteter = opptjeningAktivitet.getAndreAktiviteter();
+            for (int i = 0; i < andreAktiviteter.size(); i++) {
+                validerPerioderIkkeErInvertert(andreAktiviteter.get(i).getPeriode(), "opptjeningAktivitet.andreAktiviteter[" + i + "].perioder", feilene);
+            }
+            Frilanser fl = opptjeningAktivitet.getFrilanser();
+            if (fl != null) {
+                validerPerioderIkkeErInvertert(new Periode(fl.getStartdato(), fl.getSluttdato()), "opptjeningAktivitet.frilanser.startdato/sluttdato", feilene);
+            }
         }
     }
 
