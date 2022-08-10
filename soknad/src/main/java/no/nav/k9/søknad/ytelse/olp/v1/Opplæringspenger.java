@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.ytelse.opplæringspenger.v1;
+package no.nav.k9.søknad.ytelse.olp.v1;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
-import no.nav.k9.søknad.ytelse.opplæringspenger.v1.kurs.Kurs;
+import no.nav.k9.søknad.ytelse.olp.v1.kurs.Kurs;
 import no.nav.k9.søknad.ytelse.psb.v1.DataBruktTilUtledning;
 import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie;
 import no.nav.k9.søknad.ytelse.psb.v1.Omsorg;

@@ -15,7 +15,7 @@ import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerAleneO
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerKroniskSyktBarn;
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerMidlertidigAlene;
 import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetaling;
-import no.nav.k9.søknad.ytelse.opplæringspenger.v1.Opplæringspenger;
+import no.nav.k9.søknad.ytelse.olp.v1.Opplæringspenger;
 import no.nav.k9.søknad.ytelse.pls.v1.PleipengerLivetsSluttfase;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
 

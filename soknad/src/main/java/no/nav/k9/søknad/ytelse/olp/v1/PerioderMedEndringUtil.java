@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.ytelse.opplæringspenger.v1;
+package no.nav.k9.søknad.ytelse.olp.v1;
 
 import static no.nav.k9.søknad.TidsserieUtils.toLocalDateTimeline;
 
@@ -11,7 +11,6 @@ import no.nav.fpsak.tidsserie.LocalDateTimeline;
 import no.nav.fpsak.tidsserie.StandardCombinators;
 import no.nav.k9.søknad.TidsserieUtils;
 import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 
 class PerioderMedEndringUtil {

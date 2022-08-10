@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.ytelse.opplæringspenger.v1.kurs;
+package no.nav.k9.søknad.ytelse.olp.v1.kurs;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

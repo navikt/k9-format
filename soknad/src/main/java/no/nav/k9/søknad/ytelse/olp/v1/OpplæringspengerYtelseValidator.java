@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.ytelse.opplæringspenger.v1;
+package no.nav.k9.søknad.ytelse.olp.v1;
 
 import static no.nav.k9.søknad.TidsserieUtils.tilPeriodeList;
 import static no.nav.k9.søknad.TidsserieUtils.toLocalDateTimeline;
