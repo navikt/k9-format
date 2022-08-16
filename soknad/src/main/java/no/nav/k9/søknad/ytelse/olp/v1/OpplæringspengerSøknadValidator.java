@@ -14,7 +14,6 @@ import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
-import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
 
 public class OpplæringspengerSøknadValidator extends SøknadValidator<Søknad> {
 
@@ -51,7 +50,7 @@ public class OpplæringspengerSøknadValidator extends SøknadValidator<Søknad>
                 .map(Feil::toFeil)
                 .collect(Collectors.toList());
 
-        PleiepengerSyktBarn ytelse = (PleiepengerSyktBarn) søknad.getYtelse();
+        Opplæringspenger ytelse = (Opplæringspenger) søknad.getYtelse();
         validerInneholderBegrunnelseForInnsending(søknad, ytelse, feil);
 
         validerVersjon(søknad.getVersjon(), feil);
@@ -61,9 +60,9 @@ public class OpplæringspengerSøknadValidator extends SøknadValidator<Søknad>
         return feil;
     }
 
-    private void validerInneholderBegrunnelseForInnsending(Søknad søknad, PleiepengerSyktBarn psb, List<Feil> feil) {
-        if ((psb).getTrekkKravPerioder() != null &&
-                !(psb).getTrekkKravPerioder().isEmpty()) {
+    private void validerInneholderBegrunnelseForInnsending(Søknad søknad, Opplæringspenger olp, List<Feil> feil) {
+        if ((olp).getTrekkKravPerioder() != null &&
+                !(olp).getTrekkKravPerioder().isEmpty()) {
             if (søknad.getBegrunnelseForInnsending().getTekst() == null ||
                     søknad.getBegrunnelseForInnsending().getTekst().isEmpty()) {
                 feil.add(new Feil("begrunnelseForInnsending", "påkrevd", "Søknad inneholder trekk krav perioder uten begrunnelse for innsending."));
