@@ -56,11 +56,11 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
 
         Objects.requireNonNull(gyldigeEndringsperioder, "gyldigeEndringsperioder");
 
-        var psb = (Opplæringspenger) ytelse;
+        var olp = (Opplæringspenger) ytelse;
         var feilene = new ArrayList<Feil>();
 
         try {
-            feilene.addAll(validerOgLeggTilFeilene(psb, gyldigeEndringsperioder));
+            feilene.addAll(validerOgLeggTilFeilene(olp, gyldigeEndringsperioder));
         } catch (ValideringsAvbrytendeFeilException valideringsAvbrytendeFeilException) {
             feilene.addAll(valideringsAvbrytendeFeilException.getFeilList());
         }
@@ -68,38 +68,38 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
         return feilene;
     }
 
-    List<Feil> validerOgLeggTilFeilene(Opplæringspenger psb,
+    List<Feil> validerOgLeggTilFeilene(Opplæringspenger olp,
                                        List<Periode> gyldigeEndringsperioder) {
         final List<Feil> feilene = new ArrayList<Feil>();
 
-        validerLovligEndring(psb, gyldigeEndringsperioder, feilene);
+        validerLovligEndring(olp, gyldigeEndringsperioder, feilene);
 
-        feilene.addAll(validerPerioderErLukketOgGyldig(psb.getBosteder().getPerioder(), "bosteder.perioder"));
-        feilene.addAll(validerPerioderErLukketOgGyldig(psb.getUtenlandsopphold().getPerioder(), "utenlandsopphold.perioder"));
+        feilene.addAll(validerPerioderErLukketOgGyldig(olp.getBosteder().getPerioder(), "bosteder.perioder"));
+        feilene.addAll(validerPerioderErLukketOgGyldig(olp.getUtenlandsopphold().getPerioder(), "utenlandsopphold.perioder"));
 
-        final LocalDateTimeline<Boolean> søknadsperiodeTidslinje = lagTidslinjeOgValider(psb.getSøknadsperiodeList(), "søknadsperiode.perioder", feilene);
+        final LocalDateTimeline<Boolean> søknadsperiodeTidslinje = lagTidslinjeOgValider(olp.getSøknadsperiodeList(), "søknadsperiode.perioder", feilene);
         final LocalDateTimeline<Boolean> intervalForEndringTidslinje;
 
 
         final LocalDateTimeline<Boolean> gyldigEndringsperiodeTidslinje = lagTidslinjeOgValider(gyldigeEndringsperioder, "gyldigeEndringsperioder.perioder", feilene);
         intervalForEndringTidslinje = søknadsperiodeTidslinje.union(gyldigEndringsperiodeTidslinje, StandardCombinators::coalesceLeftHandSide);
 
-        final LocalDateTimeline<Boolean> trekkKravPerioderTidslinje = lagTidslinjeOgValider(psb.getTrekkKravPerioder(), "trekkKravPerioder.perioder", feilene);
+        final LocalDateTimeline<Boolean> trekkKravPerioderTidslinje = lagTidslinjeOgValider(olp.getTrekkKravPerioder(), "trekkKravPerioder.perioder", feilene);
         feilene.addAll(validerAtIngenPerioderOverlapperMedTrekkKravPerioder(trekkKravPerioderTidslinje, søknadsperiodeTidslinje, "trekkKravPerioder"));
 
-        for (var ytelsePeriode : PerioderMedEndringUtil.getAllePerioderSomMåVæreInnenforSøknadsperiode(psb)) {
+        for (var ytelsePeriode : PerioderMedEndringUtil.getAllePerioderSomMåVæreInnenforSøknadsperiode(olp)) {
             var ytelsePeriodeTidsserie = lagTidslinjeOgValider(ytelsePeriode.getPeriodeMap(), ytelsePeriode.getFelt() + ".perioder", feilene);
             feilene.addAll(validerAtYtelsePerioderErInnenforIntervalForEndring(intervalForEndringTidslinje, ytelsePeriodeTidsserie, ytelsePeriode.getFelt() + ".perioder"));
             feilene.addAll(validerAtIngenPerioderOverlapperMedTrekkKravPerioder(trekkKravPerioderTidslinje, ytelsePeriodeTidsserie, ytelsePeriode.getFelt() + ".perioder"));
         }
 
-        validerAtYtelsePeriodenErKomplettMedSøknad(søknadsperiodeTidslinje, psb.getUttak().getPerioder(), "uttak", feilene);
+        validerAtYtelsePeriodenErKomplettMedSøknad(søknadsperiodeTidslinje, olp.getUttak().getPerioder(), "uttak", feilene);
 
         return feilene;
     }
 
-    private void validerLovligEndring(Opplæringspenger psb, List<Periode> gyldigeEndringsperioder, List<Feil> feil) {
-        if (psb.getSøknadsperiodeList().isEmpty() && gyldigeEndringsperioder.isEmpty()) {
+    private void validerLovligEndring(Opplæringspenger olp, List<Periode> gyldigeEndringsperioder, List<Feil> feil) {
+        if (olp.getSøknadsperiodeList().isEmpty() && gyldigeEndringsperioder.isEmpty()) {
             feil.add(lagFeil("søknadsperiode", "missingArgument", "Mangler søknadsperiode eller gyldigeEndringsperioder."));
             throw new ValideringsAvbrytendeFeilException(feil);
         }
