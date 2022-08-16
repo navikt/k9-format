@@ -23,11 +23,11 @@ class PerioderMedEndringUtil {
         return TidsserieUtils.tilPeriodeList(endringsperiodeTidsserie);
     }
 
-    public static List<PerioderMedEndring> getAllePerioderSomMåVæreInnenforSøknadsperiode(Opplæringspenger psb) {
+    public static List<PerioderMedEndring> getAllePerioderSomMåVæreInnenforSøknadsperiode(Opplæringspenger olp) {
         var listen = new ArrayList<PerioderMedEndring>();
-        listen.add(new PerioderMedEndring().medPerioder("lovbestemtFerie", psb.getLovbestemtFerie().getPerioder()));
-        listen.add(new PerioderMedEndring().medPerioder("uttak", psb.getUttak().getPerioder()));
-        listen.addAll(getArbeidstidPerioder(psb.getArbeidstid()));
+        listen.add(new PerioderMedEndring().medPerioder("lovbestemtFerie", olp.getLovbestemtFerie().getPerioder()));
+        listen.add(new PerioderMedEndring().medPerioder("uttak", olp.getUttak().getPerioder()));
+        listen.addAll(getArbeidstidPerioder(olp.getArbeidstid()));
         return listen;
     }
 
