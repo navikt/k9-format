@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -12,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.k9.søknad.felles.Feil;
+import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.felles.type.Periode;
@@ -59,6 +61,11 @@ public class OmsorgspengerKroniskSyktBarn implements OmsorgspengerUtvidetRett {
 
     @Override
     public YtelseValidator getValidator() {
+        return new MinValidator();
+    }
+
+    @Override
+    public YtelseValidator getValidator(Versjon versjon) {
         return new MinValidator();
     }
 

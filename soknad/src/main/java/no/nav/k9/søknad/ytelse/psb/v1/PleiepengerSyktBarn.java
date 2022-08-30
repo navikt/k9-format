@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
+import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
@@ -321,7 +322,7 @@ public class PleiepengerSyktBarn implements Ytelse {
     }
 
     @Override
-    public YtelseValidator getValidator() {
+    public YtelseValidator getValidator(Versjon versjon) {
         return new PleiepengerSyktBarnYtelseValidator();
     }
 

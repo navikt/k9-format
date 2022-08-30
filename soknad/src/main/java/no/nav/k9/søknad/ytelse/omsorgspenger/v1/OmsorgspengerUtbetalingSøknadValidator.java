@@ -1,6 +1,7 @@
 package no.nav.k9.søknad.ytelse.omsorgspenger.v1;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.Validation;
@@ -15,9 +16,22 @@ public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<S�
 
 
     private static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
+    private static final Set<Versjon> STØTTEDE_VERSJONER = Set.of(
+            Versjon.of("1.0.0"),
+            Versjon.of("1.1.0") //støtte for normalarbeidstid ved delvis fravær
+    );
 
     public OmsorgspengerUtbetalingSøknadValidator() {
     }
+
+    private static void validerVersjon(Versjon versjon, List<Feil> feil) {
+        if (versjon != null && !versjon.erGyldig()) {
+            feil.add(new Feil("versjon", "ugyldigVersjon", "Versjonen er på ugyldig format."));
+        } else if (!STØTTEDE_VERSJONER.contains(versjon)){
+            feil.add(new Feil("versjon", "ugyldigVersjon", "Bare følgende versjoner er støttet: " + STØTTEDE_VERSJONER));
+        }
+    }
+
 
     @Override
     public List<Feil> valider(Søknad søknad) {
@@ -27,8 +41,9 @@ public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<S�
                 .map(Feil::toFeil)
                 .collect(Collectors.toList());
 
+        validerVersjon(søknad.getVersjon(), feil);
         validerFelterPåSøknad(søknad, feil);
-        feil.addAll(new OmsorgspengerUtbetalingValidator().valider(søknad.getYtelse()));
+        feil.addAll(new OmsorgspengerUtbetalingValidator(søknad.getVersjon()).valider(søknad.getYtelse()));
 
         return feil;
     }
