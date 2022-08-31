@@ -29,6 +29,7 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
     @JsonProperty("duration")
     private Duration duration; //OBS sattes tidligere direkte ved delvis fravær, men utledes nå fra verdier i feltet delvisFravær. Indikerer hvor mye fravær det er, etter at det er omregnet til 7.5 times normalarbeidsdag.
 
+    @Valid
     @JsonProperty("delvisFravær")
     private DelvisFravær delvisFravær; //denne brukes hvis det er mindre enn 100% fravær fra arbeid i aktuell periode
 
