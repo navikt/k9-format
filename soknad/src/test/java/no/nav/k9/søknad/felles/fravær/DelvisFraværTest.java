@@ -19,5 +19,9 @@ class DelvisFraværTest {
         assertThat(new DelvisFravær(dobbelNormalarbeidstid, Duration.ofMinutes(30)).normalisertTilStandarddag()).isEqualByComparingTo(Duration.ofMinutes(30));
         assertThat(new DelvisFravær(dobbelNormalarbeidstid, Duration.ofHours(1)).normalisertTilStandarddag()).isEqualByComparingTo(Duration.ofMinutes(30));
         assertThat(new DelvisFravær(dobbelNormalarbeidstid, Duration.ofHours(2)).normalisertTilStandarddag()).isEqualByComparingTo(Duration.ofHours(1));
+
+        Duration sekstimersdag = Duration.ofHours(6);
+        assertThat(new DelvisFravær(sekstimersdag, standardDag).normalisertTilStandarddag()).isEqualByComparingTo(Duration.ofHours(9).plusMinutes(30));  //jobbet 7.5 mot normalt 6
+        assertThat(new DelvisFravær(sekstimersdag, Duration.ofHours(2)).normalisertTilStandarddag()).isEqualByComparingTo(Duration.ofHours(2).plusMinutes(30));
     }
 }
