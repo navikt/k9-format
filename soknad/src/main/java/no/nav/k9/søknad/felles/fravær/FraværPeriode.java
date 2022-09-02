@@ -41,9 +41,8 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
     @JsonProperty(value = "søknadÅrsak")
     private SøknadÅrsak søknadÅrsak;
 
-    //TODO konverter fra liste til enkeltelement
     @Valid
-    @Size(min = 1, max = 1)
+    @Size(min = 1, max = 2)
     @JsonProperty(value = "aktivitetFravær", required = true)
     private List<AktivitetFravær> aktivitetFravær;
 

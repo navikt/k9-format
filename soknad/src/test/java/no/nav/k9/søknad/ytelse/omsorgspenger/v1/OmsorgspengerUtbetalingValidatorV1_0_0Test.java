@@ -47,7 +47,6 @@ class OmsorgspengerUtbetalingValidatorV1_0_0Test {
         assertThat(feil).isEmpty();
     }
 
-    @Disabled //TODO enten må valideringen slakkes opp, eller så må søknaden under test korrigeres.
     @Test
     void skal_returnere_ingen_feil_for_komplett_json_søknad() {
         var søknad = TestUtils.komplettJsonSøknad();
