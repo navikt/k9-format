@@ -21,6 +21,8 @@ import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 
+/** @deprecated bruk istedet {@link OmsorgspengerUtbetalingSøknadValidator} */
+@Deprecated(forRemoval = true, since = "6.1.1") //må ikke fjernes helt, men skal fjernes fra API-et
 public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
     private final PeriodeValidator periodeValidator;
     private Versjon versjon;
@@ -238,7 +240,7 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
         if (Duration.ZERO.equals(fraværPeriode.getDuration()) && !fraværPeriode.getPeriode().getFraOgMed().equals(fraværPeriode.getPeriode().getTilOgMed())) {
             feil.add(new Feil("fraværsperioderKorrigeringIm[" + index + "]", "nullingPeriodeOversteget", "Nulling av periode kan ikke ha lenger varighet enn én dag"));
         }
-        if (fraværPeriode.getDuration() != null && fraværPeriode.getDuration().compareTo(Duration.parse("PT7H30M")) == 1) {
+        if (fraværPeriode.getDuration() != null && fraværPeriode.getDuration().compareTo(Duration.parse("PT7H30M")) > 0) {
             feil.add(new Feil("fraværsperioderKorrigeringIm[" + index + "]", "varighetOversteget", "Delvis fravær kan ikke overstige 7 timer og 30 min"));
         }
         return feil;
@@ -266,7 +268,7 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
         if (Duration.ZERO.equals(fraværPeriode.getDuration()) && !fraværPeriode.getPeriode().getFraOgMed().equals(fraværPeriode.getPeriode().getTilOgMed())) {
             feil.add(new Feil("fraværsperioderKorrigeringIm[" + index + "]", "nullingPeriodeOversteget", "Nulling av periode kan ikke ha lenger varighet enn én dag"));
         }
-        if (fraværPeriode.getDuration() != null && fraværPeriode.getDuration().compareTo(Duration.parse("PT7H30M")) == 1) {
+        if (fraværPeriode.getDuration() != null && fraværPeriode.getDuration().compareTo(Duration.parse("PT7H30M")) > 0) {
             feil.add(new Feil("fraværsperioderKorrigeringIm[" + index + "]", "varighetOversteget", "Delvis fravær kan ikke overstige 7 timer og 30 min"));
         }
         return feil;

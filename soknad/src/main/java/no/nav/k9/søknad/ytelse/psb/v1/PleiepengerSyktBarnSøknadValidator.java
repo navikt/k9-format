@@ -1,7 +1,5 @@
 package no.nav.k9.søknad.ytelse.psb.v1;
 
-import java.time.ZonedDateTime;
-import java.time.chrono.ChronoZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,18 +10,13 @@ import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.SøknadValidator;
 import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
 
 public class PleiepengerSyktBarnSøknadValidator extends SøknadValidator<Søknad> {
 
-
     private static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
-
-    public PleiepengerSyktBarnSøknadValidator() {
-    }
 
     private static void validerBarnIkkeErSøker(Søker søker, List<Person> barnList, List<Feil> feil) {
         if (søker == null || barnList == null || barnList.isEmpty()) {

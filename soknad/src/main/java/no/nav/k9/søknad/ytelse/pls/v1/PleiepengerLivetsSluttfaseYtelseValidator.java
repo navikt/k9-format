@@ -22,9 +22,12 @@ import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
+import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetalingSøknadValidator;
 import no.nav.k9.søknad.ytelse.psb.v1.PerioderMedEndring;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 
+/** @deprecated bruk istedet {@link PleiepengerLivetsSluttfaseSøknadValidator} */
+@Deprecated(forRemoval = true, since = "6.1.1") //må ikke fjernes helt, men skal fjernes fra API-et
 public class PleiepengerLivetsSluttfaseYtelseValidator extends YtelseValidator {
     @Override
     public List<Feil> valider(Ytelse søknad) {
