@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import no.nav.k9.søknad.PeriodeValidator;
 import no.nav.k9.søknad.felles.Feil;
+import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.fravær.AktivitetFravær;
 import no.nav.k9.søknad.felles.fravær.FraværPeriode;
 import no.nav.k9.søknad.felles.opptjening.Frilanser;
@@ -22,8 +23,10 @@ import no.nav.k9.søknad.ytelse.YtelseValidator;
 
 public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
     private final PeriodeValidator periodeValidator;
+    private Versjon versjon;
 
-    public OmsorgspengerUtbetalingValidator() {
+    public OmsorgspengerUtbetalingValidator(Versjon versjon) {
+        this.versjon = versjon;
         this.periodeValidator = new PeriodeValidator();
     }
 
@@ -62,8 +65,9 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
         var aktivitet = ytelse.getAktivitet();
 
         if (aktivitet != null) {
-            if ((aktivitet.getFrilanser() != null)
-                    || ((aktivitet.getSelvstendigNæringsdrivende() != null) && !aktivitet.getSelvstendigNæringsdrivende().isEmpty())) {
+            boolean erSøknadForFrilanser = aktivitet.getFrilanser() != null;
+            boolean erSøknadForSN = aktivitet.getSelvstendigNæringsdrivende() != null && !aktivitet.getSelvstendigNæringsdrivende().isEmpty();
+            if (erSøknadForFrilanser || erSøknadForSN) {
                 feil.addAll(validerFrilanserOgSelvstendingNæringsdrivende(aktivitet.getSelvstendigNæringsdrivende(), aktivitet.getFrilanser()));
                 feil.addAll(validerSelvstendingNæringsdrivende(aktivitet.getSelvstendigNæringsdrivende()));
                 feil.addAll(validerFrilanser(aktivitet.getFrilanser()));
@@ -194,34 +198,77 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
             } else if (aktiviteterFravær.iterator().next() != AktivitetFravær.ARBEIDSTAKER) {
                 feil.add(new Feil("fraværsperioderKorrigeringIm[" + index + "]", "ikkeGyldigAktivitet", "Aktivitet må være av type Arbeidstaker"));
             }
-
-            if (Duration.ZERO.equals(fraværPeriode.getDuration()) && !fraværPeriode.getPeriode().getFraOgMed().equals(fraværPeriode.getPeriode().getTilOgMed())) {
-                feil.add(new Feil("fraværsperioderKorrigeringIm[" + index + "]", "nullingPeriodeOversteget", "Nulling av periode kan ikke ha lenger varighet enn én dag"));
-            }
-
-            if (fraværPeriode.getDuration() != null && fraværPeriode.getDuration().compareTo(Duration.parse("PT7H30M")) == 1) {
-                feil.add(new Feil("fraværsperioderKorrigeringIm[" + index + "]", "varighetOversteget", "Delvis fravær kan ikke overstige 7 timer og 30 min"));
-            }
-
+            feil.addAll(validerKorrigerIMIkkeFulltFravær(index, fraværPeriode));
             index++;
         }
+        feil.addAll(validerIkkeLikeEllerOverlappendePerioder(fraværsperioderKorrigeringIm, "fraværsperioderKorrigeringIm.perioder"));
+        return feil;
+    }
 
-
-
+    private List<Feil> validerIkkeLikeEllerOverlappendePerioder(List<FraværPeriode> fraværPerioder, String feltnavn) {
+        List<Feil> feil = new ArrayList<>();
         Map<Periode, Organisasjonsnummer> perioder = new LinkedHashMap<>();
-        for (FraværPeriode fraværPeriode : fraværsperioderKorrigeringIm) {
+        for (FraværPeriode fraværPeriode : fraværPerioder) {
             if (perioder.containsKey(fraværPeriode.getPeriode())) {
-                feil.add(new Feil("fraværsperioderKorrigeringIm.perioder[" + fraværPeriode.getPeriode().getIso8601() + "]", "likePerioder", "To identiske perioder oppgitt"));
+                feil.add(new Feil(feltnavn + "[" + fraværPeriode.getPeriode().getIso8601() + "]", "likePerioder", "To identiske perioder oppgitt"));
             } else {
                 perioder.put(fraværPeriode.getPeriode(), fraværPeriode.getArbeidsgiverOrgNr());
             }
-            index++;
         }
         if (feil.stream().noneMatch(it -> it.getFeilkode().equals("likePerioder"))) {
             // Valider perioder på tvers
-            feil.addAll(periodeValidator.validerIkkeTillattOverlapp(perioder, "fraværsperioderKorrigeringIm.perioder"));
+            feil.addAll(periodeValidator.validerIkkeTillattOverlapp(perioder, feltnavn));
         }
+        return feil;
+    }
 
+    private List<Feil> validerKorrigerIMIkkeFulltFravær(int index, FraværPeriode fraværPeriode) {
+        if (Versjon.of("1.0.0").equals(versjon)) {
+            return validerKorrigerIMIkkeFulltFraværV1_0_0(index, fraværPeriode);
+        } else {
+            return validerKorrigerIMIkkeFulltFraværV1_1_0(index, fraværPeriode);
+        }
+    }
+
+    private List<Feil> validerKorrigerIMIkkeFulltFraværV1_0_0(int index, FraværPeriode fraværPeriode) {
+        List<Feil> feil = new ArrayList<>();
+        if (fraværPeriode.getDelvisFravær() != null) {
+            feil.add(new Feil("fraværsperioderKorrigeringIm[" + index + "]", "delvisFravær", "feltet delvisFravær er ikke støttet i versjon " + versjon.getVerdi()));
+        }
+        if (Duration.ZERO.equals(fraværPeriode.getDuration()) && !fraværPeriode.getPeriode().getFraOgMed().equals(fraværPeriode.getPeriode().getTilOgMed())) {
+            feil.add(new Feil("fraværsperioderKorrigeringIm[" + index + "]", "nullingPeriodeOversteget", "Nulling av periode kan ikke ha lenger varighet enn én dag"));
+        }
+        if (fraværPeriode.getDuration() != null && fraværPeriode.getDuration().compareTo(Duration.parse("PT7H30M")) == 1) {
+            feil.add(new Feil("fraværsperioderKorrigeringIm[" + index + "]", "varighetOversteget", "Delvis fravær kan ikke overstige 7 timer og 30 min"));
+        }
+        return feil;
+    }
+
+    private List<Feil> validerKorrigerIMIkkeFulltFraværV1_1_0(int index, FraværPeriode fraværPeriode) {
+        List<Feil> feil = new ArrayList<>();
+        if (fraværPeriode.getDelvisFravær() != null) {
+            //det er ikke påkrevet å bruke delvisFravær-feltet for korrigere IM siden det ikke brukes i IM.
+            //tillater bruk og validerer konsistens
+            if (fraværPeriode.getDelvisFravær().getFravær() == null) {
+                feil.add(new Feil("fraværsperioderKorrigeringIm[" + index + "].delvisFravær.fravær", "manglerFraværForDelvisFravær", "Må oppgi fravær ved delvis fravær"));
+            }
+            if (fraværPeriode.getDelvisFravær().getNormalarbeidstid() == null) {
+                feil.add(new Feil("fraværsperioderKorrigeringIm[" + index + "].delvisFravær.normalarbeidstid", "manglerNormalarbeidstidForDelvisFravær", "Må oppgi normalarbeidstid ved delvis fravær"));
+            }
+            if (fraværPeriode.getDelvisFravær().getFravær() != null && fraværPeriode.getDelvisFravær().getNormalarbeidstid() != null) {
+                if (fraværPeriode.getDelvisFravær().getNormalarbeidstid().isZero()) {
+                    feil.add(new Feil("fraværsperioderKorrigeringIm[" + index + "].delvisFravær.normalarbeidstid", "normalarbeidstid0", "Normalarbeidstid kan ikke settes til 0"));
+                } else if (!fraværPeriode.getDelvisFravær().normalisertTilStandarddag().equals(fraværPeriode.getDuration())) {
+                    feil.add(new Feil("fraværsperioderKorrigeringIm[" + index + "].delvisFravær", "avvikDurationOgDelvisFravær", "Duration stemmer ikke med delvisFravær.fravær og delvisFravær.normalarbeidstid"));
+                }
+            }
+        }
+        if (Duration.ZERO.equals(fraværPeriode.getDuration()) && !fraværPeriode.getPeriode().getFraOgMed().equals(fraværPeriode.getPeriode().getTilOgMed())) {
+            feil.add(new Feil("fraværsperioderKorrigeringIm[" + index + "]", "nullingPeriodeOversteget", "Nulling av periode kan ikke ha lenger varighet enn én dag"));
+        }
+        if (fraværPeriode.getDuration() != null && fraværPeriode.getDuration().compareTo(Duration.parse("PT7H30M")) == 1) {
+            feil.add(new Feil("fraværsperioderKorrigeringIm[" + index + "]", "varighetOversteget", "Delvis fravær kan ikke overstige 7 timer og 30 min"));
+        }
         return feil;
     }
 
@@ -233,7 +280,6 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
 
         var index = 0;
         List<Feil> feil = new ArrayList<>();
-
         for (FraværPeriode fraværPeriode : fraværsperioder) {
             if (fraværPeriode.getAktivitetFravær() == null || fraværPeriode.getAktivitetFravær().isEmpty()) {
                 feil.add(new Feil("fraværsperioder[" + index + "]", "påkrevd", "Aktivitet må være satt"));
@@ -244,8 +290,58 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
             if (fraværPeriode.getSøknadÅrsak() == null && fraværPeriode.getAktivitetFravær().contains(AktivitetFravær.ARBEIDSTAKER)) {
                 feil.add(new Feil("fraværsperioder[" + index + "]", "påkrevd", "Søknadårsak må være satt for arbeidstaker"));
             }
+            feil.addAll(validerSøknadIkkeFulltFravær(index, fraværPeriode));
             index++;
         }
+        if (!Versjon.of("1.0.0").equals(versjon)) {
+            feil.addAll(validerIkkeLikeEllerOverlappendePerioder(fraværsperioder, "fraværsperioder"));
+        }
+        return feil;
+    }
+
+    private List<Feil> validerSøknadIkkeFulltFravær(int index, FraværPeriode fraværPeriode) {
+        if (Versjon.of("1.0.0").equals(versjon)) {
+            return validerSøknadIkkeFulltFraværV1_0_0(index, fraværPeriode);
+        } else {
+            return validerSøknadIkkeFulltFraværV1_1_0(index, fraværPeriode);
+        }
+    }
+
+    private List<Feil> validerSøknadIkkeFulltFraværV1_0_0(int index, FraværPeriode fraværPeriode) {
+        List<Feil> feil = new ArrayList<>();
+        if (fraværPeriode.getDelvisFravær() != null) {
+            feil.add(new Feil("fraværsperioder[" + index + "]", "delvisFravær", "feltet delvisFravær er ikke støttet i versjon " + versjon.getVerdi()));
+        }
+        return feil;
+    }
+
+    private List<Feil> validerSøknadIkkeFulltFraværV1_1_0(int index, FraværPeriode fraværPeriode) {
+        List<Feil> feil = new ArrayList<>();
+        if (fraværPeriode.getDuration() != null && !fraværPeriode.getDuration().isZero() && fraværPeriode.getDelvisFravær() == null) {
+            feil.add(new Feil("fraværsperioder[" + index + "].delvisFravær", "manglerDelvisFravær", "feltet delvisFravær er påkrevet i versjon " + versjon.getVerdi() + " når duration er satt til noe som ikke er 0"));
+        }
+        if (fraværPeriode.getDelvisFravær() != null) {
+            if (fraværPeriode.getDelvisFravær().getFravær() == null) {
+                feil.add(new Feil("fraværsperioder[" + index + "].delvisFravær.fravær", "manglerFraværForDelvisFravær", "Må oppgi fravær ved delvis fravær"));
+            }
+            if (fraværPeriode.getDelvisFravær().getNormalarbeidstid() == null) {
+                feil.add(new Feil("fraværsperioder[" + index + "].delvisFravær.normalarbeidstid", "manglerNormalarbeidstidForDelvisFravær", "Må oppgi normalarbeidstid ved delvis fravær"));
+            }
+            if (fraværPeriode.getDelvisFravær().getFravær() != null && fraværPeriode.getDelvisFravær().getNormalarbeidstid() != null) {
+                if (fraværPeriode.getDelvisFravær().getNormalarbeidstid().isZero()) {
+                    feil.add(new Feil("fraværsperioder[" + index + "].delvisFravær.normalarbeidstid", "normalarbeidstid0", "Normalarbeidstid kan ikke settes til 0"));
+                } else if (!fraværPeriode.getDelvisFravær().normalisertTilStandarddag().equals(fraværPeriode.getDuration())) {
+                    feil.add(new Feil("fraværsperioder[" + index + "]", "avvikDurationOgDelvisFravær", "Duration stemmer ikke med delvisFravær.fravær og delvisFravær.normalarbeidstid"));
+                }
+            }
+        }
+        if (Duration.ZERO.equals(fraværPeriode.getDuration()) && !fraværPeriode.getPeriode().getFraOgMed().equals(fraværPeriode.getPeriode().getTilOgMed())) {
+            feil.add(new Feil("fraværsperioder[" + index + "].duration", "nullingPeriodeOversteget", "Nulling av periode kan ikke ha lenger varighet enn én dag"));
+        }
+        if (fraværPeriode.getDuration() != null && fraværPeriode.getDuration().compareTo(Duration.parse("PT7H30M")) == 1) {
+            feil.add(new Feil("fraværsperioder[" + index + "].duration", "varighetOversteget", "Delvis fravær kan ikke overstige 7 timer og 30 min"));
+        }
+
         return feil;
     }
 
@@ -254,7 +350,6 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
 
         var fraværsperioder = Optional.ofNullable(ytelse.getFraværsperioder()).orElse(List.of());
         var fraværsperioderKorrigeringIm = Optional.ofNullable(ytelse.getFraværsperioderKorrigeringIm()).orElse(List.of());
-        ;
 
         if (fraværsperioder.isEmpty() && fraværsperioderKorrigeringIm.isEmpty()) {
             feil.add(new Feil("fraværsperioder", "ingenPerioder", "Må oppgi minst én fraværsperiode"));

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.k9.søknad.felles.Feil;
+import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
@@ -50,7 +51,7 @@ public class OmsorgspengerAleneOmsorg implements OmsorgspengerUtvidetRett {
     }
 
     @Override
-    public YtelseValidator getValidator() {
+    public YtelseValidator getValidator(Versjon versjon) {
         return new MinValidator();
     }
 

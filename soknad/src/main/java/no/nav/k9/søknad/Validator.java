@@ -47,7 +47,7 @@ public class Validator {
 
     private void validerYtelse(Søknad dok, List<Feil> feil) {
         var ytelse = dok.getYtelse();
-        var validator = ytelse.getValidator();
+        var validator = ytelse.getValidator(dok.getVersjon());
 
         var ytelseFeil = validator.valider(ytelse);
         feil.addAll(ytelseFeil);

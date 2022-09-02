@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerAleneOmsorg;
@@ -43,7 +44,12 @@ public interface Ytelse {
 
     Ytelse.Type getType();
 
-    YtelseValidator getValidator();
+    @Deprecated //bruk getValidator(Versjon versjon) istedet
+    default YtelseValidator getValidator() {
+        return getValidator(null);
+    }
+
+    YtelseValidator getValidator(Versjon versjon);
 
     /**
      * @return andre berørte, kjente identifiserte personer (enn søker) - f.eks. barn, ektefelle, verge etc. som er involveres i denne saken.

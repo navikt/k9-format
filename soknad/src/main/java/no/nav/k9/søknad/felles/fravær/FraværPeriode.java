@@ -24,23 +24,27 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
     @Valid
     @NotNull
     @JsonProperty("periode")
-    private final Periode periode;
+    private Periode periode;
+
     @JsonProperty("duration")
-    private final Duration duration;
+    private Duration duration; //OBS sattes tidligere direkte ved delvis fravær, men utledes nå fra verdier i feltet delvisFravær. Indikerer hvor mye fravær det er, etter at det er omregnet til 7.5 times normalarbeidsdag.
+
+    @Valid
+    @JsonProperty("delvisFravær")
+    private DelvisFravær delvisFravær; //denne brukes hvis det er mindre enn 100% fravær fra arbeid i aktuell periode
 
     @Valid
     @JsonProperty(value = "årsak", required = true)
-    private final FraværÅrsak årsak;
+    private FraværÅrsak årsak;
 
     @Valid
     @JsonProperty(value = "søknadÅrsak")
     private SøknadÅrsak søknadÅrsak;
 
-    //TODO konverter fra liste til enkeltelement
     @Valid
-    @Size(min = 1, max = 1)
+    @Size(min = 1, max = 2)
     @JsonProperty(value = "aktivitetFravær", required = true)
-    private final List<AktivitetFravær> aktivitetFravær;
+    private List<AktivitetFravær> aktivitetFravær;
 
     @JsonProperty(value = "arbeidsgiverOrgNr")
     @Valid
@@ -50,10 +54,14 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
     @Valid
     private String arbeidsforholdId;
 
+    public FraværPeriode() {
+    }
+
     @JsonCreator
     public FraværPeriode(
             @JsonProperty("periode") @Valid Periode periode,
             @JsonProperty("duration") Duration duration,
+            @JsonProperty("delvisFravær") DelvisFravær delvisFravær,
             @JsonProperty("årsak") FraværÅrsak årsak,
             @JsonProperty("søknadÅrsak") SøknadÅrsak søknadÅrsak,
             @JsonProperty("aktivitetFravær") List<AktivitetFravær> aktivitetFravær,
@@ -61,11 +69,78 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
             @JsonProperty("arbeidsforholdId") String arbeidsforholdId) {
         this.periode = periode;
         this.duration = duration;
+        this.delvisFravær = delvisFravær;
         this.årsak = årsak;
         this.søknadÅrsak = søknadÅrsak;
         this.aktivitetFravær = aktivitetFravær.stream().sorted().collect(Collectors.toList()); //sorterer for å få enklere equals og hashcode
         this.arbeidsgiverOrgNr = arbeidsgiverOrgNr;
         this.arbeidsforholdId = arbeidsforholdId;
+    }
+
+    public FraværPeriode medPeriode(Periode periode) {
+        this.periode = periode;
+        return this;
+    }
+
+    public FraværPeriode medSøknadsårsak(SøknadÅrsak søknadÅrsak) {
+        this.søknadÅrsak = søknadÅrsak;
+        return this;
+    }
+
+    public FraværPeriode medFraværÅrsak(FraværÅrsak fraværÅrsak) {
+        this.årsak = fraværÅrsak;
+        return this;
+    }
+
+    public FraværPeriode medNulling(){
+        this.delvisFravær = null;
+        this.duration = Duration.ZERO;
+        return this;
+    }
+
+    public FraværPeriode medDelvisFravær(DelvisFravær delvisFravær) {
+        this.delvisFravær = delvisFravær;
+        oppdaterDuration();
+        return this;
+    }
+
+    public FraværPeriode medNormalarbeidstid(Duration normalarbeidstid) {
+        DelvisFravær delvisFravær = new DelvisFravær(normalarbeidstid, this.delvisFravær != null ? this.delvisFravær.getFravær() : null);
+        this.delvisFravær = delvisFravær.getNormalarbeidstid() == null && delvisFravær.getFravær() == null
+                ? null
+                : delvisFravær;
+        oppdaterDuration();
+        return this;
+    }
+
+    private void oppdaterDuration() {
+        this.duration = delvisFravær == null || delvisFravær.getFravær() == null || delvisFravær.getNormalarbeidstid() == null || delvisFravær.getNormalarbeidstid().isZero()
+                ? null
+                : delvisFravær.normalisertTilStandarddag();
+    }
+
+    public FraværPeriode medFravær(Duration fravær) {
+        DelvisFravær delvisFravær = new DelvisFravær(this.delvisFravær != null ? this.delvisFravær.getNormalarbeidstid() : null, fravær);
+        this.delvisFravær = delvisFravær.getNormalarbeidstid() == null && delvisFravær.getFravær() == null
+                ? null
+                : delvisFravær;
+        oppdaterDuration();
+        return this;
+    }
+
+    public FraværPeriode medAktivitetFravær(AktivitetFravær aktivitetFravær) {
+        this.aktivitetFravær = List.of(aktivitetFravær);
+        return this;
+    }
+
+    public FraværPeriode medArbeidsgiverOrgNr(Organisasjonsnummer arbeidsgiverOrgNr) {
+        this.arbeidsgiverOrgNr = arbeidsgiverOrgNr;
+        return this;
+    }
+
+    public FraværPeriode medArbeidsforholdId(String arbeidsforholdId) {
+        this.arbeidsforholdId = arbeidsforholdId;
+        return this;
     }
 
     public Periode getPeriode() {
@@ -74,6 +149,10 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
 
     public Duration getDuration() {
         return duration;
+    }
+
+    public DelvisFravær getDelvisFravær() {
+        return delvisFravær;
     }
 
     public FraværÅrsak getÅrsak() {
@@ -103,6 +182,7 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
         FraværPeriode that = (FraværPeriode) o;
         return periode.equals(that.periode) &&
                 Objects.equals(duration, that.duration) &&
+                Objects.equals(delvisFravær, that.delvisFravær) &&
                 Objects.equals(årsak, that.årsak) &&
                 Objects.equals(aktivitetFravær, that.aktivitetFravær) &&
                 Objects.equals(søknadÅrsak, that.søknadÅrsak) &&
@@ -112,7 +192,7 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(periode, duration, årsak, aktivitetFravær, søknadÅrsak, arbeidsgiverOrgNr, arbeidsforholdId);
+        return Objects.hash(periode, duration, delvisFravær, årsak, aktivitetFravær, søknadÅrsak, arbeidsgiverOrgNr, arbeidsforholdId);
     }
 
     @Override
@@ -124,7 +204,8 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
     public String toString() {
         return "FraværPeriode{" +
                 "periode=" + periode +
-                ", duration=" + duration +
+                (duration != null ? ", duration=" + duration : "") +
+                (delvisFravær != null ? ", delvisFravær=" + delvisFravær : "") +
                 ", årsak=" + årsak +
                 ", søknadÅrsak=" + søknadÅrsak +
                 ", fraværFraAktivitet=" + aktivitetFravær +
