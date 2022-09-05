@@ -11,11 +11,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.junit.jupiter.api.Test;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.felles.Versjon;
@@ -268,7 +264,7 @@ class OmsorgspengerUtbetalingValidatorTest {
     private FraværPeriode lagFraværskorrigeringIm(Organisasjonsnummer organisasjonsnummer, String arbeidsforholdId, Periode søknadsperiode, DelvisFravær delvisFravær) {
         return new FraværPeriode()
                 .medPeriode(søknadsperiode)
-                .medAktivitetFravær(AktivitetFravær.ARBEIDSTAKER)
+                .medAktivitetFravær(List.of(AktivitetFravær.ARBEIDSTAKER))
                 .medDelvisFravær(delvisFravær)
                 .medArbeidsgiverOrgNr(organisasjonsnummer)
                 .medArbeidsforholdId(arbeidsforholdId);
@@ -279,7 +275,7 @@ class OmsorgspengerUtbetalingValidatorTest {
                 .medPeriode(søknadsperiode)
                 .medFraværÅrsak(FraværÅrsak.ORDINÆRT_FRAVÆR)
                 .medSøknadsårsak(SøknadÅrsak.NYOPPSTARTET_HOS_ARBEIDSGIVER)
-                .medAktivitetFravær(AktivitetFravær.ARBEIDSTAKER)
+                .medAktivitetFravær(List.of(AktivitetFravær.ARBEIDSTAKER))
                 .medDelvisFravær(delvisFravær)
                 .medArbeidsgiverOrgNr(organisasjonsnummer);
     }

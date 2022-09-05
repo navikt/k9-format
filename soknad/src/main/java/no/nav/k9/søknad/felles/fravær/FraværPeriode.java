@@ -3,7 +3,6 @@ package no.nav.k9.søknad.felles.fravær;
 import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -72,7 +71,7 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
         this.delvisFravær = delvisFravær;
         this.årsak = årsak;
         this.søknadÅrsak = søknadÅrsak;
-        this.aktivitetFravær = aktivitetFravær.stream().sorted().collect(Collectors.toList()); //sorterer for å få enklere equals og hashcode
+        this.aktivitetFravær = aktivitetFravær.stream().sorted().toList(); //sorterer for å få enklere equals og hashcode
         this.arbeidsgiverOrgNr = arbeidsgiverOrgNr;
         this.arbeidsforholdId = arbeidsforholdId;
     }
@@ -92,7 +91,7 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
         return this;
     }
 
-    public FraværPeriode medNulling(){
+    public FraværPeriode medNulling() {
         this.delvisFravær = null;
         this.duration = Duration.ZERO;
         return this;
@@ -105,10 +104,19 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
     }
 
     public FraværPeriode medNormalarbeidstid(Duration normalarbeidstid) {
-        DelvisFravær delvisFravær = new DelvisFravær(normalarbeidstid, this.delvisFravær != null ? this.delvisFravær.getFravær() : null);
-        this.delvisFravær = delvisFravær.getNormalarbeidstid() == null && delvisFravær.getFravær() == null
+        DelvisFravær nyDelvisFravær = new DelvisFravær(normalarbeidstid, this.delvisFravær != null ? this.delvisFravær.getFravær() : null);
+        this.delvisFravær = nyDelvisFravær.getNormalarbeidstid() == null && nyDelvisFravær.getFravær() == null
                 ? null
-                : delvisFravær;
+                : nyDelvisFravær;
+        oppdaterDuration();
+        return this;
+    }
+
+    public FraværPeriode medFravær(Duration fravær) {
+        DelvisFravær nyDelvisFravær = new DelvisFravær(this.delvisFravær != null ? this.delvisFravær.getNormalarbeidstid() : null, fravær);
+        this.delvisFravær = nyDelvisFravær.getNormalarbeidstid() == null && nyDelvisFravær.getFravær() == null
+                ? null
+                : nyDelvisFravær;
         oppdaterDuration();
         return this;
     }
@@ -119,17 +127,8 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
                 : delvisFravær.normalisertTilStandarddag();
     }
 
-    public FraværPeriode medFravær(Duration fravær) {
-        DelvisFravær delvisFravær = new DelvisFravær(this.delvisFravær != null ? this.delvisFravær.getNormalarbeidstid() : null, fravær);
-        this.delvisFravær = delvisFravær.getNormalarbeidstid() == null && delvisFravær.getFravær() == null
-                ? null
-                : delvisFravær;
-        oppdaterDuration();
-        return this;
-    }
-
-    public FraværPeriode medAktivitetFravær(AktivitetFravær aktivitetFravær) {
-        this.aktivitetFravær = List.of(aktivitetFravær);
+    public FraværPeriode medAktivitetFravær(List<AktivitetFravær> aktivitetFravær) {
+        this.aktivitetFravær = aktivitetFravær.stream().sorted().toList(); //sorterer for enklere equals
         return this;
     }
 
