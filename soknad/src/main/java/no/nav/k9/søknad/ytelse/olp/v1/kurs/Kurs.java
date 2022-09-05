@@ -1,13 +1,14 @@
 package no.nav.k9.søknad.ytelse.olp.v1.kurs;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import no.nav.k9.søknad.felles.type.Periode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -23,18 +24,18 @@ public class Kurs {
     @Valid
     private String formål;
 
-    @JsonProperty(value = "periode", required = true)
+    @JsonProperty(value = "kursperioder", required = true)
     @NotNull
     @Valid
-    private Periode periode;
+    private List<KursPeriodeMedReisetid> kursperioder;
 
     public Kurs() {
     }
 
-    public Kurs(String kursholder, String formålMedKurset, Periode periode) {
+    public Kurs(String kursholder, String formålMedKurset, List<KursPeriodeMedReisetid> kursperioder) {
         this.holder = kursholder;
         this.formål = formålMedKurset;
-        this.periode = periode;
+        this.kursperioder = kursperioder;
     }
 
     public String getHolder() {
@@ -45,7 +46,7 @@ public class Kurs {
         return formål;
     }
 
-    public Periode getPeriode() {
-        return periode;
+    public List<KursPeriodeMedReisetid> getKursperioder() {
+        return new ArrayList<>(kursperioder);
     }
 }
