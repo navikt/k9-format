@@ -11,6 +11,9 @@ import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 
+
+/** @deprecated bruk istedet spesifikke subklasser av {@link no.nav.k9.søknad.SøknadValidator} */
+@Deprecated(forRemoval = true, since = "6.1.1")
 public class Validator {
     private static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
     protected static final String PÅKREVD = "påkrevd";

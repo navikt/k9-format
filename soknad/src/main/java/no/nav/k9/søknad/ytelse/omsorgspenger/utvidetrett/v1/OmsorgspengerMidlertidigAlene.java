@@ -118,6 +118,8 @@ public class OmsorgspengerMidlertidigAlene implements OmsorgspengerUtvidetRett {
         return annenForelderPeriode;
     }
 
+    /** @deprecated bruk istedet {@link OmsorgspengerMidlertidigAleneSøknadValidator} */
+    @Deprecated(forRemoval = true, since = "6.1.1")
     public static class MinValidator extends YtelseValidator {
 
         @Override

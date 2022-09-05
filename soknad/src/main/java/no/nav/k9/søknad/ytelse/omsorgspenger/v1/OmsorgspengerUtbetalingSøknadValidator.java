@@ -14,7 +14,6 @@ import no.nav.k9.søknad.felles.Versjon;
 
 public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<Søknad> {
 
-
     private static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
     private static final Set<Versjon> STØTTEDE_VERSJONER = Set.of(
             Versjon.of("1.0.0"),

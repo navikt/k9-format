@@ -18,6 +18,7 @@ import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
+import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetalingSøknadValidator;
 
 class OpplæringspengerYtelseValidator extends YtelseValidator {
 

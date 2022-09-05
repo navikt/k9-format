@@ -17,11 +17,7 @@ import no.nav.k9.søknad.felles.type.Person;
 
 public class OpplæringspengerSøknadValidator extends SøknadValidator<Søknad> {
 
-
     private static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
-
-    public OpplæringspengerSøknadValidator() {
-    }
 
     private static void validerVersjon(Versjon versjon, List<Feil> feil) {
         if (versjon != null && !versjon.erGyldig()) {
@@ -67,13 +63,6 @@ public class OpplæringspengerSøknadValidator extends SøknadValidator<Søknad>
                     søknad.getBegrunnelseForInnsending().getTekst().isEmpty()) {
                 feil.add(new Feil("begrunnelseForInnsending", "påkrevd", "Søknad inneholder trekk krav perioder uten begrunnelse for innsending."));
             }
-        }
-    }
-
-    public void forsikreValidert(Søknad søknad, List<Periode> gyldigeEndringsperioder) {
-        List<Feil> feil = valider(søknad, gyldigeEndringsperioder);
-        if (!feil.isEmpty()) {
-            throw new ValideringsFeil(feil);
         }
     }
 

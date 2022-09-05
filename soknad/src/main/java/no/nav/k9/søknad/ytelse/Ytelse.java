@@ -44,11 +44,14 @@ public interface Ytelse {
 
     Ytelse.Type getType();
 
-    @Deprecated //bruk getValidator(Versjon versjon) istedet
+    /** @deprecated bruk istedet {@link no.nav.k9.søknad.SøknadValidator} */
+    @Deprecated(forRemoval = true, since = "6.1.1")
     default YtelseValidator getValidator() {
         return getValidator(null);
     }
 
+    /** @deprecated bruk istedet {@link no.nav.k9.søknad.SøknadValidator} */
+    @Deprecated(forRemoval = true, since = "6.1.1")
     YtelseValidator getValidator(Versjon versjon);
 
     /**

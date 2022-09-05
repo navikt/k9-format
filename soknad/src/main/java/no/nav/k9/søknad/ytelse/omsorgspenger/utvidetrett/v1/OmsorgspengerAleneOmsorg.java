@@ -18,6 +18,7 @@ import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
+import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetalingSøknadValidator;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -80,6 +81,8 @@ public class OmsorgspengerAleneOmsorg implements OmsorgspengerUtvidetRett {
         return periode;
     }
 
+    /** @deprecated bruk istedet {@link OmsorgspengerAleneOmsorgSøknadValidator} */
+    @Deprecated(forRemoval = true, since = "6.1.1")
     public static class MinValidator extends YtelseValidator {
 
         @Override

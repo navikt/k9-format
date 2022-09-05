@@ -19,13 +19,6 @@ public class PleiepengerLivetsSluttfaseSøknadValidator extends SøknadValidator
 
     private static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
 
-    public void forsikreValidert(Søknad søknad, List<Periode> gyldigeEndringsperioder) {
-        List<Feil> feil = valider(søknad, gyldigeEndringsperioder);
-        if (!feil.isEmpty()) {
-            throw new ValideringsFeil(feil);
-        }
-    }
-
     @Override
     public List<Feil> valider(Søknad søknad) {
         return valider(søknad, List.of());
