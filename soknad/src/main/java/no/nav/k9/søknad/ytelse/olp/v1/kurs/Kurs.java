@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -26,6 +27,7 @@ public class Kurs {
 
     @JsonProperty(value = "kursperioder", required = true)
     @NotNull
+    @Size(min = 1)
     @Valid
     private List<KursPeriodeMedReisetid> kursperioder;
 

@@ -18,7 +18,7 @@ import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
-import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetalingSøknadValidator;
+import no.nav.k9.søknad.ytelse.olp.v1.kurs.KursPeriodeMedReisetid;
 
 class OpplæringspengerYtelseValidator extends YtelseValidator {
 
@@ -96,6 +96,8 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
 
         validerAtYtelsePeriodenErKomplettMedSøknad(søknadsperiodeTidslinje, olp.getUttak().getPerioder(), "uttak", feilene);
 
+        validerReisetidMotKursperioden(olp.getKurs().getKursperioder(), "kurs", feilene);
+
         return feilene;
     }
 
@@ -125,6 +127,24 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
                 .filter(this::periodeInneholderDagerSomIkkeErHelg)
                 .map(p -> toFeil(p, felt, "ikkeKomplettPeriode", "Periodene er ikke komplett, periode som mangler er: "))
                 .collect(Collectors.toCollection(ArrayList::new)));
+    }
+
+    private void validerReisetidMotKursperioden(List<KursPeriodeMedReisetid> kursperioder, String felt, List<Feil> feil) {
+        for (KursPeriodeMedReisetid kursPeriode : kursperioder) {
+            LocalDate avreise = kursPeriode.getAvreise();
+            LocalDate hjemkomst = kursPeriode.getHjemkomst();
+            Periode periode = kursPeriode.getPeriode();
+
+            if (hjemkomst.isBefore(avreise)) {
+                feil.add(toFeil(periode, felt, "ugyldigKursPeriode", "hjemkomst er før avreise: "));
+            }
+            if (avreise.isAfter(periode.getFraOgMed())) {
+                feil.add(toFeil(periode, felt, "ugyldigKursPeriode", "avreise er etter kursstart: "));
+            }
+            if (hjemkomst.isBefore(periode.getTilOgMed())) {
+                feil.add(toFeil(periode, felt, "ugyldigKursPeriode", "hjemkomst er før kursslutt: "));
+            }
+        }
     }
 
     private List<Feil> validerAtIngenPerioderOverlapperMedTrekkKravPerioder(LocalDateTimeline<Boolean> trekkKravPerioder,
