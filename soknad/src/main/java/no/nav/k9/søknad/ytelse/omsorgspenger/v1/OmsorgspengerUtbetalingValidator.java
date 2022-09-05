@@ -337,10 +337,7 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
                 }
             }
         }
-        if (Duration.ZERO.equals(fraværPeriode.getDuration()) && !fraværPeriode.getPeriode().getFraOgMed().equals(fraværPeriode.getPeriode().getTilOgMed())) {
-            feil.add(new Feil("fraværsperioder[" + index + "].duration", "nullingPeriodeOversteget", "Nulling av periode kan ikke ha lenger varighet enn én dag"));
-        }
-        if (fraværPeriode.getDuration() != null && fraværPeriode.getDuration().compareTo(Duration.parse("PT7H30M")) == 1) {
+        if (fraværPeriode.getDuration() != null && fraværPeriode.getDuration().compareTo(Duration.parse("PT7H30M")) > 0) {
             feil.add(new Feil("fraværsperioder[" + index + "].duration", "varighetOversteget", "Delvis fravær kan ikke overstige 7 timer og 30 min"));
         }
 
