@@ -131,18 +131,22 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
 
     private void validerReisetidMotKursperioden(List<KursPeriodeMedReisetid> kursperioder, String felt, List<Feil> feil) {
         for (KursPeriodeMedReisetid kursPeriode : kursperioder) {
-            LocalDate avreise = kursPeriode.getAvreise();
-            LocalDate hjemkomst = kursPeriode.getHjemkomst();
-            Periode periode = kursPeriode.getPeriode();
+            if (kursPeriode != null) {
+                LocalDate avreise = kursPeriode.getAvreise();
+                LocalDate hjemkomst = kursPeriode.getHjemkomst();
+                Periode periode = kursPeriode.getPeriode();
 
-            if (hjemkomst.isBefore(avreise)) {
-                feil.add(toFeil(periode, felt, "ugyldigKursPeriode", "hjemkomst er før avreise: "));
-            }
-            if (avreise.isAfter(periode.getFraOgMed())) {
-                feil.add(toFeil(periode, felt, "ugyldigKursPeriode", "avreise er etter kursstart: "));
-            }
-            if (hjemkomst.isBefore(periode.getTilOgMed())) {
-                feil.add(toFeil(periode, felt, "ugyldigKursPeriode", "hjemkomst er før kursslutt: "));
+                if (avreise != null && hjemkomst != null && periode != null) {
+                    if (hjemkomst.isBefore(avreise)) {
+                        feil.add(toFeil(periode, felt, "ugyldigKursPeriode", "hjemkomst er før avreise: "));
+                    }
+                    if (avreise.isAfter(periode.getFraOgMed())) {
+                        feil.add(toFeil(periode, felt, "ugyldigKursPeriode", "avreise er etter kursstart: "));
+                    }
+                    if (hjemkomst.isBefore(periode.getTilOgMed())) {
+                        feil.add(toFeil(periode, felt, "ugyldigKursPeriode", "hjemkomst er før kursslutt: "));
+                    }
+                }
             }
         }
     }
