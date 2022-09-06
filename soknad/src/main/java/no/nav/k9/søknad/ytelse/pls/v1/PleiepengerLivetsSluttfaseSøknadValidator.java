@@ -10,7 +10,6 @@ import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.SøknadValidator;
 import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
@@ -18,6 +17,13 @@ import no.nav.k9.søknad.felles.type.Person;
 public class PleiepengerLivetsSluttfaseSøknadValidator extends SøknadValidator<Søknad> {
 
     private static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
+
+    public void forsikreValidert(Søknad søknad, List<Periode> gyldigeEndringsperioder) {
+        List<Feil> feil = valider(søknad, gyldigeEndringsperioder);
+        if (!feil.isEmpty()) {
+            throw new ValideringsFeil(feil);
+        }
+    }
 
     @Override
     public List<Feil> valider(Søknad søknad) {
