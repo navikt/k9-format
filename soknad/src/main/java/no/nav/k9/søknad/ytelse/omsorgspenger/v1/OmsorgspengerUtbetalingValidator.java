@@ -302,7 +302,7 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
     }
 
     private List<Feil> validerSøknadIkkeFulltFravær(int index, FraværPeriode fraværPeriode) {
-        if (Versjon.of("1.0.0").equals(versjon)) {
+        if (versjon == null || Versjon.of("1.0.0").equals(versjon)) {
             return validerSøknadIkkeFulltFraværV1_0_0(index, fraværPeriode);
         } else {
             return validerSøknadIkkeFulltFraværV1_1_0(index, fraværPeriode);
