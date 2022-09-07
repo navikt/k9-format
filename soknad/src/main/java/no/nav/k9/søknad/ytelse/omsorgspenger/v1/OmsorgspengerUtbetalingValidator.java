@@ -314,7 +314,7 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
     private List<Feil> validerSøknadIkkeFulltFraværV1_0_0(int index, FraværPeriode fraværPeriode) {
         List<Feil> feil = new ArrayList<>();
         if (fraværPeriode.getDelvisFravær() != null) {
-            feil.add(new Feil("fraværsperioder[" + index + "]", "delvisFravær", "feltet delvisFravær er ikke støttet i versjon " + (versjon != null ? versjon.getVerdi() : null));
+            feil.add(new Feil("fraværsperioder[" + index + "]", "delvisFravær", "feltet delvisFravær er ikke støttet i versjon " + (versjon != null ? versjon.getVerdi() : null)));
         }
         return feil;
     }
