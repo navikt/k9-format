@@ -21,7 +21,9 @@ import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 
-/** @deprecated bruk istedet {@link OmsorgspengerUtbetalingSøknadValidator} */
+/**
+ * @deprecated bruk istedet {@link OmsorgspengerUtbetalingSøknadValidator}
+ */
 @Deprecated(forRemoval = true, since = "6.1.1") //må ikke fjernes helt, men skal fjernes fra API-et
 public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
     private final PeriodeValidator periodeValidator;
@@ -312,7 +314,7 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
     private List<Feil> validerSøknadIkkeFulltFraværV1_0_0(int index, FraværPeriode fraværPeriode) {
         List<Feil> feil = new ArrayList<>();
         if (fraværPeriode.getDelvisFravær() != null) {
-            feil.add(new Feil("fraværsperioder[" + index + "]", "delvisFravær", "feltet delvisFravær er ikke støttet i versjon " + versjon.getVerdi()));
+            feil.add(new Feil("fraværsperioder[" + index + "]", "delvisFravær", "feltet delvisFravær er ikke støttet i versjon " + (versjon != null ? versjon.getVerdi() : null));
         }
         return feil;
     }
@@ -320,7 +322,7 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
     private List<Feil> validerSøknadIkkeFulltFraværV1_1_0(int index, FraværPeriode fraværPeriode) {
         List<Feil> feil = new ArrayList<>();
         if (fraværPeriode.getDuration() != null && !fraværPeriode.getDuration().isZero() && fraværPeriode.getDelvisFravær() == null) {
-            feil.add(new Feil("fraværsperioder[" + index + "].delvisFravær", "manglerDelvisFravær", "feltet delvisFravær er påkrevet i versjon " + versjon.getVerdi() + " når duration er satt til noe som ikke er 0"));
+            feil.add(new Feil("fraværsperioder[" + index + "].delvisFravær", "manglerDelvisFravær", "feltet delvisFravær er påkrevet i versjon " + (versjon != null ? versjon.getVerdi() : null) + " når duration er satt til noe som ikke er 0"));
         }
         if (fraværPeriode.getDelvisFravær() != null) {
             if (fraværPeriode.getDelvisFravær().getFravær() == null) {
