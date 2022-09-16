@@ -100,7 +100,7 @@ class OmsorgspengerUtbetalingValidatorTest {
     }
 
     @Test
-    void skal_returnere_feil_for_overlappende_perioder() {
+    void skal_returnere_feil_for_overlappende_perioder_ved_korrigering_IM() {
         var fraværPeriode1 = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
         var fraværPeriode2 = new Periode(LocalDate.parse("2021-09-02"), LocalDate.parse("2021-09-03"));
 
@@ -111,8 +111,22 @@ class OmsorgspengerUtbetalingValidatorTest {
         var feil = validatorSøknad.valider(ytelse);
 
 
-        assertThat(feil).hasSize(2);
-        feilInneholder(feil, "fraværsperioderKorrigeringIm.perioder[2021-09-01/2021-09-02]", "overlappendePerioder");
+        assertThat(feil).hasSize(1);
+        feilInneholder(feil, "fraværsperioderKorrigeringIm.perioder[0, 1]", "overlappendePerioder");
+    }
+
+    @Test
+    void skal_være_lov_å_ha_fravær_fra_flere_arbeidsgivere_samtidig() {
+        var fraværPeriode1 = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
+        var fraværPeriode2 = new Periode(LocalDate.parse("2021-09-02"), LocalDate.parse("2021-09-03"));
+
+        OmsorgspengerUtbetaling ytelse = byggOmsorgspengerUtbetalingSøknadBruker(
+                lagSøknadsperiode(orgnr1, fraværPeriode1, null),
+                lagSøknadsperiode(orgnr2, fraværPeriode2, null));
+
+        var feil = validatorSøknad.valider(ytelse);
+
+        assertThat(feil).isEmpty();
     }
 
     @Test
@@ -129,6 +143,22 @@ class OmsorgspengerUtbetalingValidatorTest {
 
         assertThat(feil).hasSize(1);
         feilInneholder(feil, "fraværsperioderKorrigeringIm.perioder[2021-09-01/2021-09-02]", "likePerioder");
+    }
+
+    @Test
+    void skal_returnere_feil_for_identiske_perioder_søknad() {
+
+        var fraværPeriode1 = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
+        var fraværPeriode2 = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
+
+        OmsorgspengerUtbetaling ytelse = byggOmsorgspengerUtbetalingSøknadBruker(
+                    lagSøknadsperiode(orgnr1, fraværPeriode1, null),
+                    lagSøknadsperiode(orgnr1, fraværPeriode2, null));
+
+        var feil = validatorSøknad.valider(ytelse);
+
+        assertThat(feil).hasSize(1);
+        feilInneholder(feil, "fraværsperioder[2021-09-01/2021-09-02]", "likePerioder");
     }
 
     @Test
@@ -194,9 +224,8 @@ class OmsorgspengerUtbetalingValidatorTest {
 
         var feil = validatorSøknad.valider(ytelse);
 
-        assertThat(feil).hasSize(2);
-        feilInneholder(feil, "fraværsperioder[2021-09-01/2021-09-02]", "overlappendePerioder");
-        feilInneholder(feil, "fraværsperioder[2021-09-02/2021-09-03]", "overlappendePerioder");
+        assertThat(feil).hasSize(1);
+        feilInneholder(feil, "fraværsperioder[0, 1]", "overlappendePerioder");
     }
 
     @Test

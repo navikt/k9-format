@@ -2,12 +2,16 @@ package no.nav.k9.søknad.ytelse.omsorgspenger.v1;
 
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
+import no.nav.fpsak.tidsserie.LocalDateSegment;
+import no.nav.fpsak.tidsserie.LocalDateTimeline;
 import no.nav.k9.søknad.PeriodeValidator;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
@@ -205,25 +209,82 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
             feil.addAll(validerKorrigerIMIkkeFulltFravær(index, fraværPeriode));
             index++;
         }
-        feil.addAll(validerIkkeLikeEllerOverlappendePerioder(fraværsperioderKorrigeringIm, "fraværsperioderKorrigeringIm.perioder"));
+        feil.addAll(validerIkkeLikeEllerOverlappendePerioder(fraværsperioderKorrigeringIm));
         return feil;
     }
 
-    private List<Feil> validerIkkeLikeEllerOverlappendePerioder(List<FraværPeriode> fraværPerioder, String feltnavn) {
+    private List<Feil> validerIkkeLikeEllerOverlappendePerioder(List<FraværPeriode> fraværPerioder) {
         List<Feil> feil = new ArrayList<>();
-        Map<Periode, Organisasjonsnummer> perioder = new LinkedHashMap<>();
+        Set<Periode> perioder = new HashSet<>();
         for (FraværPeriode fraværPeriode : fraværPerioder) {
-            if (perioder.containsKey(fraværPeriode.getPeriode())) {
-                feil.add(new Feil(feltnavn + "[" + fraværPeriode.getPeriode().getIso8601() + "]", "likePerioder", "To identiske perioder oppgitt"));
+            if (perioder.contains(fraværPeriode.getPeriode())) {
+                feil.add(new Feil("fraværsperioderKorrigeringIm.perioder[" + fraværPeriode.getPeriode().getIso8601() + "]", "likePerioder", "To identiske perioder oppgitt"));
             } else {
-                perioder.put(fraværPeriode.getPeriode(), fraværPeriode.getArbeidsgiverOrgNr());
+                perioder.add(fraværPeriode.getPeriode());
             }
         }
         if (feil.stream().noneMatch(it -> it.getFeilkode().equals("likePerioder"))) {
-            // Valider perioder på tvers
-            feil.addAll(periodeValidator.validerIkkeTillattOverlapp(perioder, feltnavn));
+            feil.addAll(validerOverlappendePerioderKorrigerIm(fraværPerioder));
         }
         return feil;
+    }
+
+    private List<Feil> validerOverlappendePerioderPrAktivitet(List<FraværPeriode> fraværPerioder) {
+        List<Feil> feil = new ArrayList<>();
+        Map<Aktivitet, List<LocalDateSegment<Integer>>> perioderPrAktivitet = new HashMap<>();
+        Map<Aktivitet, Set<Periode>> unikePerioderPrAktivitet = new HashMap<>();
+        int index = 0;
+        for (FraværPeriode fraværPeriode : fraværPerioder) {
+            for (AktivitetFravær aktivitetType : fraværPeriode.getAktivitetFravær()) {
+                Aktivitet aktivitet = new Aktivitet(aktivitetType, fraværPeriode.getArbeidsgiverOrgNr());
+                Set<Periode> unikePerioder = unikePerioderPrAktivitet.computeIfAbsent(aktivitet, k -> new HashSet<>());
+                if (unikePerioder.contains(fraværPeriode.getPeriode())) {
+                    feil.add(new Feil("fraværsperioder[" + fraværPeriode.getPeriode().getIso8601() + "]", "likePerioder", "To identiske perioder oppgitt for aktivitettype " + (aktivitetType != null ? aktivitetType.getÅrsak() : null)));
+                } else {
+                    unikePerioder.add(fraværPeriode.getPeriode());
+                    perioderPrAktivitet
+                            .computeIfAbsent(aktivitet, k -> new ArrayList<>())
+                            .add(new LocalDateSegment<>(fraværPeriode.getPeriode().getFraOgMed(), fraværPeriode.getPeriode().getTilOgMed(), index));
+                }
+            }
+            index++;
+        }
+        for (var entry : perioderPrAktivitet.entrySet()) {
+            LocalDateTimeline<List<Integer>> overlappendeFraværsperioder = LocalDateTimeline.buildGroupOverlappingSegments(entry.getValue())
+                    .filterValue(v -> v.size() > 1);
+
+            overlappendeFraværsperioder.stream()
+                    .forEach(overlapp -> feil.add(new Feil(
+                            "fraværsperioder" + overlapp.getValue(),
+                            "overlappendePerioder",
+                            "Overlappende periode " + new Periode(overlapp.getFom(), overlapp.getTom()).getIso8601() + " for aktivitetstype: " + (entry.getKey().aktivitetType != null ? entry.getKey().aktivitetType.getÅrsak() : null)
+                    )));
+        }
+        return feil;
+    }
+
+    private List<Feil> validerOverlappendePerioderKorrigerIm(List<FraværPeriode> fraværPerioder) {
+        List<Feil> feil = new ArrayList<>();
+        List<LocalDateSegment<Integer>> perioder = new ArrayList<>();
+        int index = 0;
+        for (FraværPeriode fraværPeriode : fraværPerioder) {
+            perioder.add(new LocalDateSegment<>(fraværPeriode.getPeriode().getFraOgMed(), fraværPeriode.getPeriode().getTilOgMed(), index));
+            index++;
+        }
+
+        LocalDateTimeline<List<Integer>> overlappendePerioder = LocalDateTimeline.buildGroupOverlappingSegments(perioder)
+                .filterValue(v -> v.size() > 1);
+
+        overlappendePerioder.stream()
+                .forEach(overlapp -> feil.add(new Feil(
+                        "fraværsperioderKorrigeringIm.perioder" + overlapp.getValue(),
+                        "overlappendePerioder",
+                        "Overlappende periode " + new Periode(overlapp.getFom(), overlapp.getTom()).getIso8601()
+                )));
+        return feil;
+    }
+
+    private record Aktivitet(AktivitetFravær aktivitetType, Organisasjonsnummer arbeidsgiverOrgNr) {
     }
 
     private List<Feil> validerKorrigerIMIkkeFulltFravær(int index, FraværPeriode fraværPeriode) {
@@ -298,7 +359,7 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
             index++;
         }
         if (!Versjon.of("1.0.0").equals(versjon)) {
-            feil.addAll(validerIkkeLikeEllerOverlappendePerioder(fraværsperioder, "fraværsperioder"));
+            feil.addAll(validerOverlappendePerioderPrAktivitet(fraværsperioder));
         }
         return feil;
     }
