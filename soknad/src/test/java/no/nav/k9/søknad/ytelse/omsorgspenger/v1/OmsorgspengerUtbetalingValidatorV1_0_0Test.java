@@ -11,16 +11,12 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.fravær.AktivitetFravær;
-import no.nav.k9.søknad.felles.fravær.DelvisFravær;
 import no.nav.k9.søknad.felles.fravær.FraværPeriode;
-import no.nav.k9.søknad.felles.fravær.FraværÅrsak;
-import no.nav.k9.søknad.felles.fravær.SøknadÅrsak;
 import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
@@ -121,8 +117,8 @@ class OmsorgspengerUtbetalingValidatorV1_0_0Test {
         var feil = validatorSøknad.valider(ytelse);
 
 
-        assertThat(feil).hasSize(2);
-        feilInneholder(feil, "fraværsperioderKorrigeringIm.perioder[2021-09-01/2021-09-02]", "overlappendePerioder");
+        assertThat(feil).hasSize(1);
+        feilInneholder(feil, "fraværsperioderKorrigeringIm.perioder[0, 1]", "overlappendePerioder");
     }
 
     @Test
