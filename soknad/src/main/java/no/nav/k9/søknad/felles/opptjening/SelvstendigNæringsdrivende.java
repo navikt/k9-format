@@ -393,7 +393,12 @@ public class SelvstendigNæringsdrivende {
             return !regnskapsførerTlf.isEmpty();
         }
 
-        @AssertTrue(message = "erFiskerPåBladB kan ikke være null dersom virksomhetstyper er FISKE.")
+
+        /*
+        Deaktivert da punsj ikke stille dette spørmålet for PSB enda.
+        TODO: Aktivere dette igjen når punsj har dette som et spørsmål.
+         */
+        /*@AssertTrue(message = "erFiskerPåBladB kan ikke være null dersom virksomhetstyper er FISKE.")
         private boolean isFiskerPåBladBValid() {
             if (virksomhetstyper.contains(VirksomhetType.FISKE)) {
                 try {
@@ -404,7 +409,7 @@ public class SelvstendigNæringsdrivende {
                 }
             }
             return true;
-        }
+        }*/
 
         /* Deaktivert pga søknader med feil
         @AssertTrue(message = "[ugyldigVerdi] Norge kan ikke være en landkode")
