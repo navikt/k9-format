@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
+import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -74,6 +75,16 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
         this.aktivitetFravær = aktivitetFravær.stream().sorted().toList(); //sorterer for å få enklere equals og hashcode
         this.arbeidsgiverOrgNr = arbeidsgiverOrgNr;
         this.arbeidsforholdId = arbeidsforholdId;
+    }
+
+    @AssertFalse(message = "Mangler fra-og-med-dato for perioden")
+    boolean isPeriodeManglerFom(){
+        return periode != null && periode.getFraOgMed() == null;
+    }
+
+    @AssertFalse(message = "Mangler til-og-med-dato for perioden")
+    boolean isPeriodeManglerTom(){
+        return periode != null && periode.getTilOgMed() == null;
     }
 
     public FraværPeriode medPeriode(Periode periode) {

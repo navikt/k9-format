@@ -8,12 +8,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.Søknad;
+import no.nav.k9.søknad.SøknadValidator;
+import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.fravær.AktivitetFravær;
 import no.nav.k9.søknad.felles.fravær.DelvisFravær;
@@ -21,12 +24,15 @@ import no.nav.k9.søknad.felles.fravær.FraværPeriode;
 import no.nav.k9.søknad.felles.fravær.FraværÅrsak;
 import no.nav.k9.søknad.felles.fravær.SøknadÅrsak;
 import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
+import no.nav.k9.søknad.felles.personopplysninger.Søker;
+import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.felles.type.Språk;
+import no.nav.k9.søknad.felles.type.SøknadId;
 
 class OmsorgspengerUtbetalingValidatorTest {
-
-    private OmsorgspengerUtbetalingValidator validatorSøknad = new OmsorgspengerUtbetalingValidator(Versjon.of("1.1.0"));
+    private SøknadValidator<Søknad> søknadValidator = new OmsorgspengerUtbetalingSøknadValidator();
 
     private Organisasjonsnummer orgnr1 = Organisasjonsnummer.of("999999999");
     private Organisasjonsnummer orgnr2 = Organisasjonsnummer.of("816338352");
@@ -35,14 +41,14 @@ class OmsorgspengerUtbetalingValidatorTest {
     @Test
     void skal_returnere_ingen_feil_for_minimum_json_søknad() {
         var søknad = TestUtils.minimumJsonSøknad();
-        var feil = new OmsorgspengerUtbetalingSøknadValidator().valider(søknad);
+        var feil = søknadValidator.valider(søknad);
         assertThat(feil).isEmpty();
     }
 
     @Test
     void skal_returnere_ingen_feil_for_komplett_json_søknad() {
         var søknad = TestUtils.komplettJsonSøknad();
-        var feil = new OmsorgspengerUtbetalingSøknadValidator().valider(søknad);
+        var feil = søknadValidator.valider(søknad);
         assertThat(feil).isEmpty();
     }
 
@@ -55,7 +61,7 @@ class OmsorgspengerUtbetalingValidatorTest {
                 lagFraværskorrigeringIm(orgnr1, arbforholdId1, fulltFraværPeriode, null),
                 lagFraværskorrigeringImGammelVariant(orgnr1, arbforholdId1, delvisFraværPeriode, Duration.ofHours(4)));
 
-        var feil = validatorSøknad.valider(ytelse);
+        List<Feil> feil = lagSøknadOgValider(ytelse);
 
         assertThat(feil).isEmpty();
     }
@@ -67,7 +73,7 @@ class OmsorgspengerUtbetalingValidatorTest {
         OmsorgspengerUtbetaling ytelse = byggOmsorgspengerUtbetalingMedFraværskorrigeringIm(
                 lagFraværskorrigeringIm(orgnr1, arbforholdId1, fraværPeriode, null));
 
-        var feil = validatorSøknad.valider(ytelse);
+        List<Feil> feil = lagSøknadOgValider(ytelse);
 
         assertThat(feil).hasSize(1);
         feilInneholder(feil, "fraværsperioder", "perioderOverFlereÅr");
@@ -80,7 +86,7 @@ class OmsorgspengerUtbetalingValidatorTest {
         OmsorgspengerUtbetaling ytelse = byggOmsorgspengerUtbetalingMedFraværskorrigeringIm(
                 lagFraværskorrigeringImGammelVariant(orgnr1, arbforholdId1, fraværPeriode, Duration.ofHours(0)));
 
-        var feil = validatorSøknad.valider(ytelse);
+        List<Feil> feil = lagSøknadOgValider(ytelse);
 
         assertThat(feil).hasSize(1);
         feilInneholder(feil, "fraværsperioderKorrigeringIm[0]", "nullingPeriodeOversteget");
@@ -93,7 +99,7 @@ class OmsorgspengerUtbetalingValidatorTest {
         OmsorgspengerUtbetaling ytelse = byggOmsorgspengerUtbetalingMedFraværskorrigeringIm(
                 lagFraværskorrigeringImGammelVariant(orgnr1, arbforholdId1, fraværPeriode, Duration.parse("PT7H31M")));
 
-        var feil = validatorSøknad.valider(ytelse);
+        List<Feil> feil = lagSøknadOgValider(ytelse);
 
         assertThat(feil).hasSize(1);
         feilInneholder(feil, "fraværsperioderKorrigeringIm[0]", "varighetOversteget");
@@ -108,11 +114,34 @@ class OmsorgspengerUtbetalingValidatorTest {
                 lagFraværskorrigeringIm(orgnr1, arbforholdId1, fraværPeriode1, null),
                 lagFraværskorrigeringIm(orgnr1, arbforholdId1, fraværPeriode2, null));
 
-        var feil = validatorSøknad.valider(ytelse);
+        List<Feil> feil = lagSøknadOgValider(ytelse);
 
 
         assertThat(feil).hasSize(1);
         feilInneholder(feil, "fraværsperioderKorrigeringIm.perioder[0, 1]", "overlappendePerioder");
+    }
+
+    @Test
+    void skal_gi_fornuftig_feilmelding_når_periode_ikke_er_satt() {
+        Periode periode = null;
+        Periode periode1 = new Periode(null, null);
+        Periode periode2 = new Periode(null, LocalDate.now());
+        Periode periode3 = new Periode(LocalDate.now(), null);
+        OmsorgspengerUtbetaling ytelse = byggOmsorgspengerUtbetalingSøknadBruker(
+                lagSøknadsperiode(orgnr1, periode, null),
+                lagSøknadsperiode(orgnr1, periode1, null),
+                lagSøknadsperiode(orgnr1, periode2, null),
+                lagSøknadsperiode(orgnr1, periode3, null)
+        );
+
+        List<Feil> feil = lagSøknadOgValider(ytelse);
+
+        assertThat(feil).hasSize(5);
+        feilInneholder(feil, "ytelse.fraværsperioder['0'].periode", "nullFeil");
+        feilInneholder(feil, "ytelse.fraværsperioder['1'].periodeManglerFom", "påkrevd");
+        feilInneholder(feil, "ytelse.fraværsperioder['1'].periodeManglerTom", "påkrevd");
+        feilInneholder(feil, "ytelse.fraværsperioder['2'].periodeManglerFom", "påkrevd");
+        feilInneholder(feil, "ytelse.fraværsperioder['3'].periodeManglerTom", "påkrevd");
     }
 
     @Test
@@ -124,7 +153,7 @@ class OmsorgspengerUtbetalingValidatorTest {
                 lagSøknadsperiode(orgnr1, fraværPeriode1, null),
                 lagSøknadsperiode(orgnr2, fraværPeriode2, null));
 
-        var feil = validatorSøknad.valider(ytelse);
+        List<Feil> feil = lagSøknadOgValider(ytelse);
 
         assertThat(feil).isEmpty();
     }
@@ -138,7 +167,7 @@ class OmsorgspengerUtbetalingValidatorTest {
                 lagFraværskorrigeringIm(orgnr1, arbforholdId1, fraværPeriode1, null),
                 lagFraværskorrigeringIm(orgnr1, arbforholdId1, fraværPeriode2, null));
 
-        var feil = validatorSøknad.valider(ytelse);
+        List<Feil> feil = lagSøknadOgValider(ytelse);
 
 
         assertThat(feil).hasSize(1);
@@ -152,10 +181,10 @@ class OmsorgspengerUtbetalingValidatorTest {
         var fraværPeriode2 = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
 
         OmsorgspengerUtbetaling ytelse = byggOmsorgspengerUtbetalingSøknadBruker(
-                    lagSøknadsperiode(orgnr1, fraværPeriode1, null),
-                    lagSøknadsperiode(orgnr1, fraværPeriode2, null));
+                lagSøknadsperiode(orgnr1, fraværPeriode1, null),
+                lagSøknadsperiode(orgnr1, fraværPeriode2, null));
 
-        var feil = validatorSøknad.valider(ytelse);
+        List<Feil> feil = lagSøknadOgValider(ytelse);
 
         assertThat(feil).hasSize(1);
         feilInneholder(feil, "fraværsperioder[2021-09-01/2021-09-02]", "likePerioder");
@@ -169,7 +198,7 @@ class OmsorgspengerUtbetalingValidatorTest {
                 lagFraværskorrigeringIm(orgnr1, arbforholdId1, fraværPeriode1, null),
                 lagFraværskorrigeringIm(orgnr2, arbforholdId1, fraværPeriode2, null));
 
-        var feil = validatorSøknad.valider(ytelse);
+        List<Feil> feil = lagSøknadOgValider(ytelse);
 
         assertThat(feil).hasSize(1);
         feilInneholder(feil, "fraværsperioderKorrigeringIm[1]", "ikkeUniktOrgNr");
@@ -183,7 +212,7 @@ class OmsorgspengerUtbetalingValidatorTest {
                 lagFraværskorrigeringIm(orgnr1, arbforholdId1, fraværPeriode1, null),
                 lagFraværskorrigeringIm(orgnr1, null, fraværPeriode2, null));
 
-        var feil = validatorSøknad.valider(ytelse);
+        List<Feil> feil = lagSøknadOgValider(ytelse);
 
         assertThat(feil).hasSize(1);
         feilInneholder(feil, "fraværsperioderKorrigeringIm[1]", "ikkeUnikArbeidsforholdId");
@@ -195,10 +224,12 @@ class OmsorgspengerUtbetalingValidatorTest {
         OmsorgspengerUtbetaling ytelse = byggOmsorgspengerUtbetalingSøknadBruker(
                 lagSøknadsperiode(orgnr1, periode, new DelvisFravær(null, Duration.ofHours(2))));
 
-        var feil = validatorSøknad.valider(ytelse);
+        List<Feil> feil = lagSøknadOgValider(ytelse);
 
-        assertThat(feil).hasSize(1);
+        assertThat(feil).hasSize(2);
+        //TODO bør holde med en feil - begge feilmeldinger rapporterer samme feil
         feilInneholder(feil, "fraværsperioder[0].delvisFravær.normalarbeidstid", "manglerNormalarbeidstidForDelvisFravær");
+        feilInneholder(feil, "ytelse.fraværsperioder['0'].delvisFravær.normalarbeidstid", "nullFeil");
     }
 
     @Test
@@ -207,10 +238,12 @@ class OmsorgspengerUtbetalingValidatorTest {
         OmsorgspengerUtbetaling ytelse = byggOmsorgspengerUtbetalingSøknadBruker(
                 lagSøknadsperiode(orgnr1, periode, new DelvisFravær(Duration.ofHours(2), null)));
 
-        var feil = validatorSøknad.valider(ytelse);
+        List<Feil> feil = lagSøknadOgValider(ytelse);
 
-        assertThat(feil).hasSize(1);
+        assertThat(feil).hasSize(2);
+        //TODO bør holde med en feil - begge feilmeldinger rapporterer samme feil
         feilInneholder(feil, "fraværsperioder[0].delvisFravær.fravær", "manglerFraværForDelvisFravær");
+        feilInneholder(feil, "ytelse.fraværsperioder['0'].delvisFravær.fravær", "nullFeil");
     }
 
     @Test
@@ -222,7 +255,7 @@ class OmsorgspengerUtbetalingValidatorTest {
                 lagSøknadsperiode(orgnr1, periode2, null)
         );
 
-        var feil = validatorSøknad.valider(ytelse);
+        List<Feil> feil = lagSøknadOgValider(ytelse);
 
         assertThat(feil).hasSize(1);
         feilInneholder(feil, "fraværsperioder[0, 1]", "overlappendePerioder");
@@ -231,28 +264,28 @@ class OmsorgspengerUtbetalingValidatorTest {
     @Test
     void skal_ikke_tillate_at_duration_ikke_tilsvarer_som_delvisFravær() {
         var periode = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
-            FraværPeriode fraværPeriode = new FraværPeriode(
-                    periode,
-                    Duration.ofHours(2),
-                    new DelvisFravær(Duration.ofHours(4), Duration.ofHours(2)), //50% fravær fra 4 times-jobb skal oppgis som 4 timer i duration ( 50% av 7.5 timer, og rundet oppover til nærmeste halvtime)
-                    FraværÅrsak.ORDINÆRT_FRAVÆR,
-                    SøknadÅrsak.NYOPPSTARTET_HOS_ARBEIDSGIVER,
-                    List.of(AktivitetFravær.ARBEIDSTAKER),
-                    Organisasjonsnummer.of("999999999"),
-                    null
-            );
+        FraværPeriode fraværPeriode = new FraværPeriode(
+                periode,
+                Duration.ofHours(2),
+                new DelvisFravær(Duration.ofHours(4), Duration.ofHours(2)), //50% fravær fra 4 times-jobb skal oppgis som 4 timer i duration ( 50% av 7.5 timer, og rundet oppover til nærmeste halvtime)
+                FraværÅrsak.ORDINÆRT_FRAVÆR,
+                SøknadÅrsak.NYOPPSTARTET_HOS_ARBEIDSGIVER,
+                List.of(AktivitetFravær.ARBEIDSTAKER),
+                Organisasjonsnummer.of("999999999"),
+                null
+        );
 
-            OmsorgspengerUtbetaling ytelse = byggOmsorgspengerUtbetalingSøknadBruker(
+        OmsorgspengerUtbetaling ytelse = byggOmsorgspengerUtbetalingSøknadBruker(
                 fraværPeriode
         );
 
 
-
-        var feil = validatorSøknad.valider(ytelse);
+        List<Feil> feil = lagSøknadOgValider(ytelse);
 
         assertThat(feil).hasSize(1);
         feilInneholder(feil, "fraværsperioder[0]", "avvikDurationOgDelvisFravær");
     }
+
 
     // Søknad med fraværskorrigering av IM
     private OmsorgspengerUtbetaling byggOmsorgspengerUtbetalingMedFraværskorrigeringIm(FraværPeriode... fraværPerioder) {
@@ -326,5 +359,22 @@ class OmsorgspengerUtbetalingValidatorTest {
         static Søknad komplettJsonSøknad() {
             return Søknad.SerDes.deserialize(jsonFromFile("komplett-søknad-omp-utbetaling-snf.json"));
         }
+
+
+    }
+
+    private List<Feil> lagSøknadOgValider(OmsorgspengerUtbetaling ytelse) {
+        Søknad søknad = lagSøknad(ytelse);
+        return søknadValidator.valider(søknad);
+    }
+
+    private Søknad lagSøknad(OmsorgspengerUtbetaling ytelse) {
+        return new Søknad(
+                new SøknadId("foo"),
+                new Versjon("1.1.0"),
+                ZonedDateTime.now(),
+                new Søker(NorskIdentitetsnummer.of("11111111111")),
+                Språk.NORSK_BOKMÅL,
+                ytelse);
     }
 }
