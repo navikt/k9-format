@@ -109,6 +109,7 @@ class SelvstendigNæringsdrvendeTest {
         validator.verifyIngenFeil(opptjeningAktivitet);
     }
 
+    @Disabled("Kan aktivere dette igjen når punsj spør om SN er fisker på blad B.")
     @Test
     public void erFiskerPåBladBKanIkkeVæreNullDersomVirksomhetstypeErFiske() {
         var periode = new Periode(LocalDate.now(), LocalDate.now().plusWeeks(2));
