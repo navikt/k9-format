@@ -127,21 +127,24 @@ class OmsorgspengerUtbetalingValidatorTest {
         Periode periode1 = new Periode(null, null);
         Periode periode2 = new Periode(null, LocalDate.now());
         Periode periode3 = new Periode(LocalDate.now(), null);
+        Periode periode4 = new Periode(LocalDate.now(), LocalDate.now().minusDays(1));
         OmsorgspengerUtbetaling ytelse = byggOmsorgspengerUtbetalingSøknadBruker(
                 lagSøknadsperiode(orgnr1, periode, null),
                 lagSøknadsperiode(orgnr1, periode1, null),
                 lagSøknadsperiode(orgnr1, periode2, null),
-                lagSøknadsperiode(orgnr1, periode3, null)
+                lagSøknadsperiode(orgnr1, periode3, null),
+                lagSøknadsperiode(orgnr1, periode4, null)
         );
 
         List<Feil> feil = lagSøknadOgValider(ytelse);
 
-        assertThat(feil).hasSize(5);
+        assertThat(feil).hasSize(6);
         feilInneholder(feil, "ytelse.fraværsperioder['0'].periode", "nullFeil");
         feilInneholder(feil, "ytelse.fraværsperioder['1'].periodeManglerFom", "påkrevd");
         feilInneholder(feil, "ytelse.fraværsperioder['1'].periodeManglerTom", "påkrevd");
         feilInneholder(feil, "ytelse.fraværsperioder['2'].periodeManglerFom", "påkrevd");
         feilInneholder(feil, "ytelse.fraværsperioder['3'].periodeManglerTom", "påkrevd");
+        feilInneholder(feil, "ytelse.fraværsperioder['4'].periodeTomFørFom", "påkrevd");
     }
 
     @Test

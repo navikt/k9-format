@@ -57,7 +57,7 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
     }
 
     private List<Feil> validerPeriodeInnenforEttÅr(OmsorgspengerUtbetaling ytelse) {
-        if (ytelse.getFraværsperioder().stream().anyMatch(OmsorgspengerUtbetalingValidator::erPeriodeUdefinert)) {
+        if (ytelse.getFraværsperioder().stream().anyMatch(OmsorgspengerUtbetalingValidator::erPeriodeUgyldig)) {
             //avbryter her for å unngå NPE i koden under når periode ikke er satt, eller ikke er satt ordentlig
             //nødvendig siden validatoren brukes mens søknaden bygges i k9-punsj, og søknad vil således være ukomplett underveis
             //periode valideres andre steder uansett
@@ -240,7 +240,7 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
         Map<Aktivitet, Set<Periode>> unikePerioderPrAktivitet = new HashMap<>();
         int index = 0;
         for (FraværPeriode fraværPeriode : fraværPerioder) {
-            if (erPeriodeUdefinert(fraværPeriode)){
+            if (erPeriodeUgyldig(fraværPeriode)){
                 //avbryter her for å unngå NPE i koden under når periode ikke er satt, eller ikke er satt ordentlig
                 //nødvendig siden validatoren brukes mens søknaden bygges i k9-punsj, og søknad vil således være ukomplett underveis
                 //periode valideres andre steder uansett
@@ -274,9 +274,9 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
         return feil;
     }
 
-    private static boolean erPeriodeUdefinert(FraværPeriode fraværPeriode){
+    private static boolean erPeriodeUgyldig(FraværPeriode fraværPeriode){
         Periode periode = fraværPeriode.getPeriode();
-        return periode == null || periode.getFraOgMed() == null || periode.getTilOgMed() == null;
+        return periode == null || periode.getFraOgMed() == null || periode.getTilOgMed() == null || periode.getTilOgMed().isBefore(periode.getFraOgMed());
     }
 
 
