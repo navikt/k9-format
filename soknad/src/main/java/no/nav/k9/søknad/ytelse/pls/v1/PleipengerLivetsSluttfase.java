@@ -24,6 +24,7 @@ import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
+import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie;
 import no.nav.k9.søknad.ytelse.psb.v1.Uttak;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 
@@ -68,6 +69,10 @@ public class PleipengerLivetsSluttfase implements Ytelse {
     @Valid
     @JsonProperty(value = "uttak"/* ,required = true TODO skal skrus på før lansering */)
     private Uttak uttak = new Uttak(); //TODO vurder å lage egen variant for å ha riktigere navngiving
+
+    @Valid
+    @JsonProperty(value = "lovbestemtFerie", required = true)
+    private LovbestemtFerie lovbestemtFerie = new LovbestemtFerie();
 
     @Override
     public Type getType() {
@@ -190,6 +195,15 @@ public class PleipengerLivetsSluttfase implements Ytelse {
 
     public PleipengerLivetsSluttfase medUttak(Uttak uttak) {
         this.uttak = Objects.requireNonNull(uttak, "uttak");
+        return this;
+    }
+
+    public LovbestemtFerie getLovbestemtFerie() {
+        return lovbestemtFerie;
+    }
+
+    public PleipengerLivetsSluttfase medLovbestemtFerie(LovbestemtFerie lovbestemtFerie) {
+        this.lovbestemtFerie = Objects.requireNonNull(lovbestemtFerie, "lovbestemtFerie");
         return this;
     }
 
