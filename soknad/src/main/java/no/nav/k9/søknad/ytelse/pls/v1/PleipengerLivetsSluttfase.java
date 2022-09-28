@@ -71,7 +71,7 @@ public class PleipengerLivetsSluttfase implements Ytelse {
     private Uttak uttak = new Uttak(); //TODO vurder å lage egen variant for å ha riktigere navngiving
 
     @Valid
-    @JsonProperty(value = "lovbestemtFerie", required = true)
+    @JsonProperty(value = "lovbestemtFerie")
     private LovbestemtFerie lovbestemtFerie = new LovbestemtFerie();
 
     @Override
