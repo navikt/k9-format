@@ -57,15 +57,20 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
     }
 
     private List<Feil> validerPeriodeInnenforEttÅr(OmsorgspengerUtbetaling ytelse) {
-        List<Feil> feil = new ArrayList<>();
+        if (ytelse.getFraværsperioder().stream().anyMatch(OmsorgspengerUtbetalingValidator::erPeriodeUgyldig)) {
+            //avbryter her for å unngå NPE i koden under når periode ikke er satt, eller ikke er satt ordentlig
+            //nødvendig siden validatoren brukes mens søknaden bygges i k9-punsj, og søknad vil således være ukomplett underveis
+            //periode valideres andre steder uansett
+            return List.of();
+        }
         var søknadsperiode = ytelse.getSøknadsperiode();
         var yearMin = søknadsperiode.getFraOgMed().getYear();
         var yearMax = søknadsperiode.getTilOgMed().getYear();
 
         if (yearMin != yearMax) {
-            feil.add(new Feil("fraværsperioder", "perioderOverFlereÅr", "Perioder kan ikke overstige ett år"));
+            return List.of(new Feil("fraværsperioder", "perioderOverFlereÅr", "Perioder kan ikke overstige ett år"));
         }
-        return feil;
+        return List.of();
     }
 
     private List<Feil> validerAktivitet(OmsorgspengerUtbetaling ytelse) {
@@ -235,6 +240,12 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
         Map<Aktivitet, Set<Periode>> unikePerioderPrAktivitet = new HashMap<>();
         int index = 0;
         for (FraværPeriode fraværPeriode : fraværPerioder) {
+            if (erPeriodeUgyldig(fraværPeriode)){
+                //avbryter her for å unngå NPE i koden under når periode ikke er satt, eller ikke er satt ordentlig
+                //nødvendig siden validatoren brukes mens søknaden bygges i k9-punsj, og søknad vil således være ukomplett underveis
+                //periode valideres andre steder uansett
+                continue;
+            }
             for (AktivitetFravær aktivitetType : fraværPeriode.getAktivitetFravær()) {
                 Aktivitet aktivitet = new Aktivitet(aktivitetType, fraværPeriode.getArbeidsgiverOrgNr());
                 Set<Periode> unikePerioder = unikePerioderPrAktivitet.computeIfAbsent(aktivitet, k -> new HashSet<>());
@@ -262,6 +273,12 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
         }
         return feil;
     }
+
+    private static boolean erPeriodeUgyldig(FraværPeriode fraværPeriode){
+        Periode periode = fraværPeriode.getPeriode();
+        return periode == null || periode.getFraOgMed() == null || periode.getTilOgMed() == null || periode.getTilOgMed().isBefore(periode.getFraOgMed());
+    }
+
 
     private List<Feil> validerOverlappendePerioderKorrigerIm(List<FraværPeriode> fraværPerioder) {
         List<Feil> feil = new ArrayList<>();
