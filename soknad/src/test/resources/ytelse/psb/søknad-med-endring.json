@@ -22,6 +22,7 @@
         "perioder": {
           "2018-12-30/..": {
             "virksomhetstyper": ["FISKE", "JORDBRUK_SKOGBRUK", "DAGMAMMA", "ANNEN"],
+            "erFiskerPåBladB": true,
             "regnskapsførerNavn": "Regskapsfører",
             "regnskapsførerTlf": "88888889",
             "erVarigEndring": true,

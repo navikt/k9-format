@@ -43,12 +43,16 @@ public class SelvstendigNæringsdrivende {
     @NotEmpty
     private Map<@NotNull Periode, @NotNull SelvstendigNæringsdrivendePeriodeInfo> perioder;
 
-    /** Orgnummer - påkrevd for norske selskaper, ikke for utenlandske enn så lenge. */
+    /**
+     * Orgnummer - påkrevd for norske selskaper, ikke for utenlandske enn så lenge.
+     */
     @JsonProperty(value = "organisasjonsnummer", required = false)
     @Valid
     private Organisasjonsnummer organisasjonsnummer;
 
-    /** Virsomhetsnavn - påkrevd for norske og utenlandske selskaper. */
+    /**
+     * Virsomhetsnavn - påkrevd for norske og utenlandske selskaper.
+     */
     @JsonProperty(value = "virksomhetNavn", required = false)
     @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message = "[ugyldigSyntaks] '${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     private String virksomhetNavn;
@@ -112,7 +116,9 @@ public class SelvstendigNæringsdrivende {
         return true;
     }
 
-    /**@Deprecated bruk tom ctor*/
+    /**
+     * @Deprecated bruk tom ctor
+     */
     public static final class Builder {
         private Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> perioder;
         private Organisasjonsnummer organisasjonsnummer;
@@ -195,7 +201,10 @@ public class SelvstendigNæringsdrivende {
         //TODO validering etter "ISO 3166 alpha-3"
         @JsonProperty("landkode")
         @Valid
-        private  Landkode landkode;
+        private Landkode landkode;
+
+        @JsonProperty("erFiskerPåBladB")
+        private Boolean erFiskerPåBladB;
 
         public SelvstendigNæringsdrivendePeriodeInfo() {
 
@@ -213,7 +222,9 @@ public class SelvstendigNæringsdrivende {
                 @JsonProperty("bruttoInntekt") BigDecimal bruttoInntekt,
                 @JsonProperty("erNyoppstartet") Boolean erNyoppstartet,
                 @JsonProperty("registrertIUtlandet") Boolean registrertIUtlandet,
-                @JsonProperty("landkode") Landkode landkode) {
+                @JsonProperty("landkode") Landkode landkode,
+                @JsonProperty("erFiskerPåBladB") Boolean erFiskerPåBladB
+        ) {
             this.virksomhetstyper = Objects.requireNonNull(virksomhetstyper, "virksomhetstyper");
             this.regnskapsførerNavn = regnskapsførerNavn;
             this.regnskapsførerTlf = regnskapsførerTlf;
@@ -225,6 +236,7 @@ public class SelvstendigNæringsdrivende {
             this.erNyoppstartet = erNyoppstartet;
             this.registrertIUtlandet = registrertIUtlandet;
             this.landkode = landkode;
+            this.erFiskerPåBladB = erFiskerPåBladB;
         }
 
         public SelvstendigNæringsdrivendePeriodeInfo medVirksomhetstyper(List<VirksomhetType> virksomhetstyper) {
@@ -277,6 +289,11 @@ public class SelvstendigNæringsdrivende {
             return this;
         }
 
+        public SelvstendigNæringsdrivendePeriodeInfo medErFiskerPåBladB(Boolean erFiskerPåBladB) {
+            this.erFiskerPåBladB = Objects.requireNonNull(erFiskerPåBladB, "erFiskerPåBladB");
+            return this;
+        }
+
         public SelvstendigNæringsdrivendePeriodeInfo medLandkode(Landkode landkode) {
             this.landkode = Objects.requireNonNull(landkode, "landkode");
             return this;
@@ -326,6 +343,10 @@ public class SelvstendigNæringsdrivende {
             return virksomhetstyper;
         }
 
+        public Boolean getErFiskerPåBladB() {
+            return erFiskerPåBladB;
+        }
+
         public static Builder builder() {
             return new Builder();
         }
@@ -363,12 +384,26 @@ public class SelvstendigNæringsdrivende {
             }
             return !regnskapsførerNavn.isEmpty();
         }
+
         @AssertTrue(message = "Kan ikke være blankt")
         private boolean isRegnskapsførerTlfEmpty() {
             if (regnskapsførerTlf == null) {
                 return true;
             }
             return !regnskapsførerTlf.isEmpty();
+        }
+
+        @AssertTrue(message = "erFiskerPåBladB kan ikke være null dersom virksomhetstyper er FISKE.")
+        private boolean isFiskerPåBladBValid() {
+            if (virksomhetstyper.contains(VirksomhetType.FISKE)) {
+                try {
+                    Objects.requireNonNull(erFiskerPåBladB, "erFiskerPåBladB");
+                    return true;
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         /* Deaktivert pga søknader med feil
@@ -381,7 +416,7 @@ public class SelvstendigNæringsdrivende {
         }
          */
 
-        @Deprecated (forRemoval = true)
+        @Deprecated(forRemoval = true)
         public static final class Builder {
             private List<VirksomhetType> virksomhetstyper;
             private String regnskapsførerNavn;
@@ -394,6 +429,8 @@ public class SelvstendigNæringsdrivende {
             private Boolean erNyoppstartet;
             private Boolean registrertIUtlandet;
             private Landkode landkode;
+
+            private Boolean erFiskerPåBladB;
 
             private Builder() {
             }
@@ -453,19 +490,27 @@ public class SelvstendigNæringsdrivende {
                 return this;
             }
 
+            public Builder erFiskerPåBladB(Boolean erFiskerPåBladB) {
+                this.erFiskerPåBladB = erFiskerPåBladB;
+                return this;
+            }
+
             @Deprecated
             public SelvstendigNæringsdrivendePeriodeInfo build() {
                 return new SelvstendigNæringsdrivendePeriodeInfo(
-                    virksomhetstyper,
-                    regnskapsførerNavn,
-                    regnskapsførerTelefon,
-                    erVarigEndring,
-                    erNyIArbeidslivet,
-                    endringDato,
-                    endringBegrunnelse,
-                    bruttoInntekt,
-                    erNyoppstartet,
-                    registrertIUtlandet, landkode);
+                        virksomhetstyper,
+                        regnskapsførerNavn,
+                        regnskapsførerTelefon,
+                        erVarigEndring,
+                        erNyIArbeidslivet,
+                        endringDato,
+                        endringBegrunnelse,
+                        bruttoInntekt,
+                        erNyoppstartet,
+                        registrertIUtlandet,
+                        landkode,
+                        erFiskerPåBladB
+                );
             }
         }
     }

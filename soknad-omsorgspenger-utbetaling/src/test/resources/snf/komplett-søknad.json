@@ -19,6 +19,7 @@
       "2018-11-11/2018-11-30": {
         "virksomhetstyper":  [
           "DAGMAMMA", "FISKE", "JORDBRUK_SKOGBRUK", "ANNEN", "-"],
+        "erFiskerPåBladB": true,
         "regnskapsførerNavn": "Regnskapsfører Svensen",
         "regnskapsførerTlf":  "12345678",
         "erVarigEndring":  true,

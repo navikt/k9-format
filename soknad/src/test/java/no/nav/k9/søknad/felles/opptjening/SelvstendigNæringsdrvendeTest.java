@@ -108,5 +108,15 @@ class SelvstendigNæringsdrvendeTest {
 
         validator.verifyIngenFeil(opptjeningAktivitet);
     }
+
+    @Test
+    public void erFiskerPåBladBKanIkkeVæreNullDersomVirksomhetstypeErFiske() {
+        var periode = new Periode(LocalDate.now(), LocalDate.now().plusWeeks(2));
+        var snInfo = new SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo()
+                .medVirksomhetstyper(List.of(VirksomhetType.FISKE));
+        var sn = new SelvstendigNæringsdrivende().medPerioder(Map.of(periode, snInfo));
+        var feil = validator.verifyHarFeil(sn);
+        feilInneholder(feil, "påkrevd");
+    }
 }
 
