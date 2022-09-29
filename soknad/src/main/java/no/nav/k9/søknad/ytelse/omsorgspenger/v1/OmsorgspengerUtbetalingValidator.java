@@ -57,7 +57,7 @@ public class OmsorgspengerUtbetalingValidator extends YtelseValidator {
     }
 
     private List<Feil> validerPeriodeInnenforEttÅr(OmsorgspengerUtbetaling ytelse) {
-        if (ytelse.getFraværsperioder().stream().anyMatch(OmsorgspengerUtbetalingValidator::erPeriodeUgyldig)) {
+        if (ytelse.getFraværsperioder() != null && ytelse.getFraværsperioder().stream().anyMatch(OmsorgspengerUtbetalingValidator::erPeriodeUgyldig)) {
             //avbryter her for å unngå NPE i koden under når periode ikke er satt, eller ikke er satt ordentlig
             //nødvendig siden validatoren brukes mens søknaden bygges i k9-punsj, og søknad vil således være ukomplett underveis
             //periode valideres andre steder uansett
