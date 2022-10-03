@@ -11,6 +11,7 @@ import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.SøknadValidator;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
+import no.nav.k9.søknad.felles.type.Periode;
 
 public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<Søknad> {
 
@@ -27,7 +28,9 @@ public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<S�
     }
 
     @Override
-    public List<Feil> valider(Søknad søknad) {
+    public List<Feil> valider(Søknad søknad) { return valider(søknad, List.of()); }
+
+    public List<Feil> valider(Søknad søknad, List<Periode> gyldigeEndringsperioder) {
         var validate = VALIDATOR_FACTORY.getValidator().validate(søknad);
 
         List<Feil> feil = validate.stream()
@@ -36,8 +39,8 @@ public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<S�
 
         validerFelterPåSøknad(søknad, feil);
 
-        validerVersjon(søknad.getVersjon(), feil);
-        feil.addAll(new OmsorgspengerUtbetalingValidator(søknad.getVersjon()).valider(søknad.getYtelse()));
+        OmsorgspengerUtbetaling ytelse = (OmsorgspengerUtbetaling) søknad.getYtelse();
+        feil.addAll(new OmsorgspengerUtbetalingValidator(søknad.getVersjon()).validerMedGyldigEndringsperodeHvisDenFinnes(søknad.getYtelse(), gyldigeEndringsperioder));
 
         return feil;
     }

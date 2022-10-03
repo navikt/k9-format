@@ -32,7 +32,7 @@ import no.nav.k9.søknad.felles.type.Språk;
 import no.nav.k9.søknad.felles.type.SøknadId;
 
 class OmsorgspengerUtbetalingValidatorTest {
-    private SøknadValidator<Søknad> søknadValidator = new OmsorgspengerUtbetalingSøknadValidator();
+    private OmsorgspengerUtbetalingSøknadValidator søknadValidator = new OmsorgspengerUtbetalingSøknadValidator();
 
     private Organisasjonsnummer orgnr1 = Organisasjonsnummer.of("999999999");
     private Organisasjonsnummer orgnr2 = Organisasjonsnummer.of("816338352");
@@ -76,7 +76,7 @@ class OmsorgspengerUtbetalingValidatorTest {
         List<Feil> feil = lagSøknadOgValider(ytelse);
 
         assertThat(feil).hasSize(1);
-        feilInneholder(feil, "fraværsperioder", "perioderOverFlereÅr");
+        feilInneholder(feil, "ytelse.fraværsperioder", "perioderOverFlereÅr");
     }
 
     @Test
@@ -89,7 +89,7 @@ class OmsorgspengerUtbetalingValidatorTest {
         List<Feil> feil = lagSøknadOgValider(ytelse);
 
         assertThat(feil).hasSize(1);
-        feilInneholder(feil, "fraværsperioderKorrigeringIm[0]", "nullingPeriodeOversteget");
+        feilInneholder(feil, "ytelse.fraværsperioderKorrigeringIm[0]", "nullingPeriodeOversteget");
     }
 
     @Test
@@ -102,7 +102,7 @@ class OmsorgspengerUtbetalingValidatorTest {
         List<Feil> feil = lagSøknadOgValider(ytelse);
 
         assertThat(feil).hasSize(1);
-        feilInneholder(feil, "fraværsperioderKorrigeringIm[0]", "varighetOversteget");
+        feilInneholder(feil, "ytelse.fraværsperioderKorrigeringIm[0]", "varighetOversteget");
     }
 
     @Test
@@ -118,18 +118,16 @@ class OmsorgspengerUtbetalingValidatorTest {
 
 
         assertThat(feil).hasSize(1);
-        feilInneholder(feil, "fraværsperioderKorrigeringIm.perioder[0, 1]", "overlappendePerioder");
+        feilInneholder(feil, "ytelse.fraværsperioderKorrigeringIm.perioder[0, 1]", "overlappendePerioder");
     }
 
     @Test
     void skal_gi_fornuftig_feilmelding_når_periode_ikke_er_satt() {
-        Periode periode = null;
         Periode periode1 = new Periode(null, null);
         Periode periode2 = new Periode(null, LocalDate.now());
         Periode periode3 = new Periode(LocalDate.now(), null);
         Periode periode4 = new Periode(LocalDate.now(), LocalDate.now().minusDays(1));
         OmsorgspengerUtbetaling ytelse = byggOmsorgspengerUtbetalingSøknadBruker(
-                lagSøknadsperiode(orgnr1, periode, null),
                 lagSøknadsperiode(orgnr1, periode1, null),
                 lagSøknadsperiode(orgnr1, periode2, null),
                 lagSøknadsperiode(orgnr1, periode3, null),
@@ -138,13 +136,11 @@ class OmsorgspengerUtbetalingValidatorTest {
 
         List<Feil> feil = lagSøknadOgValider(ytelse);
 
-        assertThat(feil).hasSize(6);
-        feilInneholder(feil, "ytelse.fraværsperioder['0'].periode", "nullFeil");
+        assertThat(feil).hasSize(5);
+        feilInneholder(feil, "ytelse.fraværsperioder['0'].periodeManglerFom", "påkrevd");
         feilInneholder(feil, "ytelse.fraværsperioder['1'].periodeManglerFom", "påkrevd");
-        feilInneholder(feil, "ytelse.fraværsperioder['1'].periodeManglerTom", "påkrevd");
-        feilInneholder(feil, "ytelse.fraværsperioder['2'].periodeManglerFom", "påkrevd");
-        feilInneholder(feil, "ytelse.fraværsperioder['3'].periodeManglerTom", "påkrevd");
-        feilInneholder(feil, "ytelse.fraværsperioder['4'].periodeTomFørFom", "påkrevd");
+        feilInneholder(feil, "ytelse.fraværsperioder['2'].periodeManglerTom", "påkrevd");
+        feilInneholder(feil, "ytelse.fraværsperioder['3'].periodeTomFørFom", "påkrevd");
     }
 
     @Test
@@ -174,7 +170,7 @@ class OmsorgspengerUtbetalingValidatorTest {
 
 
         assertThat(feil).hasSize(1);
-        feilInneholder(feil, "fraværsperioderKorrigeringIm.perioder[2021-09-01/2021-09-02]", "likePerioder");
+        feilInneholder(feil, "ytelse.fraværsperioderKorrigeringIm.perioder[2021-09-01/2021-09-02]", "likePerioder");
     }
 
     @Test
@@ -190,7 +186,7 @@ class OmsorgspengerUtbetalingValidatorTest {
         List<Feil> feil = lagSøknadOgValider(ytelse);
 
         assertThat(feil).hasSize(1);
-        feilInneholder(feil, "fraværsperioder[2021-09-01/2021-09-02]", "likePerioder");
+        feilInneholder(feil, "ytelse.fraværsperioder[2021-09-01/2021-09-02]", "likePerioder");
     }
 
     @Test
@@ -204,7 +200,7 @@ class OmsorgspengerUtbetalingValidatorTest {
         List<Feil> feil = lagSøknadOgValider(ytelse);
 
         assertThat(feil).hasSize(1);
-        feilInneholder(feil, "fraværsperioderKorrigeringIm[1]", "ikkeUniktOrgNr");
+        feilInneholder(feil, "ytelse.fraværsperioderKorrigeringIm[1]", "ikkeUniktOrgNr");
     }
 
     @Test
@@ -218,7 +214,7 @@ class OmsorgspengerUtbetalingValidatorTest {
         List<Feil> feil = lagSøknadOgValider(ytelse);
 
         assertThat(feil).hasSize(1);
-        feilInneholder(feil, "fraværsperioderKorrigeringIm[1]", "ikkeUnikArbeidsforholdId");
+        feilInneholder(feil, "ytelse.fraværsperioderKorrigeringIm[1]", "ikkeUnikArbeidsforholdId");
     }
 
     @Test
@@ -231,7 +227,7 @@ class OmsorgspengerUtbetalingValidatorTest {
 
         assertThat(feil).hasSize(2);
         //TODO bør holde med en feil - begge feilmeldinger rapporterer samme feil
-        feilInneholder(feil, "fraværsperioder[0].delvisFravær.normalarbeidstid", "manglerNormalarbeidstidForDelvisFravær");
+        feilInneholder(feil, "ytelse.fraværsperioder[0].delvisFravær.normalarbeidstid", "manglerNormalarbeidstidForDelvisFravær");
         feilInneholder(feil, "ytelse.fraværsperioder['0'].delvisFravær.normalarbeidstid", "nullFeil");
     }
 
@@ -245,7 +241,7 @@ class OmsorgspengerUtbetalingValidatorTest {
 
         assertThat(feil).hasSize(2);
         //TODO bør holde med en feil - begge feilmeldinger rapporterer samme feil
-        feilInneholder(feil, "fraværsperioder[0].delvisFravær.fravær", "manglerFraværForDelvisFravær");
+        feilInneholder(feil, "ytelse.fraværsperioder[0].delvisFravær.fravær", "manglerFraværForDelvisFravær");
         feilInneholder(feil, "ytelse.fraværsperioder['0'].delvisFravær.fravær", "nullFeil");
     }
 
@@ -261,7 +257,7 @@ class OmsorgspengerUtbetalingValidatorTest {
         List<Feil> feil = lagSøknadOgValider(ytelse);
 
         assertThat(feil).hasSize(1);
-        feilInneholder(feil, "fraværsperioder[0, 1]", "overlappendePerioder");
+        feilInneholder(feil, "ytelse.fraværsperioder[0, 1]", "overlappendePerioder");
     }
 
     @Test
@@ -286,7 +282,119 @@ class OmsorgspengerUtbetalingValidatorTest {
         List<Feil> feil = lagSøknadOgValider(ytelse);
 
         assertThat(feil).hasSize(1);
-        feilInneholder(feil, "fraværsperioder[0]", "avvikDurationOgDelvisFravær");
+        feilInneholder(feil, "ytelse.fraværsperioder[0]", "avvikDurationOgDelvisFravær");
+    }
+
+
+    @Test
+    void korrigering_av_perioder_innenfor_eksisterende_perioder_skal_ikke_feile() {
+        List<Periode> eksisterendePerioder = List.of(
+                new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-03"))
+        );
+
+        var endringsperiode = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-03"));
+        OmsorgspengerUtbetaling korrigering = byggOmsorgspengerUtbetalingSøknadBruker(
+                lagSøknadsperiode(orgnr1, endringsperiode, null)
+        );
+
+
+        List<Feil> feil = lagSøknadOgValider(korrigering, eksisterendePerioder);
+
+        assertThat(feil).hasSize(0);
+    }
+
+
+    @Test
+    void korrigering_av_perioder_som_overlapper_eksisterende_perioder_skal_feile() {
+        List<Periode> eksisterendePerioder = List.of(
+                new Periode(LocalDate.parse("2021-09-06"), LocalDate.parse("2021-09-08"))
+        );
+
+        var endringesperiode = new Periode(LocalDate.parse("2021-09-07"), LocalDate.parse("2021-09-10"));
+        OmsorgspengerUtbetaling korrigering = byggOmsorgspengerUtbetalingSøknadBruker(
+                lagSøknadsperiode(orgnr1, endringesperiode, null)
+        );
+
+
+        List<Feil> feil = lagSøknadOgValider(korrigering, eksisterendePerioder);
+
+        assertThat(feil).hasSize(1);
+        feilInneholder(
+                feil,
+                "ytelse.søknadsperiode.perioder",
+                "ugyldigPeriode",
+                "Perioden er utenfor gyldig interval. Gyldig interval: ([[2021-09-06, 2021-09-08]]), Ugyldig periode: 2021-09-09/2021-09-10"
+                );
+    }
+
+
+    @Test
+    void korrigering_av_perioder_som_er_utenfor_eksisterende_perioder_skal_feile() {
+        List<Periode> eksisterendePerioder = List.of(
+                new Periode(LocalDate.parse("2021-09-06"), LocalDate.parse("2021-09-08"))
+        );
+
+        var endringesperiode = new Periode(LocalDate.parse("2021-09-09"), LocalDate.parse("2021-09-10"));
+        OmsorgspengerUtbetaling korrigering = byggOmsorgspengerUtbetalingSøknadBruker(
+                lagSøknadsperiode(orgnr1, endringesperiode, null)
+        );
+
+
+        List<Feil> feil = lagSøknadOgValider(korrigering, eksisterendePerioder);
+
+        assertThat(feil).hasSize(1);
+        feilInneholder(
+                feil,
+                "ytelse.søknadsperiode.perioder",
+                "ugyldigPeriode",
+                "Perioden er utenfor gyldig interval. Gyldig interval: ([[2021-09-06, 2021-09-08]]), Ugyldig periode: 2021-09-09/2021-09-10"
+        );
+    }
+
+    @Test
+    void korrigering_av_perioder_som_er_før_eksisterende_perioder_skal_feile() {
+        List<Periode> eksisterendePerioder = List.of(
+                new Periode(LocalDate.parse("2021-09-08"), LocalDate.parse("2021-09-10"))
+        );
+
+        var endringesperiode = new Periode(LocalDate.parse("2021-09-06"), LocalDate.parse("2021-09-07"));
+        OmsorgspengerUtbetaling korrigering = byggOmsorgspengerUtbetalingSøknadBruker(
+                lagSøknadsperiode(orgnr1, endringesperiode, null)
+        );
+
+
+        List<Feil> feil = lagSøknadOgValider(korrigering, eksisterendePerioder);
+
+        assertThat(feil).hasSize(1);
+        feilInneholder(
+                feil,
+                "ytelse.søknadsperiode.perioder",
+                "ugyldigPeriode",
+                "Perioden er utenfor gyldig interval. Gyldig interval: ([[2021-09-08, 2021-09-10]]), Ugyldig periode: 2021-09-06/2021-09-07"
+        );
+    }
+
+    @Test
+    void korrigering_av_perioder_som_overlapper_før_eksisterende_perioder_skal_feile() {
+        List<Periode> eksisterendePerioder = List.of(
+                new Periode(LocalDate.parse("2021-09-08"), LocalDate.parse("2021-09-10"))
+        );
+
+        var endringesperiode = new Periode(LocalDate.parse("2021-09-06"), LocalDate.parse("2021-09-09"));
+        OmsorgspengerUtbetaling korrigering = byggOmsorgspengerUtbetalingSøknadBruker(
+                lagSøknadsperiode(orgnr1, endringesperiode, null)
+        );
+
+
+        List<Feil> feil = lagSøknadOgValider(korrigering, eksisterendePerioder);
+
+        assertThat(feil).hasSize(1);
+        feilInneholder(
+                feil,
+                "ytelse.søknadsperiode.perioder",
+                "ugyldigPeriode",
+                "Perioden er utenfor gyldig interval. Gyldig interval: ([[2021-09-08, 2021-09-10]]), Ugyldig periode: 2021-09-06/2021-09-07"
+        );
     }
 
 
@@ -367,8 +475,12 @@ class OmsorgspengerUtbetalingValidatorTest {
     }
 
     private List<Feil> lagSøknadOgValider(OmsorgspengerUtbetaling ytelse) {
+        return lagSøknadOgValider(ytelse, List.of());
+    }
+
+    private List<Feil> lagSøknadOgValider(OmsorgspengerUtbetaling ytelse, List<Periode> endringsperioder) {
         Søknad søknad = lagSøknad(ytelse);
-        return søknadValidator.valider(søknad);
+        return søknadValidator.valider(søknad, endringsperioder);
     }
 
     private Søknad lagSøknad(OmsorgspengerUtbetaling ytelse) {
