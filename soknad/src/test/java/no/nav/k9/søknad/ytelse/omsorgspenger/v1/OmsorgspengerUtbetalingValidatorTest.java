@@ -475,7 +475,8 @@ class OmsorgspengerUtbetalingValidatorTest {
     }
 
     private List<Feil> lagSøknadOgValider(OmsorgspengerUtbetaling ytelse) {
-        return lagSøknadOgValider(ytelse, List.of());
+        Søknad søknad = lagSøknad(ytelse);
+        return søknadValidator.valider(søknad);
     }
 
     private List<Feil> lagSøknadOgValider(OmsorgspengerUtbetaling ytelse, List<Periode> endringsperioder) {

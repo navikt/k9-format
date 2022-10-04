@@ -1,5 +1,6 @@
 package no.nav.k9.søknad.ytelse.omsorgspenger.v1;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,19 +29,29 @@ public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<S�
     }
 
     @Override
-    public List<Feil> valider(Søknad søknad) { return valider(søknad, List.of()); }
+    public List<Feil> valider(Søknad søknad) {
+        List<Feil> feil = new ArrayList<>();
+        feil.addAll(validerFelles(søknad));
+        feil.addAll(new OmsorgspengerUtbetalingValidator(søknad.getVersjon()).valider(søknad.getYtelse()));
+        return feil;
+    }
 
-    public List<Feil> valider(Søknad søknad, List<Periode> gyldigeEndringsperioder) {
+    private List<Feil> validerFelles(Søknad søknad) {
         var validate = VALIDATOR_FACTORY.getValidator().validate(søknad);
 
         List<Feil> feil = validate.stream()
                 .map(Feil::toFeil)
                 .collect(Collectors.toList());
 
+        validerVersjon(søknad.getVersjon(), feil);
         validerFelterPåSøknad(søknad, feil);
+        return feil;
+    }
 
-        OmsorgspengerUtbetaling ytelse = (OmsorgspengerUtbetaling) søknad.getYtelse();
-        feil.addAll(new OmsorgspengerUtbetalingValidator(søknad.getVersjon()).validerMedGyldigEndringsperodeHvisDenFinnes(søknad.getYtelse(), gyldigeEndringsperioder));
+    public List<Feil> valider(Søknad søknad, List<Periode> gyldigeEndringsperioder) {
+        List<Feil> feil = new ArrayList<>();
+        feil.addAll(validerFelles(søknad));
+        feil.addAll(new OmsorgspengerUtbetalingValidator(søknad.getVersjon()).valider(søknad.getYtelse(), gyldigeEndringsperioder));
 
         return feil;
     }
