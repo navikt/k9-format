@@ -84,7 +84,7 @@ class OmsorgspengerUtbetalingValidatorV1_0_0Test {
         List<Feil> feil = lagSøknadOgValider(ytelse);
 
         assertThat(feil).hasSize(1);
-        feilInneholder(feil, "fraværsperioder", "perioderOverFlereÅr");
+        feilInneholder(feil, "ytelse.fraværsperioder", "perioderOverFlereÅr");
     }
 
     @Test
@@ -97,7 +97,7 @@ class OmsorgspengerUtbetalingValidatorV1_0_0Test {
         List<Feil> feil = lagSøknadOgValider(ytelse);
 
         assertThat(feil).hasSize(1);
-        feilInneholder(feil, "fraværsperioderKorrigeringIm[0]", "nullingPeriodeOversteget");
+        feilInneholder(feil, "ytelse.fraværsperioderKorrigeringIm[0]", "nullingPeriodeOversteget");
     }
 
     @Test
@@ -110,7 +110,7 @@ class OmsorgspengerUtbetalingValidatorV1_0_0Test {
         List<Feil> feil = lagSøknadOgValider(ytelse);
 
         assertThat(feil).hasSize(1);
-        feilInneholder(feil, "fraværsperioderKorrigeringIm[0]", "varighetOversteget");
+        feilInneholder(feil, "ytelse.fraværsperioderKorrigeringIm[0]", "varighetOversteget");
     }
 
     @Test
@@ -126,7 +126,7 @@ class OmsorgspengerUtbetalingValidatorV1_0_0Test {
 
 
         assertThat(feil).hasSize(1);
-        feilInneholder(feil, "fraværsperioderKorrigeringIm.perioder[0, 1]", "overlappendePerioder");
+        feilInneholder(feil, "ytelse.fraværsperioderKorrigeringIm.perioder[0, 1]", "overlappendePerioder");
     }
 
     @Test
@@ -142,7 +142,7 @@ class OmsorgspengerUtbetalingValidatorV1_0_0Test {
 
 
         assertThat(feil).hasSize(1);
-        feilInneholder(feil, "fraværsperioderKorrigeringIm.perioder[2021-09-01/2021-09-02]", "likePerioder");
+        feilInneholder(feil, "ytelse.fraværsperioderKorrigeringIm.perioder[2021-09-01/2021-09-02]", "likePerioder");
     }
 
     @Test
@@ -156,7 +156,7 @@ class OmsorgspengerUtbetalingValidatorV1_0_0Test {
         List<Feil> feil = lagSøknadOgValider(ytelse);
 
         assertThat(feil).hasSize(1);
-        feilInneholder(feil, "fraværsperioderKorrigeringIm[1]", "ikkeUniktOrgNr");
+        feilInneholder(feil, "ytelse.fraværsperioderKorrigeringIm[1]", "ikkeUniktOrgNr");
     }
 
     @Test
@@ -170,7 +170,7 @@ class OmsorgspengerUtbetalingValidatorV1_0_0Test {
         List<Feil> feil = lagSøknadOgValider(ytelse);
 
         assertThat(feil).hasSize(1);
-        feilInneholder(feil, "fraværsperioderKorrigeringIm[1]", "ikkeUnikArbeidsforholdId");
+        feilInneholder(feil, "ytelse.fraværsperioderKorrigeringIm[1]", "ikkeUnikArbeidsforholdId");
     }
 
     // Søknad med fraværskorrigering av IM

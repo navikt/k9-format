@@ -1,5 +1,6 @@
 package no.nav.k9.søknad.ytelse.omsorgspenger.v1;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -11,6 +12,7 @@ import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.SøknadValidator;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
+import no.nav.k9.søknad.felles.type.Periode;
 
 public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<Søknad> {
 
@@ -28,16 +30,28 @@ public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<S�
 
     @Override
     public List<Feil> valider(Søknad søknad) {
+        List<Feil> feil = new ArrayList<>();
+        feil.addAll(validerFelles(søknad));
+        feil.addAll(new OmsorgspengerUtbetalingValidator(søknad.getVersjon()).valider(søknad.getYtelse()));
+        return feil;
+    }
+
+    private List<Feil> validerFelles(Søknad søknad) {
         var validate = VALIDATOR_FACTORY.getValidator().validate(søknad);
 
         List<Feil> feil = validate.stream()
                 .map(Feil::toFeil)
                 .collect(Collectors.toList());
 
-        validerFelterPåSøknad(søknad, feil);
-
         validerVersjon(søknad.getVersjon(), feil);
-        feil.addAll(new OmsorgspengerUtbetalingValidator(søknad.getVersjon()).valider(søknad.getYtelse()));
+        validerFelterPåSøknad(søknad, feil);
+        return feil;
+    }
+
+    public List<Feil> valider(Søknad søknad, List<Periode> gyldigeEndringsperioder) {
+        List<Feil> feil = new ArrayList<>();
+        feil.addAll(validerFelles(søknad));
+        feil.addAll(new OmsorgspengerUtbetalingValidator(søknad.getVersjon()).valider(søknad.getYtelse(), gyldigeEndringsperioder));
 
         return feil;
     }
