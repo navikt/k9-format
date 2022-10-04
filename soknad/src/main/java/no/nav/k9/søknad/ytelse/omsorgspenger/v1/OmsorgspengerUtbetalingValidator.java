@@ -58,12 +58,6 @@ class OmsorgspengerUtbetalingValidator extends YtelseValidator {
         return feil;
     }
 
-    @Override
-    public void forsikreValidert(Ytelse ytelse, List<Periode> gyldigeEndringsperioder) {
-        Objects.requireNonNull(gyldigeEndringsperioder, "gyldigeEndringsperioder");
-        super.forsikreValidert(ytelse, gyldigeEndringsperioder);
-    }
-
     List<Feil> validerMedGyldigEndringsperodeHvisDenFinnes(Ytelse ytelse, List<Periode> gyldigeEndringsperioder) {
         Objects.requireNonNull(gyldigeEndringsperioder, "gyldigeEndringsperioder");
 
