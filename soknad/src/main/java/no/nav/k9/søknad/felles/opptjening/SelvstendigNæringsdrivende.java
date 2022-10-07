@@ -184,6 +184,7 @@ public class SelvstendigNæringsdrivende {
         private LocalDate endringDato;
 
         @JsonProperty("endringBegrunnelse")
+        @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}§]+$", message = "[${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
         private String endringBegrunnelse;
 
         @JsonProperty("bruttoInntekt")
