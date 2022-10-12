@@ -85,10 +85,10 @@ class OmsorgspengerUtbetalingValidator extends YtelseValidator {
         } else if (omp.getFraværsperioderKorrigeringIm() != null && !omp.getFraværsperioderKorrigeringIm().isEmpty()) {
 
             List<Periode> fraværsperioderKorrigeringIm = omp.getFraværsperioderKorrigeringIm().stream().map(FraværPeriode::getPeriode).toList();
-            final LocalDateTimeline<Boolean> fraværsperioderTidslinje = lagTidslinjeOgValider(fraværsperioderKorrigeringIm, "fraværsperioderKorrigeringIm.perioder");
+            final LocalDateTimeline<Boolean> fraværsperioderKorrigeringImTidslinje = lagTidslinjeOgValider(fraværsperioderKorrigeringIm, "fraværsperioderKorrigeringIm.perioder");
             final LocalDateTimeline<Boolean> gyldigEndringsperiodeTidslinje = lagTidslinjeOgValider(gyldigeEndringsperioder, "gyldigeEndringsperioder.perioder");
 
-            return validerAtYtelsePerioderErInnenforIntervalForEndring(fraværsperioderTidslinje, gyldigEndringsperiodeTidslinje, "raværsperioderKorrigeringIm.perioder");
+            return validerAtYtelsePerioderErInnenforIntervalForEndring(fraværsperioderKorrigeringImTidslinje, gyldigEndringsperiodeTidslinje, "raværsperioderKorrigeringIm.perioder");
         }
 
         else return List.of();
