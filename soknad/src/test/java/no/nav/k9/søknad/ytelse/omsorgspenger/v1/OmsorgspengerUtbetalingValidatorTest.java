@@ -304,7 +304,7 @@ class OmsorgspengerUtbetalingValidatorTest {
     }
 
     @Test
-    void korrigering_av_perioder_innenfor_eksisterende_perioder_som_strekker_over_helg_skal_ikke_feile() {
+    void korrigering_av_perioder_innenfor_eksisterende_perioder_som_er_oppdelt_pga_helg_skal_ikke_feile() {
         List<Periode> eksisterendePerioder = List.of(
                 new Periode(LocalDate.parse("2022-08-01"), LocalDate.parse("2022-08-05")),
                 new Periode(LocalDate.parse("2022-08-08"), LocalDate.parse("2022-08-12"))
@@ -323,6 +323,24 @@ class OmsorgspengerUtbetalingValidatorTest {
         assertThat(feil).hasSize(0);
     }
 
+    @Test
+    void korrigering_av_perioder_innenfor__eksisterende_perioder_som_strekker_over_helg_skal_ikke_feile() {
+        List<Periode> eksisterendePerioder = List.of(
+                new Periode(LocalDate.parse("2022-08-01"), LocalDate.parse("2022-08-12"))
+        );
+
+        var endringsperiode1 = new Periode(LocalDate.parse("2022-08-02"), LocalDate.parse("2022-08-03"));
+        var endringsperiode2 = new Periode(LocalDate.parse("2022-08-09"), LocalDate.parse("2022-08-10"));
+        OmsorgspengerUtbetaling korrigering = byggOmsorgspengerUtbetalingSøknadBruker(
+                lagSøknadsperiode(orgnr1, endringsperiode1, null),
+                lagSøknadsperiode(orgnr1, endringsperiode2, null)
+        );
+
+
+        List<Feil> feil = lagSøknadOgValider(korrigering, eksisterendePerioder);
+
+        assertThat(feil).hasSize(0);
+    }
 
     @Test
     void korrigering_av_perioder_som_overlapper_eksisterende_perioder_skal_feile() {
