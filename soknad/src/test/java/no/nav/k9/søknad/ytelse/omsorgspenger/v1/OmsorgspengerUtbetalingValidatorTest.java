@@ -303,6 +303,44 @@ class OmsorgspengerUtbetalingValidatorTest {
         assertThat(feil).hasSize(0);
     }
 
+    @Test
+    void korrigering_av_flere_perioder_innenfor_flere_eksisterende_perioder_skal_ikke_feile() {
+        List<Periode> eksisterendePerioder = List.of(
+                new Periode(LocalDate.parse("2022-08-01"), LocalDate.parse("2022-08-05")),
+                new Periode(LocalDate.parse("2022-08-08"), LocalDate.parse("2022-08-12"))
+        );
+
+        var endringsperiode1 = new Periode(LocalDate.parse("2022-08-02"), LocalDate.parse("2022-08-03"));
+        var endringsperiode2 = new Periode(LocalDate.parse("2022-08-09"), LocalDate.parse("2022-08-10"));
+        OmsorgspengerUtbetaling korrigering = byggOmsorgspengerUtbetalingSøknadBruker(
+                lagSøknadsperiode(orgnr1, endringsperiode1, null),
+                lagSøknadsperiode(orgnr1, endringsperiode2, null)
+        );
+
+
+        List<Feil> feil = lagSøknadOgValider(korrigering, eksisterendePerioder);
+
+        assertThat(feil).hasSize(0);
+    }
+
+    @Test
+    void korrigering_av_perioder_innenfor_eksisterende_periode_som_strekker_over_helg_skal_ikke_feile() {
+        List<Periode> eksisterendePerioder = List.of(
+                new Periode(LocalDate.parse("2022-08-01"), LocalDate.parse("2022-08-12"))
+        );
+
+        var endringsperiode1 = new Periode(LocalDate.parse("2022-08-02"), LocalDate.parse("2022-08-03"));
+        var endringsperiode2 = new Periode(LocalDate.parse("2022-08-09"), LocalDate.parse("2022-08-10"));
+        OmsorgspengerUtbetaling korrigering = byggOmsorgspengerUtbetalingSøknadBruker(
+                lagSøknadsperiode(orgnr1, endringsperiode1, null),
+                lagSøknadsperiode(orgnr1, endringsperiode2, null)
+        );
+
+
+        List<Feil> feil = lagSøknadOgValider(korrigering, eksisterendePerioder);
+
+        assertThat(feil).hasSize(0);
+    }
 
     @Test
     void korrigering_av_perioder_som_overlapper_eksisterende_perioder_skal_feile() {
@@ -321,7 +359,7 @@ class OmsorgspengerUtbetalingValidatorTest {
         assertThat(feil).hasSize(1);
         feilInneholder(
                 feil,
-                "ytelse.søknadsperiode.perioder",
+                "ytelse.fraværsperioder.perioder",
                 "ugyldigPeriode",
                 "Perioden er utenfor gyldig interval. Gyldig interval: ([[2021-09-06, 2021-09-08]]), Ugyldig periode: 2021-09-09/2021-09-10"
                 );
@@ -345,7 +383,7 @@ class OmsorgspengerUtbetalingValidatorTest {
         assertThat(feil).hasSize(1);
         feilInneholder(
                 feil,
-                "ytelse.søknadsperiode.perioder",
+                "ytelse.fraværsperioder.perioder",
                 "ugyldigPeriode",
                 "Perioden er utenfor gyldig interval. Gyldig interval: ([[2021-09-06, 2021-09-08]]), Ugyldig periode: 2021-09-09/2021-09-10"
         );
@@ -368,7 +406,7 @@ class OmsorgspengerUtbetalingValidatorTest {
         assertThat(feil).hasSize(1);
         feilInneholder(
                 feil,
-                "ytelse.søknadsperiode.perioder",
+                "ytelse.fraværsperioder.perioder",
                 "ugyldigPeriode",
                 "Perioden er utenfor gyldig interval. Gyldig interval: ([[2021-09-08, 2021-09-10]]), Ugyldig periode: 2021-09-06/2021-09-07"
         );
@@ -391,7 +429,7 @@ class OmsorgspengerUtbetalingValidatorTest {
         assertThat(feil).hasSize(1);
         feilInneholder(
                 feil,
-                "ytelse.søknadsperiode.perioder",
+                "ytelse.fraværsperioder.perioder",
                 "ugyldigPeriode",
                 "Perioden er utenfor gyldig interval. Gyldig interval: ([[2021-09-08, 2021-09-10]]), Ugyldig periode: 2021-09-06/2021-09-07"
         );
