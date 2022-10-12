@@ -304,7 +304,7 @@ class OmsorgspengerUtbetalingValidatorTest {
     }
 
     @Test
-    void korrigering_av_perioder_innenfor_eksisterende_perioder_som_er_oppdelt_pga_helg_skal_ikke_feile() {
+    void korrigering_av_flere_perioder_innenfor_flere_eksisterende_perioder_skal_ikke_feile() {
         List<Periode> eksisterendePerioder = List.of(
                 new Periode(LocalDate.parse("2022-08-01"), LocalDate.parse("2022-08-05")),
                 new Periode(LocalDate.parse("2022-08-08"), LocalDate.parse("2022-08-12"))
@@ -324,7 +324,7 @@ class OmsorgspengerUtbetalingValidatorTest {
     }
 
     @Test
-    void korrigering_av_perioder_innenfor__eksisterende_perioder_som_strekker_over_helg_skal_ikke_feile() {
+    void korrigering_av_perioder_innenfor_eksisterende_periode_som_strekker_over_helg_skal_ikke_feile() {
         List<Periode> eksisterendePerioder = List.of(
                 new Periode(LocalDate.parse("2022-08-01"), LocalDate.parse("2022-08-12"))
         );
