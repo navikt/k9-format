@@ -74,10 +74,14 @@ class OmsorgspengerUtbetalingValidator extends YtelseValidator {
     }
 
     List<Feil> validerMotGyldigePerioder(OmsorgspengerUtbetaling omp, List<Periode> gyldigeEndringsperioder) {
-        final LocalDateTimeline<Boolean> søknadsperiodeTidslinje = lagTidslinjeOgValider(List.of(omp.getSøknadsperiode()), "søknadsperiode.perioder");
+        if (omp.getFraværsperioderKorrigeringIm() != null && !omp.getFraværsperioderKorrigeringIm().isEmpty()) {
+            return List.of();
+        }
+        List<Periode> fraværsperioder = omp.getFraværsperioder().stream().map(FraværPeriode::getPeriode).toList();
+        final LocalDateTimeline<Boolean> fraværsperioderTidslinje = lagTidslinjeOgValider(fraværsperioder, "fraværsperioder.perioder");
         final LocalDateTimeline<Boolean> gyldigEndringsperiodeTidslinje = lagTidslinjeOgValider(gyldigeEndringsperioder, "gyldigeEndringsperioder.perioder");
 
-        return validerAtYtelsePerioderErInnenforIntervalForEndring(søknadsperiodeTidslinje, gyldigEndringsperiodeTidslinje, "søknadsperiode.perioder");
+        return validerAtYtelsePerioderErInnenforIntervalForEndring(fraværsperioderTidslinje, gyldigEndringsperiodeTidslinje, "søknadsperiode.perioder");
     }
 
     private List<Feil> validerPerioderErLukketOgGyldig(List<Periode> periodeList, String felt) {
