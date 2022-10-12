@@ -74,14 +74,24 @@ class OmsorgspengerUtbetalingValidator extends YtelseValidator {
     }
 
     List<Feil> validerMotGyldigePerioder(OmsorgspengerUtbetaling omp, List<Periode> gyldigeEndringsperioder) {
-        if (omp.getFraværsperioderKorrigeringIm() != null && !omp.getFraværsperioderKorrigeringIm().isEmpty()) {
-            return List.of();
-        }
-        List<Periode> fraværsperioder = omp.getFraværsperioder().stream().map(FraværPeriode::getPeriode).toList();
-        final LocalDateTimeline<Boolean> fraværsperioderTidslinje = lagTidslinjeOgValider(fraværsperioder, "fraværsperioder.perioder");
-        final LocalDateTimeline<Boolean> gyldigEndringsperiodeTidslinje = lagTidslinjeOgValider(gyldigeEndringsperioder, "gyldigeEndringsperioder.perioder");
+        if (omp.getFraværsperioder() != null && !omp.getFraværsperioder().isEmpty()) {
 
-        return validerAtYtelsePerioderErInnenforIntervalForEndring(fraværsperioderTidslinje, gyldigEndringsperiodeTidslinje, "søknadsperiode.perioder");
+            List<Periode> fraværsperioder = omp.getFraværsperioder().stream().map(FraværPeriode::getPeriode).toList();
+            final LocalDateTimeline<Boolean> fraværsperioderTidslinje = lagTidslinjeOgValider(fraværsperioder, "fraværsperioder.perioder");
+            final LocalDateTimeline<Boolean> gyldigEndringsperiodeTidslinje = lagTidslinjeOgValider(gyldigeEndringsperioder, "gyldigeEndringsperioder.perioder");
+
+            return validerAtYtelsePerioderErInnenforIntervalForEndring(fraværsperioderTidslinje, gyldigEndringsperiodeTidslinje, "fraværsperioder.perioder");
+
+        } else if (omp.getFraværsperioderKorrigeringIm() != null && !omp.getFraværsperioderKorrigeringIm().isEmpty()) {
+
+            List<Periode> fraværsperioderKorrigeringIm = omp.getFraværsperioderKorrigeringIm().stream().map(FraværPeriode::getPeriode).toList();
+            final LocalDateTimeline<Boolean> fraværsperioderTidslinje = lagTidslinjeOgValider(fraværsperioderKorrigeringIm, "fraværsperioderKorrigeringIm.perioder");
+            final LocalDateTimeline<Boolean> gyldigEndringsperiodeTidslinje = lagTidslinjeOgValider(gyldigeEndringsperioder, "gyldigeEndringsperioder.perioder");
+
+            return validerAtYtelsePerioderErInnenforIntervalForEndring(fraværsperioderTidslinje, gyldigEndringsperiodeTidslinje, "raværsperioderKorrigeringIm.perioder");
+        }
+
+        else return List.of();
     }
 
     private List<Feil> validerPerioderErLukketOgGyldig(List<Periode> periodeList, String felt) {

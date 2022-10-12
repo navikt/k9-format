@@ -359,7 +359,7 @@ class OmsorgspengerUtbetalingValidatorTest {
         assertThat(feil).hasSize(1);
         feilInneholder(
                 feil,
-                "ytelse.søknadsperiode.perioder",
+                "ytelse.fraværsperioder.perioder",
                 "ugyldigPeriode",
                 "Perioden er utenfor gyldig interval. Gyldig interval: ([[2021-09-06, 2021-09-08]]), Ugyldig periode: 2021-09-09/2021-09-10"
                 );
@@ -383,7 +383,7 @@ class OmsorgspengerUtbetalingValidatorTest {
         assertThat(feil).hasSize(1);
         feilInneholder(
                 feil,
-                "ytelse.søknadsperiode.perioder",
+                "ytelse.fraværsperioder.perioder",
                 "ugyldigPeriode",
                 "Perioden er utenfor gyldig interval. Gyldig interval: ([[2021-09-06, 2021-09-08]]), Ugyldig periode: 2021-09-09/2021-09-10"
         );
@@ -406,7 +406,7 @@ class OmsorgspengerUtbetalingValidatorTest {
         assertThat(feil).hasSize(1);
         feilInneholder(
                 feil,
-                "ytelse.søknadsperiode.perioder",
+                "ytelse.fraværsperioder.perioder",
                 "ugyldigPeriode",
                 "Perioden er utenfor gyldig interval. Gyldig interval: ([[2021-09-08, 2021-09-10]]), Ugyldig periode: 2021-09-06/2021-09-07"
         );
@@ -429,7 +429,7 @@ class OmsorgspengerUtbetalingValidatorTest {
         assertThat(feil).hasSize(1);
         feilInneholder(
                 feil,
-                "ytelse.søknadsperiode.perioder",
+                "ytelse.fraværsperioder.perioder",
                 "ugyldigPeriode",
                 "Perioden er utenfor gyldig interval. Gyldig interval: ([[2021-09-08, 2021-09-10]]), Ugyldig periode: 2021-09-06/2021-09-07"
         );
