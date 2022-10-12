@@ -88,7 +88,7 @@ class OmsorgspengerUtbetalingValidator extends YtelseValidator {
             final LocalDateTimeline<Boolean> fraværsperioderKorrigeringImTidslinje = lagTidslinjeOgValider(fraværsperioderKorrigeringIm, "fraværsperioderKorrigeringIm.perioder");
             final LocalDateTimeline<Boolean> gyldigEndringsperiodeTidslinje = lagTidslinjeOgValider(gyldigeEndringsperioder, "gyldigeEndringsperioder.perioder");
 
-            return validerAtYtelsePerioderErInnenforIntervalForEndring(fraværsperioderKorrigeringImTidslinje, gyldigEndringsperiodeTidslinje, "raværsperioderKorrigeringIm.perioder");
+            return validerAtYtelsePerioderErInnenforIntervalForEndring(fraværsperioderKorrigeringImTidslinje, gyldigEndringsperiodeTidslinje, "fraværsperioderKorrigeringIm.perioder");
         }
 
         else return List.of();
