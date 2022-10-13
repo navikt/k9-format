@@ -1,5 +1,15 @@
 package no.nav.k9.søknad.ytelse.omsorgspenger.v1;
 
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+
 import no.nav.fpsak.tidsserie.LocalDateSegment;
 import no.nav.fpsak.tidsserie.LocalDateTimeline;
 import no.nav.k9.søknad.PeriodeValidator;
@@ -14,12 +24,6 @@ import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
-
-import java.time.Duration;
-import java.util.*;
-
-import static no.nav.k9.søknad.TidsserieUtils.tilPeriodeList;
-import static no.nav.k9.søknad.TidsserieUtils.toLocalDateTimeline;
 
 class OmsorgspengerUtbetalingValidator extends YtelseValidator {
     private final String YTELSE_FELT = "ytelse.";
@@ -54,98 +58,18 @@ class OmsorgspengerUtbetalingValidator extends YtelseValidator {
         Objects.requireNonNull(gyldigeEndringsperioder, "gyldigeEndringsperioder");
         final List<Feil> feil = new ArrayList<>();
         feil.addAll(valider(ytelse));
-        feil.addAll(validerMedGyldigEndringsperodeHvisDenFinnes(ytelse, gyldigeEndringsperioder));
+
+        feil.addAll(new OmsorgspengerUbetalingDelvalidatorEndringsperioder().validerMotGyldigEndringsperode(ytelse, gyldigeEndringsperioder));
         return feil;
     }
 
-    List<Feil> validerMedGyldigEndringsperodeHvisDenFinnes(Ytelse ytelse, List<Periode> gyldigeEndringsperioder) {
-        Objects.requireNonNull(gyldigeEndringsperioder, "gyldigeEndringsperioder");
-
-        var omsorgspengerUtbetaling = (OmsorgspengerUtbetaling) ytelse;
-        var feil = new ArrayList<Feil>();
-
-        try {
-            feil.addAll(validerMotGyldigePerioder(omsorgspengerUtbetaling, gyldigeEndringsperioder));
-        } catch (ValideringsAvbrytendeFeilException valideringsAvbrytendeFeilException) {
-            feil.addAll(valideringsAvbrytendeFeilException.getFeilList());
-        }
-
+    public List<Feil> valider(Ytelse ytelse, Map<AktivitetFravær, List<Periode>> gyldigeEndringsperioderSøknad, Map<Organisasjonsnummer, List<Periode>> gyldigeKorrigeringsperioderIm) {
+        Objects.requireNonNull(gyldigeEndringsperioderSøknad, "gyldigeEndringsperioder");
+        Objects.requireNonNull(gyldigeKorrigeringsperioderIm, "gyldigeKorrigeringsperioderIm");
+        final List<Feil> feil = new ArrayList<>();
+        feil.addAll(valider(ytelse));
+        feil.addAll(new OmsorgspengerUbetalingDelvalidatorEndringsperioder().validerMotGyldigEndringsperode(ytelse, gyldigeEndringsperioderSøknad, gyldigeKorrigeringsperioderIm));
         return feil;
-    }
-
-    List<Feil> validerMotGyldigePerioder(OmsorgspengerUtbetaling omp, List<Periode> gyldigeEndringsperioder) {
-        if (omp.getFraværsperioder() != null && !omp.getFraværsperioder().isEmpty()) {
-
-            List<Periode> fraværsperioder = omp.getFraværsperioder().stream().map(FraværPeriode::getPeriode).toList();
-            final LocalDateTimeline<Boolean> fraværsperioderTidslinje = lagTidslinjeOgValider(fraværsperioder, "fraværsperioder.perioder");
-            final LocalDateTimeline<Boolean> gyldigEndringsperiodeTidslinje = lagTidslinjeOgValider(gyldigeEndringsperioder, "gyldigeEndringsperioder.perioder");
-
-            return validerAtYtelsePerioderErInnenforIntervalForEndring(fraværsperioderTidslinje, gyldigEndringsperiodeTidslinje, "fraværsperioder.perioder");
-
-        } else if (omp.getFraværsperioderKorrigeringIm() != null && !omp.getFraværsperioderKorrigeringIm().isEmpty()) {
-
-            List<Periode> fraværsperioderKorrigeringIm = omp.getFraværsperioderKorrigeringIm().stream().map(FraværPeriode::getPeriode).toList();
-            final LocalDateTimeline<Boolean> fraværsperioderKorrigeringImTidslinje = lagTidslinjeOgValider(fraværsperioderKorrigeringIm, "fraværsperioderKorrigeringIm.perioder");
-            final LocalDateTimeline<Boolean> gyldigEndringsperiodeTidslinje = lagTidslinjeOgValider(gyldigeEndringsperioder, "gyldigeEndringsperioder.perioder");
-
-            return validerAtYtelsePerioderErInnenforIntervalForEndring(fraværsperioderKorrigeringImTidslinje, gyldigEndringsperiodeTidslinje, "fraværsperioderKorrigeringIm.perioder");
-        }
-
-        else return List.of();
-    }
-
-    private List<Feil> validerPerioderErLukketOgGyldig(List<Periode> periodeList, String felt) {
-        var feil = new ArrayList<Feil>();
-        for (int i = 0; i < periodeList.size(); i++) {
-            var periode = periodeList.get(i);
-            if (periode != null) {
-                validerPerioderErLukket(periode, felt + "[" + i + "]", feil);
-                validerPerioderIkkeErInvertert(periode, felt + "[" + i + "]", feil);
-            }
-        }
-        return feil;
-    }
-
-    private void validerPerioderErLukket(Periode periode, String felt, List<Feil> feil) {
-        if (periode.getTilOgMed() == null) {
-            feil.add(lagFeil(felt, "påkrevd", "Til og med (TOM) må være satt."));
-        }
-        if (periode.getFraOgMed() == null) {
-            feil.add(lagFeil(felt, "påkrevd", "Fra og med (FOM) må være satt."));
-        }
-    }
-
-    private void validerPerioderIkkeErInvertert(Periode periode, String felt, List<Feil> feil) {
-        if (periode.getFraOgMed() != null && periode.getTilOgMed() != null && periode.getTilOgMed().isBefore(periode.getFraOgMed())) {
-            feil.add(lagFeil(felt, "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM)."));
-        }
-    }
-
-    private LocalDateTimeline<Boolean> lagTidslinjeOgValider(List<Periode> periodeList, String felt) throws ValideringsAvbrytendeFeilException {
-        var nyFeil = validerPerioderErLukketOgGyldig(periodeList, felt);
-        if (!nyFeil.isEmpty()) {
-            throw new ValideringsAvbrytendeFeilException(nyFeil);
-        }
-        try {
-            return toLocalDateTimeline(periodeList);
-        } catch (RuntimeException e) {
-            throw new ValideringsAvbrytendeFeilException(List.of(lagFeil(felt, e.getClass().getSimpleName(), e.getMessage())));
-        }
-    }
-
-    private List<Feil> validerAtYtelsePerioderErInnenforIntervalForEndring(
-            LocalDateTimeline<Boolean> søknadsperiodeTidslinje,
-            LocalDateTimeline<Boolean> gyldigePerioderTidslinje,
-            String felt
-    ) {
-
-        LocalDateTimeline<Boolean> fellesPerioder = søknadsperiodeTidslinje.disjoint(gyldigePerioderTidslinje);
-
-        return tilPeriodeList(fellesPerioder)
-                .stream()
-                .map((Periode ugyldigPeriode) -> toFeil(ugyldigPeriode, felt, "ugyldigPeriode",
-                        "Perioden er utenfor gyldig interval. Gyldig interval: (" + gyldigePerioderTidslinje.getLocalDateIntervals() + "), Ugyldig periode: "))
-                .toList();
     }
 
     private List<Feil> validerPeriodeInnenforEttÅr(OmsorgspengerUtbetaling ytelse) {
@@ -539,20 +463,4 @@ class OmsorgspengerUtbetalingValidator extends YtelseValidator {
         return new Feil(YTELSE_FELT + felt, feilkode, feilmelding);
     }
 
-    private Feil toFeil(Periode periode, String felt, String feilkode, String feilmelding) {
-        return lagFeil(felt, feilkode, feilmelding + periode.toString());
-    }
-
-    static class ValideringsAvbrytendeFeilException extends RuntimeException {
-
-        private final List<Feil> feilList;
-
-        public ValideringsAvbrytendeFeilException(List<Feil> feilList) {
-            this.feilList = feilList;
-        }
-
-        public List<Feil> getFeilList() {
-            return feilList;
-        }
-    }
 }

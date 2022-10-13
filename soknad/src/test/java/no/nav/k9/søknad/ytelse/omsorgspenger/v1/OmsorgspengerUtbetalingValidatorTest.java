@@ -15,7 +15,6 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.Søknad;
-import no.nav.k9.søknad.SøknadValidator;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.fravær.AktivitetFravær;
@@ -128,10 +127,10 @@ class OmsorgspengerUtbetalingValidatorTest {
         Periode periode3 = new Periode(LocalDate.now(), null);
         Periode periode4 = new Periode(LocalDate.now(), LocalDate.now().minusDays(1));
         OmsorgspengerUtbetaling ytelse = byggOmsorgspengerUtbetalingSøknadBruker(
-                lagSøknadsperiode(orgnr1, periode1, null),
-                lagSøknadsperiode(orgnr1, periode2, null),
-                lagSøknadsperiode(orgnr1, periode3, null),
-                lagSøknadsperiode(orgnr1, periode4, null)
+                lagSøknadsperiode(orgnr1, periode1, null, AktivitetFravær.ARBEIDSTAKER),
+                lagSøknadsperiode(orgnr1, periode2, null, AktivitetFravær.ARBEIDSTAKER),
+                lagSøknadsperiode(orgnr1, periode3, null, AktivitetFravær.ARBEIDSTAKER),
+                lagSøknadsperiode(orgnr1, periode4, null, AktivitetFravær.ARBEIDSTAKER)
         );
 
         List<Feil> feil = lagSøknadOgValider(ytelse);
@@ -149,8 +148,8 @@ class OmsorgspengerUtbetalingValidatorTest {
         var fraværPeriode2 = new Periode(LocalDate.parse("2021-09-02"), LocalDate.parse("2021-09-03"));
 
         OmsorgspengerUtbetaling ytelse = byggOmsorgspengerUtbetalingSøknadBruker(
-                lagSøknadsperiode(orgnr1, fraværPeriode1, null),
-                lagSøknadsperiode(orgnr2, fraværPeriode2, null));
+                lagSøknadsperiode(orgnr1, fraværPeriode1, null, AktivitetFravær.ARBEIDSTAKER),
+                lagSøknadsperiode(orgnr2, fraværPeriode2, null, AktivitetFravær.ARBEIDSTAKER));
 
         List<Feil> feil = lagSøknadOgValider(ytelse);
 
@@ -180,13 +179,53 @@ class OmsorgspengerUtbetalingValidatorTest {
         var fraværPeriode2 = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
 
         OmsorgspengerUtbetaling ytelse = byggOmsorgspengerUtbetalingSøknadBruker(
-                lagSøknadsperiode(orgnr1, fraværPeriode1, null),
-                lagSøknadsperiode(orgnr1, fraværPeriode2, null));
+                lagSøknadsperiode(orgnr1, fraværPeriode1, null, AktivitetFravær.ARBEIDSTAKER),
+                lagSøknadsperiode(orgnr1, fraværPeriode2, null, AktivitetFravær.ARBEIDSTAKER));
 
         List<Feil> feil = lagSøknadOgValider(ytelse);
 
         assertThat(feil).hasSize(1);
         feilInneholder(feil, "ytelse.fraværsperioder[2021-09-01/2021-09-02]", "likePerioder");
+    }
+
+    @Test
+    void skal_ikke_returnere_feil_for_identiske_perioder_hos_forskjellige_arbeidsgivere_søknad() {
+
+        var fraværPeriode1 = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
+        var fraværPeriode2 = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
+
+        OmsorgspengerUtbetaling ytelse = byggOmsorgspengerUtbetalingSøknadBruker(
+                lagSøknadsperiode(orgnr1, fraværPeriode1, null, AktivitetFravær.ARBEIDSTAKER),
+                lagSøknadsperiode(orgnr2, fraværPeriode2, null, AktivitetFravær.ARBEIDSTAKER));
+
+        List<Feil> feil = lagSøknadOgValider(ytelse);
+
+        assertThat(feil).hasSize(0);
+    }
+
+    @Test
+    void skal_ikke_returnere_feil_for_identiske_perioder_hos_forskjellige_arbeidsgivere_validert_mot_eksisterende_perioder() {
+        List<Periode> eksisterendePerioder = List.of(
+                new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02")),
+                new Periode(LocalDate.parse("2021-09-03"), LocalDate.parse("2021-09-04"))
+        );
+
+        var at1FraværPeriode1 = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
+        var at1FraværPeriode2 = new Periode(LocalDate.parse("2021-09-03"), LocalDate.parse("2021-09-04"));
+
+        var at2fraværPeriode1 = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
+        var at2fraværPeriode2 = new Periode(LocalDate.parse("2021-09-03"), LocalDate.parse("2021-09-04"));
+
+        OmsorgspengerUtbetaling ytelse = byggOmsorgspengerUtbetalingSøknadBruker(
+                lagSøknadsperiode(orgnr1, at1FraværPeriode1, null, AktivitetFravær.ARBEIDSTAKER),
+                lagSøknadsperiode(orgnr1, at1FraværPeriode2, null, AktivitetFravær.ARBEIDSTAKER),
+                lagSøknadsperiode(orgnr2, at2fraværPeriode1, null, AktivitetFravær.ARBEIDSTAKER),
+                lagSøknadsperiode(orgnr2, at2fraværPeriode2, null, AktivitetFravær.ARBEIDSTAKER)
+        );
+
+        List<Feil> feil = lagSøknadOgValider(ytelse, eksisterendePerioder);
+
+        assertThat(feil).hasSize(0);
     }
 
     @Test
@@ -221,7 +260,7 @@ class OmsorgspengerUtbetalingValidatorTest {
     void skal_returnere_feil_for_delvis_fravær_uten_normalarbeidstid_satt() {
         var periode = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
         OmsorgspengerUtbetaling ytelse = byggOmsorgspengerUtbetalingSøknadBruker(
-                lagSøknadsperiode(orgnr1, periode, new DelvisFravær(null, Duration.ofHours(2))));
+                lagSøknadsperiode(orgnr1, periode, new DelvisFravær(null, Duration.ofHours(2)), AktivitetFravær.ARBEIDSTAKER));
 
         List<Feil> feil = lagSøknadOgValider(ytelse);
 
@@ -235,7 +274,7 @@ class OmsorgspengerUtbetalingValidatorTest {
     void skal_returnere_feil_for_delvis_fravær_uten_fravær_satt() {
         var periode = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
         OmsorgspengerUtbetaling ytelse = byggOmsorgspengerUtbetalingSøknadBruker(
-                lagSøknadsperiode(orgnr1, periode, new DelvisFravær(Duration.ofHours(2), null)));
+                lagSøknadsperiode(orgnr1, periode, new DelvisFravær(Duration.ofHours(2), null), AktivitetFravær.ARBEIDSTAKER));
 
         List<Feil> feil = lagSøknadOgValider(ytelse);
 
@@ -250,8 +289,8 @@ class OmsorgspengerUtbetalingValidatorTest {
         var periode1 = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
         var periode2 = new Periode(LocalDate.parse("2021-09-02"), LocalDate.parse("2021-09-03"));
         OmsorgspengerUtbetaling ytelse = byggOmsorgspengerUtbetalingSøknadBruker(
-                lagSøknadsperiode(orgnr1, periode1, null),
-                lagSøknadsperiode(orgnr1, periode2, null)
+                lagSøknadsperiode(orgnr1, periode1, null, AktivitetFravær.ARBEIDSTAKER),
+                lagSøknadsperiode(orgnr1, periode2, null, AktivitetFravær.ARBEIDSTAKER)
         );
 
         List<Feil> feil = lagSøknadOgValider(ytelse);
@@ -294,7 +333,7 @@ class OmsorgspengerUtbetalingValidatorTest {
 
         var endringsperiode = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-03"));
         OmsorgspengerUtbetaling korrigering = byggOmsorgspengerUtbetalingSøknadBruker(
-                lagSøknadsperiode(orgnr1, endringsperiode, null)
+                lagSøknadsperiode(orgnr1, endringsperiode, null, AktivitetFravær.ARBEIDSTAKER)
         );
 
 
@@ -313,10 +352,40 @@ class OmsorgspengerUtbetalingValidatorTest {
         var endringsperiode1 = new Periode(LocalDate.parse("2022-08-02"), LocalDate.parse("2022-08-03"));
         var endringsperiode2 = new Periode(LocalDate.parse("2022-08-09"), LocalDate.parse("2022-08-10"));
         OmsorgspengerUtbetaling korrigering = byggOmsorgspengerUtbetalingSøknadBruker(
-                lagSøknadsperiode(orgnr1, endringsperiode1, null),
-                lagSøknadsperiode(orgnr1, endringsperiode2, null)
+                lagSøknadsperiode(orgnr1, endringsperiode1, null, AktivitetFravær.ARBEIDSTAKER),
+                lagSøknadsperiode(orgnr1, endringsperiode2, null, AktivitetFravær.ARBEIDSTAKER)
         );
 
+
+        List<Feil> feil = lagSøknadOgValider(korrigering, eksisterendePerioder);
+
+        assertThat(feil).hasSize(0);
+    }
+
+    @Test
+    void korrigering_av_like_perioder_under_ulike_aktivitetstyper_innenfor_flere_eksisterende_perioder_skal_ikke_feile() {
+        List<Periode> eksisterendePerioder = List.of(
+                new Periode(LocalDate.parse("2022-08-01"), LocalDate.parse("2022-08-05")),
+                new Periode(LocalDate.parse("2022-08-08"), LocalDate.parse("2022-08-12"))
+        );
+
+        var endringsperiodeAT1 = new Periode(LocalDate.parse("2022-08-02"), LocalDate.parse("2022-08-04"));
+        var endringsperiodeAT2 = new Periode(LocalDate.parse("2022-08-08"), LocalDate.parse("2022-08-08"));
+
+        var endringsperiodeSN1 = new Periode(LocalDate.parse("2022-08-02"), LocalDate.parse("2022-08-04"));
+        var endringsperiodeSN2 = new Periode(LocalDate.parse("2022-08-10"), LocalDate.parse("2022-08-10"));
+
+        var endringsperiodeFL1 = new Periode(LocalDate.parse("2022-08-02"), LocalDate.parse("2022-08-04"));
+        var endringsperiodeFL2 = new Periode(LocalDate.parse("2022-08-12"), LocalDate.parse("2022-08-12"));
+
+        OmsorgspengerUtbetaling korrigering = byggOmsorgspengerUtbetalingSøknadBruker(
+                lagSøknadsperiode(orgnr1, endringsperiodeAT1, null, AktivitetFravær.ARBEIDSTAKER),
+                lagSøknadsperiode(orgnr1, endringsperiodeAT2, null, AktivitetFravær.ARBEIDSTAKER),
+                lagSøknadsperiode(orgnr1, endringsperiodeSN1, null, AktivitetFravær.SELVSTENDIG_VIRKSOMHET),
+                lagSøknadsperiode(orgnr1, endringsperiodeSN2, null, AktivitetFravær.SELVSTENDIG_VIRKSOMHET),
+                lagSøknadsperiode(orgnr1, endringsperiodeFL1, null, AktivitetFravær.FRILANSER),
+                lagSøknadsperiode(orgnr1, endringsperiodeFL2, null, AktivitetFravær.FRILANSER)
+        );
 
         List<Feil> feil = lagSøknadOgValider(korrigering, eksisterendePerioder);
 
@@ -332,8 +401,8 @@ class OmsorgspengerUtbetalingValidatorTest {
         var endringsperiode1 = new Periode(LocalDate.parse("2022-08-02"), LocalDate.parse("2022-08-03"));
         var endringsperiode2 = new Periode(LocalDate.parse("2022-08-09"), LocalDate.parse("2022-08-10"));
         OmsorgspengerUtbetaling korrigering = byggOmsorgspengerUtbetalingSøknadBruker(
-                lagSøknadsperiode(orgnr1, endringsperiode1, null),
-                lagSøknadsperiode(orgnr1, endringsperiode2, null)
+                lagSøknadsperiode(orgnr1, endringsperiode1, null, AktivitetFravær.ARBEIDSTAKER),
+                lagSøknadsperiode(orgnr1, endringsperiode2, null, AktivitetFravær.ARBEIDSTAKER)
         );
 
 
@@ -350,7 +419,7 @@ class OmsorgspengerUtbetalingValidatorTest {
 
         var endringesperiode = new Periode(LocalDate.parse("2021-09-07"), LocalDate.parse("2021-09-10"));
         OmsorgspengerUtbetaling korrigering = byggOmsorgspengerUtbetalingSøknadBruker(
-                lagSøknadsperiode(orgnr1, endringesperiode, null)
+                lagSøknadsperiode(orgnr1, endringesperiode, null, AktivitetFravær.ARBEIDSTAKER)
         );
 
 
@@ -374,7 +443,7 @@ class OmsorgspengerUtbetalingValidatorTest {
 
         var endringesperiode = new Periode(LocalDate.parse("2021-09-09"), LocalDate.parse("2021-09-10"));
         OmsorgspengerUtbetaling korrigering = byggOmsorgspengerUtbetalingSøknadBruker(
-                lagSøknadsperiode(orgnr1, endringesperiode, null)
+                lagSøknadsperiode(orgnr1, endringesperiode, null, AktivitetFravær.ARBEIDSTAKER)
         );
 
 
@@ -397,7 +466,7 @@ class OmsorgspengerUtbetalingValidatorTest {
 
         var endringesperiode = new Periode(LocalDate.parse("2021-09-06"), LocalDate.parse("2021-09-07"));
         OmsorgspengerUtbetaling korrigering = byggOmsorgspengerUtbetalingSøknadBruker(
-                lagSøknadsperiode(orgnr1, endringesperiode, null)
+                lagSøknadsperiode(orgnr1, endringesperiode, null, AktivitetFravær.ARBEIDSTAKER)
         );
 
 
@@ -420,7 +489,7 @@ class OmsorgspengerUtbetalingValidatorTest {
 
         var endringesperiode = new Periode(LocalDate.parse("2021-09-06"), LocalDate.parse("2021-09-09"));
         OmsorgspengerUtbetaling korrigering = byggOmsorgspengerUtbetalingSøknadBruker(
-                lagSøknadsperiode(orgnr1, endringesperiode, null)
+                lagSøknadsperiode(orgnr1, endringesperiode, null, AktivitetFravær.ARBEIDSTAKER)
         );
 
 
@@ -481,12 +550,12 @@ class OmsorgspengerUtbetalingValidatorTest {
                 .medArbeidsforholdId(arbeidsforholdId);
     }
 
-    private FraværPeriode lagSøknadsperiode(Organisasjonsnummer organisasjonsnummer, Periode søknadsperiode, DelvisFravær delvisFravær) {
+    private FraværPeriode lagSøknadsperiode(Organisasjonsnummer organisasjonsnummer, Periode søknadsperiode, DelvisFravær delvisFravær, AktivitetFravær aktivitetFravær) {
         return new FraværPeriode()
                 .medPeriode(søknadsperiode)
                 .medFraværÅrsak(FraværÅrsak.ORDINÆRT_FRAVÆR)
                 .medSøknadsårsak(SøknadÅrsak.NYOPPSTARTET_HOS_ARBEIDSGIVER)
-                .medAktivitetFravær(List.of(AktivitetFravær.ARBEIDSTAKER))
+                .medAktivitetFravær(List.of(aktivitetFravær))
                 .medDelvisFravær(delvisFravær)
                 .medArbeidsgiverOrgNr(organisasjonsnummer);
     }
