@@ -189,6 +189,46 @@ class OmsorgspengerUtbetalingValidatorTest {
     }
 
     @Test
+    void skal_ikke_returnere_feil_for_identiske_perioder_hos_forskjellige_arbeidsgivere_søknad() {
+
+        var fraværPeriode1 = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
+        var fraværPeriode2 = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
+
+        OmsorgspengerUtbetaling ytelse = byggOmsorgspengerUtbetalingSøknadBruker(
+                lagSøknadsperiode(orgnr1, fraværPeriode1, null, AktivitetFravær.ARBEIDSTAKER),
+                lagSøknadsperiode(orgnr2, fraværPeriode2, null, AktivitetFravær.ARBEIDSTAKER));
+
+        List<Feil> feil = lagSøknadOgValider(ytelse);
+
+        assertThat(feil).hasSize(0);
+    }
+
+    @Test
+    void skal_ikke_returnere_feil_for_identiske_perioder_hos_forskjellige_arbeidsgivere_validert_mot_eksisterende_perioder() {
+        List<Periode> eksisterendePerioder = List.of(
+                new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02")),
+                new Periode(LocalDate.parse("2021-09-03"), LocalDate.parse("2021-09-04"))
+        );
+
+        var at1FraværPeriode1 = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
+        var at1FraværPeriode2 = new Periode(LocalDate.parse("2021-09-03"), LocalDate.parse("2021-09-04"));
+
+        var at2fraværPeriode1 = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
+        var at2fraværPeriode2 = new Periode(LocalDate.parse("2021-09-03"), LocalDate.parse("2021-09-04"));
+
+        OmsorgspengerUtbetaling ytelse = byggOmsorgspengerUtbetalingSøknadBruker(
+                lagSøknadsperiode(orgnr1, at1FraværPeriode1, null, AktivitetFravær.ARBEIDSTAKER),
+                lagSøknadsperiode(orgnr1, at1FraværPeriode2, null, AktivitetFravær.ARBEIDSTAKER),
+                lagSøknadsperiode(orgnr2, at2fraværPeriode1, null, AktivitetFravær.ARBEIDSTAKER),
+                lagSøknadsperiode(orgnr2, at2fraværPeriode2, null, AktivitetFravær.ARBEIDSTAKER)
+        );
+
+        List<Feil> feil = lagSøknadOgValider(ytelse, eksisterendePerioder);
+
+        assertThat(feil).hasSize(0);
+    }
+
+    @Test
     void skal_returnere_feil_for_flere_orgnr() {
         var fraværPeriode1 = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
         var fraværPeriode2 = new Periode(LocalDate.parse("2021-09-03"), LocalDate.parse("2021-09-04"));
