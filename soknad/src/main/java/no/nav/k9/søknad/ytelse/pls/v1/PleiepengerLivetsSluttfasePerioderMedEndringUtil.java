@@ -7,6 +7,7 @@ import java.util.List;
 
 import no.nav.k9.søknad.TidsserieUtils;
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie;
 import no.nav.k9.søknad.ytelse.psb.v1.PerioderMedEndring;
 import no.nav.k9.søknad.ytelse.psb.v1.PerioderMedEndringUtil;
 
@@ -23,7 +24,11 @@ public class PleiepengerLivetsSluttfasePerioderMedEndringUtil {
     public static List<PerioderMedEndring> getAllePerioderSomMåVæreInnenforSøknadsperiode(PleipengerLivetsSluttfase ppn) {
         var listen = new ArrayList<PerioderMedEndring>();
         listen.add(new PerioderMedEndring().medPerioder("uttak", ppn.getUttak().getPerioder()));
-        listen.add(new PerioderMedEndring().medPerioder("lovbestemtFerie", ppn.getLovbestemtFerie().getPerioder()));
+        LovbestemtFerie lovbestemtFerie = ppn.getLovbestemtFerie();
+        if (lovbestemtFerie != null && lovbestemtFerie.getPerioder() != null) {
+            listen.add(new PerioderMedEndring().medPerioder("lovbestemtFerie", lovbestemtFerie.getPerioder()));
+        }
+
         listen.addAll(PerioderMedEndringUtil.getArbeidstidPerioder(ppn.getArbeidstid()));
         return listen;
     }
