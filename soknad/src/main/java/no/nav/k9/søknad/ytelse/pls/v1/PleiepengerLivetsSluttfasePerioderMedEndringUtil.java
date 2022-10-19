@@ -23,6 +23,7 @@ public class PleiepengerLivetsSluttfasePerioderMedEndringUtil {
     public static List<PerioderMedEndring> getAllePerioderSomMåVæreInnenforSøknadsperiode(PleipengerLivetsSluttfase ppn) {
         var listen = new ArrayList<PerioderMedEndring>();
         listen.add(new PerioderMedEndring().medPerioder("uttak", ppn.getUttak().getPerioder()));
+        listen.add(new PerioderMedEndring().medPerioder("lovbestemtFerie", ppn.getLovbestemtFerie().getPerioder()));
         listen.addAll(PerioderMedEndringUtil.getArbeidstidPerioder(ppn.getArbeidstid()));
         return listen;
     }

@@ -11,6 +11,7 @@ import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
 import no.nav.k9.søknad.felles.type.Landkode;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie;
 import no.nav.k9.søknad.ytelse.psb.v1.Uttak;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
@@ -47,6 +48,11 @@ public class YtelseEksempel {
                 .medLand(Landkode.NORGE);
         return new Bosteder().medPerioder(
                 lagPerioder(perioder, bostedPeriodeInfo));
+    }
+
+    public static LovbestemtFerie lagLovbestemtFerie(Periode... perioder) {
+        LovbestemtFerie.LovbestemtFeriePeriodeInfo feriePeriodeInfo = new LovbestemtFerie.LovbestemtFeriePeriodeInfo().medSkalHaFerie(true);
+        return new LovbestemtFerie().medPerioder(lagPerioder(perioder, feriePeriodeInfo));
     }
 
     public static Utenlandsopphold lagUtenlandsopphold(Periode... perioder) {

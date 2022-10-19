@@ -117,5 +117,27 @@ class SøknadTest {
         assertThat(feil).size().isEqualTo(3);
     }
 
+    @Test
+    public void lovbestemtFerieKanIkkeVæreUtenforSøknadsperiode() {
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
+        var lovbestemtFerie = new Periode(LocalDate.now().minusMonths(2), søknadsperiode.getTilOgMed());
 
+        var ytelse = YtelseEksempel.ytelseForArbeidstaker(søknadsperiode);
+        var søknad = SøknadEksempel.søknad(ytelse);
+        ((PleipengerLivetsSluttfase) søknad.getYtelse()).medLovbestemtFerie(YtelseEksempel.lagLovbestemtFerie(lovbestemtFerie));
+
+        verifyHarFeil(søknad);
+    }
+
+    @Test
+    public void lovbestemtFerieISøknadsperiodeFeilerIkke() {
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
+        var lovbestemtFerie = new Periode(LocalDate.now().plusMonths(2), søknadsperiode.getTilOgMed());
+
+        var ytelse = YtelseEksempel.ytelseForArbeidstaker(søknadsperiode);
+        var søknad = SøknadEksempel.søknad(ytelse);
+        ((PleipengerLivetsSluttfase) søknad.getYtelse()).medLovbestemtFerie(YtelseEksempel.lagLovbestemtFerie(lovbestemtFerie));
+
+        verifyIngenFeil(søknad);
+    }
 }
