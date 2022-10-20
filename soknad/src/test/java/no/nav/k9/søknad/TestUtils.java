@@ -71,7 +71,7 @@ public class TestUtils {
                 .stream()
                 .filter(f -> f.getFeilkode().equals(feilkode) && f.getFelt().equals(felt) && f.getFeilmelding().equals(feilmelding))
                 .collect(Collectors.toList()))
-                .withFailMessage("Finner ikke fetl og feilkode: " + felt + ", " + feilkode + ", " + feilmelding)
+                .withFailMessage("Finner ikke felt og feilkode: " + felt + ", " + feilkode + ", " + feilmelding)
                 .isNotEmpty();
     }
 

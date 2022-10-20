@@ -16,10 +16,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Kurs {
 
-    @JsonProperty(value = "holder", required = true)
+    @JsonProperty(value = "kursholder", required = true)
     @NotNull
     @Valid
-    private String holder;
+    private Kursholder kursholder;
 
     @JsonProperty(value = "formål", required = true)
     @NotNull
@@ -32,22 +32,17 @@ public class Kurs {
     @Valid
     private List<KursPeriodeMedReisetid> kursperioder;
 
-    @JsonProperty(value = "institusjonUuid")
-    @Valid
-    private UUID institusjonUuid;
-
     public Kurs() {
     }
 
-    public Kurs(String kursholder, String formålMedKurset, List<KursPeriodeMedReisetid> kursperioder, UUID institusjonUuid) {
-        this.holder = kursholder;
+    public Kurs(Kursholder kursholder, String formålMedKurset, List<KursPeriodeMedReisetid> kursperioder) {
+        this.kursholder = kursholder;
         this.formål = formålMedKurset;
         this.kursperioder = kursperioder;
-        this.institusjonUuid = institusjonUuid;
     }
 
-    public String getHolder() {
-        return holder;
+    public Kursholder getKursholder() {
+        return kursholder;
     }
 
     public String getFormål() {
@@ -56,9 +51,5 @@ public class Kurs {
 
     public List<KursPeriodeMedReisetid> getKursperioder() {
         return new ArrayList<>(kursperioder);
-    }
-
-    public UUID getInstitusjonUuid() {
-        return institusjonUuid;
     }
 }
