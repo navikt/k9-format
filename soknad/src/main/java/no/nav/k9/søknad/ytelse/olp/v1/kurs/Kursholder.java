@@ -20,7 +20,7 @@ public class Kursholder {
     @Pattern(regexp = "^[\\p{Pd}\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}§]*$", message = "[${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
     private String holder;
 
-    @JsonProperty(value = "institusjonUuid", required = true)
+    @JsonProperty(value = "institusjonsidentifikator", required = true)
     @Valid
     private UUID institusjonUuid;
 
