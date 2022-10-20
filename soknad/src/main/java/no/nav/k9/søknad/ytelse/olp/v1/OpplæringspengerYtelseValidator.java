@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import no.nav.fpsak.tidsserie.LocalDateTimeline;
@@ -19,6 +20,7 @@ import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 import no.nav.k9.søknad.ytelse.olp.v1.kurs.KursPeriodeMedReisetid;
+import no.nav.k9.søknad.ytelse.olp.v1.kurs.Kursholder;
 
 class OpplæringspengerYtelseValidator extends YtelseValidator {
 
@@ -96,7 +98,9 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
 
         validerAtYtelsePeriodenErKomplettMedSøknad(søknadsperiodeTidslinje, olp.getUttak().getPerioder(), "uttak", feilene);
 
-        validerReisetidMotKursperioden(olp.getKurs().getKursperioder(), "kurs", feilene);
+        validerKursholderOgInstitusjonUuid(olp.getKurs().getKursholder(), "kurs.kursholder", feilene);
+
+        validerReisetidMotKursperioden(olp.getKurs().getKursperioder(), "kurs.kursperioder", feilene);
 
         return feilene;
     }
@@ -127,6 +131,17 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
                 .filter(this::periodeInneholderDagerSomIkkeErHelg)
                 .map(p -> toFeil(p, felt, "ikkeKomplettPeriode", "Periodene er ikke komplett, periode som mangler er: "))
                 .collect(Collectors.toCollection(ArrayList::new)));
+    }
+
+    private void validerKursholderOgInstitusjonUuid(Kursholder kursholder, String felt, List<Feil> feil) {
+        String holder = kursholder.getHolder();
+        UUID institusjonUuid = kursholder.getInstitusjonUuid();
+
+        if (holder == null && institusjonUuid == null) {
+            feil.add(lagFeil(felt, "ugyldigHolderEllerInstitusjonUuid", "Enten holder eller institusjonUuid må være satt."));
+        } else if (holder != null && institusjonUuid != null) {
+            feil.add(lagFeil(felt, "ugyldigHolderEllerInstitusjonUuid", "Kan ikke ha både holder og institusjonUuid satt samtidig."));
+        }
     }
 
     private void validerReisetidMotKursperioden(List<KursPeriodeMedReisetid> kursperioder, String felt, List<Feil> feil) {
