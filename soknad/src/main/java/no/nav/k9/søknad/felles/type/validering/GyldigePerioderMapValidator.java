@@ -26,6 +26,7 @@ public class GyldigePerioderMapValidator implements ConstraintValidator<GyldigeP
                         .addConstraintViolation();
                 ok = false;
             }
+            i++;
         }
         return ok;
     }
