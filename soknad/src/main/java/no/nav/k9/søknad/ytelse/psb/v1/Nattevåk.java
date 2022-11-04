@@ -19,15 +19,15 @@ import no.nav.k9.søknad.felles.type.Periode;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Nattevåk {
 
-    @JsonProperty(value="perioder", required = true)
+    @JsonProperty(value = "perioder", required = true)
     @Valid
     @NotNull
-    private Map<@NotNull Periode, @NotNull NattevåkPeriodeInfo> perioder = new TreeMap<>();
+    private Map<@NotNull @Valid Periode, @NotNull @Valid NattevåkPeriodeInfo> perioder = new TreeMap<>();
 
     //TODO list?
-    @JsonProperty(value="perioderSomSkalSlettes", required = true)
+    @JsonProperty(value = "perioderSomSkalSlettes", required = true)
     @Valid
-    private Map<@NotNull Periode, @NotNull NattevåkPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
+    private Map<@NotNull @Valid Periode, @NotNull @Valid NattevåkPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
     public Nattevåk() {
     }
@@ -66,7 +66,7 @@ public class Nattevåk {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class NattevåkPeriodeInfo {
 
-        @JsonProperty(value="tilleggsinformasjon", required = true)
+        @JsonProperty(value = "tilleggsinformasjon", required = true)
         @Valid
         private String tilleggsinformasjon;
 

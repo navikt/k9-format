@@ -143,7 +143,6 @@ class OmsorgspengerUbetalingDelvalidatorEndringsperioder {
             var periode = periodeList.get(i);
             if (periode != null) {
                 validerPerioderErLukket(periode, felt + "[" + i + "]", feil);
-                validerPerioderIkkeErInvertert(periode, felt + "[" + i + "]", feil);
             }
         }
         return feil;
@@ -155,12 +154,6 @@ class OmsorgspengerUbetalingDelvalidatorEndringsperioder {
         }
         if (periode.getFraOgMed() == null) {
             feil.add(lagFeil(felt, "påkrevd", "Fra og med (FOM) må være satt."));
-        }
-    }
-
-    private void validerPerioderIkkeErInvertert(Periode periode, String felt, List<Feil> feil) {
-        if (periode.getFraOgMed() != null && periode.getTilOgMed() != null && periode.getTilOgMed().isBefore(periode.getFraOgMed())) {
-            feil.add(lagFeil(felt, "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM)."));
         }
     }
 

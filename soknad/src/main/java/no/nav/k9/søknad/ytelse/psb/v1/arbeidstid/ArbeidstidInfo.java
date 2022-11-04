@@ -25,7 +25,7 @@ public class ArbeidstidInfo {
     @JsonProperty(value = "perioder", required = true)
     @Valid
     @NotNull
-    private Map<@NotNull Periode, @NotNull ArbeidstidPeriodeInfo> perioder = new TreeMap<>();
+    private Map<@NotNull @Valid Periode, @NotNull ArbeidstidPeriodeInfo> perioder = new TreeMap<>();
 
     @Deprecated
     public ArbeidstidInfo(

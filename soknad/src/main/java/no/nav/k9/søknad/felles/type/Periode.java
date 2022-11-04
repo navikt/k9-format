@@ -8,6 +8,8 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import javax.validation.constraints.AssertFalse;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
@@ -30,7 +32,7 @@ public class Periode implements Comparable<Periode> {
         this.tilOgMed = parseLocalDate(split[1]);
         this.iso8601 = iso8601;
     }
-    
+
     public Periode(Periode p) {
         this(p.getFraOgMed(), p.getTilOgMed());
     }
@@ -39,6 +41,11 @@ public class Periode implements Comparable<Periode> {
         this.fraOgMed = fraOgMed;
         this.tilOgMed = tilOgMed;
         this.iso8601 = toIso8601(fraOgMed) + SKILLE + toIso8601(tilOgMed);
+    }
+
+    @AssertFalse(message = "[ugyldigPeriode] Fra og med (FOM) må være før eller lik til og med (TOM).")
+    public boolean isTilOgMedFørFraOgMed() {
+        return fraOgMed != null && tilOgMed != null && tilOgMed.isBefore(fraOgMed);
     }
 
     public LocalDate getFraOgMed() {
@@ -76,8 +83,6 @@ public class Periode implements Comparable<Periode> {
         return new Periode(periode.fraOgMed, periode.tilOgMed != null ? periode.tilOgMed : fallbackTilOgMed);
     }
 
-
-
     @Override
     public int compareTo(Periode o) {
         return this.iso8601.compareTo(o.iso8601);
@@ -91,7 +96,7 @@ public class Periode implements Comparable<Periode> {
             return false;
         var periode = (Periode) o;
         return Objects.equals(fraOgMed, periode.fraOgMed)
-            && Objects.equals(tilOgMed, periode.tilOgMed);
+                && Objects.equals(tilOgMed, periode.tilOgMed);
     }
 
     @Override
@@ -104,10 +109,12 @@ public class Periode implements Comparable<Periode> {
         return iso8601;
     }
 
-    /** Sjekk om denne perioden inneholder (omslutter) angitt periode. */
+    /**
+     * Sjekk om denne perioden inneholder (omslutter) angitt periode.
+     */
     public boolean inneholder(Periode periode) {
         return (this.fraOgMed == null || (periode.fraOgMed != null && !this.fraOgMed.isAfter(periode.fraOgMed)))
-            && (this.tilOgMed == null || (periode.tilOgMed != null && !this.tilOgMed.isBefore(periode.tilOgMed)));
+                && (this.tilOgMed == null || (periode.tilOgMed != null && !this.tilOgMed.isBefore(periode.tilOgMed)));
     }
 
     /**
@@ -143,9 +150,9 @@ public class Periode implements Comparable<Periode> {
         private static final Comparator<Periode> tilOgMedComparator = Comparator.comparing(periode -> periode.tilOgMed);
 
         public static <PERIODE_INFO> void leggTilPeriode(
-                                                         Map<Periode, PERIODE_INFO> perioder,
-                                                         Periode nyPeriode,
-                                                         PERIODE_INFO nyPeriodeInfo) {
+                Map<Periode, PERIODE_INFO> perioder,
+                Periode nyPeriode,
+                PERIODE_INFO nyPeriodeInfo) {
             Objects.requireNonNull(perioder, "perioder");
             Objects.requireNonNull(nyPeriode, "nyPeriode");
             Objects.requireNonNull(nyPeriodeInfo, "nyPeriodeInfo");
@@ -158,23 +165,23 @@ public class Periode implements Comparable<Periode> {
         }
 
         public static <PERIODE_INFO> void leggTilPerioder(
-                                                          Map<Periode, PERIODE_INFO> perioder,
-                                                          Map<Periode, PERIODE_INFO> nyePerioder) {
+                Map<Periode, PERIODE_INFO> perioder,
+                Map<Periode, PERIODE_INFO> nyePerioder) {
             Objects.requireNonNull(perioder);
             Objects.requireNonNull(nyePerioder);
             var nyeKeys = nyePerioder.keySet();
 
             var duplikater = perioder
-                .keySet()
-                .stream()
-                .filter(nyeKeys::contains)
-                .collect(Collectors.toSet());
+                    .keySet()
+                    .stream()
+                    .filter(nyeKeys::contains)
+                    .collect(Collectors.toSet());
 
             if (!duplikater.isEmpty()) {
                 var duplikatePerioder = String.join(", ", duplikater
-                    .stream()
-                    .map(it -> it.iso8601)
-                    .collect(Collectors.toSet()));
+                        .stream()
+                        .map(it -> it.iso8601)
+                        .collect(Collectors.toSet()));
                 throw new IllegalArgumentException("Inneholder allerede " + duplikatePerioder);
             }
 

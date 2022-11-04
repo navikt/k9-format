@@ -82,16 +82,6 @@ public class UtenlandskArbeidsforhold {
         return ansettelsePeriode.getFraOgMed() != null;
     }
 
-    @AssertTrue(message = "[ugyldigPeriode] Tom kan ikke være før Fom må være satt")
-    private boolean isPeriodeInvers() {
-        if (ansettelsePeriode == null ||
-                ansettelsePeriode.getFraOgMed() == null ||
-                ansettelsePeriode.getTilOgMed() == null) {
-            return true;
-        }
-        return ansettelsePeriode.getFraOgMed().isBefore(ansettelsePeriode.getTilOgMed());
-    }
-
     /* Deaktivet pga søknader med feil
     @AssertTrue(message = "[ugyldigVerdi] Norge kan ikke være en landkode")
     private boolean isLandNotNor() {

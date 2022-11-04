@@ -225,7 +225,6 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
         var feil = new ArrayList<Feil>();
         perioder.keySet().forEach(p -> {
             validerPerioderErLukket(p, felt + "['" + p + "']", feil);
-            validerPerioderIkkeErInvertert(p, felt + "['" + p + "']", feil);
         });
         return feil;
     }
@@ -236,7 +235,6 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
             var periode = periodeList.get(i);
             if (periode != null) {
                 validerPerioderErLukket(periode, felt + "[" + i + "]", feil);
-                validerPerioderIkkeErInvertert(periode, felt + "[" + i + "]", feil);
             }
         }
         return feil;
@@ -251,11 +249,6 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
         }
     }
 
-    private void validerPerioderIkkeErInvertert(Periode periode, String felt, List<Feil> feil) {
-        if (periode.getFraOgMed() != null && periode.getTilOgMed() != null && periode.getTilOgMed().isBefore(periode.getFraOgMed())) {
-            feil.add(lagFeil(felt, "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM)."));
-        }
-    }
 
     static class ValideringsAvbrytendeFeilException extends RuntimeException {
 

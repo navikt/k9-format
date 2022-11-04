@@ -52,7 +52,7 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
     }
 
     List<Feil> validerMedGyldigEndringsperodeHvisDenFinnes(Ytelse ytelse,
-            List<Periode> gyldigeEndringsperioder) {
+                                                           List<Periode> gyldigeEndringsperioder) {
 
         Objects.requireNonNull(gyldigeEndringsperioder, "gyldigeEndringsperioder");
 
@@ -80,7 +80,9 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
 
         feilene.addAll(validerPerioderErLukketOgGyldig(psb.getBosteder().getPerioder(), "bosteder.perioder"));
         feilene.addAll(validerPerioderErLukketOgGyldig(psb.getUtenlandsopphold().getPerioder(), "utenlandsopphold.perioder"));
-
+        if (psb.getSøknadsperiodeList().stream().anyMatch(Periode::isTilOgMedFørFraOgMed)){
+            return feilene; //får duplikate feil hvis vi her går videre med ugyldige perioder
+        }
         final LocalDateTimeline<Boolean> søknadsperiodeTidslinje = lagTidslinjeOgValider(psb.getSøknadsperiodeList(), "søknadsperiode.perioder", feilene);
         final LocalDateTimeline<Boolean> intervalForEndringTidslinje;
 
@@ -95,13 +97,21 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         final LocalDateTimeline<Boolean> trekkKravPerioderTidslinje = lagTidslinjeOgValider(psb.getTrekkKravPerioder(), "trekkKravPerioder.perioder", feilene);
         feilene.addAll(validerAtIngenPerioderOverlapperMedTrekkKravPerioder(trekkKravPerioderTidslinje, søknadsperiodeTidslinje, "trekkKravPerioder"));
 
-        for (var ytelsePeriode : PerioderMedEndringUtil.getAllePerioderSomMåVæreInnenforSøknadsperiode(psb)) {
+
+        List<PerioderMedEndring> perioderMedEndring = PerioderMedEndringUtil.getAllePerioderSomMåVæreInnenforSøknadsperiode(psb);
+        for (var ytelsePeriode : perioderMedEndring) {
+            if (ytelsePeriode.getPeriodeMap().keySet().stream().anyMatch(Periode::isTilOgMedFørFraOgMed)){
+                continue; //ugyldig periode, får duplikate feil hvis vi går videre med periodene
+            }
             var ytelsePeriodeTidsserie = lagTidslinjeOgValider(ytelsePeriode.getPeriodeMap(), ytelsePeriode.getFelt() + ".perioder", feilene);
             feilene.addAll(validerAtYtelsePerioderErInnenforIntervalForEndring(intervalForEndringTidslinje, ytelsePeriodeTidsserie, ytelsePeriode.getFelt() + ".perioder"));
             feilene.addAll(validerAtIngenPerioderOverlapperMedTrekkKravPerioder(trekkKravPerioderTidslinje, ytelsePeriodeTidsserie, ytelsePeriode.getFelt() + ".perioder"));
         }
 
-        validerAtYtelsePeriodenErKomplettMedSøknad(søknadsperiodeTidslinje, psb.getUttak().getPerioder(), "uttak", feilene);
+        if (psb.getUttak().getPerioder().keySet().stream().noneMatch(Periode::isTilOgMedFørFraOgMed)){
+            //får duplikate feil hvis vi validerer videre med ugyldige perioder
+            validerAtYtelsePeriodenErKomplettMedSøknad(søknadsperiodeTidslinje, psb.getUttak().getPerioder(), "uttak", feilene);
+        }
 
         return feilene;
     }
@@ -128,10 +138,10 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
     }
 
     private void validerAtYtelsePeriodenErKomplettMedSøknad(LocalDateTimeline<Boolean> søknadsperiode,
-                                                                  Map<Periode, ?> ytelsePeriode,
-                                                                  String felt,
-                                                                  List<Feil> feil) {
-        feil.addAll( tilPeriodeList(søknadsperiode.disjoint(lagTidslinjeOgValider(new ArrayList<>(ytelsePeriode.keySet()), felt, feil))).stream()
+                                                            Map<Periode, ?> ytelsePeriode,
+                                                            String felt,
+                                                            List<Feil> feil) {
+        feil.addAll(tilPeriodeList(søknadsperiode.disjoint(lagTidslinjeOgValider(new ArrayList<>(ytelsePeriode.keySet()), felt, feil))).stream()
                 .filter(this::periodeInneholderDagerSomIkkeErHelg)
                 .map(p -> toFeil(p, felt, "ikkeKomplettPeriode", "Periodene er ikke komplett, periode som mangler er: "))
                 .collect(Collectors.toCollection(ArrayList::new)));
@@ -178,7 +188,7 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         }
     }
 
-    private LocalDateTimeline<Boolean> lagTidslinjeOgValider(Map<Periode, ? > periodeMap, String felt, List<Feil> feil) throws ValideringsAvbrytendeFeilException {
+    private LocalDateTimeline<Boolean> lagTidslinjeOgValider(Map<Periode, ?> periodeMap, String felt, List<Feil> feil) throws ValideringsAvbrytendeFeilException {
         var nyFeil = validerPerioderErLukketOgGyldig(periodeMap, felt);
         if (!nyFeil.isEmpty()) {
             feil.addAll(nyFeil);
@@ -194,19 +204,16 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
 
     private List<Feil> validerPerioderErLukketOgGyldig(Map<Periode, ?> perioder, String felt) {
         var feil = new ArrayList<Feil>();
-        perioder.keySet().forEach(p -> {
-            validerPerioderErLukket(p, felt + "['" + p + "']", feil);
-            validerPerioderIkkeErInvertert(p, felt + "['" + p + "']", feil);});
+        perioder.keySet().forEach(p -> validerPerioderErLukket(p, felt + "['" + p + "']", feil));
         return feil;
     }
 
     private List<Feil> validerPerioderErLukketOgGyldig(List<Periode> periodeList, String felt) {
         var feil = new ArrayList<Feil>();
-        for (int i = 0; i < periodeList.size(); i++ ) {
+        for (int i = 0; i < periodeList.size(); i++) {
             var periode = periodeList.get(i);
             if (periode != null) {
                 validerPerioderErLukket(periode, felt + "[" + i + "]", feil);
-                validerPerioderIkkeErInvertert(periode, felt + "[" + i + "]", feil);
             }
         }
         return feil;
@@ -218,12 +225,6 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
         }
         if (periode.getFraOgMed() == null) {
             feil.add(lagFeil(felt, "påkrevd", "Fra og med (FOM) må være satt."));
-        }
-    }
-
-    private void validerPerioderIkkeErInvertert(Periode periode, String felt, List<Feil> feil) {
-        if (periode.getFraOgMed() != null && periode.getTilOgMed() != null && periode.getTilOgMed().isBefore(periode.getFraOgMed())) {
-            feil.add(lagFeil(felt, "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM)."));
         }
     }
 

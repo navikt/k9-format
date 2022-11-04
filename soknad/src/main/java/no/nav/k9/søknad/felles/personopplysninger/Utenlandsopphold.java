@@ -30,12 +30,12 @@ public class Utenlandsopphold {
     @Valid
     @JsonInclude(value = Include.ALWAYS)
     @JsonProperty(value = "perioder")
-    private Map<Periode, @NotNull UtenlandsoppholdPeriodeInfo> perioder = new TreeMap<>();
+    private Map<@NotNull @Valid Periode, @NotNull UtenlandsoppholdPeriodeInfo> perioder = new TreeMap<>();
 
     @Valid
     @JsonInclude(value = Include.ALWAYS)
     @JsonProperty(value = "perioderSomSkalSlettes")
-    private Map<Periode, @NotNull UtenlandsoppholdPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
+    private Map<@NotNull @Valid Periode, @NotNull UtenlandsoppholdPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
     /**@deprecated brukt tom ctor.*/
     @JsonCreator

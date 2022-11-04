@@ -139,7 +139,7 @@ class OmsorgspengerUtbetalingValidatorTest {
         feilInneholder(feil, "ytelse.fraværsperioder['0'].periodeManglerFom", "påkrevd");
         feilInneholder(feil, "ytelse.fraværsperioder['1'].periodeManglerFom", "påkrevd");
         feilInneholder(feil, "ytelse.fraværsperioder['2'].periodeManglerTom", "påkrevd");
-        feilInneholder(feil, "ytelse.fraværsperioder['3'].periodeTomFørFom", "påkrevd");
+        feilInneholder(feil, "ytelse.fraværsperioder['3'].periode.tilOgMedFørFraOgMed", "ugyldigPeriode");
     }
 
     @Test

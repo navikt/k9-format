@@ -41,7 +41,7 @@ public class SelvstendigNæringsdrivende {
     @Valid
     @NotNull
     @NotEmpty
-    private Map<@NotNull Periode, @NotNull SelvstendigNæringsdrivendePeriodeInfo> perioder;
+    private Map<@NotNull @Valid Periode, @NotNull SelvstendigNæringsdrivendePeriodeInfo> perioder;
 
     /**
      * Orgnummer - påkrevd for norske selskaper, ikke for utenlandske enn så lenge.

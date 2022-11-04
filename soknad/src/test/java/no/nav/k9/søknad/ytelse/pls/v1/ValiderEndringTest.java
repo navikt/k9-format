@@ -24,10 +24,10 @@ import no.nav.k9.søknad.felles.type.SøknadId;
 import no.nav.k9.søknad.ytelse.pls.SøknadEksempel;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 
-class EndringTest {
+class ValiderEndringTest {
 
     @Test
-    public void komplettEndringssøknadUtenFeil() {
+    void komplettEndringssøknadUtenFeil() {
         var gyldigEndringsInterval = new Periode(LocalDate.now().minusMonths(2), LocalDate.now().plusWeeks(3));
         var endringsperiode = new Periode(LocalDate.now().minusWeeks(2), LocalDate.now().plusWeeks(3));
 
@@ -38,7 +38,7 @@ class EndringTest {
     }
 
     @Test
-    public void komplettEndringssøknadUtenFeilUtenGyldigPeriode() {
+    void komplettEndringssøknadUtenFeilUtenGyldigPeriode() {
         var endringsperiode = new Periode(LocalDate.now().minusWeeks(2), LocalDate.now().plusWeeks(3));
 
         var ytelseMedEndring = YtelseEksempel.komplettYtelseMedEndring(endringsperiode);
@@ -49,9 +49,8 @@ class EndringTest {
     }
 
 
-
     @Test
-    public void endringssøknadMedSøknadsperioderUtenFeil() {
+    void endringssøknadMedSøknadsperioderUtenFeil() {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusWeeks(2));
         var endringsperiode = new Periode(LocalDate.now().minusMonths(2), LocalDate.now().minusDays(1));
 
@@ -64,7 +63,7 @@ class EndringTest {
 
 
     @Test
-    public void søknadMedEndringAvUttakUtenGyldigIntervalForEndring() {
+    void søknadMedEndringAvUttakUtenGyldigIntervalForEndring() {
         var endringsperiode = new Periode(LocalDate.now().minusMonths(1), LocalDate.now().minusDays(1));
 
         var ytelse = YtelseEksempel.lagYtelse()
@@ -77,9 +76,9 @@ class EndringTest {
     }
 
     @Test
-    public void endringssøknadMedPerioderUtenforGyldigperiode() {
+    void endringssøknadMedPerioderUtenforGyldigperiode() {
         var gyldigEndringsInterval = new Periode(LocalDate.now().minusMonths(2), LocalDate.now().minusDays(1));
-        var periodeUtenforGyldigInterval =new Periode(LocalDate.now().minusMonths(2).minusMonths(1), LocalDate.now().minusDays(1).minusDays(1));
+        var periodeUtenforGyldigInterval = new Periode(LocalDate.now().minusMonths(2).minusMonths(1), LocalDate.now().minusDays(1).minusDays(1));
 
         var ytelse = YtelseEksempel.komplettYtelseMedEndring(periodeUtenforGyldigInterval);
         var søknad = SøknadEksempel.søknad(ytelse);
@@ -92,7 +91,7 @@ class EndringTest {
     }
 
     @Test
-    public void kalkulertEndringsperiodeFinnerFlereSøknadsperioder() {
+    void kalkulertEndringsperiodeFinnerFlereSøknadsperioder() {
         var søknadsperiodeEN = new Periode(LocalDate.now(), LocalDate.now().plusWeeks(2));
         var søknadsperiodeTo = new Periode(LocalDate.now().plusWeeks(4), LocalDate.now().plusWeeks(6));
         var søknadsperiodeTre = new Periode(LocalDate.now().plusWeeks(7), LocalDate.now().plusWeeks(10));
@@ -101,8 +100,8 @@ class EndringTest {
         var gyldigIntervalForEndring = List.of(søknadsperiodeEN, søknadsperiodeTo, søknadsperiodeTre, søknadsperiodeFire);
 
         var ytelse = YtelseEksempel.komplettYtelseMedEndring(søknadsperiodeEN, søknadsperiodeTo, søknadsperiodeTre, søknadsperiodeFire);
-
-        verifyIngenFeil(ytelse, gyldigIntervalForEndring);
+        var søknad = SøknadEksempel.søknad(ytelse);
+        verifyIngenFeil(søknad, gyldigIntervalForEndring);
 
         var endringsperiode = ytelse.getEndringsperiode();
         assertThat(endringsperiode)
@@ -115,7 +114,7 @@ class EndringTest {
     }
 
     @Test
-    public void endringsperioderKanInneholdeHelgSomIkkeErMedIGyldigIntervalForEndring() {
+    void endringsperioderKanInneholdeHelgSomIkkeErMedIGyldigIntervalForEndring() {
         var stp = mandagenFør(LocalDate.now());
         var stpTo = mandagenFør(LocalDate.now().plusWeeks(1));
         var stpTre = mandagenFør(LocalDate.now().plusWeeks(2));
@@ -132,8 +131,9 @@ class EndringTest {
 
         verifyIngenFeil(søknad, gyldigIntervalForEndring);
     }
+
     @Test
-    public void endringsperioderIkkeInneholdeDagerSomErUtenforGyldigIntervalOgIkkeErHelg() {
+    void endringsperioderIkkeInneholdeDagerSomErUtenforGyldigIntervalOgIkkeErHelg() {
         var stp = mandagenFør(LocalDate.now());
         var stpTo = mandagenFør(LocalDate.now().plusWeeks(1));
         var stpTre = mandagenFør(LocalDate.now().plusWeeks(2));
@@ -154,7 +154,7 @@ class EndringTest {
     }
 
     @Test
-    public void kunDokumentklassifiseringSkalFungere() {
+    void kunDokumentklassifiseringSkalFungere() {
         var gyldigIntervalForEndring = List.of(new Periode(LocalDate.now(), LocalDate.now().plusWeeks(2)));
 
         var ytelse = new PleipengerLivetsSluttfase().medPleietrengende(new Pleietrengende().medNorskIdentitetsnummer(NorskIdentitetsnummer.of("22211111111")));

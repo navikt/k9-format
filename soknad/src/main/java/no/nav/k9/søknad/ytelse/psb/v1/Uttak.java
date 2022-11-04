@@ -27,7 +27,7 @@ public class Uttak {
     @Valid
     @NotNull
     @JsonProperty(value = "perioder")
-    private Map<@NotNull Periode, @NotNull UttakPeriodeInfo> perioder = new TreeMap<>();
+    private Map<@NotNull @Valid Periode, @NotNull UttakPeriodeInfo> perioder = new TreeMap<>();
 
     public Uttak() {
     }
