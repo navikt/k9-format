@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.felles.type.validering.GyldigePerioderMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -21,8 +22,9 @@ public class LovbestemtFerie {
 
     @JsonProperty(value="perioder", required = true)
     @Valid
+    @GyldigePerioderMap
     @NotNull
-    private Map<@NotNull @Valid Periode, @NotNull @Valid LovbestemtFeriePeriodeInfo> perioder = new TreeMap<>();
+    private Map<@NotNull Periode, @NotNull @Valid LovbestemtFeriePeriodeInfo> perioder = new TreeMap<>();
 
     public LovbestemtFerie() {
     }

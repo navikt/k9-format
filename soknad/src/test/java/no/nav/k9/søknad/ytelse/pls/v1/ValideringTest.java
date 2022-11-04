@@ -94,8 +94,8 @@ class ValideringTest {
 
         var feil = verifyHarFeil(søknad);
         assertThat(feil).hasSize(2);
-        feilInneholder(feil, "ytelse.bosteder.perioder<K>[" + bostedperiode + "].tilOgMedFørFraOgMed", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
-        feilInneholder(feil, "ytelse.utenlandsopphold.perioder<K>[" + bostedperiode + "].tilOgMedFørFraOgMed", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "ytelse.bosteder.perioder.['" + bostedperiode + "']", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "ytelse.utenlandsopphold.perioder.['" + bostedperiode + "']", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
         Søknad.SerDes.serialize(søknad);
     }
 
@@ -122,10 +122,10 @@ class ValideringTest {
 
         var feil = verifyHarFeil(søknad);
 
-        feilInneholder(feil, "ytelse.arbeidstid.arbeidstakerList[0].arbeidstidInfo.perioder<K>[" + søknadsperiode + "].tilOgMedFørFraOgMed", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
-        feilInneholder(feil, "ytelse.bosteder.perioder<K>[" + søknadsperiode + "].tilOgMedFørFraOgMed", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
-        feilInneholder(feil, "ytelse.utenlandsopphold.perioder<K>[" + søknadsperiode + "].tilOgMedFørFraOgMed", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
-        feilInneholder(feil, "ytelse.uttak.perioder<K>[" + søknadsperiode + "].tilOgMedFørFraOgMed", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "ytelse.arbeidstid.arbeidstakerList[0].arbeidstidInfo.perioder.['" + søknadsperiode + "']", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "ytelse.bosteder.perioder.['" + søknadsperiode + "']", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "ytelse.utenlandsopphold.perioder.['" + søknadsperiode + "']", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
+        feilInneholder(feil, "ytelse.uttak.perioder.['" + søknadsperiode + "']", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
         feilInneholder(feil, "ytelse.søknadsperiode[0].tilOgMedFørFraOgMed", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
         assertThat(feil).size().isEqualTo(5);
     }

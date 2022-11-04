@@ -31,6 +31,7 @@ import no.nav.k9.søknad.felles.type.Landkode;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.VirksomhetType;
+import no.nav.k9.søknad.felles.type.validering.GyldigePerioderMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(value = Include.NON_EMPTY)
@@ -39,9 +40,10 @@ public class SelvstendigNæringsdrivende {
 
     @JsonProperty(value = "perioder", required = true)
     @Valid
+    @GyldigePerioderMap
     @NotNull
     @NotEmpty
-    private Map<@NotNull @Valid Periode, @NotNull SelvstendigNæringsdrivendePeriodeInfo> perioder;
+    private Map<@NotNull Periode, @NotNull SelvstendigNæringsdrivendePeriodeInfo> perioder;
 
     /**
      * Orgnummer - påkrevd for norske selskaper, ikke for utenlandske enn så lenge.
