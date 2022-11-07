@@ -42,10 +42,6 @@ public class PleiepengerLivetsSluttfaseYtelseValidator extends YtelseValidator {
         try {
             validerLovligEndring(søknad, gyldigeEndringsperioder);
 
-            feilene.addAll(validerPerioderErLukket(søknad.getBosteder().getPerioder(), "bosteder.perioder"));
-            feilene.addAll(validerPerioderErLukket(søknad.getBosteder().getPerioderSomSkalSlettes(), "bosteder.perioderSomSkalSlettes"));
-            feilene.addAll(validerPerioderErLukket(søknad.getUtenlandsopphold().getPerioder(), "utenlandsopphold.perioder"));
-            feilene.addAll(validerPerioderErLukket(søknad.getUtenlandsopphold().getPerioderSomSkalSlettes(), "utenlandsopphold.perioderSomSkalSlettes"));
             validerArbeidstid(søknad);
             validerOpptjening(søknad, feilene);
 

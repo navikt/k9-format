@@ -12,7 +12,6 @@ import java.util.Set;
 
 import no.nav.fpsak.tidsserie.LocalDateSegment;
 import no.nav.fpsak.tidsserie.LocalDateTimeline;
-import no.nav.k9.søknad.PeriodeValidator;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.fravær.AktivitetFravær;
@@ -28,12 +27,10 @@ import no.nav.k9.søknad.ytelse.YtelseValidator;
 class OmsorgspengerUtbetalingValidator extends YtelseValidator {
     private final String YTELSE_FELT = "ytelse.";
 
-    private final PeriodeValidator periodeValidator;
     private Versjon versjon;
 
     OmsorgspengerUtbetalingValidator(Versjon versjon) {
         this.versjon = versjon;
-        this.periodeValidator = new PeriodeValidator();
     }
 
     @Override

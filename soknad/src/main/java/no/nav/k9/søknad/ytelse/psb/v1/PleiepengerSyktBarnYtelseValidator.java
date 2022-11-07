@@ -78,14 +78,11 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
             feilene.add(new Feil("oppgittOpptjening", "påkrevd", "Opplysninger om opptjening må være oppgitt for ny søknadsperiode."));
         }
 
-        feilene.addAll(validerPerioderErLukketOgGyldig(psb.getBosteder().getPerioder(), "bosteder.perioder"));
-        feilene.addAll(validerPerioderErLukketOgGyldig(psb.getUtenlandsopphold().getPerioder(), "utenlandsopphold.perioder"));
         if (psb.getSøknadsperiodeList().stream().anyMatch(Periode::isTilOgMedFørFraOgMed)){
             return feilene; //får duplikate feil hvis vi her går videre med ugyldige perioder
         }
         final LocalDateTimeline<Boolean> søknadsperiodeTidslinje = lagTidslinjeOgValider(psb.getSøknadsperiodeList(), "søknadsperiode.perioder", feilene);
         final LocalDateTimeline<Boolean> intervalForEndringTidslinje;
-
 
         final LocalDateTimeline<Boolean> gyldigEndringsperiodeTidslinje = lagTidslinjeOgValider(gyldigeEndringsperioder, "gyldigeEndringsperioder.perioder", feilene);
         intervalForEndringTidslinje = søknadsperiodeTidslinje.union(gyldigEndringsperiodeTidslinje, StandardCombinators::coalesceLeftHandSide);
