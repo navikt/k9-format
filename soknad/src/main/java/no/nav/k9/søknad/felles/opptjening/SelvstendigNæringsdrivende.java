@@ -40,7 +40,7 @@ public class SelvstendigNæringsdrivende {
 
     @JsonProperty(value = "perioder", required = true)
     @Valid
-    @GyldigePerioderMap
+    @GyldigePerioderMap(krevFomDato = true, krevTomDato = false)
     @NotNull
     @NotEmpty
     private Map<@NotNull Periode, @NotNull SelvstendigNæringsdrivendePeriodeInfo> perioder;

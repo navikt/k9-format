@@ -9,17 +9,37 @@ import no.nav.k9.søknad.felles.type.Periode;
 
 public class GyldigePerioderMapValidator implements ConstraintValidator<GyldigePerioderMap, Map<Periode, ?>> {
 
+    private boolean krevFom;
+    private boolean krevTom;
+
     @Override
-    public void initialize(GyldigePerioderMap gyldigePerioderMap) {
-        //kan i fremtiden velge å ta inn parametre for å spesialisere eksempelvis: sjekke for overlapp, sjekke om periode er åpen
+    public void initialize(GyldigePerioderMap konfig) {
+        //kan i fremtiden velge å ta inn flere parametre for å spesialisere eksempelvis: sjekke for overlapp
+        krevFom = konfig.krevFomDato();
+        krevTom = konfig.krevTomDato();
     }
 
     @Override
     public boolean isValid(Map<Periode, ?> value, ConstraintValidatorContext constraintContext) {
         int i = 0;
         boolean ok = true;
+        if (value == null){
+            return true; //hvis påkrevd, bruk @NotNull
+        }
         for (Periode periode : value.keySet()) {
-            if (periode.isTilOgMedFørFraOgMed()) {
+            if (krevFom && periode.getFraOgMed() == null) {
+                constraintContext.disableDefaultConstraintViolation();
+                constraintContext.buildConstraintViolationWithTemplate("[ugyldigPeriode] Fra og med (FOM) må være satt.")
+                        .addContainerElementNode("['" + periode + "']", Periode.class, i)
+                        .addConstraintViolation();
+                ok = false;
+            } else if (krevTom && periode.getTilOgMed() == null) {
+                constraintContext.disableDefaultConstraintViolation();
+                constraintContext.buildConstraintViolationWithTemplate("[ugyldigPeriode] Til og med (TOM) må være satt.")
+                        .addContainerElementNode("['" + periode + "']", Periode.class, i)
+                        .addConstraintViolation();
+                ok = false;
+            } else if (periode.isTilOgMedFørFraOgMed()) {
                 constraintContext.disableDefaultConstraintViolation();
                 constraintContext.buildConstraintViolationWithTemplate("[ugyldigPeriode] Fra og med (FOM) må være før eller lik til og med (TOM).")
                         .addContainerElementNode("['" + periode + "']", Periode.class, i)

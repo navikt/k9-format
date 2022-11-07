@@ -43,9 +43,7 @@ class OmsorgspengerUtbetalingValidator extends YtelseValidator {
         OmsorgspengerUtbetaling omp = (OmsorgspengerUtbetaling) ytelse;
         feil.addAll(validerPeriodeInnenforEttÅr(omp));
         feil.addAll(validerAktivitet(omp));
-        feil.addAll(validerUtenlandsopphold(omp));
         feil.addAll(validerFosterbarn(omp));
-        feil.addAll(validerBosteder(omp));
         feil.addAll(validerFraværsperioderFraSøker(omp));
         feil.addAll(validerFraværskorrigeringIm(omp));
         feil.addAll(validerFraværsperiodeKilder(omp));
@@ -130,7 +128,6 @@ class OmsorgspengerUtbetalingValidator extends YtelseValidator {
         var index = 0;
         for (SelvstendigNæringsdrivende sn : selvstendigeVirksomheter) {
             String snFelt = "selvstendigNæringsdrivende[" + index + "]";
-            feil.addAll(this.periodeValidator.validerTillattOverlappOgÅpnePerioder(sn.getPerioder(), snFelt + ".perioder"));
 
             sn.getPerioder().forEach((periode, snInfo) -> {
                 String periodeString = periode.getFraOgMed() + "-" + periode.getTilOgMed();
@@ -160,14 +157,6 @@ class OmsorgspengerUtbetalingValidator extends YtelseValidator {
         return feil;
     }
 
-    private List<Feil> validerUtenlandsopphold(OmsorgspengerUtbetaling ytelse) {
-        var utenlandsopphold = ytelse.getUtenlandsopphold();
-        if (utenlandsopphold == null) {
-            return List.of();
-        }
-        return new PeriodeValidator().validerIkkeTillattOverlapp(utenlandsopphold.getPerioder(), "utenlandsopphold.perioder");
-    }
-
     private List<Feil> validerFosterbarn(OmsorgspengerUtbetaling ytelse) {
         var fosterbarn = ytelse.getFosterbarn();
         if (fosterbarn == null || fosterbarn.isEmpty()) {
@@ -186,14 +175,6 @@ class OmsorgspengerUtbetalingValidator extends YtelseValidator {
             index++;
         }
         return feil;
-    }
-
-    private List<Feil> validerBosteder(OmsorgspengerUtbetaling ytelse) {
-        var bosteder = ytelse.getBosteder();
-        if (bosteder == null) {
-            return List.of();
-        }
-        return new PeriodeValidator().validerIkkeTillattOverlapp(bosteder.getPerioder(), "bosteder.perioder");
     }
 
     private List<Feil> validerFraværskorrigeringIm(OmsorgspengerUtbetaling ytelse) {

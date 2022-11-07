@@ -29,13 +29,13 @@ import no.nav.k9.søknad.felles.type.validering.GyldigePerioderMap;
 public class Utenlandsopphold {
 
     @Valid
-    @GyldigePerioderMap
+    @GyldigePerioderMap(krevFomDato = true, krevTomDato = true)
     @JsonInclude(value = Include.ALWAYS)
     @JsonProperty(value = "perioder")
     private Map<@NotNull Periode, @NotNull UtenlandsoppholdPeriodeInfo> perioder = new TreeMap<>();
 
     @Valid
-    @GyldigePerioderMap
+    @GyldigePerioderMap(krevFomDato = true, krevTomDato = true)
     @JsonInclude(value = Include.ALWAYS)
     @JsonProperty(value = "perioderSomSkalSlettes")
     private Map<@NotNull Periode, @NotNull UtenlandsoppholdPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();

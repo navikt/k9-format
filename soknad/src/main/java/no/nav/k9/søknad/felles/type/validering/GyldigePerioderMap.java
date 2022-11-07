@@ -18,6 +18,9 @@ public @interface GyldigePerioderMap {
 
     String message() default "Ugyldig peride-map";
 
+    boolean krevFomDato() default false;
+    boolean krevTomDato() default false;
+
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};

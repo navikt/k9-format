@@ -29,13 +29,13 @@ public class Bosteder {
 
     @JsonProperty(value = "perioder")
     @Valid
-    @GyldigePerioderMap
+    @GyldigePerioderMap(krevFomDato = true, krevTomDato = true)
     @JsonInclude(value = Include.ALWAYS)
     private Map<@NotNull Periode, @NotNull BostedPeriodeInfo> perioder = new TreeMap<>();
 
     @JsonProperty(value = "perioderSomSkalSlettes")
     @Valid
-    @GyldigePerioderMap
+    @GyldigePerioderMap(krevFomDato = true, krevTomDato = true)
     @JsonInclude(value = Include.ALWAYS)
     private Map<@NotNull Periode, @NotNull BostedPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
