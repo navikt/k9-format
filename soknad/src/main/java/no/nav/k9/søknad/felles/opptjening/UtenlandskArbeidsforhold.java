@@ -33,20 +33,6 @@ public class UtenlandskArbeidsforhold {
     @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message = "[ugyldigSyntaks] '${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     private String arbeidsgiversnavn;
 
-    public UtenlandskArbeidsforhold() {
-
-    }
-
-    @Deprecated
-    public UtenlandskArbeidsforhold(@JsonProperty(value = "ansettelsePeriode") @Valid @NotNull Periode ansettelsePeriode,
-                                    @JsonProperty(value = "land") @Valid @NotNull Landkode land,
-                                    @JsonProperty(value = "arbeidsgiversnavn") String arbeidsgiversnavn
-    ) {
-        this.ansettelsePeriode = ansettelsePeriode;
-        this.land = land;
-        this.arbeidsgiversnavn = arbeidsgiversnavn;
-    }
-
     public Periode getAnsettelsePeriode() {
         return ansettelsePeriode;
     }

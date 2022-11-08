@@ -67,7 +67,7 @@ public class OmsorgspengerAleneOmsorgTest {
         }
 
         static OmsorgspengerAleneOmsorg komplettBuilder() {
-            var barn = new Barn(NorskIdentitetsnummer.of("11111111111"));
+            var barn =  new Barn().medNorskIdentitetsnummer(NorskIdentitetsnummer.of("11111111111"));
             var periode = new Periode(LocalDate.parse("2021-01-01"), null);
             return new OmsorgspengerAleneOmsorg(barn, periode);
         }

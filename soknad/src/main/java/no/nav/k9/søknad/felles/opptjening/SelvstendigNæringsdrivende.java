@@ -1,12 +1,9 @@
 package no.nav.k9.søknad.felles.opptjening;
 
 import static java.util.Collections.unmodifiableMap;
-import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPeriode;
-import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPerioder;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -59,20 +56,6 @@ public class SelvstendigNæringsdrivende {
     @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message = "[ugyldigSyntaks] '${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     private String virksomhetNavn;
 
-    public SelvstendigNæringsdrivende() {
-
-    }
-
-    @Deprecated
-    public SelvstendigNæringsdrivende(
-            @JsonProperty(value = "perioder", required = true) @Valid @NotNull Map<@NotNull Periode, @NotNull SelvstendigNæringsdrivendePeriodeInfo> perioder,
-            @JsonProperty(value = "organisasjonsnummer", required = false) @Valid Organisasjonsnummer organisasjonsnummer,
-            @JsonProperty(value = "virksomhetNavn", required = false) String virksomhetNavn) {
-        this.perioder = unmodifiableMap(perioder);
-        this.organisasjonsnummer = organisasjonsnummer;
-        this.virksomhetNavn = virksomhetNavn;
-    }
-
     public SelvstendigNæringsdrivende medPerioder(Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> perioder) {
         this.perioder = Objects.requireNonNull(perioder, "perioder");
         return this;
@@ -86,11 +69,6 @@ public class SelvstendigNæringsdrivende {
     public SelvstendigNæringsdrivende medVirksomhetNavn(String virksomhetNavn) {
         this.virksomhetNavn = Objects.requireNonNull(virksomhetNavn, "virksomhetNavn");
         return this;
-    }
-
-    @Deprecated
-    public static SelvstendigNæringsdrivende.Builder builder() {
-        return new SelvstendigNæringsdrivende.Builder();
     }
 
     public Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> getPerioder() {
@@ -107,6 +85,9 @@ public class SelvstendigNæringsdrivende {
 
     @AssertTrue(message = "organisasjonsnummer må være satt med mindre virksomhet er registrert i utlandet")
     boolean isOkOrganisasjonsnummer() {
+        if (perioder == null) {
+            return true;
+        }
         if (organisasjonsnummer == null) {
             for (var sn : perioder.entrySet()) {
                 if (sn.getValue().registrertIUtlandet != null && !sn.getValue().registrertIUtlandet) {
@@ -116,43 +97,6 @@ public class SelvstendigNæringsdrivende {
             return !perioder.isEmpty();
         }
         return true;
-    }
-
-    /**
-     * @Deprecated bruk tom ctor
-     */
-    public static final class Builder {
-        private Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> perioder;
-        private Organisasjonsnummer organisasjonsnummer;
-        private String virksomhetNavn;
-
-        private Builder() {
-            perioder = new HashMap<>();
-        }
-
-        public Builder perioder(Map<Periode, SelvstendigNæringsdrivendePeriodeInfo> perioder) {
-            leggTilPerioder(this.perioder, perioder);
-            return this;
-        }
-
-        public Builder periode(Periode periode, SelvstendigNæringsdrivendePeriodeInfo selvstendigNæringsdrivendePeriodeInfo) {
-            leggTilPeriode(this.perioder, periode, selvstendigNæringsdrivendePeriodeInfo);
-            return this;
-        }
-
-        public SelvstendigNæringsdrivende.Builder organisasjonsnummer(Organisasjonsnummer organisasjonsnummer) {
-            this.organisasjonsnummer = organisasjonsnummer;
-            return this;
-        }
-
-        public SelvstendigNæringsdrivende.Builder virksomhetNavn(String virksomhetNavn) {
-            this.virksomhetNavn = virksomhetNavn;
-            return this;
-        }
-
-        public SelvstendigNæringsdrivende build() {
-            return new SelvstendigNæringsdrivende(perioder, organisasjonsnummer, virksomhetNavn);
-        }
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -208,39 +152,6 @@ public class SelvstendigNæringsdrivende {
 
         @JsonProperty("erFiskerPåBladB")
         private Boolean erFiskerPåBladB;
-
-        public SelvstendigNæringsdrivendePeriodeInfo() {
-
-        }
-
-        @Deprecated
-        private SelvstendigNæringsdrivendePeriodeInfo(
-                @JsonProperty(value = "virksomhetstyper", required = true) List<VirksomhetType> virksomhetstyper,
-                @JsonProperty("regnskapsførerNavn") String regnskapsførerNavn,
-                @JsonProperty("regnskapsførerTlf") String regnskapsførerTlf,
-                @JsonProperty("erVarigEndring") Boolean erVarigEndring,
-                @JsonProperty("erNyIArbeidslivet") Boolean erNyIArbeidslivet,
-                @JsonProperty("endringDato") LocalDate endringDato,
-                @JsonProperty("endringBegrunnelse") String endringBegrunnelse,
-                @JsonProperty("bruttoInntekt") BigDecimal bruttoInntekt,
-                @JsonProperty("erNyoppstartet") Boolean erNyoppstartet,
-                @JsonProperty("registrertIUtlandet") Boolean registrertIUtlandet,
-                @JsonProperty("landkode") Landkode landkode,
-                @JsonProperty("erFiskerPåBladB") Boolean erFiskerPåBladB
-        ) {
-            this.virksomhetstyper = Objects.requireNonNull(virksomhetstyper, "virksomhetstyper");
-            this.regnskapsførerNavn = regnskapsførerNavn;
-            this.regnskapsførerTlf = regnskapsførerTlf;
-            this.erVarigEndring = erVarigEndring;
-            this.erNyIArbeidslivet = erNyIArbeidslivet;
-            this.endringDato = endringDato;
-            this.endringBegrunnelse = endringBegrunnelse;
-            this.bruttoInntekt = bruttoInntekt;
-            this.erNyoppstartet = erNyoppstartet;
-            this.registrertIUtlandet = registrertIUtlandet;
-            this.landkode = landkode;
-            this.erFiskerPåBladB = erFiskerPåBladB;
-        }
 
         public SelvstendigNæringsdrivendePeriodeInfo medVirksomhetstyper(List<VirksomhetType> virksomhetstyper) {
             this.virksomhetstyper = Objects.requireNonNull(virksomhetstyper, "virksomhetstyper");
@@ -298,7 +209,7 @@ public class SelvstendigNæringsdrivende {
         }
 
         public SelvstendigNæringsdrivendePeriodeInfo medLandkode(Landkode landkode) {
-            this.landkode = Objects.requireNonNull(landkode, "landkode");
+            this.landkode = landkode;
             return this;
         }
 
@@ -348,10 +259,6 @@ public class SelvstendigNæringsdrivende {
 
         public Boolean getErFiskerPåBladB() {
             return erFiskerPåBladB;
-        }
-
-        public static Builder builder() {
-            return new Builder();
         }
 
         @Size(max = 0, message = "${validatedValue}")
@@ -424,102 +331,5 @@ public class SelvstendigNæringsdrivende {
         }
          */
 
-        @Deprecated(forRemoval = true)
-        public static final class Builder {
-            private List<VirksomhetType> virksomhetstyper;
-            private String regnskapsførerNavn;
-            private String regnskapsførerTelefon;
-            private Boolean erVarigEndring;
-            private Boolean erNyIArbeidslivet;
-            private LocalDate endringDato;
-            private String endringBegrunnelse;
-            private BigDecimal bruttoInntekt;
-            private Boolean erNyoppstartet;
-            private Boolean registrertIUtlandet;
-            private Landkode landkode;
-
-            private Boolean erFiskerPåBladB;
-
-            private Builder() {
-            }
-
-            public Builder virksomhetstyper(List<VirksomhetType> virksomhetstyper) {
-                this.virksomhetstyper = virksomhetstyper;
-                return this;
-            }
-
-            public Builder regnskapsførerNavn(String regnskapsførerNavn) {
-                this.regnskapsførerNavn = regnskapsførerNavn;
-                return this;
-            }
-
-            public Builder regnskapsførerTelefon(String regnskapsførerTelefon) {
-                this.regnskapsførerTelefon = regnskapsførerTelefon;
-                return this;
-            }
-
-            public Builder endringDato(LocalDate endringDato) {
-                this.endringDato = endringDato;
-                return this;
-            }
-
-            public Builder erVarigEndring(Boolean erVarigEndring) {
-                this.erVarigEndring = erVarigEndring;
-                return this;
-            }
-
-            public Builder erNyIArbeidslivet(Boolean erNyIArbeidslivet) {
-                this.erNyIArbeidslivet = erNyIArbeidslivet;
-                return this;
-            }
-
-            public Builder endringBegrunnelse(String endringBegrunnelse) {
-                this.endringBegrunnelse = endringBegrunnelse;
-                return this;
-            }
-
-            public Builder bruttoInntekt(BigDecimal bruttoInntekt) {
-                this.bruttoInntekt = bruttoInntekt;
-                return this;
-            }
-
-            public Builder erNyoppstartet(Boolean erNyoppstartet) {
-                this.erNyoppstartet = erNyoppstartet;
-                return this;
-            }
-
-            public Builder registrertIUtlandet(Boolean registrertIUtlandet) {
-                this.registrertIUtlandet = registrertIUtlandet;
-                return this;
-            }
-
-            public Builder landkode(Landkode landkode) {
-                this.landkode = landkode;
-                return this;
-            }
-
-            public Builder erFiskerPåBladB(Boolean erFiskerPåBladB) {
-                this.erFiskerPåBladB = erFiskerPåBladB;
-                return this;
-            }
-
-            @Deprecated
-            public SelvstendigNæringsdrivendePeriodeInfo build() {
-                return new SelvstendigNæringsdrivendePeriodeInfo(
-                        virksomhetstyper,
-                        regnskapsførerNavn,
-                        regnskapsførerTelefon,
-                        erVarigEndring,
-                        erNyIArbeidslivet,
-                        endringDato,
-                        endringBegrunnelse,
-                        bruttoInntekt,
-                        erNyoppstartet,
-                        registrertIUtlandet,
-                        landkode,
-                        erFiskerPåBladB
-                );
-            }
-        }
     }
 }

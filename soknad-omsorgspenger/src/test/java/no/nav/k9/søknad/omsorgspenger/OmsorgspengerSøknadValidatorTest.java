@@ -1,22 +1,21 @@
 package no.nav.k9.søknad.omsorgspenger;
 
+import static no.nav.k9.søknad.omsorgspenger.TestUtils.jsonForKomplettSøknad;
 import static org.assertj.core.api.Assertions.assertThat;
-
-import no.nav.k9.søknad.ValideringsFeil;
-import no.nav.k9.søknad.felles.*;
-import no.nav.k9.søknad.felles.personopplysninger.Barn;
-import no.nav.k9.søknad.felles.personopplysninger.Søker;
-import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
-import no.nav.k9.søknad.felles.type.SøknadId;
-
-import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 
-import static no.nav.k9.søknad.omsorgspenger.TestUtils.jsonForKomplettSøknad;
+import org.junit.jupiter.api.Test;
+
+import no.nav.k9.søknad.ValideringsFeil;
+import no.nav.k9.søknad.felles.Feil;
+import no.nav.k9.søknad.felles.personopplysninger.Barn;
+import no.nav.k9.søknad.felles.personopplysninger.Søker;
+import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
+import no.nav.k9.søknad.felles.type.SøknadId;
 
 public class OmsorgspengerSøknadValidatorTest {
     private static final OmsorgspengerSøknadValidator validator = new OmsorgspengerSøknadValidator();
@@ -33,20 +32,14 @@ public class OmsorgspengerSøknadValidatorTest {
     @Test
     public void søknadMedFødselsdatoSattPåBarn() {
         OmsorgspengerSøknad.Builder builder = medSøker()
-                .barn(Barn.builder()
-                        .fødselsdato(LocalDate.now())
-                        .build()
-                );
+                .barn(new Barn().medFødselsdato(LocalDate.now()));
         verifyIngenFeil(builder);
     }
 
     @Test
     public void søknadMedIdentSattPåBarn() {
         OmsorgspengerSøknad.Builder builder = medSøker()
-                .barn(Barn
-                        .builder()
-                        .norskIdentitetsnummer(NorskIdentitetsnummer.of("11111111111"))
-                        .build()
+                .barn(new Barn().medNorskIdentitetsnummer(NorskIdentitetsnummer.of("11111111111"))
                 );
         verifyIngenFeil(builder);
     }
@@ -65,11 +58,13 @@ public class OmsorgspengerSøknadValidatorTest {
             return ex.getFeil();
         }
     }
+
     private List<Feil> verifyHarFeil(OmsorgspengerSøknad.Builder builder) {
         final List<Feil> feil = valider(builder);
         assertThat(feil).isNotEmpty();
         return feil;
     }
+
     private List<Feil> verifyHarFeil(OmsorgspengerSøknad søknad) {
         final List<Feil> feil = validator.valider(søknad);
         assertThat(feil).isNotEmpty();
@@ -91,9 +86,7 @@ public class OmsorgspengerSøknadValidatorTest {
                 .builder()
                 .søknadId(SøknadId.of("123"))
                 .mottattDato(ZonedDateTime.now())
-                .søker(Søker.builder()
-                        .norskIdentitetsnummer(NorskIdentitetsnummer.of("11111111111"))
-                        .build()
+                .søker(new Søker(NorskIdentitetsnummer.of("11111111111"))
                 );
     }
 }

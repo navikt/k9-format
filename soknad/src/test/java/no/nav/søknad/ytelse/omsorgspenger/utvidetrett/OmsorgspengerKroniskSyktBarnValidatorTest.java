@@ -77,7 +77,7 @@ public class OmsorgspengerKroniskSyktBarnValidatorTest {
         }
 
         static OmsorgspengerKroniskSyktBarn minimumSøknad() {
-            var barn = new Barn(null, LocalDate.now());
+            var barn = new Barn().medFødselsdato(LocalDate.now());
             return new OmsorgspengerKroniskSyktBarn().medBarn(barn);
         }
 

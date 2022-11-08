@@ -32,25 +32,6 @@ public class Barn implements Person {
     @PastOrPresent(message = "[ugyldigFødselsdato] Fødselsdato kan ikke være fremtidig")
     private LocalDate fødselsdato;
 
-    public Barn() {
-
-    }
-
-    @Deprecated
-    public Barn(
-                @JsonProperty("norskIdentitetsnummer") @JsonAlias({ "fødselsnummer", "norskIdentifikator", "identitetsnummer",
-                        "fnr" }) NorskIdentitetsnummer norskIdentitetsnummer,
-                @JsonProperty("fødselsdato") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Oslo") LocalDate fødselsdato) {
-        this.norskIdentitetsnummer = norskIdentitetsnummer;
-        this.fødselsdato = fødselsdato;
-    }
-
-    @Deprecated
-    public Barn(NorskIdentitetsnummer norskIdentitetsnummer) {
-        this.norskIdentitetsnummer = Objects.requireNonNull(norskIdentitetsnummer);
-        this.fødselsdato = null;
-    }
-
     @Override
     public PersonIdent getPersonIdent() {
         return norskIdentitetsnummer;
@@ -83,12 +64,6 @@ public class Barn implements Person {
     }
      */
 
-    /** @deprecated brukt ctor. */
-    @Deprecated(forRemoval = true)
-    public static Builder builder() {
-        return new Builder();
-    }
-
     @Override
     public int hashCode() {
         return Objects.hash(norskIdentitetsnummer, fødselsdato);
@@ -105,27 +80,4 @@ public class Barn implements Person {
             && Objects.equals(getFødselsdato(), other.getFødselsdato());
     }
 
-    /** @deprecated brukt ctor. */
-    @Deprecated(forRemoval = true)
-    public static final class Builder {
-        private NorskIdentitetsnummer norskIdentitetsnummer;
-        private LocalDate fødselsdato;
-
-        private Builder() {
-        }
-
-        public Builder norskIdentitetsnummer(NorskIdentitetsnummer norskIdentitetsnummer) {
-            this.norskIdentitetsnummer = norskIdentitetsnummer;
-            return this;
-        }
-
-        public Builder fødselsdato(LocalDate fødselsdato) {
-            this.fødselsdato = fødselsdato;
-            return this;
-        }
-
-        public Barn build() {
-            return new Barn(norskIdentitetsnummer, fødselsdato);
-        }
-    }
 }

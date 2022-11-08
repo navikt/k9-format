@@ -69,7 +69,7 @@ public class OmsorgspengerMidlertidigAleneValidatorTest {
 
         static OmsorgspengerMidlertidigAlene komplettBuilder() {
 
-            var barn = new Barn(NorskIdentitetsnummer.of("11111111111"));
+            var barn =  new Barn().medNorskIdentitetsnummer(NorskIdentitetsnummer.of("11111111111"));
 
             var annenForelder = new AnnenForelder(NorskIdentitetsnummer.of("21111111111"))
                 .medSituasjon(SituasjonType.ANNET, "en annen årsak")

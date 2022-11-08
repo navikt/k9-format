@@ -20,12 +20,6 @@ public class Frilanser {
     @JsonProperty(value = "sluttdato")
     private LocalDate sluttdato;
 
-    /**@deprecated brukt ctor.*/
-    @Deprecated(forRemoval = true)
-    public static Frilanser.Builder builder() {
-        return new Frilanser.Builder();
-    }
-
     public Frilanser() {
 
     }
@@ -36,12 +30,12 @@ public class Frilanser {
         this.sluttdato = sluttdato;
     }
 
-    public Frilanser medStartDato(LocalDate startdato) {
+    public Frilanser medStartdato(LocalDate startdato) {
         this.startdato = Objects.requireNonNull(startdato, "startdato");
         return this;
     }
 
-    public Frilanser medSluttDato(LocalDate sluttdato) {
+    public Frilanser medSluttdato(LocalDate sluttdato) {
         this.sluttdato = Objects.requireNonNull(sluttdato, "sluttdato");
         return this;
     }
@@ -51,27 +45,4 @@ public class Frilanser {
     }
     public LocalDate getSluttdato() { return sluttdato; }
 
-    /**@deprecated brukt ctor.*/
-    @Deprecated(forRemoval = true)
-    public static final class Builder {
-        private LocalDate startdato;
-        private LocalDate sluttdato;
-
-        private Builder() {
-        }
-
-        public Builder startdato(LocalDate startdato) {
-            this.startdato = startdato;
-            return this;
-        }
-
-        public Builder sluttdato(LocalDate sluttdato) {
-            this.sluttdato = sluttdato;
-            return this;
-        }
-
-        public Frilanser build() {
-            return new Frilanser(startdato, sluttdato);
-        }
-    }
 }

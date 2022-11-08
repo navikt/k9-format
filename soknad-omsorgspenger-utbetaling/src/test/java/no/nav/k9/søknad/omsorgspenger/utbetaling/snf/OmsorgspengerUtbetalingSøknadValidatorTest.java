@@ -4,13 +4,13 @@ import static java.util.List.of;
 import static no.nav.k9.søknad.omsorgspenger.utbetaling.snf.TestUtils.jsonForKomplettSøknad;
 import static no.nav.k9.søknad.omsorgspenger.utbetaling.snf.TestUtils.komplettBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -52,14 +52,14 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
         var builder = komplettBuilder();
         builder.barn = new ArrayList<>();
         verifyIngenFeil(builder);
-        builder.fosterbarn(Barn.builder().build());
+        builder.fosterbarn(new Barn());
         Assertions.assertThat(verifyHarFeil(builder)).hasSize(1);
         builder.barn = new ArrayList<>();
-        builder.fosterbarn(Barn.builder().fødselsdato(LocalDate.now()).norskIdentitetsnummer(NorskIdentitetsnummer.of("123")).build());
+        builder.fosterbarn(new Barn().medFødselsdato(LocalDate.now()).medNorskIdentitetsnummer(NorskIdentitetsnummer.of("123")));
         Assertions.assertThat(verifyHarFeil(builder)).hasSize(1);
         builder.barn = new ArrayList<>();
-        builder.fosterbarn(Barn.builder().fødselsdato(LocalDate.now()).build());
-        builder.fosterbarn(Barn.builder().norskIdentitetsnummer(NorskIdentitetsnummer.of("123")).build());
+        builder.fosterbarn(new Barn().medFødselsdato(LocalDate.now()));
+        builder.fosterbarn(new Barn().medNorskIdentitetsnummer(NorskIdentitetsnummer.of("123")));
         verifyIngenFeil(builder);
     }
 
@@ -74,8 +74,7 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
     public void selvstending_næringsdrivende_mangler_organisajonsnummer_virksomhetsnavn_og_perioder() {
         var builder = komplettBuilder();
         List<SelvstendigNæringsdrivende> selvstendingeVirksomheter = of(
-                SelvstendigNæringsdrivende.builder()
-                        .build()
+                new SelvstendigNæringsdrivende()
         );
         builder.selvstendigNæringsdrivende(selvstendingeVirksomheter);
         Assertions.assertThat(verifyHarFeil(builder)).hasSize(2);
@@ -85,34 +84,36 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
     @Test
     public void selvstending_næringsdrivende_mangler_påkrevde_felter() {
         var builder = komplettBuilder();
-        assertThrows(NullPointerException.class, () -> {
-                    List<SelvstendigNæringsdrivende> selvstendingeVirksomheter = of(
-                            SelvstendigNæringsdrivende.builder()
-                                    .organisasjonsnummer(Organisasjonsnummer.of("816338352"))
-                                    .periode(
-                                            new Periode(LocalDate.now().minusMonths(2), LocalDate.now()),
-                                            SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
-                                                    .build()
-                                    ).build()
-                    );
-        });
+        List<SelvstendigNæringsdrivende> selvstendingeVirksomheter = of(
+                new SelvstendigNæringsdrivende()
+                        .medOrganisasjonsnummer(Organisasjonsnummer.of("816338352"))
+                        .medPerioder(Map.of(
+                                new Periode(LocalDate.of(2022, 9, 8), LocalDate.of(2022, 11, 8)),
+                                new SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo())
+                        )
+        );
+        builder.selvstendigNæringsdrivende(selvstendingeVirksomheter);
+        List<Feil> feil = verifyHarFeil(builder);
+        Assertions.assertThat(feil.stream().map(f -> "[" + f.getFelt() + "] " + f.getFeilmelding()).toList()).containsOnly(
+                "[selvstendigNæringsdrivende[0].perioder[2022-09-08/2022-11-08].virksomhetstyper] must not be null",
+                "[selvstendigNæringsdrivende[0].perioder[2022-09-08/2022-11-08].virksomhetstyper] must not be empty"
+        );
     }
 
     @Test
     public void selvstending_næringsdrivende_har_varig_endring_uten_påkrevde_felter() {
         var builder = komplettBuilder();
         List<SelvstendigNæringsdrivende> selvstendingeVirksomheter = of(
-                SelvstendigNæringsdrivende.builder()
-                        .organisasjonsnummer(Organisasjonsnummer.of("816338352"))
-                        .virksomhetNavn("ABC")
-                        .periode(
+                new SelvstendigNæringsdrivende()
+                        .medOrganisasjonsnummer(Organisasjonsnummer.of("816338352"))
+                        .medVirksomhetNavn("ABC")
+                        .medPerioder(Map.of(
                                 new Periode(LocalDate.now().minusMonths(2), LocalDate.now()),
-                                SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
-                                        .bruttoInntekt(BigDecimal.valueOf(500_00))
-                                        .virksomhetstyper(of(VirksomhetType.JORDBRUK_SKOGBRUK))
-                                        .erVarigEndring(true)
-                                        .build()
-                        ).build()
+                                new SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo()
+                                        .medBruttoInntekt(BigDecimal.valueOf(500_00))
+                                        .medVirksomhetstyper(of(VirksomhetType.JORDBRUK_SKOGBRUK))
+                                        .medErVarigEndring(true)
+                        ))
         );
         builder.selvstendigNæringsdrivende(selvstendingeVirksomheter);
         Assertions.assertThat(verifyHarFeil(builder)).hasSize(2);
@@ -122,17 +123,16 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
     public void selvstending_næringsdrivende_er_registrert_i_utlandet_uten_landkode() {
         var builder = komplettBuilder();
         List<SelvstendigNæringsdrivende> selvstendingeVirksomheter = of(
-                SelvstendigNæringsdrivende.builder()
-                        .organisasjonsnummer(Organisasjonsnummer.of("816338352"))
-                        .virksomhetNavn("ABC")
-                        .periode(
+                new SelvstendigNæringsdrivende()
+                        .medOrganisasjonsnummer(Organisasjonsnummer.of("816338352"))
+                        .medVirksomhetNavn("ABC")
+                        .medPerioder(Map.of(
                                 new Periode(LocalDate.now().minusMonths(2), LocalDate.now()),
-                                SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
-                                        .bruttoInntekt(BigDecimal.valueOf(500_000))
-                                        .virksomhetstyper(of(VirksomhetType.JORDBRUK_SKOGBRUK))
-                                        .registrertIUtlandet(true)
-                                        .build()
-                        ).build()
+                                new SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo()
+                                        .medBruttoInntekt(BigDecimal.valueOf(500_000))
+                                        .medVirksomhetstyper(of(VirksomhetType.JORDBRUK_SKOGBRUK))
+                                        .medRegistrertIUtlandet(true))
+                        )
         );
         builder.selvstendigNæringsdrivende(selvstendingeVirksomheter);
         Assertions.assertThat(verifyHarFeil(builder)).hasSize(1);
@@ -142,18 +142,17 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
     public void selvstending_næringsdrivende_er_registrert_i_utlandet_med_lankode_blankt() {
         var builder = komplettBuilder();
         List<SelvstendigNæringsdrivende> selvstendingeVirksomheter = of(
-                SelvstendigNæringsdrivende.builder()
-                        .organisasjonsnummer(Organisasjonsnummer.of("816338352"))
-                        .virksomhetNavn("ABC")
-                        .periode(
+                new SelvstendigNæringsdrivende()
+                        .medOrganisasjonsnummer(Organisasjonsnummer.of("816338352"))
+                        .medVirksomhetNavn("ABC")
+                        .medPerioder(Map.of(
                                 new Periode(LocalDate.now().minusMonths(2), LocalDate.now()),
-                                SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
-                                        .bruttoInntekt(BigDecimal.valueOf(500_000))
-                                        .virksomhetstyper(of(VirksomhetType.JORDBRUK_SKOGBRUK))
-                                        .registrertIUtlandet(true)
-                                        .landkode(Landkode.of(""))
-                                        .build()
-                        ).build()
+                                new SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo()
+                                        .medBruttoInntekt(BigDecimal.valueOf(500_000))
+                                        .medVirksomhetstyper(of(VirksomhetType.JORDBRUK_SKOGBRUK))
+                                        .medRegistrertIUtlandet(true)
+                                        .medLandkode(Landkode.of(""))
+                        ))
         );
         builder.selvstendigNæringsdrivende(selvstendingeVirksomheter);
         Assertions.assertThat(verifyHarFeil(builder)).hasSize(1);
@@ -163,18 +162,17 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
     public void selvstending_næringsdrivende_er_registrert_i_utlandet_med_ugyldig_landkode() {
         var builder = komplettBuilder();
         List<SelvstendigNæringsdrivende> selvstendingeVirksomheter = of(
-                SelvstendigNæringsdrivende.builder()
-                        .organisasjonsnummer(Organisasjonsnummer.of("816338352"))
-                        .virksomhetNavn("ABC")
-                        .periode(
+                new SelvstendigNæringsdrivende()
+                        .medOrganisasjonsnummer(Organisasjonsnummer.of("816338352"))
+                        .medVirksomhetNavn("ABC")
+                        .medPerioder(Map.of(
                                 new Periode(LocalDate.now().minusMonths(2), LocalDate.now()),
-                                SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
-                                        .bruttoInntekt(BigDecimal.valueOf(500_000))
-                                        .virksomhetstyper(of(VirksomhetType.JORDBRUK_SKOGBRUK))
-                                        .registrertIUtlandet(true)
-                                        .landkode(Landkode.of("UKJENT"))
-                                        .build()
-                        ).build()
+                                new SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo()
+                                        .medBruttoInntekt(BigDecimal.valueOf(500_000))
+                                        .medVirksomhetstyper(of(VirksomhetType.JORDBRUK_SKOGBRUK))
+                                        .medRegistrertIUtlandet(true)
+                                        .medLandkode(Landkode.of("UKJENT"))
+                        ))
         );
         builder.selvstendigNæringsdrivende(selvstendingeVirksomheter);
         Assertions.assertThat(verifyHarFeil(builder)).hasSize(1);
@@ -183,7 +181,7 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
     @Test
     public void frilanser_mangler_startdato() {
         var builder = komplettBuilder();
-        builder.frilanser(Frilanser.builder().build());
+        builder.frilanser(new Frilanser());
         Assertions.assertThat(verifyHarFeil(builder)).hasSize(1);
     }
 
