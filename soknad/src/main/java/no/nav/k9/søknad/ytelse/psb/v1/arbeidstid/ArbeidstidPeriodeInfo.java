@@ -31,14 +31,6 @@ public class ArbeidstidPeriodeInfo {
     @JsonProperty(value = "faktiskArbeidTimerPerDag", required = true)
     private Duration faktiskArbeidTimerPerDag;
 
-    @Deprecated
-    public ArbeidstidPeriodeInfo(
-            @JsonProperty(value = "jobberNormaltTimerPerDag", required = true) @Valid @NotNull @DurationMin Duration jobberNormaltTimerPerDag,
-            @JsonProperty(value = "faktiskArbeidTimerPerDag", required = true) @Valid @NotNull @DurationMin Duration faktiskArbeidTimerPerDag) {
-        this.jobberNormaltTimerPerDag = Objects.requireNonNull(jobberNormaltTimerPerDag, "jobberNormaltTimerPerDag");
-        this.faktiskArbeidTimerPerDag = Objects.requireNonNull(faktiskArbeidTimerPerDag, "faktiskArbeidTimerPerDag");
-    }
-
     public ArbeidstidPeriodeInfo(ArbeidstidPeriodeInfo info) {
         this.jobberNormaltTimerPerDag = info.jobberNormaltTimerPerDag;
         this.faktiskArbeidTimerPerDag = info.faktiskArbeidTimerPerDag;

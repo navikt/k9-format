@@ -29,15 +29,9 @@ public class ArbeidstidInfo {
     @NotNull
     private Map<@NotNull Periode, @NotNull ArbeidstidPeriodeInfo> perioder = new TreeMap<>();
 
-    @Deprecated
-    public ArbeidstidInfo(
-            @JsonProperty(value = "perioder", required = true) @Valid @NotNull Map<@NotNull Periode, @NotNull ArbeidstidPeriodeInfo> perioder) {
-        this.perioder = Objects.requireNonNull(perioder, "perioder");
-    }
-
     public ArbeidstidInfo() {
     }
-    
+
     public ArbeidstidInfo(ArbeidstidInfo arbeidstidInfo) {
         this.perioder = new TreeMap<>(arbeidstidInfo.getPerioder().entrySet()
                 .stream()

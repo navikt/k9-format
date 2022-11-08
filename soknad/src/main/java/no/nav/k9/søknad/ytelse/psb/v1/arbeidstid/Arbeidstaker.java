@@ -30,18 +30,6 @@ public class Arbeidstaker {
     @NotNull
     private ArbeidstidInfo arbeidstidInfo;
 
-    @Deprecated
-    public Arbeidstaker(@JsonProperty(value = "norskIdentitetsnummer") @Valid NorskIdentitetsnummer norskIdentitetsnummer,
-                        @JsonProperty(value = "organisasjonsnummer") @Valid Organisasjonsnummer organisasjonsnummer,
-                        @JsonProperty(value = "arbeidstidInfo") @Valid ArbeidstidInfo arbeidstidInfo) {
-        this.norskIdentitetsnummer = norskIdentitetsnummer;
-        this.organisasjonsnummer = organisasjonsnummer;
-        this.arbeidstidInfo = Objects.requireNonNull(arbeidstidInfo, "arbeidstidInfo");
-    }
-
-    public Arbeidstaker() {
-
-    }
     protected boolean erEntydigPåID() {
         return this.norskIdentitetsnummer != null && this.organisasjonsnummer != null;
     }
