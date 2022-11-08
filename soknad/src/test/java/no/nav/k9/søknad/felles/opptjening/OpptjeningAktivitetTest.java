@@ -13,7 +13,7 @@ class OpptjeningAktivitetTest {
     @Test
     public void frilanserKanHaÅpenPeriode() {
 
-        var frilanser = new Frilanser().medStartDato(LocalDate.now());
+        var frilanser = new Frilanser().medStartdato(LocalDate.now());
         var opptjeningAktivitet = new OpptjeningAktivitet().medFrilanser(frilanser);
 
 

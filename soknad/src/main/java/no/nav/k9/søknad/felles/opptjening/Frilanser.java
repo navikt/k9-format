@@ -30,12 +30,12 @@ public class Frilanser {
         this.sluttdato = sluttdato;
     }
 
-    public Frilanser medStartDato(LocalDate startdato) {
+    public Frilanser medStartdato(LocalDate startdato) {
         this.startdato = Objects.requireNonNull(startdato, "startdato");
         return this;
     }
 
-    public Frilanser medSluttDato(LocalDate sluttdato) {
+    public Frilanser medSluttdato(LocalDate sluttdato) {
         this.sluttdato = Objects.requireNonNull(sluttdato, "sluttdato");
         return this;
     }
