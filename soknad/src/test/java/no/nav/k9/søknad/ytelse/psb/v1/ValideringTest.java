@@ -245,10 +245,11 @@ class ValideringTest {
     public void tilsynnInneholderÅpnePerioder() {
         var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusMonths(2));
         var psb = YtelseEksempel.minimumYtelseMedSøknadsperiode(søknadsperiode);
-        psb.medTilsynsordning(new Tilsynsordning().medPerioder(Map.of(new Periode(LocalDate.now(), null), new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7)))));
+        Periode tilsynsordningPeriode = new Periode(LocalDate.now(), null);
+        psb.medTilsynsordning(new Tilsynsordning().medPerioder(Map.of(tilsynsordningPeriode, new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(7)))));
         var søknad = SøknadEksempel.søknad(psb);
         var feil = verifyHarFeil(søknad, List.of());
-        feilInneholder(feil, "påkrevd");
+        feilInneholder(feil, "ytelse.tilsynsordning.perioder.['" + tilsynsordningPeriode +"']",  "påkrevd", "Til og med (TOM) må være satt.");
     }
 
     @Test

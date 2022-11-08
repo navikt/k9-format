@@ -47,12 +47,10 @@ public class PerioderMedEndringUtil {
             }
         }
         if (arbeidstid.getFrilanserArbeidstidInfo().isPresent()) {
-            listen.add(new PerioderMedEndring().medPerioder("arbeidstid.frilanser",
-                    arbeidstid.getFrilanserArbeidstidInfo().get().getPerioder()));
+            listen.add(new PerioderMedEndring().medPerioder("arbeidstid.frilanser", arbeidstid.getFrilanserArbeidstidInfo().get().getPerioder()));
         }
         if (arbeidstid.getSelvstendigNæringsdrivendeArbeidstidInfo().isPresent()) {
-            listen.add(new PerioderMedEndring().medPerioder("arbeidstid.selvstendigNæringsdrivende",
-                    arbeidstid.getSelvstendigNæringsdrivendeArbeidstidInfo().get().getPerioder()));
+            listen.add(new PerioderMedEndring().medPerioder("arbeidstid.selvstendigNæringsdrivende", arbeidstid.getSelvstendigNæringsdrivendeArbeidstidInfo().get().getPerioder()));
         }
         return listen;
     }

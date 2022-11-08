@@ -172,11 +172,6 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
     }
 
     private LocalDateTimeline<Boolean> lagTidslinjeOgValider(List<Periode> periodeList, String felt, List<Feil> feil) throws ValideringsAvbrytendeFeilException {
-        var nyFeil = validerPerioderErLukketOgGyldig(periodeList, felt);
-        if (!nyFeil.isEmpty()) {
-            feil.addAll(nyFeil);
-            throw new ValideringsAvbrytendeFeilException(feil);
-        }
         try {
             return toLocalDateTimeline(periodeList);
         } catch (IllegalArgumentException e) {
@@ -186,42 +181,11 @@ class PleiepengerSyktBarnYtelseValidator extends YtelseValidator {
     }
 
     private LocalDateTimeline<Boolean> lagTidslinjeOgValider(Map<Periode, ?> periodeMap, String felt, List<Feil> feil) throws ValideringsAvbrytendeFeilException {
-        var nyFeil = validerPerioderErLukketOgGyldig(periodeMap, felt);
-        if (!nyFeil.isEmpty()) {
-            feil.addAll(nyFeil);
-            throw new ValideringsAvbrytendeFeilException(feil);
-        }
         try {
             return toLocalDateTimeline(new ArrayList<>(periodeMap.keySet()));
         } catch (IllegalArgumentException e) {
             feil.add(lagFeil(felt, "IllegalArgumentException", e.getMessage()));
             throw new ValideringsAvbrytendeFeilException(feil);
-        }
-    }
-
-    private List<Feil> validerPerioderErLukketOgGyldig(Map<Periode, ?> perioder, String felt) {
-        var feil = new ArrayList<Feil>();
-        perioder.keySet().forEach(p -> validerPerioderErLukket(p, felt + "['" + p + "']", feil));
-        return feil;
-    }
-
-    private List<Feil> validerPerioderErLukketOgGyldig(List<Periode> periodeList, String felt) {
-        var feil = new ArrayList<Feil>();
-        for (int i = 0; i < periodeList.size(); i++) {
-            var periode = periodeList.get(i);
-            if (periode != null) {
-                validerPerioderErLukket(periode, felt + "[" + i + "]", feil);
-            }
-        }
-        return feil;
-    }
-
-    private void validerPerioderErLukket(Periode periode, String felt, List<Feil> feil) {
-        if (periode.getTilOgMed() == null) {
-            feil.add(lagFeil(felt, "påkrevd", "Til og med (TOM) må være satt."));
-        }
-        if (periode.getFraOgMed() == null) {
-            feil.add(lagFeil(felt, "påkrevd", "Fra og med (FOM) må være satt."));
         }
     }
 

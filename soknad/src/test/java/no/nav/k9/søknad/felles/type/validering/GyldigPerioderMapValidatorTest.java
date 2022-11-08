@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.felles.type.Periode;
 
-class GyldigePerioderMapValidatorTest {
+class GyldigPerioderMapValidatorTest {
 
     private static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
 
@@ -95,7 +95,7 @@ class GyldigePerioderMapValidatorTest {
         ));
         Validator validator = VALIDATOR_FACTORY.getValidator();
         List<String> feilmeldinger = validator.validate(dto).stream().map(ConstraintViolation::getMessage).toList();
-        Assertions.assertThat(feilmeldinger).containsOnly("[ugyldigPeriode] Fra og med (FOM) må være satt.");
+        Assertions.assertThat(feilmeldinger).containsOnly("[påkrevd] Fra og med (FOM) må være satt.");
     }
 
     @Test
@@ -115,7 +115,7 @@ class GyldigePerioderMapValidatorTest {
         ));
         Validator validator = VALIDATOR_FACTORY.getValidator();
         List<String> feilmeldinger = validator.validate(dto).stream().map(ConstraintViolation::getMessage).toList();
-        Assertions.assertThat(feilmeldinger).containsOnly("[ugyldigPeriode] Til og med (TOM) må være satt.");
+        Assertions.assertThat(feilmeldinger).containsOnly("[påkrevd] Til og med (TOM) må være satt.");
     }
 
     @Test
@@ -125,6 +125,6 @@ class GyldigePerioderMapValidatorTest {
         ));
         Validator validator = VALIDATOR_FACTORY.getValidator();
         List<String> feilmeldinger = validator.validate(dto).stream().map(ConstraintViolation::getMessage).toList();
-        Assertions.assertThat(feilmeldinger).containsOnly("[ugyldigPeriode] Fra og med (FOM) må være satt.");
+        Assertions.assertThat(feilmeldinger).containsOnly("[påkrevd] Fra og med (FOM) må være satt.");
     }
 }

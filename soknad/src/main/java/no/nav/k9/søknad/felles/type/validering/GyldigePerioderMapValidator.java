@@ -23,23 +23,25 @@ public class GyldigePerioderMapValidator implements ConstraintValidator<GyldigeP
     public boolean isValid(Map<Periode, ?> value, ConstraintValidatorContext constraintContext) {
         int i = 0;
         boolean ok = true;
-        if (value == null){
+        if (value == null) {
             return true; //hvis påkrevd, bruk @NotNull
         }
         for (Periode periode : value.keySet()) {
             if (krevFom && periode.getFraOgMed() == null) {
                 constraintContext.disableDefaultConstraintViolation();
-                constraintContext.buildConstraintViolationWithTemplate("[ugyldigPeriode] Fra og med (FOM) må være satt.")
+                constraintContext.buildConstraintViolationWithTemplate("[påkrevd] Fra og med (FOM) må være satt.")
                         .addContainerElementNode("['" + periode + "']", Periode.class, i)
                         .addConstraintViolation();
                 ok = false;
-            } else if (krevTom && periode.getTilOgMed() == null) {
+            }
+            if (krevTom && periode.getTilOgMed() == null) {
                 constraintContext.disableDefaultConstraintViolation();
-                constraintContext.buildConstraintViolationWithTemplate("[ugyldigPeriode] Til og med (TOM) må være satt.")
+                constraintContext.buildConstraintViolationWithTemplate("[påkrevd] Til og med (TOM) må være satt.")
                         .addContainerElementNode("['" + periode + "']", Periode.class, i)
                         .addConstraintViolation();
                 ok = false;
-            } else if (periode.isTilOgMedFørFraOgMed()) {
+            }
+            if (periode.isTilOgMedFørFraOgMed()) {
                 constraintContext.disableDefaultConstraintViolation();
                 constraintContext.buildConstraintViolationWithTemplate("[ugyldigPeriode] Fra og med (FOM) må være før eller lik til og med (TOM).")
                         .addContainerElementNode("['" + periode + "']", Periode.class, i)

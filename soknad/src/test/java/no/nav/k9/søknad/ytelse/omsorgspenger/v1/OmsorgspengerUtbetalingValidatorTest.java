@@ -136,10 +136,11 @@ class OmsorgspengerUtbetalingValidatorTest {
         List<Feil> feil = lagSøknadOgValider(ytelse);
 
         assertThat(feil).hasSize(5);
-        feilInneholder(feil, "ytelse.fraværsperioder['0'].periodeManglerFom", "påkrevd");
-        feilInneholder(feil, "ytelse.fraværsperioder['1'].periodeManglerFom", "påkrevd");
-        feilInneholder(feil, "ytelse.fraværsperioder['2'].periodeManglerTom", "påkrevd");
-        feilInneholder(feil, "ytelse.fraværsperioder['3'].periode.tilOgMedFørFraOgMed", "ugyldigPeriode");
+        feilInneholder(feil, "ytelse.fraværsperioder['0'].periode", "påkrevd", "Fra og med (FOM) må være satt.");
+        feilInneholder(feil, "ytelse.fraværsperioder['0'].periode", "påkrevd", "Til og med (TOM) må være satt.");
+        feilInneholder(feil, "ytelse.fraværsperioder['1'].periode", "påkrevd", "Fra og med (FOM) må være satt.");
+        feilInneholder(feil, "ytelse.fraværsperioder['2'].periode", "påkrevd", "Til og med (TOM) må være satt.");
+        feilInneholder(feil, "ytelse.fraværsperioder['3'].periode.tilOgMedFørFraOgMed", "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM).");
     }
 
     @Test

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
-import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -16,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.felles.type.validering.GyldigPeriode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -23,6 +23,7 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
 
     @Valid
     @NotNull
+    @GyldigPeriode(krevFomDato = true, krevTomDato = true)
     @JsonProperty("periode")
     private Periode periode;
 
@@ -75,16 +76,6 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
         this.aktivitetFravær = aktivitetFravær.stream().sorted().toList(); //sorterer for å få enklere equals og hashcode
         this.arbeidsgiverOrgNr = arbeidsgiverOrgNr;
         this.arbeidsforholdId = arbeidsforholdId;
-    }
-
-    @AssertFalse(message = "Mangler fra-og-med-dato for perioden")
-    boolean isPeriodeManglerFom(){
-        return periode != null && periode.getFraOgMed() == null;
-    }
-
-    @AssertFalse(message = "Mangler til-og-med-dato for perioden")
-    boolean isPeriodeManglerTom(){
-        return periode != null && periode.getTilOgMed() == null;
     }
 
     public FraværPeriode medPeriode(Periode periode) {

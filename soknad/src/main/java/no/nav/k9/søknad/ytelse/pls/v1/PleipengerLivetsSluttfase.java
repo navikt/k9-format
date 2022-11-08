@@ -22,6 +22,7 @@ import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
+import no.nav.k9.søknad.felles.type.validering.LukketPeriode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie;
@@ -42,12 +43,12 @@ public class PleipengerLivetsSluttfase implements Ytelse {
     @NotNull
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     @JsonProperty(value = "søknadsperiode", required = true)
-    private List<@NotNull @Valid Periode> søknadsperiode = new ArrayList<>();
+    private List<@NotNull @LukketPeriode Periode> søknadsperiode = new ArrayList<>();
 
     @Valid
     @JsonProperty(value = "trekkKravPerioder", required = true)
     @NotNull
-    private List<@NotNull @Valid Periode> trekkKravPerioder = new ArrayList<>();
+    private List<@NotNull @LukketPeriode Periode> trekkKravPerioder = new ArrayList<>();
 
     @Valid
     @JsonProperty(value = "opptjeningAktivitet")
