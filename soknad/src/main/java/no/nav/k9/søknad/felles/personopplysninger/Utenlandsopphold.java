@@ -22,20 +22,23 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 import no.nav.k9.søknad.felles.type.Landkode;
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.felles.type.validering.GyldigePerioderMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Utenlandsopphold {
 
     @Valid
+    @GyldigePerioderMap(krevFomDato = true, krevTomDato = true)
     @JsonInclude(value = Include.ALWAYS)
     @JsonProperty(value = "perioder")
-    private Map<Periode, @NotNull UtenlandsoppholdPeriodeInfo> perioder = new TreeMap<>();
+    private Map<@NotNull Periode, @NotNull UtenlandsoppholdPeriodeInfo> perioder = new TreeMap<>();
 
     @Valid
+    @GyldigePerioderMap(krevFomDato = true, krevTomDato = true)
     @JsonInclude(value = Include.ALWAYS)
     @JsonProperty(value = "perioderSomSkalSlettes")
-    private Map<Periode, @NotNull UtenlandsoppholdPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
+    private Map<@NotNull Periode, @NotNull UtenlandsoppholdPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
     /**@deprecated brukt tom ctor.*/
     @JsonCreator

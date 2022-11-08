@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.felles.type.validering.GyldigePerioderMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -22,14 +23,16 @@ public class Beredskap {
 
     @JsonProperty(value="perioder", required = true)
     @Valid
+    @GyldigePerioderMap
     @NotNull
-    private Map<@NotNull Periode, @NotNull BeredskapPeriodeInfo> perioder = new TreeMap<>();
+    private Map<@NotNull Periode, @NotNull @Valid BeredskapPeriodeInfo> perioder = new TreeMap<>();
 
     // Hvorfor er dette et map? Dette er vel egentlig en liste med perioder?
     //TODO gjøre om til List
     @JsonProperty(value="perioderSomSkalSlettes")
     @Valid
-    private Map<@NotNull Periode, @NotNull BeredskapPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
+    @GyldigePerioderMap
+    private Map<@NotNull Periode, @NotNull @Valid BeredskapPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
     public Beredskap() {
     }

@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.k9.søknad.felles.type.Landkode;
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.felles.type.validering.GyldigePerioderMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -28,11 +29,13 @@ public class Bosteder {
 
     @JsonProperty(value = "perioder")
     @Valid
+    @GyldigePerioderMap(krevFomDato = true, krevTomDato = true)
     @JsonInclude(value = Include.ALWAYS)
     private Map<@NotNull Periode, @NotNull BostedPeriodeInfo> perioder = new TreeMap<>();
 
     @JsonProperty(value = "perioderSomSkalSlettes")
     @Valid
+    @GyldigePerioderMap(krevFomDato = true, krevTomDato = true)
     @JsonInclude(value = Include.ALWAYS)
     private Map<@NotNull Periode, @NotNull BostedPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 

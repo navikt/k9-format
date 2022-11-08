@@ -31,6 +31,7 @@ import no.nav.k9.søknad.felles.type.Landkode;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.VirksomhetType;
+import no.nav.k9.søknad.felles.type.validering.GyldigePerioderMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(value = Include.NON_EMPTY)
@@ -39,6 +40,7 @@ public class SelvstendigNæringsdrivende {
 
     @JsonProperty(value = "perioder", required = true)
     @Valid
+    @GyldigePerioderMap(krevFomDato = true, krevTomDato = false)
     @NotNull
     @NotEmpty
     private Map<@NotNull Periode, @NotNull SelvstendigNæringsdrivendePeriodeInfo> perioder;

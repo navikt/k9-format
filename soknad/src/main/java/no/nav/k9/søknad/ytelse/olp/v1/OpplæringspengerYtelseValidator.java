@@ -77,9 +77,6 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
 
         validerLovligEndring(olp, gyldigeEndringsperioder, feilene);
 
-        feilene.addAll(validerPerioderErLukketOgGyldig(olp.getBosteder().getPerioder(), "bosteder.perioder"));
-        feilene.addAll(validerPerioderErLukketOgGyldig(olp.getUtenlandsopphold().getPerioder(), "utenlandsopphold.perioder"));
-
         final LocalDateTimeline<Boolean> søknadsperiodeTidslinje = lagTidslinjeOgValider(olp.getSøknadsperiodeList(), "søknadsperiode.perioder", feilene);
         final LocalDateTimeline<Boolean> intervalForEndringTidslinje;
 
@@ -91,6 +88,9 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
         feilene.addAll(validerAtIngenPerioderOverlapperMedTrekkKravPerioder(trekkKravPerioderTidslinje, søknadsperiodeTidslinje, "trekkKravPerioder"));
 
         for (var ytelsePeriode : PerioderMedEndringUtil.getAllePerioderSomMåVæreInnenforSøknadsperiode(olp)) {
+            if (ytelsePeriode.getPeriodeMap().keySet().stream().anyMatch(Periode::isTilOgMedFørFraOgMed)){
+                continue; //fortsette validering med ugyldige perioder gir bare duplikate feil
+            }
             var ytelsePeriodeTidsserie = lagTidslinjeOgValider(ytelsePeriode.getPeriodeMap(), ytelsePeriode.getFelt() + ".perioder", feilene);
             feilene.addAll(validerAtYtelsePerioderErInnenforIntervalForEndring(intervalForEndringTidslinje, ytelsePeriodeTidsserie, ytelsePeriode.getFelt() + ".perioder"));
             feilene.addAll(validerAtIngenPerioderOverlapperMedTrekkKravPerioder(trekkKravPerioderTidslinje, ytelsePeriodeTidsserie, ytelsePeriode.getFelt() + ".perioder"));
@@ -194,7 +194,7 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
     }
 
     private LocalDateTimeline<Boolean> lagTidslinjeOgValider(List<Periode> periodeList, String felt, List<Feil> feil) throws ValideringsAvbrytendeFeilException {
-        var nyFeil = validerPerioderErLukketOgGyldig(periodeList, felt);
+        var nyFeil = validerPerioderErLukket(periodeList, felt);
         if (!nyFeil.isEmpty()) {
             feil.addAll(nyFeil);
             throw new ValideringsAvbrytendeFeilException(feil);
@@ -208,7 +208,7 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
     }
 
     private LocalDateTimeline<Boolean> lagTidslinjeOgValider(Map<Periode, ?> periodeMap, String felt, List<Feil> feil) throws ValideringsAvbrytendeFeilException {
-        var nyFeil = validerPerioderErLukketOgGyldig(periodeMap, felt);
+        var nyFeil = validerPerioderErLukket(periodeMap, felt);
         if (!nyFeil.isEmpty()) {
             feil.addAll(nyFeil);
             throw new ValideringsAvbrytendeFeilException(feil);
@@ -221,22 +221,20 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
         }
     }
 
-    private List<Feil> validerPerioderErLukketOgGyldig(Map<Periode, ?> perioder, String felt) {
+    private List<Feil> validerPerioderErLukket(Map<Periode, ?> perioder, String felt) {
         var feil = new ArrayList<Feil>();
         perioder.keySet().forEach(p -> {
             validerPerioderErLukket(p, felt + "['" + p + "']", feil);
-            validerPerioderIkkeErInvertert(p, felt + "['" + p + "']", feil);
         });
         return feil;
     }
 
-    private List<Feil> validerPerioderErLukketOgGyldig(List<Periode> periodeList, String felt) {
+    private List<Feil> validerPerioderErLukket(List<Periode> periodeList, String felt) {
         var feil = new ArrayList<Feil>();
         for (int i = 0; i < periodeList.size(); i++) {
             var periode = periodeList.get(i);
             if (periode != null) {
                 validerPerioderErLukket(periode, felt + "[" + i + "]", feil);
-                validerPerioderIkkeErInvertert(periode, felt + "[" + i + "]", feil);
             }
         }
         return feil;
@@ -251,11 +249,6 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
         }
     }
 
-    private void validerPerioderIkkeErInvertert(Periode periode, String felt, List<Feil> feil) {
-        if (periode.getFraOgMed() != null && periode.getTilOgMed() != null && periode.getTilOgMed().isBefore(periode.getFraOgMed())) {
-            feil.add(lagFeil(felt, "ugyldigPeriode", "Fra og med (FOM) må være før eller lik til og med (TOM)."));
-        }
-    }
 
     static class ValideringsAvbrytendeFeilException extends RuntimeException {
 

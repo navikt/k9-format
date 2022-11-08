@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.felles.type.validering.GyldigePerioderMap;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -26,6 +27,7 @@ public class Uttak {
 
     @Valid
     @NotNull
+    @GyldigePerioderMap(krevFomDato = true, krevTomDato = true)
     @JsonProperty(value = "perioder")
     private Map<@NotNull Periode, @NotNull UttakPeriodeInfo> perioder = new TreeMap<>();
 

@@ -22,7 +22,7 @@ public class OpptjeningAktivitet {
     @JsonProperty(value = "selvstendigNæringsdrivende", required = true)
     @Valid
     @NotNull
-    private List<@NotNull SelvstendigNæringsdrivende> selvstendigNæringsdrivende = new ArrayList<>();
+    private List<@NotNull @Valid SelvstendigNæringsdrivende> selvstendigNæringsdrivende = new ArrayList<>();
 
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     @JsonProperty(value = "frilanser")

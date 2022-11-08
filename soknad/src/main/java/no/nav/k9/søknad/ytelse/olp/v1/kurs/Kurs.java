@@ -2,7 +2,6 @@ package no.nav.k9.søknad.ytelse.olp.v1.kurs;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -30,7 +29,7 @@ public class Kurs {
     @NotNull
     @Size(min = 1)
     @Valid
-    private List<KursPeriodeMedReisetid> kursperioder;
+    private List<@NotNull @Valid KursPeriodeMedReisetid> kursperioder;
 
     public Kurs() {
     }

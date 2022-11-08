@@ -87,11 +87,6 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
         return periode != null && periode.getTilOgMed() == null;
     }
 
-    @AssertFalse(message = "Til-og-med-dato er før fra-og-med-dato for perioden")
-    boolean isPeriodeTomFørFom(){
-        return periode != null && periode.getTilOgMed() != null && periode.getFraOgMed() != null && periode.getTilOgMed().isBefore(periode.getFraOgMed());
-    }
-
     public FraværPeriode medPeriode(Periode periode) {
         this.periode = periode;
         return this;
