@@ -34,7 +34,7 @@ public class Tilsynsordning {
         this.perioder = new TreeMap<>(t.getPerioder().entrySet()
                 .stream()
                 .map(e -> Map.entry(
-                    new Periode(e.getKey()),
+                    e.getKey(),
                     new TilsynPeriodeInfo(e.getValue())
                 ))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))

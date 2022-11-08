@@ -50,7 +50,7 @@ public final class Søknadsammenslåer {
                 .entrySet()
                 .stream()
                 .map(e -> Map.entry(
-                        new Periode(e.getKey()),
+                        e.getKey(),
                         new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(e.getValue().getEtablertTilsynTimerPerDag())
                 ))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));

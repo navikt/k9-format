@@ -42,7 +42,7 @@ public class ArbeidstidInfo {
         this.perioder = new TreeMap<>(arbeidstidInfo.getPerioder().entrySet()
                 .stream()
                 .map(e -> Map.entry(
-                    new Periode(e.getKey()),
+                    e.getKey(),
                     new ArbeidstidPeriodeInfo(e.getValue())
                 ))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
