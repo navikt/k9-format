@@ -26,17 +26,6 @@ public class AnnenAktivitet {
     @NotNull
     private AnnenAktivitetType annenAktivitetType;
 
-    @Deprecated
-    public AnnenAktivitet(@JsonProperty(value = "periode", required = true) @Valid @NotNull Periode periode,
-                          @JsonProperty(value = "annenAktivitetType", required = true) @Valid @NotNull AnnenAktivitetType annenAktivitetType) {
-        this.periode = periode;
-        this.annenAktivitetType = annenAktivitetType;
-    }
-
-    public AnnenAktivitet() {
-
-    }
-
     public Periode getPeriode() {
         return periode;
     }

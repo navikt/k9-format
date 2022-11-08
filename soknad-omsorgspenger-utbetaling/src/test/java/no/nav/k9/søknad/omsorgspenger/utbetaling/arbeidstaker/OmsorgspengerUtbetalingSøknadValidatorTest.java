@@ -1,19 +1,20 @@
 package no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker;
 
-import no.nav.k9.søknad.ValideringsFeil;
-import no.nav.k9.søknad.felles.Feil;
-import no.nav.k9.søknad.felles.personopplysninger.Barn;
-import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
-import org.junit.jupiter.api.Test;
+import static no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker.TestUtils.jsonForKomplettSøknad;
+import static no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker.TestUtils.komplettBuilder;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker.TestUtils.jsonForKomplettSøknad;
-import static no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker.TestUtils.komplettBuilder;
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
+
+import no.nav.k9.søknad.ValideringsFeil;
+import no.nav.k9.søknad.felles.Feil;
+import no.nav.k9.søknad.felles.personopplysninger.Barn;
+import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 
 @SuppressWarnings("removal")
 public class OmsorgspengerUtbetalingSøknadValidatorTest {
@@ -41,14 +42,14 @@ public class OmsorgspengerUtbetalingSøknadValidatorTest {
         var builder = komplettBuilder();
         builder.barn = new ArrayList<>();
         verifyIngenFeil(builder);
-        builder.fosterbarn(Barn.builder().build());
+        builder.fosterbarn(new Barn());
         assertThat(verifyHarFeil(builder)).hasSize(1);
         builder.barn = new ArrayList<>();
-        builder.fosterbarn(Barn.builder().fødselsdato(LocalDate.now()).norskIdentitetsnummer(NorskIdentitetsnummer.of("123")).build());
+        builder.fosterbarn(new Barn().medFødselsdato(LocalDate.now()).medNorskIdentitetsnummer(NorskIdentitetsnummer.of("123")));
         assertThat(verifyHarFeil(builder)).hasSize(1);
         builder.barn = new ArrayList<>();
-        builder.fosterbarn(Barn.builder().fødselsdato(LocalDate.now()).build());
-        builder.fosterbarn(Barn.builder().norskIdentitetsnummer(NorskIdentitetsnummer.of("123")).build());
+        builder.fosterbarn(new Barn().medFødselsdato(LocalDate.now()));
+        builder.fosterbarn(new Barn().medNorskIdentitetsnummer(NorskIdentitetsnummer.of("123")));
         verifyIngenFeil(builder);
     }
 

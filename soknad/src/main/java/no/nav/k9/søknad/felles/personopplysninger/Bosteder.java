@@ -1,10 +1,7 @@
 package no.nav.k9.søknad.felles.personopplysninger;
 
 import static java.util.Collections.unmodifiableMap;
-import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPeriode;
-import static no.nav.k9.søknad.felles.type.Periode.Utils.leggTilPerioder;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
@@ -13,7 +10,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -39,17 +35,6 @@ public class Bosteder {
     @JsonInclude(value = Include.ALWAYS)
     private Map<@NotNull Periode, @NotNull BostedPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
-    /**@deprecated brukt tom ctor.*/
-    @JsonCreator
-    public Bosteder(
-                    @JsonProperty("perioder") Map<Periode, BostedPeriodeInfo> perioder) {
-        this.perioder = (perioder == null ) ? new TreeMap<>() : new TreeMap<>(perioder);
-    }
-
-    public Bosteder() {
-
-    }
-
     public Map<Periode, BostedPeriodeInfo> getPerioder() {
         return unmodifiableMap(perioder);
     }
@@ -68,36 +53,6 @@ public class Bosteder {
         return this;
     }
 
-    /**@deprecated brukt ctor.*/
-    @Deprecated(forRemoval = true)
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    /**@deprecated brukt ctor.*/
-    @Deprecated(forRemoval = true)
-    public static final class Builder {
-        private Map<Periode, BostedPeriodeInfo> perioder;
-
-        private Builder() {
-            perioder = new HashMap<>();
-        }
-
-        public Builder perioder(Map<Periode, BostedPeriodeInfo> perioder) {
-            leggTilPerioder(this.perioder, perioder);
-            return this;
-        }
-
-        public Builder periode(Periode periode, BostedPeriodeInfo bostedPeriodeInfo) {
-            leggTilPeriode(this.perioder, periode, bostedPeriodeInfo);
-            return this;
-        }
-
-        public Bosteder build() {
-            return new Bosteder(
-                perioder);
-        }
-    }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -108,16 +63,6 @@ public class Bosteder {
         @Valid
         private Landkode land;
 
-        /**@deprecated brukt tom ctor.*/
-        @JsonCreator
-        public BostedPeriodeInfo(@JsonProperty(value = "land", required = true) @NotNull @Valid Landkode land) {
-            this.land = Objects.requireNonNull(land, "land");
-        }
-
-        public BostedPeriodeInfo() {
-
-        }
-
         public Landkode getLand() {
             return land;
         }
@@ -125,31 +70,6 @@ public class Bosteder {
         public BostedPeriodeInfo medLand(Landkode land) {
             this.land = Objects.requireNonNull(land, "land");
             return this;
-        }
-
-        /**@deprecated brukt ctor.*/
-        @Deprecated(forRemoval = true)
-        public static Builder builder() {
-            return new Builder();
-        }
-
-        /**@deprecated brukt ctor.*/
-        @Deprecated(forRemoval = true)
-        public static final class Builder {
-            private Landkode land;
-
-            private Builder() {
-            }
-
-            public Builder land(Landkode land) {
-                this.land = land;
-                return this;
-            }
-
-            public BostedPeriodeInfo build() {
-                return new BostedPeriodeInfo(
-                    land);
-            }
         }
     }
 }

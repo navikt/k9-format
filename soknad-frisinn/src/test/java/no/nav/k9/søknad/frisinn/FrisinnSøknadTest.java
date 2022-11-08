@@ -95,9 +95,7 @@ public class FrisinnSøknadTest {
             .søknadsperiode("2020-04-01/2020-04-30")
             .mottattDato(ZonedDateTime.parse("2020-04-20T07:15:36.124Z"))
             .språk(Språk.of("nb"))
-            .søker(Søker.builder()
-                .norskIdentitetsnummer(NorskIdentitetsnummer.of("12345678901"))
-                .build())
+            .søker(new Søker(NorskIdentitetsnummer.of("12345678901")))
             .inntekter(new Inntekter(frilanser, selvstendig, arbeidstaker))
             .build();
         return søknad;
