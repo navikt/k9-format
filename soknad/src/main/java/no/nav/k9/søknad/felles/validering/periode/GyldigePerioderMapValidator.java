@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.felles.type.validering;
+package no.nav.k9.søknad.felles.validering.periode;
 
 import java.util.Map;
 
@@ -14,7 +14,7 @@ public class GyldigePerioderMapValidator implements ConstraintValidator<GyldigeP
 
     @Override
     public void initialize(GyldigePerioderMap konfig) {
-        //kan i fremtiden velge å ta inn flere parametre for å spesialisere eksempelvis: sjekke for overlapp
+        //kan i fremtiden velge å ta inn flere parametre for å spesialisere. Eksempelvis: sjekke for overlapp
         krevFom = konfig.krevFomDato();
         krevTom = konfig.krevTomDato();
     }

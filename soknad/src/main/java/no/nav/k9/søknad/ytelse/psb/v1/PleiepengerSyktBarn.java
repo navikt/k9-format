@@ -24,7 +24,7 @@ import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
-import no.nav.k9.søknad.felles.type.validering.LukketPeriode;
+import no.nav.k9.søknad.felles.validering.periode.LukketPeriode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;

@@ -15,23 +15,24 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.felles.type.validering.GyldigePerioderMap;
+import no.nav.k9.søknad.felles.validering.AvbrytendeValideringsfeil;
+import no.nav.k9.søknad.felles.validering.periode.GyldigePerioderMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Beredskap {
 
-    @JsonProperty(value="perioder", required = true)
+    @JsonProperty(value = "perioder", required = true)
     @Valid
-    @GyldigePerioderMap
+    @GyldigePerioderMap(payload = {AvbrytendeValideringsfeil.class})
     @NotNull
     private Map<@NotNull Periode, @NotNull @Valid BeredskapPeriodeInfo> perioder = new TreeMap<>();
 
     // Hvorfor er dette et map? Dette er vel egentlig en liste med perioder?
     //TODO gjøre om til List
-    @JsonProperty(value="perioderSomSkalSlettes")
+    @JsonProperty(value = "perioderSomSkalSlettes")
     @Valid
-    @GyldigePerioderMap
+    @GyldigePerioderMap(payload = {AvbrytendeValideringsfeil.class})
     private Map<@NotNull Periode, @NotNull @Valid BeredskapPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
     public Beredskap() {

@@ -8,12 +8,12 @@ import javax.validation.ValidatorFactory;
 
 import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.SøknadValidator;
-import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
+import no.nav.k9.søknad.felles.validering.AvbrytendeValideringsfeil;
 
 public class OpplæringspengerSøknadValidator extends SøknadValidator<Søknad> {
 
@@ -45,6 +45,10 @@ public class OpplæringspengerSøknadValidator extends SøknadValidator<Søknad>
         List<Feil> feil = validate.stream()
                 .map(Feil::toFeil)
                 .collect(Collectors.toList());
+
+        if (AvbrytendeValideringsfeil.harAvbrytendeValideringsfeil(validate)) {
+            return feil;
+        }
 
         Opplæringspenger ytelse = (Opplæringspenger) søknad.getYtelse();
         validerInneholderBegrunnelseForInnsending(søknad, ytelse, feil);

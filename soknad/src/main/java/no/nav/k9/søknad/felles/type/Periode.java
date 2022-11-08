@@ -8,6 +8,8 @@ import javax.validation.constraints.AssertFalse;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import no.nav.k9.søknad.felles.validering.AvbrytendeValideringsfeil;
+
 public class Periode implements Comparable<Periode> {
     private static final String ÅPEN = "..";
     private static final String SKILLE = "/";
@@ -38,7 +40,7 @@ public class Periode implements Comparable<Periode> {
         this.iso8601 = toIso8601(fraOgMed) + SKILLE + toIso8601(tilOgMed);
     }
 
-    @AssertFalse(message = "[ugyldigPeriode] Fra og med (FOM) må være før eller lik til og med (TOM).")
+    @AssertFalse(message = "[ugyldigPeriode] Fra og med (FOM) må være før eller lik til og med (TOM).", payload = AvbrytendeValideringsfeil.class)
     public boolean isTilOgMedFørFraOgMed() {
         return fraOgMed != null && tilOgMed != null && tilOgMed.isBefore(fraOgMed);
     }

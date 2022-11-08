@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.felles.type.validering.GyldigPeriode;
+import no.nav.k9.søknad.felles.validering.periode.LukketPeriode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -23,7 +23,7 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
 
     @Valid
     @NotNull
-    @GyldigPeriode(krevFomDato = true, krevTomDato = true)
+    @LukketPeriode
     @JsonProperty("periode")
     private Periode periode;
 

@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.felles.type.validering;
+package no.nav.k9.søknad.felles.validering.periode;
 
 
 import java.lang.annotation.Documented;
@@ -16,9 +16,10 @@ import javax.validation.Payload;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface GyldigePerioderMap {
 
-    String message() default "Ugyldig peride-map";
+    String message() default "Ugyldig periode-map";
 
     boolean krevFomDato() default false;
+
     boolean krevTomDato() default false;
 
     Class<?>[] groups() default {};

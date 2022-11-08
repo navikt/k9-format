@@ -13,6 +13,7 @@ import no.nav.k9.søknad.SøknadValidator;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.felles.validering.AvbrytendeValideringsfeil;
 
 public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<Søknad> {
 
@@ -42,6 +43,10 @@ public class OmsorgspengerUtbetalingSøknadValidator extends SøknadValidator<S�
         List<Feil> feil = validate.stream()
                 .map(Feil::toFeil)
                 .collect(Collectors.toList());
+
+        if (AvbrytendeValideringsfeil.harAvbrytendeValideringsfeil(validate)) {
+            return feil;
+        }
 
         validerVersjon(søknad.getVersjon(), feil);
         validerFelterPåSøknad(søknad, feil);

@@ -19,20 +19,21 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 import no.nav.k9.søknad.felles.type.Landkode;
 import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.felles.type.validering.GyldigePerioderMap;
+import no.nav.k9.søknad.felles.validering.AvbrytendeValideringsfeil;
+import no.nav.k9.søknad.felles.validering.periode.GyldigePerioderMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Utenlandsopphold {
 
     @Valid
-    @GyldigePerioderMap(krevFomDato = true, krevTomDato = true)
+    @GyldigePerioderMap(krevFomDato = true, krevTomDato = true, payload = {AvbrytendeValideringsfeil.class})
     @JsonInclude(value = Include.ALWAYS)
     @JsonProperty(value = "perioder")
     private Map<@NotNull Periode, @NotNull UtenlandsoppholdPeriodeInfo> perioder = new TreeMap<>();
 
     @Valid
-    @GyldigePerioderMap(krevFomDato = true, krevTomDato = true)
+    @GyldigePerioderMap(krevFomDato = true, krevTomDato = true, payload = {AvbrytendeValideringsfeil.class})
     @JsonInclude(value = Include.ALWAYS)
     @JsonProperty(value = "perioderSomSkalSlettes")
     private Map<@NotNull Periode, @NotNull UtenlandsoppholdPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
@@ -42,7 +43,7 @@ public class Utenlandsopphold {
     }
 
     public Utenlandsopphold medPerioder(Map<Periode, UtenlandsoppholdPeriodeInfo> perioder) {
-        this.perioder = (perioder == null ) ? new TreeMap<>() : new TreeMap<>(perioder);
+        this.perioder = (perioder == null) ? new TreeMap<>() : new TreeMap<>(perioder);
         return this;
     }
 
@@ -51,7 +52,7 @@ public class Utenlandsopphold {
     }
 
     public Utenlandsopphold medPerioderSomSkalSlettes(Map<Periode, UtenlandsoppholdPeriodeInfo> perioderSomSkalSlettes) {
-        this.perioderSomSkalSlettes = (perioderSomSkalSlettes == null ) ? new TreeMap<>() : new TreeMap<>(perioderSomSkalSlettes);
+        this.perioderSomSkalSlettes = (perioderSomSkalSlettes == null) ? new TreeMap<>() : new TreeMap<>(perioderSomSkalSlettes);
         return this;
     }
 

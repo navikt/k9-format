@@ -16,6 +16,8 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.felles.type.Periode;
+import no.nav.k9.søknad.felles.validering.AvbrytendeValideringsfeil;
+import no.nav.k9.søknad.felles.validering.periode.GyldigePerioderMap;
 
 class GyldigPerioderMapValidatorTest {
 
@@ -23,10 +25,10 @@ class GyldigPerioderMapValidatorTest {
 
     static class TestDto {
 
-        @GyldigePerioderMap(krevFomDato = true, krevTomDato = false)
+        @GyldigePerioderMap(krevFomDato = true, krevTomDato = false, payload = {AvbrytendeValideringsfeil.class})
         private Map<Periode, Boolean> åpnePerioder;
 
-        @GyldigePerioderMap(krevFomDato = true, krevTomDato = true)
+        @GyldigePerioderMap(krevFomDato = true, krevTomDato = true, payload = {AvbrytendeValideringsfeil.class})
         private Map<Periode, Boolean> lukkedePerioder;
 
         public TestDto medÅpnePerioder(Map<Periode, Boolean> åpnePerioder) {

@@ -13,6 +13,7 @@ import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
+import no.nav.k9.søknad.felles.validering.AvbrytendeValideringsfeil;
 
 public class PleiepengerLivetsSluttfaseSøknadValidator extends SøknadValidator<Søknad> {
 
@@ -36,6 +37,10 @@ public class PleiepengerLivetsSluttfaseSøknadValidator extends SøknadValidator
         List<Feil> feil = validate.stream()
                 .map(Feil::toFeil)
                 .collect(Collectors.toList());
+
+        if (AvbrytendeValideringsfeil.harAvbrytendeValideringsfeil(validate)) {
+            return feil;
+        }
 
         validerInneholderBegrunnelseDersomTrekkAvPerioder(søknad, feil);
         validerFelterPåSøknad(søknad, feil);

@@ -16,7 +16,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.felles.type.validering.GyldigePerioderMap;
+import no.nav.k9.søknad.felles.validering.AvbrytendeValideringsfeil;
+import no.nav.k9.søknad.felles.validering.periode.GyldigePerioderMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -25,7 +26,7 @@ public class ArbeidstidInfo {
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     @JsonProperty(value = "perioder", required = true)
     @Valid
-    @GyldigePerioderMap
+    @GyldigePerioderMap(payload = {AvbrytendeValideringsfeil.class})
     @NotNull
     private Map<@NotNull Periode, @NotNull ArbeidstidPeriodeInfo> perioder = new TreeMap<>();
 
@@ -36,11 +37,11 @@ public class ArbeidstidInfo {
         this.perioder = new TreeMap<>(arbeidstidInfo.getPerioder().entrySet()
                 .stream()
                 .map(e -> Map.entry(
-                    e.getKey(),
-                    new ArbeidstidPeriodeInfo(e.getValue())
+                        e.getKey(),
+                        new ArbeidstidPeriodeInfo(e.getValue())
                 ))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
-            );
+        );
     }
 
     public Map<Periode, ArbeidstidPeriodeInfo> getPerioder() {

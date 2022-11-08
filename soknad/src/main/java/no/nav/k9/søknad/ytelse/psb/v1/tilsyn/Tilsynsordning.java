@@ -15,30 +15,31 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.felles.type.validering.GyldigePerioderMap;
+import no.nav.k9.søknad.felles.validering.AvbrytendeValideringsfeil;
+import no.nav.k9.søknad.felles.validering.periode.GyldigePerioderMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Tilsynsordning {
 
-    @JsonProperty(value="perioder", required = true)
+    @JsonProperty(value = "perioder", required = true)
     @NotNull
     @Valid
-    @GyldigePerioderMap(krevFomDato = true, krevTomDato = true)
+    @GyldigePerioderMap(krevFomDato = true, krevTomDato = true, payload = {AvbrytendeValideringsfeil.class})
     private Map<@NotNull Periode, @NotNull TilsynPeriodeInfo> perioder = new TreeMap<>();
 
     public Tilsynsordning() {
     }
-    
+
     public Tilsynsordning(Tilsynsordning t) {
         this.perioder = new TreeMap<>(t.getPerioder().entrySet()
                 .stream()
                 .map(e -> Map.entry(
-                    e.getKey(),
-                    new TilsynPeriodeInfo(e.getValue())
+                        e.getKey(),
+                        new TilsynPeriodeInfo(e.getValue())
                 ))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
-            );
+        );
     }
 
     public Map<Periode, TilsynPeriodeInfo> getPerioder() {
