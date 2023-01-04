@@ -20,11 +20,6 @@ public class Kurs {
     @Valid
     private Kursholder kursholder;
 
-    @JsonProperty(value = "formål", required = true)
-    @NotNull
-    @Valid
-    private String formål;
-
     @JsonProperty(value = "kursperioder", required = true)
     @NotNull
     @Size(min = 1)
@@ -34,18 +29,13 @@ public class Kurs {
     public Kurs() {
     }
 
-    public Kurs(Kursholder kursholder, String formålMedKurset, List<KursPeriodeMedReisetid> kursperioder) {
+    public Kurs(Kursholder kursholder, List<KursPeriodeMedReisetid> kursperioder) {
         this.kursholder = kursholder;
-        this.formål = formålMedKurset;
         this.kursperioder = kursperioder;
     }
 
     public Kursholder getKursholder() {
         return kursholder;
-    }
-
-    public String getFormål() {
-        return formål;
     }
 
     public List<KursPeriodeMedReisetid> getKursperioder() {
