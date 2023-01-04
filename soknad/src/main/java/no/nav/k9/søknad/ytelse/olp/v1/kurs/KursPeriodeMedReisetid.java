@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -30,13 +32,25 @@ public class KursPeriodeMedReisetid {
     @Valid
     private LocalDate hjemkomst;
 
+    @JsonProperty(value = "begrunnelseReisetidTil")
+    @Size(max = 4000)
+    @Pattern(regexp = "^[\\p{Pd}\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}§]*$", message = "[${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
+    private String begrunnelseReisetidTil;
+
+    @JsonProperty(value = "begrunnelseReisetidHjem")
+    @Size(max = 4000)
+    @Pattern(regexp = "^[\\p{Pd}\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}§]*$", message = "[${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
+    private String begrunnelseReisetidHjem;
+
     public KursPeriodeMedReisetid() {
     }
 
-    public KursPeriodeMedReisetid(Periode periode, LocalDate avreise, LocalDate hjemkomst) {
+    public KursPeriodeMedReisetid(Periode periode, LocalDate avreise, LocalDate hjemkomst, String begrunnelseReisetidTil, String begrunnelseReisetidHjem) {
         this.periode = periode;
         this.avreise = avreise;
         this.hjemkomst = hjemkomst;
+        this.begrunnelseReisetidTil = begrunnelseReisetidTil;
+        this.begrunnelseReisetidHjem = begrunnelseReisetidHjem;
     }
 
     public Periode getPeriode() {
@@ -49,5 +63,13 @@ public class KursPeriodeMedReisetid {
 
     public LocalDate getHjemkomst() {
         return hjemkomst;
+    }
+
+    public String getBegrunnelseReisetidTil() {
+        return begrunnelseReisetidTil;
+    }
+
+    public String getBegrunnelseReisetidHjem() {
+        return begrunnelseReisetidHjem;
     }
 }
