@@ -23,7 +23,7 @@ class OpplæringspengerYtelseValidatorTest {
     private Opplæringspenger lagYtelse(String holder, UUID institusjonUuid) {
         Periode søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusWeeks(1));
         KursPeriodeMedReisetid kursPeriode = new KursPeriodeMedReisetid(søknadsperiode, søknadsperiode.getFraOgMed(), søknadsperiode.getTilOgMed());
-        Kurs kurs = new Kurs(new Kursholder(holder, institusjonUuid), "?", List.of(kursPeriode));
+        Kurs kurs = new Kurs(new Kursholder(holder, institusjonUuid), List.of(kursPeriode));
         return new Opplæringspenger().medBarn(YtelseEksempel.lagBarn()).medSøknadsperiode(List.of(søknadsperiode)).medUttak(YtelseEksempel.lagUttak(søknadsperiode)).medKurs(kurs);
     }
 
