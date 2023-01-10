@@ -8,6 +8,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -25,11 +26,13 @@ public class KursPeriodeMedReisetid {
     @JsonProperty(value = "avreise", required = true)
     @NotNull
     @Valid
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Oslo")
     private LocalDate avreise;
 
     @JsonProperty(value = "hjemkomst", required = true)
     @NotNull
     @Valid
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Oslo")
     private LocalDate hjemkomst;
 
     @JsonProperty(value = "begrunnelseReisetidTil")
