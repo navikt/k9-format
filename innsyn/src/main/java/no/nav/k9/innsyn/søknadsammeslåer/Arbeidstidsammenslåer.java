@@ -28,10 +28,14 @@ public class Arbeidstidsammenslåer {
         sammenslåttArbeidstid.medArbeidstaker(arbeidstakerliste);
 
         final ArbeidstidInfo frilanserArbeidstidInfo = slåSammenFrilanserArbeidstid(s2Ytelse, a1, a2);
-        sammenslåttArbeidstid.medFrilanserArbeidstid(frilanserArbeidstidInfo);
+        if (!frilanserArbeidstidInfo.getPerioder().isEmpty()) {
+            sammenslåttArbeidstid.medFrilanserArbeidstid(frilanserArbeidstidInfo);
+        }
 
         final ArbeidstidInfo selvstendigNæringsdrivendeArbeidstidInfo = slåSammenSelvstendigNæringsdrivendeArbeidstidInfo(s2Ytelse, a1, a2);
-        sammenslåttArbeidstid.medSelvstendigNæringsdrivendeArbeidstidInfo(selvstendigNæringsdrivendeArbeidstidInfo);
+        if (!selvstendigNæringsdrivendeArbeidstidInfo.getPerioder().isEmpty()) {
+            sammenslåttArbeidstid.medSelvstendigNæringsdrivendeArbeidstidInfo(selvstendigNæringsdrivendeArbeidstidInfo);
+        }
 
         return sammenslåttArbeidstid;
     }
