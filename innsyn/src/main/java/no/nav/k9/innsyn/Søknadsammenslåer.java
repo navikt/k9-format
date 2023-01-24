@@ -77,7 +77,7 @@ public final class Søknadsammenslåer {
 
         final Søknad s = new Søknad()
                 .medSøknadId(SøknadId.of("generert"))
-                .medVersjon("1.0.0.")
+                .medVersjon("1.0.0")
                 .medMottattDato(ZonedDateTime.now())
                 /* Bruk aktørId fra PsbSøknadsinnhold fremfor: */
                 .medSøker(new Søker(NorskIdentitetsnummer.of("00000000000")))
