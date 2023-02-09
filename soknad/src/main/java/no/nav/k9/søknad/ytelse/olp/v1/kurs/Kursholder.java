@@ -14,7 +14,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Kursholder {
 
-    @JsonProperty(value = "holder", required = true)
+    @Deprecated(forRemoval = true)
+    @JsonProperty(value = "holder")
     @Valid
     @Size(max = 100)
     @Pattern(regexp = "^[\\p{Pd}\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}§]*$", message = "[${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
@@ -27,11 +28,17 @@ public class Kursholder {
     public Kursholder() {
     }
 
+    public Kursholder(UUID institusjonUuid) {
+        this.institusjonUuid = institusjonUuid;
+    }
+
+    @Deprecated(forRemoval = true)
     public Kursholder(String holder, UUID institusjonUuid) {
         this.holder = holder;
         this.institusjonUuid = institusjonUuid;
     }
 
+    @Deprecated(forRemoval = true)
     public String getHolder() {
         return holder;
     }
