@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -17,8 +18,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import no.nav.k9.søknad.felles.Kildesystem;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.BegrunnelseForInnsending;
@@ -71,6 +74,10 @@ public class Søknad implements Innsending {
     @NotNull
     @JsonProperty(value = "ytelse", required = true)
     private Ytelse ytelse;
+    
+    @Valid
+    @JsonProperty(value = "kildesystem", required = false)
+    private Kildesystem kildesystem;
 
     public Søknad() {
         //
@@ -139,6 +146,19 @@ public class Søknad implements Innsending {
     public <Y extends Ytelse> Y getYtelse() {
         return (Y) ytelse;
     }
+    
+    /**
+     * Dette feltet kan brukes til å oppgi kildesystem. For historiske data
+     * er feltet kun garantert å være satt for alle søknader som kommer fra
+     * endringsdialogen. Ved behov for å se på historiske data av andre typer,
+     * se på journalpostens kanalfelt og/eller metadatafeltet på journalposten
+     * kalt "k9.kilde". 
+     * 
+     * @return Systemet som søknadsdataene kommer fra.
+     */
+    public Optional<Kildesystem> getKildesystem() {
+        return Optional.ofNullable(kildesystem);
+    }
 
     public void setSøknadId(SøknadId søknadId) {
         this.søknadId = Objects.requireNonNull(søknadId, "søknadId");
@@ -158,6 +178,10 @@ public class Søknad implements Innsending {
 
     public void setYtelse(Ytelse ytelse) {
         this.ytelse = Objects.requireNonNull(ytelse, "ytelse");
+    }
+    
+    public void setKildesystem(Kildesystem kildesystem) {
+        this.kildesystem = kildesystem;
     }
 
     public Søknad medMottattDato(ZonedDateTime mottattDato) {
@@ -212,6 +236,14 @@ public class Søknad implements Innsending {
 
     public Søknad medJournalposter(List<Journalpost> journalposter) {
         this.journalposter.addAll(Objects.requireNonNull(journalposter, "journalposter"));
+        return this;
+    }
+    
+    /**
+     * @see #getKildesystem()
+     */
+    public Søknad medKildesystem(Kildesystem kildesystem) {
+        this.kildesystem = kildesystem;
         return this;
     }
 

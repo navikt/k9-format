@@ -10,6 +10,7 @@
     "inneholderMedisinskeOpplysninger" : false,
     "journalpostId" : "sajhdasd83724234"
   } ],
+  "kildesystem": "søknadsdialog",
   "ytelse": {
     "type" : "PLEIEPENGER_SYKT_BARN",
     "søknadsperiode" : [ "2018-12-30/2019-10-20" ],
