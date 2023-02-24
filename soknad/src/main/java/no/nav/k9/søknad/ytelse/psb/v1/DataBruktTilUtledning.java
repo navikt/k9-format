@@ -27,6 +27,10 @@ public class DataBruktTilUtledning {
     @Valid
     private Boolean harMedsøker;
 
+    @JsonProperty(value = "soknadDialogCommitSha")
+    @Valid
+    private String soknadDialogCommitSha;
+
     // Utgår?
     @JsonProperty(value = "bekrefterPeriodeOver8Uker")
     @Valid
@@ -38,12 +42,14 @@ public class DataBruktTilUtledning {
                                  @JsonProperty(value = "harBekreftetOpplysninger") @Valid Boolean harBekreftetOpplysninger,
                                  @JsonProperty(value = "samtidigHjemme") @Valid Boolean samtidigHjemme,
                                  @JsonProperty(value = "harMedsøker") @Valid Boolean harMedsøker,
+                                 @JsonProperty(value = "soknadDialogCommitSha") @Valid String soknadDialogCommitSha,
                                  @JsonProperty(value = "bekrefterPeriodeOver8Uker") @Valid Boolean bekrefterPeriodeOver8Uker) {
 
         this.harForståttRettigheterOgPlikter = harForståttRettigheterOgPlikter;
         this.harBekreftetOpplysninger = harBekreftetOpplysninger;
         this.samtidigHjemme = samtidigHjemme;
         this.harMedsøker = harMedsøker;
+        this.soknadDialogCommitSha = soknadDialogCommitSha;
         this.bekrefterPeriodeOver8Uker = bekrefterPeriodeOver8Uker;
     }
 
@@ -83,6 +89,15 @@ public class DataBruktTilUtledning {
 
     public DataBruktTilUtledning medHarMedsøker(Boolean harMedsøker) {
         this.harMedsøker = harMedsøker;
+        return this;
+    }
+
+    public String getSoknadDialogCommitSha() {
+        return this.soknadDialogCommitSha;
+    }
+
+    public DataBruktTilUtledning medSoknadDialogCommitSha(String soknadDialogCommitSha) {
+        this.soknadDialogCommitSha = soknadDialogCommitSha;
         return this;
     }
 
