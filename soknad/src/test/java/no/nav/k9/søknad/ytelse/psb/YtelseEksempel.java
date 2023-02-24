@@ -39,7 +39,7 @@ public class YtelseEksempel {
 
     public static PleiepengerSyktBarn komplettYtelseMedSøknadsperiode(Periode søknadsperiode, Periode lovbestemtFeriePeriode, Periode utenlandsperiode, Periode bostedperiode) {
         var søknadInfo = new DataBruktTilUtledning(true, true,
-                false, false, true);
+                false, false, "abc-123",  true);
         var infoFraPunsj = new InfoFraPunsj()
                 .medSøknadenInneholderInfomasjonSomIkkeKanPunsjes(false);
 
