@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import no.nav.fpsak.tidsserie.LocalDateTimeline;
 import no.nav.fpsak.tidsserie.StandardCombinators;
 import no.nav.k9.innsyn.søknadsammeslåer.Arbeidstidsammenslåer;
+import no.nav.k9.innsyn.søknadsammeslåer.LovbestemtFeriesammenslåer;
 import no.nav.k9.innsyn.søknadsammeslåer.Tilsynsammenslåer;
 import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.TidsserieUtils;
@@ -74,6 +75,7 @@ public final class Søknadsammenslåer {
 
         ytelse.medArbeidstid(Arbeidstidsammenslåer.slåSammenArbeidstid(s1Ytelse, s2Ytelse));
         ytelse.medTilsynsordning(Tilsynsammenslåer.slåsammen(s1Ytelse, s2Ytelse));
+        ytelse.medLovbestemtFerie(LovbestemtFeriesammenslåer.slåsammen(s1Ytelse, s2Ytelse));
 
         final Søknad s = new Søknad()
                 .medSøknadId(SøknadId.of("generert"))

@@ -20,6 +20,8 @@ import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.SøknadId;
+import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie;
+import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie.LovbestemtFeriePeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
@@ -239,6 +241,91 @@ public class SøknadsammenslåerTest {
             new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(4)),
             new Periode(LocalDate.of(2021, 9, 25), LocalDate.of(2021, 12, 1)),
             new TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(2).plusMinutes(30))
+        ));
+    }
+    
+    @Test
+    public void kanSlåSammenLovbestemtFerieMedTomSøknad() {
+        final Søknad søknad1 = lagGyldigSøknad();
+        
+        final Søknad søknad2 = lagGyldigSøknad();
+        final PleiepengerSyktBarn ytelse2 = søknad2.getYtelse();
+        ytelse2.medLovbestemtFerie(new LovbestemtFerie().medPerioder(Map.of(
+                new Periode(LocalDate.of(2021, 9, 25), LocalDate.of(2021, 12, 1)),
+                new LovbestemtFeriePeriodeInfo().medSkalHaFerie(true)
+        )));
+        
+        final Søknad resultat = Søknadsammenslåer.slåSammen(søknad1, søknad2);
+        final PleiepengerSyktBarn resultatYtelse = resultat.getYtelse();
+        
+        assertResultet(resultatYtelse.getLovbestemtFerie().getPerioder(), Map.of(
+            new Periode(LocalDate.of(2021, 9, 25), LocalDate.of(2021, 12, 1)),
+            new LovbestemtFeriePeriodeInfo().medSkalHaFerie(true)
+        ));
+    }
+    
+    @Test
+    public void kanSlåSammenLovbestemtFerieMedToSøknader() {
+        final Søknad søknad1 = lagGyldigSøknad();
+        final PleiepengerSyktBarn ytelse1 = søknad1.getYtelse();
+        ytelse1.medLovbestemtFerie(new LovbestemtFerie().medPerioder(Map.of(
+            new Periode(LocalDate.of(2021, 9, 25), LocalDate.of(2021, 12, 1)),
+            new LovbestemtFeriePeriodeInfo().medSkalHaFerie(true)
+        )));
+        
+        final Søknad søknad2 = lagGyldigSøknad();
+        final PleiepengerSyktBarn ytelse2 = søknad2.getYtelse();
+        ytelse2.medLovbestemtFerie(new LovbestemtFerie().medPerioder(Map.of(
+            new Periode(LocalDate.of(2021, 9, 25), LocalDate.of(2021, 9, 26)),
+            new LovbestemtFeriePeriodeInfo().medSkalHaFerie(false),
+            new Periode(LocalDate.of(2021, 9, 23), LocalDate.of(2021, 9, 24)),
+            new LovbestemtFeriePeriodeInfo().medSkalHaFerie(true)
+        )));
+        
+        final Søknad resultat = Søknadsammenslåer.slåSammen(søknad1, søknad2);
+        final PleiepengerSyktBarn resultatYtelse = resultat.getYtelse();
+        
+        assertResultet(resultatYtelse.getLovbestemtFerie().getPerioder(), Map.of(
+            new Periode(LocalDate.of(2021, 9, 23), LocalDate.of(2021, 9, 24)),
+            new LovbestemtFeriePeriodeInfo().medSkalHaFerie(true),
+            new Periode(LocalDate.of(2021, 9, 25), LocalDate.of(2021, 9, 26)),
+            new LovbestemtFeriePeriodeInfo().medSkalHaFerie(false),
+            new Periode(LocalDate.of(2021, 9, 27), LocalDate.of(2021, 12, 1)),
+            new LovbestemtFeriePeriodeInfo().medSkalHaFerie(true)
+        ));
+    }
+    
+    @Test
+    public void kanSlåSammenLovbestemtFerieMedSøknadsperiodeutnulling() {
+        final Søknad søknad1 = lagGyldigSøknad();
+        final PleiepengerSyktBarn ytelse1 = søknad1.getYtelse();
+        ytelse1.medLovbestemtFerie(new LovbestemtFerie().medPerioder(Map.of(
+            new Periode(LocalDate.of(2021, 9, 25), LocalDate.of(2021, 12, 1)),
+            new LovbestemtFeriePeriodeInfo().medSkalHaFerie(true)
+        )));
+        
+        final Søknad søknad2 = lagGyldigSøknad();
+        final PleiepengerSyktBarn ytelse2 = søknad2.getYtelse();
+        ytelse2.medLovbestemtFerie(new LovbestemtFerie().medPerioder(Map.of(
+            new Periode(LocalDate.of(2021, 9, 25), LocalDate.of(2021, 9, 26)),
+            new LovbestemtFeriePeriodeInfo().medSkalHaFerie(false),
+            new Periode(LocalDate.of(2021, 9, 23), LocalDate.of(2021, 9, 24)),
+            new LovbestemtFeriePeriodeInfo().medSkalHaFerie(true)
+        )));
+        ytelse2.medSøknadsperiode(new Periode(LocalDate.of(2021, 10, 2), LocalDate.of(2021, 10, 3)));
+        
+        final Søknad resultat = Søknadsammenslåer.slåSammen(søknad1, søknad2);
+        final PleiepengerSyktBarn resultatYtelse = resultat.getYtelse();
+        
+        assertResultet(resultatYtelse.getLovbestemtFerie().getPerioder(), Map.of(
+            new Periode(LocalDate.of(2021, 9, 23), LocalDate.of(2021, 9, 24)),
+            new LovbestemtFeriePeriodeInfo().medSkalHaFerie(true),
+            new Periode(LocalDate.of(2021, 9, 25), LocalDate.of(2021, 9, 26)),
+            new LovbestemtFeriePeriodeInfo().medSkalHaFerie(false),
+            new Periode(LocalDate.of(2021, 9, 27), LocalDate.of(2021, 10, 1)),
+            new LovbestemtFeriePeriodeInfo().medSkalHaFerie(true),
+            new Periode(LocalDate.of(2021, 10, 4), LocalDate.of(2021, 12, 1)),
+            new LovbestemtFeriePeriodeInfo().medSkalHaFerie(true)
         ));
     }
 
