@@ -96,6 +96,7 @@ public class Arbeidstidsammenslåer {
                     final LocalDateTimeline<ArbeidstidPeriodeInfo> tidslinje = lagArbeidstidTidslinje(a.getArbeidstidInfo());
                     return Map.entry(hentArbeidsgiverIdent(a), tidslinje);
                 })
+                .filter(e -> !e.getValue().isEmpty())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
