@@ -33,6 +33,8 @@ public class Journalpost {
     private Boolean inneholderMedisinskeOpplysninger;
 
     @JsonProperty(value = "brevkoder")
+    @Size(max = 50)
+    @Valid
     private List<String> brevkoder;
 
     @JsonProperty(value = "journalpostId", required = true)
