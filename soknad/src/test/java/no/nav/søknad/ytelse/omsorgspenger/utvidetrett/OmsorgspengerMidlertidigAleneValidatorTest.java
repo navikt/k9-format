@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 
+import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerMidlertidigAleneSøknadValidator;
 import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.JsonUtils;
@@ -19,13 +20,12 @@ import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.SøknadId;
-import no.nav.k9.søknad.ytelse.YtelseValidator;
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.AnnenForelder;
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.AnnenForelder.SituasjonType;
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerMidlertidigAlene;
 
 public class OmsorgspengerMidlertidigAleneValidatorTest {
-    private static final YtelseValidator validator = new OmsorgspengerMidlertidigAlene.MinValidator();
+    private static final OmsorgspengerMidlertidigAleneSøknadValidator validator = new OmsorgspengerMidlertidigAleneSøknadValidator();
 
     @Test
     void komplettSøknadSkalIkkeHaValideringsfeil() {
@@ -42,11 +42,12 @@ public class OmsorgspengerMidlertidigAleneValidatorTest {
         var json = JsonUtils.toString(søknad);
         
         var søknad2 = JsonUtils.fromString(json, Søknad.class);
-        assertThat(JsonUtils.toString(søknad2)).isEqualTo(json);
+        String string = JsonUtils.toString(søknad2);
+        assertThat(string).isEqualTo(json);
     }
 
     private void verifyIngenFeil(Søknad søknad) {
-        final List<Feil> feil = validator.valider(søknad.getYtelse());
+        final List<Feil> feil = validator.valider(søknad);
         assertThat(feil).isEmpty();
     }
 
@@ -72,7 +73,7 @@ public class OmsorgspengerMidlertidigAleneValidatorTest {
             var barn =  new Barn().medNorskIdentitetsnummer(NorskIdentitetsnummer.of("11111111111"));
 
             var annenForelder = new AnnenForelder(NorskIdentitetsnummer.of("21111111111"))
-                .medSituasjon(SituasjonType.ANNET, "en annen årsak")
+                .medSituasjon(SituasjonType.ANNET, "en annen \nårsak")
                 .medPeriode(LocalDate.parse("2021-01-01"), LocalDate.parse("2021-07-01"));
 
             return new OmsorgspengerMidlertidigAlene(List.of(barn), annenForelder, "ok");

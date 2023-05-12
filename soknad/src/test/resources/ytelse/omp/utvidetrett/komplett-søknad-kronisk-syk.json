@@ -1,7 +1,7 @@
 {
-  "søknadId": "$søknadId",
+  "søknadId": "222e4a87-f471-4181-9d5b-7d67d046b031",
   "mottattDato": "2018-01-02T03:04:05.006Z",
-  "versjon" : "0.1",
+  "versjon" : "1.0.0",
   "språk": "nb",
   "ytelse" : {
       "type" : "OMP_UTV_KS",

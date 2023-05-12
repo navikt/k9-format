@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 
+import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerAleneOmsorgSøknadValidator;
 import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.JsonUtils;
@@ -20,11 +21,10 @@ import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.SøknadId;
-import no.nav.k9.søknad.ytelse.YtelseValidator;
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerAleneOmsorg;
 
 public class OmsorgspengerAleneOmsorgTest {
-    private static final YtelseValidator validator = new OmsorgspengerAleneOmsorg.MinValidator();
+    private static final OmsorgspengerAleneOmsorgSøknadValidator validator = new OmsorgspengerAleneOmsorgSøknadValidator();
 
     @Test
     void komplettSøknadSkalIkkeHaValideringsfeil() {
@@ -45,7 +45,7 @@ public class OmsorgspengerAleneOmsorgTest {
     }
 
     private void verifyIngenFeil(Søknad søknad) {
-        final List<Feil> feil = validator.valider(søknad.getYtelse());
+        final List<Feil> feil = validator.valider(søknad);
         assertThat(feil).isEmpty();
     }
 
