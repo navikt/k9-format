@@ -35,7 +35,7 @@ public class AnnenForelder implements Person {
     private SituasjonType situasjonType;
 
     @JsonProperty(value = "situasjonBeskrivelse")
-    @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message = "[${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
+    @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}«»]+$", message = "[${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
     private String situasjonBeskrivelse;
 
     @JsonProperty(value = "periode")
