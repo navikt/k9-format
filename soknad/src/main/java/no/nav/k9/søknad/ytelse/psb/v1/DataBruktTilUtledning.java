@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -36,6 +37,9 @@ public class DataBruktTilUtledning {
     @Valid
     private Boolean bekrefterPeriodeOver8Uker;
 
+    @JsonProperty(value = "ukjenteArbeidsforhold")
+    @Valid
+    private List<UkjentArbeidsforhold> ukjenteArbeidsforhold;
 
     @JsonCreator
     public DataBruktTilUtledning(@JsonProperty(value = "harForståttRettigheterOgPlikter") @Valid Boolean harForståttRettigheterOgPlikter,
@@ -43,7 +47,9 @@ public class DataBruktTilUtledning {
                                  @JsonProperty(value = "samtidigHjemme") @Valid Boolean samtidigHjemme,
                                  @JsonProperty(value = "harMedsøker") @Valid Boolean harMedsøker,
                                  @JsonProperty(value = "soknadDialogCommitSha") @Valid String soknadDialogCommitSha,
-                                 @JsonProperty(value = "bekrefterPeriodeOver8Uker") @Valid Boolean bekrefterPeriodeOver8Uker) {
+                                 @JsonProperty(value = "bekrefterPeriodeOver8Uker") @Valid Boolean bekrefterPeriodeOver8Uker,
+                                 @JsonProperty(value = "ukjenteArbeidsforhold") @Valid List<UkjentArbeidsforhold> ukjenteArbeidsforhold
+                                 ) {
 
         this.harForståttRettigheterOgPlikter = harForståttRettigheterOgPlikter;
         this.harBekreftetOpplysninger = harBekreftetOpplysninger;
@@ -51,6 +57,7 @@ public class DataBruktTilUtledning {
         this.harMedsøker = harMedsøker;
         this.soknadDialogCommitSha = soknadDialogCommitSha;
         this.bekrefterPeriodeOver8Uker = bekrefterPeriodeOver8Uker;
+        this.ukjenteArbeidsforhold = ukjenteArbeidsforhold;
     }
 
     public DataBruktTilUtledning() {
@@ -107,6 +114,15 @@ public class DataBruktTilUtledning {
 
     public DataBruktTilUtledning medBekrefterPeriodeOver8Uker(Boolean bekrefterPeriodeOver8Uker) {
         this.bekrefterPeriodeOver8Uker = bekrefterPeriodeOver8Uker;
+        return this;
+    }
+
+    public List<UkjentArbeidsforhold> getUkjenteArbeidsforhold() {
+        return ukjenteArbeidsforhold;
+    }
+
+    public DataBruktTilUtledning medUkjenteArbeidsforhold(List<UkjentArbeidsforhold> ukjenteArbeidsforhold) {
+        this.ukjenteArbeidsforhold = ukjenteArbeidsforhold;
         return this;
     }
 }

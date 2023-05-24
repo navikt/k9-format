@@ -1,6 +1,7 @@
 package no.nav.k9.søknad.ytelse.psb;
 
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,14 +12,7 @@ import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
 import no.nav.k9.søknad.felles.type.Landkode;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.ytelse.psb.v1.Beredskap;
-import no.nav.k9.søknad.ytelse.psb.v1.DataBruktTilUtledning;
-import no.nav.k9.søknad.ytelse.psb.v1.InfoFraPunsj;
-import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie;
-import no.nav.k9.søknad.ytelse.psb.v1.Nattevåk;
-import no.nav.k9.søknad.ytelse.psb.v1.Omsorg;
-import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
-import no.nav.k9.søknad.ytelse.psb.v1.Uttak;
+import no.nav.k9.søknad.ytelse.psb.v1.*;
 import no.nav.k9.søknad.ytelse.psb.v1.Uttak.UttakPeriodeInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
@@ -39,7 +33,13 @@ public class YtelseEksempel {
 
     public static PleiepengerSyktBarn komplettYtelseMedSøknadsperiode(Periode søknadsperiode, Periode lovbestemtFeriePeriode, Periode utenlandsperiode, Periode bostedperiode) {
         var søknadInfo = new DataBruktTilUtledning(true, true,
-                false, false, "abc-123",  true);
+                false, false, "abc-123",  true, Arrays.asList(
+                new UkjentArbeidsforhold()
+                        .medOrganisasjonsnummer(Organisasjonsnummer.of("888888888"))
+                        .medErAnsatt(true)
+                        .medNormalarbeidstid(new NormalArbeidstid().medTimerPerUke(Duration.ofHours(7).plusMinutes(30)))
+                        .medArbeiderIPerioden(ArbeiderIPeriodenSvar.SOM_VANLIG)
+        ));
         var infoFraPunsj = new InfoFraPunsj()
                 .medSøknadenInneholderInfomasjonSomIkkeKanPunsjes(false);
 

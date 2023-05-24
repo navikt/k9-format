@@ -21,7 +21,17 @@
       "samtidigHjemme" : false,
       "harMedsøker" : false,
       "soknadDialogCommitSha": "abc-123",
-      "bekrefterPeriodeOver8Uker" : true
+      "bekrefterPeriodeOver8Uker" : true,
+      "ukjenteArbeidsforhold": [
+        {
+          "organisasjonsnummer": "888888888",
+          "erAnsatt": true,
+          "normalarbeidstid": {
+            "timerPerUke": "PT37H30M"
+          },
+          "arbeiderIPerioden": "SOM_VANLIG"
+        }
+      ]
     },
     "infoFraPunsj" : {
       "søknadenInneholderInfomasjonSomIkkeKanPunsjes" : false,
