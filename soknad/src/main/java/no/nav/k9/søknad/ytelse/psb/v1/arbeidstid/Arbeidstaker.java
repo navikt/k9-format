@@ -25,6 +25,10 @@ public class Arbeidstaker {
     @Valid
     private Organisasjonsnummer organisasjonsnummer;
 
+    @JsonProperty(value = "organisasjonsnavn")
+    @Valid
+    private String organisasjonsnavn; // brukes ikke ved saksbehandling
+
     @JsonProperty(value = "arbeidstidInfo", required = true)
     @Valid
     @NotNull
@@ -54,6 +58,15 @@ public class Arbeidstaker {
     public Arbeidstaker medOrganisasjonsnummer(Organisasjonsnummer organisasjonsnummer) {
         this.organisasjonsnummer = Objects.requireNonNull(organisasjonsnummer, "organisasjonsnummer");
         return this;
+    }
+
+    public Arbeidstaker medOrganisasjonsnavn(String organisasjonsnavn) {
+        this.organisasjonsnavn = organisasjonsnavn;
+        return this;
+    }
+
+    public String getOrganisasjonsnavn() {
+        return organisasjonsnavn;
     }
 
     public ArbeidstidInfo getArbeidstidInfo() {

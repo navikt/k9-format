@@ -25,6 +25,7 @@
       "ukjenteArbeidsforhold": [
         {
           "organisasjonsnummer": "888888888",
+          "organisasjonsnavn": "Something Fishy AS",
           "erAnsatt": true,
           "normalarbeidstid": {
             "timerPerUke": "PT37H30M"
@@ -92,6 +93,7 @@
       "arbeidstakerList" : [ {
         "norskIdentitetsnummer" : null,
         "organisasjonsnummer" : "999999999",
+        "organisasjonsnavn" : "Something Fishy AS",
         "arbeidstidInfo" : {
           "perioder" : {
             "2018-12-30/2019-10-20" : {
