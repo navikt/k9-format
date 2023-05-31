@@ -10,7 +10,7 @@ import java.time.Duration;
 
 public class NormalArbeidstid {
     @JsonProperty(value = "timerPerUke", required = true)
-    @DurationMin(hours = 0, minutes = 1, message = "[ugyldigVerdi] Må være større enn 0.")
+    @DurationMin(hours = 0, minutes = 0, message = "[ugyldigVerdi] Må være større enn 0.")
     @DurationMax(hours = 40, message = "[ugyldigVerdi] Må være lavere eller lik 40 timer.")
     @NotNull
     @Valid
