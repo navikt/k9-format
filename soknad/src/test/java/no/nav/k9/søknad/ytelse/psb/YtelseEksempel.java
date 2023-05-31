@@ -36,6 +36,7 @@ public class YtelseEksempel {
                 false, false, "abc-123",  true, Arrays.asList(
                 new UkjentArbeidsforhold()
                         .medOrganisasjonsnummer(Organisasjonsnummer.of("888888888"))
+                        .medOrganisasjonsnavn("Something Fishy AS")
                         .medErAnsatt(true)
                         .medNormalarbeidstid(new NormalArbeidstid().medTimerPerUke(Duration.ofHours(7).plusMinutes(30)))
                         .medArbeiderIPerioden(ArbeiderIPeriodenSvar.SOM_VANLIG)
@@ -136,6 +137,7 @@ public class YtelseEksempel {
     public static Arbeidstaker lagArbeidstaker(ArbeidstidPeriodeInfo arbeidstidPeriodeInfo, Periode... perioder) {
         return new Arbeidstaker()
                 .medOrganisasjonsnummer(Organisasjonsnummer.of("999999999"))
+                .medOrganisasjonsnavn("Something Fishy AS")
                 .medArbeidstidInfo(new ArbeidstidInfo().medPerioder(
                         lagPerioder(perioder, arbeidstidPeriodeInfo)));
     }
