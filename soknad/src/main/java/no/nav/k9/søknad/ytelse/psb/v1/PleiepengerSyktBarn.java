@@ -65,6 +65,10 @@ public class PleiepengerSyktBarn implements Ytelse {
     @JsonProperty(value = "dataBruktTilUtledning")
     private DataBruktTilUtledning dataBruktTilUtledning;
 
+    @JsonProperty(value = "annetDataBruktTilUtledning")
+    @Valid
+    private no.nav.k9.søknad.ytelse.DataBruktTilUtledning annetDataBruktTilUtledning;
+
     @Deprecated
     @Valid
     @JsonProperty(value = "infoFraPunsj")
@@ -325,6 +329,17 @@ public class PleiepengerSyktBarn implements Ytelse {
     @Override
     public YtelseValidator getValidator(Versjon versjon) {
         return new PleiepengerSyktBarnYtelseValidator();
+    }
+
+    @Override
+    public no.nav.k9.søknad.ytelse.DataBruktTilUtledning getDataBruktTilUtledning() {
+        return this.annetDataBruktTilUtledning;
+    }
+
+    @Override
+    public Ytelse medDataBruktTilUtledning(no.nav.k9.søknad.ytelse.DataBruktTilUtledning dataBruktTilUtledning) {
+        this.annetDataBruktTilUtledning = dataBruktTilUtledning;
+        return this;
     }
 
 

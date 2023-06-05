@@ -55,6 +55,12 @@ public interface Ytelse {
     YtelseValidator getValidator(Versjon versjon);
 
     /**
+     * Data brukt til utledning av ytelse.
+     */
+    DataBruktTilUtledning getDataBruktTilUtledning();
+    Ytelse medDataBruktTilUtledning(DataBruktTilUtledning dataBruktTilUtledning);
+
+    /**
      * @return andre berørte, kjente identifiserte personer (enn søker) - f.eks. barn, ektefelle, verge etc. som er involveres i denne saken.
      */
     List<Person> getBerørtePersoner();

@@ -23,6 +23,7 @@ import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.felles.validering.periode.LukketPeriode;
+import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie;
@@ -75,6 +76,10 @@ public class PleipengerLivetsSluttfase implements Ytelse {
     @JsonProperty(value = "lovbestemtFerie")
     private LovbestemtFerie lovbestemtFerie = new LovbestemtFerie();
 
+    @JsonProperty(value = "dataBruktTilUtledning")
+    @Valid
+    private DataBruktTilUtledning dataBruktTilUtledning;
+
     @Override
     public Type getType() {
         return Type.PLEIEPENGER_LIVETS_SLUTTFASE;
@@ -83,6 +88,17 @@ public class PleipengerLivetsSluttfase implements Ytelse {
     @Override
     public YtelseValidator getValidator(Versjon versjon) {
         return new PleiepengerLivetsSluttfaseYtelseValidator();
+    }
+
+    @Override
+    public DataBruktTilUtledning getDataBruktTilUtledning() {
+        return this.dataBruktTilUtledning;
+    }
+
+    @Override
+    public Ytelse medDataBruktTilUtledning(DataBruktTilUtledning dataBruktTilUtledning) {
+        this.dataBruktTilUtledning = dataBruktTilUtledning;
+        return this;
     }
 
     @Override

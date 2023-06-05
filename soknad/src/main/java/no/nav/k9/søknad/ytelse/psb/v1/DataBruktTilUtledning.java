@@ -12,10 +12,18 @@ import java.util.List;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class DataBruktTilUtledning {
 
+    /**
+     * @deprecated flyttes til  {@link no.nav.k9.søknad.ytelse.DataBruktTilUtledning}
+     */
+    @Deprecated(forRemoval = true, since = "8.2.1")
     @JsonProperty(value = "harForståttRettigheterOgPlikter")
     @Valid
     private Boolean harForståttRettigheterOgPlikter;
 
+    /**
+     * @deprecated flyttes til  {@link no.nav.k9.søknad.ytelse.DataBruktTilUtledning}
+     */
+    @Deprecated(forRemoval = true, since = "8.2.1")
     @JsonProperty(value = "harBekreftetOpplysninger")
     @Valid
     private Boolean harBekreftetOpplysninger;
@@ -28,6 +36,10 @@ public class DataBruktTilUtledning {
     @Valid
     private Boolean harMedsøker;
 
+    /**
+     * @deprecated flyttes til  {@link no.nav.k9.søknad.ytelse.DataBruktTilUtledning}
+     */
+    @Deprecated(forRemoval = true, since = "8.2.1")
     @JsonProperty(value = "soknadDialogCommitSha")
     @Valid
     private String soknadDialogCommitSha;
@@ -42,14 +54,26 @@ public class DataBruktTilUtledning {
     private List<UkjentArbeidsforhold> ukjenteArbeidsforhold;
 
     @JsonCreator
-    public DataBruktTilUtledning(@JsonProperty(value = "harForståttRettigheterOgPlikter") @Valid Boolean harForståttRettigheterOgPlikter,
-                                 @JsonProperty(value = "harBekreftetOpplysninger") @Valid Boolean harBekreftetOpplysninger,
-                                 @JsonProperty(value = "samtidigHjemme") @Valid Boolean samtidigHjemme,
-                                 @JsonProperty(value = "harMedsøker") @Valid Boolean harMedsøker,
-                                 @JsonProperty(value = "soknadDialogCommitSha") @Valid String soknadDialogCommitSha,
-                                 @JsonProperty(value = "bekrefterPeriodeOver8Uker") @Valid Boolean bekrefterPeriodeOver8Uker,
-                                 @JsonProperty(value = "ukjenteArbeidsforhold") @Valid List<UkjentArbeidsforhold> ukjenteArbeidsforhold
-                                 ) {
+    public DataBruktTilUtledning(
+            /** @deprecated flyttes til  {@link no.nav.k9.søknad.ytelse.DataBruktTilUtledning} */
+            @Deprecated(forRemoval = true, since = "8.2.1")
+            @JsonProperty(value = "harForståttRettigheterOgPlikter") @Valid Boolean harForståttRettigheterOgPlikter,
+
+            /** @deprecated flyttes til  {@link no.nav.k9.søknad.ytelse.DataBruktTilUtledning} */
+            @Deprecated(forRemoval = true, since = "8.2.1")
+            @JsonProperty(value = "harBekreftetOpplysninger") @Valid Boolean harBekreftetOpplysninger,
+
+            @JsonProperty(value = "samtidigHjemme") @Valid Boolean samtidigHjemme,
+            @JsonProperty(value = "harMedsøker") @Valid Boolean harMedsøker,
+
+            /** @deprecated flyttes til  {@link no.nav.k9.søknad.ytelse.DataBruktTilUtledning} */
+            @Deprecated(forRemoval = true, since = "8.2.1")
+            @JsonProperty(value = "soknadDialogCommitSha") @Valid String soknadDialogCommitSha,
+
+            @JsonProperty(value = "bekrefterPeriodeOver8Uker") @Valid Boolean bekrefterPeriodeOver8Uker,
+
+            @JsonProperty(value = "ukjenteArbeidsforhold") @Valid List<UkjentArbeidsforhold> ukjenteArbeidsforhold
+    ) {
 
         this.harForståttRettigheterOgPlikter = harForståttRettigheterOgPlikter;
         this.harBekreftetOpplysninger = harBekreftetOpplysninger;
@@ -63,19 +87,35 @@ public class DataBruktTilUtledning {
     public DataBruktTilUtledning() {
     }
 
+    /**
+     * @deprecated flyttes til  {@link no.nav.k9.søknad.ytelse.DataBruktTilUtledning}
+     */
+    @Deprecated(forRemoval = true, since = "8.2.1")
     public Boolean getHarForståttRettigheterOgPlikter() {
         return harForståttRettigheterOgPlikter;
     }
 
+    /**
+     * @deprecated flyttes til  {@link no.nav.k9.søknad.ytelse.DataBruktTilUtledning}
+     */
+    @Deprecated(forRemoval = true, since = "8.2.1")
     public DataBruktTilUtledning medHarForståttRettigheterOgPlikter(Boolean harForståttRettigheterOgPlikter) {
         this.harForståttRettigheterOgPlikter = harForståttRettigheterOgPlikter;
         return this;
     }
 
+    /**
+     * @deprecated flyttes til  {@link no.nav.k9.søknad.ytelse.DataBruktTilUtledning}
+     */
+    @Deprecated(forRemoval = true, since = "8.2.1")
     public Boolean getHarBekreftetOpplysninger() {
         return harBekreftetOpplysninger;
     }
 
+    /**
+     * @deprecated flyttes til  {@link no.nav.k9.søknad.ytelse.DataBruktTilUtledning}
+     */
+    @Deprecated(forRemoval = true, since = "8.2.1")
     public DataBruktTilUtledning medHarBekreftetOpplysninger(Boolean harBekreftetOpplysninger) {
         this.harBekreftetOpplysninger = harBekreftetOpplysninger;
         return this;
@@ -99,10 +139,18 @@ public class DataBruktTilUtledning {
         return this;
     }
 
+    /**
+     * @deprecated flyttes til  {@link no.nav.k9.søknad.ytelse.DataBruktTilUtledning}
+     */
+    @Deprecated(forRemoval = true, since = "8.2.1")
     public String getSoknadDialogCommitSha() {
         return this.soknadDialogCommitSha;
     }
 
+    /**
+     * @deprecated flyttes til  {@link no.nav.k9.søknad.ytelse.DataBruktTilUtledning}
+     */
+    @Deprecated(forRemoval = true, since = "8.2.1")
     public DataBruktTilUtledning medSoknadDialogCommitSha(String soknadDialogCommitSha) {
         this.soknadDialogCommitSha = soknadDialogCommitSha;
         return this;
