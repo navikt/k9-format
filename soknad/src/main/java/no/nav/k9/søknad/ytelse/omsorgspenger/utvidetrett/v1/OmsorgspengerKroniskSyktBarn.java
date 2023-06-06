@@ -77,7 +77,7 @@ public class OmsorgspengerKroniskSyktBarn implements OmsorgspengerUtvidetRett {
 
     @Override
     public Ytelse medDataBruktTilUtledning(DataBruktTilUtledning dataBruktTilUtledning) {
-        this.medDataBruktTilUtledning(dataBruktTilUtledning);
+        this.dataBruktTilUtledning = dataBruktTilUtledning;
         return this;
     }
 
