@@ -23,10 +23,10 @@ import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
+import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 import no.nav.k9.søknad.ytelse.olp.v1.kurs.Kurs;
-import no.nav.k9.søknad.ytelse.psb.v1.DataBruktTilUtledning;
 import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie;
 import no.nav.k9.søknad.ytelse.psb.v1.Omsorg;
 import no.nav.k9.søknad.ytelse.psb.v1.Uttak;
@@ -259,5 +259,16 @@ public class Opplæringspenger implements Ytelse {
     @Override
     public YtelseValidator getValidator(Versjon versjon) {
         return new OpplæringspengerYtelseValidator();
+    }
+
+    @Override
+    public DataBruktTilUtledning getDataBruktTilUtledning() {
+        return this.dataBruktTilUtledning;
+    }
+
+    @Override
+    public Ytelse medDataBruktTilUtledning(DataBruktTilUtledning dataBruktTilUtledning) {
+        this.dataBruktTilUtledning = dataBruktTilUtledning;
+        return this;
     }
 }

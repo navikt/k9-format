@@ -1,24 +1,22 @@
 package no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1;
 
-import java.util.List;
-import java.util.Objects;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
+import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
-import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetalingSøknadValidator;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -35,6 +33,10 @@ public class OmsorgspengerAleneOmsorg implements OmsorgspengerUtvidetRett {
     @JsonProperty(value = "periode")
     @NotNull
     private Periode periode;
+
+    @JsonProperty(value = "dataBruktTilUtledning")
+    @Valid
+    private DataBruktTilUtledning dataBruktTilUtledning;
 
     public OmsorgspengerAleneOmsorg() {
     }
@@ -54,6 +56,17 @@ public class OmsorgspengerAleneOmsorg implements OmsorgspengerUtvidetRett {
     @Override
     public YtelseValidator getValidator(Versjon versjon) {
         return new MinValidator();
+    }
+
+    @Override
+    public DataBruktTilUtledning getDataBruktTilUtledning() {
+        return this.dataBruktTilUtledning;
+    }
+
+    @Override
+    public Ytelse medDataBruktTilUtledning(DataBruktTilUtledning dataBruktTilUtledning) {
+        this.dataBruktTilUtledning = dataBruktTilUtledning;
+        return this;
     }
 
     @Override

@@ -21,6 +21,7 @@ import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
+import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 
@@ -52,6 +53,10 @@ public class OmsorgspengerUtbetaling implements Ytelse {
     @Valid
     @JsonProperty(value = "fraværsperioderKorrigeringIm")
     private List<FraværPeriode> fraværsperioderKorrigeringIm;
+
+    @JsonProperty(value = "dataBruktTilUtledning")
+    @Valid
+    private DataBruktTilUtledning dataBruktTilUtledning;
 
     public OmsorgspengerUtbetaling() {
         //
@@ -137,6 +142,17 @@ public class OmsorgspengerUtbetaling implements Ytelse {
     @Override
     public YtelseValidator getValidator(Versjon versjon) {
         return new OmsorgspengerUtbetalingValidator(versjon);
+    }
+
+    @Override
+    public DataBruktTilUtledning getDataBruktTilUtledning() {
+        return this.dataBruktTilUtledning;
+    }
+
+    @Override
+    public Ytelse medDataBruktTilUtledning(DataBruktTilUtledning dataBruktTilUtledning) {
+        this.dataBruktTilUtledning = dataBruktTilUtledning;
+        return this;
     }
 
     public OmsorgspengerUtbetaling medFosterbarn(List<Barn> barn) {

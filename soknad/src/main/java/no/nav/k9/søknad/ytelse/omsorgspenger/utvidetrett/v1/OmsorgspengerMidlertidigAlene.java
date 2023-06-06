@@ -23,6 +23,7 @@ import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
+import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 
@@ -43,6 +44,10 @@ public class OmsorgspengerMidlertidigAlene implements OmsorgspengerUtvidetRett {
     @JsonProperty(value = "begrunnelse")
     @Size(max = 30000)
     private String begrunnelse;
+
+    @JsonProperty(value = "dataBruktTilUtledning")
+    @Valid
+    private DataBruktTilUtledning dataBruktTilUtledning;
 
     public OmsorgspengerMidlertidigAlene() {
     }
@@ -82,6 +87,17 @@ public class OmsorgspengerMidlertidigAlene implements OmsorgspengerUtvidetRett {
     @Override
     public YtelseValidator getValidator(Versjon versjon) {
         return new MinValidator();
+    }
+
+    @Override
+    public DataBruktTilUtledning getDataBruktTilUtledning() {
+        return this.dataBruktTilUtledning;
+    }
+
+    @Override
+    public Ytelse medDataBruktTilUtledning(DataBruktTilUtledning dataBruktTilUtledning) {
+        this.dataBruktTilUtledning = dataBruktTilUtledning;
+        return this;
     }
 
     public String getBegrunnelse() {
