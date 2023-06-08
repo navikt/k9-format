@@ -8,8 +8,6 @@ import no.nav.k9.søknad.JsonUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -64,10 +62,9 @@ public class DataBruktTilUtledning {
      * av klassens struktur og ikke er underlagt de samme valideringene eller sjekkene som andre felt.</p>
      */
     @JsonProperty("annetData")
-    private Map<String, Object> annetData;
+    private String annetData;
 
     public DataBruktTilUtledning() {
-        this.annetData = new HashMap<>();
     }
 
     public Boolean getHarForståttRettigheterOgPlikter() {
@@ -97,17 +94,12 @@ public class DataBruktTilUtledning {
         return this;
     }
 
-    public Map<String, Object> getAnnetData() {
+    public String getAnnetData() {
         return this.annetData;
     }
 
-    public DataBruktTilUtledning setAnnetData(Map<String, Object> annetData) {
+    public DataBruktTilUtledning medAnnetData(String annetData) {
         this.annetData = annetData;
-        return this;
-    }
-
-    public DataBruktTilUtledning medData(String key, Object value) {
-        this.annetData.put(key, value);
         return this;
     }
 
