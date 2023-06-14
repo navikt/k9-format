@@ -28,7 +28,7 @@ public class UkjentArbeidsforhold {
 
     public UkjentArbeidsforhold(
             @JsonProperty(value = "organisasjonsnummer", required = true) @Valid Organisasjonsnummer organisasjonsnummer,
-            @JsonProperty(value = "organisasjonsnavn", required = true) @Valid String organisasjonsnavn,
+            @JsonProperty(value = "organisasjonsnavn") @Valid String organisasjonsnavn,
             @JsonProperty(value = "erAnsatt", required = true) @Valid Boolean erAnsatt,
             @JsonProperty(value = "normalarbeidstid") @Valid NormalArbeidstid normalarbeidstid,
             @JsonProperty(value = "arbeiderIPerioden") @Valid ArbeiderIPeriodenSvar arbeiderIPerioden
