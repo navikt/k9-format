@@ -13,8 +13,9 @@ updates:
     registries:
       - k9-format
     groups:
-      patterns:
-        - "*"
+      maven:
+        patterns:
+          - "*"
         
   - package-ecosystem: github-actions
     directory: "/"
