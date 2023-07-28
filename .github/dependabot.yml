@@ -16,6 +16,11 @@ updates:
       maven:
         patterns:
           - "*"
+        exclude-patterns:
+          - "no.nav*"
+      kontrakt:
+        patterns:
+          - "no.nav*"
         
   - package-ecosystem: github-actions
     directory: "/"
