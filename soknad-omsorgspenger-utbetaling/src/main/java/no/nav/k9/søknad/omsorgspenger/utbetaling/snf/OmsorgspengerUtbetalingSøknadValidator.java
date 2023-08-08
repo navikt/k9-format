@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.validation.Validation;
-import javax.validation.ValidatorFactory;
+import jakarta.validation.Validation;
+import jakarta.validation.ValidatorFactory;
 
 import no.nav.k9.søknad.SøknadValidator;
 import no.nav.k9.søknad.felles.Feil;

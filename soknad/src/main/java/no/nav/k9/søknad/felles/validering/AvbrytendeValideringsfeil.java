@@ -2,8 +2,8 @@ package no.nav.k9.søknad.felles.validering;
 
 import java.util.Set;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Payload;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Payload;
 
 /**
  * brukes for å markere valideringsfeil som bør stoppe videre validering for å unngå duplikate- eller følgefeil

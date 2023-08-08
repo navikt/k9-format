@@ -3,7 +3,7 @@ package no.nav.k9.søknad.ytelse.psb.v1.tilsyn;
 import java.time.Duration;
 import java.util.Objects;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.hibernate.validator.constraints.time.DurationMax;
 import org.hibernate.validator.constraints.time.DurationMin;

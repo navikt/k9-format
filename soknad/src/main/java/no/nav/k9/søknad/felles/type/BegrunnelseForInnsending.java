@@ -2,7 +2,7 @@ package no.nav.k9.søknad.felles.type;
 
 import java.util.Objects;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

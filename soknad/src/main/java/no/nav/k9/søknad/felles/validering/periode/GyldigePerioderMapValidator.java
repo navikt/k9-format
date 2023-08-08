@@ -2,8 +2,8 @@ package no.nav.k9.søknad.felles.validering.periode;
 
 import java.util.Map;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 import no.nav.k9.søknad.felles.type.Periode;
 

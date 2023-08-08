@@ -3,7 +3,7 @@ package no.nav.k9.søknad.felles.type;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import javax.validation.constraints.AssertFalse;
+import jakarta.validation.constraints.AssertFalse;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
