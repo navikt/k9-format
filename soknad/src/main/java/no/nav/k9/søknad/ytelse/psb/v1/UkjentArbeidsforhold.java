@@ -3,7 +3,7 @@ package no.nav.k9.søknad.ytelse.psb.v1;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 public class UkjentArbeidsforhold {
     @JsonProperty(value = "organisasjonsnummer", required = true)

@@ -1,6 +1,6 @@
 package no.nav.k9.søknad.ytelse.psb.v1;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
