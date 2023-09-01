@@ -1,12 +1,14 @@
 package no.nav.k9.innsyn.søknadsammeslåer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import no.nav.fpsak.tidsserie.LocalDateSegment;
 import no.nav.fpsak.tidsserie.LocalDateTimeline;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer;
@@ -92,12 +94,38 @@ public class Arbeidstidsammenslåer {
 
     private static Map<Object, LocalDateTimeline<ArbeidstidPeriodeInfo>> byggTidslinjeMap(Arbeidstid arbeidstid) {
         return arbeidstid.getArbeidstakerList().stream()
-                .map(a -> {
-                    final LocalDateTimeline<ArbeidstidPeriodeInfo> tidslinje = lagArbeidstidTidslinje(a.getArbeidstidInfo());
-                    return Map.entry(hentArbeidsgiverIdent(a), tidslinje);
-                })
-                .filter(e -> !e.getValue().isEmpty())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .map(a -> Map.entry(hentArbeidsgiverIdent(a), lagArbeidstidTidslinje(a.getArbeidstidInfo())))
+                .filter(entry -> !entry.getValue().isEmpty())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (oldValue, newValue) -> slåSammenArbeidstidslinjer(newValue, oldValue),
+                        HashMap::new));
+    }
+
+    private static LocalDateTimeline<ArbeidstidPeriodeInfo> slåSammenArbeidstidslinjer(
+            LocalDateTimeline<ArbeidstidPeriodeInfo> value,
+            LocalDateTimeline<ArbeidstidPeriodeInfo> oldValue) {
+        /*
+         * Dette er en workaround for feil i gamle søknader.
+         *
+         * Det var mulig å oppgi samme arbeidsgiver flere ganger. Dette håndterer sammenslåing
+         * av verdiene for tilfeller som kan håndteres automatisk (der det er ikke-overlappende
+         * eller likt). Andre tilfeller må håndteres manuelt.
+         */
+        return value.union(oldValue, (di, s1, s2) -> {
+            if (s1 == null) {
+                return new LocalDateSegment<ArbeidstidPeriodeInfo>(di, s2.getValue());
+            }
+            if (s2 == null) {
+                return new LocalDateSegment<ArbeidstidPeriodeInfo>(di, s1.getValue());
+            }
+            if (s1.getValue().equals(s2.getValue())) {
+                return new LocalDateSegment<ArbeidstidPeriodeInfo>(di, s1.getValue());
+            }
+
+            throw new IllegalStateException("Forsøker å slå sammen arbeidstidslinjer med overlappende verdier. Dette betyr at søknaden inneholder samme arbeidsgiver to ganger i arbeidstidslisten med overlappende, og forskjellige, verdier. Denne feilen må rettes manuelt.");
+        });
     }
 
     private static LocalDateTimeline<ArbeidstidPeriodeInfo> lagArbeidstidTidslinje(ArbeidstidInfo arbeidstidInfo) {
