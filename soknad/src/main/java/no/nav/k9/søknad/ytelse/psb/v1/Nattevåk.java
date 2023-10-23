@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.validation.constraints.Size;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.validering.AvbrytendeValideringsfeil;
 import no.nav.k9.søknad.felles.validering.periode.GyldigePerioderMap;
@@ -72,6 +73,7 @@ public class Nattevåk {
 
         @JsonProperty(value = "tilleggsinformasjon", required = true)
         @Valid
+        @Size(max = 4000)
         private String tilleggsinformasjon;
 
         public NattevåkPeriodeInfo() {
