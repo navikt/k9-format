@@ -1,5 +1,7 @@
 package no.nav.k9.søknad.felles;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import jakarta.validation.constraints.Pattern;
@@ -9,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public class Versjon {
+public class Versjon implements Comparable<Versjon> {
 
     @JsonIgnore
     private static final String SEMVER_REGEX = "(\\d+)\\.(\\d+)\\.(\\d+)";
@@ -42,6 +44,27 @@ public class Versjon {
     @JsonIgnore
     public boolean erGyldig() {
         return verdi.matches(SEMVER_REGEX);
+    }
+
+    @Override
+    public int compareTo(Versjon that) {
+        if (!this.erGyldig() || !that.erGyldig()) {
+            throw new IllegalArgumentException("Ugyldig format på Versjon");
+        }
+
+        List<Integer> thisComponents = Arrays.stream(this.verdi.split("\\."))
+                .map(Integer::parseInt).toList();
+        List<Integer> thatComponents = Arrays.stream(that.verdi.split("\\."))
+                .map(Integer::parseInt).toList();
+
+        for (int i=0; i<3; i++) {
+            Integer thisVersjonstall = thisComponents.get(i);
+            Integer thatVersjonstall = thatComponents.get(i);
+            if (!Objects.equals(thisVersjonstall, thatVersjonstall)) {
+                return thisVersjonstall.compareTo(thatVersjonstall);
+            }
+        }
+        return 0;
     }
 
     @Override
