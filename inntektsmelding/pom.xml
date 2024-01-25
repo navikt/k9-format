@@ -33,7 +33,6 @@
 				<executions>
 					<execution>
 						<configuration>
-							<schemaDirectory>src/main/resources</schemaDirectory>
 							<sources>
 								<source>src/main/resources/xsd/</source>
 							</sources>
