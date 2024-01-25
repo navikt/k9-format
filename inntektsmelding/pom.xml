@@ -66,24 +66,6 @@
 					</dependency>
 				</dependencies>
 			</plugin>
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-						<!-- så lenge plugin for å generere java-klasser ikke støtter å generere med jakarta-koordinater for importene, må det fikses slik -->
-                        <phase>process-sources</phase>
-                        <configuration>
-                            <target>
-								<replace token= "javax.xml.bind" value="jakarta.xml.bind" dir="target/generated-sources/jaxb/no" summary="true" failOnNoReplacements="true" />
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
