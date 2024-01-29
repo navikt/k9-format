@@ -1,5 +1,6 @@
 package no.nav.k9.innsyn.sak;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -21,6 +22,7 @@ public record SøknadInfo(
         @JsonProperty(value = "mottattTidspunkt", required = true)
         @Valid
         @NotNull
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
         ZonedDateTime mottattTidspunkt
 ) {
 }

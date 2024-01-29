@@ -9,6 +9,7 @@ import no.nav.k9.innsyn.InnsynHendelseData;
 
 import java.util.Set;
 
+import static no.nav.k9.innsyn.utils.RegexUtils.AKTØR_ID_REGEXP;
 import static no.nav.k9.innsyn.utils.RegexUtils.SAKSNUMMER_REGEXP;
 
 
@@ -16,9 +17,7 @@ import static no.nav.k9.innsyn.utils.RegexUtils.SAKSNUMMER_REGEXP;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 @JsonTypeName(InnsynHendelseData.SAK_INNHOLD)
 public record Saksinnhold(
-
         @JsonProperty(value = "saksnummer", required = true)
-        @JsonValue
         @Valid
         @NotNull
         @Pattern(regexp = SAKSNUMMER_REGEXP, message = "Saksnummer [${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
@@ -28,14 +27,14 @@ public record Saksinnhold(
         @Valid
         @NotNull
         @Size(max = 20)
-        @Pattern(regexp = "^\\d+$", message = "søkerAktørId [${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
+        @Pattern(regexp = AKTØR_ID_REGEXP, message = "søkerAktørId [${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
         String søkerAktørId,
 
         @JsonProperty(value = "pleietrengendeAktørId", required = true)
         @Valid
         @NotNull
         @Size(max = 20)
-        @Pattern(regexp = "^\\d+$", message = "pleietrengendeAktørId [${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
+        @Pattern(regexp = AKTØR_ID_REGEXP, message = "pleietrengendeAktørId [${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
         String pleietrengendeAktørId,
 
         @JsonProperty(value = "behandlinger", required = true)
@@ -43,4 +42,8 @@ public record Saksinnhold(
         @NotNull
         Set<Behandling> behandlinger
 ) implements InnsynHendelseData {
+
+        @JsonCreator
+        public Saksinnhold {
+        }
 }
