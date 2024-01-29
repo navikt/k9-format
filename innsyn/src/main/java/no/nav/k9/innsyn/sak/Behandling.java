@@ -23,10 +23,11 @@ public record Behandling(
         @NotNull
         Set<Aksjonspunkt> aksjonspunkter,
 
-        @JsonProperty(value = "behandlingsfrist", required = true)
+        //TODO required == false pga utenlandssaker?
+        @JsonProperty(value = "saksbehandlingstid", required = true)
         @Valid
         @NotNull
-        LocalDate behandlingsfrist
+        LocalDate saksbehandlingstid
 ) {
 }
 

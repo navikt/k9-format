@@ -39,7 +39,7 @@ class SaksinnholdTest {
                     "behandlinger": [
                       {
                         "status": "UNDER_BEHANDLING",
-                        "behandlingsfrist": "2024-06-01",
+                        "saksbehandlingstid": "2024-06-01",
                         "søknader": [
                           {
                             "status": "MOTTATT",
@@ -71,7 +71,7 @@ class SaksinnholdTest {
         assertThat(behandlinger).hasSize(1);
         Behandling behandling = behandlinger.stream().findFirst().get();
         assertThat(behandling.status()).isEqualTo(BehandlingStatus.UNDER_BEHANDLING);
-        assertThat(behandling.behandlingsfrist()).isEqualTo(LocalDate.parse("2024-06-01"));
+        assertThat(behandling.saksbehandlingstid()).isEqualTo(LocalDate.parse("2024-06-01"));
 
         // Søknader
         Set<SøknadInfo> søknader = behandling.søknader();
