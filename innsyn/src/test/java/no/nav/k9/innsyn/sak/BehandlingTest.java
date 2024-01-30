@@ -33,7 +33,7 @@ class BehandlingTest {
     private static Behandling lagBehandling(boolean erUtenlands, ZonedDateTime... søknadtidspunkter) {
         return new Behandling(BehandlingStatus.UNDER_BEHANDLING,
                 Arrays.stream(søknadtidspunkter).map(it -> new SøknadInfo(SøknadStatus.MOTTATT, "123", it)).collect(Collectors.toSet()),
-                Set.of(new Aksjonspunkt(Aksjonspunkt.Type.VENT_ANKE_OVERSENDT_TIL_TRYGDERETTEN, Aksjonspunkt.Venteårsak.MANGLENDE_INNTEKTSMELDING)),
+                Set.of(new Aksjonspunkt(Aksjonspunkt.Type.VENT_ETTERLYST_INNTEKTSMELDING, Aksjonspunkt.Venteårsak.VENT_OPDT_INNTEKTSMELDING)),
                 erUtenlands);
     }
 
