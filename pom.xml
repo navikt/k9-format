@@ -16,6 +16,7 @@
         <module>soknad-omsorgspenger-utbetaling</module>
         <module>soknad-frisinn</module>
         <module>ettersendelse</module>
+        <module>konstant</module>
     </modules>
 
     <properties>
