@@ -36,10 +36,11 @@ class SaksinnholdTest {
                     "saksnummer": "ABC123",
                     "søkerAktørId": "11111111111",
                     "pleietrengendeAktørId": "22222222222",
+                    "ytelseType": "PSB",
                     "behandlinger": [
                       {
                         "status": "UNDER_BEHANDLING",
-                        "saksbehandlingstid": "2024-06-01",
+                        "erUtenlands": "false",
                         "søknader": [
                           {
                             "status": "MOTTATT",
