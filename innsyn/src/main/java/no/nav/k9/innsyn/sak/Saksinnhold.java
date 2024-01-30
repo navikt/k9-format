@@ -40,7 +40,14 @@ public record Saksinnhold(
         @JsonProperty(value = "behandlinger", required = true)
         @Valid
         @NotNull
-        Set<Behandling> behandlinger
+        Set<Behandling> behandlinger,
+
+        //TODO bør erstattes av kodeverk fra k9-sak
+        @JsonProperty(value = "ytelseType", required = true)
+        @Valid
+        @NotNull
+        String ytelseType
+
 ) implements InnsynHendelseData {
 
         @JsonCreator

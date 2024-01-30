@@ -71,7 +71,6 @@ class SaksinnholdTest {
         assertThat(behandlinger).hasSize(1);
         Behandling behandling = behandlinger.stream().findFirst().get();
         assertThat(behandling.status()).isEqualTo(BehandlingStatus.UNDER_BEHANDLING);
-        assertThat(behandling.saksbehandlingstid()).isEqualTo(LocalDate.parse("2024-06-01"));
 
         // Søknader
         Set<SøknadInfo> søknader = behandling.søknader();
@@ -102,7 +101,7 @@ class SaksinnholdTest {
                 BehandlingStatus.UNDER_BEHANDLING,
                 søknader,
                 aksjonspunkter,
-                LocalDate.parse("2024-06-01")
+                false
         ));
 
         String saksnummer = "ABC123";
@@ -113,7 +112,8 @@ class SaksinnholdTest {
                 saksnummer,
                 søkerAktørId,
                 pleietrengendeAktørId,
-                behandlinger
+                behandlinger,
+                "PSB"
         );
     }
 }

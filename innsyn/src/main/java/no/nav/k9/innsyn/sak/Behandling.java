@@ -1,10 +1,14 @@
 package no.nav.k9.innsyn.sak;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDate;
+import java.time.Duration;
+import java.time.ZonedDateTime;
+import java.util.Comparator;
+import java.util.Optional;
 import java.util.Set;
 
 public record Behandling(
@@ -23,11 +27,19 @@ public record Behandling(
         @NotNull
         Set<Aksjonspunkt> aksjonspunkter,
 
-        //TODO required == false pga utenlandssaker?
-        @JsonProperty(value = "saksbehandlingstid", required = true)
-        @Valid
-        @NotNull
-        LocalDate saksbehandlingstid
+        @JsonProperty(value = "erUtenlands")
+        boolean erUtenlands
 ) {
+    public Optional<ZonedDateTime> utledSaksbehandlingsfrist(Duration saksbehandlingstid) {
+        if (erUtenlands) {
+            return Optional.empty();
+        }
+
+        var tidligsteMottattDato = søknader.stream()
+                .min(Comparator.comparing(SøknadInfo::mottattTidspunkt))
+                .map(SøknadInfo::mottattTidspunkt);
+
+        return tidligsteMottattDato.map(it -> it.plus(saksbehandlingstid));
+    }
 }
 
