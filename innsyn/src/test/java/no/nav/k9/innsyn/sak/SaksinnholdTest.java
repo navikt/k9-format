@@ -50,8 +50,8 @@ class SaksinnholdTest {
                         ],
                         "aksjonspunkter": [
                           {
-                            "type": "VENT_KOMPLETT_SØKNAD",
-                            "venteårsak": "AVVENT_DOKUMTANSJON"
+                            "type": "VENT_ETTERLYST_INNTEKTSMELDING",
+                            "venteårsak": "VENT_OPDT_INNTEKTSMELDING"
                           }
                         ]
                       }
@@ -85,8 +85,8 @@ class SaksinnholdTest {
         Set<Aksjonspunkt> aksjonspunkter = behandling.aksjonspunkter();
         assertThat(aksjonspunkter).hasSize(1);
         Aksjonspunkt aksjonspunkt = aksjonspunkter.stream().findFirst().get();
-        assertThat(aksjonspunkt.type()).isEqualTo(Aksjonspunkt.Type.VENT_KOMPLETT_SØKNAD);
-        assertThat(aksjonspunkt.venteårsak()).isEqualTo(Aksjonspunkt.Venteårsak.AVVENT_DOKUMTANSJON);
+        assertThat(aksjonspunkt.type()).isEqualTo(Aksjonspunkt.Type.VENT_ETTERLYST_INNTEKTSMELDING);
+        assertThat(aksjonspunkt.venteårsak()).isEqualTo(Aksjonspunkt.Venteårsak.VENT_OPDT_INNTEKTSMELDING);
     }
 
     private Saksinnhold lagSaksinnhold() {
@@ -95,7 +95,7 @@ class SaksinnholdTest {
         );
 
         Set<Aksjonspunkt> aksjonspunkter = Set.of(
-                new Aksjonspunkt(Aksjonspunkt.Type.VENT_KOMPLETT_SØKNAD, Aksjonspunkt.Venteårsak.AVVENT_DOKUMTANSJON)
+                new Aksjonspunkt(Aksjonspunkt.Type.VENT_ETTERLYST_MEDISINSKE_OPPLYSNINGER, Aksjonspunkt.Venteårsak.LEGEERKLÆRING)
         );
 
         Set<Behandling> behandlinger = Set.of(new Behandling(

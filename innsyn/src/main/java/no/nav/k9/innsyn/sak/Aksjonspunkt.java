@@ -9,41 +9,33 @@ public record Aksjonspunkt(
         @JsonProperty("venteårsak") @Valid @NotNull Venteårsak venteårsak
 ) {
 
-    // TODO:  Tilpass venteårsakene i k9-sak
+    /**
+     * @see <a href="https://github.com/navikt/k9-sak/blob/fcaffc46d11cb5cc10738ad5cc34d981b0fbcff1/kodeverk/src/main/java/no/nav/k9/kodeverk/behandling/aksjonspunkt/Vente%C3%A5rsak.java">Venteårsak i k9-sak</a>
+     */
     public enum Venteårsak {
-        ANKE_VENTER_PÅ_MERKNADER_FRA_BRUKER,
-        AVVENT_DOKUMTANSJON,
-        AVVENT_FØDSEL,
-        AVVENT_RESPONS_REVURDERING,
-        BRUKERTILBAKEMELDING,
-        UTLAND_TRYGD,
-        FOR_TIDLIG_SOKNAD,
-        UTVIDET_FRIST,
-        INNTEKT_RAPPORTERINGSFRIST,
-        MANGLENDE_SYKEMELDING,
-        MANGLENDE_INNTEKTSMELDING,
-        OPPTJENING_OPPLYSNINGER,
-        SISTE_AAP_ELLER_DP_MELDEKORT,
-        SENDT_INFORMASJONSBREV,
-        ÅPEN_BEHANDLING,
+        UDEFINERT, // Ikke definert
+        ANNET, // Annet
+        AVV_DOK, // Annen dokumentasjon
+
+        // Inntektsmelding
+        AVV_IM_MOT_AAREG, // Venter på inntektsmelding fra arbeidsgiver som stemmer med Aareg
+        AVV_IM_MOT_SØKNAD_AT, // Venter på inntektsmelding fra arbeidsgiver etter mottatt søknad som arbeidstaker
+        VENT_OPDT_INNTEKTSMELDING, // Venter på oppdatert inntektsmelding
+        VENT_PÅ_NY_INNTEKTSMELDING_MED_GYLDIG_ARB_ID, // Venter på ny inntektsmelding med arbeidsforholdId som stemmer med Aareg
+        VENTER_PÅ_ETTERLYST_INNTEKTSMELDINGER, // Venter på inntektsmeldinger etter etterlysning
+        VENTER_PÅ_ETTERLYST_INNTEKTSMELDINGER_MED_VARSEL, // Venter på inntektsmeldinger etter etterlysning med varsel om mulig avslag
+        INNTEKTSMELDING, // Inntektsmelding
+        // Inntektsmelding
+
+        // Medisinske opplysninger
+        LEGEERKLÆRING, // Legeerklæring fra riktig lege
+        MEDISINSKE_OPPLYSNINGER,
     }
 
     // TODO:  Tilpass aksjonspunktene i k9-sak
     public enum Type {
-        VENT_MANUELT_SATT,
-        VENT_FØDSEL,
-        VENT_KOMPLETT_SØKNAD,
-        VENT_REVURDERING,
-        VENT_TIDLIG_SØKNAD,
-        VENT_KØET_BEHANDLING,
-        VENT_SØKNAD,
-        VENT_INNTEKT_RAPPORTERINGSFRIST,
-        VENT_SISTE_AAP_ELLER_DP_MELDEKORT,
         VENT_ETTERLYST_INNTEKTSMELDING,
-        VENT_ANKE_OVERSENDT_TIL_TRYGDERETTEN,
-        VENT_SYKEMELDING,
-        VENT_KABAL_KLAGE,
-        VENT_PÅ_KABAL_ANKE,
-
+        VENT_ETTERLYST_MEDISINSKE_OPPLYSNINGER,
+        VENT_ANNET
     }
 }
