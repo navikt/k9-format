@@ -39,6 +39,11 @@
             <url>https://maven.pkg.github.com/navikt/k9-format/</url>
         </repository>
         <repository>
+            <id>k9-sak</id>
+            <name>GitHub Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/navikt/k9-sak/</url>
+        </repository>
+        <repository>
             <!-- bruker SNAPSHOT versjon av eclipse-transformer (0.3.0-SNAPSHOT) -->
             <id>ossrh</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
