@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import no.nav.k9.innsyn.InnsynHendelseData;
+import no.nav.k9.kodeverk.behandling.FagsakYtelseType;
+import no.nav.k9.sak.typer.AktørId;
+import no.nav.k9.sak.typer.Saksnummer;
 
 import java.util.Set;
 
@@ -20,33 +23,30 @@ public record Saksinnhold(
         @JsonProperty(value = "saksnummer", required = true)
         @Valid
         @NotNull
-        @Pattern(regexp = SAKSNUMMER_REGEXP, message = "Saksnummer [${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
-        String saksnummer, // NOSONAR
+        Saksnummer saksnummer, // NOSONAR
 
         @JsonProperty(value = "søkerAktørId", required = true)
         @Valid
         @NotNull
         @Size(max = 20)
-        @Pattern(regexp = AKTØR_ID_REGEXP, message = "søkerAktørId [${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
-        String søkerAktørId,
+        AktørId søkerAktørId,
 
         @JsonProperty(value = "pleietrengendeAktørId", required = true)
         @Valid
         @NotNull
         @Size(max = 20)
         @Pattern(regexp = AKTØR_ID_REGEXP, message = "pleietrengendeAktørId [${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
-        String pleietrengendeAktørId,
+        AktørId pleietrengendeAktørId,
 
         @JsonProperty(value = "behandlinger", required = true)
         @Valid
         @NotNull
         Set<Behandling> behandlinger,
 
-        //TODO bør erstattes av kodeverk fra k9-sak
         @JsonProperty(value = "ytelseType", required = true)
         @Valid
         @NotNull
-        String ytelseType
+        FagsakYtelseType ytelseType
 
 ) implements InnsynHendelseData {
 

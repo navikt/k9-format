@@ -1,10 +1,15 @@
 package no.nav.k9.innsyn.sak;
 
 import no.nav.k9.innsyn.InnsynHendelse;
+import no.nav.k9.kodeverk.behandling.BehandlingStatus;
+import no.nav.k9.kodeverk.behandling.FagsakYtelseType;
+import no.nav.k9.kodeverk.behandling.aksjonspunkt.Ventekategori;
+import no.nav.k9.kodeverk.behandling.aksjonspunkt.Venteårsak;
+import no.nav.k9.sak.typer.AktørId;
+import no.nav.k9.sak.typer.Saksnummer;
 import no.nav.k9.søknad.JsonUtils;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Set;
 import java.util.UUID;
@@ -30,48 +35,48 @@ class SaksinnholdTest {
         //language=JSON
         final var jsonString = """
                 {
-                  "oppdateringstidspunkt": "2021-06-01T12:00:00.000Z",
-                  "data": {
-                    "type": "SAK_INNHOLD",
-                    "saksnummer": "ABC123",
-                    "søkerAktørId": "11111111111",
-                    "pleietrengendeAktørId": "22222222222",
-                    "ytelseType": "PSB",
-                    "behandlinger": [
-                      {
-                        "status": "UNDER_BEHANDLING",
-                        "erUtenlands": "false",
-                        "søknader": [
-                          {
-                            "status": "MOTTATT",
-                            "søknadId": "f1b3f3c3-0b1a-4e4a-9b1a-3c3f3b1a4e4a",
-                            "mottattTidspunkt": "2021-06-01T12:00:00.000Z"
-                          }
-                        ],
-                        "aksjonspunkter": [
-                          {
-                            "type": "VENT_ETTERLYST_INNTEKTSMELDING",
-                            "venteårsak": "VENT_OPDT_INNTEKTSMELDING"
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
+                   "oppdateringstidspunkt": "2021-06-01T12:00:00.000Z",
+                   "data": {
+                     "type": "SAK_INNHOLD",
+                     "saksnummer": "ABC123",
+                     "søkerAktørId": "11111111111",
+                     "pleietrengendeAktørId": "22222222222",
+                     "ytelseType": "PSB",
+                     "behandlinger": [
+                       {
+                         "status": "OPPRE",
+                         "erUtenlands": "false",
+                         "søknader": [
+                           {
+                             "status": "MOTTATT",
+                             "søknadId": "f1b3f3c3-0b1a-4e4a-9b1a-3c3f3b1a4e4a",
+                             "mottattTidspunkt": "2021-06-01T12:00:00.000Z"
+                           }
+                         ],
+                         "aksjonspunkter": [
+                           {
+                             "ventekategori": "AVVENTER_ANNET",
+                             "venteårsak": "VENT_OPDT_INNTEKTSMELDING"
+                           }
+                         ]
+                       }
+                     ]
+                   }
+                 }
                 """;
 
         final var hendelse = JsonUtils.fromString(jsonString, InnsynHendelse.class);
         final var saksinnhold = (Saksinnhold) hendelse.getData();
 
-        assertThat(saksinnhold.saksnummer()).isEqualTo("ABC123");
-        assertThat(saksinnhold.søkerAktørId()).isEqualTo("11111111111");
-        assertThat(saksinnhold.pleietrengendeAktørId()).isEqualTo("22222222222");
+        assertThat(saksinnhold.saksnummer().getVerdi()).isEqualTo("ABC123");
+        assertThat(saksinnhold.søkerAktørId().getId()).isEqualTo("11111111111");
+        assertThat(saksinnhold.pleietrengendeAktørId().getId()).isEqualTo("22222222222");
 
         // behandlinger
         Set<Behandling> behandlinger = saksinnhold.behandlinger();
         assertThat(behandlinger).hasSize(1);
         Behandling behandling = behandlinger.stream().findFirst().get();
-        assertThat(behandling.status()).isEqualTo(BehandlingStatus.UNDER_BEHANDLING);
+        assertThat(behandling.status()).isEqualTo(BehandlingStatus.OPPRETTET);
 
         // Søknader
         Set<SøknadInfo> søknader = behandling.søknader();
@@ -85,8 +90,8 @@ class SaksinnholdTest {
         Set<Aksjonspunkt> aksjonspunkter = behandling.aksjonspunkter();
         assertThat(aksjonspunkter).hasSize(1);
         Aksjonspunkt aksjonspunkt = aksjonspunkter.stream().findFirst().get();
-        assertThat(aksjonspunkt.type()).isEqualTo(Aksjonspunkt.Type.VENT_ETTERLYST_INNTEKTSMELDING);
-        assertThat(aksjonspunkt.venteårsak()).isEqualTo(Aksjonspunkt.Venteårsak.VENT_OPDT_INNTEKTSMELDING);
+        assertThat(aksjonspunkt.ventekategori()).isEqualTo(Ventekategori.AVVENTER_ANNET);
+        assertThat(aksjonspunkt.venteårsak()).isEqualTo(Venteårsak.VENT_OPDT_INNTEKTSMELDING);
     }
 
     private Saksinnhold lagSaksinnhold() {
@@ -95,11 +100,11 @@ class SaksinnholdTest {
         );
 
         Set<Aksjonspunkt> aksjonspunkter = Set.of(
-                new Aksjonspunkt(Aksjonspunkt.Type.VENT_ETTERLYST_MEDISINSKE_OPPLYSNINGER, Aksjonspunkt.Venteårsak.LEGEERKLÆRING)
+                new Aksjonspunkt(Ventekategori.AVVENTER_SØKER, Venteårsak.LEGEERKLÆRING)
         );
 
         Set<Behandling> behandlinger = Set.of(new Behandling(
-                BehandlingStatus.UNDER_BEHANDLING,
+                BehandlingStatus.OPPRETTET,
                 søknader,
                 aksjonspunkter,
                 false
@@ -110,11 +115,11 @@ class SaksinnholdTest {
         String pleietrengendeAktørId = "22222222222";
 
         return new Saksinnhold(
-                saksnummer,
-                søkerAktørId,
-                pleietrengendeAktørId,
+                new Saksnummer(saksnummer),
+                new AktørId(søkerAktørId),
+                new AktørId(pleietrengendeAktørId),
                 behandlinger,
-                "PSB"
+                FagsakYtelseType.PLEIEPENGER_SYKT_BARN
         );
     }
 }

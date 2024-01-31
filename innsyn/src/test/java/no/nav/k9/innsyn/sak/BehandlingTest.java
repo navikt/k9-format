@@ -1,6 +1,9 @@
 package no.nav.k9.innsyn.sak;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import no.nav.k9.kodeverk.behandling.BehandlingStatus;
+import no.nav.k9.kodeverk.behandling.aksjonspunkt.Ventekategori;
+import no.nav.k9.kodeverk.behandling.aksjonspunkt.Venteårsak;
+import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -10,7 +13,7 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class BehandlingTest {
 
@@ -39,9 +42,9 @@ class BehandlingTest {
     }
 
     private static Behandling lagBehandling(boolean erUtenlands, ZonedDateTime... søknadtidspunkter) {
-        return new Behandling(BehandlingStatus.UNDER_BEHANDLING,
+        return new Behandling(BehandlingStatus.OPPRETTET,
                 Arrays.stream(søknadtidspunkter).map(it -> new SøknadInfo(SøknadStatus.MOTTATT, "123", it)).collect(Collectors.toSet()),
-                Set.of(new Aksjonspunkt(Aksjonspunkt.Type.VENT_ETTERLYST_INNTEKTSMELDING, Aksjonspunkt.Venteårsak.VENT_OPDT_INNTEKTSMELDING)),
+                Set.of(new Aksjonspunkt(Ventekategori.AVVENTER_ANNET, Venteårsak.VENT_OPDT_INNTEKTSMELDING)),
                 erUtenlands);
     }
 
