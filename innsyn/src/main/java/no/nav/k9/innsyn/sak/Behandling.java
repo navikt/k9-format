@@ -1,9 +1,9 @@
 package no.nav.k9.innsyn.sak;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import no.nav.k9.konstant.Konstant;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
@@ -30,7 +30,7 @@ public record Behandling(
         @JsonProperty(value = "erUtenlands")
         boolean erUtenlands
 ) {
-    public Optional<ZonedDateTime> utledSaksbehandlingsfrist(Duration saksbehandlingstid) {
+    public Optional<ZonedDateTime> utledSaksbehandlingsfrist(Duration overstyrSaksbehandlingstid) {
         if (erUtenlands) {
             return Optional.empty();
         }
@@ -39,7 +39,10 @@ public record Behandling(
                 .min(Comparator.comparing(SøknadInfo::mottattTidspunkt))
                 .map(SøknadInfo::mottattTidspunkt);
 
-        return tidligsteMottattDato.map(it -> it.plus(saksbehandlingstid));
+        return tidligsteMottattDato.map(it -> {
+            Duration saksbehandlingstid = overstyrSaksbehandlingstid != null ? overstyrSaksbehandlingstid : Konstant.FORVENTET_SAKSBEHANDLINGSTID;
+            return it.plus(saksbehandlingstid);
+        });
     }
 }
 

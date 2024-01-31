@@ -18,15 +18,23 @@ class BehandlingTest {
     void skalRegneUtSaksbehandlingsfrist() {
         ZonedDateTime tidligsteMottattTidspunkt = LocalDate.of(2024, 1, 5).atStartOfDay(ZoneId.systemDefault());
         var behandling = lagBehandling(false, tidligsteMottattTidspunkt.plusDays(10), tidligsteMottattTidspunkt, tidligsteMottattTidspunkt.plusMonths(20));
-        ZonedDateTime saksbehandlingsfrist = behandling.utledSaksbehandlingsfrist(Duration.ofDays(10)).get();
-        assertThat(saksbehandlingsfrist).isEqualTo(tidligsteMottattTidspunkt.plusDays(10));
+        ZonedDateTime saksbehandlingsfrist = behandling.utledSaksbehandlingsfrist(null).get();
+        assertThat(saksbehandlingsfrist).isEqualTo(tidligsteMottattTidspunkt.plusWeeks(8));
+    }
+
+    @Test
+    void skalOverstureOgRegneUtSaksbehandlingsfrist() {
+        ZonedDateTime tidligsteMottattTidspunkt = LocalDate.of(2024, 1, 5).atStartOfDay(ZoneId.systemDefault());
+        var behandling = lagBehandling(false, tidligsteMottattTidspunkt.plusDays(10), tidligsteMottattTidspunkt, tidligsteMottattTidspunkt.plusMonths(20));
+        ZonedDateTime saksbehandlingsfrist = behandling.utledSaksbehandlingsfrist(Duration.ofDays(5)).get();
+        assertThat(saksbehandlingsfrist).isEqualTo(tidligsteMottattTidspunkt.plusDays(5));
     }
 
     @Test
     void skalIkkeRegneUtSaksbehandlingsfristForUtenlandsbehandling() {
         ZonedDateTime mottattidspunkt = LocalDate.of(2024, 1, 5).atStartOfDay(ZoneId.systemDefault());
         var behandling = lagBehandling(true, mottattidspunkt);
-        var saksbehandlingsfrist = behandling.utledSaksbehandlingsfrist(Duration.ofDays(10));
+        var saksbehandlingsfrist = behandling.utledSaksbehandlingsfrist(null);
         assertThat(saksbehandlingsfrist).isEmpty();
     }
 
