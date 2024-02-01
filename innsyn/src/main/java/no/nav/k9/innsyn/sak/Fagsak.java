@@ -1,19 +1,13 @@
 package no.nav.k9.innsyn.sak;
 
-import static no.nav.k9.innsyn.utils.RegexUtils.AKTØR_ID_REGEXP;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import no.nav.k9.kodeverk.behandling.FagsakYtelseType;
 import no.nav.k9.sak.typer.AktørId;
 import no.nav.k9.sak.typer.Saksnummer;
 
-public record Saksinnhold(
+public record Fagsak(
         @JsonProperty(value = "saksnummer", required = true)
         @Valid
         @NotNull

@@ -4,11 +4,9 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import no.nav.k9.innsyn.InnsynHendelseData;
-import no.nav.k9.kodeverk.behandling.BehandlingStatus;
 import no.nav.k9.konstant.Konstant;
 
 import java.time.Duration;
@@ -39,8 +37,8 @@ public record Behandling(
         @JsonProperty(value = "erUtenlands")
         boolean erUtenlands,
 
-        @JsonProperty(value = "saksinnhold")
-        Saksinnhold saksinnhold
+        @JsonProperty(value = "fagsak")
+        Fagsak fagsak
 
 ) implements InnsynHendelseData  {
     public Optional<ZonedDateTime> utledSaksbehandlingsfrist(Duration overstyrSaksbehandlingstid) {

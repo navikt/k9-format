@@ -1,7 +1,6 @@
 package no.nav.k9.innsyn.sak;
 
 import no.nav.k9.innsyn.InnsynHendelse;
-import no.nav.k9.kodeverk.behandling.BehandlingStatus;
 import no.nav.k9.kodeverk.behandling.FagsakYtelseType;
 import no.nav.k9.kodeverk.behandling.aksjonspunkt.Ventekategori;
 import no.nav.k9.kodeverk.behandling.aksjonspunkt.Venteårsak;
@@ -43,13 +42,13 @@ class BehandlingTest {
                   "oppdateringstidspunkt": "2021-06-01T12:00:00.000Z",
                   "data": {
                     "type": "BEHANDLING_INNHOLD",
-                    "saksinnhold": {
+                    "fagsak": {
                       "saksnummer": "ABC123",
                       "søkerAktørId": "11111111111",
                       "pleietrengendeAktørId": "22222222222",
                       "ytelseType": "PSB"
                     },
-                    "status": "OPPRE",
+                    "status": "OPPRETTET",
                     "erUtenlands": "false",
                     "søknader": [
                       {
@@ -70,7 +69,7 @@ class BehandlingTest {
 
         final var hendelse = JsonUtils.fromString(jsonString, InnsynHendelse.class);
         final var behandling = (Behandling) hendelse.getData();
-        final var saksinnhold = behandling.saksinnhold();
+        final var saksinnhold = behandling.fagsak();
 
         assertThat(saksinnhold.saksnummer().getVerdi()).isEqualTo("ABC123");
         assertThat(saksinnhold.søkerAktørId().getId()).isEqualTo("11111111111");
@@ -135,7 +134,7 @@ class BehandlingTest {
         String søkerAktørId = "11111111111";
         String pleietrengendeAktørId = "22222222222";
 
-        Saksinnhold saksinnhold = new Saksinnhold(
+        Fagsak saksinnhold = new Fagsak(
                 new Saksnummer(saksnummer),
                 new AktørId(søkerAktørId),
                 new AktørId(pleietrengendeAktørId),
