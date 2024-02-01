@@ -14,11 +14,17 @@ import java.time.ZonedDateTime;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @JsonTypeName(InnsynHendelseData.BEHANDLING_INNHOLD)
 public record Behandling(
+        @JsonProperty(value = "behandlingsId", required = true)
+        @Valid
+        @NotNull
+        UUID behandlingsId,
+
         @JsonProperty(value = "status", required = true)
         @Valid
         @NotNull
