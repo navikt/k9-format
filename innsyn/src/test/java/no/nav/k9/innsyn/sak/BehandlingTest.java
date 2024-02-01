@@ -42,6 +42,7 @@ class BehandlingTest {
                   "oppdateringstidspunkt": "2021-06-01T12:00:00.000Z",
                   "data": {
                     "type": "BEHANDLING_INNHOLD",
+                    "behandlingsId": "f1b3f3c3-0b1a-4e4a-9b1a-3c3f3b1a4e4a",
                     "fagsak": {
                       "saksnummer": "ABC123",
                       "søkerAktørId": "11111111111",
@@ -77,12 +78,15 @@ class BehandlingTest {
 
         // behandlinger
         assertThat(behandling.status()).isEqualTo(BehandlingStatus.OPPRETTET);
+        assertThat(behandling.erUtenlands()).isFalse();
+        assertThat(behandling.behandlingsId()).isEqualTo(UUID.fromString("f1b3f3c3-0b1a-4e4a-9b1a-3c3f3b1a4e4a"));
 
         // Søknader
         Set<SøknadInfo> søknader = behandling.søknader();
         assertThat(søknader).hasSize(1);
         SøknadInfo søknadInfo = søknader.stream().findFirst().get();
         assertThat(søknadInfo.status()).isEqualTo(SøknadStatus.MOTTATT);
+
         assertThat(søknadInfo.søknadId()).isEqualTo("f1b3f3c3-0b1a-4e4a-9b1a-3c3f3b1a4e4a");
         assertThat(søknadInfo.mottattTidspunkt()).isEqualTo(ZonedDateTime.parse("2021-06-01T12:00:00.000Z"));
 
@@ -142,6 +146,7 @@ class BehandlingTest {
         );
 
         Behandling behandling = new Behandling(
+                UUID.randomUUID(),
                 BehandlingStatus.OPPRETTET,
                 søknader,
                 aksjonspunkter,
