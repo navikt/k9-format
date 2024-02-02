@@ -2,8 +2,6 @@ package no.nav.k9.innsyn.sak;
 
 import no.nav.k9.innsyn.InnsynHendelse;
 import no.nav.k9.kodeverk.behandling.FagsakYtelseType;
-import no.nav.k9.kodeverk.behandling.aksjonspunkt.Ventekategori;
-import no.nav.k9.kodeverk.behandling.aksjonspunkt.Venteårsak;
 import no.nav.k9.sak.typer.AktørId;
 import no.nav.k9.sak.typer.Saksnummer;
 import no.nav.k9.søknad.JsonUtils;
@@ -60,8 +58,7 @@ class BehandlingTest {
                     ],
                     "aksjonspunkter": [
                       {
-                        "ventekategori": "AVVENTER_ANNET",
-                        "venteårsak": "VENT_OPDT_INNTEKTSMELDING"
+                        "venteårsak": "INNTEKTSMELDING"
                       }
                     ]
                   }
@@ -70,7 +67,7 @@ class BehandlingTest {
 
         final var hendelse = JsonUtils.fromString(jsonString, InnsynHendelse.class);
         final var behandling = (Behandling) hendelse.getData();
-        final var saksinnhold = behandling.fagsak();
+        final Fagsak saksinnhold = behandling.fagsak();
 
         assertThat(saksinnhold.saksnummer().getVerdi()).isEqualTo("ABC123");
         assertThat(saksinnhold.søkerAktørId().getId()).isEqualTo("11111111111");
@@ -94,8 +91,7 @@ class BehandlingTest {
         Set<Aksjonspunkt> aksjonspunkter = behandling.aksjonspunkter();
         assertThat(aksjonspunkter).hasSize(1);
         Aksjonspunkt aksjonspunkt = aksjonspunkter.stream().findFirst().get();
-        assertThat(aksjonspunkt.ventekategori()).isEqualTo(Ventekategori.AVVENTER_ANNET);
-        assertThat(aksjonspunkt.venteårsak()).isEqualTo(Venteårsak.VENT_OPDT_INNTEKTSMELDING);
+        assertThat(aksjonspunkt.venteårsak()).isEqualTo(Aksjonspunkt.Venteårsak.INNTEKTSMELDING);
     }
 
     @Test
@@ -131,7 +127,7 @@ class BehandlingTest {
         Set<SøknadInfo> søknader = Arrays.stream(søknadtidspunkter).map(it -> new SøknadInfo(SøknadStatus.MOTTATT, UUID.randomUUID().toString(), it)).collect(Collectors.toSet());
 
         Set<Aksjonspunkt> aksjonspunkter = Set.of(
-                new Aksjonspunkt(Ventekategori.AVVENTER_SØKER, Venteårsak.LEGEERKLÆRING)
+                new Aksjonspunkt(Aksjonspunkt.Venteårsak.MEDISINSK_DOKUMENTASJON)
         );
 
         String saksnummer = "ABC123";
