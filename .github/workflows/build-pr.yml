@@ -22,4 +22,4 @@ jobs:
       - name: Build
         run: mvn verify --settings .github/settings.xml -DtrimStackTrace=false
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.READER_TOKEN }}

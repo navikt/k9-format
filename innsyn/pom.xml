@@ -12,6 +12,10 @@
     <artifactId>innsyn</artifactId>
     <packaging>jar</packaging>
 
+    <properties>
+        <k9-sak.version>4.1.7</k9-sak.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -36,6 +40,16 @@
         <dependency>
             <groupId>no.nav.k9</groupId>
             <artifactId>soknad</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.k9</groupId>
+            <artifactId>konstant</artifactId>
+            <version>${revision}${sha1}${changelist}</version>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.k9.sak</groupId>
+            <artifactId>kodeverk</artifactId>
+            <version>${k9-sak.version}</version>
         </dependency>
     </dependencies>
 </project>

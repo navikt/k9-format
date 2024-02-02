@@ -25,5 +25,5 @@ jobs:
         run: |
              mvn install -e --batch-mode --settings .github/settings.xml --file pom.xml -DtrimStackTrace=false
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.READER_TOKEN }}
           
