@@ -16,6 +16,13 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
           cache: 'maven'
+      - name: Verify
+        shell: bash
+        run: |
+           mvn verify -e -B --file pom.xml --settings .github/settings.xml -DtrimStackTrace=false -Dtoken=${GITHUB_TOKEN}
+        env:
+          GITHUB_TOKEN: ${{ secrets.READEME_TOKEN }}
+          NEW_VERSION: ${{ github.event.release.tag_name }}
       - name: Publish artifacts
         shell: bash
         run: |
