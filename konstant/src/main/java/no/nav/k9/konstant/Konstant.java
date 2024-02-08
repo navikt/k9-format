@@ -4,7 +4,7 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 
 public class Konstant {
-    private static final Long SAKSBEHANDLINGSTID_UKER = 7L;
+    private static final Long SAKSBEHANDLINGSTID_UKER = 6L;
     private static final Long ANTALL_UKEDAGER = 7L;
     /*
      * ChronoUnit.WEEKS har ikke en fast varighet fordi lengden av en uke kan variere for eksempel, pga.sommertid).
