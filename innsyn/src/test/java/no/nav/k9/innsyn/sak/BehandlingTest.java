@@ -1,11 +1,6 @@
 package no.nav.k9.innsyn.sak;
 
-import no.nav.k9.innsyn.InnsynHendelse;
-import no.nav.k9.kodeverk.behandling.FagsakYtelseType;
-import no.nav.k9.sak.typer.AktørId;
-import no.nav.k9.sak.typer.Saksnummer;
-import no.nav.k9.søknad.JsonUtils;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -16,7 +11,14 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
+
+import no.nav.k9.innsyn.InnsynHendelse;
+import no.nav.k9.kodeverk.behandling.FagsakYtelseType;
+import no.nav.k9.sak.typer.AktørId;
+import no.nav.k9.sak.typer.Saksnummer;
+import no.nav.k9.søknad.JsonUtils;
+import no.nav.k9.søknad.felles.Kildesystem;
 
 class BehandlingTest {
 
@@ -52,8 +54,9 @@ class BehandlingTest {
                     "søknader": [
                       {
                         "status": "MOTTATT",
-                        "søknadId": "f1b3f3c3-0b1a-4e4a-9b1a-3c3f3b1a4e4a",
-                        "mottattTidspunkt": "2021-06-01T12:00:00.000Z"
+                        "journalpostId": "f1b3f3c3-0b1a-4e4a-9b1a-3c3f3b1a4e4a",
+                        "mottattTidspunkt": "2021-06-01T12:00:00.000Z",
+                        "kildesystem": "søknadsdialog"
                       }
                     ],
                     "aksjonspunkter": [
@@ -83,8 +86,9 @@ class BehandlingTest {
         assertThat(søknader).hasSize(1);
         SøknadInfo søknadInfo = søknader.stream().findFirst().get();
         assertThat(søknadInfo.status()).isEqualTo(SøknadStatus.MOTTATT);
+        assertThat(søknadInfo.kildesystem()).isEqualTo(Kildesystem.SØKNADSDIALOG);
 
-        assertThat(søknadInfo.søknadId()).isEqualTo("f1b3f3c3-0b1a-4e4a-9b1a-3c3f3b1a4e4a");
+        assertThat(søknadInfo.journalpostId()).isEqualTo("f1b3f3c3-0b1a-4e4a-9b1a-3c3f3b1a4e4a");
         assertThat(søknadInfo.mottattTidspunkt()).isEqualTo(ZonedDateTime.parse("2021-06-01T12:00:00.000Z"));
 
         // Aksjonspunkter
@@ -124,7 +128,7 @@ class BehandlingTest {
 
     private static Behandling lagBehandling(boolean erUtenlands, ZonedDateTime... søknadtidspunkter) {
 
-        Set<SøknadInfo> søknader = Arrays.stream(søknadtidspunkter).map(it -> new SøknadInfo(SøknadStatus.MOTTATT, UUID.randomUUID().toString(), it)).collect(Collectors.toSet());
+        Set<SøknadInfo> søknader = Arrays.stream(søknadtidspunkter).map(it -> new SøknadInfo(SøknadStatus.MOTTATT, UUID.randomUUID().toString(), it, Kildesystem.SØKNADSDIALOG)).collect(Collectors.toSet());
 
         Set<Aksjonspunkt> aksjonspunkter = Set.of(
                 new Aksjonspunkt(Aksjonspunkt.Venteårsak.MEDISINSK_DOKUMENTASJON)
