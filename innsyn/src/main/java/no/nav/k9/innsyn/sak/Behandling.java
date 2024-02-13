@@ -1,15 +1,13 @@
 package no.nav.k9.innsyn.sak;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import no.nav.k9.innsyn.InnsynHendelseData;
 import no.nav.k9.konstant.Konstant;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Comparator;
 import java.util.Optional;
@@ -24,6 +22,14 @@ public record Behandling(
         @Valid
         @NotNull
         UUID behandlingsId,
+
+        @JsonProperty(value = "opprettetDato", required = true)
+        @NotNull
+        LocalDate opprettetDato,
+
+        @JsonInclude(value = JsonInclude.Include.NON_NULL)
+        @JsonProperty(value = "avsluttetDato")
+        LocalDate avsluttetDato,
 
         @JsonProperty(value = "status", required = true)
         @Valid

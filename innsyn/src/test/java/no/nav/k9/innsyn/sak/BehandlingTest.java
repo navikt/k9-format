@@ -2,10 +2,7 @@ package no.nav.k9.innsyn.sak;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
@@ -43,6 +40,7 @@ class BehandlingTest {
                   "data": {
                     "type": "BEHANDLING_INNHOLD",
                     "behandlingsId": "f1b3f3c3-0b1a-4e4a-9b1a-3c3f3b1a4e4a",
+                    "opprettetDato": "2024-02-13",
                     "fagsak": {
                       "saksnummer": "ABC123",
                       "søkerAktørId": "11111111111",
@@ -147,6 +145,8 @@ class BehandlingTest {
 
         Behandling behandling = new Behandling(
                 UUID.randomUUID(),
+                LocalDate.now(),
+                null,
                 BehandlingStatus.OPPRETTET,
                 søknader,
                 aksjonspunkter,
