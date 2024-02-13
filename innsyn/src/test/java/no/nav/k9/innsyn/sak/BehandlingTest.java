@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 
 import no.nav.k9.innsyn.InnsynHendelse;
+import no.nav.k9.innsyn.TempObjectMapperKodeverdi;
 import no.nav.k9.kodeverk.behandling.FagsakYtelseType;
 import no.nav.k9.sak.typer.AktørId;
 import no.nav.k9.sak.typer.Saksnummer;
@@ -105,6 +106,9 @@ class BehandlingTest {
         Aksjonspunkt aksjonspunkt = aksjonspunkter.stream().findFirst().get();
         assertThat(aksjonspunkt.venteårsak()).isEqualTo(Aksjonspunkt.Venteårsak.INNTEKTSMELDING);
         assertThat(aksjonspunkt.tidsfrist()).isEqualTo(ZonedDateTime.parse("2024-02-15T12:00:00.000Z"));
+
+        String json = JsonUtils.toString(hendelse, TempObjectMapperKodeverdi.getObjectMapper());
+        assertThat(json).doesNotContain("kodeverk");
     }
 
     @Test
