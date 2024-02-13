@@ -2,7 +2,10 @@ package no.nav.k9.innsyn.sak;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.*;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
@@ -40,7 +43,7 @@ class BehandlingTest {
                   "data": {
                     "type": "BEHANDLING_INNHOLD",
                     "behandlingsId": "f1b3f3c3-0b1a-4e4a-9b1a-3c3f3b1a4e4a",
-                    "opprettetDato": "2024-02-13",
+                    "opprettetTidspunkt": "2024-02-13T12:00:00.000Z",
                     "fagsak": {
                       "saksnummer": "ABC123",
                       "søkerAktørId": "11111111111",
@@ -49,6 +52,8 @@ class BehandlingTest {
                     },
                     "status": "OPPRETTET",
                     "erUtenlands": "false",
+                    "avsluttetTidspunkt": "2024-02-14T12:00:00.000Z",
+                    "behandlingResultat": "INNVILGET",
                     "søknader": [
                       {
                         "status": "MOTTATT",
@@ -59,7 +64,8 @@ class BehandlingTest {
                     ],
                     "aksjonspunkter": [
                       {
-                        "venteårsak": "INNTEKTSMELDING"
+                        "venteårsak": "INNTEKTSMELDING",
+                        "tidsfrist": "2024-02-15T12:00:00.000Z"
                       }
                     ]
                   }
@@ -77,7 +83,11 @@ class BehandlingTest {
         // behandlinger
         assertThat(behandling.status()).isEqualTo(BehandlingStatus.OPPRETTET);
         assertThat(behandling.erUtenlands()).isFalse();
+        assertThat(behandling.opprettetTidspunkt()).isEqualTo(ZonedDateTime.parse("2024-02-13T12:00:00.000Z"));
+        assertThat(behandling.avsluttetTidspunkt()).isEqualTo(ZonedDateTime.parse("2024-02-14T12:00:00.000Z"));
+        assertThat(behandling.erUtenlands()).isFalse();
         assertThat(behandling.behandlingsId()).isEqualTo(UUID.fromString("f1b3f3c3-0b1a-4e4a-9b1a-3c3f3b1a4e4a"));
+
 
         // Søknader
         Set<SøknadInfo> søknader = behandling.søknader();
@@ -94,6 +104,7 @@ class BehandlingTest {
         assertThat(aksjonspunkter).hasSize(1);
         Aksjonspunkt aksjonspunkt = aksjonspunkter.stream().findFirst().get();
         assertThat(aksjonspunkt.venteårsak()).isEqualTo(Aksjonspunkt.Venteårsak.INNTEKTSMELDING);
+        assertThat(aksjonspunkt.tidsfrist()).isEqualTo(ZonedDateTime.parse("2024-02-15T12:00:00.000Z"));
     }
 
     @Test
@@ -129,7 +140,7 @@ class BehandlingTest {
         Set<SøknadInfo> søknader = Arrays.stream(søknadtidspunkter).map(it -> new SøknadInfo(SøknadStatus.MOTTATT, UUID.randomUUID().toString(), it, Kildesystem.SØKNADSDIALOG)).collect(Collectors.toSet());
 
         Set<Aksjonspunkt> aksjonspunkter = Set.of(
-                new Aksjonspunkt(Aksjonspunkt.Venteårsak.MEDISINSK_DOKUMENTASJON)
+                new Aksjonspunkt(Aksjonspunkt.Venteårsak.MEDISINSK_DOKUMENTASJON, ZonedDateTime.now())
         );
 
         String saksnummer = "ABC123";
@@ -145,8 +156,9 @@ class BehandlingTest {
 
         Behandling behandling = new Behandling(
                 UUID.randomUUID(),
-                LocalDate.now(),
-                null,
+                ZonedDateTime.now(),
+                ZonedDateTime.now(),
+                BehandlingResultat.INNVILGET,
                 BehandlingStatus.OPPRETTET,
                 søknader,
                 aksjonspunkter,

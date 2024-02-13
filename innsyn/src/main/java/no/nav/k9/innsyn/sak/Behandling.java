@@ -1,18 +1,22 @@
 package no.nav.k9.innsyn.sak;
 
-import com.fasterxml.jackson.annotation.*;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import no.nav.k9.innsyn.InnsynHendelseData;
-import no.nav.k9.konstant.Konstant;
-
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import no.nav.k9.innsyn.InnsynHendelseData;
+import no.nav.k9.konstant.Konstant;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, fieldVisibility = JsonAutoDetect.Visibility.ANY)
@@ -23,13 +27,17 @@ public record Behandling(
         @NotNull
         UUID behandlingsId,
 
-        @JsonProperty(value = "opprettetDato", required = true)
+        @JsonProperty(value = "opprettetTidspunkt", required = true)
         @NotNull
-        LocalDate opprettetDato,
+        ZonedDateTime opprettetTidspunkt,
 
         @JsonInclude(value = JsonInclude.Include.NON_NULL)
-        @JsonProperty(value = "avsluttetDato")
-        LocalDate avsluttetDato,
+        @JsonProperty(value = "avsluttetTidspunkt")
+        ZonedDateTime avsluttetTidspunkt,
+
+        @JsonInclude(value = JsonInclude.Include.NON_NULL)
+        @JsonProperty(value = "resultat")
+        BehandlingResultat resultat,
 
         @JsonProperty(value = "status", required = true)
         @Valid
