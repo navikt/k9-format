@@ -2,8 +2,8 @@ package no.nav.k9.innsyn.sak;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.Duration;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
@@ -115,20 +115,22 @@ class BehandlingTest {
         assertThat(saksbehandlingsfrist).isEqualTo(tidligsteMottattTidspunkt.plusWeeks(6));
     }
 
+
+
     @Test
     void skalOverstureOgRegneUtSaksbehandlingsfrist() {
         ZonedDateTime tidligsteMottattTidspunkt = LocalDate.of(2024, 1, 5).atStartOfDay(ZoneId.systemDefault());
         var behandling = lagBehandling(false, tidligsteMottattTidspunkt.plusDays(10), tidligsteMottattTidspunkt, tidligsteMottattTidspunkt.plusMonths(20));
-        ZonedDateTime saksbehandlingsfrist = behandling.utledSaksbehandlingsfrist(Duration.ofDays(5)).get();
+        ZonedDateTime saksbehandlingsfrist = behandling.utledSaksbehandlingsfrist(Period.ofDays(5)).get();
         assertThat(saksbehandlingsfrist).isEqualTo(tidligsteMottattTidspunkt.plusDays(5));
     }
 
     @Test
-    void skalIkkeRegneUtSaksbehandlingsfristForUtenlandsbehandling() {
-        ZonedDateTime mottattidspunkt = LocalDate.of(2024, 1, 5).atStartOfDay(ZoneId.systemDefault());
-        var behandling = lagBehandling(true, mottattidspunkt);
-        var saksbehandlingsfrist = behandling.utledSaksbehandlingsfrist(null);
-        assertThat(saksbehandlingsfrist).isEmpty();
+    void skalRegneUtSaksbehandlingsfristUtland() {
+        ZonedDateTime tidligsteMottattTidspunkt = LocalDate.of(2024, 1, 5).atStartOfDay(ZoneId.systemDefault());
+        var behandling = lagBehandling(true, tidligsteMottattTidspunkt.plusDays(10), tidligsteMottattTidspunkt, tidligsteMottattTidspunkt.plusMonths(20));
+        ZonedDateTime saksbehandlingsfrist = behandling.utledSaksbehandlingsfrist(null).get();
+        assertThat(saksbehandlingsfrist).isEqualTo(tidligsteMottattTidspunkt.plusMonths(6));
     }
 
     private static Behandling lagBehandling() {
@@ -157,7 +159,7 @@ class BehandlingTest {
         Behandling behandling = new Behandling(
                 UUID.randomUUID(),
                 ZonedDateTime.now(),
-                ZonedDateTime.now(),
+                null,
                 BehandlingResultat.INNVILGET,
                 BehandlingStatus.OPPRETTET,
                 søknader,

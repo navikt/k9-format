@@ -1,6 +1,6 @@
 package no.nav.k9.innsyn.sak;
 
-import java.time.Duration;
+import java.time.Period;
 import java.time.ZonedDateTime;
 import java.util.Comparator;
 import java.util.Optional;
@@ -61,8 +61,8 @@ public record Behandling(
         Fagsak fagsak
 
 ) implements InnsynHendelseData  {
-    public Optional<ZonedDateTime> utledSaksbehandlingsfrist(Duration overstyrSaksbehandlingstid) {
-        if (erUtenlands) {
+    public Optional<ZonedDateTime> utledSaksbehandlingsfrist(Period overstyrSaksbehandlingstid) {
+        if (avsluttetTidspunkt != null) {
             return Optional.empty();
         }
 
@@ -71,7 +71,11 @@ public record Behandling(
                 .map(SøknadInfo::mottattTidspunkt);
 
         return tidligsteMottattDato.map(it -> {
-            Duration saksbehandlingstid = overstyrSaksbehandlingstid != null ? overstyrSaksbehandlingstid : Konstant.FORVENTET_SAKSBEHANDLINGSTID;
+            if (overstyrSaksbehandlingstid != null) {
+                return it.plus(overstyrSaksbehandlingstid);
+            }
+
+            Period saksbehandlingstid = erUtenlands ? Konstant.UTLAND_FORVENTET_SAKSBEHANDLINGSTID : Konstant.FORVENTET_SAKSBEHANDLINGSTID;
             return it.plus(saksbehandlingstid);
         });
     }
