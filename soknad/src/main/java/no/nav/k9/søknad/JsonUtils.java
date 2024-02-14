@@ -27,6 +27,14 @@ public final class JsonUtils {
     }
 
     public static String toString(Object object) {
+        return toString(object, objectMapper);
+    }
+
+    /**
+     * Tillater å override objectmapper. Nødvendig i en overgangsfase mens Kodeverdi objekter i k9sak
+     * overføres til @JsonValue
+     */
+    public static String toString(Object object, ObjectMapper objectMapper) {
         try {
             return objectMapper.writer(new PlatformIndependentPrettyPrinter()).writeValueAsString(object);
         } catch (JsonProcessingException e) {

@@ -1,14 +1,18 @@
 package no.nav.k9.innsyn.sak;
 
+import java.time.ZonedDateTime;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 public record Aksjonspunkt(
-        @JsonProperty("venteårsak") @Valid @NotNull Venteårsak venteårsak
+        @JsonProperty("venteårsak") @Valid @NotNull Venteårsak venteårsak,
+        @JsonProperty("tidsfrist") ZonedDateTime tidsfrist
 ) {
 
     public enum Venteårsak {
-        INNTEKTSMELDING, MEDISINSK_DOKUMENTASJON
+        INNTEKTSMELDING, MEDISINSK_DOKUMENTASJON, FOR_TIDLIG_SOKNAD, MELDEKORT
     }
 }

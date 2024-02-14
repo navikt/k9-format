@@ -1,20 +1,22 @@
 package no.nav.k9.innsyn.sak;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import no.nav.k9.innsyn.InnsynHendelseData;
-import no.nav.k9.konstant.Konstant;
-
-import java.time.Duration;
+import java.time.Period;
 import java.time.ZonedDateTime;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import no.nav.k9.innsyn.InnsynHendelseData;
+import no.nav.k9.konstant.Konstant;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, fieldVisibility = JsonAutoDetect.Visibility.ANY)
@@ -24,6 +26,18 @@ public record Behandling(
         @Valid
         @NotNull
         UUID behandlingsId,
+
+        @JsonProperty(value = "opprettetTidspunkt", required = true)
+        @NotNull
+        ZonedDateTime opprettetTidspunkt,
+
+        @JsonInclude(value = JsonInclude.Include.NON_NULL)
+        @JsonProperty(value = "avsluttetTidspunkt")
+        ZonedDateTime avsluttetTidspunkt,
+
+        @JsonInclude(value = JsonInclude.Include.NON_NULL)
+        @JsonProperty(value = "resultat")
+        BehandlingResultat resultat,
 
         @JsonProperty(value = "status", required = true)
         @Valid
@@ -47,8 +61,8 @@ public record Behandling(
         Fagsak fagsak
 
 ) implements InnsynHendelseData  {
-    public Optional<ZonedDateTime> utledSaksbehandlingsfrist(Duration overstyrSaksbehandlingstid) {
-        if (erUtenlands) {
+    public Optional<ZonedDateTime> utledSaksbehandlingsfrist(Period overstyrSaksbehandlingstid) {
+        if (avsluttetTidspunkt != null) {
             return Optional.empty();
         }
 
@@ -57,7 +71,11 @@ public record Behandling(
                 .map(SøknadInfo::mottattTidspunkt);
 
         return tidligsteMottattDato.map(it -> {
-            Duration saksbehandlingstid = overstyrSaksbehandlingstid != null ? overstyrSaksbehandlingstid : Konstant.FORVENTET_SAKSBEHANDLINGSTID;
+            if (overstyrSaksbehandlingstid != null) {
+                return it.plus(overstyrSaksbehandlingstid);
+            }
+
+            Period saksbehandlingstid = erUtenlands ? Konstant.UTLAND_FORVENTET_SAKSBEHANDLINGSTID : Konstant.FORVENTET_SAKSBEHANDLINGSTID;
             return it.plus(saksbehandlingstid);
         });
     }
