@@ -13,6 +13,6 @@ public record Aksjonspunkt(
 ) {
 
     public enum Venteårsak {
-        INNTEKTSMELDING, MEDISINSK_DOKUMENTASJON
+        INNTEKTSMELDING, MEDISINSK_DOKUMENTASJON, FOR_TIDLIG_SOKNAD, MELDEKORT
     }
 }
