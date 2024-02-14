@@ -3,12 +3,13 @@ package no.nav.k9.innsyn;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import no.nav.k9.søknad.felles.DtoKonstanter;
 
 /**
  * En hendelse fra k9-sak med nye data som kan brukes i innsyn.
@@ -27,8 +28,7 @@ public class InnsynHendelse<T extends InnsynHendelseData> {
      */
     @Valid
     @NotNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
-    @JsonProperty(value = "oppdateringstidspunkt", required = true)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DtoKonstanter.DATO_TID_FORMAT, timezone = DtoKonstanter.TIDSSONE)    @JsonProperty(value = "oppdateringstidspunkt", required = true)
     private ZonedDateTime oppdateringstidspunkt;
     
     @Valid
