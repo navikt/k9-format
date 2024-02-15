@@ -7,6 +7,7 @@ import java.time.Period;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -114,7 +115,10 @@ class BehandlingTest {
     @Test
     void skalRegneUtSaksbehandlingsfrist() {
         ZonedDateTime tidligsteMottattTidspunkt = LocalDate.of(2024, 1, 5).atStartOfDay(ZoneId.systemDefault());
-        var behandling = lagBehandling(false, tidligsteMottattTidspunkt.plusDays(10), tidligsteMottattTidspunkt, tidligsteMottattTidspunkt.plusMonths(20));
+        var behandling = lagBehandling(false,
+                tidligsteMottattTidspunkt.plusDays(10),
+                tidligsteMottattTidspunkt,
+                tidligsteMottattTidspunkt.plusMonths(20));
         ZonedDateTime saksbehandlingsfrist = behandling.utledSaksbehandlingsfrist(null).get();
         assertThat(saksbehandlingsfrist).isEqualTo(tidligsteMottattTidspunkt.plusWeeks(6));
     }
@@ -122,7 +126,7 @@ class BehandlingTest {
 
 
     @Test
-    void skalOverstureOgRegneUtSaksbehandlingsfrist() {
+    void skalOverstyreOgRegneUtSaksbehandlingsfrist() {
         ZonedDateTime tidligsteMottattTidspunkt = LocalDate.of(2024, 1, 5).atStartOfDay(ZoneId.systemDefault());
         var behandling = lagBehandling(false, tidligsteMottattTidspunkt.plusDays(10), tidligsteMottattTidspunkt, tidligsteMottattTidspunkt.plusMonths(20));
         ZonedDateTime saksbehandlingsfrist = behandling.utledSaksbehandlingsfrist(Period.ofDays(5)).get();
@@ -137,13 +141,48 @@ class BehandlingTest {
         assertThat(saksbehandlingsfrist).isEqualTo(tidligsteMottattTidspunkt.plusMonths(6));
     }
 
+    @Test
+    void skalIkkeRegneUtSaksbehandlingsfristHvisInnholderPunsj() {
+        ZonedDateTime tidligsteMottattTidspunkt = LocalDate.of(2024, 1, 5).atStartOfDay(ZoneId.systemDefault());
+
+        var behandling = lagBehandling(false,
+                Set.of(
+                        lagSøknad(tidligsteMottattTidspunkt.plusDays(10), Kildesystem.SØKNADSDIALOG),
+                        lagSøknad(tidligsteMottattTidspunkt, Kildesystem.SØKNADSDIALOG),
+                        lagSøknad(tidligsteMottattTidspunkt.plusMonths(20), Kildesystem.PUNSJ)
+                        ));
+
+        var saksbehandlingsfrist = behandling.utledSaksbehandlingsfrist(null);
+        assertThat(saksbehandlingsfrist).isEmpty();
+    }
+
+    @Test
+    void skalIkkeRegneUtSaksbehandlingsfristHvisIngenSøknad() {
+        ZonedDateTime tidligsteMottattTidspunkt = LocalDate.of(2024, 1, 5).atStartOfDay(ZoneId.systemDefault());
+
+        var behandling = lagBehandling(false, Collections.emptySet());
+
+        var saksbehandlingsfrist = behandling.utledSaksbehandlingsfrist(null);
+        assertThat(saksbehandlingsfrist).isEmpty();
+    }
+
+
     private static Behandling lagBehandling() {
         return lagBehandling(false, ZonedDateTime.now());
     }
 
     private static Behandling lagBehandling(boolean erUtenlands, ZonedDateTime... søknadtidspunkter) {
+        final Set<SøknadInfo> collect = Arrays.stream(søknadtidspunkter)
+                .map(it -> lagSøknad(it, Kildesystem.SØKNADSDIALOG))
+                .collect(Collectors.toSet());
+        return lagBehandling(erUtenlands, collect);
+    }
 
-        Set<SøknadInfo> søknader = Arrays.stream(søknadtidspunkter).map(it -> new SøknadInfo(SøknadStatus.MOTTATT, UUID.randomUUID().toString(), it, Kildesystem.SØKNADSDIALOG)).collect(Collectors.toSet());
+    private static SøknadInfo lagSøknad(ZonedDateTime it, Kildesystem kilde) {
+        return new SøknadInfo(SøknadStatus.MOTTATT, UUID.randomUUID().toString(), it, kilde);
+    }
+
+    private static Behandling lagBehandling(boolean erUtenlands, Set<SøknadInfo> søknader) {
 
         Set<Aksjonspunkt> aksjonspunkter = Set.of(
                 new Aksjonspunkt(Aksjonspunkt.Venteårsak.MEDISINSK_DOKUMENTASJON, ZonedDateTime.now())

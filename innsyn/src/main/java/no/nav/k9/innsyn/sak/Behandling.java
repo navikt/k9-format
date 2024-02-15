@@ -19,6 +19,7 @@ import jakarta.validation.constraints.NotNull;
 import no.nav.k9.innsyn.InnsynHendelseData;
 import no.nav.k9.konstant.Konstant;
 import no.nav.k9.søknad.felles.DtoKonstanter;
+import no.nav.k9.søknad.felles.Kildesystem;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, fieldVisibility = JsonAutoDetect.Visibility.ANY)
@@ -67,6 +68,10 @@ public record Behandling(
 ) implements InnsynHendelseData  {
     public Optional<ZonedDateTime> utledSaksbehandlingsfrist(Period overstyrSaksbehandlingstid) {
         if (avsluttetTidspunkt != null) {
+            return Optional.empty();
+        }
+
+        if (søknader.stream().anyMatch(it -> it.kildesystem() == Kildesystem.PUNSJ)) {
             return Optional.empty();
         }
 
