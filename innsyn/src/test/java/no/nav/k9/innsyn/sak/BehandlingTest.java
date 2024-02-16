@@ -2,12 +2,8 @@ package no.nav.k9.innsyn.sak;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -110,75 +106,6 @@ class BehandlingTest {
 
         String json = JsonUtils.toString(hendelse, TempObjectMapperKodeverdi.getObjectMapper());
         assertThat(json).doesNotContain("kodeverk");
-    }
-
-    @Test
-    void skalRegneUtSaksbehandlingsfrist() {
-        ZonedDateTime tidligsteMottattTidspunkt = LocalDate.of(2024, 1, 5).atStartOfDay(ZoneId.systemDefault());
-        var behandling = lagBehandling(false,
-                tidligsteMottattTidspunkt.plusDays(10),
-                tidligsteMottattTidspunkt,
-                tidligsteMottattTidspunkt.plusMonths(20));
-        ZonedDateTime saksbehandlingsfrist = behandling.utledSaksbehandlingsfrist(null).get();
-        assertThat(saksbehandlingsfrist).isEqualTo(tidligsteMottattTidspunkt.plusWeeks(6));
-    }
-
-
-
-    @Test
-    void skalOverstyreOgRegneUtSaksbehandlingsfrist() {
-        ZonedDateTime tidligsteMottattTidspunkt = LocalDate.of(2024, 1, 5).atStartOfDay(ZoneId.systemDefault());
-        var behandling = lagBehandling(false, tidligsteMottattTidspunkt.plusDays(10), tidligsteMottattTidspunkt, tidligsteMottattTidspunkt.plusMonths(20));
-        ZonedDateTime saksbehandlingsfrist = behandling.utledSaksbehandlingsfrist(Period.ofDays(5)).get();
-        assertThat(saksbehandlingsfrist).isEqualTo(tidligsteMottattTidspunkt.plusDays(5));
-    }
-
-    @Test
-    void skalRegneUtSaksbehandlingsfristUtland() {
-        ZonedDateTime tidligsteMottattTidspunkt = LocalDate.of(2024, 1, 5).atStartOfDay(ZoneId.systemDefault());
-        var behandling = lagBehandling(true, tidligsteMottattTidspunkt.plusDays(10), tidligsteMottattTidspunkt, tidligsteMottattTidspunkt.plusMonths(20));
-        ZonedDateTime saksbehandlingsfrist = behandling.utledSaksbehandlingsfrist(null).get();
-        assertThat(saksbehandlingsfrist).isEqualTo(tidligsteMottattTidspunkt.plusMonths(6));
-    }
-
-    @Test
-    void skalIkkeRegneUtSaksbehandlingsfristHvisInnholderPunsj() {
-        ZonedDateTime tidligsteMottattTidspunkt = LocalDate.of(2024, 1, 5).atStartOfDay(ZoneId.systemDefault());
-
-        var behandling = lagBehandling(false,
-                Set.of(
-                        lagSøknad(tidligsteMottattTidspunkt.plusDays(10), Kildesystem.SØKNADSDIALOG),
-                        lagSøknad(tidligsteMottattTidspunkt, Kildesystem.SØKNADSDIALOG),
-                        lagSøknad(tidligsteMottattTidspunkt.plusMonths(20), Kildesystem.PUNSJ)
-                        ));
-
-        var saksbehandlingsfrist = behandling.utledSaksbehandlingsfrist(null);
-        assertThat(saksbehandlingsfrist).isEmpty();
-    }
-
-    @Test
-    void skalIkkeRegneUtSaksbehandlingsfristHvisManglerKildesystem() {
-        ZonedDateTime tidligsteMottattTidspunkt = LocalDate.of(2024, 1, 5).atStartOfDay(ZoneId.systemDefault());
-
-        var behandling = lagBehandling(false,
-                Set.of(
-                        lagSøknad(tidligsteMottattTidspunkt.plusDays(10), Kildesystem.SØKNADSDIALOG),
-                        lagSøknad(tidligsteMottattTidspunkt, Kildesystem.SØKNADSDIALOG),
-                        lagSøknad(tidligsteMottattTidspunkt.plusMonths(20), null)
-                ));
-
-        var saksbehandlingsfrist = behandling.utledSaksbehandlingsfrist(null);
-        assertThat(saksbehandlingsfrist).isEmpty();
-    }
-
-    @Test
-    void skalIkkeRegneUtSaksbehandlingsfristHvisIngenSøknad() {
-        ZonedDateTime tidligsteMottattTidspunkt = LocalDate.of(2024, 1, 5).atStartOfDay(ZoneId.systemDefault());
-
-        var behandling = lagBehandling(false, Collections.emptySet());
-
-        var saksbehandlingsfrist = behandling.utledSaksbehandlingsfrist(null);
-        assertThat(saksbehandlingsfrist).isEmpty();
     }
 
 

@@ -1,15 +1,8 @@
 package no.nav.k9.innsyn.sak;
 
-import java.time.Period;
 import java.time.ZonedDateTime;
-import java.util.Comparator;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -21,9 +14,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import no.nav.k9.innsyn.InnsynHendelseData;
-import no.nav.k9.konstant.Konstant;
 import no.nav.k9.søknad.felles.DtoKonstanter;
-import no.nav.k9.søknad.felles.Kildesystem;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, fieldVisibility = JsonAutoDetect.Visibility.ANY)
@@ -69,41 +60,5 @@ public record Behandling(
         @JsonProperty(value = "fagsak")
         Fagsak fagsak
 
-) implements InnsynHendelseData {
-
-    private static Logger log = LoggerFactory.getLogger(Behandling.class);
-
-    public Optional<ZonedDateTime> utledSaksbehandlingsfrist(Period overstyrSaksbehandlingstid) {
-        if (avsluttetTidspunkt != null) {
-            log.info("beregner ikke frist for avsluttet behandling");
-            return Optional.empty();
-        }
-
-        var kildesystemer = søknader.stream().map(SøknadInfo::kildesystem).collect(Collectors.toList());
-        if (kildesystemer.isEmpty() || !kildesystemer.stream().allMatch(it -> it == Kildesystem.SØKNADSDIALOG || it == Kildesystem.ENDRINGSDIALOG)) {
-            log.info("beregner ikke frist for behandlinger som har dokumenter med kildesystemer={}", kildesystemer);
-            return Optional.empty();
-        }
-
-        var tidligsteMottattDato = søknader.stream()
-                .min(Comparator.comparing(SøknadInfo::mottattTidspunkt))
-                .map(SøknadInfo::mottattTidspunkt);
-
-        return tidligsteMottattDato.map(it -> {
-            if (overstyrSaksbehandlingstid != null) {
-                return it.plus(overstyrSaksbehandlingstid);
-            }
-
-            Period saksbehandlingstid;
-            if (erUtenlands) {
-                log.info("Beregner frist for utland");
-                saksbehandlingstid = Konstant.UTLAND_FORVENTET_SAKSBEHANDLINGSTID;
-            } else {
-                log.info("Beregner frist for vanlig sak");
-                saksbehandlingstid = Konstant.FORVENTET_SAKSBEHANDLINGSTID;
-            }
-            return it.plus(saksbehandlingstid);
-        });
-    }
-}
+) implements InnsynHendelseData {}
 
