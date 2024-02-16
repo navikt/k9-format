@@ -6,6 +6,10 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -65,13 +69,19 @@ public record Behandling(
         @JsonProperty(value = "fagsak")
         Fagsak fagsak
 
-) implements InnsynHendelseData  {
+) implements InnsynHendelseData {
+
+    private static Logger log = LoggerFactory.getLogger(Behandling.class);
+
     public Optional<ZonedDateTime> utledSaksbehandlingsfrist(Period overstyrSaksbehandlingstid) {
         if (avsluttetTidspunkt != null) {
+            log.info("beregner ikke frist for avsluttet behandling");
             return Optional.empty();
         }
 
-        if (søknader.stream().anyMatch(it -> it.kildesystem() == Kildesystem.PUNSJ)) {
+        var kildesystemer = søknader.stream().map(SøknadInfo::kildesystem).collect(Collectors.toList());
+        if (kildesystemer.isEmpty() || !kildesystemer.stream().allMatch(it -> it == Kildesystem.SØKNADSDIALOG || it == Kildesystem.ENDRINGSDIALOG)) {
+            log.info("beregner ikke frist for behandlinger som har dokumenter med kildesystemer={}", kildesystemer);
             return Optional.empty();
         }
 
@@ -84,7 +94,14 @@ public record Behandling(
                 return it.plus(overstyrSaksbehandlingstid);
             }
 
-            Period saksbehandlingstid = erUtenlands ? Konstant.UTLAND_FORVENTET_SAKSBEHANDLINGSTID : Konstant.FORVENTET_SAKSBEHANDLINGSTID;
+            Period saksbehandlingstid;
+            if (erUtenlands) {
+                log.info("Beregner frist for utland");
+                saksbehandlingstid = Konstant.UTLAND_FORVENTET_SAKSBEHANDLINGSTID;
+            } else {
+                log.info("Beregner frist for vanlig sak");
+                saksbehandlingstid = Konstant.FORVENTET_SAKSBEHANDLINGSTID;
+            }
             return it.plus(saksbehandlingstid);
         });
     }

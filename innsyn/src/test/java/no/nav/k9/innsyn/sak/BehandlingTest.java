@@ -157,6 +157,21 @@ class BehandlingTest {
     }
 
     @Test
+    void skalIkkeRegneUtSaksbehandlingsfristHvisManglerKildesystem() {
+        ZonedDateTime tidligsteMottattTidspunkt = LocalDate.of(2024, 1, 5).atStartOfDay(ZoneId.systemDefault());
+
+        var behandling = lagBehandling(false,
+                Set.of(
+                        lagSøknad(tidligsteMottattTidspunkt.plusDays(10), Kildesystem.SØKNADSDIALOG),
+                        lagSøknad(tidligsteMottattTidspunkt, Kildesystem.SØKNADSDIALOG),
+                        lagSøknad(tidligsteMottattTidspunkt.plusMonths(20), null)
+                ));
+
+        var saksbehandlingsfrist = behandling.utledSaksbehandlingsfrist(null);
+        assertThat(saksbehandlingsfrist).isEmpty();
+    }
+
+    @Test
     void skalIkkeRegneUtSaksbehandlingsfristHvisIngenSøknad() {
         ZonedDateTime tidligsteMottattTidspunkt = LocalDate.of(2024, 1, 5).atStartOfDay(ZoneId.systemDefault());
 
