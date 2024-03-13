@@ -25,6 +25,8 @@ class TestUtils {
                 .søker(new Søker(NorskIdentitetsnummer.of("11111111111")))
                 .mottattDato(ZonedDateTime.parse("2019-10-20T07:15:36.124Z"))
                 .søknadId(SøknadId.of("123-123-123"))
-                .ytelse(Ytelse.valueOf("PLEIEPENGER_SYKT_BARN"));
+                .ytelse(Ytelse.valueOf("PLEIEPENGER_SYKT_BARN"))
+                .pleietrengende(new Pleietrengende(NorskIdentitetsnummer.of("22222222222")))
+                .type(EttersendelseType.ANNET);
     }
 }

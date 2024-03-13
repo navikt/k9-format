@@ -32,36 +32,47 @@ public class Ettersendelse implements Innsending {
     @Valid
     private final Versjon versjon;
 
-
     @JsonProperty(value="mottattDato")
     @Valid
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
     private final ZonedDateTime mottattDato;
-
 
     @JsonProperty(value="søker", required = true)
     @Valid
     @NotNull
     private final Søker søker;
 
-
     @JsonProperty(value="ytelse", required = true)
     @Valid
     @NotNull
     private final Ytelse ytelse;
 
+    @JsonProperty(value="pleietrengende")
+    @Valid
+    @NotNull
+    private final Pleietrengende pleietrengende;
+
+    @JsonProperty(value="type") //TODO set required = true
+    @Valid
+    @NotNull
+    private final EttersendelseType type;
+
     @JsonCreator
     private Ettersendelse(
-                          @JsonProperty("søknadId") SøknadId søknadId,
-                          @JsonProperty("versjon") Versjon versjon,
-                          @JsonProperty("mottattDato") ZonedDateTime mottattDato,
-                          @JsonProperty("søker") Søker søker,
-                          @JsonProperty("ytelse") Ytelse ytelse) {
+            @JsonProperty("søknadId") SøknadId søknadId,
+            @JsonProperty("versjon") Versjon versjon,
+            @JsonProperty("mottattDato") ZonedDateTime mottattDato,
+            @JsonProperty("søker") Søker søker,
+            @JsonProperty("ytelse") Ytelse ytelse,
+            @JsonProperty("pleietrengende") Pleietrengende pleietrengende,
+            @JsonProperty("type") EttersendelseType type) {
         this.søknadId = søknadId;
         this.versjon = versjon;
         this.mottattDato = mottattDato;
         this.søker = søker;
         this.ytelse = ytelse;
+        this.pleietrengende = pleietrengende;
+        this.type = type;
     }
 
     @Override
@@ -87,7 +98,15 @@ public class Ettersendelse implements Innsending {
     public Ytelse getYtelse() {
         return ytelse;
     }
-    
+
+    public Pleietrengende getPleietrengende() {
+        return pleietrengende;
+    }
+
+    public EttersendelseType getType() {
+        return type;
+    }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -122,6 +141,8 @@ public class Ettersendelse implements Innsending {
         private ZonedDateTime mottattDato;
         private Søker søker;
         private Ytelse ytelse;
+        private Pleietrengende pleietrengende;
+        private EttersendelseType type;
 
         private Builder() {
         }
@@ -146,20 +167,32 @@ public class Ettersendelse implements Innsending {
             return this;
         }
 
+        public Builder pleietrengende(Pleietrengende pleietrengende) {
+            this.pleietrengende = pleietrengende;
+            return this;
+        }
+
+        public Builder type(EttersendelseType type) {
+            this.type = type;
+            return this;
+        }
+
         public Builder json(String json) {
             this.json = json;
             return this;
         }
 
         public Ettersendelse build() {
-            Ettersendelse ettetrsendelse = (json == null) ? new Ettersendelse(
-                søknadId,
-                versjon,
-                mottattDato,
-                søker,
-                ytelse) : SerDes.deserialize(json);
-            validator.forsikreValidert(ettetrsendelse);
-            return ettetrsendelse;
+            Ettersendelse ettersendelse = (json == null) ? new Ettersendelse(
+                    søknadId,
+                    versjon,
+                    mottattDato,
+                    søker,
+                    ytelse,
+                    pleietrengende,
+                    type) : SerDes.deserialize(json);
+            validator.forsikreValidert(ettersendelse);
+            return ettersendelse;
         }
     }
 }

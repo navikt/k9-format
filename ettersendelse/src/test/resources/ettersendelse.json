@@ -5,5 +5,9 @@
   "søker": {
     "norskIdentitetsnummer": "11111111111"
   },
-  "ytelse": "PLEIEPENGER_SYKT_BARN"
+  "ytelse": "PLEIEPENGER_SYKT_BARN",
+  "pleietrengende": {
+    "norskIdentitetsnummer": "22222222222"
+  },
+  "type": "ANNET"
 }
