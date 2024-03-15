@@ -34,10 +34,6 @@
             <artifactId>hibernate-validator</artifactId>
         </dependency>
         <dependency>
-            <groupId>no.nav.fpsak.tidsserie</groupId>
-            <artifactId>fpsak-tidsserie</artifactId>
-        </dependency>
-        <dependency>
             <groupId>no.nav.k9</groupId>
             <artifactId>soknad</artifactId>
         </dependency>

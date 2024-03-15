@@ -151,10 +151,6 @@
             <artifactId>jakarta.el</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>no.nav.fpsak.tidsserie</groupId>
-            <artifactId>fpsak-tidsserie</artifactId>
-        </dependency>
     </dependencies>
 
     <build>
