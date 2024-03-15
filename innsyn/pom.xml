@@ -13,7 +13,7 @@
     <packaging>jar</packaging>
 
     <properties>
-        <k9-sak.version>4.1.10</k9-sak.version>
+        <k9-sak.version>4.1.8</k9-sak.version>
     </properties>
 
     <dependencies>
