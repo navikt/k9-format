@@ -20,6 +20,7 @@ public class EttersendelseValidator extends SøknadValidator<Ettersendelse> {
         validerMottattDato(ettersendelse.getMottattDato(), feil);
         validerSøker(ettersendelse.getSøker(), feil);
         validerYtelse(ettersendelse.getYtelse(), feil);
+        //TODO valider type og pleietrengende når feltene tas i bruk
 
         return feil;
     }
