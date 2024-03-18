@@ -49,12 +49,10 @@ public class Ettersendelse implements Innsending {
 
     @JsonProperty(value="pleietrengende")
     @Valid
-    @NotNull
     private final Pleietrengende pleietrengende;
 
-    @JsonProperty(value="type") //TODO set required = true
+    @JsonProperty(value="type") //TODO set required = true og @NotNull
     @Valid
-    @NotNull
     private final EttersendelseType type;
 
     @JsonCreator
