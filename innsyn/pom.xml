@@ -35,6 +35,10 @@
         </dependency>
         <dependency>
             <groupId>no.nav.k9</groupId>
+            <artifactId>ettersendelse</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.k9</groupId>
             <artifactId>konstant</artifactId>
             <version>${revision}${sha1}${changelist}</version>
         </dependency>
