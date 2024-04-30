@@ -20,7 +20,7 @@ public class PsbSøknaddataHendelseTest {
     @Test
     public void kanLageOgLeseHendelse() {
         final var søknad = lagGyldigSøknad();
-        final PsbSøknadsinnhold data = new PsbSøknadsinnhold("123", "1111", "2222", søknad);
+        final PsbSøknadsinnhold data = new PsbSøknadsinnhold("123", "1111", "2222", søknad, null);
         final InnsynHendelse<PsbSøknadsinnhold> hendelse = new InnsynHendelse<>(ZonedDateTime.now(), data);
         final String json = JsonUtils.toString(hendelse);
         
