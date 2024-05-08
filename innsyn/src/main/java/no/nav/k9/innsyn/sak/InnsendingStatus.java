@@ -1,5 +1,5 @@
 package no.nav.k9.innsyn.sak;
 
-public enum SøknadStatus {
+public enum InnsendingStatus {
     MOTTATT, BEHANDLET;
 }
