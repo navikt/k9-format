@@ -4,12 +4,7 @@ import java.time.ZonedDateTime;
 import java.util.Set;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.*;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -44,10 +39,11 @@ public record Behandling(
         @NotNull
         BehandlingStatus status,
 
-        @JsonProperty(value = "søknader", required = true)
+        @JsonProperty(value = "innsendinger", required = true)
+        @JsonAlias(value = "søknader")
         @Valid
         @NotNull
-        Set<SøknadInfo> søknader,
+        Set<InnsendingInfo> innsendinger,
 
         @JsonProperty(value = "aksjonspunkter", required = true)
         @Valid

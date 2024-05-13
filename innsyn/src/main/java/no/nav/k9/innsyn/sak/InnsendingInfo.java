@@ -12,12 +12,12 @@ import jakarta.validation.constraints.Size;
 import no.nav.k9.søknad.felles.DtoKonstanter;
 import no.nav.k9.søknad.felles.Kildesystem;
 
-public record SøknadInfo(
+public record InnsendingInfo(
 
         @JsonProperty(value = "status", required = true)
         @Valid
         @NotNull
-        SøknadStatus status,
+        InnsendingStatus status,
 
         @JsonProperty(value = "journalpostId", required = true)
         @Valid
@@ -34,7 +34,10 @@ public record SøknadInfo(
 
         @Valid
         @JsonProperty(value = "kildesystem")
-        Kildesystem kildesystem
+        Kildesystem kildesystem,
 
+        @Valid
+        @JsonProperty(value = "type")
+        InnsendingType type
 ) {
 }
