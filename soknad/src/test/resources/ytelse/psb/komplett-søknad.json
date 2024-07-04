@@ -42,6 +42,7 @@
       "norskIdentitetsnummer" : "22111111111",
       "fødselsdato" : null
     },
+    "erSammenMedBarnet": true,
     "arbeidAktivitet" : {
       "selvstendigNæringsdrivende" : [ {
         "perioder" : {
@@ -133,7 +134,8 @@
       "perioder" : {
         "2018-12-30/2019-10-20" : {
           "land" : "DNK",
-          "årsak" : "barnetInnlagtIHelseinstitusjonForNorskOffentligRegning"
+          "årsak" : "barnetInnlagtIHelseinstitusjonForNorskOffentligRegning",
+          "erSammenMedBarnet" : true
         }
       }
     }

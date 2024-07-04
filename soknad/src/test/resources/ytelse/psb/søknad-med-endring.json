@@ -10,6 +10,7 @@
     "barn": {
       "norskIdentitetsnummer": "22222222222"
     },
+    "erSammenMedBarnet": true,
     "søknadsperiode": ["2018-12-30/2019-09-20"],
     "endringsperiode": ["2019-09-21/2020-02-20"],
     "trekkKravPerioder": [],
@@ -62,7 +63,8 @@
       "perioder": {
         "2018-12-30/2019-10-20": {
           "land": "RU",
-          "årsak": null
+          "årsak": null,
+          "erSammenMedBarnet": true
         }
       },
       "perioderSomSkalSlettes": {}
