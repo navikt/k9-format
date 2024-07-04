@@ -110,6 +110,9 @@ public class PleiepengerSyktBarn implements Ytelse {
     @JsonProperty(value = "omsorg", required = true)
     private Omsorg omsorg = new Omsorg();
 
+    @JsonProperty(value = "erSammenMedBarnet")
+    private Boolean erSammenMedBarnet;
+
     public PleiepengerSyktBarn() {
     }
 
@@ -313,6 +316,15 @@ public class PleiepengerSyktBarn implements Ytelse {
 
     public PleiepengerSyktBarn medOmsorg(Omsorg omsorg) {
         this.omsorg = Objects.requireNonNull(omsorg, "omsorg");
+        return this;
+    }
+
+    public Boolean getErSammenMedBarnet() {
+        return erSammenMedBarnet;
+    }
+
+    public PleiepengerSyktBarn medErSammenMedBarnet(Boolean erSammenMedBarnet) {
+        this.erSammenMedBarnet = Objects.requireNonNull(erSammenMedBarnet, "erSammenMedBarnet");
         return this;
     }
 

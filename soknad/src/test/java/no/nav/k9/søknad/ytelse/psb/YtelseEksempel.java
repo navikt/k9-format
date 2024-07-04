@@ -51,6 +51,7 @@ public class YtelseEksempel {
                 .medBeredskap(lagBeredskap(søknadsperiode))
                 .medNattevåk(lagNattevåk(søknadsperiode))
                 .medOmsorg(lagOmsorg())
+                .medErSammenMedBarnet(true)
                 .medLovbestemtFerie(lagLovbestemtFerie(lovbestemtFeriePeriode))
                 .medUtenlandsopphold(lagUtenlandsopphold(utenlandsperiode))
                 .medBosteder(lagBosteder(bostedperiode));
@@ -72,6 +73,7 @@ public class YtelseEksempel {
     public static PleiepengerSyktBarn komplettYtelseMedEndring(Periode... perioder) {
         return YtelseEksempel.lagYtelse()
                 .medBeredskap(lagBeredskap(perioder))
+                .medErSammenMedBarnet(true)
                 .medNattevåk(lagNattevåk(perioder))
                 .medTilsynsordning(lagTilsynsordning(perioder))
                 .medArbeidstid(new Arbeidstid().leggeTilArbeidstaker(lagArbeidstaker(perioder)))
@@ -91,7 +93,8 @@ public class YtelseEksempel {
         Utenlandsopphold.UtenlandsoppholdPeriodeInfo utenlandsoppholdPeriodeInfo = new Utenlandsopphold
                 .UtenlandsoppholdPeriodeInfo()
                 .medLand(Landkode.FINLAND)
-                .medÅrsak(Utenlandsopphold.UtenlandsoppholdÅrsak.BARNET_INNLAGT_I_HELSEINSTITUSJON_FOR_NORSK_OFFENTLIG_REGNING);
+                .medÅrsak(Utenlandsopphold.UtenlandsoppholdÅrsak.BARNET_INNLAGT_I_HELSEINSTITUSJON_FOR_NORSK_OFFENTLIG_REGNING)
+                .medErSammenMedBarnet(true);
         return new Utenlandsopphold().medPerioder(
                 lagPerioder(perioder, utenlandsoppholdPeriodeInfo));
     }

@@ -64,7 +64,8 @@ public class YtelseEksempel {
         Utenlandsopphold.UtenlandsoppholdPeriodeInfo utenlandsoppholdPeriodeInfo = new Utenlandsopphold
                 .UtenlandsoppholdPeriodeInfo()
                 .medLand(Landkode.FINLAND)
-                .medÅrsak(årsak);
+                .medÅrsak(årsak)
+                .medErSammenMedBarnet(true);
         return new Utenlandsopphold().medPerioder(
                 lagPerioder(perioder, utenlandsoppholdPeriodeInfo));
     }
