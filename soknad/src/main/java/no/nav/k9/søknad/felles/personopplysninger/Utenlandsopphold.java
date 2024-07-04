@@ -68,7 +68,7 @@ public class Utenlandsopphold {
         private UtenlandsoppholdÅrsak årsak;
 
         @JsonProperty(value = "erSammenMedBarnet")
-        private Boolean erSammenMedBarnet;
+        private Boolean erSammenMedBarnet = true; // Fravær av verdi tolkes som true for gamle søknader.
 
         public Landkode getLand() {
             return land;
