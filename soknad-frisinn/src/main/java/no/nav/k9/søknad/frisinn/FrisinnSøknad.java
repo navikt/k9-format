@@ -31,7 +31,7 @@ public class FrisinnSøknad implements Innsending {
     private Versjon versjon;
 
     @JsonProperty(value = "mottattDato")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "UTC")
     @Valid
     @NotNull
     private ZonedDateTime mottattDato;

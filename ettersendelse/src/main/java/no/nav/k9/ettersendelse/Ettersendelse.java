@@ -22,7 +22,7 @@ import no.nav.k9.søknad.felles.type.SøknadId;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Ettersendelse implements Innsending {
-    
+
     @JsonProperty(value="søknadId", required = true)
     @NotNull
     @Valid
@@ -34,7 +34,7 @@ public class Ettersendelse implements Innsending {
 
     @JsonProperty(value="mottattDato")
     @Valid
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "UTC")
     private final ZonedDateTime mottattDato;
 
     @JsonProperty(value="søker", required = true)
@@ -77,7 +77,7 @@ public class Ettersendelse implements Innsending {
     public ZonedDateTime getMottattDato() {
         return mottattDato;
     }
-    
+
     @Override
     public Søker getSøker() {
         return søker;

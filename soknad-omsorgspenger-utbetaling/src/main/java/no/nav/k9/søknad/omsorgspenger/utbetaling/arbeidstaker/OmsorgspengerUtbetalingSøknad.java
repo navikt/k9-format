@@ -38,7 +38,7 @@ public class OmsorgspengerUtbetalingSøknad implements Innsending {
     @JsonProperty(value = "mottattDato", required = true)
     @Valid
     @NotNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "UTC")
     public final ZonedDateTime mottattDato;
 
     @JsonProperty(value = "søker", required = true)
@@ -68,12 +68,12 @@ public class OmsorgspengerUtbetalingSøknad implements Innsending {
     public ZonedDateTime getMottattDato() {
         return mottattDato;
     }
-    
+
     @Override
     public Søker getSøker() {
         return søker;
     }
-    
+
     @Override
     public Versjon getVersjon() {
         return versjon;
@@ -83,7 +83,7 @@ public class OmsorgspengerUtbetalingSøknad implements Innsending {
     public SøknadId getSøknadId() {
         return søknadId;
     }
-    
+
     @Size(max=0, message="${validatedValue}")
     private List<Feil> getValiderAngittFosterbarn() {
         var barn = this.fosterbarn;

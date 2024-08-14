@@ -2,8 +2,12 @@ package no.nav.k9.søknad;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.ZonedDateTime;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -45,6 +49,21 @@ public class JsonUtilsTest {
         } catch (RuntimeException e) {
             // Ignore.
         }
+    }
+
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "\"2024-08-14T10:05:56.111111111Z\"",
+            "\"2024-08-14T10:05:56.111111Z\"",
+            "\"2024-08-14T10:05:56.111Z\"",
+            "\"2024-08-14T10:05:56Z\""})
+    public void skal_kunne_deserialisere_zoneddatetime(String dato) {
+        deserialiserZonedDatetime(dato);
+    }
+
+    private static ZonedDateTime deserialiserZonedDatetime(String s) {
+        return JsonUtils.fromString(s, ZonedDateTime.class);
     }
 
 

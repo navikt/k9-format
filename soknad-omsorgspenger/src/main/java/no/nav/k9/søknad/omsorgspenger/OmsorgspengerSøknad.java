@@ -39,7 +39,7 @@ public class OmsorgspengerSøknad implements Innsending {
     @JsonProperty(value = "mottattDato", required = true)
     @Valid
     @NotNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "UTC")
     public final ZonedDateTime mottattDato;
 
     @JsonProperty(value = "søker", required = true)

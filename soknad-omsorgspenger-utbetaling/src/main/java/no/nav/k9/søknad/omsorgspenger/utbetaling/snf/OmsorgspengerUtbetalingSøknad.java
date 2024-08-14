@@ -40,7 +40,7 @@ public class OmsorgspengerUtbetalingSøknad implements Innsending {
     @JsonProperty(value = "mottattDato", required = true)
     @Valid
     @NotNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "UTC")
     public final ZonedDateTime mottattDato;
 
     @JsonProperty(value = "søker", required = true)
@@ -59,7 +59,7 @@ public class OmsorgspengerUtbetalingSøknad implements Innsending {
     @JsonProperty("frilanser")
     @Valid
     public final Frilanser frilanser;
-    
+
     @JsonCreator
     private OmsorgspengerUtbetalingSøknad(
             @JsonProperty("søknadId") SøknadId søknadId,
@@ -77,12 +77,12 @@ public class OmsorgspengerUtbetalingSøknad implements Innsending {
         this.selvstendigNæringsdrivende = selvstendigNæringsdrivende;
         this.frilanser = frilanser;
     }
-    
+
     @AssertTrue(message="Enten frilanser eller selvstendingNæringsdrivende må være satt i søknaden")
     private boolean isFrilanserEllerSn() {
         return frilanser!=null || (selvstendigNæringsdrivende!=null && !selvstendigNæringsdrivende.isEmpty());
     }
-    
+
     @Override
     public ZonedDateTime getMottattDato() {
         return mottattDato;
@@ -92,7 +92,7 @@ public class OmsorgspengerUtbetalingSøknad implements Innsending {
     public Søker getSøker() {
         return søker;
     }
-    
+
     @Override
     public Versjon getVersjon() {
         return versjon;
@@ -122,7 +122,7 @@ public class OmsorgspengerUtbetalingSøknad implements Innsending {
         }
         return feil;
     }
-    
+
     public static Builder builder() {
         return new Builder();
     }
