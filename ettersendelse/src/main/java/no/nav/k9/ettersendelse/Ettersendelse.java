@@ -1,23 +1,18 @@
 package no.nav.k9.ettersendelse;
 
-import java.io.IOException;
-import java.time.ZonedDateTime;
-
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import no.nav.k9.søknad.Innsending;
 import no.nav.k9.søknad.JsonUtils;
+import no.nav.k9.søknad.felles.DtoKonstanter;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.SøknadId;
+
+import java.io.IOException;
+import java.time.ZonedDateTime;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -34,7 +29,7 @@ public class Ettersendelse implements Innsending {
 
     @JsonProperty(value="mottattDato")
     @Valid
-    @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "UTC")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DtoKonstanter.DATO_TID_FORMAT, timezone = DtoKonstanter.TIDSSONE)
     private final ZonedDateTime mottattDato;
 
     @JsonProperty(value="søker", required = true)

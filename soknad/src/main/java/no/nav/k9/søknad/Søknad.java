@@ -1,21 +1,7 @@
 package no.nav.k9.søknad;
 
-import java.io.IOException;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -23,12 +9,12 @@ import no.nav.k9.søknad.felles.DtoKonstanter;
 import no.nav.k9.søknad.felles.Kildesystem;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
-import no.nav.k9.søknad.felles.type.BegrunnelseForInnsending;
-import no.nav.k9.søknad.felles.type.Journalpost;
-import no.nav.k9.søknad.felles.type.Person;
-import no.nav.k9.søknad.felles.type.Språk;
-import no.nav.k9.søknad.felles.type.SøknadId;
+import no.nav.k9.søknad.felles.type.*;
 import no.nav.k9.søknad.ytelse.Ytelse;
+
+import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.util.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -46,7 +32,8 @@ public class Søknad implements Innsending {
 
     @Valid
     @NotNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DtoKonstanter.DATO_TID_FORMAT, timezone = DtoKonstanter.TIDSSONE)    @JsonProperty(value = "mottattDato", required = true)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DtoKonstanter.DATO_TID_FORMAT, timezone = DtoKonstanter.TIDSSONE)
+    @JsonProperty(value = "mottattDato", required = true)
     private ZonedDateTime mottattDato;
 
     @Valid
@@ -72,7 +59,7 @@ public class Søknad implements Innsending {
     @NotNull
     @JsonProperty(value = "ytelse", required = true)
     private Ytelse ytelse;
-    
+
     @Valid
     @JsonProperty(value = "kildesystem", required = false)
     private Kildesystem kildesystem;
@@ -144,14 +131,14 @@ public class Søknad implements Innsending {
     public <Y extends Ytelse> Y getYtelse() {
         return (Y) ytelse;
     }
-    
+
     /**
      * Dette feltet kan brukes til å oppgi kildesystem. For historiske data
      * er feltet kun garantert å være satt for alle søknader som kommer fra
      * endringsdialogen. Ved behov for å se på historiske data av andre typer,
      * se på journalpostens kanalfelt og/eller metadatafeltet på journalposten
-     * kalt "k9.kilde". 
-     * 
+     * kalt "k9.kilde".
+     *
      * @return Systemet som søknadsdataene kommer fra.
      */
     public Optional<Kildesystem> getKildesystem() {
@@ -177,7 +164,7 @@ public class Søknad implements Innsending {
     public void setYtelse(Ytelse ytelse) {
         this.ytelse = Objects.requireNonNull(ytelse, "ytelse");
     }
-    
+
     public void setKildesystem(Kildesystem kildesystem) {
         this.kildesystem = kildesystem;
     }
@@ -236,7 +223,7 @@ public class Søknad implements Innsending {
         this.journalposter.addAll(Objects.requireNonNull(journalposter, "journalposter"));
         return this;
     }
-    
+
     /**
      * @see #getKildesystem()
      */

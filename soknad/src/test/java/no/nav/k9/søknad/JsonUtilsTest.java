@@ -1,21 +1,22 @@
 package no.nav.k9.søknad;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.time.ZonedDateTime;
-
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class JsonUtilsTest {
 
     @Test
     public void reserialiseringSkalAlltidGiSammeJson() {
-        final String testdataverdi = "foobar" ;
+        final String testdataverdi = "foobar";
 
         final Testdata testdata = new Testdata();
         testdata.setFelt(testdataverdi);
@@ -35,8 +36,8 @@ public class JsonUtilsTest {
         final Testdata testdata = new Testdata();
         final ObjectNode objectNode = JsonUtils.toObjectNode(testdata);
 
-        final String feltnavn = "nyttFeltnavn" ;
-        final String feltverdi = "nyFeltverdi" ;
+        final String feltnavn = "nyttFeltnavn";
+        final String feltverdi = "nyFeltverdi";
         objectNode.put(feltnavn, feltverdi);
 
         final String json = JsonUtils.toString(objectNode);
@@ -54,12 +55,36 @@ public class JsonUtilsTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "\"2024-08-14T10:05:56.111111111Z\"",
             "\"2024-08-14T10:05:56.111111Z\"",
             "\"2024-08-14T10:05:56.111Z\"",
-            "\"2024-08-14T10:05:56Z\""})
+            "\"2024-08-14T10:05:56Z\""
+    })
     public void skal_kunne_deserialisere_zoneddatetime(String dato) {
-        deserialiserZonedDatetime(dato);
+        Assertions.assertThatNoException().isThrownBy(() -> deserialiserZonedDatetime(dato));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "2024-08-14T10:05:56.111111Z",
+            "2024-08-14T10:05:56.11111Z",
+            "2024-08-14T10:05:56.1111Z",
+            "2024-08-14T10:05:56.111Z",
+            "2024-08-14T10:05:56.11Z",
+            "2024-08-14T10:05:56.1Z",
+            "2024-08-14T10:05:56Z"
+    })
+    public void deserialisering_av_zdt_skal_ikke_feile(String dato) {
+        ZonedDateTime.parse(dato, CustomZonedDateTimeDeSerializer.zonedDateTimeFormatter);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "2024-08-14T10:05:56.1111111Z",
+            "2024-08-14T10:05Z"
+    })
+    public void deserialisering_av_zdt_skal_feile(String dato) {
+        assertThatThrownBy(() -> ZonedDateTime.parse(dato, CustomZonedDateTimeDeSerializer.zonedDateTimeFormatter))
+                .isInstanceOf(DateTimeParseException.class);
     }
 
     private static ZonedDateTime deserialiserZonedDatetime(String s) {

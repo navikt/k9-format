@@ -1,23 +1,21 @@
 package no.nav.k9.søknad;
 
-import java.io.IOException;
-import java.util.TimeZone;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
+import no.nav.k9.søknad.felles.DtoKonstanter;
 import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetaling;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
+
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
+import java.util.TimeZone;
 
 public final class JsonUtils {
 
@@ -59,9 +57,13 @@ public final class JsonUtils {
     }
 
     private static final ObjectMapper createObjectMapper() {
+        JavaTimeModule javaTimeModule = new JavaTimeModule();
+        javaTimeModule.addDeserializer(ZonedDateTime.class, new CustomZonedDateTimeDeSerializer());
+
+
         final ObjectMapper objectMapper = new ObjectMapper()
                 .registerModule(new Jdk8Module())
-                .registerModule(new JavaTimeModule())
+                .registerModule(javaTimeModule)
                 .setPropertyNamingStrategy(PropertyNamingStrategies.LOWER_CAMEL_CASE)
                 .setTimeZone(TimeZone.getTimeZone("UTC"))
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
@@ -74,6 +76,7 @@ public final class JsonUtils {
                 .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
 
         objectMapper.registerSubtypes(OmsorgspengerUtbetaling.class, PleiepengerSyktBarn.class);
+        objectMapper.setDateFormat(new SimpleDateFormat(DtoKonstanter.DATO_TID_FORMAT));
 
         return objectMapper;
     }
