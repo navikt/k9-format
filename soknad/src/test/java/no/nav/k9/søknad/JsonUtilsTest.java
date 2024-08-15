@@ -11,6 +11,7 @@ import java.time.format.DateTimeParseException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatNoException;
 
 public class JsonUtilsTest {
 
@@ -74,7 +75,7 @@ public class JsonUtilsTest {
             "2024-08-14T10:05:56Z"
     })
     public void deserialisering_av_zdt_skal_ikke_feile(String dato) {
-        ZonedDateTime.parse(dato, CustomZonedDateTimeDeSerializer.zonedDateTimeFormatter);
+        assertThatNoException().isThrownBy(() -> ZonedDateTime.parse(dato, CustomZonedDateTimeDeSerializer.zonedDateTimeFormatter));
     }
 
     @ParameterizedTest
