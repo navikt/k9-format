@@ -16,7 +16,7 @@ public record Aksjonspunkt(
         Venteårsak venteårsak,
 
         @JsonProperty("tidsfrist")
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DtoKonstanter.DATO_TID_FORMAT, timezone = DtoKonstanter.TIDSSONE)
+        @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = DtoKonstanter.TIDSSONE)
         ZonedDateTime tidsfrist
 ) {
 

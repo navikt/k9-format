@@ -29,7 +29,7 @@ public record InnsendingInfo(
         @JsonProperty(value = "mottattTidspunkt", required = true)
         @Valid
         @NotNull
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DtoKonstanter.DATO_TID_FORMAT, timezone = DtoKonstanter.TIDSSONE)
+        @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = DtoKonstanter.TIDSSONE)
         ZonedDateTime mottattTidspunkt,
 
         @Valid

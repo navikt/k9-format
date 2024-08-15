@@ -46,7 +46,7 @@ public class Søknad implements Innsending {
 
     @Valid
     @NotNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DtoKonstanter.DATO_TID_FORMAT, timezone = DtoKonstanter.TIDSSONE)    @JsonProperty(value = "mottattDato", required = true)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = DtoKonstanter.TIDSSONE)    @JsonProperty(value = "mottattDato", required = true)
     private ZonedDateTime mottattDato;
 
     @Valid
@@ -72,7 +72,7 @@ public class Søknad implements Innsending {
     @NotNull
     @JsonProperty(value = "ytelse", required = true)
     private Ytelse ytelse;
-    
+
     @Valid
     @JsonProperty(value = "kildesystem", required = false)
     private Kildesystem kildesystem;
@@ -144,14 +144,14 @@ public class Søknad implements Innsending {
     public <Y extends Ytelse> Y getYtelse() {
         return (Y) ytelse;
     }
-    
+
     /**
      * Dette feltet kan brukes til å oppgi kildesystem. For historiske data
      * er feltet kun garantert å være satt for alle søknader som kommer fra
      * endringsdialogen. Ved behov for å se på historiske data av andre typer,
      * se på journalpostens kanalfelt og/eller metadatafeltet på journalposten
-     * kalt "k9.kilde". 
-     * 
+     * kalt "k9.kilde".
+     *
      * @return Systemet som søknadsdataene kommer fra.
      */
     public Optional<Kildesystem> getKildesystem() {
@@ -177,7 +177,7 @@ public class Søknad implements Innsending {
     public void setYtelse(Ytelse ytelse) {
         this.ytelse = Objects.requireNonNull(ytelse, "ytelse");
     }
-    
+
     public void setKildesystem(Kildesystem kildesystem) {
         this.kildesystem = kildesystem;
     }
@@ -236,7 +236,7 @@ public class Søknad implements Innsending {
         this.journalposter.addAll(Objects.requireNonNull(journalposter, "journalposter"));
         return this;
     }
-    
+
     /**
      * @see #getKildesystem()
      */

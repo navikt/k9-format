@@ -22,12 +22,12 @@ public record Behandling(
 
         @JsonProperty(value = "opprettetTidspunkt", required = true)
         @NotNull
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DtoKonstanter.DATO_TID_FORMAT, timezone = DtoKonstanter.TIDSSONE)
+        @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = DtoKonstanter.TIDSSONE)
         ZonedDateTime opprettetTidspunkt,
 
         @JsonInclude(value = JsonInclude.Include.NON_NULL)
         @JsonProperty(value = "avsluttetTidspunkt")
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DtoKonstanter.DATO_TID_FORMAT, timezone = DtoKonstanter.TIDSSONE)
+        @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = DtoKonstanter.TIDSSONE)
         ZonedDateTime avsluttetTidspunkt,
 
         @JsonInclude(value = JsonInclude.Include.NON_NULL)
