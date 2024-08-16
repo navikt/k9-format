@@ -77,6 +77,7 @@ public class JsonUtilsTest {
             "2024-08-14T10:05:56.1Z",
             "2024-08-14T10:05:56Z",
             "2024-08-14T10:05:56.111+02:00",
+            "2024-08-14T10:05:56.111+02:00[Europe/Oslo]",
     })
     public void deserialisering_av_zdt_skal_ikke_feile(String dato) {
         assertThatNoException().isThrownBy(() -> ZonedDateTime.parse(dato, CustomZonedDateTimeDeSerializer.zonedDateTimeFormatter));
