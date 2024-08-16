@@ -18,7 +18,7 @@ public class CustomZonedDateTimeDeSerializer extends JsonDeserializer<ZonedDateT
             .optionalStart()
             .appendFraction(ChronoField.MILLI_OF_SECOND, 0, 9, true)
             .optionalEnd()
-            .appendPattern("XXX")
+            .appendPattern("ZZZZZ")
             .toFormatter();
 
     @Override
