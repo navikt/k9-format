@@ -66,6 +66,9 @@ public class JsonUtilsTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
+            "2024-08-14T10:05:56.111111111Z",
+            "2024-08-14T10:05:56.11111111Z",
+            "2024-08-14T10:05:56.1111111Z",
             "2024-08-14T10:05:56.111111Z",
             "2024-08-14T10:05:56.11111Z",
             "2024-08-14T10:05:56.1111Z",
@@ -80,7 +83,7 @@ public class JsonUtilsTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "2024-08-14T10:05:56.1111111Z",
+            "2024-08-14T10:05:56.1111111111Z",
             "2024-08-14T10:05Z"
     })
     public void deserialisering_av_zdt_skal_feile(String dato) {

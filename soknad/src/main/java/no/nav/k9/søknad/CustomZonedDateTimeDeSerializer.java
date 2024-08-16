@@ -16,7 +16,7 @@ public class CustomZonedDateTimeDeSerializer extends JsonDeserializer<ZonedDateT
     static final DateTimeFormatter zonedDateTimeFormatter = new DateTimeFormatterBuilder()
             .appendPattern("yyyy-MM-dd'T'HH:mm:ss")
             .optionalStart()
-            .appendFraction(ChronoField.NANO_OF_SECOND, 0, 6, true)
+            .appendFraction(ChronoField.MILLI_OF_SECOND, 0, 9, true)
             .optionalEnd()
             .appendPattern("XXX")
             .toFormatter();
