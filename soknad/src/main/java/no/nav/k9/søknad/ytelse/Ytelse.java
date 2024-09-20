@@ -19,6 +19,7 @@ import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetaling;
 import no.nav.k9.søknad.ytelse.olp.v1.Opplæringspenger;
 import no.nav.k9.søknad.ytelse.pls.v1.PleipengerLivetsSluttfase;
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
+import no.nav.k9.søknad.ytelse.ung.v1.Ungdomsytelse;
 
 @Valid
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
@@ -30,6 +31,7 @@ import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
         @JsonSubTypes.Type(name = Ytelse.PLEIEPENGER_SYKT_BARN, value = PleiepengerSyktBarn.class),
         @JsonSubTypes.Type(name = Ytelse.OPPLÆRINGSPENGER, value = Opplæringspenger.class),
         @JsonSubTypes.Type(name = Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE, value = PleipengerLivetsSluttfase.class),
+        @JsonSubTypes.Type(name = Ytelse.UNGDOMSYTELSE, value = Ungdomsytelse.class),
 })
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public interface Ytelse {
@@ -41,6 +43,7 @@ public interface Ytelse {
     String OPPLÆRINGSPENGER = "OPPLÆRINGSPENGER";
     String PLEIEPENGER_SYKT_BARN = "PLEIEPENGER_SYKT_BARN";
     String PLEIEPENGER_LIVETS_SLUTTFASE = "PLEIEPENGER_LIVETS_SLUTTFASE";
+    String UNGDOMSYTELSE = "UNGDOMSYTELSE";
 
     Ytelse.Type getType();
 
@@ -79,6 +82,8 @@ public interface Ytelse {
         OMSORGSPENGER_UTVIDETRETT_KRONISK_SYKT_BARN(Ytelse.OMSORGSPENGER_UTVIDETRETT_KRONISK_SYKT),
         OMSORGSPENGER_UTVIDETRETT_MIDLERTIDIG_ALENE(Ytelse.OMSORGSPENGER_UTVIDETRETT_MIDLERTIDIG_ALENE),
         OMSORGSPENGER_UTVIDETRETT_ALENE_OMSORG(Ytelse.OMSORGSPENGER_UTVIDETRETT_ALENE_OMSORG),
+        UNGDOMSYTELSE(Ytelse.UNGDOMSYTELSE),
+
         ;
 
         @JsonValue
