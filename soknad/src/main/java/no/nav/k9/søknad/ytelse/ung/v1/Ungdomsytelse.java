@@ -78,6 +78,7 @@ public class Ungdomsytelse implements Ytelse {
         final var tom = perioder
                 .stream()
                 .map(Periode::getTilOgMed)
+                .filter(Objects::nonNull)
                 .max(LocalDate::compareTo)
                 .orElse(null);
         return new Periode(fom, tom);
