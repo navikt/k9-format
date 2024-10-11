@@ -1,23 +1,22 @@
 package no.nav.k9.søknad.ytelse.ung.v1;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
-import no.nav.k9.søknad.felles.validering.periode.LukketPeriode;
+import no.nav.k9.søknad.felles.validering.periode.GyldigPeriode;
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class Ungdomsytelse implements Ytelse {
 
@@ -25,7 +24,7 @@ public class Ungdomsytelse implements Ytelse {
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     @JsonProperty(value = "søknadsperiode", required = true)
     @NotNull
-    private List<@NotNull @LukketPeriode Periode> søknadsperiode = new ArrayList<>();
+    private List<@NotNull @GyldigPeriode(krevFomDato = true) Periode> søknadsperiode = new ArrayList<>();
 
     @Override
     public Type getType() {
@@ -80,7 +79,7 @@ public class Ungdomsytelse implements Ytelse {
                 .stream()
                 .map(Periode::getTilOgMed)
                 .max(LocalDate::compareTo)
-                .orElseThrow();
+                .orElse(null);
         return new Periode(fom, tom);
     }
 
