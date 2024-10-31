@@ -17,10 +17,14 @@ public class UngdomsytelseSøknadValidator extends SøknadValidator<Søknad> {
 
     @Override
     public List<Feil> valider(Søknad søknad) {
-        return List.of();
+        return validerSøknadsfelter(søknad);
     }
 
     public List<Feil> valider(Søknad søknad, List<Periode> gyldigeEndringsperioder) {
+        return validerSøknadsfelter(søknad);
+    }
+
+    private List<Feil> validerSøknadsfelter(Søknad søknad) {
         var validate = VALIDATOR_FACTORY.getValidator().validate(søknad);
 
         List<Feil> feil = validate.stream()
@@ -34,5 +38,4 @@ public class UngdomsytelseSøknadValidator extends SøknadValidator<Søknad> {
         validerFelterPåSøknad(søknad, feil);
         return feil;
     }
-
 }
