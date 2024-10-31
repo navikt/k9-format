@@ -31,7 +31,7 @@ public class Ungdomsytelse implements Ytelse {
 
     @JsonProperty(value = "inntekt")
     @DecimalMin("0.00")
-    @DecimalMax("10000000.00")
+    @DecimalMax("1000000.00")
     private BigDecimal inntekt;
 
     @Override

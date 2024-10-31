@@ -25,4 +25,11 @@ class ValideringTest {
         var ytelse = YtelseEksempel.komplettYtelseMedSøknadsperiode(søknadsperiode, BigDecimal.valueOf(-1000));
         ValiderUtil.verifyHarFeil(SøknadEksempel.søknad(ytelse));
     }
+
+    @Test
+    void verifiserInntektOverGrenseFeiler() {
+        var søknadsperiode = new Periode(LocalDate.now(), null);
+        var ytelse = YtelseEksempel.komplettYtelseMedSøknadsperiode(søknadsperiode, BigDecimal.valueOf(1000001.00));
+        ValiderUtil.verifyHarFeil(SøknadEksempel.søknad(ytelse));
+    }
 }
