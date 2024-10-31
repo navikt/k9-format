@@ -18,4 +18,11 @@ class ValideringTest {
         ValiderUtil.verifyIngenFeil(SøknadEksempel.søknad(ytelse));
         Assertions.assertDoesNotThrow(ytelse::getSøknadsperiode);
     }
+
+    @Test
+    void verifiserInntektUnderNullFeiler() {
+        var søknadsperiode = new Periode(LocalDate.now(), null);
+        var ytelse = YtelseEksempel.komplettYtelseMedSøknadsperiode(søknadsperiode, BigDecimal.valueOf(-1000));
+        ValiderUtil.verifyHarFeil(SøknadEksempel.søknad(ytelse));
+    }
 }
