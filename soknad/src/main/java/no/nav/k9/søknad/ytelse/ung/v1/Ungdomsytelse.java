@@ -3,6 +3,8 @@ package no.nav.k9.søknad.ytelse.ung.v1;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
@@ -13,6 +15,7 @@ import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +28,11 @@ public class Ungdomsytelse implements Ytelse {
     @JsonProperty(value = "søknadsperiode", required = true)
     @NotNull
     private List<@NotNull @GyldigPeriode(krevFomDato = true) Periode> søknadsperiode = new ArrayList<>();
+
+    @JsonProperty(value = "inntekt")
+    @DecimalMin("0.00")
+    @DecimalMax("10000000.00")
+    private BigDecimal inntekt;
 
     @Override
     public Type getType() {
@@ -82,6 +90,15 @@ public class Ungdomsytelse implements Ytelse {
                 .max(LocalDate::compareTo)
                 .orElse(null);
         return new Periode(fom, tom);
+    }
+
+    public BigDecimal getInntekt() {
+        return inntekt;
+    }
+
+    public Ungdomsytelse medInntekt(BigDecimal inntekt) {
+        this.inntekt = Objects.requireNonNull(inntekt, "inntekt");
+        return this;
     }
 
     public Ungdomsytelse medSøknadsperiode(List<Periode> søknadsperiodeList) {

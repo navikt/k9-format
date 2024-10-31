@@ -6,6 +6,7 @@ import no.nav.k9.søknad.ytelse.ung.YtelseEksempel;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 class ValideringTest {
@@ -13,7 +14,7 @@ class ValideringTest {
     @Test
     void verifiserHentingAvSøknadsperiodeUtenTomDatoIkkeFeiler() {
         var søknadsperiode = new Periode(LocalDate.now(), null);
-        var ytelse = YtelseEksempel.komplettYtelseMedSøknadsperiode(søknadsperiode);
+        var ytelse = YtelseEksempel.komplettYtelseMedSøknadsperiode(søknadsperiode, BigDecimal.valueOf(1000));
         ValiderUtil.verifyIngenFeil(SøknadEksempel.søknad(ytelse));
         Assertions.assertDoesNotThrow(ytelse::getSøknadsperiode);
     }
