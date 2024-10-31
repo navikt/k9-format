@@ -1,6 +1,7 @@
 package no.nav.k9.søknad.felles.type;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import jakarta.validation.Valid;
@@ -30,6 +31,11 @@ public class Journalpost {
     @JsonProperty(value = "inneholderMedisinskeOpplysninger", required = true)
     @Valid
     private Boolean inneholderMedisinskeOpplysninger;
+
+    @JsonProperty(value = "brevkoder")
+    @Size(max = 50)
+    @Valid
+    private List<String> brevkoder;
 
     @JsonProperty(value = "journalpostId", required = true)
     @NotNull
@@ -64,6 +70,15 @@ public class Journalpost {
 
     public Journalpost medJournalpostId(String journalpostId) {
         this.journalpostId = Objects.requireNonNull(journalpostId, "journalpostId");
+        return this;
+    }
+
+    public List<String> getBrevkoder() {
+        return brevkoder;
+    }
+
+    public Journalpost medBrevkoder(List<String> brevkoder) {
+        this.brevkoder = new ArrayList<>(Objects.requireNonNull(brevkoder, "brevkoder"));
         return this;
     }
 }
