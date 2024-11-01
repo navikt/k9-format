@@ -27,7 +27,7 @@ public class Ungdomsytelse implements Ytelse {
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     @JsonProperty(value = "søknadsperiode", required = true)
     @NotNull
-    private List<@NotNull @GyldigPeriode(krevFomDato = true) Periode> søknadsperiode = new ArrayList<>();
+    private List<@NotNull @GyldigPeriode(krevFomDato = true, krevTomDato = true) Periode> søknadsperiode = new ArrayList<>();
 
     @JsonProperty(value = "inntekt")
     @DecimalMin("0.00")
