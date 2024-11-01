@@ -18,6 +18,7 @@ import no.nav.k9.søknad.ytelse.YtelseValidator;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -90,6 +91,10 @@ public class Ungdomsytelse implements Ytelse {
                 .max(LocalDate::compareTo)
                 .orElse(null);
         return new Periode(fom, tom);
+    }
+
+    public List<Periode> getSøknadsperiodeList() {
+        return søknadsperiode == null ? null : Collections.unmodifiableList(søknadsperiode);
     }
 
     public BigDecimal getInntekt() {
