@@ -12,23 +12,22 @@ import java.time.LocalDate;
 class ValideringTest {
 
     @Test
-    void verifiserHentingAvSøknadsperiodeUtenTomDatoIkkeFeiler() {
+    void verifiserHentingAvSøknadsperiodeUtenTomDatoFeiler() {
         var søknadsperiode = new Periode(LocalDate.now(), null);
         var ytelse = YtelseEksempel.komplettYtelseMedSøknadsperiode(søknadsperiode, BigDecimal.valueOf(1000));
-        ValiderUtil.verifyIngenFeil(SøknadEksempel.søknad(ytelse));
-        Assertions.assertDoesNotThrow(ytelse::getSøknadsperiode);
+        ValiderUtil.verifyHarFeil(SøknadEksempel.søknad(ytelse));
     }
 
     @Test
     void verifiserInntektUnderNullFeiler() {
-        var søknadsperiode = new Periode(LocalDate.now(), null);
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now());
         var ytelse = YtelseEksempel.komplettYtelseMedSøknadsperiode(søknadsperiode, BigDecimal.valueOf(-1000));
         ValiderUtil.verifyHarFeil(SøknadEksempel.søknad(ytelse));
     }
 
     @Test
     void verifiserInntektOverGrenseFeiler() {
-        var søknadsperiode = new Periode(LocalDate.now(), null);
+        var søknadsperiode = new Periode(LocalDate.now(), LocalDate.now());
         var ytelse = YtelseEksempel.komplettYtelseMedSøknadsperiode(søknadsperiode, BigDecimal.valueOf(1000001.00));
         ValiderUtil.verifyHarFeil(SøknadEksempel.søknad(ytelse));
     }
