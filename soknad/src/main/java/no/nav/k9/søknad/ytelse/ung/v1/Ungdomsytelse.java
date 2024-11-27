@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
+import no.nav.k9.søknad.TidUtils;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.type.Periode;
@@ -18,17 +19,18 @@ import no.nav.k9.søknad.ytelse.YtelseValidator;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 public class Ungdomsytelse implements Ytelse {
 
+    private UngSøknadstype søknadType = UngSøknadstype.DELTAKELSE_SØKNAD;
+
     @Valid
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     @JsonProperty(value = "søknadsperiode", required = true)
     @NotNull
-    private List<@NotNull @GyldigPeriode(krevFomDato = true, krevTomDato = true) Periode> søknadsperiode = new ArrayList<>();
+    private List<@NotNull @GyldigPeriode(krevFomDato = true) Periode> søknadsperiode = new ArrayList<>();
 
     @JsonProperty(value = "inntekt")
     @DecimalMin("0.00")
@@ -84,6 +86,11 @@ public class Ungdomsytelse implements Ytelse {
                 .map(Periode::getFraOgMed)
                 .min(LocalDate::compareTo)
                 .orElseThrow();
+
+        if (søknadType == UngSøknadstype.DELTAKELSE_SØKNAD) {
+            return new Periode(fom, TidUtils.TIDENES_ENDE); // Deltakelse har ingen sluttdato
+        }
+
         final var tom = perioder
                 .stream()
                 .map(Periode::getTilOgMed)
@@ -94,7 +101,12 @@ public class Ungdomsytelse implements Ytelse {
     }
 
     public List<Periode> getSøknadsperiodeList() {
-        return søknadsperiode == null ? null : Collections.unmodifiableList(søknadsperiode);
+        return søknadsperiode == null ? null : søknadsperiode.stream().map(p -> {
+            if (p.getTilOgMed() == null) {
+                return new Periode(p.getFraOgMed(), TidUtils.TIDENES_ENDE);
+            }
+            return p;
+        }).toList();
     }
 
     public BigDecimal getInntekt() {
@@ -116,4 +128,12 @@ public class Ungdomsytelse implements Ytelse {
         return this;
     }
 
+    public UngSøknadstype getSøknadType() {
+        return søknadType;
+    }
+
+    public Ungdomsytelse medSøknadType(UngSøknadstype søknadType) {
+        this.søknadType = Objects.requireNonNull(søknadType, "søknadType");
+        return this;
+    }
 }
