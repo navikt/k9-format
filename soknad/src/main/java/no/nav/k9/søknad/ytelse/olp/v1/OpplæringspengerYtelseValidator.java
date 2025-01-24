@@ -18,7 +18,7 @@ import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
-import no.nav.k9.søknad.ytelse.olp.v1.kurs.KursPeriodeMedReisetid;
+import no.nav.k9.søknad.ytelse.olp.v1.kurs.KursPeriode;
 
 class OpplæringspengerYtelseValidator extends YtelseValidator {
 
@@ -129,8 +129,8 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
                 .collect(Collectors.toCollection(ArrayList::new)));
     }
 
-    private void validerReisetidMotKursperioden(List<KursPeriodeMedReisetid> kursperioder, String felt, List<Feil> feil) {
-        for (KursPeriodeMedReisetid kursPeriode : kursperioder) {
+    private void validerReisetidMotKursperioden(List<KursPeriode> kursperioder, String felt, List<Feil> feil) {
+        for (KursPeriode kursPeriode : kursperioder) {
             if (kursPeriode != null) {
                 LocalDate avreise = kursPeriode.getAvreise();
                 LocalDate hjemkomst = kursPeriode.getHjemkomst();

@@ -15,7 +15,7 @@ import no.nav.k9.søknad.felles.type.Periode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-public class KursPeriodeMedReisetid {
+public class KursPeriode {
 
     @JsonProperty(value = "periode", required = true)
     @NotNull
@@ -42,10 +42,10 @@ public class KursPeriodeMedReisetid {
     @Pattern(regexp = "^[\\p{Pd}\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}§]*$", message = "[${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
     private String begrunnelseReisetidHjem;
 
-    public KursPeriodeMedReisetid() {
+    public KursPeriode() {
     }
 
-    public KursPeriodeMedReisetid(Periode periode, LocalDate avreise, LocalDate hjemkomst, String begrunnelseReisetidTil, String begrunnelseReisetidHjem) {
+    public KursPeriode(Periode periode, LocalDate avreise, LocalDate hjemkomst, String begrunnelseReisetidTil, String begrunnelseReisetidHjem) {
         this.periode = periode;
         this.avreise = avreise;
         this.hjemkomst = hjemkomst;

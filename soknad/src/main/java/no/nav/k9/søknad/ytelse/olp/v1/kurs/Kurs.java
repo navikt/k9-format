@@ -24,12 +24,12 @@ public class Kurs {
     @NotNull
     @Size(min = 1)
     @Valid
-    private List<@NotNull @Valid KursPeriodeMedReisetid> kursperioder;
+    private List<@NotNull @Valid KursPeriode> kursperioder;
 
     public Kurs() {
     }
 
-    public Kurs(Kursholder kursholder, List<KursPeriodeMedReisetid> kursperioder) {
+    public Kurs(Kursholder kursholder, List<KursPeriode> kursperioder) {
         this.kursholder = kursholder;
         this.kursperioder = kursperioder;
     }
@@ -38,7 +38,7 @@ public class Kurs {
         return kursholder;
     }
 
-    public List<KursPeriodeMedReisetid> getKursperioder() {
+    public List<KursPeriode> getKursperioder() {
         return new ArrayList<>(kursperioder);
     }
 }
