@@ -13,6 +13,7 @@ import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.olp.v1.kurs.Kurs;
 import no.nav.k9.søknad.ytelse.olp.v1.kurs.KursPeriode;
 import no.nav.k9.søknad.ytelse.olp.v1.kurs.Kursholder;
+import no.nav.k9.søknad.ytelse.olp.v1.kurs.Reise;
 import no.nav.k9.søknad.ytelse.psb.YtelseEksempel;
 
 class OpplæringspengerYtelseValidatorTest {
@@ -22,7 +23,8 @@ class OpplæringspengerYtelseValidatorTest {
     private Opplæringspenger lagYtelse() {
         Periode søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusWeeks(1));
         KursPeriode kursPeriode = new KursPeriode(søknadsperiode, søknadsperiode.getFraOgMed(), søknadsperiode.getTilOgMed(), null, null);
-        Kurs kurs = new Kurs(new Kursholder(UUID.randomUUID()), List.of(kursPeriode));
+        Reise reise = new Reise(true, List.of(LocalDate.now()), null);
+        Kurs kurs = new Kurs(new Kursholder(UUID.randomUUID()), List.of(kursPeriode), reise);
         return new Opplæringspenger().medBarn(YtelseEksempel.lagBarn()).medSøknadsperiode(List.of(søknadsperiode)).medUttak(YtelseEksempel.lagUttak(søknadsperiode)).medKurs(kurs);
     }
 

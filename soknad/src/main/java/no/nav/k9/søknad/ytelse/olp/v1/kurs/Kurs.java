@@ -26,12 +26,18 @@ public class Kurs {
     @Valid
     private List<@NotNull @Valid KursPeriode> kursperioder;
 
+    @JsonProperty(value = "reise", required = true)
+    @NotNull
+    @Valid
+    private Reise reise;
+
     public Kurs() {
     }
 
-    public Kurs(Kursholder kursholder, List<KursPeriode> kursperioder) {
+    public Kurs(Kursholder kursholder, List<KursPeriode> kursperioder, Reise reise) {
         this.kursholder = kursholder;
         this.kursperioder = kursperioder;
+        this.reise = reise;
     }
 
     public Kursholder getKursholder() {
