@@ -97,6 +97,7 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
 
         validerAtYtelsePeriodenErKomplettMedSøknad(søknadsperiodeTidslinje, olp.getUttak().getPerioder(), "uttak", feilene);
 
+        validerAtReise(olp.getKurs().getReise(), "kurs.reise", feilene);
         validerReisetidMotKursperioden(olp.getKurs().getKursperioder(), olp.getKurs().getReise(), "kurs.reise", feilene);
 
         return feilene;
@@ -128,6 +129,17 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
                 .filter(this::periodeInneholderDagerSomIkkeErHelg)
                 .map(p -> toFeil(p, felt, "ikkeKomplettPeriode", "Periodene er ikke komplett, periode som mangler er: "))
                 .collect(Collectors.toCollection(ArrayList::new)));
+    }
+
+    private void validerAtReise(Reise reise, String felt, List<Feil> feilene) {
+        if (reise.isReiserUtenforKursdager()) {
+            if (reise.getReisedager() == null || reise.getReisedager().isEmpty()) {
+                feilene.add(lagFeil(felt, "påkrevd", "Reisedager må inneholde minst en dag når reiserUtenforKursdager er satt."));
+            }
+            if (reise.getReisedagerBeskrivelse() == null) {
+                feilene.add(lagFeil(felt, "påkrevd", "Beskrivelse må være satt når reiserUtenforKursdager er satt."));
+            }
+        }
     }
 
     private void validerReisetidMotKursperioden(List<KursPeriode> kursperioder, Reise reise, String felt, List<Feil> feil) {
