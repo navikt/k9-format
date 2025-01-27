@@ -97,7 +97,7 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
 
         validerAtYtelsePeriodenErKomplettMedSøknad(søknadsperiodeTidslinje, olp.getUttak().getPerioder(), "uttak", feilene);
 
-        validerAtReise(olp.getKurs().getReise(), "kurs.reise", feilene);
+        validerReise(olp.getKurs().getReise(), "kurs.reise", feilene);
         validerReisetidMotKursperioden(olp.getKurs().getKursperioder(), olp.getKurs().getReise(), "kurs.reise", feilene);
 
         return feilene;
@@ -131,7 +131,7 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
                 .collect(Collectors.toCollection(ArrayList::new)));
     }
 
-    private void validerAtReise(Reise reise, String felt, List<Feil> feilene) {
+    private void validerReise(Reise reise, String felt, List<Feil> feilene) {
         if (reise.isReiserUtenforKursdager()) {
             if (reise.getReisedager() == null || reise.getReisedager().isEmpty()) {
                 feilene.add(lagFeil(felt, "påkrevd", "Reisedager må inneholde minst en dag når reiserUtenforKursdager er satt."));
