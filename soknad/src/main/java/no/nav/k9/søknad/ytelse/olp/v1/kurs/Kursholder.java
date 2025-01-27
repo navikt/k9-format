@@ -31,13 +31,11 @@ public class Kursholder {
         this.institusjonUuid = institusjonUuid;
     }
 
-    @Deprecated(forRemoval = true)
     public Kursholder(String navn, UUID institusjonUuid) {
         this.navn = navn;
         this.institusjonUuid = institusjonUuid;
     }
 
-    @Deprecated(forRemoval = true)
     public String getNavn() {
         return navn;
     }
