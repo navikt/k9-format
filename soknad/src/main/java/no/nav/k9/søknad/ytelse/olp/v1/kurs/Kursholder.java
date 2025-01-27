@@ -14,11 +14,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Kursholder {
 
-    @JsonProperty(value = "holder")
+    @JsonProperty(value = "navn")
     @Valid
     @Size(max = 100)
     @Pattern(regexp = "^[\\p{Pd}\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}§]*$", message = "[${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
-    private String holder;
+    private String navn;
 
     @JsonProperty(value = "institusjonsidentifikator", required = true)
     @Valid
@@ -32,14 +32,14 @@ public class Kursholder {
     }
 
     @Deprecated(forRemoval = true)
-    public Kursholder(String holder, UUID institusjonUuid) {
-        this.holder = holder;
+    public Kursholder(String navn, UUID institusjonUuid) {
+        this.navn = navn;
         this.institusjonUuid = institusjonUuid;
     }
 
     @Deprecated(forRemoval = true)
-    public String getHolder() {
-        return holder;
+    public String getNavn() {
+        return navn;
     }
 
     public UUID getInstitusjonUuid() {
