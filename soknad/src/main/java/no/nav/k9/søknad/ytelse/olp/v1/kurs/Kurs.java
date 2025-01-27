@@ -47,4 +47,8 @@ public class Kurs {
     public List<KursPeriode> getKursperioder() {
         return new ArrayList<>(kursperioder);
     }
+
+    public Reise getReise() {
+        return reise;
+    }
 }

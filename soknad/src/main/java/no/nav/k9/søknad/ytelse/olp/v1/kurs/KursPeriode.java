@@ -1,11 +1,7 @@
 package no.nav.k9.søknad.ytelse.olp.v1.kurs;
 
-import java.time.LocalDate;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -22,54 +18,14 @@ public class KursPeriode {
     @Valid
     private Periode periode;
 
-    @JsonProperty(value = "avreise", required = true)
-    @NotNull
-    @Valid
-    private LocalDate avreise;
-
-    @JsonProperty(value = "hjemkomst", required = true)
-    @NotNull
-    @Valid
-    private LocalDate hjemkomst;
-
-    @JsonProperty(value = "begrunnelseReisetidTil")
-    @Size(max = 4000)
-    @Pattern(regexp = "^[\\p{Pd}\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}§]*$", message = "[${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
-    private String begrunnelseReisetidTil;
-
-    @JsonProperty(value = "begrunnelseReisetidHjem")
-    @Size(max = 4000)
-    @Pattern(regexp = "^[\\p{Pd}\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}§]*$", message = "[${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
-    private String begrunnelseReisetidHjem;
-
     public KursPeriode() {
     }
 
-    public KursPeriode(Periode periode, LocalDate avreise, LocalDate hjemkomst, String begrunnelseReisetidTil, String begrunnelseReisetidHjem) {
+    public KursPeriode(Periode periode) {
         this.periode = periode;
-        this.avreise = avreise;
-        this.hjemkomst = hjemkomst;
-        this.begrunnelseReisetidTil = begrunnelseReisetidTil;
-        this.begrunnelseReisetidHjem = begrunnelseReisetidHjem;
     }
 
     public Periode getPeriode() {
         return periode;
-    }
-
-    public LocalDate getAvreise() {
-        return avreise;
-    }
-
-    public LocalDate getHjemkomst() {
-        return hjemkomst;
-    }
-
-    public String getBegrunnelseReisetidTil() {
-        return begrunnelseReisetidTil;
-    }
-
-    public String getBegrunnelseReisetidHjem() {
-        return begrunnelseReisetidHjem;
     }
 }
