@@ -18,7 +18,6 @@ import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
-import no.nav.k9.søknad.ytelse.olp.v1.kurs.KursPeriode;
 import no.nav.k9.søknad.ytelse.olp.v1.kurs.Reise;
 
 class OpplæringspengerYtelseValidator extends YtelseValidator {
@@ -142,7 +141,7 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
         }
     }
 
-    private void validerReisetidMotKursperioden(List<KursPeriode> kursperioder, Reise reise, String felt, List<Feil> feil) {
+    private void validerReisetidMotKursperioden(List<Periode> kursperioder, Reise reise, String felt, List<Feil> feil) {
         var reisedager = reise.getReisedager();
         if (reisedager == null || reisedager.isEmpty()) {
             return;
@@ -151,7 +150,7 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
         // En reisedag må være innenfor en kursperiode
         for (LocalDate reisedag : reisedager) {
             if (reisedag != null) {
-                if (kursperioder.stream().noneMatch(kursPeriode -> kursPeriode.getPeriode().inneholder(new Periode(reisedag, reisedag)))) {
+                if (kursperioder.stream().noneMatch(kursPeriode -> kursPeriode.inneholder(new Periode(reisedag, reisedag)))) {
                     feil.add(lagFeil(felt, "ugyldigReise", "Reisedagen er ikke innenfor en kursperiode: " + reisedag));
                 }
             }
