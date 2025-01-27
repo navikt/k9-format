@@ -18,7 +18,7 @@ import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
-import no.nav.k9.søknad.ytelse.olp.v1.kurs.KursPeriodeMedReisetid;
+import no.nav.k9.søknad.ytelse.olp.v1.kurs.Reise;
 
 class OpplæringspengerYtelseValidator extends YtelseValidator {
 
@@ -86,7 +86,7 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
         feilene.addAll(validerAtIngenPerioderOverlapperMedTrekkKravPerioder(trekkKravPerioderTidslinje, søknadsperiodeTidslinje, "trekkKravPerioder"));
 
         for (var ytelsePeriode : PerioderMedEndringUtil.getAllePerioderSomMåVæreInnenforSøknadsperiode(olp)) {
-            if (ytelsePeriode.getPeriodeMap().keySet().stream().anyMatch(Periode::isTilOgMedFørFraOgMed)){
+            if (ytelsePeriode.getPeriodeMap().keySet().stream().anyMatch(Periode::isTilOgMedFørFraOgMed)) {
                 continue; //fortsette validering med ugyldige perioder gir bare duplikate feil
             }
             var ytelsePeriodeTidsserie = lagTidslinjeOgValider(ytelsePeriode.getPeriodeMap(), ytelsePeriode.getFelt() + ".perioder", feilene);
@@ -96,7 +96,8 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
 
         validerAtYtelsePeriodenErKomplettMedSøknad(søknadsperiodeTidslinje, olp.getUttak().getPerioder(), "uttak", feilene);
 
-        validerReisetidMotKursperioden(olp.getKurs().getKursperioder(), "kurs.kursperioder", feilene);
+        validerReise(olp.getKurs().getReise(), "kurs.reise", feilene);
+        validerReisetidMotKursperioden(olp.getKurs().getKursperioder(), olp.getKurs().getReise(), "kurs.reise", feilene);
 
         return feilene;
     }
@@ -129,23 +130,28 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
                 .collect(Collectors.toCollection(ArrayList::new)));
     }
 
-    private void validerReisetidMotKursperioden(List<KursPeriodeMedReisetid> kursperioder, String felt, List<Feil> feil) {
-        for (KursPeriodeMedReisetid kursPeriode : kursperioder) {
-            if (kursPeriode != null) {
-                LocalDate avreise = kursPeriode.getAvreise();
-                LocalDate hjemkomst = kursPeriode.getHjemkomst();
-                Periode periode = kursPeriode.getPeriode();
+    private void validerReise(Reise reise, String felt, List<Feil> feilene) {
+        if (reise.isReiserUtenforKursdager()) {
+            if (reise.getReisedager() == null || reise.getReisedager().isEmpty()) {
+                feilene.add(lagFeil(felt, "påkrevd", "Reisedager må inneholde minst en dag når reiserUtenforKursdager er satt."));
+            }
+            if (reise.getReisedagerBeskrivelse() == null) {
+                feilene.add(lagFeil(felt, "påkrevd", "Beskrivelse må være satt når reiserUtenforKursdager er satt."));
+            }
+        }
+    }
 
-                if (avreise != null && hjemkomst != null && periode != null) {
-                    if (hjemkomst.isBefore(avreise)) {
-                        feil.add(toFeil(periode, felt, "ugyldigKursPeriode", "hjemkomst er før avreise: "));
-                    }
-                    if (avreise.isAfter(periode.getFraOgMed())) {
-                        feil.add(toFeil(periode, felt, "ugyldigKursPeriode", "avreise er etter kursstart: "));
-                    }
-                    if (hjemkomst.isBefore(periode.getTilOgMed())) {
-                        feil.add(toFeil(periode, felt, "ugyldigKursPeriode", "hjemkomst er før kursslutt: "));
-                    }
+    private void validerReisetidMotKursperioden(List<Periode> kursperioder, Reise reise, String felt, List<Feil> feil) {
+        var reisedager = reise.getReisedager();
+        if (reisedager == null || reisedager.isEmpty()) {
+            return;
+        }
+
+        // En reisedag må være innenfor en kursperiode
+        for (LocalDate reisedag : reisedager) {
+            if (reisedag != null) {
+                if (kursperioder.stream().noneMatch(kursPeriode -> kursPeriode.inneholder(new Periode(reisedag, reisedag)))) {
+                    feil.add(lagFeil(felt, "ugyldigReise", "Reisedagen er ikke innenfor en kursperiode: " + reisedag));
                 }
             }
         }

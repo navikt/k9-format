@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import no.nav.k9.søknad.felles.type.Periode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -24,21 +25,31 @@ public class Kurs {
     @NotNull
     @Size(min = 1)
     @Valid
-    private List<@NotNull @Valid KursPeriodeMedReisetid> kursperioder;
+    private List<@NotNull @Valid Periode> kursperioder;
+
+    @JsonProperty(value = "reise", required = true)
+    @NotNull
+    @Valid
+    private Reise reise;
 
     public Kurs() {
     }
 
-    public Kurs(Kursholder kursholder, List<KursPeriodeMedReisetid> kursperioder) {
+    public Kurs(Kursholder kursholder, List<Periode> kursperioder, Reise reise) {
         this.kursholder = kursholder;
         this.kursperioder = kursperioder;
+        this.reise = reise;
     }
 
     public Kursholder getKursholder() {
         return kursholder;
     }
 
-    public List<KursPeriodeMedReisetid> getKursperioder() {
+    public List<Periode> getKursperioder() {
         return new ArrayList<>(kursperioder);
+    }
+
+    public Reise getReise() {
+        return reise;
     }
 }

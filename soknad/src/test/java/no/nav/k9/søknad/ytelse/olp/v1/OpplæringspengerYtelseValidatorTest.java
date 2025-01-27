@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.olp.v1.kurs.Kurs;
-import no.nav.k9.søknad.ytelse.olp.v1.kurs.KursPeriodeMedReisetid;
 import no.nav.k9.søknad.ytelse.olp.v1.kurs.Kursholder;
+import no.nav.k9.søknad.ytelse.olp.v1.kurs.Reise;
 import no.nav.k9.søknad.ytelse.psb.YtelseEksempel;
 
 class OpplæringspengerYtelseValidatorTest {
@@ -21,8 +21,8 @@ class OpplæringspengerYtelseValidatorTest {
 
     private Opplæringspenger lagYtelse() {
         Periode søknadsperiode = new Periode(LocalDate.now(), LocalDate.now().plusWeeks(1));
-        KursPeriodeMedReisetid kursPeriode = new KursPeriodeMedReisetid(søknadsperiode, søknadsperiode.getFraOgMed(), søknadsperiode.getTilOgMed(), null, null);
-        Kurs kurs = new Kurs(new Kursholder(UUID.randomUUID()), List.of(kursPeriode));
+        Reise reise = new Reise(true, List.of(LocalDate.now()), "Langt å kjøre");
+        Kurs kurs = new Kurs(new Kursholder(UUID.randomUUID()), List.of(søknadsperiode), reise);
         return new Opplæringspenger().medBarn(YtelseEksempel.lagBarn()).medSøknadsperiode(List.of(søknadsperiode)).medUttak(YtelseEksempel.lagUttak(søknadsperiode)).medKurs(kurs);
     }
 
