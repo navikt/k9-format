@@ -79,17 +79,23 @@ public class OppgittInntekt {
         }
 
         public Builder medArbeidstakerOgFrilansinntekter(Set<InntektForPeriode> inntekter) {
-            arbeidstakerOgFrilansInntekter.addAll(inntekter);
+            if (inntekter != null) {
+                arbeidstakerOgFrilansInntekter.addAll(inntekter);
+            }
             return this;
         }
 
         public Builder medNæringsinntekter(Set<InntektForPeriode> inntekter) {
-            næringsinntekter.addAll(inntekter);
+            if (inntekter != null) {
+                næringsinntekter.addAll(inntekter);
+            }
             return this;
         }
 
         public Builder medYtelser(Set<InntektForPeriode> inntekter) {
-            ytelser.addAll(inntekter);
+            if (inntekter != null) {
+                ytelser.addAll(inntekter);
+            }
             return this;
         }
 
