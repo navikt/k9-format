@@ -13,9 +13,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ValiderUtil {
 
     private static final UngdomsytelseSøknadValidator validatorSøknad = new UngdomsytelseSøknadValidator();
+    private static final UngdomsytelseInntektrapporteringValidator inntektrapporteringValidator = new UngdomsytelseInntektrapporteringValidator();
+
 
     public static List<Feil> verifyHarFeil(Søknad søknad) {
         final List<Feil> feil = valider(søknad);
+        assertThat(feil).isNotEmpty();
+        return feil;
+    }
+
+    public static List<Feil> verifyHarFeil(UngdomsytelseInntektrapportering inntektrapportering) {
+        final List<Feil> feil = valider(inntektrapportering);
         assertThat(feil).isNotEmpty();
         return feil;
     }
@@ -32,6 +40,12 @@ public class ValiderUtil {
         return feil;
     }
 
+    public static List<Feil> verifyIngenFeil(UngdomsytelseInntektrapportering inntektrapportering) {
+        final List<Feil> feil = valider(inntektrapportering);
+        assertThat(feil).isEmpty();
+        return feil;
+    }
+
     public static List<Feil> verifyIngenFeil(Søknad søknad, List<Periode> gyldigEndringsInterval) {
         final List<Feil> feil = valider(søknad, gyldigEndringsInterval);
         assertThat(feil).isEmpty();
@@ -41,6 +55,14 @@ public class ValiderUtil {
     public static List<Feil> valider(Søknad søknad) {
         try {
             return validatorSøknad.valider(søknad);
+        } catch (ValideringsFeil ex) {
+            return ex.getFeil();
+        }
+    }
+
+    public static List<Feil> valider(UngdomsytelseInntektrapportering inntektrapportering) {
+        try {
+            return inntektrapporteringValidator.valider(inntektrapportering);
         } catch (ValideringsFeil ex) {
             return ex.getFeil();
         }

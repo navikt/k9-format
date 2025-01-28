@@ -54,23 +54,22 @@ public class UngdomsytelseInntektrapportering implements Innsending {
     @JsonManagedReference
     @Valid
     @NotNull
-    @JsonProperty(value = "ytelse", required = true)
+    @JsonProperty(value = "inntekter", required = true)
     private OppgittInntekt inntekter;
 
     @Valid
     @JsonProperty(value = "kildesystem", required = true)
     @NotNull
-    private Kildesystem kildesystem;
-
+    private Kildesystem kildesystem = Kildesystem.SØKNADSDIALOG;
 
 
     @JsonCreator
     public UngdomsytelseInntektrapportering(@JsonProperty(value = "søknadId", required = true) @Valid @NotNull SøknadId søknadId,
-                  @JsonProperty(value = "versjon", required = true) @Valid @NotNull Versjon versjon,
-                  @JsonProperty(value = "mottattDato", required = true) @Valid @NotNull ZonedDateTime mottattDato,
-                  @JsonProperty(value = "søker", required = true) @Valid @NotNull Søker søker,
-                  @JsonProperty(value = "språk", required = false) @Valid Språk språk,
-                  @JsonProperty(value = "inntekter", required = true) @Valid @NotNull OppgittInntekt inntekter) {
+                                            @JsonProperty(value = "versjon", required = true) @Valid @NotNull Versjon versjon,
+                                            @JsonProperty(value = "mottattDato", required = true) @Valid @NotNull ZonedDateTime mottattDato,
+                                            @JsonProperty(value = "søker", required = true) @Valid @NotNull Søker søker,
+                                            @JsonProperty(value = "språk", required = false) @Valid Språk språk,
+                                            @JsonProperty(value = "inntekter", required = true) @Valid @NotNull OppgittInntekt inntekter) {
         this.søknadId = Objects.requireNonNull(søknadId, "søknadId");
         this.versjon = Objects.requireNonNull(versjon, "versjon");
         this.mottattDato = Objects.requireNonNull(mottattDato, "mottattDato");
@@ -80,10 +79,10 @@ public class UngdomsytelseInntektrapportering implements Innsending {
     }
 
     public UngdomsytelseInntektrapportering(@JsonProperty(value = "søknadId", required = true) @Valid @NotNull SøknadId søknadId,
-                  @JsonProperty(value = "versjon", required = true) @Valid @NotNull Versjon versjon,
-                  @JsonProperty(value = "mottattDato", required = true) @Valid @NotNull ZonedDateTime mottattDato,
-                  @JsonProperty(value = "søker", required = true) @Valid @NotNull Søker søker,
-                  @JsonProperty(value = "inntekter", required = true) @Valid @NotNull OppgittInntekt inntekter) {
+                                            @JsonProperty(value = "versjon", required = true) @Valid @NotNull Versjon versjon,
+                                            @JsonProperty(value = "mottattDato", required = true) @Valid @NotNull ZonedDateTime mottattDato,
+                                            @JsonProperty(value = "søker", required = true) @Valid @NotNull Søker søker,
+                                            @JsonProperty(value = "inntekter", required = true) @Valid @NotNull OppgittInntekt inntekter) {
         this(søknadId, versjon, mottattDato, søker, Språk.NORSK_BOKMÅL, inntekter);
     }
 
@@ -129,7 +128,8 @@ public class UngdomsytelseInntektrapportering implements Innsending {
     }
 
     public void setVersjon(Versjon versjon) {
-        this.versjon = Objects.requireNonNull(versjon);;
+        this.versjon = Objects.requireNonNull(versjon);
+        ;
     }
 
     public void setMottattDato(ZonedDateTime mottattDato) {

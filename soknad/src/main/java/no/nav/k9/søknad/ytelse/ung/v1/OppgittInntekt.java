@@ -116,7 +116,7 @@ public class OppgittInntekt {
         // Siden settet er av typen NavigableSet (sortert) trenger vi kun å sjekke forrige element i lista
         while (iterator.hasNext()) {
             final var next = iterator.next();
-            if (prev.inneholder(next.getPeriode())) {
+            if (!prev.getTilOgMed().isBefore(next.getPeriode().getFraOgMed())) {
                 return false;
             }
             prev = next.getPeriode();
