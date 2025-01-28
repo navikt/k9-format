@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import no.nav.k9.søknad.TidUtils;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
+import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.felles.validering.periode.GyldigPeriode;
@@ -32,10 +33,6 @@ public class Ungdomsytelse implements Ytelse {
     @NotNull
     private List<@NotNull @GyldigPeriode(krevFomDato = true) Periode> søknadsperiode = new ArrayList<>();
 
-    @JsonProperty(value = "inntekt")
-    @DecimalMin("0.00")
-    @DecimalMax("1000000.00")
-    private BigDecimal inntekt;
 
     @Override
     public Type getType() {
@@ -87,17 +84,7 @@ public class Ungdomsytelse implements Ytelse {
                 .min(LocalDate::compareTo)
                 .orElseThrow();
 
-        if (søknadType == UngSøknadstype.DELTAKELSE_SØKNAD) {
-            return new Periode(fom, TidUtils.TIDENES_ENDE); // Deltakelse har ingen sluttdato
-        }
-
-        final var tom = perioder
-                .stream()
-                .map(Periode::getTilOgMed)
-                .filter(Objects::nonNull)
-                .max(LocalDate::compareTo)
-                .orElse(null);
-        return new Periode(fom, tom);
+        return new Periode(fom, TidUtils.TIDENES_ENDE); // Deltakelse har ingen sluttdato
     }
 
     public List<Periode> getSøknadsperiodeList() {
@@ -107,15 +94,6 @@ public class Ungdomsytelse implements Ytelse {
             }
             return p;
         }).toList();
-    }
-
-    public BigDecimal getInntekt() {
-        return inntekt;
-    }
-
-    public Ungdomsytelse medInntekt(BigDecimal inntekt) {
-        this.inntekt = Objects.requireNonNull(inntekt, "inntekt");
-        return this;
     }
 
     public Ungdomsytelse medSøknadsperiode(List<Periode> søknadsperiodeList) {
@@ -132,8 +110,4 @@ public class Ungdomsytelse implements Ytelse {
         return søknadType;
     }
 
-    public Ungdomsytelse medSøknadType(UngSøknadstype søknadType) {
-        this.søknadType = Objects.requireNonNull(søknadType, "søknadType");
-        return this;
-    }
 }
