@@ -11,21 +11,22 @@ import no.nav.k9.søknad.felles.validering.AvbrytendeValideringsfeil;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class UngdomsytelseSøknadValidator extends SøknadValidator<Søknad> {
+public class UngdomsytelseInntektrapporteringValidator extends SøknadValidator<UngdomsytelseInntektrapportering> {
 
     private static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
 
     @Override
-    public List<Feil> valider(Søknad søknad) {
+    public List<Feil> valider(UngdomsytelseInntektrapportering søknad) {
         List<Feil> feil = validerSøknadsfelter(søknad);
         return feil;
     }
 
-    public List<Feil> valider(Søknad søknad, List<Periode> gyldigeEndringsperioder) {
+
+    public List<Feil> valider(UngdomsytelseInntektrapportering søknad, List<Periode> gyldigeEndringsperioder) {
         return validerSøknadsfelter(søknad);
     }
 
-    private List<Feil> validerSøknadsfelter(Søknad søknad) {
+    private List<Feil> validerSøknadsfelter(UngdomsytelseInntektrapportering søknad) {
         var validate = VALIDATOR_FACTORY.getValidator().validate(søknad);
 
         List<Feil> feil = validate.stream()

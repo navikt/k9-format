@@ -23,15 +23,15 @@ public abstract class SøknadValidator<S> {
      * Felles validering av felter på søknad. Må kalles eksplisitt på av
      * subklassene til denne klassen hvis den skal brukes,
      * 
-     * @param søknad Søknaden som valideres.
+     * @param innsending Innsendingen som valideres.
      * @param feil En liste der eventuelt feil skal legges til.
      */
-    public final void validerFelterPåSøknad(Søknad søknad, List<Feil> feil) {
-        validerMottattDato(søknad, feil);
-        validerVersjon(søknad.getVersjon(), feil);
+    public final void validerFelterPåSøknad(Innsending innsending, List<Feil> feil) {
+        validerMottattDato(innsending, feil);
+        validerVersjon(innsending.getVersjon(), feil);
     }
     
-    private void validerMottattDato(Søknad søknad, List<Feil> feil) {
+    private void validerMottattDato(Innsending søknad, List<Feil> feil) {
         final int maximumClockSkewSeconds = 10;
         if (søknad.getMottattDato() != null &&
                 søknad.getMottattDato()
