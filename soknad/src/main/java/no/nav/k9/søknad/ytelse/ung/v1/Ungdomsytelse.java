@@ -20,16 +20,18 @@ import java.util.Objects;
 
 public class Ungdomsytelse implements Ytelse {
 
+    @Valid
+    @JsonProperty(value = "søknadType", required = true)
     private UngSøknadstype søknadType = UngSøknadstype.DELTAKELSE_SØKNAD;
 
     @Valid
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
-    @JsonProperty(value = "søknadsperiode", required = true)
+    @JsonProperty(value = "søktFraDatoer", required = true)
     @NotNull
     private List<@NotNull LocalDate> søktFraDatoer = new ArrayList<>();
 
     @Valid
-    @JsonProperty(value = "inntekter", required = true)
+    @JsonProperty(value = "inntekter", required = false)
     private OppgittInntekt inntekter;
 
     @Override

@@ -33,6 +33,10 @@ public class UngdomsytelseSøknadValidator extends SøknadValidator<Søknad> {
             feil.add(new Feil("søktFraDatoer", PÅKREVD, "Deltakelsesøknad må sette minst en startdato"));
         }
 
+        if (ytelse.getSøknadType() == UngSøknadstype.RAPPORTERING_SØKNAD && ytelse.getInntekter() == null) {
+            feil.add(new Feil("inntekter", PÅKREVD, "Rapporteringsinnsending må sette inntekter"));
+        }
+
         return feil;
     }
 
