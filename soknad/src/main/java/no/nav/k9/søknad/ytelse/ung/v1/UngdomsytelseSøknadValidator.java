@@ -22,18 +22,18 @@ public class UngdomsytelseSøknadValidator extends SøknadValidator<Søknad> {
         return feil;
     }
 
+    public List<Feil> valider(Søknad søknad, List<Periode> gyldigeEndringsperioder) {
+        return validerSøknadsfelter(søknad);
+    }
+
     private List<Feil> validerYtelse(Søknad søknad, List<Feil> feil) {
         Ungdomsytelse ytelse = søknad.getYtelse();
 
-        if (ytelse.getSøknadType() == UngSøknadstype.RAPPORTERING_SØKNAD && ytelse.getSøknadsperiode().getTilOgMed() == null) {
-            feil.add(new Feil("søknadsperiode.tilOgMed", PÅKREVD, "Rapporteringssøknad må ha en sluttdato"));
+        if (ytelse.getSøknadType() == UngSøknadstype.DELTAKELSE_SØKNAD && (ytelse.getStartdatoer() == null || ytelse.getStartdatoer().isEmpty())) {
+            feil.add(new Feil("søktFraDatoer", PÅKREVD, "Deltakelsesøknad må sette minst en startdato"));
         }
 
         return feil;
-    }
-
-    public List<Feil> valider(Søknad søknad, List<Periode> gyldigeEndringsperioder) {
-        return validerSøknadsfelter(søknad);
     }
 
     private List<Feil> validerSøknadsfelter(Søknad søknad) {

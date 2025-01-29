@@ -14,6 +14,7 @@ public class ValiderUtil {
 
     private static final UngdomsytelseSøknadValidator validatorSøknad = new UngdomsytelseSøknadValidator();
 
+
     public static List<Feil> verifyHarFeil(Søknad søknad) {
         final List<Feil> feil = valider(søknad);
         assertThat(feil).isNotEmpty();
@@ -45,6 +46,7 @@ public class ValiderUtil {
             return ex.getFeil();
         }
     }
+
 
     public static List<Feil> valider(Søknad søknad, List<Periode> gyldigEndringsInterval) {
         try {
