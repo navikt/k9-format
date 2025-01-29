@@ -29,7 +29,6 @@ public class Ungdomsytelse implements Ytelse {
     private List<@NotNull LocalDate> søktFraDatoer = new ArrayList<>();
 
     @Valid
-    @NotNull
     @JsonProperty(value = "inntekter", required = true)
     private OppgittInntekt inntekter;
 
