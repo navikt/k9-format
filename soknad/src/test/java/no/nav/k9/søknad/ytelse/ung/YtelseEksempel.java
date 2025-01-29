@@ -1,13 +1,14 @@
 package no.nav.k9.søknad.ytelse.ung;
 
-import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.ung.v1.Ungdomsytelse;
+
+import java.time.LocalDate;
 
 public class YtelseEksempel {
 
-    public static Ungdomsytelse komplettYtelseMedSøknadsperiode(Periode søknadsperiode) {
+    public static Ungdomsytelse komplettYtelseMedSøknadsperiode(LocalDate fraOgMed) {
 
         return new Ungdomsytelse()
-                .medSøknadsperiode(søknadsperiode);
+                .medStartdato(fraOgMed);
     }
 }

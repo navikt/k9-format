@@ -7,8 +7,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import no.nav.k9.søknad.felles.type.Periode;
-import no.nav.k9.søknad.ytelse.ung.v1.inntekt.InntektForPeriode;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -20,96 +20,59 @@ public class OppgittInntekt {
     /**
      * Inntekter i periode som arbeidstaker og/eller frilans
      */
-    @JsonProperty(value = "arbeidstakerOgFrilansInntekter")
+    @JsonProperty(value = "oppgittePeriodeinntekter")
     @Valid
     @NotNull
-    private NavigableSet<InntektForPeriode> arbeidstakerOgFrilansInntekter;
-
-    /**
-     * Inntekter i periode som selvstendig næringsdrivende.
-     */
-    @JsonProperty(value = "næringsinntekter")
-    @Valid
-    @NotNull
-    private NavigableSet<InntektForPeriode> næringsinntekter;
-
-    /**
-     * Inntekter i periode som ytelse
-     */
-    @JsonProperty(value = "ytelser")
-    @Valid
-    @NotNull
-    private NavigableSet<InntektForPeriode> ytelser;
-
+    @Size(min = 1)
+    private NavigableSet<@NotNull OppgittInntektForPeriode> oppgittePeriodeinntekter;
 
     @JsonCreator
-    public OppgittInntekt(@JsonProperty(value = "arbeidstakerOgFrilansInntekter") Set<InntektForPeriode> arbeidstakerOgFrilansInntekter,
-                          @JsonProperty(value = "næringsinntekter") Set<InntektForPeriode> næringsinntekter,
-                          @JsonProperty(value = "ytelser") Set<InntektForPeriode> ytelser) {
-        this.arbeidstakerOgFrilansInntekter = (arbeidstakerOgFrilansInntekter == null) ? Collections.emptyNavigableSet()
-                : Collections.unmodifiableNavigableSet(new TreeSet<>(arbeidstakerOgFrilansInntekter));
-        this.næringsinntekter = (næringsinntekter == null) ? Collections.emptyNavigableSet()
-                : Collections.unmodifiableNavigableSet(new TreeSet<>(næringsinntekter));
-        this.ytelser = (ytelser == null) ? Collections.emptyNavigableSet()
-                : Collections.unmodifiableNavigableSet(new TreeSet<>(ytelser));
+    public OppgittInntekt(@JsonProperty(value = "oppgittePeriodeinntekter") Set<OppgittInntektForPeriode> oppgittePeriodeinntekter) {
+        this.oppgittePeriodeinntekter = (oppgittePeriodeinntekter == null) ? Collections.emptyNavigableSet()
+                : Collections.unmodifiableNavigableSet(new TreeSet<>(oppgittePeriodeinntekter));
     }
 
     public static Builder builder() {
         return new Builder();
     }
 
-    public NavigableSet<InntektForPeriode> getArbeidstakerOgFrilansInntekter() {
-        return arbeidstakerOgFrilansInntekter;
+    public NavigableSet<OppgittInntektForPeriode> getOppgittePeriodeinntekter() {
+        return oppgittePeriodeinntekter;
     }
 
-    public NavigableSet<InntektForPeriode> getNæringsinntekter() {
-        return næringsinntekter;
-    }
-
-    public NavigableSet<InntektForPeriode> getYtelser() {
-        return ytelser;
+    public Periode getMinMaksPeriode() {
+        final var first = oppgittePeriodeinntekter.first();
+        final var last = oppgittePeriodeinntekter.last();
+        return new Periode(first.getPeriode().getFraOgMed(), last.getPeriode().getTilOgMed());
     }
 
     public static final class Builder {
-        private Set<InntektForPeriode> arbeidstakerOgFrilansInntekter = new LinkedHashSet<>();
-        private Set<InntektForPeriode> næringsinntekter = new LinkedHashSet<>();
-        private Set<InntektForPeriode> ytelser = new LinkedHashSet<>();
+        private Set<OppgittInntektForPeriode> oppgittePeriodeinntekter = new LinkedHashSet<>();
 
         private Builder() {
         }
 
-        public Builder medArbeidstakerOgFrilansinntekter(Set<InntektForPeriode> inntekter) {
+        public Builder medOppgittePeriodeinntekter(Set<OppgittInntektForPeriode> inntekter) {
             if (inntekter != null) {
-                arbeidstakerOgFrilansInntekter.addAll(inntekter);
-            }
-            return this;
-        }
-
-        public Builder medNæringsinntekter(Set<InntektForPeriode> inntekter) {
-            if (inntekter != null) {
-                næringsinntekter.addAll(inntekter);
-            }
-            return this;
-        }
-
-        public Builder medYtelser(Set<InntektForPeriode> inntekter) {
-            if (inntekter != null) {
-                ytelser.addAll(inntekter);
+                oppgittePeriodeinntekter.addAll(inntekter);
             }
             return this;
         }
 
         public OppgittInntekt build() {
-            return new OppgittInntekt(arbeidstakerOgFrilansInntekter, næringsinntekter, ytelser);
+            if (oppgittePeriodeinntekter.isEmpty()) {
+                throw new IllegalStateException("Må oppgi minst en periodeinntekt");
+            }
+            return new OppgittInntekt(oppgittePeriodeinntekter);
         }
     }
 
     @AssertTrue(message = "Perioder for inntekt kan ikke overlappe")
     public boolean isHarIngenOverlappendePerioder() {
-        return harIngenOverlapp(arbeidstakerOgFrilansInntekter) && harIngenOverlapp(næringsinntekter) && harIngenOverlapp(ytelser);
+        return harIngenOverlapp(oppgittePeriodeinntekter);
     }
 
-    private boolean harIngenOverlapp(NavigableSet<InntektForPeriode> set) {
+    private boolean harIngenOverlapp(@Valid @NotNull NavigableSet<@NotNull OppgittInntektForPeriode> set) {
         final var iterator = set.iterator();
         // Initialiserer til første mulige periode
         var prev = new Periode(LocalDate.MIN, LocalDate.MIN);
