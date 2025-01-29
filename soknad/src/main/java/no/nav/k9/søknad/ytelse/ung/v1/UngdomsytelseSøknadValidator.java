@@ -30,7 +30,7 @@ public class UngdomsytelseSøknadValidator extends SøknadValidator<Søknad> {
         Ungdomsytelse ytelse = søknad.getYtelse();
 
         if (ytelse.getSøknadType() == UngSøknadstype.DELTAKELSE_SØKNAD && (ytelse.getStartdatoer() == null || ytelse.getStartdatoer().isEmpty())) {
-            feil.add(new Feil("søktFraDatoer", PÅKREVD, "Rapporteringssøknad må ha en sluttdato"));
+            feil.add(new Feil("søktFraDatoer", PÅKREVD, "Deltakelsesøknad må sette minst en startdato"));
         }
 
         return feil;

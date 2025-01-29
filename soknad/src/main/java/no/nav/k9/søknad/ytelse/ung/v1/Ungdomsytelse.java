@@ -113,6 +113,12 @@ public class Ungdomsytelse implements Ytelse {
     }
 
 
+    public Ungdomsytelse medSøknadType(UngSøknadstype søknadType) {
+        this.søknadType = Objects.requireNonNull(søknadType, "søknadType");
+        return this;
+    }
+
+
     public UngSøknadstype getSøknadType() {
         return søknadType;
     }

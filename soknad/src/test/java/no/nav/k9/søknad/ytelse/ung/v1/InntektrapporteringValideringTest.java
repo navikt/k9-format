@@ -72,7 +72,7 @@ class InntektrapporteringValideringTest {
                 new Versjon("6.0.1"),
                 ZonedDateTime.now(),
                 new Søker(NorskIdentitetsnummer.of("22222222222")),
-                        new Ungdomsytelse().medInntekter(inntekter)
+                        new Ungdomsytelse().medInntekter(inntekter).medSøknadType(UngSøknadstype.RAPPORTERING_SØKNAD)
         );
     }
 
