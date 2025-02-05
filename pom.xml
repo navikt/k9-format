@@ -23,7 +23,7 @@
         <revision>9.0.0</revision>
         <sha1></sha1>
         <changelist>-SNAPSHOT</changelist>
-        <java.version>17</java.version>
+        <java.version>21</java.version>
         <junit.version>5.11.4</junit.version>
 
         <maven.compiler.source>${java.version}</maven.compiler.source>
