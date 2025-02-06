@@ -18,6 +18,7 @@ import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
+import no.nav.k9.søknad.ytelse.olp.v1.kurs.Kursholder;
 import no.nav.k9.søknad.ytelse.olp.v1.kurs.Reise;
 
 class OpplæringspengerYtelseValidator extends YtelseValidator {
@@ -98,6 +99,7 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
 
         validerReise(olp.getKurs().getReise(), "kurs.reise", feilene);
         validerReisetidMotKursperioden(olp.getKurs().getKursperioder(), olp.getKurs().getReise(), "kurs.reise", feilene);
+        validerKursholder(olp.getKurs().getKursholder(), feilene);
 
         return feilene;
     }
@@ -154,6 +156,12 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
                     feil.add(lagFeil(felt, "ugyldigReise", "Reisedagen er ikke innenfor en kursperiode: " + reisedag));
                 }
             }
+        }
+    }
+
+    private void validerKursholder(Kursholder kursholder, List<Feil> feilene) {
+        if (kursholder.getInstitusjonUuid() == null && (kursholder.getNavn() == null || kursholder.getNavn().isEmpty())) {
+            feilene.add(lagFeil("kurs.kursholder", "påkrevd", "Enten id eller navn på institusjon må være satt"));
         }
     }
 
