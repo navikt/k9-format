@@ -32,6 +32,14 @@ public class OmsorgspengerKroniskSyktBarn implements OmsorgspengerUtvidetRett {
     @NotNull
     private Boolean kroniskEllerFunksjonshemming;
 
+    @JsonProperty(value = "høyereRisikoForFravær")
+    @Valid
+    private Boolean høyereRisikoForFravær;
+
+    @JsonProperty(value = "høyereRisikoForFraværBeskrivelse")
+    @Valid
+    private String høyereRisikoForFraværBeskrivelse;
+
     @JsonProperty(value = "dataBruktTilUtledning")
     @Valid
     private DataBruktTilUtledning dataBruktTilUtledning;
@@ -40,8 +48,12 @@ public class OmsorgspengerKroniskSyktBarn implements OmsorgspengerUtvidetRett {
     }
 
     @JsonCreator
-    public OmsorgspengerKroniskSyktBarn(@JsonProperty(value = "barn", required = true) @Valid @NotNull Barn barn,
-                                        @JsonProperty(value = "kroniskEllerFunksjonshemming") @Valid @NotNull Boolean kroniskEllerFunksjonshemming) {
+    public OmsorgspengerKroniskSyktBarn(
+            @JsonProperty(value = "barn", required = true) @Valid @NotNull Barn barn,
+            @JsonProperty(value = "kroniskEllerFunksjonshemming") @Valid @NotNull Boolean kroniskEllerFunksjonshemming,
+            @JsonProperty(value = "høyereRisikoForFravær") @Valid Boolean høyereRisikoForFravær,
+            @JsonProperty(value = "høyereRisikoForFraværBeskrivelse") @Valid String høyereRisikoForFraværBeskrivelse
+    ) {
         this.barn = Objects.requireNonNull(barn, "barn");
         this.kroniskEllerFunksjonshemming = Objects.requireNonNull(kroniskEllerFunksjonshemming, "kroniskEllerFunksjonshemming");
     }
@@ -109,6 +121,14 @@ public class OmsorgspengerKroniskSyktBarn implements OmsorgspengerUtvidetRett {
 
     public Boolean getKroniskEllerFunksjonshemming() {
         return kroniskEllerFunksjonshemming;
+    }
+
+    public Boolean getHøyereRisikoForFravær() {
+        return høyereRisikoForFravær;
+    }
+
+    public String getHøyereRisikoForFraværBeskrivelse() {
+        return høyereRisikoForFraværBeskrivelse;
     }
 
     /** @deprecated bruk istedet {@link OmsorgspengerKroniskSyktBarnSøknadValidator} */
