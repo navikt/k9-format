@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;
@@ -32,16 +35,38 @@ public class OmsorgspengerKroniskSyktBarn implements OmsorgspengerUtvidetRett {
     @NotNull
     private Boolean kroniskEllerFunksjonshemming;
 
+    @JsonProperty(value = "høyereRisikoForFravær")
+    @Valid
+    private Boolean høyereRisikoForFravær;
+
+    @JsonProperty(value = "høyereRisikoForFraværBeskrivelse")
+    @Valid
+    @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}§]+$", message = "[${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
+    @Size(min = 1, max = 1000, message = "Må være mellom 1 og 1000 tegn")
+    private String høyereRisikoForFraværBeskrivelse;
+
     @JsonProperty(value = "dataBruktTilUtledning")
     @Valid
     private DataBruktTilUtledning dataBruktTilUtledning;
+
+    @AssertTrue(message = "høyereRisikoForFraværBeskrivelse er påkrevd dersom høyereRisikoForFraværBeskrivelse er true")
+    private boolean finnesBeskrivesleForHøyereRisikoForFravær() {
+        if(Boolean.TRUE.equals(høyereRisikoForFravær)) {
+            return høyereRisikoForFraværBeskrivelse != null;
+        }
+        return true;
+    }
 
     public OmsorgspengerKroniskSyktBarn() {
     }
 
     @JsonCreator
-    public OmsorgspengerKroniskSyktBarn(@JsonProperty(value = "barn", required = true) @Valid @NotNull Barn barn,
-                                        @JsonProperty(value = "kroniskEllerFunksjonshemming") @Valid @NotNull Boolean kroniskEllerFunksjonshemming) {
+    public OmsorgspengerKroniskSyktBarn(
+            @JsonProperty(value = "barn", required = true) @Valid @NotNull Barn barn,
+            @JsonProperty(value = "kroniskEllerFunksjonshemming") @Valid @NotNull Boolean kroniskEllerFunksjonshemming,
+            @JsonProperty(value = "høyereRisikoForFravær") @Valid Boolean høyereRisikoForFravær,
+            @JsonProperty(value = "høyereRisikoForFraværBeskrivelse") @Valid String høyereRisikoForFraværBeskrivelse
+    ) {
         this.barn = Objects.requireNonNull(barn, "barn");
         this.kroniskEllerFunksjonshemming = Objects.requireNonNull(kroniskEllerFunksjonshemming, "kroniskEllerFunksjonshemming");
     }
@@ -109,6 +134,14 @@ public class OmsorgspengerKroniskSyktBarn implements OmsorgspengerUtvidetRett {
 
     public Boolean getKroniskEllerFunksjonshemming() {
         return kroniskEllerFunksjonshemming;
+    }
+
+    public Boolean getHøyereRisikoForFravær() {
+        return høyereRisikoForFravær;
+    }
+
+    public String getHøyereRisikoForFraværBeskrivelse() {
+        return høyereRisikoForFraværBeskrivelse;
     }
 
     /** @deprecated bruk istedet {@link OmsorgspengerKroniskSyktBarnSøknadValidator} */
