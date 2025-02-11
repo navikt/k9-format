@@ -69,6 +69,8 @@ public class OmsorgspengerKroniskSyktBarn implements OmsorgspengerUtvidetRett {
     ) {
         this.barn = Objects.requireNonNull(barn, "barn");
         this.kroniskEllerFunksjonshemming = Objects.requireNonNull(kroniskEllerFunksjonshemming, "kroniskEllerFunksjonshemming");
+        this.høyereRisikoForFravær = høyereRisikoForFravær;
+        this.høyereRisikoForFraværBeskrivelse = høyereRisikoForFraværBeskrivelse;
     }
 
     public OmsorgspengerKroniskSyktBarn medBarn(Barn barn) {
