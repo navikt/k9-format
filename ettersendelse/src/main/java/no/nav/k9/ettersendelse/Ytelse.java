@@ -23,5 +23,7 @@ public enum Ytelse {
 
     /** Omsorgspenger dele omsorgsdager*/
     OMP_DELE_DAGER,
+
+    OPPLÆRINGSPENGER,
     ;
 }
