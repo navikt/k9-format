@@ -17,6 +17,7 @@
         <module>soknad-frisinn</module>
         <module>ettersendelse</module>
         <module>konstant</module>
+        <module>oppgave</module>
     </modules>
 
     <properties>
@@ -87,6 +88,11 @@
             <dependency>
                 <groupId>no.nav.k9</groupId>
                 <artifactId>ettersendelse</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>no.nav.k9</groupId>
+                <artifactId>oppgave</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
