@@ -69,7 +69,7 @@ public class OppgaveBekreftelse implements Innsending {
                               @JsonProperty(value = "mottattDato", required = true) @Valid @NotNull ZonedDateTime mottattDato,
                               @JsonProperty(value = "søker", required = true) @Valid @NotNull Søker søker,
                               @JsonProperty(value = "språk", required = false) @Valid Språk språk,
-                              @JsonProperty(value = "ytelse", required = true) @Valid @NotNull Bekreftelse bekreftelse) {
+                              @JsonProperty(value = "bekreftelse", required = true) @Valid @NotNull Bekreftelse bekreftelse) {
         this.søknadId = Objects.requireNonNull(søknadId, "søknadId");
         this.versjon = Objects.requireNonNull(versjon, "versjon");
         this.mottattDato = Objects.requireNonNull(mottattDato, "mottattDato");
@@ -182,7 +182,7 @@ public class OppgaveBekreftelse implements Innsending {
     }
 
     public OppgaveBekreftelse medBekreftelse(Bekreftelse bekreftelse) {
-        this.bekreftelse = Objects.requireNonNull(bekreftelse, "ytelse");
+        this.bekreftelse = Objects.requireNonNull(bekreftelse, "bekreftelse");
         return this;
     }
     

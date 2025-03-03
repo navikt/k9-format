@@ -3,7 +3,19 @@ package no.nav.k9.oppgave.bekreftelse.ung.periodeendring;
 import no.nav.k9.oppgave.bekreftelse.Bekreftelse;
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 
+import java.time.LocalDate;
+
 public class EndretFomDatoBekreftelse implements Bekreftelse {
+
+    private LocalDate nyFomDato;
+
+    public EndretFomDatoBekreftelse(LocalDate nyFomDato) {
+        this.nyFomDato = nyFomDato;
+    }
+
+    public LocalDate getNyFomDato() {
+        return nyFomDato;
+    }
 
     @Override
     public Type getType() {
