@@ -21,7 +21,7 @@ import java.util.Optional;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-public class Oppgave implements Innsending {
+public class OppgaveBekreftelse implements Innsending {
 
     @Valid
     @NotNull
@@ -59,17 +59,17 @@ public class Oppgave implements Innsending {
     @JsonProperty(value = "kildesystem", required = false)
     private Kildesystem kildesystem;
 
-    public Oppgave() {
+    public OppgaveBekreftelse() {
         //
     }
 
     @JsonCreator
-    public Oppgave(@JsonProperty(value = "søknadId", required = true) @Valid @NotNull SøknadId søknadId,
-                   @JsonProperty(value = "versjon", required = true) @Valid @NotNull Versjon versjon,
-                   @JsonProperty(value = "mottattDato", required = true) @Valid @NotNull ZonedDateTime mottattDato,
-                   @JsonProperty(value = "søker", required = true) @Valid @NotNull Søker søker,
-                   @JsonProperty(value = "språk", required = false) @Valid Språk språk,
-                   @JsonProperty(value = "ytelse", required = true) @Valid @NotNull Bekreftelse bekreftelse) {
+    public OppgaveBekreftelse(@JsonProperty(value = "søknadId", required = true) @Valid @NotNull SøknadId søknadId,
+                              @JsonProperty(value = "versjon", required = true) @Valid @NotNull Versjon versjon,
+                              @JsonProperty(value = "mottattDato", required = true) @Valid @NotNull ZonedDateTime mottattDato,
+                              @JsonProperty(value = "søker", required = true) @Valid @NotNull Søker søker,
+                              @JsonProperty(value = "språk", required = false) @Valid Språk språk,
+                              @JsonProperty(value = "ytelse", required = true) @Valid @NotNull Bekreftelse bekreftelse) {
         this.søknadId = Objects.requireNonNull(søknadId, "søknadId");
         this.versjon = Objects.requireNonNull(versjon, "versjon");
         this.mottattDato = Objects.requireNonNull(mottattDato, "mottattDato");
@@ -78,11 +78,11 @@ public class Oppgave implements Innsending {
         this.språk = språk;
     }
 
-    public Oppgave(@JsonProperty(value = "søknadId", required = true) @Valid @NotNull SøknadId søknadId,
-                   @JsonProperty(value = "versjon", required = true) @Valid @NotNull Versjon versjon,
-                   @JsonProperty(value = "mottattDato", required = true) @Valid @NotNull ZonedDateTime mottattDato,
-                   @JsonProperty(value = "søker", required = true) @Valid @NotNull Søker søker,
-                   @JsonProperty(value = "bekreftelse", required = true) @Valid @NotNull Bekreftelse bekreftelse) {
+    public OppgaveBekreftelse(@JsonProperty(value = "søknadId", required = true) @Valid @NotNull SøknadId søknadId,
+                              @JsonProperty(value = "versjon", required = true) @Valid @NotNull Versjon versjon,
+                              @JsonProperty(value = "mottattDato", required = true) @Valid @NotNull ZonedDateTime mottattDato,
+                              @JsonProperty(value = "søker", required = true) @Valid @NotNull Søker søker,
+                              @JsonProperty(value = "bekreftelse", required = true) @Valid @NotNull Bekreftelse bekreftelse) {
         this(søknadId, versjon, mottattDato, søker, Språk.NORSK_BOKMÅL, bekreftelse);
     }
 
@@ -146,48 +146,48 @@ public class Oppgave implements Innsending {
         this.kildesystem = kildesystem;
     }
 
-    public Oppgave medMottattDato(ZonedDateTime mottattDato) {
+    public OppgaveBekreftelse medMottattDato(ZonedDateTime mottattDato) {
         this.mottattDato = Objects.requireNonNull(mottattDato, "mottattDato");
         return this;
     }
 
-    public Oppgave medSpråk(Språk språk) {
+    public OppgaveBekreftelse medSpråk(Språk språk) {
         this.språk = språk;
         return this;
     }
 
-    public Oppgave medSøknadId(String søknadId) {
+    public OppgaveBekreftelse medSøknadId(String søknadId) {
         this.søknadId = new SøknadId(Objects.requireNonNull(søknadId, "søknadId"));
         return this;
     }
 
-    public Oppgave medSøknadId(SøknadId søknadId) {
+    public OppgaveBekreftelse medSøknadId(SøknadId søknadId) {
         this.søknadId = Objects.requireNonNull(søknadId, "søknadId");
         return this;
     }
 
-    public Oppgave medVersjon(String versjon) {
+    public OppgaveBekreftelse medVersjon(String versjon) {
         this.versjon = new Versjon(Objects.requireNonNull(versjon, "versjon"));
         return this;
     }
 
-    public Oppgave medVersjon(Versjon versjon) {
+    public OppgaveBekreftelse medVersjon(Versjon versjon) {
         this.versjon = Objects.requireNonNull(versjon, "versjon");
         return this;
     }
 
-    public Oppgave medSøker(Søker søker) {
+    public OppgaveBekreftelse medSøker(Søker søker) {
         this.søker = Objects.requireNonNull(søker, "søker");
         return this;
     }
 
-    public Oppgave medBekreftelse(Bekreftelse bekreftelse) {
+    public OppgaveBekreftelse medBekreftelse(Bekreftelse bekreftelse) {
         this.bekreftelse = Objects.requireNonNull(bekreftelse, "ytelse");
         return this;
     }
     
 
-    public Oppgave medKildesystem(Kildesystem kildesystem) {
+    public OppgaveBekreftelse medKildesystem(Kildesystem kildesystem) {
         this.kildesystem = kildesystem;
         return this;
     }
@@ -196,17 +196,17 @@ public class Oppgave implements Innsending {
         private SerDes() {
         }
 
-        public static String serialize(Oppgave oppgave) {
+        public static String serialize(OppgaveBekreftelse oppgave) {
             return JsonUtils.toString(oppgave);
         }
 
-        public static Oppgave deserialize(String oppgave) {
-            return JsonUtils.fromString(oppgave, Oppgave.class);
+        public static OppgaveBekreftelse deserialize(String oppgave) {
+            return JsonUtils.fromString(oppgave, OppgaveBekreftelse.class);
         }
 
-        public static Oppgave deserialize(ObjectNode node) {
+        public static OppgaveBekreftelse deserialize(ObjectNode node) {
             try {
-                return JsonUtils.getObjectMapper().treeToValue(node, Oppgave.class);
+                return JsonUtils.getObjectMapper().treeToValue(node, OppgaveBekreftelse.class);
             } catch (IOException e) {
                 throw new IllegalArgumentException("Kunne ikke konvertere til Oppgave.class", e);
             }
