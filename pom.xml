@@ -17,7 +17,7 @@
         <module>soknad-frisinn</module>
         <module>ettersendelse</module>
         <module>konstant</module>
-        <module>oppgave</module>
+        <module>oppgave-ungdomsytelse</module>
     </modules>
 
     <properties>
@@ -92,7 +92,7 @@
             </dependency>
             <dependency>
                 <groupId>no.nav.k9</groupId>
-                <artifactId>oppgave</artifactId>
+                <artifactId>oppgave-ungdomsytelse</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
