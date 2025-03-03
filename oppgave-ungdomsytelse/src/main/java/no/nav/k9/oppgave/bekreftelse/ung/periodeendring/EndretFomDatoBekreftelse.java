@@ -9,6 +9,7 @@ public class EndretFomDatoBekreftelse implements DatoEndring {
 
     private LocalDate nyFomDato;
     private boolean harBrukerGodtattEndringen;
+    private DataBruktTilUtledning dataBruktTilUtledning;
 
 
     public EndretFomDatoBekreftelse(LocalDate nyFomDato, boolean harBrukerGodtattEndringen) {
@@ -27,11 +28,12 @@ public class EndretFomDatoBekreftelse implements DatoEndring {
 
     @Override
     public DataBruktTilUtledning getDataBruktTilUtledning() {
-        return new DataBruktTilUtledning();
+        return dataBruktTilUtledning;
     }
 
     @Override
     public Bekreftelse medDataBruktTilUtledning(DataBruktTilUtledning dataBruktTilUtledning) {
+        this.dataBruktTilUtledning = dataBruktTilUtledning;
         return this;
     }
 
