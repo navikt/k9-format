@@ -5,16 +5,24 @@ import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 
 import java.time.LocalDate;
 
-public class EndretTomDatoBekreftelse implements Bekreftelse {
+public class EndretTomDatoBekreftelse implements DatoEndring {
 
     private LocalDate nyTomDato;
+    private boolean harBrukerGodtattEndringen;
 
-    public EndretTomDatoBekreftelse(LocalDate nyTomDato) {
+    public EndretTomDatoBekreftelse(LocalDate nyTomDato, boolean harBrukerGodtattEndringen) {
         this.nyTomDato = nyTomDato;
+        this.harBrukerGodtattEndringen = harBrukerGodtattEndringen;
     }
 
-    public LocalDate getNyTomDato() {
+    @Override
+    public LocalDate getNyDato() {
         return nyTomDato;
+    }
+
+    @Override
+    public boolean harBrukerGodtattEndringen() {
+        return harBrukerGodtattEndringen;
     }
 
     @Override
