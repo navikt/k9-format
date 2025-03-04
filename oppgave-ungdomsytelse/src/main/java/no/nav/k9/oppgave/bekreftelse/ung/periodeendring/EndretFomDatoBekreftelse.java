@@ -1,5 +1,7 @@
 package no.nav.k9.oppgave.bekreftelse.ung.periodeendring;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.oppgave.bekreftelse.Bekreftelse;
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 
@@ -11,8 +13,10 @@ public class EndretFomDatoBekreftelse implements DatoEndring {
     private boolean harBrukerGodtattEndringen;
     private DataBruktTilUtledning dataBruktTilUtledning;
 
-
-    public EndretFomDatoBekreftelse(LocalDate nyFomDato, boolean harBrukerGodtattEndringen) {
+    @JsonCreator
+    public EndretFomDatoBekreftelse(
+            @JsonProperty("nyFomDato") LocalDate nyFomDato,
+            @JsonProperty("harBrukerGodtattEndringen") boolean harBrukerGodtattEndringen) {
         this.nyFomDato = nyFomDato;
         this.harBrukerGodtattEndringen = harBrukerGodtattEndringen;
     }
