@@ -9,8 +9,13 @@ import java.time.LocalDate;
 
 public class EndretFomDatoBekreftelse implements DatoEndring {
 
+    @JsonProperty("nyFomDato")
     private LocalDate nyFomDato;
+
+    @JsonProperty("harBrukerGodtattEndringen")
     private boolean harBrukerGodtattEndringen;
+
+    @JsonProperty("dataBruktTilUtledning")
     private DataBruktTilUtledning dataBruktTilUtledning;
 
     @JsonCreator
