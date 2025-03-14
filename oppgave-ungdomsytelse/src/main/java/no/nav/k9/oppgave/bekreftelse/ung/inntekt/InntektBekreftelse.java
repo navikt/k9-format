@@ -88,7 +88,7 @@ public class InntektBekreftelse implements Uttalelse {
 
     @Override
     public boolean harBrukerGodtattEndringen() {
-        return false;
+        return harBrukerGodtattEndringen;
     }
 
     public static final class Builder {
