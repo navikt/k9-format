@@ -31,13 +31,6 @@ public class OppgittInntektForPeriode implements Comparable<OppgittInntektForPer
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal arbeidstakerOgFrilansInntekt;
 
-    @JsonProperty(value = "næringsinntekt", required = false)
-    @Valid
-    @DecimalMin(MIN)
-    @DecimalMax(MAX)
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private BigDecimal næringsinntekt;
-
     @JsonProperty(value = "ytelse", required = false)
     @Valid
     @DecimalMin(MIN)
@@ -47,12 +40,9 @@ public class OppgittInntektForPeriode implements Comparable<OppgittInntektForPer
 
 
     @JsonCreator
-    public OppgittInntektForPeriode(@JsonProperty(value = "arbeidstakerOgFrilansInntekt") BigDecimal arbeidstakerOgFrilansInntekt,
-                                    @JsonProperty(value = "næringsinntekt") BigDecimal næringsinntekt,
-                                    @JsonProperty(value = "ytelse") BigDecimal ytelse,
-                                    @JsonProperty(value = "periode") Periode periode) {
+    public OppgittInntektForPeriode(@JsonProperty(value = "periode") Periode periode, @JsonProperty(value = "arbeidstakerOgFrilansInntekt") BigDecimal arbeidstakerOgFrilansInntekt,
+                                    @JsonProperty(value = "ytelse") BigDecimal ytelse) {
         this.arbeidstakerOgFrilansInntekt = arbeidstakerOgFrilansInntekt;
-        this.næringsinntekt = næringsinntekt;
         this.ytelse = ytelse;
         this.periode = periode;
     }
@@ -67,10 +57,6 @@ public class OppgittInntektForPeriode implements Comparable<OppgittInntektForPer
 
     public BigDecimal getArbeidstakerOgFrilansInntekt() {
         return arbeidstakerOgFrilansInntekt;
-    }
-
-    public BigDecimal getNæringsinntekt() {
-        return næringsinntekt;
     }
 
     public BigDecimal getYtelse() {
@@ -88,18 +74,16 @@ public class OppgittInntektForPeriode implements Comparable<OppgittInntektForPer
         OppgittInntektForPeriode that = (OppgittInntektForPeriode) o;
         return Objects.equals(periode, that.periode) &&
                 Objects.equals(arbeidstakerOgFrilansInntekt, that.arbeidstakerOgFrilansInntekt) &&
-                Objects.equals(næringsinntekt, that.næringsinntekt) &&
                 Objects.equals(ytelse, that.ytelse);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(periode, arbeidstakerOgFrilansInntekt, næringsinntekt, ytelse);
+        return Objects.hash(periode, arbeidstakerOgFrilansInntekt, ytelse);
     }
 
     public static final class Builder {
         private BigDecimal arbeidstakerOgFrilansInntekt;
-        private BigDecimal næringsinntekt;
         private BigDecimal ytelse;
         private Periode periode;
 
@@ -112,18 +96,13 @@ public class OppgittInntektForPeriode implements Comparable<OppgittInntektForPer
             return this;
         }
 
-        public Builder medNæringsinntekt(BigDecimal inntekt) {
-            this.næringsinntekt = inntekt;
-            return this;
-        }
-
         public Builder medYtelse(BigDecimal inntekt) {
             this.ytelse = inntekt;
             return this;
         }
 
         public OppgittInntektForPeriode build() {
-            return new OppgittInntektForPeriode(arbeidstakerOgFrilansInntekt, næringsinntekt, ytelse, periode);
+            return new OppgittInntektForPeriode(periode, arbeidstakerOgFrilansInntekt, ytelse);
         }
     }
 

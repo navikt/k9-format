@@ -42,7 +42,9 @@ public class InntektBekreftelse implements Uttalelse {
 
 
     @JsonCreator
-    public InntektBekreftelse(@JsonProperty(value = "oppgittePeriodeinntekter") Set<OppgittInntektForPeriode> oppgittePeriodeinntekter, boolean harBrukerGodtattEndringen, String uttalelseFraBruker) {
+    public InntektBekreftelse(@JsonProperty(value = "oppgittePeriodeinntekter") Set<OppgittInntektForPeriode> oppgittePeriodeinntekter,
+                              @JsonProperty(value = "harBrukerGodtattEndringen") boolean harBrukerGodtattEndringen,
+                              @JsonProperty(value = "uttalelseFraBruker") String uttalelseFraBruker) {
         this.oppgittePeriodeinntekter = (oppgittePeriodeinntekter == null) ? Collections.emptyNavigableSet()
                 : Collections.unmodifiableNavigableSet(new TreeSet<>(oppgittePeriodeinntekter));
         this.uttalelseFraBruker = uttalelseFraBruker;
