@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.ytelse.ung.v1;
+package no.nav.k9.søknad.ytelse.ung.v1.inntekt;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;

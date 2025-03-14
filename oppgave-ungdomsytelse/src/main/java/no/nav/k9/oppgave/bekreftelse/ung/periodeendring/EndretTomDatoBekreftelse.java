@@ -15,6 +15,9 @@ public class EndretTomDatoBekreftelse implements DatoEndring {
     @JsonProperty("harBrukerGodtattEndringen")
     private boolean harBrukerGodtattEndringen;
 
+    @JsonProperty("uttalelseFraBruker")
+    private String uttalelseFraBruker;
+
     @JsonProperty("dataBruktTilUtledning")
     private DataBruktTilUtledning dataBruktTilUtledning;
 
@@ -32,6 +35,11 @@ public class EndretTomDatoBekreftelse implements DatoEndring {
     }
 
     @Override
+    public String getUttalelseFraBruker() {
+        return null;
+    }
+
+    @Override
     public boolean harBrukerGodtattEndringen() {
         return harBrukerGodtattEndringen;
     }
@@ -44,6 +52,17 @@ public class EndretTomDatoBekreftelse implements DatoEndring {
     @Override
     public DataBruktTilUtledning getDataBruktTilUtledning() {
         return dataBruktTilUtledning;
+    }
+
+
+    public Bekreftelse medUttalelseFraBruker(String uttalelseFraBruker) {
+        this.uttalelseFraBruker = uttalelseFraBruker;
+        return this;
+    }
+
+    public Bekreftelse medHarBrukerGodtattEndringen(boolean harBrukerGodtattEndringen) {
+        this.harBrukerGodtattEndringen = harBrukerGodtattEndringen;
+        return this;
     }
 
     @Override

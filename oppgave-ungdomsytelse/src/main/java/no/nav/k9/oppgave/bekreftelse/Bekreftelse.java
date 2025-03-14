@@ -20,6 +20,7 @@ public interface Bekreftelse {
 
     String UNG_ENDRET_FOM_DATO = "UNG_ENDRET_FOM_DATO";
     String UNG_ENDRET_TOM_DATO = "UNG_ENDRET_TOM_DATO";
+    String UNG_AVVIK_REGISTERINNTEKT = "UNG_AVVIK_REGISTERINNTEKT";
 
     Bekreftelse.Type getType();
 
@@ -32,7 +33,8 @@ public interface Bekreftelse {
 
     enum Type {
         UNG_ENDRET_FOM_DATO(Bekreftelse.UNG_ENDRET_FOM_DATO),
-        UNG_ENDRET_TOM_DATO(Bekreftelse.UNG_ENDRET_TOM_DATO);
+        UNG_ENDRET_TOM_DATO(Bekreftelse.UNG_ENDRET_TOM_DATO),
+        UNG_AVVIK_REGISTERINNTEKT(Bekreftelse.UNG_AVVIK_REGISTERINNTEKT);
 
 
         @JsonValue

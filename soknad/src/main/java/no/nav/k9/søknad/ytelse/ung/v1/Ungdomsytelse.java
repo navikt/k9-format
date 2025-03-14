@@ -12,6 +12,7 @@ import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
+import no.nav.k9.søknad.ytelse.ung.v1.inntekt.OppgittInntekt;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
