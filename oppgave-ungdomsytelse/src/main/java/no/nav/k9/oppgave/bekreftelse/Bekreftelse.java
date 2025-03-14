@@ -33,6 +33,12 @@ public interface Bekreftelse {
 
     Bekreftelse medDataBruktTilUtledning(DataBruktTilUtledning dataBruktTilUtledning);
 
+    String getUttalelseFraBruker();
+
+    boolean harBrukerGodtattEndringen();
+
+
+
     enum Type {
         UNG_ENDRET_FOM_DATO(Bekreftelse.UNG_ENDRET_FOM_DATO),
         UNG_ENDRET_TOM_DATO(Bekreftelse.UNG_ENDRET_TOM_DATO),

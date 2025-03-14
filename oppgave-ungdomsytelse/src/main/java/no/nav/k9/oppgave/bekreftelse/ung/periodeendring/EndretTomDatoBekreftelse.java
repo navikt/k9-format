@@ -36,7 +36,7 @@ public class EndretTomDatoBekreftelse implements DatoEndring {
 
     @Override
     public String getUttalelseFraBruker() {
-        return null;
+        return uttalelseFraBruker;
     }
 
     @Override

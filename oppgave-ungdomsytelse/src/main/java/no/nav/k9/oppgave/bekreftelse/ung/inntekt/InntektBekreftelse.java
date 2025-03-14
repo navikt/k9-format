@@ -9,7 +9,6 @@ import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import no.nav.k9.oppgave.bekreftelse.Bekreftelse;
-import no.nav.k9.oppgave.bekreftelse.ung.Uttalelse;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 
@@ -18,7 +17,7 @@ import java.util.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-public class InntektBekreftelse implements Uttalelse {
+public class InntektBekreftelse implements Bekreftelse {
 
     /**
      * Inntekter i periode som arbeidstaker og/eller frilans
