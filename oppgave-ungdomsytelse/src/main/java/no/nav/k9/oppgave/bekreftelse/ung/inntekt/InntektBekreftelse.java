@@ -19,6 +19,10 @@ import java.util.*;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class InntektBekreftelse implements Bekreftelse {
 
+    @JsonProperty("oppgaveId")
+    private UUID oppgaveId;
+
+
     /**
      * Inntekter i periode som arbeidstaker og/eller frilans
      */
@@ -62,6 +66,11 @@ public class InntektBekreftelse implements Bekreftelse {
         final var first = oppgittePeriodeinntekter.first();
         final var last = oppgittePeriodeinntekter.last();
         return new Periode(first.getPeriode().getFraOgMed(), last.getPeriode().getTilOgMed());
+    }
+
+    @Override
+    public UUID getOppgaveId() {
+        return oppgaveId;
     }
 
     @Override

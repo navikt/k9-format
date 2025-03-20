@@ -6,8 +6,12 @@ import no.nav.k9.oppgave.bekreftelse.Bekreftelse;
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class EndretTomDatoBekreftelse implements DatoEndring {
+
+    @JsonProperty("oppgaveId")
+    private UUID oppgaveId;
 
     @JsonProperty("nyTomDato")
     private LocalDate nyTomDato;
@@ -71,4 +75,8 @@ public class EndretTomDatoBekreftelse implements DatoEndring {
         return this;
     }
 
+    @Override
+    public UUID getOppgaveId() {
+        return oppgaveId;
+    }
 }

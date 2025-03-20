@@ -1,5 +1,7 @@
 package no.nav.k9.oppgave.bekreftelse;
 
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -23,6 +25,11 @@ public interface Bekreftelse {
     String UNG_ENDRET_FOM_DATO = "UNG_ENDRET_FOM_DATO";
     String UNG_ENDRET_TOM_DATO = "UNG_ENDRET_TOM_DATO";
     String UNG_AVVIK_REGISTERINNTEKT = "UNG_AVVIK_REGISTERINNTEKT";
+
+    /**
+     * Unik id for oppgaven som blir bekreftet
+     */
+    UUID getOppgaveId();
 
     Bekreftelse.Type getType();
 
