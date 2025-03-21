@@ -39,7 +39,7 @@ public class OppgaveUtil {
     }
 
     public static InntektBekreftelse bekreftelseAvvikRegisterinntekt(boolean harBrukerGodtattEndringen, String uttalelseFraBruker) {
-        return new InntektBekreftelse(Set.of(new OppgittInntektForPeriode(new Periode(LocalDate.now(), LocalDate.now()), BigDecimal.TEN, BigDecimal.TEN)), harBrukerGodtattEndringen, uttalelseFraBruker);
+        return new InntektBekreftelse(UUID.randomUUID(), Set.of(new OppgittInntektForPeriode(new Periode(LocalDate.now(), LocalDate.now()), BigDecimal.TEN, BigDecimal.TEN)), harBrukerGodtattEndringen, uttalelseFraBruker);
     }
 
 }
