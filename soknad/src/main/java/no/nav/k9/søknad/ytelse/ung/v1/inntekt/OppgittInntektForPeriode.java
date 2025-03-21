@@ -1,17 +1,14 @@
-package no.nav.k9.søknad.ytelse.ung.v1;
+package no.nav.k9.søknad.ytelse.ung.v1.inntekt;
 
 import com.fasterxml.jackson.annotation.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.validering.periode.GyldigPeriode;
-import no.nav.k9.søknad.ytelse.ung.v1.inntekt.InntektForPeriode;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)

@@ -2,15 +2,20 @@ package no.nav.k9.oppgave.util;
 
 import no.nav.k9.oppgave.OppgaveBekreftelse;
 import no.nav.k9.oppgave.bekreftelse.Bekreftelse;
+import no.nav.k9.oppgave.bekreftelse.ung.inntekt.InntektBekreftelse;
+import no.nav.k9.oppgave.bekreftelse.ung.inntekt.OppgittInntektForPeriode;
 import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretFomDatoBekreftelse;
 import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretTomDatoBekreftelse;
 import no.nav.k9.søknad.felles.Kildesystem;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
+import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.SøknadId;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 public class OppgaveUtil {
@@ -32,4 +37,9 @@ public class OppgaveUtil {
     public static EndretTomDatoBekreftelse bekreftelseEndretSluttdatodato(LocalDate nySluttdato, boolean harBrukerGodtattEndringen) {
         return new EndretTomDatoBekreftelse(nySluttdato, harBrukerGodtattEndringen);
     }
+
+    public static InntektBekreftelse bekreftelseAvvikRegisterinntekt(boolean harBrukerGodtattEndringen, String uttalelseFraBruker) {
+        return new InntektBekreftelse(UUID.randomUUID(), Set.of(new OppgittInntektForPeriode(new Periode(LocalDate.now(), LocalDate.now()), BigDecimal.TEN, BigDecimal.TEN)), harBrukerGodtattEndringen, uttalelseFraBruker);
+    }
+
 }

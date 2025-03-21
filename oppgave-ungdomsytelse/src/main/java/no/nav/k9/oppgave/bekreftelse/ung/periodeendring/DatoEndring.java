@@ -8,6 +8,4 @@ public interface DatoEndring extends Bekreftelse {
 
     LocalDate getNyDato();
 
-    boolean harBrukerGodtattEndringen();
-
 }

@@ -6,10 +6,10 @@ import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.SøknadId;
-import no.nav.k9.søknad.ytelse.ung.v1.inntekt.InntektForPeriode;
+import no.nav.k9.søknad.ytelse.ung.v1.inntekt.OppgittInntekt;
+import no.nav.k9.søknad.ytelse.ung.v1.inntekt.OppgittInntektForPeriode;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Set;

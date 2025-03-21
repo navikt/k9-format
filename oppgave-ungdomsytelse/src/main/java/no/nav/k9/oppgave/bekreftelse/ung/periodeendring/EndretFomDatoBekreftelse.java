@@ -6,14 +6,21 @@ import no.nav.k9.oppgave.bekreftelse.Bekreftelse;
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class EndretFomDatoBekreftelse implements DatoEndring {
+
+    @JsonProperty("oppgaveId")
+    private UUID oppgaveId;
 
     @JsonProperty("nyFomDato")
     private LocalDate nyFomDato;
 
     @JsonProperty("harBrukerGodtattEndringen")
     private boolean harBrukerGodtattEndringen;
+
+    @JsonProperty("uttalelseFraBruker")
+    private String uttalelseFraBruker;
 
     @JsonProperty("dataBruktTilUtledning")
     private DataBruktTilUtledning dataBruktTilUtledning;
@@ -52,7 +59,27 @@ public class EndretFomDatoBekreftelse implements DatoEndring {
     }
 
     @Override
+    public String getUttalelseFraBruker() {
+        return uttalelseFraBruker;
+    }
+
+    public Bekreftelse medUttalelseFraBruker(String uttalelseFraBruker) {
+        this.uttalelseFraBruker = uttalelseFraBruker;
+        return this;
+    }
+
+    public Bekreftelse medHarBrukerGodtattEndringen(boolean harBrukerGodtattEndringen) {
+        this.harBrukerGodtattEndringen = harBrukerGodtattEndringen;
+        return this;
+    }
+
+    @Override
     public boolean harBrukerGodtattEndringen() {
         return harBrukerGodtattEndringen;
+    }
+
+    @Override
+    public UUID getOppgaveId() {
+        return oppgaveId;
     }
 }

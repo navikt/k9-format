@@ -28,4 +28,25 @@ class SerializeAndDeserializeTest {
 
         assertEquals(OppgaveBekreftelse.SerDes.serialize(deserilizedOppgave), serializedOppgave);
     }
+
+    @Test
+    public void oppgave_bekreft_avvik_registerinntekt_serdes_test() {
+        var oppgaveBekreftelse = lagOppgaveBekreftelse(bekreftelseAvvikRegisterinntekt(true, null));
+
+        var serializedOppgave = OppgaveBekreftelse.SerDes.serialize(oppgaveBekreftelse);
+        var deserilizedOppgave = OppgaveBekreftelse.SerDes.deserialize(serializedOppgave);
+
+        assertEquals(OppgaveBekreftelse.SerDes.serialize(deserilizedOppgave), serializedOppgave);
+    }
+
+    @Test
+    public void oppgave_bekreft_avvik_registerinntekt_med_uttalelse_serdes_test() {
+        var oppgaveBekreftelse = lagOppgaveBekreftelse(bekreftelseAvvikRegisterinntekt(false, "en uttalelse"));
+
+        var serializedOppgave = OppgaveBekreftelse.SerDes.serialize(oppgaveBekreftelse);
+        var deserilizedOppgave = OppgaveBekreftelse.SerDes.deserialize(serializedOppgave);
+
+        assertEquals(OppgaveBekreftelse.SerDes.serialize(deserilizedOppgave), serializedOppgave);
+    }
+
 }

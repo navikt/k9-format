@@ -6,14 +6,21 @@ import no.nav.k9.oppgave.bekreftelse.Bekreftelse;
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class EndretTomDatoBekreftelse implements DatoEndring {
+
+    @JsonProperty("oppgaveId")
+    private UUID oppgaveId;
 
     @JsonProperty("nyTomDato")
     private LocalDate nyTomDato;
 
     @JsonProperty("harBrukerGodtattEndringen")
     private boolean harBrukerGodtattEndringen;
+
+    @JsonProperty("uttalelseFraBruker")
+    private String uttalelseFraBruker;
 
     @JsonProperty("dataBruktTilUtledning")
     private DataBruktTilUtledning dataBruktTilUtledning;
@@ -32,6 +39,11 @@ public class EndretTomDatoBekreftelse implements DatoEndring {
     }
 
     @Override
+    public String getUttalelseFraBruker() {
+        return uttalelseFraBruker;
+    }
+
+    @Override
     public boolean harBrukerGodtattEndringen() {
         return harBrukerGodtattEndringen;
     }
@@ -46,10 +58,25 @@ public class EndretTomDatoBekreftelse implements DatoEndring {
         return dataBruktTilUtledning;
     }
 
+
+    public Bekreftelse medUttalelseFraBruker(String uttalelseFraBruker) {
+        this.uttalelseFraBruker = uttalelseFraBruker;
+        return this;
+    }
+
+    public Bekreftelse medHarBrukerGodtattEndringen(boolean harBrukerGodtattEndringen) {
+        this.harBrukerGodtattEndringen = harBrukerGodtattEndringen;
+        return this;
+    }
+
     @Override
     public Bekreftelse medDataBruktTilUtledning(DataBruktTilUtledning dataBruktTilUtledning) {
         this.dataBruktTilUtledning = dataBruktTilUtledning;
         return this;
     }
 
+    @Override
+    public UUID getOppgaveId() {
+        return oppgaveId;
+    }
 }
