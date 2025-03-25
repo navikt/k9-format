@@ -27,8 +27,10 @@ public class EndretFomDatoBekreftelse implements DatoEndring {
 
     @JsonCreator
     public EndretFomDatoBekreftelse(
+            @JsonProperty("oppgaveId") UUID oppgaveId,
             @JsonProperty("nyFomDato") LocalDate nyFomDato,
             @JsonProperty("harBrukerGodtattEndringen") boolean harBrukerGodtattEndringen) {
+        this.oppgaveId = oppgaveId;
         this.nyFomDato = nyFomDato;
         this.harBrukerGodtattEndringen = harBrukerGodtattEndringen;
     }
@@ -61,6 +63,11 @@ public class EndretFomDatoBekreftelse implements DatoEndring {
     @Override
     public String getUttalelseFraBruker() {
         return uttalelseFraBruker;
+    }
+
+    public Bekreftelse medOppgaveId(UUID oppgaveId) {
+        this.oppgaveId = oppgaveId;
+        return this;
     }
 
     public Bekreftelse medUttalelseFraBruker(String uttalelseFraBruker) {

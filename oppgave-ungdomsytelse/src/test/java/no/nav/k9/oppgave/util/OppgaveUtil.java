@@ -30,12 +30,12 @@ public class OppgaveUtil {
                 .medKildesystem(Kildesystem.SØKNADSDIALOG);
     }
 
-    public static EndretFomDatoBekreftelse bekreftelseEndretStartdato(LocalDate nyStartdato, boolean harBrukerGodtattEndringen) {
-        return new EndretFomDatoBekreftelse(nyStartdato, harBrukerGodtattEndringen);
+    public static EndretFomDatoBekreftelse bekreftelseEndretStartdato(UUID oppgaveId, LocalDate nyStartdato, boolean harBrukerGodtattEndringen) {
+        return new EndretFomDatoBekreftelse(oppgaveId, nyStartdato, harBrukerGodtattEndringen);
     }
 
-    public static EndretTomDatoBekreftelse bekreftelseEndretSluttdatodato(LocalDate nySluttdato, boolean harBrukerGodtattEndringen) {
-        return new EndretTomDatoBekreftelse(nySluttdato, harBrukerGodtattEndringen);
+    public static EndretTomDatoBekreftelse bekreftelseEndretSluttdatodato(UUID oppgaveId, LocalDate nySluttdato, boolean harBrukerGodtattEndringen) {
+        return new EndretTomDatoBekreftelse(oppgaveId, nySluttdato, harBrukerGodtattEndringen);
     }
 
     public static InntektBekreftelse bekreftelseAvvikRegisterinntekt(boolean harBrukerGodtattEndringen, String uttalelseFraBruker) {
