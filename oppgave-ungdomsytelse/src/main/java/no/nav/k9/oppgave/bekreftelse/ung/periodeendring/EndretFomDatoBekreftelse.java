@@ -10,8 +10,8 @@ import java.util.UUID;
 
 public class EndretFomDatoBekreftelse implements DatoEndring {
 
-    @JsonProperty("oppgaveId")
-    private UUID oppgaveId;
+    @JsonProperty("oppgaveReferanse")
+    private UUID oppgaveReferanse;
 
     @JsonProperty("nyFomDato")
     private LocalDate nyFomDato;
@@ -27,10 +27,10 @@ public class EndretFomDatoBekreftelse implements DatoEndring {
 
     @JsonCreator
     public EndretFomDatoBekreftelse(
-            @JsonProperty("oppgaveId") UUID oppgaveId,
+            @JsonProperty("oppgaveReferanse") UUID oppgaveReferanse,
             @JsonProperty("nyFomDato") LocalDate nyFomDato,
             @JsonProperty("harBrukerGodtattEndringen") boolean harBrukerGodtattEndringen) {
-        this.oppgaveId = oppgaveId;
+        this.oppgaveReferanse = oppgaveReferanse;
         this.nyFomDato = nyFomDato;
         this.harBrukerGodtattEndringen = harBrukerGodtattEndringen;
     }
@@ -65,8 +65,8 @@ public class EndretFomDatoBekreftelse implements DatoEndring {
         return uttalelseFraBruker;
     }
 
-    public Bekreftelse medOppgaveId(UUID oppgaveId) {
-        this.oppgaveId = oppgaveId;
+    public Bekreftelse medOppgaveReferanse(UUID oppgaveReferanse) {
+        this.oppgaveReferanse = oppgaveReferanse;
         return this;
     }
 
@@ -86,7 +86,7 @@ public class EndretFomDatoBekreftelse implements DatoEndring {
     }
 
     @Override
-    public UUID getOppgaveId() {
-        return oppgaveId;
+    public UUID getOppgaveReferanse() {
+        return oppgaveReferanse;
     }
 }

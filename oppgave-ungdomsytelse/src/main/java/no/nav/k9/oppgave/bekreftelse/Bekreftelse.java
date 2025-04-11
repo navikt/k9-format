@@ -32,7 +32,7 @@ public interface Bekreftelse {
     /**
      * Unik id for oppgaven som blir bekreftet
      */
-    UUID getOppgaveId();
+    UUID getOppgaveReferanse();
 
     Bekreftelse.Type getType();
 

@@ -6,13 +6,12 @@ import no.nav.k9.oppgave.bekreftelse.Bekreftelse;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 public class EndretProgramperiodeBekreftelse implements Bekreftelse {
 
     @JsonProperty("oppgaveId")
-    private UUID oppgaveId;
+    private UUID oppgaveReferanse;
 
     @JsonProperty("nyPeriode")
     private Periode nyPeriode;
@@ -28,10 +27,10 @@ public class EndretProgramperiodeBekreftelse implements Bekreftelse {
 
     @JsonCreator
     public EndretProgramperiodeBekreftelse(
-            @JsonProperty("oppgaveId") UUID oppgaveId,
+            @JsonProperty("oppgaveReferanse") UUID oppgaveReferanse,
             @JsonProperty("nyPeriode") Periode nyPeriode,
             @JsonProperty("harBrukerGodtattEndringen") boolean harBrukerGodtattEndringen) {
-        this.oppgaveId = oppgaveId;
+        this.oppgaveReferanse = oppgaveReferanse;
         this.nyPeriode = nyPeriode;
         this.harBrukerGodtattEndringen = harBrukerGodtattEndringen;
     }
@@ -41,8 +40,8 @@ public class EndretProgramperiodeBekreftelse implements Bekreftelse {
     }
 
     @Override
-    public UUID getOppgaveId() {
-        return oppgaveId;
+    public UUID getOppgaveReferanse() {
+        return oppgaveReferanse;
     }
 
     @Override
@@ -68,11 +67,6 @@ public class EndretProgramperiodeBekreftelse implements Bekreftelse {
 
     public Bekreftelse medUttalelseFraBruker(String uttalelseFraBruker) {
         this.uttalelseFraBruker = uttalelseFraBruker;
-        return this;
-    }
-
-    public Bekreftelse medHarBrukerGodtattEndringen(boolean harBrukerGodtattEndringen) {
-        this.harBrukerGodtattEndringen = harBrukerGodtattEndringen;
         return this;
     }
 
