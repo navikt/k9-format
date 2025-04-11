@@ -5,6 +5,7 @@ import no.nav.k9.oppgave.bekreftelse.Bekreftelse;
 import no.nav.k9.oppgave.bekreftelse.ung.inntekt.InntektBekreftelse;
 import no.nav.k9.oppgave.bekreftelse.ung.inntekt.OppgittInntektForPeriode;
 import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretFomDatoBekreftelse;
+import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretProgramperiodeBekreftelse;
 import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretTomDatoBekreftelse;
 import no.nav.k9.søknad.felles.Kildesystem;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
@@ -36,6 +37,10 @@ public class OppgaveUtil {
 
     public static EndretTomDatoBekreftelse bekreftelseEndretSluttdatodato(UUID oppgaveId, LocalDate nySluttdato, boolean harBrukerGodtattEndringen) {
         return new EndretTomDatoBekreftelse(oppgaveId, nySluttdato, harBrukerGodtattEndringen);
+    }
+
+    public static EndretProgramperiodeBekreftelse bekreftelseEndretProgramperiode(UUID oppgaveId, Periode nyPeriode, boolean harBrukerGodtattEndringen) {
+        return new EndretProgramperiodeBekreftelse(oppgaveId, nyPeriode, harBrukerGodtattEndringen);
     }
 
     public static InntektBekreftelse bekreftelseAvvikRegisterinntekt(boolean harBrukerGodtattEndringen, String uttalelseFraBruker) {
