@@ -19,8 +19,8 @@ import java.util.*;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class InntektBekreftelse implements Bekreftelse {
 
-    @JsonProperty("oppgaveId")
-    private final UUID oppgaveId;
+    @JsonProperty("oppgaveReferanse")
+    private final UUID oppgaveReferanse;
 
 
     /**
@@ -45,14 +45,14 @@ public class InntektBekreftelse implements Bekreftelse {
 
 
     @JsonCreator
-    public InntektBekreftelse(@JsonProperty("oppgaveId") UUID oppgaveId, @JsonProperty(value = "oppgittePeriodeinntekter") Set<OppgittInntektForPeriode> oppgittePeriodeinntekter,
+    public InntektBekreftelse(@JsonProperty("oppgaveReferanse") UUID oppgaveReferanse, @JsonProperty(value = "oppgittePeriodeinntekter") Set<OppgittInntektForPeriode> oppgittePeriodeinntekter,
                               @JsonProperty(value = "harBrukerGodtattEndringen") boolean harBrukerGodtattEndringen,
                               @JsonProperty(value = "uttalelseFraBruker") String uttalelseFraBruker) {
         this.oppgittePeriodeinntekter = (oppgittePeriodeinntekter == null) ? Collections.emptyNavigableSet()
                 : Collections.unmodifiableNavigableSet(new TreeSet<>(oppgittePeriodeinntekter));
         this.uttalelseFraBruker = uttalelseFraBruker;
         this.harBrukerGodtattEndringen = harBrukerGodtattEndringen;
-        this.oppgaveId = oppgaveId;
+        this.oppgaveReferanse = oppgaveReferanse;
     }
 
     public static Builder builder() {
@@ -70,8 +70,8 @@ public class InntektBekreftelse implements Bekreftelse {
     }
 
     @Override
-    public UUID getOppgaveId() {
-        return oppgaveId;
+    public UUID getOppgaveReferanse() {
+        return oppgaveReferanse;
     }
 
     @Override
@@ -104,7 +104,7 @@ public class InntektBekreftelse implements Bekreftelse {
         private Set<OppgittInntektForPeriode> oppgittePeriodeinntekter = new LinkedHashSet<>();
         private String uttalelseFraBruker;
         private boolean harBrukerGodtattEndringen;
-        private UUID oppgaveId;
+        private UUID oppgaveReferanse;
 
         private Builder() {
         }
@@ -126,8 +126,8 @@ public class InntektBekreftelse implements Bekreftelse {
             return this;
         }
 
-        public Builder medOppgaveId(UUID oppgaveId) {
-            this.oppgaveId = oppgaveId;
+        public Builder medOppgaveReferanse(UUID oppgaveReferanse) {
+            this.oppgaveReferanse = oppgaveReferanse;
             return this;
         }
 
@@ -137,7 +137,7 @@ public class InntektBekreftelse implements Bekreftelse {
             if (oppgittePeriodeinntekter.isEmpty()) {
                 throw new IllegalStateException("Må oppgi minst en periodeinntekt");
             }
-            return new InntektBekreftelse(oppgaveId, oppgittePeriodeinntekter, harBrukerGodtattEndringen, uttalelseFraBruker);
+            return new InntektBekreftelse(oppgaveReferanse, oppgittePeriodeinntekter, harBrukerGodtattEndringen, uttalelseFraBruker);
         }
     }
 

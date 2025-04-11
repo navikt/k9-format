@@ -3,18 +3,18 @@ package no.nav.k9.oppgave.bekreftelse.ung.periodeendring;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.oppgave.bekreftelse.Bekreftelse;
+import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
-public class EndretFomDatoBekreftelse implements DatoEndring {
+public class EndretProgramperiodeBekreftelse implements Bekreftelse {
 
-    @JsonProperty("oppgaveId")
-    private UUID oppgaveId;
+    @JsonProperty("oppgaveReferanse")
+    private UUID oppgaveReferanse;
 
-    @JsonProperty("nyFomDato")
-    private LocalDate nyFomDato;
+    @JsonProperty("nyPeriode")
+    private Periode nyPeriode;
 
     @JsonProperty("harBrukerGodtattEndringen")
     private boolean harBrukerGodtattEndringen;
@@ -26,22 +26,27 @@ public class EndretFomDatoBekreftelse implements DatoEndring {
     private DataBruktTilUtledning dataBruktTilUtledning;
 
     @JsonCreator
-    public EndretFomDatoBekreftelse(
-            @JsonProperty("oppgaveId") UUID oppgaveId,
-            @JsonProperty("nyFomDato") LocalDate nyFomDato,
+    public EndretProgramperiodeBekreftelse(
+            @JsonProperty("oppgaveReferanse") UUID oppgaveReferanse,
+            @JsonProperty("nyPeriode") Periode nyPeriode,
             @JsonProperty("harBrukerGodtattEndringen") boolean harBrukerGodtattEndringen) {
-        this.oppgaveId = oppgaveId;
-        this.nyFomDato = nyFomDato;
+        this.oppgaveReferanse = oppgaveReferanse;
+        this.nyPeriode = nyPeriode;
         this.harBrukerGodtattEndringen = harBrukerGodtattEndringen;
     }
 
-    public LocalDate getNyFomDato() {
-        return nyFomDato;
+    public Periode getNyPeriode() {
+        return nyPeriode;
+    }
+
+    @Override
+    public UUID getOppgaveReferanse() {
+        return oppgaveReferanse;
     }
 
     @Override
     public Type getType() {
-        return Type.UNG_ENDRET_FOM_DATO;
+        return Type.UNG_ENDRET_PROGRAMPERIODE;
     }
 
     @Override
@@ -56,18 +61,8 @@ public class EndretFomDatoBekreftelse implements DatoEndring {
     }
 
     @Override
-    public LocalDate getNyDato() {
-        return nyFomDato;
-    }
-
-    @Override
     public String getUttalelseFraBruker() {
         return uttalelseFraBruker;
-    }
-
-    public Bekreftelse medOppgaveId(UUID oppgaveId) {
-        this.oppgaveId = oppgaveId;
-        return this;
     }
 
     public Bekreftelse medUttalelseFraBruker(String uttalelseFraBruker) {
@@ -75,18 +70,8 @@ public class EndretFomDatoBekreftelse implements DatoEndring {
         return this;
     }
 
-    public Bekreftelse medHarBrukerGodtattEndringen(boolean harBrukerGodtattEndringen) {
-        this.harBrukerGodtattEndringen = harBrukerGodtattEndringen;
-        return this;
-    }
-
     @Override
     public boolean harBrukerGodtattEndringen() {
         return harBrukerGodtattEndringen;
-    }
-
-    @Override
-    public UUID getOppgaveId() {
-        return oppgaveId;
     }
 }

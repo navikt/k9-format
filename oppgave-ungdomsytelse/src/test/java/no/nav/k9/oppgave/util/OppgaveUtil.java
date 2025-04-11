@@ -4,8 +4,7 @@ import no.nav.k9.oppgave.OppgaveBekreftelse;
 import no.nav.k9.oppgave.bekreftelse.Bekreftelse;
 import no.nav.k9.oppgave.bekreftelse.ung.inntekt.InntektBekreftelse;
 import no.nav.k9.oppgave.bekreftelse.ung.inntekt.OppgittInntektForPeriode;
-import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretFomDatoBekreftelse;
-import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretTomDatoBekreftelse;
+import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretProgramperiodeBekreftelse;
 import no.nav.k9.søknad.felles.Kildesystem;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
@@ -30,12 +29,8 @@ public class OppgaveUtil {
                 .medKildesystem(Kildesystem.SØKNADSDIALOG);
     }
 
-    public static EndretFomDatoBekreftelse bekreftelseEndretStartdato(UUID oppgaveId, LocalDate nyStartdato, boolean harBrukerGodtattEndringen) {
-        return new EndretFomDatoBekreftelse(oppgaveId, nyStartdato, harBrukerGodtattEndringen);
-    }
-
-    public static EndretTomDatoBekreftelse bekreftelseEndretSluttdatodato(UUID oppgaveId, LocalDate nySluttdato, boolean harBrukerGodtattEndringen) {
-        return new EndretTomDatoBekreftelse(oppgaveId, nySluttdato, harBrukerGodtattEndringen);
+    public static EndretProgramperiodeBekreftelse bekreftelseEndretProgramperiode(UUID oppgaveReferanse, Periode nyPeriode, boolean harBrukerGodtattEndringen) {
+        return new EndretProgramperiodeBekreftelse(oppgaveReferanse, nyPeriode, harBrukerGodtattEndringen);
     }
 
     public static InntektBekreftelse bekreftelseAvvikRegisterinntekt(boolean harBrukerGodtattEndringen, String uttalelseFraBruker) {
