@@ -29,8 +29,8 @@ public class OppgaveUtil {
                 .medKildesystem(Kildesystem.SØKNADSDIALOG);
     }
 
-    public static EndretProgramperiodeBekreftelse bekreftelseEndretProgramperiode(UUID oppgaveId, Periode nyPeriode, boolean harBrukerGodtattEndringen) {
-        return new EndretProgramperiodeBekreftelse(oppgaveId, nyPeriode, harBrukerGodtattEndringen);
+    public static EndretProgramperiodeBekreftelse bekreftelseEndretProgramperiode(UUID oppgaveReferanse, Periode nyPeriode, boolean harBrukerGodtattEndringen) {
+        return new EndretProgramperiodeBekreftelse(oppgaveReferanse, nyPeriode, harBrukerGodtattEndringen);
     }
 
     public static InntektBekreftelse bekreftelseAvvikRegisterinntekt(boolean harBrukerGodtattEndringen, String uttalelseFraBruker) {

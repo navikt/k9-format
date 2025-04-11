@@ -104,7 +104,7 @@ public class InntektBekreftelse implements Bekreftelse {
         private Set<OppgittInntektForPeriode> oppgittePeriodeinntekter = new LinkedHashSet<>();
         private String uttalelseFraBruker;
         private boolean harBrukerGodtattEndringen;
-        private UUID oppgaveId;
+        private UUID oppgaveReferanse;
 
         private Builder() {
         }
@@ -126,8 +126,8 @@ public class InntektBekreftelse implements Bekreftelse {
             return this;
         }
 
-        public Builder medOppgaveReferanse(UUID oppgaveId) {
-            this.oppgaveId = oppgaveId;
+        public Builder medOppgaveReferanse(UUID oppgaveReferanse) {
+            this.oppgaveReferanse = oppgaveReferanse;
             return this;
         }
 
@@ -137,7 +137,7 @@ public class InntektBekreftelse implements Bekreftelse {
             if (oppgittePeriodeinntekter.isEmpty()) {
                 throw new IllegalStateException("Må oppgi minst en periodeinntekt");
             }
-            return new InntektBekreftelse(oppgaveId, oppgittePeriodeinntekter, harBrukerGodtattEndringen, uttalelseFraBruker);
+            return new InntektBekreftelse(oppgaveReferanse, oppgittePeriodeinntekter, harBrukerGodtattEndringen, uttalelseFraBruker);
         }
     }
 
