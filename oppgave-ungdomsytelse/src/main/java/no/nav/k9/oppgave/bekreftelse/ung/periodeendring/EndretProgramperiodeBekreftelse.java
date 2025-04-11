@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class EndretProgramperiodeBekreftelse implements Bekreftelse {
 
-    @JsonProperty("oppgaveId")
+    @JsonProperty("oppgaveReferanse")
     private UUID oppgaveReferanse;
 
     @JsonProperty("nyPeriode")
