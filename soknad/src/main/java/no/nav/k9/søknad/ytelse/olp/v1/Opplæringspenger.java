@@ -116,20 +116,31 @@ public class Opplæringspenger implements Ytelse {
 
     @Override
     public Periode getSøknadsperiode() {
-        throw new UnsupportedOperationException("Metoden skal ikke brukes for opplæringspenger. Bruk getSøknadsperiodeList() i stedet.");
+        final List<Periode> perioder = new ArrayList<>(søknadsperiode);
+        perioder.addAll(getEndringsperiode());
+
+        final var fom = perioder
+                .stream()
+                .map(Periode::getFraOgMed)
+                .min(LocalDate::compareTo)
+                .orElseThrow();
+        final var tom = perioder
+                .stream()
+                .map(Periode::getTilOgMed)
+                .max(LocalDate::compareTo)
+                .orElseThrow();
+        return new Periode(fom, tom);
     }
 
     public List<Periode> getSøknadsperiodeList() {
-        return kurs == null ? null : Collections.unmodifiableList(kurs.getKursperioder());
+        return søknadsperiode == null ? null : Collections.unmodifiableList(søknadsperiode);
     }
 
-    @Deprecated //Opplæringspenger bruker kursperioder som søknadsperiode
     public Opplæringspenger medSøknadsperiode(List<Periode> søknadsperiodeList) {
         this.søknadsperiode.addAll(Objects.requireNonNull(søknadsperiodeList, "søknadsperiodeList"));
         return this;
     }
 
-    @Deprecated //Opplæringspenger bruker kursperioder som søknadsperiode
     public Opplæringspenger medSøknadsperiode(Periode søknadsperiode) {
         this.søknadsperiode.add(Objects.requireNonNull(søknadsperiode, "søknadsperiode"));
         return this;
