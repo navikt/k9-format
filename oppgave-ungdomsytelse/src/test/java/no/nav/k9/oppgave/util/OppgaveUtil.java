@@ -3,13 +3,14 @@ package no.nav.k9.oppgave.util;
 import no.nav.k9.oppgave.OppgaveBekreftelse;
 import no.nav.k9.oppgave.bekreftelse.Bekreftelse;
 import no.nav.k9.oppgave.bekreftelse.ung.inntekt.InntektBekreftelse;
-import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretProgramperiodeBekreftelse;
+import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretSluttdatoBekreftelse;
+import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretStartdatoBekreftelse;
 import no.nav.k9.søknad.felles.Kildesystem;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
-import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.SøknadId;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -25,8 +26,12 @@ public class OppgaveUtil {
                 .medKildesystem(Kildesystem.SØKNADSDIALOG);
     }
 
-    public static EndretProgramperiodeBekreftelse bekreftelseEndretProgramperiode(UUID oppgaveReferanse, Periode nyPeriode, boolean harBrukerGodtattEndringen) {
-        return new EndretProgramperiodeBekreftelse(oppgaveReferanse, nyPeriode, harBrukerGodtattEndringen);
+    public static EndretStartdatoBekreftelse bekreftelseEndretStartdato(UUID oppgaveReferanse, LocalDate nyStartdato, boolean harBrukerGodtattEndringen) {
+        return new EndretStartdatoBekreftelse(oppgaveReferanse, nyStartdato, harBrukerGodtattEndringen);
+    }
+
+    public static EndretSluttdatoBekreftelse bekreftelseEndretSluttdato(UUID oppgaveReferanse, LocalDate nySluttdato, boolean harBrukerGodtattEndringen) {
+        return new EndretSluttdatoBekreftelse(oppgaveReferanse, nySluttdato, harBrukerGodtattEndringen);
     }
 
     public static InntektBekreftelse bekreftelseAvvikRegisterinntekt(boolean harBrukerGodtattEndringen, String uttalelseFraBruker) {

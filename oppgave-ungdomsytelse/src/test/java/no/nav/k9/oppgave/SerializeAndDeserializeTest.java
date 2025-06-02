@@ -1,6 +1,5 @@
 package no.nav.k9.oppgave;
 
-import no.nav.k9.søknad.felles.type.Periode;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -12,8 +11,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class SerializeAndDeserializeTest {
 
     @Test
-    public void oppgave_bekreft_endret_programperiode_serdes_test() {
-        var oppgaveBekreftelse = lagOppgaveBekreftelse(bekreftelseEndretProgramperiode(UUID.randomUUID(), new Periode(LocalDate.now(), LocalDate.now().plusDays(1)), true));
+    public void oppgave_bekreft_endret_startdato_serdes_test() {
+        var oppgaveBekreftelse = lagOppgaveBekreftelse(bekreftelseEndretStartdato(UUID.randomUUID(), LocalDate.now(), true));
+
+        var serializedOppgave = OppgaveBekreftelse.SerDes.serialize(oppgaveBekreftelse);
+        var deserilizedOppgave = OppgaveBekreftelse.SerDes.deserialize(serializedOppgave);
+
+        assertEquals(OppgaveBekreftelse.SerDes.serialize(deserilizedOppgave), serializedOppgave);
+    }
+
+    @Test
+    public void oppgave_bekreft_endret_sluttdato_serdes_test() {
+        var oppgaveBekreftelse = lagOppgaveBekreftelse(bekreftelseEndretSluttdato(UUID.randomUUID(), LocalDate.now(), true));
 
         var serializedOppgave = OppgaveBekreftelse.SerDes.serialize(oppgaveBekreftelse);
         var deserilizedOppgave = OppgaveBekreftelse.SerDes.deserialize(serializedOppgave);

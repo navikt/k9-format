@@ -6,15 +6,16 @@ import no.nav.k9.oppgave.bekreftelse.Bekreftelse;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
-public class EndretProgramperiodeBekreftelse implements Bekreftelse {
+public class EndretStartdatoBekreftelse implements Bekreftelse {
 
     @JsonProperty("oppgaveReferanse")
     private UUID oppgaveReferanse;
 
-    @JsonProperty("nyPeriode")
-    private Periode nyPeriode;
+    @JsonProperty("nyStartdato")
+    private LocalDate nyStartdato;
 
     @JsonProperty("harBrukerGodtattEndringen")
     private boolean harBrukerGodtattEndringen;
@@ -26,17 +27,17 @@ public class EndretProgramperiodeBekreftelse implements Bekreftelse {
     private DataBruktTilUtledning dataBruktTilUtledning;
 
     @JsonCreator
-    public EndretProgramperiodeBekreftelse(
+    public EndretStartdatoBekreftelse(
             @JsonProperty("oppgaveReferanse") UUID oppgaveReferanse,
-            @JsonProperty("nyPeriode") Periode nyPeriode,
+            @JsonProperty("nyStartdato") LocalDate nyStartdato,
             @JsonProperty("harBrukerGodtattEndringen") boolean harBrukerGodtattEndringen) {
         this.oppgaveReferanse = oppgaveReferanse;
-        this.nyPeriode = nyPeriode;
+        this.nyStartdato = nyStartdato;
         this.harBrukerGodtattEndringen = harBrukerGodtattEndringen;
     }
 
-    public Periode getNyPeriode() {
-        return nyPeriode;
+    public LocalDate getNyStartdato() {
+        return nyStartdato;
     }
 
     @Override
@@ -46,7 +47,7 @@ public class EndretProgramperiodeBekreftelse implements Bekreftelse {
 
     @Override
     public Type getType() {
-        return Type.UNG_ENDRET_PROGRAMPERIODE;
+        return Type.UNG_ENDRET_STARTDATO;
     }
 
     @Override
