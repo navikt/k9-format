@@ -95,8 +95,6 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
             feilene.addAll(validerAtIngenPerioderOverlapperMedTrekkKravPerioder(trekkKravPerioderTidslinje, ytelsePeriodeTidsserie, ytelsePeriode.getFelt() + ".perioder"));
         }
 
-        validerAtYtelsePeriodenErKomplettMedSøknad(søknadsperiodeTidslinje, olp.getUttak().getPerioder(), "uttak", feilene);
-
         validerReise(olp.getKurs().getReise(), "kurs.reise", feilene);
         validerReisetidMotKursperioden(olp.getKurs().getKursperioder(), olp.getKurs().getReise(), "kurs.reise", feilene);
         validerKursholder(olp.getKurs().getKursholder(), feilene);
@@ -120,16 +118,6 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
                 .map(p -> toFeil(p, felt, "ugyldigPeriode",
                         "Perioden er utenfor gyldig interval. Gyldig interva: (" + gyldigInterval.getLocalDateIntervals() + "), Ugyldig periode: "))
                 .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    private void validerAtYtelsePeriodenErKomplettMedSøknad(LocalDateTimeline<Boolean> søknadsperiode,
-                                                            Map<Periode, ?> ytelsePeriode,
-                                                            String felt,
-                                                            List<Feil> feil) {
-        feil.addAll(tilPeriodeList(søknadsperiode.disjoint(lagTidslinjeOgValider(new ArrayList<>(ytelsePeriode.keySet()), felt, feil))).stream()
-                .filter(this::periodeInneholderDagerSomIkkeErHelg)
-                .map(p -> toFeil(p, felt, "ikkeKomplettPeriode", "Periodene er ikke komplett, periode som mangler er: "))
-                .collect(Collectors.toCollection(ArrayList::new)));
     }
 
     private void validerReise(Reise reise, String felt, List<Feil> feilene) {
