@@ -14,7 +14,7 @@ public class EndretStartdatoBekreftelse implements Bekreftelse {
     @JsonProperty("oppgaveReferanse")
     private UUID oppgaveReferanse;
 
-    @JsonProperty("nyPeriode")
+    @JsonProperty("nyStartdato")
     private LocalDate nyStartdato;
 
     @JsonProperty("harBrukerGodtattEndringen")

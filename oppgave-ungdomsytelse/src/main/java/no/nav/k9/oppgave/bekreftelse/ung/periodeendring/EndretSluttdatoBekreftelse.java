@@ -13,7 +13,7 @@ public class EndretSluttdatoBekreftelse implements Bekreftelse {
     @JsonProperty("oppgaveReferanse")
     private UUID oppgaveReferanse;
 
-    @JsonProperty("nyPeriode")
+    @JsonProperty("nySluttdato")
     private LocalDate nySluttdato;
 
     @JsonProperty("harBrukerGodtattEndringen")
