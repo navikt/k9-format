@@ -6,7 +6,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.validation.Valid;
 import no.nav.k9.oppgave.bekreftelse.ung.inntekt.InntektBekreftelse;
-import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretProgramperiodeBekreftelse;
+import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretSluttdatoBekreftelse;
+import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretStartdatoBekreftelse;
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 
 import java.util.UUID;
@@ -14,13 +15,15 @@ import java.util.UUID;
 @Valid
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes(value = {
-        @JsonSubTypes.Type(name = Bekreftelse.UNG_ENDRET_PROGRAMPERIODE, value = EndretProgramperiodeBekreftelse.class),
+        @JsonSubTypes.Type(name = Bekreftelse.UNG_ENDRET_STARTDATO, value = EndretStartdatoBekreftelse.class),
+        @JsonSubTypes.Type(name = Bekreftelse.UNG_ENDRET_SLUTTDATO, value = EndretSluttdatoBekreftelse.class),
         @JsonSubTypes.Type(name = Bekreftelse.UNG_AVVIK_REGISTERINNTEKT, value = InntektBekreftelse.class),
 })
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public interface Bekreftelse {
 
-    String UNG_ENDRET_PROGRAMPERIODE = "UNG_ENDRET_PROGRAMPERIODE";
+    String UNG_ENDRET_STARTDATO = "UNG_ENDRET_STARTDATO";
+    String UNG_ENDRET_SLUTTDATO = "UNG_ENDRET_SLUTTDATO";
     String UNG_AVVIK_REGISTERINNTEKT = "UNG_AVVIK_REGISTERINNTEKT";
 
     /**
@@ -42,9 +45,9 @@ public interface Bekreftelse {
     boolean harBrukerGodtattEndringen();
 
 
-
     enum Type {
-        UNG_ENDRET_PROGRAMPERIODE(Bekreftelse.UNG_ENDRET_PROGRAMPERIODE),
+        UNG_ENDRET_STARTDATO(Bekreftelse.UNG_ENDRET_STARTDATO),
+        UNG_ENDRET_SLUTTDATO(Bekreftelse.UNG_ENDRET_SLUTTDATO),
         UNG_AVVIK_REGISTERINNTEKT(Bekreftelse.UNG_AVVIK_REGISTERINNTEKT);
 
 
