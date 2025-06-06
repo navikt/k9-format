@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import no.nav.k9.konstant.Patterns;
 import no.nav.k9.oppgave.bekreftelse.Bekreftelse;
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 
@@ -22,6 +25,8 @@ public class InntektBekreftelse implements Bekreftelse {
     private final boolean harBrukerGodtattEndringen;
 
     @JsonProperty("uttalelseFraBruker")
+    @Pattern(regexp = Patterns.FRITEKST, message = "[${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
+    @Size(max = 4000)
     private final String uttalelseFraBruker;
 
     @JsonProperty("dataBruktTilUtledning")

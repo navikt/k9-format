@@ -16,6 +16,11 @@
             <groupId>no.nav.k9</groupId>
             <artifactId>soknad</artifactId>
         </dependency>
+        <dependency>
+            <groupId>no.nav.k9</groupId>
+            <artifactId>konstant</artifactId>
+            <version>${revision}${sha1}${changelist}</version>
+        </dependency>
     </dependencies>
 
 </project>
