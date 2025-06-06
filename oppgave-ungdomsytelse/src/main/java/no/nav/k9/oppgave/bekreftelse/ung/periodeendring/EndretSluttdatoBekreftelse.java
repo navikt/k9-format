@@ -2,6 +2,9 @@ package no.nav.k9.oppgave.bekreftelse.ung.periodeendring;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import no.nav.k9.konstant.Patterns;
 import no.nav.k9.oppgave.bekreftelse.Bekreftelse;
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 
@@ -20,6 +23,8 @@ public class EndretSluttdatoBekreftelse implements Bekreftelse {
     private boolean harBrukerGodtattEndringen;
 
     @JsonProperty("uttalelseFraBruker")
+    @Pattern(regexp = Patterns.FRITEKST, message = "[${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
+    @Size(max = 4000)
     private String uttalelseFraBruker;
 
     @JsonProperty("dataBruktTilUtledning")
