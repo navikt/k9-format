@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Set;
+import java.util.UUID;
 
 class InntektrapporteringValideringTest {
 
@@ -72,7 +73,10 @@ class InntektrapporteringValideringTest {
                 new Versjon("6.0.1"),
                 ZonedDateTime.now(),
                 new Søker(NorskIdentitetsnummer.of("22222222222")),
-                        new Ungdomsytelse().medInntekter(inntekter).medSøknadType(UngSøknadstype.RAPPORTERING_SØKNAD)
+                        new Ungdomsytelse()
+                                .medInntekter(inntekter)
+                                .medDeltakelseId(UUID.randomUUID())
+                                .medSøknadType(UngSøknadstype.RAPPORTERING_SØKNAD)
         );
     }
 

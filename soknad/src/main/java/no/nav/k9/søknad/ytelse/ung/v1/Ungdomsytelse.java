@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Ungdomsytelse implements Ytelse {
 
@@ -34,6 +35,9 @@ public class Ungdomsytelse implements Ytelse {
     @Valid
     @JsonProperty(value = "inntekter", required = false)
     private OppgittInntekt inntekter;
+
+    @JsonProperty(value = "deltakelseId")
+    private UUID deltakelseId;
 
     @Override
     public Type getType() {
@@ -114,7 +118,6 @@ public class Ungdomsytelse implements Ytelse {
         return this;
     }
 
-
     public Ungdomsytelse medSøknadType(UngSøknadstype søknadType) {
         this.søknadType = Objects.requireNonNull(søknadType, "søknadType");
         return this;
@@ -125,4 +128,12 @@ public class Ungdomsytelse implements Ytelse {
         return søknadType;
     }
 
+    public UUID getDeltakelseId() {
+        return deltakelseId;
+    }
+
+    public Ungdomsytelse medDeltakelseId(UUID deltakelseId) {
+        this.deltakelseId = Objects.requireNonNull(deltakelseId, "deltakelseId");
+        return this;
+    }
 }

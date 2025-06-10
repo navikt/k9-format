@@ -4,6 +4,7 @@ import no.nav.k9.søknad.ytelse.ung.v1.UngSøknadstype;
 import no.nav.k9.søknad.ytelse.ung.v1.Ungdomsytelse;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class YtelseEksempel {
 
@@ -11,6 +12,7 @@ public class YtelseEksempel {
 
         return new Ungdomsytelse()
                 .medStartdato(fraOgMed)
-                .medSøknadType(UngSøknadstype.DELTAKELSE_SØKNAD);
+                .medSøknadType(UngSøknadstype.DELTAKELSE_SØKNAD)
+                .medDeltakelseId(UUID.randomUUID());
     }
 }
