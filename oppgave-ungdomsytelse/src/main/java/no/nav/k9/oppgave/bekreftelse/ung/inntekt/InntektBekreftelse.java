@@ -7,8 +7,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import no.nav.k9.oppgave.bekreftelse.Bekreftelse;
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
 import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -18,8 +16,8 @@ public class InntektBekreftelse implements Bekreftelse {
     @JsonProperty("oppgaveReferanse")
     private final UUID oppgaveReferanse;
 
-    @JsonProperty("harBrukerGodtattEndringen")
-    private final boolean harBrukerGodtattEndringen;
+    @JsonProperty("harUttalelse")
+    private final boolean harUttalelse;
 
     @JsonProperty("uttalelseFraBruker")
     private final String uttalelseFraBruker;
@@ -30,10 +28,10 @@ public class InntektBekreftelse implements Bekreftelse {
 
     @JsonCreator
     public InntektBekreftelse(@JsonProperty("oppgaveReferanse") UUID oppgaveReferanse,
-                              @JsonProperty(value = "harBrukerGodtattEndringen") boolean harBrukerGodtattEndringen,
+                              @JsonProperty(value = "harUttalelse") boolean harUttalelse,
                               @JsonProperty(value = "uttalelseFraBruker") String uttalelseFraBruker) {
         this.uttalelseFraBruker = uttalelseFraBruker;
-        this.harBrukerGodtattEndringen = harBrukerGodtattEndringen;
+        this.harUttalelse = harUttalelse;
         this.oppgaveReferanse = oppgaveReferanse;
     }
 
@@ -68,13 +66,13 @@ public class InntektBekreftelse implements Bekreftelse {
     }
 
     @Override
-    public boolean harBrukerGodtattEndringen() {
-        return harBrukerGodtattEndringen;
+    public boolean harUttalelse() {
+        return harUttalelse;
     }
 
     public static final class Builder {
         private String uttalelseFraBruker;
-        private boolean harBrukerGodtattEndringen;
+        private boolean harUttalelse;
         private UUID oppgaveReferanse;
 
         private Builder() {
@@ -85,8 +83,8 @@ public class InntektBekreftelse implements Bekreftelse {
             return this;
         }
 
-        public Builder medHarBrukerGodtattEndringen(boolean harBrukerGodtattEndringen) {
-            this.harBrukerGodtattEndringen = harBrukerGodtattEndringen;
+        public Builder medHarUttalelse(boolean harUttalelse) {
+            this.harUttalelse = harUttalelse;
             return this;
         }
 
@@ -96,7 +94,7 @@ public class InntektBekreftelse implements Bekreftelse {
         }
 
         public InntektBekreftelse build() {
-            return new InntektBekreftelse(oppgaveReferanse, harBrukerGodtattEndringen, uttalelseFraBruker);
+            return new InntektBekreftelse(oppgaveReferanse, harUttalelse, uttalelseFraBruker);
         }
     }
 

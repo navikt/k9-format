@@ -16,8 +16,8 @@ public class EndretSluttdatoBekreftelse implements Bekreftelse {
     @JsonProperty("nySluttdato")
     private LocalDate nySluttdato;
 
-    @JsonProperty("harBrukerGodtattEndringen")
-    private boolean harBrukerGodtattEndringen;
+    @JsonProperty("harUttalelse")
+    private boolean harUttalelse;
 
     @JsonProperty("uttalelseFraBruker")
     private String uttalelseFraBruker;
@@ -29,10 +29,10 @@ public class EndretSluttdatoBekreftelse implements Bekreftelse {
     public EndretSluttdatoBekreftelse(
             @JsonProperty("oppgaveReferanse") UUID oppgaveReferanse,
             @JsonProperty("nySluttdato") LocalDate nySluttdato,
-            @JsonProperty("harBrukerGodtattEndringen") boolean harBrukerGodtattEndringen) {
+            @JsonProperty("harUttalelse") boolean harUttalelse) {
         this.oppgaveReferanse = oppgaveReferanse;
         this.nySluttdato = nySluttdato;
-        this.harBrukerGodtattEndringen = harBrukerGodtattEndringen;
+        this.harUttalelse = harUttalelse;
     }
 
     public LocalDate getNySluttdato() {
@@ -71,7 +71,7 @@ public class EndretSluttdatoBekreftelse implements Bekreftelse {
     }
 
     @Override
-    public boolean harBrukerGodtattEndringen() {
-        return harBrukerGodtattEndringen;
+    public boolean harUttalelse() {
+        return harUttalelse;
     }
 }

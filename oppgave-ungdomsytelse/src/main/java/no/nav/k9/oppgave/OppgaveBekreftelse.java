@@ -127,7 +127,7 @@ public class OppgaveBekreftelse implements Innsending {
     }
 
     public void setVersjon(Versjon versjon) {
-        this.versjon = Objects.requireNonNull(versjon);;
+        this.versjon = Objects.requireNonNull(versjon);
     }
 
     public void setMottattDato(ZonedDateTime mottattDato) {
