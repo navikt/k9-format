@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import no.nav.k9.konstant.Patterns;
 import no.nav.k9.oppgave.bekreftelse.Bekreftelse;
-import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 
 import java.time.LocalDate;
@@ -20,8 +19,8 @@ public class EndretStartdatoBekreftelse implements Bekreftelse {
     @JsonProperty("nyStartdato")
     private LocalDate nyStartdato;
 
-    @JsonProperty("harBrukerGodtattEndringen")
-    private boolean harBrukerGodtattEndringen;
+    @JsonProperty("harUttalelse")
+    private boolean harUttalelse;
 
     @JsonProperty("uttalelseFraBruker")
     @Pattern(regexp = Patterns.FRITEKST, message = "[${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
@@ -35,10 +34,10 @@ public class EndretStartdatoBekreftelse implements Bekreftelse {
     public EndretStartdatoBekreftelse(
             @JsonProperty("oppgaveReferanse") UUID oppgaveReferanse,
             @JsonProperty("nyStartdato") LocalDate nyStartdato,
-            @JsonProperty("harBrukerGodtattEndringen") boolean harBrukerGodtattEndringen) {
+            @JsonProperty("harUttalelse") boolean harUttalelse) {
         this.oppgaveReferanse = oppgaveReferanse;
         this.nyStartdato = nyStartdato;
-        this.harBrukerGodtattEndringen = harBrukerGodtattEndringen;
+        this.harUttalelse = harUttalelse;
     }
 
     public LocalDate getNyStartdato() {
@@ -77,7 +76,7 @@ public class EndretStartdatoBekreftelse implements Bekreftelse {
     }
 
     @Override
-    public boolean harBrukerGodtattEndringen() {
-        return harBrukerGodtattEndringen;
+    public boolean harUttalelse() {
+        return harUttalelse;
     }
 }

@@ -42,7 +42,7 @@ public interface Bekreftelse {
 
     String getUttalelseFraBruker();
 
-    boolean harBrukerGodtattEndringen();
+    boolean harUttalelse();
 
 
     enum Type {
