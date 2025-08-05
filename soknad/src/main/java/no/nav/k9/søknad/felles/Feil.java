@@ -54,7 +54,7 @@ public class Feil {
             feilmelding = feilkodeMatcher.group(2).trim();
         } else if (constraintMessage.equals("must not be null")){
             feilkode = "nullFeil";
-            feilmelding = "Feltet kan ikke være tomt, null feil";
+            feilmelding = "Feltet kan ikke være tomt";
 
         }else if (constraintMessage.equals("must not be empty")){
             feilkode = "tomFeil";

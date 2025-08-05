@@ -142,7 +142,7 @@ public class Opplæringspenger implements Ytelse {
     }
 
     public Opplæringspenger medSøknadsperiode(Periode søknadsperiode) {
-        this.søknadsperiode.add(Objects.requireNonNull(søknadsperiode, "søknadsperiode"));
+        this.søknadsperiode.add(Objects.requireNonNull(søknadsperiode, "Søknadsperiode er påkrevd"));
         return this;
     }
 
