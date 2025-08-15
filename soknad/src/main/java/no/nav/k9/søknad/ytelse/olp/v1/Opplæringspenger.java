@@ -87,9 +87,8 @@ public class Opplæringspenger implements Ytelse {
     private Omsorg omsorg = new Omsorg();
 
     @Valid
-    @NotNull
-    @JsonProperty(value = "kurs", required = true)
-    private Kurs kurs = new Kurs();
+    @JsonProperty(value = "kurs")
+    private Kurs kurs = null;
 
     public Opplæringspenger() {
     }
