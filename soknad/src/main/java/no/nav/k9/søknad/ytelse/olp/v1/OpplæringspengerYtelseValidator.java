@@ -95,11 +95,19 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
             feilene.addAll(validerAtIngenPerioderOverlapperMedTrekkKravPerioder(trekkKravPerioderTidslinje, ytelsePeriodeTidsserie, ytelsePeriode.getFelt() + ".perioder"));
         }
 
-        validerAtYtelsePeriodenErKomplettMedSøknad(søknadsperiodeTidslinje, olp.getKurs().getKursperioder(), "kurs.kursperioder", feilene);
+        if (olp.getKurs() != null) {
+            validerAtYtelsePeriodenErKomplettMedSøknad(søknadsperiodeTidslinje, olp.getKurs().getKursperioder(), "kurs.kursperioder", feilene);
 
-        validerReise(olp.getKurs().getReise(), "kurs.reise", feilene);
-        validerReisetidMotKursperioden(olp.getKurs().getKursperioder(), olp.getKurs().getReise(), "kurs.reise", feilene);
-        validerKursholder(olp.getKurs().getKursholder(), feilene);
+            validerReise(olp.getKurs().getReise(), "kurs.reise", feilene);
+            validerReisetidMotKursperioden(olp.getKurs().getKursperioder(), olp.getKurs().getReise(), "kurs.reise", feilene);
+            validerKursholder(olp.getKurs().getKursholder(), feilene);
+        } else {
+            validerAtYtelsePeriodenErKomplettMedSøknad(søknadsperiodeTidslinje, List.of(), "kurs.kursperioder", feilene);
+
+            if (trekkKravPerioderTidslinje.isEmpty()) {
+                feilene.add(lagFeil("kurs", "påkrevd", "Kurs eller trekkKravPerioder må være satt."));
+            }
+        }
 
         return feilene;
     }
