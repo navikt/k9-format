@@ -8,6 +8,7 @@ import jakarta.validation.ValidatorFactory;
 
 import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.SøknadValidator;
+import no.nav.k9.søknad.ValideringsFeil;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
@@ -18,6 +19,13 @@ import no.nav.k9.søknad.felles.validering.AvbrytendeValideringsfeil;
 public class OpplæringspengerSøknadValidator extends SøknadValidator<Søknad> {
 
     private static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
+
+    public void forsikreValidert(Søknad søknad, List<Periode> gyldigeEndringsperioder) {
+        List<Feil> feil = valider(søknad, gyldigeEndringsperioder);
+        if (!feil.isEmpty()) {
+            throw new ValideringsFeil(feil);
+        }
+    }
 
     private static void validerVersjon(Versjon versjon, List<Feil> feil) {
         if (versjon != null && !versjon.erGyldig()) {
