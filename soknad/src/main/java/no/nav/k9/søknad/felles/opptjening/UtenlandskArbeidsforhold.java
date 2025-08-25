@@ -30,7 +30,7 @@ public class UtenlandskArbeidsforhold {
     private Landkode land;
 
     @JsonProperty(value = "arbeidsgiversnavn", required = true)
-    @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message = "[ugyldigSyntaks] '${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
+    @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message = "[ugyldigSyntaks] matcher ikke tillatt pattern '{regexp}'")
     private String arbeidsgiversnavn;
 
     public Periode getAnsettelsePeriode() {

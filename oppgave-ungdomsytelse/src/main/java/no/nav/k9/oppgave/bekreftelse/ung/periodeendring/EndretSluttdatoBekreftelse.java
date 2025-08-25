@@ -23,7 +23,7 @@ public class EndretSluttdatoBekreftelse implements Bekreftelse {
     private boolean harUttalelse;
 
     @JsonProperty("uttalelseFraBruker")
-    @Pattern(regexp = Patterns.FRITEKST, message = "[${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
+    @Pattern(regexp = Patterns.FRITEKST, message = "[ugyldigSyntaks] matcher ikke tillatt pattern [{regexp}]")
     @Size(max = 4000)
     private String uttalelseFraBruker;
 

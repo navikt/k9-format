@@ -6,6 +6,8 @@
   "ytelse" : {
       "type" : "OMP_UTV_KS",
       "kroniskEllerFunksjonshemming": false,
+      "høyereRisikoForFravær": true,
+      "høyereRisikoForFraværBeskrivelse": "Beskrivelse av høyere risiko for fravær med sensitiv info",
       "barn": {
         "navn": "Kari",
         "norskIdentifikator": "2323",
