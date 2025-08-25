@@ -25,7 +25,7 @@ public class Reise {
 
     @JsonProperty(value = "reisedagerBeskrivelse")
     @Size(max = 4000)
-    @Pattern(regexp = "^[\\p{Pd}\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}§]*$", message = "[${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
+    @Pattern(regexp = "^[\\p{Pd}\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}§]*$", message = "[ugyldigSyntaks] matcher ikke tillatt pattern [{regexp}]")
     private String reisedagerBeskrivelse;
 
     public Reise() {

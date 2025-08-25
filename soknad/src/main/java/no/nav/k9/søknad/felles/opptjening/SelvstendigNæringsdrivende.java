@@ -114,11 +114,11 @@ public class SelvstendigNæringsdrivende {
         private List<VirksomhetType> virksomhetstyper;
 
         @JsonProperty("regnskapsførerNavn")
-        @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message = "[ugyldigSyntaks] '${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
+        @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message = "[ugyldigSyntaks] matcher ikke tillatt pattern '{regexp}'")
         private String regnskapsførerNavn;
 
         @JsonProperty("regnskapsførerTlf")
-        @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message = "[ugyldigSyntaks] '${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
+        @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message = "[ugyldigSyntaks] matcher ikke tillatt pattern '{regexp}'")
         private String regnskapsførerTlf;
 
         @JsonProperty("erVarigEndring")
@@ -131,7 +131,7 @@ public class SelvstendigNæringsdrivende {
         private LocalDate endringDato;
 
         @JsonProperty("endringBegrunnelse")
-        @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}§]+$", message = "[${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
+        @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}§]+$", message = "[ugyldigSyntaks] matcher ikke tillatt pattern '{regexp}'")
         private String endringBegrunnelse;
 
         @JsonProperty("bruttoInntekt")

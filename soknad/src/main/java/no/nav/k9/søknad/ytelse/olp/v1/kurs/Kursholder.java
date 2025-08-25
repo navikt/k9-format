@@ -17,7 +17,7 @@ public class Kursholder {
     @JsonProperty(value = "navn")
     @Valid
     @Size(max = 100)
-    @Pattern(regexp = "^[\\p{Pd}\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}§]*$", message = "[${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
+    @Pattern(regexp = "^[\\p{Pd}\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}§]*$", message = "[ugyldigSyntaks] matcher ikke tillatt pattern [{regexp}]")
     private String navn;
 
     @JsonProperty(value = "institusjonsidentifikator")
