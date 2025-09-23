@@ -103,10 +103,6 @@ class OpplæringspengerYtelseValidator extends YtelseValidator {
             validerKursholder(olp.getKurs().getKursholder(), feilene);
         } else {
             validerAtYtelsePeriodenErKomplettMedSøknad(søknadsperiodeTidslinje, List.of(), "kurs.kursperioder", feilene);
-
-            if (trekkKravPerioderTidslinje.isEmpty()) {
-                feilene.add(lagFeil("kurs", "påkrevd", "Kurs eller trekkKravPerioder må være satt."));
-            }
         }
 
         return feilene;
