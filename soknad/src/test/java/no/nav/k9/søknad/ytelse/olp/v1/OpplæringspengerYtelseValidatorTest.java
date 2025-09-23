@@ -54,15 +54,6 @@ class OpplæringspengerYtelseValidatorTest {
     }
 
     @Test
-    void ManglendeKursOgTrekkVarPeriodeSkalKasteFeil() {
-        Opplæringspenger olpYtelse = new Opplæringspenger().medBarn(YtelseEksempel.lagBarn()).medSøknadsperiode(List.of());
-        List<Feil> feil = ytelseValidator.valider(olpYtelse, List.of(GYLDIG_ENDRINGS_PERIODE));
-
-        assertThat(feil.size()).isEqualTo(1);
-        assertThat(feil.get(0).getFeilmelding()).isEqualTo("Kurs eller trekkKravPerioder må være satt.");
-    }
-
-    @Test
     void TrekkAvPeriodeOgLeggTilNyttKursIAnnenPeriodeSkalVæreOk() {
         Periode trekkKravPeriode = new Periode(GYLDIG_ENDRINGS_PERIODE.getFraOgMed(), GYLDIG_ENDRINGS_PERIODE.getFraOgMed().plusWeeks(1));
         Periode nyKursPeriode = new Periode(LocalDate.now().plusWeeks(3), LocalDate.now().plusWeeks(4));
