@@ -43,8 +43,7 @@ public record Inntektsmelding(
         @NotNull
         Arbeidsgiver arbeidsgiver,
 
-        @JsonProperty(value = "startDatoPermisjon", required = true)
-        @NotNull
+        @JsonProperty(value = "startDatoPermisjon")
         LocalDate startDatoPermisjon,
 
         @JsonProperty(value = "oppgittFravær", required = true)
