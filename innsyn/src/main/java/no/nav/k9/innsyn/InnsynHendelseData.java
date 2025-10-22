@@ -21,4 +21,5 @@ public interface InnsynHendelseData {
     String OMSORG = "OMSORG";
     String SØKNAD_TRUKKET = "SØKNAD_TRUKKET";
     String BEHANDLING_INNHOLD = "BEHANDLING_INNHOLD";
+    String INNTEKTSMELDING = "INNTEKTSMELDING";
 }
