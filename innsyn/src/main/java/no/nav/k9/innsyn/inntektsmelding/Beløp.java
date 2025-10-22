@@ -1,4 +1,4 @@
-package no.nav.k9.innsyn.inntektsmeling;
+package no.nav.k9.innsyn.inntektsmelding;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.DecimalMax;
