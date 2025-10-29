@@ -1,18 +1,17 @@
 package no.nav.k9.innsyn.inntektsmelding;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import no.nav.k9.innsyn.InnsynHendelseData;
-import no.nav.k9.innsyn.sak.FagsakYtelseType;
-import no.nav.k9.innsyn.sak.Saksnummer;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@JsonTypeName(InnsynHendelseData.INNTEKTSMELDING)
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import no.nav.k9.innsyn.sak.FagsakYtelseType;
+import no.nav.k9.innsyn.sak.Saksnummer;
+
+
 public record Inntektsmelding(
         @JsonProperty(value = "status", required = true)
         @NotNull
@@ -104,6 +103,7 @@ public record Inntektsmelding(
         @NotNull
         List<JournalpostId> erstattetAv
 
-) implements InnsynHendelseData {
+)  {
+
 }
 
