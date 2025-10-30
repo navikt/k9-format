@@ -1,18 +1,17 @@
 package no.nav.k9.innsyn.inntektsmelding;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-
 import jakarta.validation.Valid;
 import no.nav.k9.innsyn.InnsynHendelseData;
 import no.nav.k9.innsyn.sak.FagsakYtelseType;
 import no.nav.k9.innsyn.sak.Saksnummer;
 
-@JsonTypeName(InnsynHendelseData.INNTEKTSMELDINGER)
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
+@JsonTypeName(InnsynHendelseData.INNTEKTSMELDING)
 public record Inntektsmelding(
         @JsonProperty(value = "status", required = true)
         InntektsmeldingStatus status,
@@ -21,15 +20,15 @@ public record Inntektsmelding(
         @Valid
         Saksnummer saksnummer,
 
-        @JsonProperty(value = "graderinger", required = true)
+        @JsonProperty(value = "graderinger")
         @Valid
         List<Gradering> graderinger,
 
-        @JsonProperty(value = "naturalYtelser", required = true)
+        @JsonProperty(value = "naturalYtelser")
         @Valid
         List<NaturalYtelse> naturalYtelser,
 
-        @JsonProperty(value = "utsettelsePerioder", required = true)
+        @JsonProperty(value = "utsettelsePerioder")
         @Valid
         List<UtsettelsePeriode> utsettelsePerioder,
 
@@ -40,11 +39,11 @@ public record Inntektsmelding(
         @JsonProperty(value = "startDatoPermisjon")
         LocalDate startDatoPermisjon,
 
-        @JsonProperty(value = "oppgittFravær", required = true)
+        @JsonProperty(value = "oppgittFravær")
         @Valid
         List<PeriodeAndel> oppgittFravær,
 
-        @JsonProperty(value = "nærRelasjon", required = true)
+        @JsonProperty(value = "nærRelasjon")
         boolean nærRelasjon,
 
         @JsonProperty(value = "journalpostId", required = true)
@@ -58,11 +57,11 @@ public record Inntektsmelding(
         @Valid
         Beløp inntektBeløp,
 
-        @JsonProperty(value = "refusjonBeløpPerMnd", required = true)
+        @JsonProperty(value = "refusjonBeløpPerMnd")
         @Valid
         Beløp refusjonBeløpPerMnd,
 
-        @JsonProperty(value = "refusjonOpphører", required = true)
+        @JsonProperty(value = "refusjonOpphører")
         LocalDate refusjonOpphører,
 
         @JsonProperty(value = "innsendingstidspunkt", required = true)
@@ -71,20 +70,20 @@ public record Inntektsmelding(
         @JsonProperty(value = "kildesystem", required = true)
         String kildesystem,
 
-        @JsonProperty(value = "inntektsmeldingType", required = true)
+        @JsonProperty(value = "inntektsmeldingType")
         InntektsmeldingType inntektsmeldingType,
 
-        @JsonProperty(value = "endringerRefusjon", required = true)
+        @JsonProperty(value = "endringerRefusjon")
         @Valid
         List<Refusjon> endringerRefusjon,
 
-        @JsonProperty(value = "innsendingsårsak", required = true)
+        @JsonProperty(value = "innsendingsårsak")
         InntektsmeldingInnsendingsårsak innsendingsårsak,
 
-        @JsonProperty(value = "ytelseType", required = true)
+        @JsonProperty(value = "ytelseType")
         FagsakYtelseType ytelseType,
 
-        @JsonProperty(value = "erstattetAv", required = true)
+        @JsonProperty(value = "erstattetAv")
         @Valid
         List<JournalpostId> erstattetAv
 

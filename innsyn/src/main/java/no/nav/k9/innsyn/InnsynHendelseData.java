@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import jakarta.validation.Valid;
+import no.nav.k9.innsyn.inntektsmelding.Inntektsmelding;
 import no.nav.k9.innsyn.sak.Behandling;
 
 @Valid
@@ -14,6 +15,7 @@ import no.nav.k9.innsyn.sak.Behandling;
         @JsonSubTypes.Type(name = InnsynHendelseData.OMSORG, value = Omsorg.class),
         @JsonSubTypes.Type(name = InnsynHendelseData.SØKNAD_TRUKKET, value = SøknadTrukket.class),
         @JsonSubTypes.Type(name = InnsynHendelseData.BEHANDLING_INNHOLD, value = Behandling.class),
+        @JsonSubTypes.Type(name = InnsynHendelseData.INNTEKTSMELDING, value = Inntektsmelding.class),
 })
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public interface InnsynHendelseData {
@@ -21,5 +23,5 @@ public interface InnsynHendelseData {
     String OMSORG = "OMSORG";
     String SØKNAD_TRUKKET = "SØKNAD_TRUKKET";
     String BEHANDLING_INNHOLD = "BEHANDLING_INNHOLD";
-    String INNTEKTSMELDINGER = "INNTEKTSMELDINGER";
+    String INNTEKTSMELDING = "INNTEKTSMELDING";
 }

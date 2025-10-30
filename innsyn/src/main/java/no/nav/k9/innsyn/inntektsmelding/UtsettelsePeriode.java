@@ -7,13 +7,11 @@ import no.nav.k9.søknad.felles.type.Periode;
 
 public record UtsettelsePeriode(
         @Valid
-        @NotNull
-        @JsonProperty(value = "periode", required = true)
+        @JsonProperty(value = "periode")
         Periode periode,
 
         @Valid
-        @NotNull
-        @JsonProperty(value = "årsak", required = true)
+        @JsonProperty(value = "årsak")
         UtsettelseÅrsak årsak
 ) {
 }

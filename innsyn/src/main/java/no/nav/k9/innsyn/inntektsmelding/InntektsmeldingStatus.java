@@ -1,6 +1,7 @@
 package no.nav.k9.innsyn.inntektsmelding;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

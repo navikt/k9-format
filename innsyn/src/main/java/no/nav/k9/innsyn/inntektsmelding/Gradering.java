@@ -8,12 +8,12 @@ import no.nav.k9.søknad.felles.type.Periode;
 public record Gradering(
         @Valid
         @NotNull
-        @JsonProperty(value = "periode", required = true)
+        @JsonProperty(value = "periode")
         Periode periode,
 
         @Valid
         @NotNull
-        @JsonProperty(value = "arbeidstidProsent", required = true)
+        @JsonProperty(value = "arbeidstidProsent")
         Stillingsprosent arbeidstidProsent
 ) implements Comparable<Gradering> {
 

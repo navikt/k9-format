@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public enum NaturalYtelseType {
 
