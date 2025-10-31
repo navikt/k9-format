@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import jakarta.validation.Valid;
 import no.nav.k9.innsyn.InnsynHendelseData;
+import no.nav.k9.innsyn.sak.AktørId;
 import no.nav.k9.innsyn.sak.FagsakYtelseType;
 import no.nav.k9.innsyn.sak.Saksnummer;
 
@@ -13,6 +14,13 @@ import java.util.List;
 
 @JsonTypeName(InnsynHendelseData.INNTEKTSMELDING)
 public record Inntektsmelding(
+
+        @JsonProperty(value = "søkerAktørId", required = true)
+        AktørId søkerAktørId,
+
+        @JsonProperty(value = "fagsakYtelseType", required = true)
+        FagsakYtelseType fagsakYtelseType,
+
         @JsonProperty(value = "status", required = true)
         InntektsmeldingStatus status,
 
@@ -80,8 +88,8 @@ public record Inntektsmelding(
         @JsonProperty(value = "innsendingsårsak")
         InntektsmeldingInnsendingsårsak innsendingsårsak,
 
-        @JsonProperty(value = "ytelseType")
-        FagsakYtelseType ytelseType,
+        @JsonProperty(value = "imYtelseType")
+        FagsakYtelseType imYtelseType,
 
         @JsonProperty(value = "erstattetAv")
         @Valid
