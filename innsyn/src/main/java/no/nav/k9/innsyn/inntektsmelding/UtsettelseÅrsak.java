@@ -49,4 +49,12 @@ public enum UtsettelseÅrsak {
         }
         return ad;
     }
+
+    public String getNavn() {
+        return navn;
+    }
+
+    public String getKode() {
+        return kode;
+    }
 }

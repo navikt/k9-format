@@ -35,4 +35,7 @@ public enum InntektsmeldingStatus {
         return KODER.get(kode);
     }
 
+    public String getKode() {
+        return kode;
+    }
 }

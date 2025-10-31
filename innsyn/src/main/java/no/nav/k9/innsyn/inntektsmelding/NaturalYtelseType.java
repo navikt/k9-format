@@ -68,4 +68,16 @@ public enum NaturalYtelseType {
         }
         return ad;
     }
+
+    public String getNavn() {
+        return navn;
+    }
+
+    public String getKode() {
+        return kode;
+    }
+
+    public String getOffisiellKode() {
+        return offisiellKode;
+    }
 }
