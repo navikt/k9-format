@@ -1,16 +1,20 @@
 package no.nav.k9.innsyn.inntektsmelding;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.Valid;
-
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+
 public record Refusjon(
-        @JsonProperty(value = "refusjonsbeløpMnd")
+        @JsonProperty(value = "refusjonsbeløpMnd", required = true)
+        @NotNull
         @Valid
         Beløp refusjonsbeløpMnd,
 
-        @JsonProperty(value = "fom")
+        @JsonProperty(value = "fom", required = true)
+        @NotNull
         LocalDate fom
 ) {
 }
