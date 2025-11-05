@@ -9,6 +9,7 @@ public enum FagsakYtelseType {
     OMSORGSPENGER_KS("OMP_KS", "Ekstra omsorgsdager kronisk syk"),
     OMSORGSPENGER_MA("OMP_MA", "Ekstra omsorgsdager midlertidig alene"),
     OMSORGSPENGER_AO("OMP_AO", "Alene om omsorgen"),
+    OMSORGSPENGER("OMP", "Omsorgspenger"),
     OPPLÆRINGSPENGER("OLP", "Opplæringspenger");
 
 
