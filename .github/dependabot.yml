@@ -12,6 +12,8 @@ updates:
       interval: daily
     cooldown:
       default-days: 7
+      exclude:
+        - "no.nav.*"
     registries:
       - k9-format
     groups:
