@@ -10,6 +10,8 @@ updates:
     directory: "/"
     schedule:
       interval: daily
+    cooldown:
+      default-days: 7
     registries:
       - k9-format
     groups:
@@ -26,6 +28,8 @@ updates:
     directory: "/"
     schedule:
       interval: daily
+    cooldown:
+      default-days: 7
     groups:
       github-actions:
         patterns:
