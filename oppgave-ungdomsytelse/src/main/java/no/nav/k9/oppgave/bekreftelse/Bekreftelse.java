@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.validation.Valid;
 import no.nav.k9.oppgave.bekreftelse.ung.inntekt.InntektBekreftelse;
+import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretPeriodeBekreftelse;
 import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretSluttdatoBekreftelse;
 import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretStartdatoBekreftelse;
 import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.FjernetPeriodeBekreftelse;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @JsonSubTypes(value = {
         @JsonSubTypes.Type(name = Bekreftelse.UNG_ENDRET_STARTDATO, value = EndretStartdatoBekreftelse.class),
         @JsonSubTypes.Type(name = Bekreftelse.UNG_ENDRET_SLUTTDATO, value = EndretSluttdatoBekreftelse.class),
+        @JsonSubTypes.Type(name = Bekreftelse.UNG_ENDRET_PERIODE, value = EndretPeriodeBekreftelse.class),
         @JsonSubTypes.Type(name = Bekreftelse.UNG_FJERNET_PERIODE, value = FjernetPeriodeBekreftelse.class),
         @JsonSubTypes.Type(name = Bekreftelse.UNG_AVVIK_REGISTERINNTEKT, value = InntektBekreftelse.class),
 })
@@ -26,6 +28,7 @@ public interface Bekreftelse {
 
     String UNG_ENDRET_STARTDATO = "UNG_ENDRET_STARTDATO";
     String UNG_ENDRET_SLUTTDATO = "UNG_ENDRET_SLUTTDATO";
+    String UNG_ENDRET_PERIODE = "UNG_ENDRET_PERIODE";
     String UNG_FJERNET_PERIODE = "UNG_FJERNET_PERIODE";
     String UNG_AVVIK_REGISTERINNTEKT = "UNG_AVVIK_REGISTERINNTEKT";
 
@@ -51,6 +54,7 @@ public interface Bekreftelse {
     enum Type {
         UNG_ENDRET_STARTDATO(Bekreftelse.UNG_ENDRET_STARTDATO),
         UNG_ENDRET_SLUTTDATO(Bekreftelse.UNG_ENDRET_SLUTTDATO),
+        UNG_ENDRET_PERIODE(Bekreftelse.UNG_ENDRET_PERIODE),
         UNG_FJERNET_PERIODE(Bekreftelse.UNG_FJERNET_PERIODE),
         UNG_AVVIK_REGISTERINNTEKT(Bekreftelse.UNG_AVVIK_REGISTERINNTEKT);
 
