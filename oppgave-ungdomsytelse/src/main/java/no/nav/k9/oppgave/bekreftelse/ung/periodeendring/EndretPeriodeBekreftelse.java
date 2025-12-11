@@ -2,6 +2,7 @@ package no.nav.k9.oppgave.bekreftelse.ung.periodeendring;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import no.nav.k9.konstant.Patterns;
@@ -13,12 +14,15 @@ import java.util.UUID;
 
 public class EndretPeriodeBekreftelse implements Bekreftelse{
 
+    @NotNull
     @JsonProperty("oppgaveReferanse")
     private UUID oppgaveReferanse;
 
+    @NotNull
     @JsonProperty("nyPeriode")
     private Periode nyPeriode;
 
+    @NotNull
     @JsonProperty("harUttalelse")
     private boolean harUttalelse;
 
