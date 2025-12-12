@@ -18,7 +18,6 @@ public class EndretPeriodeBekreftelse implements Bekreftelse{
     @JsonProperty("oppgaveReferanse")
     private UUID oppgaveReferanse;
 
-    @NotNull
     @JsonProperty("nyPeriode")
     private Periode nyPeriode;
 
