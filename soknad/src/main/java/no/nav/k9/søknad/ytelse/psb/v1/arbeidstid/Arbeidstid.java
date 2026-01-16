@@ -19,7 +19,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Arbeidstid {
 
     @JsonProperty(value = "arbeidstakerList", required = true)
-    @Valid
     @NotNull
     private List<@NotNull @Valid Arbeidstaker> arbeidstakerList = new ArrayList<>();
 

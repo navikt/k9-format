@@ -40,16 +40,14 @@ public class PleipengerLivetsSluttfase implements Ytelse {
     @JsonProperty(value = "pleietrengende", required = true)
     private Pleietrengende pleietrengende;
 
-    @Valid
     @NotNull
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     @JsonProperty(value = "søknadsperiode", required = true)
-    private List<@NotNull @LukketPeriode Periode> søknadsperiode = new ArrayList<>();
+    private List<@Valid @NotNull @LukketPeriode Periode> søknadsperiode = new ArrayList<>();
 
-    @Valid
     @JsonProperty(value = "trekkKravPerioder", required = true)
     @NotNull
-    private List<@NotNull @LukketPeriode Periode> trekkKravPerioder = new ArrayList<>();
+    private List<@Valid @NotNull @LukketPeriode Periode> trekkKravPerioder = new ArrayList<>();
 
     @Valid
     @JsonProperty(value = "opptjeningAktivitet")

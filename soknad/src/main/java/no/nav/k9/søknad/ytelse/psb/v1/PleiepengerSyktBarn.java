@@ -40,22 +40,19 @@ public class PleiepengerSyktBarn implements Ytelse {
     @JsonProperty(value = "barn", required = true)
     private Barn barn;
 
-    @Valid
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     @JsonProperty(value = "søknadsperiode", required = true)
     @NotNull
-    private List<@NotNull @LukketPeriode Periode> søknadsperiode = new ArrayList<>();
+    private List<@Valid @NotNull @LukketPeriode Periode> søknadsperiode = new ArrayList<>();
 
     @Deprecated
-    @Valid
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     @JsonProperty(value = "endringsperiode", required = true)
-    private List<@NotNull @LukketPeriode Periode> endringsperiode = new ArrayList<>();
+    private List<@Valid @NotNull @LukketPeriode Periode> endringsperiode = new ArrayList<>();
 
-    @Valid
     @JsonProperty(value = "trekkKravPerioder", required = true)
     @NotNull
-    private List<@NotNull @LukketPeriode Periode> trekkKravPerioder = new ArrayList<>();
+    private List<@Valid @NotNull @LukketPeriode Periode> trekkKravPerioder = new ArrayList<>();
 
     @Valid
     @JsonProperty(value = "opptjeningAktivitet")

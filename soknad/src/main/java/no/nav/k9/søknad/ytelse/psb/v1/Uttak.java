@@ -26,11 +26,10 @@ import no.nav.k9.søknad.felles.validering.periode.GyldigePerioderMap;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Uttak {
 
-    @Valid
     @NotNull
     @GyldigePerioderMap(krevFomDato = true, krevTomDato = true, payload = {AvbrytendeValideringsfeil.class})
     @JsonProperty(value = "perioder")
-    private Map<@NotNull Periode, @NotNull UttakPeriodeInfo> perioder = new TreeMap<>();
+    private Map<@NotNull Periode, @Valid @NotNull UttakPeriodeInfo> perioder = new TreeMap<>();
 
     public Uttak() {
     }

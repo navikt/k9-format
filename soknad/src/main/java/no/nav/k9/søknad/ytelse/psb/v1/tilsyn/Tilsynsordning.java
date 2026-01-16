@@ -24,9 +24,8 @@ public class Tilsynsordning {
 
     @JsonProperty(value = "perioder", required = true)
     @NotNull
-    @Valid
     @GyldigePerioderMap(krevFomDato = true, krevTomDato = true, payload = {AvbrytendeValideringsfeil.class})
-    private Map<@NotNull Periode, @NotNull TilsynPeriodeInfo> perioder = new TreeMap<>();
+    private Map<@NotNull Periode, @Valid @NotNull TilsynPeriodeInfo> perioder = new TreeMap<>();
 
     public Tilsynsordning() {
     }
