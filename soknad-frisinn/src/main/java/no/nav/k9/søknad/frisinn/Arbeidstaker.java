@@ -17,8 +17,7 @@ public class Arbeidstaker {
      * Inntekter i periode som arbeidstaker.
      */
     @JsonProperty(value = "inntekterSøknadsperiode")
-    @Valid
-    private NavigableMap<Periode, PeriodeInntekt> inntekterSøknadsperiode;
+    private NavigableMap<@Valid Periode, @Valid PeriodeInntekt> inntekterSøknadsperiode;
 
 
     @JsonCreator

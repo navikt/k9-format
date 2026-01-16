@@ -71,28 +71,23 @@ public record Inntektsmelding(
 
         @JsonProperty(value = "erstattetAv", required = true)
         @NotNull
-        @Valid
-        List<JournalpostId> erstattetAv,
+        List<@Valid JournalpostId> erstattetAv,
 
         // Nesten ingen inntektsmeldinger har graderinger. Kun 10 i hele prod databasen per 4.10.25
         @JsonProperty(value = "graderinger")
-        @Valid
-        List<Gradering> graderinger,
+        List<@Valid Gradering> graderinger,
 
         @JsonProperty(value = "naturalYtelser")
-        @Valid
-        List<NaturalYtelse> naturalYtelser,
+        List<@Valid NaturalYtelse> naturalYtelser,
 
         @JsonProperty(value = "utsettelsePerioder")
-        @Valid
-        List<UtsettelsePeriode> utsettelsePerioder,
+        List<@Valid UtsettelsePeriode> utsettelsePerioder,
 
         @JsonProperty(value = "startDatoPermisjon")
         LocalDate startDatoPermisjon,
 
         @JsonProperty(value = "oppgittFravær")
-        @Valid
-        List<PeriodeAndel> oppgittFravær,
+        List<@Valid PeriodeAndel> oppgittFravær,
 
         @JsonProperty(value = "refusjonBeløpPerMnd")
         @Valid
@@ -105,8 +100,7 @@ public record Inntektsmelding(
         InntektsmeldingType inntektsmeldingType,
 
         @JsonProperty(value = "endringerRefusjon")
-        @Valid
-        List<Refusjon> endringerRefusjon
+        List<@Valid Refusjon> endringerRefusjon
 
         /* ytelseType på inntektsmeldingen er alltid null fordi den ikke lagres i k9-abakus.*/
 

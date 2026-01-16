@@ -24,7 +24,6 @@ public class Kurs {
     @JsonProperty(value = "kursperioder", required = true)
     @NotNull
     @Size(min = 1)
-    @Valid
     private List<@NotNull @Valid Periode> kursperioder;
 
     @JsonProperty(value = "reise", required = true)

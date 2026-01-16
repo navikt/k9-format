@@ -20,7 +20,6 @@ public class Reise {
     private boolean reiserUtenforKursdager;
 
     @JsonProperty(value="reisedager")
-    @Valid
     private List<@NotNull @Valid LocalDate> reisedager;
 
     @JsonProperty(value = "reisedagerBeskrivelse")

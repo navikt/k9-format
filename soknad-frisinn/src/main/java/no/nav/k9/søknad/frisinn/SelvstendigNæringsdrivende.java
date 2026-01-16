@@ -33,16 +33,15 @@ public class SelvstendigNæringsdrivende {
     private final boolean søkerKompensasjon;
     @JsonInclude(value = Include.NON_EMPTY)
     @JsonProperty(value = "inntekterFør")
-    @Valid
-    private NavigableMap<Periode, PeriodeInntekt> inntekterFør;
+    private NavigableMap<@Valid Periode, @Valid PeriodeInntekt> inntekterFør;
     /**
      * Inntekter i periode som skal kompenseres. Periode må være innenfor søknadsperiode. Hvis ingen inntekt i periode som kompenseres, sett
      * inntekt = 0
      */
     @JsonInclude(value = Include.ALWAYS)
     @JsonProperty(value = "inntekterSøknadsperiode", required = true)
-    @Valid
-    private NavigableMap<Periode, PeriodeInntekt> inntekterSøknadsperiode;
+    private NavigableMap<@Valid Periode, @Valid PeriodeInntekt> inntekterSøknadsperiode;
+
     @JsonProperty("regnskapsførerNavn")
     @Pattern(regexp = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}]+$", message = "[ugyldigSyntaks] matcher ikke tillatt pattern '{regexp}'")
     private String regnskapsførerNavn;

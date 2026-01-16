@@ -50,8 +50,7 @@ public class DataBruktTilUtledning {
     private Boolean bekrefterPeriodeOver8Uker;
 
     @JsonProperty(value = "ukjenteArbeidsforhold")
-    @Valid
-    private List<UkjentArbeidsforhold> ukjenteArbeidsforhold;
+    private List<@Valid UkjentArbeidsforhold> ukjenteArbeidsforhold;
 
     @JsonCreator
     public DataBruktTilUtledning(

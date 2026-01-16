@@ -26,17 +26,15 @@ import no.nav.k9.søknad.felles.validering.periode.GyldigePerioderMap;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public class Utenlandsopphold {
 
-    @Valid
     @GyldigePerioderMap(krevFomDato = true, krevTomDato = true, payload = {AvbrytendeValideringsfeil.class})
     @JsonInclude(value = Include.ALWAYS)
     @JsonProperty(value = "perioder")
-    private Map<@NotNull Periode, @NotNull UtenlandsoppholdPeriodeInfo> perioder = new TreeMap<>();
+    private Map<@NotNull Periode, @Valid @NotNull UtenlandsoppholdPeriodeInfo> perioder = new TreeMap<>();
 
-    @Valid
     @GyldigePerioderMap(krevFomDato = true, krevTomDato = true, payload = {AvbrytendeValideringsfeil.class})
     @JsonInclude(value = Include.ALWAYS)
     @JsonProperty(value = "perioderSomSkalSlettes")
-    private Map<@NotNull Periode, @NotNull UtenlandsoppholdPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
+    private Map<@NotNull Periode, @Valid @NotNull UtenlandsoppholdPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
     public Map<Periode, UtenlandsoppholdPeriodeInfo> getPerioder() {
         return unmodifiableMap(perioder);

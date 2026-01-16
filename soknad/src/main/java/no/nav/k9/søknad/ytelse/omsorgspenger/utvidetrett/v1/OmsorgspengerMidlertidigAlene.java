@@ -36,10 +36,9 @@ public class OmsorgspengerMidlertidigAlene implements OmsorgspengerUtvidetRett {
     @NotNull
     private AnnenForelder annenForelder;
 
-    @Valid
     @JsonProperty(value = "barn")
     @NotNull
-    private List<Barn> barn;
+    private List<@Valid Barn> barn;
 
     @JsonProperty(value = "begrunnelse")
     @Size(max = 30000)
