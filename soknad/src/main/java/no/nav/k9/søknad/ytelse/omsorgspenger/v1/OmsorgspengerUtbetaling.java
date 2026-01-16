@@ -30,9 +30,8 @@ import no.nav.k9.søknad.ytelse.YtelseValidator;
 @JsonTypeName(Ytelse.OMSORGSPENGER_UTBETALING)
 public class OmsorgspengerUtbetaling implements Ytelse {
 
-    @Valid
     @JsonProperty("fosterbarn")
-    private List<Barn> fosterbarn;
+    private List<@Valid Barn> fosterbarn;
 
     @Valid
     @JsonProperty(value = "aktivitet")
@@ -46,13 +45,11 @@ public class OmsorgspengerUtbetaling implements Ytelse {
     @JsonProperty(value = "utenlandsopphold")
     private Utenlandsopphold utenlandsopphold;
 
-    @Valid
     @JsonProperty(value = "fraværsperioder")
-    private List<FraværPeriode> fraværsperioder;
+    private List<@Valid FraværPeriode> fraværsperioder;
 
-    @Valid
     @JsonProperty(value = "fraværsperioderKorrigeringIm")
-    private List<FraværPeriode> fraværsperioderKorrigeringIm;
+    private List<@Valid FraværPeriode> fraværsperioderKorrigeringIm;
 
     @JsonProperty(value = "dataBruktTilUtledning")
     @Valid

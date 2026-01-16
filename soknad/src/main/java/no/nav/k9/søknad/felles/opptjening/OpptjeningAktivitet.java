@@ -20,7 +20,6 @@ public class OpptjeningAktivitet {
 
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     @JsonProperty(value = "selvstendigNæringsdrivende", required = true)
-    @Valid
     @NotNull
     private List<@NotNull @Valid SelvstendigNæringsdrivende> selvstendigNæringsdrivende = new ArrayList<>();
 
@@ -29,16 +28,14 @@ public class OpptjeningAktivitet {
     @Valid
     private Frilanser frilanser;
 
-    @Valid
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     @JsonProperty(value = "utenlandskeArbeidsforhold")
     @NotNull
-    private List<UtenlandskArbeidsforhold> utenlandskeArbeidsforhold = new ArrayList<>();
+    private List<@Valid UtenlandskArbeidsforhold> utenlandskeArbeidsforhold = new ArrayList<>();
 
-    @Valid
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     @JsonProperty(value = "andreAktiviteter", required = true)
-    private List<AnnenAktivitet> andreAktiviteter = new ArrayList<>();
+    private List<@Valid AnnenAktivitet> andreAktiviteter = new ArrayList<>();
 
     public List<SelvstendigNæringsdrivende> getSelvstendigNæringsdrivende() {
         return selvstendigNæringsdrivende;

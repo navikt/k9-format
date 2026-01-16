@@ -42,13 +42,11 @@ public class Opplæringspenger implements Ytelse {
     @JsonProperty(value = "barn", required = true)
     private Barn barn;
 
-    @Valid
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     @JsonProperty(value = "søknadsperiode", required = true)
     @NotNull
     private List<@NotNull @Valid Periode> søknadsperiode = new ArrayList<>();
 
-    @Valid
     @JsonProperty(value = "trekkKravPerioder", required = true)
     @NotNull
     private List<@NotNull @Valid Periode> trekkKravPerioder = new ArrayList<>();

@@ -41,14 +41,12 @@ public record Behandling(
 
         @JsonProperty(value = "innsendinger", required = true)
         @JsonAlias(value = "søknader")
-        @Valid
         @NotNull
-        Set<InnsendingInfo> innsendinger,
+        Set<@Valid InnsendingInfo> innsendinger,
 
         @JsonProperty(value = "aksjonspunkter", required = true)
-        @Valid
         @NotNull
-        Set<Aksjonspunkt> aksjonspunkter,
+        Set<@Valid Aksjonspunkt> aksjonspunkter,
 
         @JsonProperty(value = "erUtenlands")
         boolean erUtenlands,

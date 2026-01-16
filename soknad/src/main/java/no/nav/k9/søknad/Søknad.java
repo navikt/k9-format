@@ -45,10 +45,9 @@ public class Søknad implements Innsending {
     @JsonProperty(value = "språk", required = false)
     private Språk språk = Språk.NORSK_BOKMÅL;
 
-    @Valid
     @Size(max=1000)
     @JsonProperty(value = "journalposter")
-    private List<Journalpost> journalposter = new ArrayList<>();
+    private List<@Valid Journalpost> journalposter = new ArrayList<>();
 
     @Valid
     @JsonProperty(value = "begrunnelseForInnsending")

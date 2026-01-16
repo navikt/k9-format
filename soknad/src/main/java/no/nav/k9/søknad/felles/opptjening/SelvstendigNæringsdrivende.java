@@ -37,11 +37,10 @@ import no.nav.k9.søknad.felles.validering.periode.GyldigePerioderMap;
 public class SelvstendigNæringsdrivende {
 
     @JsonProperty(value = "perioder", required = true)
-    @Valid
     @GyldigePerioderMap(krevFomDato = true, krevTomDato = false, payload = {AvbrytendeValideringsfeil.class})
     @NotNull
     @NotEmpty
-    private Map<@NotNull Periode, @NotNull SelvstendigNæringsdrivendePeriodeInfo> perioder;
+    private Map<@NotNull Periode, @Valid @NotNull SelvstendigNæringsdrivendePeriodeInfo> perioder;
 
     /**
      * Orgnummer - påkrevd for norske selskaper, ikke for utenlandske enn så lenge.
