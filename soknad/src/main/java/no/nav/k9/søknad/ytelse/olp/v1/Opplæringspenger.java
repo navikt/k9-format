@@ -90,6 +90,9 @@ public class Opplæringspenger implements Ytelse {
     @JsonProperty(value = "kurs")
     private Kurs kurs = null;
 
+    @JsonProperty(value = "skalEttersendeVedlegg")
+    private boolean skalEttersendeVedlegg = false;
+
     public Opplæringspenger() {
     }
 
@@ -243,6 +246,15 @@ public class Opplæringspenger implements Ytelse {
     public Opplæringspenger medKurs(Kurs kurs) {
         this.kurs = Objects.requireNonNull(kurs, "kurs");
         return this;
+    }
+
+    public Opplæringspenger medSkalEttersendeVedlegg(boolean skalEttersendeVedlegg) {
+        this.skalEttersendeVedlegg = skalEttersendeVedlegg;
+        return this;
+    }
+
+    public boolean isSkalEttersendeVedlegg() {
+        return skalEttersendeVedlegg;
     }
 
     @Override
