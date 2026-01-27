@@ -22,7 +22,6 @@ import no.nav.k9.søknad.felles.validering.periode.GyldigePerioderMap;
 public class LovbestemtFerie {
 
     @JsonProperty(value = "perioder", required = true)
-    @Valid
     @GyldigePerioderMap(krevFomDato = true, krevTomDato = true, payload = {AvbrytendeValideringsfeil.class})
     @NotNull
     private Map<@NotNull Periode, @NotNull @Valid LovbestemtFeriePeriodeInfo> perioder = new TreeMap<>();

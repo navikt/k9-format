@@ -23,14 +23,12 @@ import no.nav.k9.søknad.felles.validering.periode.GyldigePerioderMap;
 public class Nattevåk {
 
     @JsonProperty(value = "perioder", required = true)
-    @Valid
     @GyldigePerioderMap(payload = {AvbrytendeValideringsfeil.class})
     @NotNull
     private Map<@NotNull Periode, @NotNull @Valid NattevåkPeriodeInfo> perioder = new TreeMap<>();
 
     //TODO list?
     @JsonProperty(value = "perioderSomSkalSlettes", required = true)
-    @Valid
     @GyldigePerioderMap(payload = {AvbrytendeValideringsfeil.class})
     private Map<@NotNull Periode, @NotNull @Valid NattevåkPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 

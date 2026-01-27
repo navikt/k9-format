@@ -21,10 +21,9 @@ public class OppgittInntekt {
      * Inntekter i periode som arbeidstaker og/eller frilans
      */
     @JsonProperty(value = "oppgittePeriodeinntekter")
-    @Valid
     @NotNull
     @Size(min = 1)
-    private NavigableSet<@NotNull OppgittInntektForPeriode> oppgittePeriodeinntekter;
+    private NavigableSet<@Valid @NotNull OppgittInntektForPeriode> oppgittePeriodeinntekter;
 
     @JsonCreator
     public OppgittInntekt(@JsonProperty(value = "oppgittePeriodeinntekter") Set<OppgittInntektForPeriode> oppgittePeriodeinntekter) {

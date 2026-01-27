@@ -30,8 +30,7 @@ public class Frilanser {
      * inntekt = 0
      */
     @JsonProperty(value = "inntekterSøknadsperiode")
-    @Valid
-    private NavigableMap<Periode, PeriodeInntekt> inntekterSøknadsperiode;
+    private NavigableMap<@Valid Periode, @Valid PeriodeInntekt> inntekterSøknadsperiode;
 
     @JsonCreator
     public Frilanser(@JsonProperty(value = "inntekterSøknadsperiode") Map<Periode, PeriodeInntekt> inntekterSøknadsperiode,

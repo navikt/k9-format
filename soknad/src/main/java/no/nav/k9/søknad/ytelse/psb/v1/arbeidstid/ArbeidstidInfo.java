@@ -25,10 +25,9 @@ public class ArbeidstidInfo {
 
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     @JsonProperty(value = "perioder", required = true)
-    @Valid
     @GyldigePerioderMap(payload = {AvbrytendeValideringsfeil.class})
     @NotNull
-    private Map<@NotNull Periode, @NotNull ArbeidstidPeriodeInfo> perioder = new TreeMap<>();
+    private Map<@NotNull Periode, @Valid @NotNull ArbeidstidPeriodeInfo> perioder = new TreeMap<>();
 
     public ArbeidstidInfo() {
     }

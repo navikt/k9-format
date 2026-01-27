@@ -42,10 +42,9 @@ public class FraværPeriode implements Comparable<FraværPeriode> {
     @JsonProperty(value = "søknadÅrsak")
     private SøknadÅrsak søknadÅrsak;
 
-    @Valid
     @Size(min = 1, max = 2)
     @JsonProperty(value = "aktivitetFravær", required = true)
-    private List<AktivitetFravær> aktivitetFravær;
+    private List<@Valid AktivitetFravær> aktivitetFravær;
 
     @JsonProperty(value = "arbeidsgiverOrgNr")
     @Valid

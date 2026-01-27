@@ -25,16 +25,14 @@ import no.nav.k9.søknad.felles.validering.periode.GyldigePerioderMap;
 public class Bosteder {
 
     @JsonProperty(value = "perioder")
-    @Valid
     @GyldigePerioderMap(krevFomDato = true, krevTomDato = true, payload = {AvbrytendeValideringsfeil.class})
     @JsonInclude(value = Include.ALWAYS)
-    private Map<@NotNull Periode, @NotNull BostedPeriodeInfo> perioder = new TreeMap<>();
+    private Map<@NotNull Periode, @Valid @NotNull BostedPeriodeInfo> perioder = new TreeMap<>();
 
     @JsonProperty(value = "perioderSomSkalSlettes")
-    @Valid
     @GyldigePerioderMap(krevFomDato = true, krevTomDato = true, payload = {AvbrytendeValideringsfeil.class})
     @JsonInclude(value = Include.ALWAYS)
-    private Map<@NotNull Periode, @NotNull BostedPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
+    private Map<@NotNull Periode, @Valid @NotNull BostedPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
     public Map<Periode, BostedPeriodeInfo> getPerioder() {
         return unmodifiableMap(perioder);

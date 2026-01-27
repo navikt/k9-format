@@ -26,11 +26,10 @@ public class Ungdomsytelse implements Ytelse {
     @JsonProperty(value = "søknadType", required = true)
     private UngSøknadstype søknadType = UngSøknadstype.DELTAKELSE_SØKNAD;
 
-    @Valid
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     @JsonProperty(value = "søktFraDatoer", required = true)
     @NotNull
-    private List<@NotNull LocalDate> søktFraDatoer = new ArrayList<>();
+    private List<@Valid @NotNull LocalDate> søktFraDatoer = new ArrayList<>();
 
     @Valid
     @JsonProperty(value = "inntekter", required = false)

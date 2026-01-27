@@ -24,7 +24,6 @@ import no.nav.k9.søknad.felles.validering.periode.GyldigePerioderMap;
 public class Beredskap {
 
     @JsonProperty(value = "perioder", required = true)
-    @Valid
     @GyldigePerioderMap(payload = {AvbrytendeValideringsfeil.class})
     @NotNull
     private Map<@NotNull Periode, @NotNull @Valid BeredskapPeriodeInfo> perioder = new TreeMap<>();
@@ -32,7 +31,6 @@ public class Beredskap {
     // Hvorfor er dette et map? Dette er vel egentlig en liste med perioder?
     //TODO gjøre om til List
     @JsonProperty(value = "perioderSomSkalSlettes")
-    @Valid
     @GyldigePerioderMap(payload = {AvbrytendeValideringsfeil.class})
     private Map<@NotNull Periode, @NotNull @Valid BeredskapPeriodeInfo> perioderSomSkalSlettes = new TreeMap<>();
 
