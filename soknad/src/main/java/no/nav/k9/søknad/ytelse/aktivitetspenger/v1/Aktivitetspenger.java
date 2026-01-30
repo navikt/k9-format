@@ -13,6 +13,7 @@ import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Aktivitetspenger implements Ytelse {
 
@@ -66,6 +67,11 @@ public class Aktivitetspenger implements Ytelse {
     @Override
     public Periode getSøknadsperiode() {
         return søknadsperiode;
+    }
+
+    public Aktivitetspenger medSøknadsperiode(Periode søknadsperiode) {
+        this.søknadsperiode = Objects.requireNonNull(søknadsperiode, "søknadsperiode");
+        return this;
     }
 
 }
