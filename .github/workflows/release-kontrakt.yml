@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    name: Bygg pull-request
+    name: Publish kontrakt
     runs-on: ubuntu-latest
     permissions:
       packages: write
