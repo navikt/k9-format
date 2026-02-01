@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
+import no.nav.k9.søknad.ytelse.aktivitetspenger.v1.Aktivitetspenger;
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerAleneOmsorg;
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerKroniskSyktBarn;
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerMidlertidigAlene;
@@ -32,6 +33,7 @@ import no.nav.k9.søknad.ytelse.ung.v1.Ungdomsytelse;
         @JsonSubTypes.Type(name = Ytelse.OPPLÆRINGSPENGER, value = Opplæringspenger.class),
         @JsonSubTypes.Type(name = Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE, value = PleipengerLivetsSluttfase.class),
         @JsonSubTypes.Type(name = Ytelse.UNGDOMSYTELSE, value = Ungdomsytelse.class),
+        @JsonSubTypes.Type(name = Ytelse.AKTIVITETSPENGER, value = Aktivitetspenger.class),
 })
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public interface Ytelse {
