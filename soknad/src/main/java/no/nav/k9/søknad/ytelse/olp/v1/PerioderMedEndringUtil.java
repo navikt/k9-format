@@ -16,8 +16,9 @@ import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 class PerioderMedEndringUtil {
 
     public static List<Periode> getEndringsperiode(Opplæringspenger søknad) {
-        var allePerioderMedEndringTidsserie =
-                tilTidsserie(getAllePerioderSomMåVæreInnenforSøknadsperiode(søknad));
+        var allePerioderMedEndring = getAllePerioderSomMåVæreInnenforSøknadsperiode(søknad);
+        allePerioderMedEndring.add(new PerioderMedEndring().medPerioder("utenlandsopphold", søknad.getUtenlandsopphold().getPerioder()));
+        var allePerioderMedEndringTidsserie = tilTidsserie(allePerioderMedEndring);
         var søknadsperiode = toLocalDateTimeline(søknad.getSøknadsperiodeList());
         var endringsperiodeTidsserie = allePerioderMedEndringTidsserie.disjoint(søknadsperiode);
         return TidsserieUtils.tilPeriodeList(endringsperiodeTidsserie);
@@ -27,7 +28,6 @@ class PerioderMedEndringUtil {
         var listen = new ArrayList<PerioderMedEndring>();
         listen.add(new PerioderMedEndring().medPerioder("lovbestemtFerie", olp.getLovbestemtFerie().getPerioder()));
         listen.add(new PerioderMedEndring().medPerioder("uttak", olp.getUttak().getPerioder()));
-        listen.add(new PerioderMedEndring().medPerioder("utenlandsopphold", olp.getUtenlandsopphold().getPerioder()));
         listen.addAll(getArbeidstidPerioder(olp.getArbeidstid()));
         return listen;
     }
