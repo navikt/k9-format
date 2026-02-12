@@ -24,6 +24,7 @@ public class PleiepengerLivetsSluttfasePerioderMedEndringUtil {
     public static List<PerioderMedEndring> getAllePerioderSomMåVæreInnenforSøknadsperiode(PleipengerLivetsSluttfase ppn) {
         var listen = new ArrayList<PerioderMedEndring>();
         listen.add(new PerioderMedEndring().medPerioder("uttak", ppn.getUttak().getPerioder()));
+        listen.add(new PerioderMedEndring().medPerioder("utenlandsopphold", ppn.getUtenlandsopphold().getPerioder()));
         LovbestemtFerie lovbestemtFerie = ppn.getLovbestemtFerie();
         if (lovbestemtFerie != null && lovbestemtFerie.getPerioder() != null) {
             listen.add(new PerioderMedEndring().medPerioder("lovbestemtFerie", lovbestemtFerie.getPerioder()));

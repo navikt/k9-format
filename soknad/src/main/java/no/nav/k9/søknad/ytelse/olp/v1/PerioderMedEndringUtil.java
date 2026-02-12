@@ -27,6 +27,7 @@ class PerioderMedEndringUtil {
         var listen = new ArrayList<PerioderMedEndring>();
         listen.add(new PerioderMedEndring().medPerioder("lovbestemtFerie", olp.getLovbestemtFerie().getPerioder()));
         listen.add(new PerioderMedEndring().medPerioder("uttak", olp.getUttak().getPerioder()));
+        listen.add(new PerioderMedEndring().medPerioder("utenlandsopphold", olp.getUtenlandsopphold().getPerioder()));
         listen.addAll(getArbeidstidPerioder(olp.getArbeidstid()));
         return listen;
     }
