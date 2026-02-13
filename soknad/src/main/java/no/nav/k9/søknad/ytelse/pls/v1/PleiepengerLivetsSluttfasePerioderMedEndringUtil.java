@@ -14,8 +14,9 @@ import no.nav.k9.søknad.ytelse.psb.v1.PerioderMedEndringUtil;
 public class PleiepengerLivetsSluttfasePerioderMedEndringUtil {
 
     public static List<Periode> getEndringsperiode(PleipengerLivetsSluttfase ppn) {
-        var allePerioderMedEndringTidsserie =
-                PerioderMedEndringUtil.tilTidsserie(getAllePerioderSomMåVæreInnenforSøknadsperiode(ppn));
+        var allePerioderMedEndring = getAllePerioderSomMåVæreInnenforSøknadsperiode(ppn);
+        allePerioderMedEndring.add(new PerioderMedEndring().medPerioder("utenlandsopphold", ppn.getUtenlandsopphold().getPerioder()));
+        var allePerioderMedEndringTidsserie = PerioderMedEndringUtil.tilTidsserie(allePerioderMedEndring);
         var søknadsperiode = toLocalDateTimeline(ppn.getSøknadsperiodeList());
         var endringsperiodeTidsserie = allePerioderMedEndringTidsserie.disjoint(søknadsperiode);
         return TidsserieUtils.tilPeriodeList(endringsperiodeTidsserie);
