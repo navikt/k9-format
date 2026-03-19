@@ -5,7 +5,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
-import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.felles.validering.periode.LukketPeriode;
