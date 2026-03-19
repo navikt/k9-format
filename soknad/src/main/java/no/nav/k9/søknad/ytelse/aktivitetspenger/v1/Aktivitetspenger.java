@@ -24,8 +24,8 @@ public class Aktivitetspenger implements Ytelse {
     private Periode søknadsperiode;
 
     @Valid
-    @JsonProperty(value = "forutgåendeMedlemskap", required = true)
-    private Bosteder forutgåendeMedlemskap = new Bosteder();
+    @JsonProperty(value = "forutgåendeBosteder", required = true)
+    private Bosteder forutgåendeBosteder = new Bosteder();
 
     @Override
     public Type getType() {
@@ -72,13 +72,17 @@ public class Aktivitetspenger implements Ytelse {
         return søknadsperiode;
     }
 
+    public Bosteder getForutgåendeBosteder() {
+        return forutgåendeBosteder;
+    }
+
     public Aktivitetspenger medSøknadsperiode(Periode søknadsperiode) {
         this.søknadsperiode = Objects.requireNonNull(søknadsperiode, "søknadsperiode");
         return this;
     }
 
-    public Ytelse medForutgåendeMedlemskap(Bosteder bosteder) {
-        this.forutgåendeMedlemskap = Objects.requireNonNull(bosteder, "bosteder");
+    public Ytelse medForutgåendeBosteder(Bosteder bosteder) {
+        this.forutgåendeBosteder = Objects.requireNonNull(bosteder, "bosteder");
         return this;
     }
 
