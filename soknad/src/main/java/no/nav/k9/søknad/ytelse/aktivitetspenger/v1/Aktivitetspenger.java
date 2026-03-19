@@ -17,12 +17,15 @@ import java.util.Objects;
 
 public class Aktivitetspenger implements Ytelse {
 
-
     @Valid
     @NotNull
     @LukketPeriode
     @JsonProperty("søknadsperiode")
     private Periode søknadsperiode;
+
+    @Valid
+    @JsonProperty(value = "forutgåendeBosteder", required = true)
+    private Bosteder forutgåendeBosteder = new Bosteder();
 
     @Override
     public Type getType() {
@@ -69,9 +72,19 @@ public class Aktivitetspenger implements Ytelse {
         return søknadsperiode;
     }
 
+    public Bosteder getForutgåendeBosteder() {
+        return forutgåendeBosteder;
+    }
+
     public Aktivitetspenger medSøknadsperiode(Periode søknadsperiode) {
         this.søknadsperiode = Objects.requireNonNull(søknadsperiode, "søknadsperiode");
         return this;
     }
+
+    public Ytelse medForutgåendeBosteder(Bosteder bosteder) {
+        this.forutgåendeBosteder = Objects.requireNonNull(bosteder, "bosteder");
+        return this;
+    }
+
 
 }
