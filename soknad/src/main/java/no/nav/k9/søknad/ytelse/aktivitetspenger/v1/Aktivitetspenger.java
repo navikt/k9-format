@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
+import no.nav.k9.søknad.felles.personopplysninger.Bosteder;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.felles.validering.periode.LukketPeriode;
@@ -17,12 +18,15 @@ import java.util.Objects;
 
 public class Aktivitetspenger implements Ytelse {
 
-
     @Valid
     @NotNull
     @LukketPeriode
     @JsonProperty("søknadsperiode")
     private Periode søknadsperiode;
+
+    @Valid
+    @JsonProperty(value = "forutgåendeMedlemskap", required = true)
+    private Bosteder forutgåendeMedlemskap = new Bosteder();
 
     @Override
     public Type getType() {
@@ -73,5 +77,11 @@ public class Aktivitetspenger implements Ytelse {
         this.søknadsperiode = Objects.requireNonNull(søknadsperiode, "søknadsperiode");
         return this;
     }
+
+    public Ytelse medForutgåendeMedlemskap(Bosteder bosteder) {
+        this.forutgåendeMedlemskap = Objects.requireNonNull(bosteder, "bosteder");
+        return this;
+    }
+
 
 }
