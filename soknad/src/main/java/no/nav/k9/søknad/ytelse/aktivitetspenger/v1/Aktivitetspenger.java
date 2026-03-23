@@ -24,8 +24,9 @@ public class Aktivitetspenger implements Ytelse {
     private Periode søknadsperiode;
 
     @Valid
+    @NotNull
     @JsonProperty(value = "forutgåendeBosteder", required = true)
-    private Bosteder forutgåendeBosteder = new Bosteder();
+    private Bosteder forutgåendeBosteder;
 
     @Override
     public Type getType() {

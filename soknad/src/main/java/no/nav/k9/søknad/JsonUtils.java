@@ -72,7 +72,6 @@ public final class JsonUtils {
                 .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                 .configure(JsonGenerator.Feature.WRITE_BIGDECIMAL_AS_PLAIN, true)
                 .enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY)
-                .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                 .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
 
         objectMapper.registerSubtypes(OmsorgspengerUtbetaling.class, PleiepengerSyktBarn.class);
