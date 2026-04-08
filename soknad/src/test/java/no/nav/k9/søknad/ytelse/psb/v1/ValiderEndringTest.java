@@ -7,6 +7,7 @@ import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagArbeidstaker;
 import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagBeredskap;
 import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagNattevåk;
 import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagTilsynsordning;
+import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagUtenlandsopphold;
 import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagUttak;
 import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagYtelse;
 import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.minimumYtelseMedSøknadsperiode;
@@ -67,6 +68,18 @@ class ValiderEndringTest {
 
         var psb = lagYtelse()
                 .medTilsynsordning(lagTilsynsordning(endringsperiode));
+        var søknad = SøknadEksempel.søknad(psb);
+        verifyIngenFeil(søknad, List.of(gyldigIntervalForEndring));
+    }
+
+    @Test
+    void endringssøknadMedBareUtenlandsopphold() {
+        var gyldigIntervalForEndring = new Periode(LocalDate.now(), LocalDate.now().plusWeeks(4));
+        var endringsperiode = new Periode(LocalDate.now().plusDays(2), LocalDate.now().plusWeeks(2));
+
+        var psb = lagYtelse()
+                .medUtenlandsopphold(lagUtenlandsopphold(endringsperiode));
+        assertThat(psb.getSøknadsperiode()).isEqualTo(endringsperiode);
         var søknad = SøknadEksempel.søknad(psb);
         verifyIngenFeil(søknad, List.of(gyldigIntervalForEndring));
     }
