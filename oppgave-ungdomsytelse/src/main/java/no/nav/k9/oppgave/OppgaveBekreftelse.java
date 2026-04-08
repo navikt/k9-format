@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -50,7 +49,6 @@ public class OppgaveBekreftelse implements Innsending {
     @JsonProperty(value = "språk", required = false)
     private Språk språk = Språk.NORSK_BOKMÅL;
 
-    @JsonManagedReference
     @Valid
     @NotNull
     @JsonProperty(value = "bekreftelse", required = true)

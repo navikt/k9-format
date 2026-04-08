@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.AssertTrue;
 
+import java.util.ServiceLoader;
+
 
 /**
  * <p>Klassen representerer tilleggsdata som har verdi som dokumentasjon.
@@ -20,7 +22,7 @@ import jakarta.validation.constraints.AssertTrue;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-public abstract class DataBruktTilUtledning {
+public class DataBruktTilUtledning {
 
     /**
      * Brukes for å bekrefte at bruker har forstått rettigheter og plikter.
@@ -102,16 +104,13 @@ public abstract class DataBruktTilUtledning {
     }
 
     /**
-     * Returnerer en JSON-representasjon av denne klassen eller toString fra superklassen.
-     * Hvis serialisering feiler, returneres toString fra superklassen.
-     * @return JSON-representasjon av denne klassen.
+     * Returnerer en JSON-representasjon av denne klassen
      */
     @Override
     public String toString() {
-        return toJsonString();
-
+        ServiceLoader<DataBruktTilUtledningJsonSerializer> services = ServiceLoader.load(DataBruktTilUtledningJsonSerializer.class);
+        return services.findFirst().map(it->it.toJsonString(this))
+                .orElseThrow( ()-> new IllegalStateException("Trenger å finne implementasjon av DataBruktTilUtledningJsonSerializer. Det kan legges til ved å importere jackson2/3-spesifikk versjon av soknad-modul fra k9-format"));
     }
 
-    //ulik implmeentasjon for jackson 2/3
-    abstract protected String toJsonString();
 }

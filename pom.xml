@@ -10,24 +10,23 @@
 
     <modules>
         <module>ettersendelse</module>
+        <module>ettersendelse-serdes-jackson2</module>
+        <module>ettersendelse-serdes-jackson3</module>
         <module>innsyn</module>
+        <module>innsyn-jackson2-test</module>
+        <module>innsyn-jackson3-test</module>
         <module>inntektsmelding</module>
         <module>konstant</module>
         <module>oppgave-ungdomsytelse</module>
+        <module>oppgave-ungdomsytelse-serdes-jackson2</module>
+        <module>oppgave-ungdomsytelse-serdes-jackson3</module>
         <module>soknad</module>
         <module>soknad-frisinn</module>
         <module>soknad-omsorgspenger</module>
         <module>soknad-omsorgspenger-utbetaling</module>
+        <module>soknad-serdes-jackson2</module>
+        <module>soknad-serdes-jackson3</module>
 
-        <module>ettersendelse-jackson2</module>
-        <module>innsyn-jackson2-test</module>
-        <module>soknad-jackson2</module>
-        <module>oppgave-ungdomsytelse-jackson2</module>
-
-        <module>soknad-jackson3</module>
-        <module>ettersendelse-jackson3</module>
-        <module>oppgave-ungdomsytelse-jackson3</module>
-        <module>innsyn-jackson3-test</module>
     </modules>
 
     <properties>
@@ -110,12 +109,12 @@
             </dependency>
             <dependency>
                 <groupId>no.nav.k9</groupId>
-                <artifactId>soknad-jackson2</artifactId>
+                <artifactId>soknad-serdes-jackson2</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>no.nav.k9</groupId>
-                <artifactId>soknad-jackson3</artifactId>
+                <artifactId>soknad-serdes-jackson3</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -135,12 +134,12 @@
             </dependency>
             <dependency>
                 <groupId>no.nav.k9</groupId>
-                <artifactId>ettersendelse-jackson2</artifactId>
+                <artifactId>ettersendelse-serdes-jackson2</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>no.nav.k9</groupId>
-                <artifactId>ettersendelse-jackson3</artifactId>
+                <artifactId>ettersendelse-serdes-jackson3</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -150,12 +149,12 @@
             </dependency>
             <dependency>
                 <groupId>no.nav.k9</groupId>
-                <artifactId>oppgave-ungdomsytelse-jackson2</artifactId>
+                <artifactId>oppgave-ungdomsytelse-serdes-jackson2</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>no.nav.k9</groupId>
-                <artifactId>oppgave-ungdomsytelse-jackson3</artifactId>
+                <artifactId>oppgave-ungdomsytelse-serdes-jackson3</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

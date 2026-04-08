@@ -64,7 +64,6 @@ public class Søknad implements Innsending {
     @JsonProperty(value = "begrunnelseForInnsending")
     private BegrunnelseForInnsending begrunnelseForInnsending = new BegrunnelseForInnsending();
 
-    @JsonManagedReference
     @Valid
     @NotNull
     @JsonProperty(value = "ytelse", required = true)

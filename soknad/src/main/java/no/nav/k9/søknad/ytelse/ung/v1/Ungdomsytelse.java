@@ -55,12 +55,7 @@ public class Ungdomsytelse implements Ytelse {
 
     @Override
     public DataBruktTilUtledning getDataBruktTilUtledning() {
-        return new DataBruktTilUtledning() {
-            @Override
-            protected String toJsonString() {
-                return "";
-            }
-        };
+        return new DataBruktTilUtledning();
     }
 
     @Override

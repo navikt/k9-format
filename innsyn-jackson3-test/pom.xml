@@ -23,11 +23,11 @@
         </dependency>
         <dependency>
             <groupId>no.nav.k9</groupId>
-            <artifactId>soknad-jackson3</artifactId>
+            <artifactId>soknad-serdes-jackson3</artifactId>
         </dependency>
         <dependency>
             <groupId>no.nav.k9</groupId>
-            <artifactId>ettersendelse-jackson3</artifactId>
+            <artifactId>ettersendelse-serdes-jackson3</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
