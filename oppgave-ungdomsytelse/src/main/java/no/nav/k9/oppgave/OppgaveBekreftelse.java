@@ -48,7 +48,6 @@ public class OppgaveBekreftelse implements Innsending {
     @JsonProperty(value = "språk", required = false)
     private Språk språk = Språk.NORSK_BOKMÅL;
 
-    @JsonManagedReference
     @Valid
     @NotNull
     @JsonProperty(value = "bekreftelse", required = true)
