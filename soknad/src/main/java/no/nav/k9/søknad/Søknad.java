@@ -1,7 +1,11 @@
 package no.nav.k9.søknad;
 
-import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -9,12 +13,19 @@ import no.nav.k9.søknad.felles.DtoKonstanter;
 import no.nav.k9.søknad.felles.Kildesystem;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
-import no.nav.k9.søknad.felles.type.*;
+import no.nav.k9.søknad.felles.type.BegrunnelseForInnsending;
+import no.nav.k9.søknad.felles.type.Journalpost;
+import no.nav.k9.søknad.felles.type.Person;
+import no.nav.k9.søknad.felles.type.Språk;
+import no.nav.k9.søknad.felles.type.SøknadId;
 import no.nav.k9.søknad.ytelse.Ytelse;
 
-import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -231,25 +242,5 @@ public class Søknad implements Innsending {
         return this;
     }
 
-    public static final class SerDes {
-        private SerDes() {
-        }
 
-        public static String serialize(Søknad søknad) {
-            return JsonUtils.toString(søknad);
-        }
-
-        public static Søknad deserialize(String søknad) {
-            return JsonUtils.fromString(søknad, Søknad.class);
-        }
-
-        public static Søknad deserialize(ObjectNode node) {
-            try {
-                return JsonUtils.getObjectMapper().treeToValue(node, Søknad.class);
-            } catch (IOException e) {
-                throw new IllegalArgumentException("Kunne ikke konvertere til Søknad.class", e);
-            }
-        }
-
-    }
 }

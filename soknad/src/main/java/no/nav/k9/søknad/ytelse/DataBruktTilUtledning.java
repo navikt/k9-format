@@ -4,8 +4,6 @@ package no.nav.k9.søknad.ytelse;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import no.nav.k9.søknad.JsonUtils;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.AssertTrue;
 
@@ -22,7 +20,7 @@ import jakarta.validation.constraints.AssertTrue;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-public class DataBruktTilUtledning {
+public abstract class DataBruktTilUtledning {
 
     /**
      * Brukes for å bekrefte at bruker har forstått rettigheter og plikter.
@@ -110,11 +108,10 @@ public class DataBruktTilUtledning {
      */
     @Override
     public String toString() {
-        try {
-            return JsonUtils.toString(this);
-        } catch (Exception e) {
-            // hvis serialisering feiler, returner toString fra superklassen.
-            return super.toString();
-        }
+        return toJsonString();
+
     }
+
+    //ulik implmeentasjon for jackson 2/3
+    abstract protected String toJsonString();
 }
