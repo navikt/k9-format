@@ -1,0 +1,69 @@
+{
+  "språk": "nb",
+  "søker": {
+    "norskIdentitetsnummer": "11111111111"
+  },
+  "ytelse": {
+    "barn": {
+      "fødselsdato": null,
+      "norskIdentitetsnummer": "22222222222"
+    },
+    "type": "PLEIEPENGER_SYKT_BARN",
+    "uttak": {
+      "perioder": {},
+      "perioderSomSkalSlettes": {}
+    },
+    "omsorg": {
+      "relasjonTilBarnet": null,
+      "beskrivelseAvOmsorgsrollen": null
+    },
+    "bosteder": {
+      "perioder": {},
+      "perioderSomSkalSlettes": {}
+    },
+    "beredskap": {
+      "perioder": {},
+      "perioderSomSkalSlettes": {}
+    },
+    "nattevåk": {
+      "perioder": {},
+      "perioderSomSkalSlettes": {}
+    },
+    "arbeidstid": {
+      "arbeidstakerList": [],
+      "frilanserArbeidstidInfo": null,
+      "selvstendigNæringsdrivendeArbeidstidInfo": null
+    },
+    "infoFraPunsj": null,
+    "tilsynsordning": {
+      "perioder": {},
+      "perioderSomSkalSlettes": {}
+    },
+    "endringsperiode": [],
+    "lovbestemtFerie": {
+      "perioder": {}
+    },
+    "søknadsperiode": [],
+    "utenlandsopphold": {
+      "perioder": {},
+      "perioderSomSkalSlettes": {}
+    },
+    "trekkKravPerioder": [],
+    "opptjeningAktivitet": {},
+    "dataBruktTilUtledning": {
+      "harMedsøker": null,
+      "samtidigHjemme": null,
+      "harBekreftetOpplysninger": null,
+      "bekrefterPeriodeOver8Uker": null,
+      "harForståttRettigheterOgPlikter": null
+    }
+  },
+  "versjon": "1.0.0",
+  "søknadId": "6b3ad728-c925-4489-bbb3-8c424a761f1d",
+  "mottattDato": "2021-09-09T08:10:00.000Z",
+  "journalposter": [{
+    "journalpostId": "510000000",
+    "inneholderMedisinskeOpplysninger": true,
+    "inneholderInfomasjonSomIkkeKanPunsjes": false
+  }]
+}

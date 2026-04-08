@@ -1,0 +1,30 @@
+{
+  "søknadId": "123",
+  "mottattDato": "2018-01-02T03:04:05.000Z",
+  "versjon": "1.0.0",
+  "språk": "nb",
+  "søker": {
+    "norskIdentitetsnummer": "02119970078"
+  },
+  "ytelse": {
+    "type": "OMP_UT",
+    "fosterbarn": null,
+    "aktivitet": {
+      "frilanser": {
+        "startdato": "2020-01-01",
+        "jobberFortsattSomFrilans": true
+      }
+    },
+    "fraværsperioder": [
+      {
+        "periode": "2021-09-01/2021-09-02",
+        "duration": null,
+        "årsak": "STENGT_SKOLE_ELLER_BARNEHAGE",
+        "søknadÅrsak": "ARBEIDSGIVER_KONKURS",
+        "aktivitetFravær": ["SELVSTENDIG_VIRKSOMHET"]
+      }
+    ],
+    "bosteder": null,
+    "utenlandsopphold": null
+  }
+}

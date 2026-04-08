@@ -1,0 +1,30 @@
+{
+  "søknadId": "1",
+  "versjon": "2.0.0",
+  "mottattDato": "2020-10-12T12:53:21.046Z",
+  "søker": {
+    "norskIdentitetsnummer": "11111111111"
+  },
+  "ytelse": {
+    "type": "PLEIEPENGER_SYKT_BARN",
+    "barn": {
+      "norskIdentitetsnummer": null,
+      "fødselsdato": "2021-04-22"
+    },
+    "søknadsperiode": [
+      "2018-12-30/2019-10-20"
+    ],
+    "endringsperiode": [],
+    "uttak": {
+      "perioder": {
+        "2018-12-30/2019-02-20": {
+          "timerPleieAvBarnetPerDag": "PT7H30M"
+        },
+        "2019-02-21/2019-10-20": {
+          "timerPleieAvBarnetPerDag": "PT7H30M"
+        }
+      },
+      "perioderSomSkalSlettes": {}
+    }
+  }
+}

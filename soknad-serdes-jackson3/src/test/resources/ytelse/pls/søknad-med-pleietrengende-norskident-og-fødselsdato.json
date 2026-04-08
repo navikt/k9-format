@@ -1,0 +1,42 @@
+{
+  "søknadId": "1",
+  "versjon": "2.0.0",
+  "mottattDato": "2020-10-12T12:53:21.046Z",
+  "søker": {
+    "norskIdentitetsnummer": "11111111111"
+  },
+  "journalposter" : [],
+  "ytelse": {
+    "type" : "PLEIEPENGER_LIVETS_SLUTTFASE",
+    "pleietrengende" : {
+      "norskIdentitetsnummer" : "22111111111",
+      "fødselsdato" : "2000-01-01"
+    },
+    "arbeidAktivitet" : {
+      "selvstendigNæringsdrivende" : [],
+      "frilanser" : null
+    },
+    "arbeidstid" : {
+      "arbeidstakerList" : [ {
+        "norskIdentitetsnummer" : null,
+        "organisasjonsnummer" : "999999999",
+        "arbeidstidInfo" : {
+          "perioder" : {
+            "2021-12-01/2021-12-13" : {
+              "jobberNormaltTimerPerDag" : "PT7H30M",
+              "faktiskArbeidTimerPerDag" : "PT7H30M"
+            }
+          }
+        }
+      } ],
+      "frilanserArbeidstidInfo" : null,
+      "selvstendigNæringsdrivendeArbeidstidInfo" : null
+    },
+    "bosteder" : {
+      "perioder" : {}
+    },
+    "utenlandsopphold" : {
+      "perioder" : {}
+    }
+  }
+}
