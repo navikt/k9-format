@@ -91,12 +91,12 @@ public class Aktivitetspenger implements Ytelse {
         return this;
     }
 
-    public Ytelse medForutgåendeBosteder(Bosteder bosteder) {
+    public Aktivitetspenger medForutgåendeBosteder(Bosteder bosteder) {
         this.forutgåendeBosteder = Objects.requireNonNull(bosteder, "bosteder");
         return this;
     }
 
-    public Ytelse medInntekter(OppgittInntekt inntekter) {
+    public Aktivitetspenger medInntekter(OppgittInntekt inntekter) {
         this.inntekter = Objects.requireNonNull(inntekter, "inntekter");
         return this;
     }
