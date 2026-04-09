@@ -31,19 +31,14 @@ public class JsonUtilsJackson3Test {
         assertThat(reserialisertJson).isEqualTo(json);
     }
 
-    /*
     @Test
     public void ukjentePropertiesSkalGiException() {
-        final Testdata testdata = new Testdata();
-        final ObjectNode objectNode = JsonUtils.toObjectNode(testdata);
-
-        final String feltnavn = "nyttFeltnavn";
-        final String feltverdi = "nyFeltverdi";
-        objectNode.put(feltnavn, feltverdi);
-
-        final String json = JsonUtils.toString(objectNode);
-        assertThat(json).contains(feltnavn);
-        assertThat(json).contains(feltverdi);
+        String json = """
+                {
+                "felt" : "verdi",
+                "nyttFeltnavn" : "nyFeltverdi
+                }
+                """;
 
         try {
             JsonUtils.fromString(json, Testdata.class);
@@ -52,7 +47,6 @@ public class JsonUtilsJackson3Test {
             // Ignore.
         }
     }
-    */
 
 
     @ParameterizedTest
