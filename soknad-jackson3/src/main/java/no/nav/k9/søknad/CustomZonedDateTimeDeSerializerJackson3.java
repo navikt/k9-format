@@ -1,6 +1,7 @@
 package no.nav.k9.søknad;
 
 import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonParser;
 import tools.jackson.databind.ValueDeserializer;
 
 import java.time.ZonedDateTime;
@@ -29,6 +30,10 @@ public class CustomZonedDateTimeDeSerializerJackson3 extends ValueDeserializer<Z
 
     @Override
     public ZonedDateTime deserialize(tools.jackson.core.JsonParser p, tools.jackson.databind.DeserializationContext ctxt) throws JacksonException {
-        return ZonedDateTime.parse(p.getValueAsString(), zonedDateTimeFormatter);
+        return parseDateTime(p.getValueAsString());
+    }
+
+    static ZonedDateTime parseDateTime(String p) {
+        return ZonedDateTime.parse(p, zonedDateTimeFormatter);
     }
 }
