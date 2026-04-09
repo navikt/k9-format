@@ -18,7 +18,7 @@
         </dependency>
         <dependency>
             <groupId>no.nav.k9</groupId>
-            <artifactId>soknad-jackson3</artifactId>
+            <artifactId>soknad-serdes-jackson3</artifactId>
         </dependency>
     </dependencies>
 
