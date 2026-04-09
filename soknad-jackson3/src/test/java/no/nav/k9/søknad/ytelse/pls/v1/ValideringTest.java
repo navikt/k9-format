@@ -1,6 +1,7 @@
 package no.nav.k9.søknad.ytelse.pls.v1;
 
 import no.nav.k9.søknad.JsonUtils;
+import no.nav.k9.søknad.JsonUtilsJackson3;
 import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.TestUtils;
 import no.nav.k9.søknad.felles.Feil;

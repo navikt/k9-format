@@ -3,6 +3,7 @@ package no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker;
 import com.fasterxml.jackson.annotation.*;
 import no.nav.k9.søknad.Innsending;
 import no.nav.k9.søknad.JsonUtils;
+import no.nav.k9.søknad.JsonUtilsJackson2;
 import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;

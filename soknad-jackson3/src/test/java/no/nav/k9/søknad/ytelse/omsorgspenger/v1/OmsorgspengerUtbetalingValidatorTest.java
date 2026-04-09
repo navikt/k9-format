@@ -1,6 +1,7 @@
 package no.nav.k9.søknad.ytelse.omsorgspenger.v1;
 
 import no.nav.k9.søknad.JsonUtils;
+import no.nav.k9.søknad.JsonUtilsJackson3;
 import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;

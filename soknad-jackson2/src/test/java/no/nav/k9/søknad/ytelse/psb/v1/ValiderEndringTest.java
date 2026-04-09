@@ -20,11 +20,12 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import no.nav.k9.søknad.JsonUtils;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
-import no.nav.k9.søknad.JsonUtils;
+import no.nav.k9.søknad.JsonUtilsJackson2;
 import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.TestUtils;
 import no.nav.k9.søknad.felles.Versjon;
@@ -235,7 +236,7 @@ class ValiderEndringTest {
     private void assertEndringsperioderIJson(PleiepengerSyktBarn ytelse) {
         var endringsperioder = new ArrayList<Periode>();
         try {
-            var jsonArray = (ArrayNode) JsonUtils.getObjectMapper()
+            var jsonArray = (ArrayNode) JsonUtilsJackson2.getObjectMapper()
                     .readTree(JsonUtils.toString(ytelse))
                     .get("endringsperiode");
 

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import no.nav.k9.søknad.JsonUtils;
+import no.nav.k9.søknad.JsonUtilsJackson2;
 import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.Søknad;

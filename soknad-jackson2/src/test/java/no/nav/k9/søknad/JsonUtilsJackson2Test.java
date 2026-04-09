@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatNoException;
 
-public class JsonUtilsTest {
+public class JsonUtilsJackson2Test {
 
     @Test
     public void reserialiseringSkalAlltidGiSammeJson() {
@@ -35,7 +35,7 @@ public class JsonUtilsTest {
     @Test
     public void ukjentePropertiesSkalGiException() {
         final Testdata testdata = new Testdata();
-        final ObjectNode objectNode = JsonUtils.toObjectNode(testdata);
+        final ObjectNode objectNode = JsonUtilsJackson2.toObjectNode(testdata);
 
         final String feltnavn = "nyttFeltnavn";
         final String feltverdi = "nyFeltverdi";

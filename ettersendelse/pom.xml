@@ -16,7 +16,55 @@
             <groupId>no.nav.k9</groupId>
             <artifactId>soknad</artifactId>
         </dependency>
+        <dependency>
+            <groupId>no.nav.k9</groupId>
+            <artifactId>soknad-jackson2</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.k9</groupId>
+            <artifactId>soknad-jackson3</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-test</id>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>jackson2-test</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <test.json.util.service>no.nav.k9.søknad.JsonUtilsJackson2</test.json.util.service>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>jackson3-test</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <test.json.util.service>no.nav.k9.søknad.JsonUtilsJackson3</test.json.util.service>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

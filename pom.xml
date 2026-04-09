@@ -10,8 +10,6 @@
 
     <modules>
         <module>ettersendelse</module>
-        <module>ettersendelse-jackson2-test</module>
-        <module>ettersendelse-jackson3-test</module>
         <module>innsyn</module>
         <module>innsyn-jackson2-test</module>
         <module>innsyn-jackson3-test</module>

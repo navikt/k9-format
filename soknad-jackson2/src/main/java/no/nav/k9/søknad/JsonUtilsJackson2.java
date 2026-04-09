@@ -17,15 +17,22 @@ import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.TimeZone;
 
-public final class JsonUtils {
+public final class JsonUtilsJackson2 implements JsonUtilsService {
 
     private static final ObjectMapper objectMapper = createObjectMapper();
 
-    private JsonUtils() {
+    @Override
+    public String toString(Object object) {
+        return toString(object, objectMapper);
     }
 
-    public static String toString(Object object) {
-        return toString(object, objectMapper);
+    @Override
+    public <T> T fromString(String s, Class<T> clazz) {
+        try {
+            return objectMapper.readValue(s, clazz);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -37,14 +44,6 @@ public final class JsonUtils {
             return objectMapper.writer(new PlatformIndependentPrettyPrinter()).writeValueAsString(object);
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Feil ved serialisering av objekt.", e);
-        }
-    }
-
-    public static <T> T fromString(String s, Class<T> clazz) {
-        try {
-            return objectMapper.readValue(s, clazz);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 

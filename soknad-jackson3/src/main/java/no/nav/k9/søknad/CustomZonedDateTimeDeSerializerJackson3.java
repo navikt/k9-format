@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 
-public class CustomZonedDateTimeDeSerializer extends ValueDeserializer<ZonedDateTime> {
+public class CustomZonedDateTimeDeSerializerJackson3 extends ValueDeserializer<ZonedDateTime> {
 
     static final DateTimeFormatter zonedDateTimeFormatter = new DateTimeFormatterBuilder()
             // 2024-08-14T10:05:56

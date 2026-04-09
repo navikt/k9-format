@@ -1,6 +1,7 @@
 package no.nav.k9.søknad.ytelse.psb.v1;
 
 import no.nav.k9.søknad.JsonUtils;
+import no.nav.k9.søknad.JsonUtilsJackson3;
 import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.TestUtils;
 import no.nav.k9.søknad.felles.Versjon;
@@ -233,7 +234,7 @@ class ValiderEndringTest {
     private void assertEndringsperioderIJson(PleiepengerSyktBarn ytelse) {
         var endringsperioder = new ArrayList<Periode>();
         try {
-            var jsonArray = (ArrayNode) JsonUtils.getJsonMapper()
+            var jsonArray = (ArrayNode) JsonUtilsJackson3.getJsonMapper()
                     .readTree(JsonUtils.toString(ytelse))
                     .get("endringsperiode");
 

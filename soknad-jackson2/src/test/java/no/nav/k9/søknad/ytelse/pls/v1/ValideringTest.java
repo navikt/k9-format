@@ -1,20 +1,6 @@
 package no.nav.k9.søknad.ytelse.pls.v1;
 
-import static no.nav.k9.søknad.TestUtils.feilInneholder;
-import static no.nav.k9.søknad.ytelse.pls.v1.ValiderUtil.verifyHarFeil;
-import static no.nav.k9.søknad.ytelse.pls.v1.ValiderUtil.verifyIngenFeil;
-import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagUttak;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.time.Duration;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-
 import no.nav.k9.søknad.JsonUtils;
-import org.junit.jupiter.api.Test;
-
 import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.TestUtils;
 import no.nav.k9.søknad.felles.Feil;
@@ -28,6 +14,19 @@ import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo;
+import org.junit.jupiter.api.Test;
+
+import java.time.Duration;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+
+import static no.nav.k9.søknad.TestUtils.feilInneholder;
+import static no.nav.k9.søknad.ytelse.pls.v1.ValiderUtil.verifyHarFeil;
+import static no.nav.k9.søknad.ytelse.pls.v1.ValiderUtil.verifyIngenFeil;
+import static no.nav.k9.søknad.ytelse.psb.YtelseEksempel.lagUttak;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ValideringTest {
 

@@ -33,6 +33,10 @@ public class CustomZonedDateTimeDeSerializer extends JsonDeserializer<ZonedDateT
     @Override
     public ZonedDateTime deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         String value = p.getValueAsString();
+        return parseDateTime(value);
+    }
+
+    static ZonedDateTime parseDateTime(String value) {
         return ZonedDateTime.parse(value, zonedDateTimeFormatter);
     }
 }

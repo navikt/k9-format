@@ -1,6 +1,7 @@
 package no.nav.k9.søknad.ytelse.psb.v1;
 
 import no.nav.k9.søknad.JsonUtils;
+import no.nav.k9.søknad.JsonUtilsJackson3;
 import no.nav.k9.søknad.Søknad;
 import org.junit.jupiter.api.Test;
 

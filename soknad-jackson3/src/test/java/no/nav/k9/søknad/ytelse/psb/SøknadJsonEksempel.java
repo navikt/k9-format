@@ -1,6 +1,7 @@
 package no.nav.k9.søknad.ytelse.psb;
 
 import no.nav.k9.søknad.JsonUtils;
+import no.nav.k9.søknad.JsonUtilsJackson3;
 import no.nav.k9.søknad.Søknad;
 
 import java.io.IOException;

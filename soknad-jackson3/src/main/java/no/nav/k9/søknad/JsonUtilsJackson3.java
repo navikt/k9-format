@@ -7,7 +7,7 @@ import tools.jackson.databind.module.SimpleModule;
 
 import java.time.ZonedDateTime;
 
-public final class JsonUtils {
+public final class JsonUtilsJackson3 implements JsonUtilsService {
 
     private static final JsonMapper defaultJsonMapper = createDefaultJsonMapperBuilder().build();
 
@@ -15,17 +15,18 @@ public final class JsonUtils {
             .defaultPrettyPrinter(new PlatformIndependentPrettyPrinter())
             .build();
 
-    private JsonUtils() {
-    }
-
-    private static JsonMapper.Builder createDefaultJsonMapperBuilder(){
-        JsonMapper.Builder builder = DefaultJson3Mapper.getCopyFromDefaultJsonMapper();
-        builder.addModule(new SimpleModule().addDeserializer(ZonedDateTime.class, new CustomZonedDateTimeDeSerializer()));
-        return builder;
-    }
-
-    public static String toString(Object object) {
+    @Override
+    public  String toString(Object object) {
         return toString(object, defaultJsonMapper);
+    }
+
+    @Override
+    public  <T> T fromString(String s, Class<T> clazz) {
+        try {
+            return defaultJsonMapper.readValue(s, clazz);
+        } catch (JacksonException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static String toString(Object object, JsonMapper jsonMapper) {
@@ -36,12 +37,10 @@ public final class JsonUtils {
         }
     }
 
-    public static <T> T fromString(String s, Class<T> clazz) {
-        try {
-            return defaultJsonMapper.readValue(s, clazz);
-        } catch (JacksonException e) {
-            throw new RuntimeException(e);
-        }
+    private static JsonMapper.Builder createDefaultJsonMapperBuilder(){
+        JsonMapper.Builder builder = DefaultJson3Mapper.getCopyFromDefaultJsonMapper();
+        builder.addModule(new SimpleModule().addDeserializer(ZonedDateTime.class, new CustomZonedDateTimeDeSerializerJackson3()));
+        return builder;
     }
 
     public static JsonMapper getJsonMapper() {

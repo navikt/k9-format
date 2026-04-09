@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.AssertTrue;
+import no.nav.k9.søknad.JsonUtils;
 
 import java.util.ServiceLoader;
 
@@ -108,9 +109,7 @@ public class DataBruktTilUtledning {
      */
     @Override
     public String toString() {
-        ServiceLoader<DataBruktTilUtledningJsonSerializer> services = ServiceLoader.load(DataBruktTilUtledningJsonSerializer.class);
-        return services.findFirst().map(it->it.toJsonString(this))
-                .orElseThrow( ()-> new IllegalStateException("Trenger å finne implementasjon av DataBruktTilUtledningJsonSerializer. Det kan legges til ved å importere jackson2/3-spesifikk versjon av soknad-modul fra k9-format"));
+        return JsonUtils.toString(this);
     }
 
 }
