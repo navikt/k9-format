@@ -16,6 +16,11 @@
             <groupId>no.nav.k9</groupId>
             <artifactId>soknad</artifactId>
         </dependency>
+        <dependency>
+            <groupId>no.nav.k9</groupId>
+            <artifactId>soknad-jackson2</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 
