@@ -18,6 +18,7 @@
         <module>ettersendelse</module>
         <module>konstant</module>
         <module>oppgave-ungdomsytelse</module>
+        <module>inntektsrapportering</module>
     </modules>
 
     <properties>
@@ -94,6 +95,11 @@
             <dependency>
                 <groupId>no.nav.k9</groupId>
                 <artifactId>oppgave-ungdomsytelse</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>no.nav.ung</groupId>
+                <artifactId>inntektsrapportering</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
