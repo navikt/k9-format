@@ -9,16 +9,19 @@
     <name>k9-format</name>
 
     <modules>
-        <module>innsyn</module>
-        <module>soknad-omsorgspenger</module>
-        <module>soknad</module>
-        <module>inntektsmelding</module>
-        <module>soknad-omsorgspenger-utbetaling</module>
-        <module>soknad-frisinn</module>
         <module>ettersendelse</module>
+        <module>innsyn</module>
+        <module>inntektsmelding</module>
+        <module>inntektsrapportering</module>
         <module>konstant</module>
         <module>oppgave-ungdomsytelse</module>
-        <module>inntektsrapportering</module>
+        <module>soknad</module>
+        <module>soknad-jackson2</module>
+        <module>soknad-jackson3</module>
+        <module>soknad-jackson2og3-tester</module>
+        <module>soknad-frisinn</module>
+        <module>soknad-omsorgspenger</module>
+        <module>soknad-omsorgspenger-utbetaling</module>
     </modules>
 
     <properties>
@@ -78,13 +81,40 @@
                 <type>pom</type>
             </dependency>
             <dependency>
+                <groupId>tools.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
+                <version>3.1.1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.hibernate.validator</groupId>
                 <artifactId>hibernate-validator</artifactId>
                 <version>9.1.0.Final</version>
             </dependency>
             <dependency>
                 <groupId>no.nav.k9</groupId>
+                <artifactId>konstant</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>no.nav.k9</groupId>
                 <artifactId>soknad</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>no.nav.k9</groupId>
+                <artifactId>soknad-jackson2</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>no.nav.k9</groupId>
+                <artifactId>soknad-jackson3</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>no.nav.k9</groupId>
+                <artifactId>innsyn</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

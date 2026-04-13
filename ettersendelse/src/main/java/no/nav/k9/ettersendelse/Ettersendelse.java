@@ -1,17 +1,18 @@
 package no.nav.k9.ettersendelse;
 
-import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import no.nav.k9.søknad.Innsending;
-import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.felles.DtoKonstanter;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.SøknadId;
 
-import java.io.IOException;
 import java.time.ZonedDateTime;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -104,32 +105,12 @@ public class Ettersendelse implements Innsending {
         return new Builder();
     }
 
-    public static final class SerDes {
-        private SerDes() {
-        }
 
-        public static String serialize(Ettersendelse ettersendelse) {
-            return JsonUtils.toString(ettersendelse);
-        }
-
-        public static Ettersendelse deserialize(String ettersendelse) {
-            return JsonUtils.fromString(ettersendelse, Ettersendelse.class);
-        }
-
-        public static Ettersendelse deserialize(ObjectNode node) {
-            try {
-                return JsonUtils.getObjectMapper().treeToValue(node, Ettersendelse.class);
-            } catch (IOException e) {
-                throw new IllegalArgumentException("Kunne ikke konvertere til Ettersendelse.class", e);
-            }
-        }
-    }
 
     public static final class Builder {
         private final static EttersendelseValidator validator = new EttersendelseValidator();
         private final static Versjon versjon = Versjon.of("0.0.1");
 
-        private String json;
         private SøknadId søknadId;
         private ZonedDateTime mottattDato;
         private Søker søker;
@@ -170,20 +151,15 @@ public class Ettersendelse implements Innsending {
             return this;
         }
 
-        public Builder json(String json) {
-            this.json = json;
-            return this;
-        }
-
         public Ettersendelse build() {
-            Ettersendelse ettersendelse = (json == null) ? new Ettersendelse(
+            Ettersendelse ettersendelse = new Ettersendelse(
                     søknadId,
                     versjon,
                     mottattDato,
                     søker,
                     ytelse,
                     pleietrengende,
-                    type) : SerDes.deserialize(json);
+                    type);
             validator.forsikreValidert(ettersendelse);
             return ettersendelse;
         }

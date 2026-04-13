@@ -1,6 +1,9 @@
 package no.nav.k9.innsyn.sak;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import no.nav.k9.innsyn.InnsynHendelse;
+import no.nav.k9.søknad.JsonUtils;
+import no.nav.k9.søknad.felles.Kildesystem;
+import org.junit.jupiter.api.Test;
 
 import java.time.ZonedDateTime;
 import java.util.Arrays;
@@ -8,11 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.Test;
-
-import no.nav.k9.innsyn.InnsynHendelse;
-import no.nav.k9.søknad.JsonUtils;
-import no.nav.k9.søknad.felles.Kildesystem;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class BehandlingTest {
 

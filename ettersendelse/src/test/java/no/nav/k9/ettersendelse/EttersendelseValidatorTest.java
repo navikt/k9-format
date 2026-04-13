@@ -7,6 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Collections;
 import java.util.List;
 
+import no.nav.k9.søknad.JsonUtils;
 import org.junit.jupiter.api.Test;
 
 import no.nav.k9.søknad.ValideringsFeil;
@@ -18,7 +19,7 @@ public class EttersendelseValidatorTest {
     @Test
     public void ettersendelseUtenNoeSatt() {
         Ettersendelse.Builder builder = Ettersendelse.builder();
-        Ettersendelse ettersendelse = Ettersendelse.SerDes.deserialize("{\"versjon\":\"0.0.1\"}");
+        Ettersendelse ettersendelse = JsonUtils.fromString("{\"versjon\":\"0.0.1\"}", Ettersendelse.class);
         List<Feil> builderFeil = verifyHarFeil(builder);
         List<Feil> jsonFeil = verifyHarFeil(ettersendelse);
         assertThat(builderFeil).containsAll(jsonFeil);
@@ -44,7 +45,7 @@ public class EttersendelseValidatorTest {
 
     @Test
     public void komplettEttersendelseFraJson() {
-        Ettersendelse ettersendelse = Ettersendelse.SerDes.deserialize(jsonForKomplettEttersendelse());
+        Ettersendelse ettersendelse = JsonUtils.fromString(jsonForKomplettEttersendelse(), Ettersendelse.class);
         verifyIngenFeil(ettersendelse);
     }
 

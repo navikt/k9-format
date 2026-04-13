@@ -4,10 +4,11 @@ package no.nav.k9.søknad.ytelse;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import no.nav.k9.søknad.JsonUtils;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.AssertTrue;
+import no.nav.k9.søknad.JsonUtils;
+
+import java.util.ServiceLoader;
 
 
 /**
@@ -104,17 +105,11 @@ public class DataBruktTilUtledning {
     }
 
     /**
-     * Returnerer en JSON-representasjon av denne klassen eller toString fra superklassen.
-     * Hvis serialisering feiler, returneres toString fra superklassen.
-     * @return JSON-representasjon av denne klassen.
+     * Returnerer en JSON-representasjon av denne klassen
      */
     @Override
     public String toString() {
-        try {
-            return JsonUtils.toString(this);
-        } catch (Exception e) {
-            // hvis serialisering feiler, returner toString fra superklassen.
-            return super.toString();
-        }
+        return JsonUtils.toString(this);
     }
+
 }

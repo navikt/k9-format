@@ -1,12 +1,14 @@
 package no.nav.k9.oppgave;
 
-import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import no.nav.k9.oppgave.bekreftelse.Bekreftelse;
 import no.nav.k9.søknad.Innsending;
-import no.nav.k9.søknad.JsonUtils;
 import no.nav.k9.søknad.felles.DtoKonstanter;
 import no.nav.k9.søknad.felles.Kildesystem;
 import no.nav.k9.søknad.felles.Versjon;
@@ -14,7 +16,6 @@ import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.Språk;
 import no.nav.k9.søknad.felles.type.SøknadId;
 
-import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.Optional;
@@ -48,7 +49,6 @@ public class OppgaveBekreftelse implements Innsending {
     @JsonProperty(value = "språk", required = false)
     private Språk språk = Språk.NORSK_BOKMÅL;
 
-    @JsonManagedReference
     @Valid
     @NotNull
     @JsonProperty(value = "bekreftelse", required = true)
@@ -192,25 +192,5 @@ public class OppgaveBekreftelse implements Innsending {
         return this;
     }
 
-    public static final class SerDes {
-        private SerDes() {
-        }
 
-        public static String serialize(OppgaveBekreftelse oppgave) {
-            return JsonUtils.toString(oppgave);
-        }
-
-        public static OppgaveBekreftelse deserialize(String oppgave) {
-            return JsonUtils.fromString(oppgave, OppgaveBekreftelse.class);
-        }
-
-        public static OppgaveBekreftelse deserialize(ObjectNode node) {
-            try {
-                return JsonUtils.getObjectMapper().treeToValue(node, OppgaveBekreftelse.class);
-            } catch (IOException e) {
-                throw new IllegalArgumentException("Kunne ikke konvertere til Oppgave.class", e);
-            }
-        }
-
-    }
 }

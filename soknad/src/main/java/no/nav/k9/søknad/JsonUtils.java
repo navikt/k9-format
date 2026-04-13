@@ -1,94 +1,45 @@
 package no.nav.k9.søknad;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.util.DefaultIndenter;
-import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import no.nav.k9.søknad.felles.DtoKonstanter;
-import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetaling;
-import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn;
+import java.util.List;
+import java.util.ServiceLoader;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.time.ZonedDateTime;
-import java.util.TimeZone;
+public class JsonUtils {
 
-public final class JsonUtils {
+    private static JsonUtilsService service;
 
-    private static final ObjectMapper objectMapper = createObjectMapper();
+    static {
+        //dersom eksakt 1 tilgjengelig implementasjon, husk denne for raskere tilgang
+        ServiceLoader<JsonUtilsService> services = ServiceLoader.load(JsonUtilsService.class);
+        if (services.stream().count() == 1) {
+            service = services.findFirst().orElseThrow();
+        }
+    }
 
-    private JsonUtils() {
+    private static JsonUtilsService findService() {
+        if (service != null) {
+            return service;
+        }
+        ServiceLoader<JsonUtilsService> services = ServiceLoader.load(JsonUtilsService.class);
+        String klasseValgtForTest = System.getProperty("test.json.util.service");
+        List<ServiceLoader.Provider<JsonUtilsService>> filtrerte = services.stream()
+                .filter(it -> klasseValgtForTest == null || klasseValgtForTest.equals(it.type().getName()))
+                .toList();
+
+        if (filtrerte.isEmpty()) {
+            throw new IllegalStateException("Ingen implementasjoner av JsonUtilService funnet. Du må importere soknad-jackson2 eller soknad-jackson3 fra k9-format");
+        } else if (filtrerte.size() > 1) {
+            throw new IllegalStateException("Flere implementasjoner av JsonUtilService funnet. Du må importere bare en av soknad-jackson2 eller soknad-jackson3 fra k9-format");
+        } else {
+            return filtrerte.getFirst().get();
+        }
     }
 
     public static String toString(Object object) {
-        return toString(object, objectMapper);
-    }
-
-    /**
-     * Tillater å override objectmapper. Nødvendig i en overgangsfase mens Kodeverdi objekter i k9sak
-     * overføres til @JsonValue
-     */
-    public static String toString(Object object, ObjectMapper objectMapper) {
-        try {
-            return objectMapper.writer(new PlatformIndependentPrettyPrinter()).writeValueAsString(object);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Feil ved serialisering av objekt.", e);
-        }
+        return findService().toString(object);
     }
 
     public static <T> T fromString(String s, Class<T> clazz) {
-        try {
-            return objectMapper.readValue(s, clazz);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return findService().fromString(s, clazz);
     }
 
-    public static final ObjectMapper getObjectMapper() {
-        return objectMapper;
-    }
-
-    static ObjectNode toObjectNode(Object object) {
-        return (ObjectNode) objectMapper.valueToTree(object);
-    }
-
-    private static final ObjectMapper createObjectMapper() {
-        JavaTimeModule javaTimeModule = new JavaTimeModule();
-        javaTimeModule.addDeserializer(ZonedDateTime.class, new CustomZonedDateTimeDeSerializer());
-
-
-        final ObjectMapper objectMapper = new ObjectMapper()
-                .registerModule(new Jdk8Module())
-                .registerModule(javaTimeModule)
-                .setPropertyNamingStrategy(PropertyNamingStrategies.LOWER_CAMEL_CASE)
-                .setTimeZone(TimeZone.getTimeZone("UTC"))
-                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .disable(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS)
-                .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
-                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-                .configure(JsonGenerator.Feature.WRITE_BIGDECIMAL_AS_PLAIN, true)
-                .enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY)
-                .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-                .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
-
-        objectMapper.registerSubtypes(OmsorgspengerUtbetaling.class, PleiepengerSyktBarn.class);
-        objectMapper.setDateFormat(new SimpleDateFormat(DtoKonstanter.DATO_TID_FORMAT));
-
-        return objectMapper;
-    }
-
-    private static final class PlatformIndependentPrettyPrinter extends DefaultPrettyPrinter {
-        PlatformIndependentPrettyPrinter() {
-            this._objectIndenter = new DefaultIndenter("  ", "\n");
-        }
-
-        @Override
-        public DefaultPrettyPrinter createInstance() {
-            return new DefaultPrettyPrinter(this);
-        }
-    }
 }

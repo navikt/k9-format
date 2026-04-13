@@ -4,9 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.ZonedDateTime;
 
+import no.nav.k9.søknad.JsonUtils;
 import org.junit.jupiter.api.Test;
 
-import no.nav.k9.søknad.JsonUtils;
+import no.nav.k9.søknad.JsonUtilsJackson2;
 import no.nav.k9.søknad.Søknad;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Barn;

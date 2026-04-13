@@ -25,6 +25,7 @@ import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
 import no.nav.k9.søknad.felles.validering.periode.LukketPeriode;
+import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid;
@@ -60,11 +61,11 @@ public class PleiepengerSyktBarn implements Ytelse {
 
     @Valid
     @JsonProperty(value = "dataBruktTilUtledning")
-    private DataBruktTilUtledning dataBruktTilUtledning;
+    private no.nav.k9.søknad.ytelse.psb.v1.DataBruktTilUtledning dataBruktTilUtledning;
 
     @JsonProperty(value = "annetDataBruktTilUtledning")
     @Valid
-    private no.nav.k9.søknad.ytelse.DataBruktTilUtledning annetDataBruktTilUtledning;
+    private DataBruktTilUtledning annetDataBruktTilUtledning;
 
     @Deprecated
     @Valid
@@ -215,11 +216,11 @@ public class PleiepengerSyktBarn implements Ytelse {
         return this;
     }
 
-    public Optional<DataBruktTilUtledning> getSøknadInfo() {
+    public Optional<no.nav.k9.søknad.ytelse.psb.v1.DataBruktTilUtledning> getSøknadInfo() {
         return Optional.ofNullable(dataBruktTilUtledning);
     }
 
-    public PleiepengerSyktBarn medSøknadInfo(DataBruktTilUtledning dataBruktTilUtledning) {
+    public PleiepengerSyktBarn medSøknadInfo(no.nav.k9.søknad.ytelse.psb.v1.DataBruktTilUtledning dataBruktTilUtledning) {
         this.dataBruktTilUtledning = Objects.requireNonNull(dataBruktTilUtledning, "dataBruktTilUtledning");
         return this;
     }
@@ -341,12 +342,12 @@ public class PleiepengerSyktBarn implements Ytelse {
     }
 
     @Override
-    public no.nav.k9.søknad.ytelse.DataBruktTilUtledning getDataBruktTilUtledning() {
+    public DataBruktTilUtledning getDataBruktTilUtledning() {
         return this.annetDataBruktTilUtledning;
     }
 
     @Override
-    public Ytelse medDataBruktTilUtledning(no.nav.k9.søknad.ytelse.DataBruktTilUtledning dataBruktTilUtledning) {
+    public Ytelse medDataBruktTilUtledning(DataBruktTilUtledning dataBruktTilUtledning) {
         this.annetDataBruktTilUtledning = dataBruktTilUtledning;
         return this;
     }

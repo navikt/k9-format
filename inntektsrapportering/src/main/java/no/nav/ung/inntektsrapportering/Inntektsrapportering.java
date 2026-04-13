@@ -1,8 +1,10 @@
 package no.nav.ung.inntektsrapportering;
 
-import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import no.nav.ung.inntektsrapportering.inntekt.OppgittInntekt;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import no.nav.k9.søknad.Innsending;
@@ -13,8 +15,8 @@ import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.Språk;
 import no.nav.k9.søknad.felles.type.SøknadId;
+import no.nav.ung.inntektsrapportering.inntekt.OppgittInntekt;
 
-import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.Optional;
@@ -188,25 +190,4 @@ public class Inntektsrapportering implements Innsending {
         return this;
     }
 
-    public static final class SerDes {
-        private SerDes() {
-        }
-
-        public static String serialize(Inntektsrapportering inntektsrapportering) {
-            return JsonUtils.toString(inntektsrapportering);
-        }
-
-        public static Inntektsrapportering deserialize(String inntektsrapportering) {
-            return JsonUtils.fromString(inntektsrapportering, Inntektsrapportering.class);
-        }
-
-        public static Inntektsrapportering deserialize(ObjectNode node) {
-            try {
-                return JsonUtils.getObjectMapper().treeToValue(node, Inntektsrapportering.class);
-            } catch (IOException e) {
-                throw new IllegalArgumentException("Kunne ikke konvertere til Oppgave.class", e);
-            }
-        }
-
-    }
 }
