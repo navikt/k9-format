@@ -11,11 +11,13 @@ import no.nav.k9.søknad.felles.validering.periode.LukketPeriode;
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
+import no.nav.k9.søknad.ytelse.ung.v1.inntekt.OppgittInntekt;
 
 import java.util.List;
 import java.util.Objects;
 
 public class Aktivitetspenger implements Ytelse {
+
 
     @Valid
     @NotNull
@@ -26,6 +28,10 @@ public class Aktivitetspenger implements Ytelse {
     @Valid
     @JsonProperty(value = "forutgåendeBosteder", required = true)
     private Bosteder forutgåendeBosteder = new Bosteder();
+
+    @Valid
+    @JsonProperty(value = "inntekter", required = false)
+    private OppgittInntekt inntekter;
 
     @Override
     public Type getType() {
@@ -76,13 +82,22 @@ public class Aktivitetspenger implements Ytelse {
         return forutgåendeBosteder;
     }
 
+    public OppgittInntekt getInntekter() {
+        return inntekter;
+    }
+
     public Aktivitetspenger medSøknadsperiode(Periode søknadsperiode) {
         this.søknadsperiode = Objects.requireNonNull(søknadsperiode, "søknadsperiode");
         return this;
     }
 
-    public Ytelse medForutgåendeBosteder(Bosteder bosteder) {
+    public Aktivitetspenger medForutgåendeBosteder(Bosteder bosteder) {
         this.forutgåendeBosteder = Objects.requireNonNull(bosteder, "bosteder");
+        return this;
+    }
+
+    public Aktivitetspenger medInntekter(OppgittInntekt inntekter) {
+        this.inntekter = Objects.requireNonNull(inntekter, "inntekter");
         return this;
     }
 
