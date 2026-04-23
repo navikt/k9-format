@@ -4,7 +4,12 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import tools.jackson.databind.exc.InvalidFormatException;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
 
@@ -105,4 +110,247 @@ public class JsonUtilsJackson3Test {
             return felt;
         }
     }
+
+    public static class TimeHolder {
+        private LocalDateTime tid;
+        private ZonedDateTime zonedDateTime;
+        private LocalDate localDate;
+        private Duration duration;
+
+        public LocalDateTime getTid() {
+            return tid;
+        }
+
+        public void setTid(LocalDateTime tid) {
+            this.tid = tid;
+        }
+
+        public ZonedDateTime getZonedDateTime() {
+            return zonedDateTime;
+        }
+
+        public void setZonedDateTime(ZonedDateTime zonedDateTime) {
+            this.zonedDateTime = zonedDateTime;
+        }
+
+        public LocalDate getLocalDate() {
+            return localDate;
+        }
+
+        public void setLocalDate(LocalDate localDate) {
+            this.localDate = localDate;
+        }
+
+        public Duration getDuration() {
+            return duration;
+        }
+
+        public void setDuration(Duration duration) {
+            this.duration = duration;
+        }
+
+    }
+    @Test
+    void serialize_localdatetime() {
+        TimeHolder holder = new TimeHolder();
+        holder.setTid(LocalDateTime.of(2025, 6, 15, 14, 30, 0));
+        String json = JsonUtils.toString(holder);
+        assertThat(json).contains("\"2025-06-15T14:30:00\"");
+    }
+
+    @Test
+    void deserialize_localdatetime() {
+        String json = """
+                { "tid": "2025-06-15T14:30:00" }
+                """;
+        TimeHolder result = JsonUtils.fromString(json, TimeHolder.class);
+        assertThat(result.getTid()).isEqualTo(LocalDateTime.of(2025, 6, 15, 14, 30, 0));
+    }
+
+    @Test
+    void serialize_localdatetime_with_nanos() {
+        TimeHolder holder = new TimeHolder();
+        holder.setTid(LocalDateTime.of(2025, 6, 15, 14, 30, 0, 123456000));
+        String json = JsonUtils.toString(holder);
+        assertThat(json).contains("\"2025-06-15T14:30:00.123456\"");
+    }
+
+    @Test
+    void deserialize_localdatetime_with_nanos() {
+        String json = """
+                { "tid": "2025-06-15T14:30:00.123456" }
+                """;
+        TimeHolder result = JsonUtils.fromString(json, TimeHolder.class);
+        assertThat(result.getTid()).isEqualTo(LocalDateTime.of(2025, 6, 15, 14, 30, 0, 123456000));
+    }
+
+    @Test
+    void serialize_zonedDateTime_utc() {
+        TimeHolder holder = new TimeHolder();
+        holder.setZonedDateTime(ZonedDateTime.of(2025, 6, 15, 10, 30, 0, 0, ZoneId.of("UTC")));
+        String json = JsonUtils.toString(holder);
+        assertThat(json).contains("\"2025-06-15T10:30:00Z\"");
+    }
+
+    @Test
+    void deserialize_zonedDateTime_utc() {
+        String json = """
+                { "zonedDateTime": "2025-06-15T10:30:00Z" }
+                """;
+        TimeHolder result = JsonUtils.fromString(json, TimeHolder.class);
+        assertThat(result.getZonedDateTime()).isEqualTo(ZonedDateTime.of(2025, 6, 15, 10, 30, 0, 0, ZoneId.of("UTC")));
+    }
+
+    @Test
+    void serialize_zonedDateTime_with_offset() {
+        TimeHolder holder = new TimeHolder();
+        holder.setZonedDateTime(ZonedDateTime.of(2025, 6, 15, 12, 30, 0, 0, ZoneId.of("Europe/Oslo")));
+        String json = JsonUtils.toString(holder);
+        assertThat(json).contains("\"2025-06-15T10:30:00Z\"");
+    }
+
+    @Test
+    void deserialize_zonedDateTime_with_offset() {
+        String json = """
+                { "zonedDateTime": "2025-06-15T12:30:00+02:00" }
+                """;
+        TimeHolder result = JsonUtils.fromString(json, TimeHolder.class);
+        assertThat(result.getZonedDateTime().toInstant())
+                .isEqualTo(ZonedDateTime.of(2025, 6, 15, 10, 30, 0, 0, ZoneId.of("UTC")).toInstant());
+    }
+
+    @Test
+    void serialize_zonedDateTime_with_millis() {
+        TimeHolder holder = new TimeHolder();
+        holder.setZonedDateTime(ZonedDateTime.of(2025, 6, 15, 10, 30, 0, 123000000, ZoneId.of("UTC")));
+        String json = JsonUtils.toString(holder);
+        assertThat(json).contains("\"2025-06-15T10:30:00.123Z\"");
+    }
+
+    @Test
+    void deserialize_zonedDateTime_with_millis() {
+        String json = """
+                { "zonedDateTime": "2025-06-15T10:30:00.123Z" }
+                """;
+        TimeHolder result = JsonUtils.fromString(json, TimeHolder.class);
+        assertThat(result.getZonedDateTime().getNano()).isEqualTo(123000000);
+    }
+
+    @Test
+    void serialize_localDate() {
+        TimeHolder holder = new TimeHolder();
+        holder.setLocalDate(LocalDate.of(2025, 6, 15));
+        String json = JsonUtils.toString(holder);
+        assertThat(json).contains("\"2025-06-15\"");
+    }
+
+    @Test
+    void deserialize_localDate() {
+        String json = """
+                { "localDate": "2025-06-15" }
+                """;
+        TimeHolder result = JsonUtils.fromString(json, TimeHolder.class);
+        assertThat(result.getLocalDate()).isEqualTo(LocalDate.of(2025, 6, 15));
+    }
+
+    @Test
+    void serialize_duration_iso() {
+        TimeHolder holder = new TimeHolder();
+        holder.setDuration(Duration.ofHours(7).plusMinutes(30));
+        String json = JsonUtils.toString(holder);
+        assertThat(json).contains("\"PT7H30M\"");
+    }
+
+    @Test
+    void deserialize_duration_iso() {
+        String json = """
+                { "duration": "PT7H30M" }
+                """;
+        TimeHolder result = JsonUtils.fromString(json, TimeHolder.class);
+        assertThat(result.getDuration()).isEqualTo(Duration.ofHours(7).plusMinutes(30));
+    }
+
+    @Test
+    void serialize_duration_seconds() {
+        TimeHolder holder = new TimeHolder();
+        holder.setDuration(Duration.ofHours(1));
+        String json = JsonUtils.toString(holder);
+        assertThat(json).contains("\"PT1H\"");
+    }
+
+    @Test
+    void deserialize_duration_seconds() {
+        String json = """
+                { "duration": "PT3600S" }
+                """;
+        TimeHolder result = JsonUtils.fromString(json, TimeHolder.class);
+        assertThat(result.getDuration()).isEqualTo(Duration.ofHours(1));
+    }
+
+    @Test
+    void serialize_and_deserialize_roundtrip() {
+        TimeHolder original = new TimeHolder();
+        original.setTid(LocalDateTime.of(2025, 3, 20,8, 15, 30));
+        original.setZonedDateTime(ZonedDateTime.of(2025, 3, 20, 14, 0, 0, 0, ZoneId.of("UTC")));
+        original.setLocalDate(LocalDate.of(2025, 3, 20));
+        original.setDuration(Duration.ofHours(2).plusMinutes(45));
+        String json = JsonUtils.toString(original);
+        TimeHolder deserialized = JsonUtils.fromString(json, TimeHolder.class);
+        assertThat(deserialized.getTid()).isEqualTo(original.getTid());
+        assertThat(deserialized.getZonedDateTime().toInstant()).isEqualTo(original.getZonedDateTime().toInstant());
+        assertThat(deserialized.getLocalDate()).isEqualTo(original.getLocalDate());
+        assertThat(deserialized.getDuration()).isEqualTo(original.getDuration());
+    }
+
+    public enum TestEnum {
+        OPSJON_A,
+        OPSJON_B
+    }
+
+    public static class EnumHolder {
+
+        private TestEnum verdi;
+
+        public TestEnum getVerdi() {
+            return verdi;
+        }
+
+        public void setVerdi(TestEnum verdi) {
+            this.verdi = verdi;
+        }
+    }
+
+    @Test
+    void serialisering_av_enum() {
+        EnumHolder enumHolder = new EnumHolder();
+        enumHolder.setVerdi(TestEnum.OPSJON_A);
+        String string = JsonUtils.toString(enumHolder);
+        assertThat(string).isEqualTo("""
+                {
+                  "verdi" : "OPSJON_A"
+                }""");
+    }
+
+    @Test
+    void deserialisering_av_enum() {
+        EnumHolder deserialisert = JsonUtils.fromString("""
+                {
+                "verdi" : "OPSJON_A"
+                }""", EnumHolder.class);
+        assertThat(deserialisert.getVerdi()).isEqualTo(TestEnum.OPSJON_A);
+    }
+
+    @Test
+    void deserialisering_av_ukjent_enumverdi() {
+        try {
+            JsonUtils.fromString("""
+                    {
+                      "verdi" : "OPSJON_C"            
+                    }""", EnumHolder.class);
+            throw new AssertionError("Forventer at deserialisering feiler ved ukjent enumverdi");
+        } catch (RuntimeException e){
+            assertThat(e.getCause()).isInstanceOf(InvalidFormatException.class);
+        }
+    }
+
 }
