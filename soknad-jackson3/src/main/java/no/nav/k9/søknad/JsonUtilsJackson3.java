@@ -2,6 +2,7 @@ package no.nav.k9.søknad;
 
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.SerializationFeature;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.module.SimpleModule;
 
@@ -13,11 +14,12 @@ public final class JsonUtilsJackson3 implements JsonUtilsService {
 
     private static final JsonMapper prettyPrintJsonMapper = createDefaultJsonMapperBuilder()
             .defaultPrettyPrinter(new PlatformIndependentPrettyPrinter())
+            .enable(SerializationFeature.INDENT_OUTPUT)
             .build();
 
     @Override
     public  String toString(Object object) {
-        return toString(object, defaultJsonMapper);
+        return toString(object, prettyPrintJsonMapper);
     }
 
     @Override
@@ -58,7 +60,7 @@ public final class JsonUtilsJackson3 implements JsonUtilsService {
 
         @Override
         public tools.jackson.core.util.DefaultPrettyPrinter createInstance() {
-            return new tools.jackson.core.util.DefaultPrettyPrinter(this);
+            return new PlatformIndependentPrettyPrinter();
         }
     }
 

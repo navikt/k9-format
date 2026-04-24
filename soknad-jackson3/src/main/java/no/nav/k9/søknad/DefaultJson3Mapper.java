@@ -41,7 +41,7 @@ public class DefaultJson3Mapper {
 
     private static JsonMapper.Builder createJsonMapperBuilder() {
         return JsonMapper.builder()
-                .defaultTimeZone(TimeZone.getTimeZone("Europe/Oslo"))
+                .defaultTimeZone(TimeZone.getTimeZone("UTC"))
                 .disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES) // Var noen tester med null for booleans
                 .enable(EnumFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE)
                 .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES) // TODO: Trengs denne? Sak har kjørt lenge uten
