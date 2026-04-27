@@ -82,7 +82,7 @@ class TestUtils {
                         .medStartdato(LocalDate.parse("2019-01-01"))
                         .medSluttdato(LocalDate.parse("2020-01-01")))
                 .søker(new Søker(NorskIdentitetsnummer.of("11111111111")))
-                .fosterbarn(new Barn().medNorskIdentitetsnummer(NorskIdentitetsnummer.of("11111111113")))
+                .fosterbarn(new Barn().medNorskIdentitetsnummer(NorskIdentitetsnummer.of("24420167209")))
                 .fosterbarn(new Barn().medFødselsdato(LocalDate.parse("2000-01-01")))
                 .mottattDato(ZonedDateTime.parse("2019-10-20T07:15:36.124Z"))
                 .søknadId(SøknadId.of("123-123-123"));
@@ -115,7 +115,7 @@ class TestUtils {
                 .frilanser(new Frilanser()
                         .medStartdato(LocalDate.parse("2019-01-01")))
                 .søker(new Søker(NorskIdentitetsnummer.of("11111111111")))
-                .fosterbarn(new Barn().medNorskIdentitetsnummer(NorskIdentitetsnummer.of("11111111113")))
+                .fosterbarn(new Barn().medNorskIdentitetsnummer(NorskIdentitetsnummer.of("24420167209")))
                 .fosterbarn(new Barn().medFødselsdato(LocalDate.parse("2000-01-01")))
                 .mottattDato(ZonedDateTime.parse("2019-10-20T07:15:36.124Z"))
                 .søknadId(SøknadId.of("123-123-123"));
