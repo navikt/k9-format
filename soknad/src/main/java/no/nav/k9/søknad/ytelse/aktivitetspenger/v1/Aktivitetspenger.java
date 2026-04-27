@@ -99,8 +99,8 @@ public class Aktivitetspenger implements Ytelse {
         return this;
     }
 
-    public Ytelse medInntekter(OppgittInntekt inntekter) {
-        this.inntekter = Objects.requireNonNull(inntekter, "inntekter");
+    public Ytelse medInntekter(Bosteder bosteder) {
+        this.forutgåendeBosteder = Objects.requireNonNull(bosteder, "bosteder");
         return this;
     }
 
