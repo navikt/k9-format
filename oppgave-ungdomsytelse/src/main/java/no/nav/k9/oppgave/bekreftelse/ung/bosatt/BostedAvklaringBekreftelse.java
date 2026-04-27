@@ -46,7 +46,7 @@ public class BostedAvklaringBekreftelse implements Bekreftelse {
 
     @Override
     public Type getType() {
-        return Type.UNG_BOSTED_AVKLARING;
+        return Type.AVP_BOSTED_AVKLARING;
     }
 
     @Override

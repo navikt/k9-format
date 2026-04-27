@@ -23,7 +23,7 @@ import java.util.UUID;
         @JsonSubTypes.Type(name = Bekreftelse.UNG_ENDRET_PERIODE, value = EndretPeriodeBekreftelse.class),
         @JsonSubTypes.Type(name = Bekreftelse.UNG_FJERNET_PERIODE, value = FjernetPeriodeBekreftelse.class),
         @JsonSubTypes.Type(name = Bekreftelse.UNG_AVVIK_REGISTERINNTEKT, value = InntektBekreftelse.class),
-        @JsonSubTypes.Type(name = Bekreftelse.UNG_BOSTED_AVKLARING, value = BostedAvklaringBekreftelse.class),
+        @JsonSubTypes.Type(name = Bekreftelse.AVP_BOSTED_AVKLARING, value = BostedAvklaringBekreftelse.class),
 })
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public interface Bekreftelse {
@@ -33,7 +33,7 @@ public interface Bekreftelse {
     String UNG_ENDRET_PERIODE = "UNG_ENDRET_PERIODE";
     String UNG_FJERNET_PERIODE = "UNG_FJERNET_PERIODE";
     String UNG_AVVIK_REGISTERINNTEKT = "UNG_AVVIK_REGISTERINNTEKT";
-    String UNG_BOSTED_AVKLARING = "UNG_BOSTED_AVKLARING";
+    String AVP_BOSTED_AVKLARING = "AVP_BOSTED_AVKLARING";
 
     /**
      * Unik id for oppgaven som blir bekreftet
@@ -60,7 +60,7 @@ public interface Bekreftelse {
         UNG_ENDRET_PERIODE(Bekreftelse.UNG_ENDRET_PERIODE),
         UNG_FJERNET_PERIODE(Bekreftelse.UNG_FJERNET_PERIODE),
         UNG_AVVIK_REGISTERINNTEKT(Bekreftelse.UNG_AVVIK_REGISTERINNTEKT),
-        UNG_BOSTED_AVKLARING(Bekreftelse.UNG_BOSTED_AVKLARING);
+        AVP_BOSTED_AVKLARING(Bekreftelse.AVP_BOSTED_AVKLARING);
 
 
         @JsonValue
