@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.validation.Valid;
+import no.nav.k9.oppgave.bekreftelse.ung.bosatt.BostedAvklaringBekreftelse;
 import no.nav.k9.oppgave.bekreftelse.ung.inntekt.InntektBekreftelse;
 import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretPeriodeBekreftelse;
 import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretSluttdatoBekreftelse;
@@ -22,6 +23,7 @@ import java.util.UUID;
         @JsonSubTypes.Type(name = Bekreftelse.UNG_ENDRET_PERIODE, value = EndretPeriodeBekreftelse.class),
         @JsonSubTypes.Type(name = Bekreftelse.UNG_FJERNET_PERIODE, value = FjernetPeriodeBekreftelse.class),
         @JsonSubTypes.Type(name = Bekreftelse.UNG_AVVIK_REGISTERINNTEKT, value = InntektBekreftelse.class),
+        @JsonSubTypes.Type(name = Bekreftelse.AVP_BOSTED_AVKLARING, value = BostedAvklaringBekreftelse.class),
 })
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public interface Bekreftelse {
@@ -31,6 +33,7 @@ public interface Bekreftelse {
     String UNG_ENDRET_PERIODE = "UNG_ENDRET_PERIODE";
     String UNG_FJERNET_PERIODE = "UNG_FJERNET_PERIODE";
     String UNG_AVVIK_REGISTERINNTEKT = "UNG_AVVIK_REGISTERINNTEKT";
+    String AVP_BOSTED_AVKLARING = "AVP_BOSTED_AVKLARING";
 
     /**
      * Unik id for oppgaven som blir bekreftet
@@ -56,7 +59,8 @@ public interface Bekreftelse {
         UNG_ENDRET_SLUTTDATO(Bekreftelse.UNG_ENDRET_SLUTTDATO),
         UNG_ENDRET_PERIODE(Bekreftelse.UNG_ENDRET_PERIODE),
         UNG_FJERNET_PERIODE(Bekreftelse.UNG_FJERNET_PERIODE),
-        UNG_AVVIK_REGISTERINNTEKT(Bekreftelse.UNG_AVVIK_REGISTERINNTEKT);
+        UNG_AVVIK_REGISTERINNTEKT(Bekreftelse.UNG_AVVIK_REGISTERINNTEKT),
+        AVP_BOSTED_AVKLARING(Bekreftelse.AVP_BOSTED_AVKLARING);
 
 
         @JsonValue
