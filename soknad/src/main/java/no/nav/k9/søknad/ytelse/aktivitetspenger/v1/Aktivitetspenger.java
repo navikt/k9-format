@@ -33,6 +33,9 @@ public class Aktivitetspenger implements Ytelse {
     @JsonProperty(value = "inntekter", required = false)
     private OppgittInntekt inntekter;
 
+    @JsonProperty(value = "erBosattITrondheim", required = false)
+    private Boolean erBosattITrondheim;
+
     @Override
     public Type getType() {
         return Type.AKTIVITETSPENGER;
@@ -101,5 +104,13 @@ public class Aktivitetspenger implements Ytelse {
         return this;
     }
 
+    public Boolean getErBosattITrondheim() {
+        return erBosattITrondheim;
+    }
+
+    public Aktivitetspenger medErBosattITrondheim(Boolean erBosattITrondheim) {
+        this.erBosattITrondheim = erBosattITrondheim;
+        return this;
+    }
 
 }
