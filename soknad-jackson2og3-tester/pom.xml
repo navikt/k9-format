@@ -22,6 +22,11 @@
             <artifactId>soknad-jackson3</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>no.nav.k9</groupId>
+            <artifactId>oppgave-ungdomsytelse</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
