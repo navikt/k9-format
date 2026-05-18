@@ -20,7 +20,6 @@
         <module>soknad-jackson3</module>
         <module>soknad-jackson2og3-tester</module>
         <module>soknad-frisinn</module>
-        <module>soknad-omsorgspenger-utbetaling</module>
     </modules>
 
     <properties>
