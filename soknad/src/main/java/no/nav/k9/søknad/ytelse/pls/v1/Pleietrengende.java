@@ -1,16 +1,22 @@
 package no.nav.k9.søknad.ytelse.pls.v1;
 
-import com.fasterxml.jackson.annotation.*;
-import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
-import no.nav.k9.søknad.felles.type.Person;
-import no.nav.k9.søknad.felles.type.PersonIdent;
+import java.time.LocalDate;
+import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.AssertFalse;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.PastOrPresent;
-import java.time.LocalDate;
-import java.util.Objects;
+
+import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
+import no.nav.k9.søknad.felles.type.Person;
+import no.nav.k9.søknad.felles.type.PersonIdent;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -26,6 +32,9 @@ public class Pleietrengende implements Person {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Oslo")
     @PastOrPresent(message = "[ugyldigFødselsdato] Fødselsdato kan ikke være fremtidig")
     private LocalDate fødselsdato;
+
+    @JsonProperty("ukjent")
+    private boolean ukjent = false;
 
     @Deprecated
     public Pleietrengende(@JsonProperty(value = "norskIdentitetsnummer") @JsonAlias({ "fødselsnummer", "norskIdentifikator", "identitetsnummer", "fnr" }) NorskIdentitetsnummer norskIdentitetsnummer,
@@ -46,6 +55,15 @@ public class Pleietrengende implements Person {
         return fødselsdato;
     }
 
+    public boolean isUkjent() {
+        return ukjent;
+    }
+
+    public Pleietrengende medUkjentPleietrengende() {
+        this.ukjent = true;
+        return this;
+    }
+
     public Pleietrengende medNorskIdentitetsnummer(NorskIdentitetsnummer norskIdentitetsnummer) {
         this.norskIdentitetsnummer = Objects.requireNonNull(norskIdentitetsnummer, "norskIdentitetsnummer");
         return this;
@@ -59,7 +77,8 @@ public class Pleietrengende implements Person {
     @AssertTrue(message = "norskIdentitetsnummer eller fødselsdato må være satt")
     private boolean isOk() {
         return (norskIdentitetsnummer != null && norskIdentitetsnummer.getVerdi() != null)
-                || (fødselsdato != null);
+                || (fødselsdato != null)
+                ||  ukjent;
     }
 
     @AssertFalse(message = "[ikkeEntydig] Ikke entydig, må oppgi enten fnr/dnr eller fødselsdato.")

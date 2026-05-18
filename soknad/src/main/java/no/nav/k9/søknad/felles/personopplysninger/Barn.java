@@ -26,11 +26,14 @@ public class Barn implements Person {
     @Valid
     private NorskIdentitetsnummer norskIdentitetsnummer;
 
-    @JsonProperty(value = "fødselsdato", required = false)
+    @JsonProperty(value = "fødselsdato")
     @Valid
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Oslo")
     @PastOrPresent(message = "[ugyldigFødselsdato] Fødselsdato kan ikke være fremtidig")
     private LocalDate fødselsdato;
+
+    @JsonProperty("ukjent")
+    private boolean ukjent = false;
 
     @Override
     public PersonIdent getPersonIdent() {
@@ -39,6 +42,10 @@ public class Barn implements Person {
 
     public LocalDate getFødselsdato() {
         return fødselsdato;
+    }
+
+    public boolean isUkjent() {
+        return ukjent;
     }
 
     public Barn medNorskIdentitetsnummer(NorskIdentitetsnummer norskIdentitetsnummer) {
@@ -51,18 +58,17 @@ public class Barn implements Person {
         return this;
     }
 
+    public Barn medUkjentBarn() {
+        this.ukjent = true;
+        return this;
+    }
+
     @AssertTrue(message = "norskIdentitetsnummer eller fødselsdato må være satt")
     private boolean isOk() {
         return (norskIdentitetsnummer != null && norskIdentitetsnummer.getVerdi() != null)
-                || (fødselsdato != null);
+                || (fødselsdato != null)
+                ||  ukjent;
     }
-
-    /* Deaktivert pga søknader med feil
-    @AssertFalse(message = "[ikkeEntydig] Ikke entydig, må oppgi enten fnr/dnr eller fødselsdato.")
-    private boolean isEntydig() {
-        return this.getPersonIdent() != null && this.fødselsdato != null;
-    }
-     */
 
     @Override
     public int hashCode() {
@@ -79,5 +85,4 @@ public class Barn implements Person {
         return Objects.equals(getPersonIdent(), other.getPersonIdent())
             && Objects.equals(getFødselsdato(), other.getFødselsdato());
     }
-
 }
