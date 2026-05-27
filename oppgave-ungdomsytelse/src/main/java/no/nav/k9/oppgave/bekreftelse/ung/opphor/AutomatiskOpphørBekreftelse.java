@@ -63,6 +63,8 @@ public record AutomatiskOpphørBekreftelse(
     }
 
     @Override
+    // TODO(rydd): Vurder å gi denne metoden et mindre builder-liknende navn (f.eks. kloneMedDataBruktTilUtledning)
+    // siden dette i record er en kopimetode ("wither") som returnerer ny instans, ikke en muterende setter.
     public Bekreftelse medDataBruktTilUtledning(DataBruktTilUtledning dataBruktTilUtledning) {
         return new AutomatiskOpphørBekreftelse(oppgaveReferanse, sluttdato, harUttalelse, uttalelseFraBruker, dataBruktTilUtledning);
     }
