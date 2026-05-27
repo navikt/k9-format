@@ -1,7 +1,7 @@
 package no.nav.k9.oppgave.bekreftelse.ung.periodeendring;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import no.nav.k9.konstant.Patterns;
@@ -11,33 +11,19 @@ import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public class EndretStartdatoBekreftelse implements Bekreftelse {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record EndretStartdatoBekreftelse(
+        UUID oppgaveReferanse,
+        LocalDate nyStartdato,
+        boolean harUttalelse,
+        @Pattern(regexp = Patterns.FRITEKST, message = "[ugyldigSyntaks] matcher ikke tillatt pattern [{regexp}]")
+        @Size(max = 4000)
+        String uttalelseFraBruker,
+        DataBruktTilUtledning dataBruktTilUtledning
+) implements Bekreftelse {
 
-    @JsonProperty("oppgaveReferanse")
-    private UUID oppgaveReferanse;
-
-    @JsonProperty("nyStartdato")
-    private LocalDate nyStartdato;
-
-    @JsonProperty("harUttalelse")
-    private boolean harUttalelse;
-
-    @JsonProperty("uttalelseFraBruker")
-    @Pattern(regexp = Patterns.FRITEKST, message = "[ugyldigSyntaks] matcher ikke tillatt pattern [{regexp}]")
-    @Size(max = 4000)
-    private String uttalelseFraBruker;
-
-    @JsonProperty("dataBruktTilUtledning")
-    private DataBruktTilUtledning dataBruktTilUtledning;
-
-    @JsonCreator
-    public EndretStartdatoBekreftelse(
-            @JsonProperty("oppgaveReferanse") UUID oppgaveReferanse,
-            @JsonProperty("nyStartdato") LocalDate nyStartdato,
-            @JsonProperty("harUttalelse") boolean harUttalelse) {
-        this.oppgaveReferanse = oppgaveReferanse;
-        this.nyStartdato = nyStartdato;
-        this.harUttalelse = harUttalelse;
+    public EndretStartdatoBekreftelse(UUID oppgaveReferanse, LocalDate nyStartdato, boolean harUttalelse) {
+        this(oppgaveReferanse, nyStartdato, harUttalelse, null, null);
     }
 
     public LocalDate getNyStartdato() {
@@ -49,6 +35,7 @@ public class EndretStartdatoBekreftelse implements Bekreftelse {
         return oppgaveReferanse;
     }
 
+    @JsonIgnore
     @Override
     public Type getType() {
         return Type.UNG_ENDRET_STARTDATO;
@@ -61,8 +48,7 @@ public class EndretStartdatoBekreftelse implements Bekreftelse {
 
     @Override
     public Bekreftelse medDataBruktTilUtledning(DataBruktTilUtledning dataBruktTilUtledning) {
-        this.dataBruktTilUtledning = dataBruktTilUtledning;
-        return this;
+        return new EndretStartdatoBekreftelse(oppgaveReferanse, nyStartdato, harUttalelse, uttalelseFraBruker, dataBruktTilUtledning);
     }
 
     @Override
@@ -71,12 +57,6 @@ public class EndretStartdatoBekreftelse implements Bekreftelse {
     }
 
     public Bekreftelse medUttalelseFraBruker(String uttalelseFraBruker) {
-        this.uttalelseFraBruker = uttalelseFraBruker;
-        return this;
-    }
-
-    @Override
-    public boolean harUttalelse() {
-        return harUttalelse;
+        return new EndretStartdatoBekreftelse(oppgaveReferanse, nyStartdato, harUttalelse, uttalelseFraBruker, dataBruktTilUtledning);
     }
 }
