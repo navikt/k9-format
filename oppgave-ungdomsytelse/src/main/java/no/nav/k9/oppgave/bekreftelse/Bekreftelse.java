@@ -1,5 +1,6 @@
 package no.nav.k9.oppgave.bekreftelse;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -41,6 +42,7 @@ public interface Bekreftelse {
      */
     UUID getOppgaveReferanse();
 
+    @JsonIgnore
     Bekreftelse.Type getType();
 
     /**
