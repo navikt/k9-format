@@ -16,7 +16,7 @@ import java.util.UUID;
 public record EndretPeriodeBekreftelse(
         @NotNull UUID oppgaveReferanse,
         Periode nyPeriode,
-        @NotNull boolean harUttalelse,
+        boolean harUttalelse,
         @Pattern(regexp = Patterns.FRITEKST, message = "[ugyldigSyntaks] matcher ikke tillatt pattern [{regexp}]")
         @Size(max = 4000)
         String uttalelseFraBruker,
