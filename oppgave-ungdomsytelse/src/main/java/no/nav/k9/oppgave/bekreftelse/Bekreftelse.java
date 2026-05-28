@@ -25,7 +25,7 @@ import java.util.UUID;
         @JsonSubTypes.Type(name = Bekreftelse.UNG_FJERNET_PERIODE, value = FjernetPeriodeBekreftelse.class),
         @JsonSubTypes.Type(name = Bekreftelse.UNG_AVVIK_REGISTERINNTEKT, value = InntektBekreftelse.class),
         @JsonSubTypes.Type(name = Bekreftelse.AVP_BOSTED_AVKLARING, value = BostedAvklaringBekreftelse.class),
-        @JsonSubTypes.Type(name = Bekreftelse.UNG_OPPHOR_VED_MAKDSDATO, value = OpphørVedMaksdatoBekreftelse.class),
+        @JsonSubTypes.Type(name = Bekreftelse.UNG_OPPHOR_VED_MAKSDATO, value = OpphørVedMaksdatoBekreftelse.class),
 })
 public interface Bekreftelse {
 
@@ -35,7 +35,7 @@ public interface Bekreftelse {
     String UNG_FJERNET_PERIODE = "UNG_FJERNET_PERIODE";
     String UNG_AVVIK_REGISTERINNTEKT = "UNG_AVVIK_REGISTERINNTEKT";
     String AVP_BOSTED_AVKLARING = "AVP_BOSTED_AVKLARING";
-    String UNG_OPPHOR_VED_MAKDSDATO = "UNG_OPPHOR_VED_MAKDSDATO";
+    String UNG_OPPHOR_VED_MAKSDATO = "UNG_OPPHOR_VED_MAKSDATO";
 
     /**
      * Unik id for oppgaven som blir bekreftet
@@ -64,7 +64,7 @@ public interface Bekreftelse {
         UNG_FJERNET_PERIODE(Bekreftelse.UNG_FJERNET_PERIODE),
         UNG_AVVIK_REGISTERINNTEKT(Bekreftelse.UNG_AVVIK_REGISTERINNTEKT),
         AVP_BOSTED_AVKLARING(Bekreftelse.AVP_BOSTED_AVKLARING),
-        UNG_OPPHOR_VED_MAKSDATO(Bekreftelse.UNG_OPPHOR_VED_MAKDSDATO);
+        UNG_OPPHOR_VED_MAKSDATO(Bekreftelse.UNG_OPPHOR_VED_MAKSDATO);
 
 
         @JsonValue
