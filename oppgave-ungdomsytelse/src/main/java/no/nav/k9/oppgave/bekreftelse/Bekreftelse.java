@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.validation.Valid;
 import no.nav.k9.oppgave.bekreftelse.ung.bosatt.BostedAvklaringBekreftelse;
 import no.nav.k9.oppgave.bekreftelse.ung.inntekt.InntektBekreftelse;
-import no.nav.k9.oppgave.bekreftelse.ung.opphor.AutomatiskOpphørBekreftelse;
+import no.nav.k9.oppgave.bekreftelse.ung.opphor.OpphørVedMaksdatoBekreftelse;
 import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretPeriodeBekreftelse;
 import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretSluttdatoBekreftelse;
 import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretStartdatoBekreftelse;
@@ -25,7 +25,7 @@ import java.util.UUID;
         @JsonSubTypes.Type(name = Bekreftelse.UNG_FJERNET_PERIODE, value = FjernetPeriodeBekreftelse.class),
         @JsonSubTypes.Type(name = Bekreftelse.UNG_AVVIK_REGISTERINNTEKT, value = InntektBekreftelse.class),
         @JsonSubTypes.Type(name = Bekreftelse.AVP_BOSTED_AVKLARING, value = BostedAvklaringBekreftelse.class),
-        @JsonSubTypes.Type(name = Bekreftelse.UNG_AUTOMATISK_OPPHOR, value = AutomatiskOpphørBekreftelse.class),
+        @JsonSubTypes.Type(name = Bekreftelse.UNG_OPPHOR_VED_MAKDSDATO, value = OpphørVedMaksdatoBekreftelse.class),
 })
 public interface Bekreftelse {
 
@@ -35,7 +35,7 @@ public interface Bekreftelse {
     String UNG_FJERNET_PERIODE = "UNG_FJERNET_PERIODE";
     String UNG_AVVIK_REGISTERINNTEKT = "UNG_AVVIK_REGISTERINNTEKT";
     String AVP_BOSTED_AVKLARING = "AVP_BOSTED_AVKLARING";
-    String UNG_AUTOMATISK_OPPHOR = "UNG_AUTOMATISK_OPPHOR";
+    String UNG_OPPHOR_VED_MAKDSDATO = "UNG_OPPHOR_VED_MAKDSDATO";
 
     /**
      * Unik id for oppgaven som blir bekreftet
@@ -64,7 +64,7 @@ public interface Bekreftelse {
         UNG_FJERNET_PERIODE(Bekreftelse.UNG_FJERNET_PERIODE),
         UNG_AVVIK_REGISTERINNTEKT(Bekreftelse.UNG_AVVIK_REGISTERINNTEKT),
         AVP_BOSTED_AVKLARING(Bekreftelse.AVP_BOSTED_AVKLARING),
-        UNG_AUTOMATISK_OPPHOR(Bekreftelse.UNG_AUTOMATISK_OPPHOR);
+        UNG_OPPHOR_VED_MAKSDATO(Bekreftelse.UNG_OPPHOR_VED_MAKDSDATO);
 
 
         @JsonValue
