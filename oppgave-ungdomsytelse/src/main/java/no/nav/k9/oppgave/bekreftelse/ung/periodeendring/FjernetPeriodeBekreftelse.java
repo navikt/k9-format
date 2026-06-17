@@ -2,6 +2,7 @@ package no.nav.k9.oppgave.bekreftelse.ung.periodeendring;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import no.nav.k9.konstant.Patterns;
@@ -24,6 +25,15 @@ public record FjernetPeriodeBekreftelse(
 
     public FjernetPeriodeBekreftelse(UUID oppgaveReferanse, Periode fjernetPeriode, boolean harUttalelse) {
         this(oppgaveReferanse, fjernetPeriode, harUttalelse, null, null);
+    }
+
+    @JsonIgnore
+    @AssertTrue(message = "uttalelseFraBruker må være satt dersom harUttalelse er true")
+    public boolean isUttalelseFraBrukerSattVedHarUttalelse() {
+        if (harUttalelse) {
+            return uttalelseFraBruker != null && !uttalelseFraBruker.isBlank();
+        }
+        return true;
     }
 
     public Periode getFjernetPeriode() {
@@ -56,9 +66,5 @@ public record FjernetPeriodeBekreftelse(
     @Override
     public String getUttalelseFraBruker() {
         return uttalelseFraBruker;
-    }
-
-    public Bekreftelse medUttalelseFraBruker(String uttalelseFraBruker) {
-        return new FjernetPeriodeBekreftelse(oppgaveReferanse, fjernetPeriode, harUttalelse, uttalelseFraBruker, dataBruktTilUtledning);
     }
 }

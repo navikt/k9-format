@@ -3,6 +3,7 @@ package no.nav.k9.oppgave;
 import no.nav.k9.oppgave.bekreftelse.Bekreftelse;
 import no.nav.k9.oppgave.bekreftelse.ung.opphor.OpphørVedMaksdatoBekreftelse;
 import no.nav.k9.søknad.JsonUtils;
+import no.nav.k9.søknad.TestValidator;
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 import org.junit.jupiter.api.Test;
 
@@ -35,8 +36,9 @@ class OpphørVedMaksdatoBekreftelseTest {
         var original = new OpphørVedMaksdatoBekreftelse(
                 UUID.fromString("00000000-0000-0000-0000-000000000002"),
                 LocalDate.of(2026, 5, 12),
-                true)
-                .medUttalelseFraBruker("Jeg er uenig i dette vedtaket");
+                true,
+                "Jeg er uenig i dette vedtaket",
+                null);
 
         var medData = original.medDataBruktTilUtledning(
                 new DataBruktTilUtledning()
@@ -75,12 +77,45 @@ class OpphørVedMaksdatoBekreftelseTest {
                 LocalDate.of(2026, 6, 1),
                 false);
 
-        var medUttalelse = (OpphørVedMaksdatoBekreftelse) original.medUttalelseFraBruker("kommentar");
+        var medUttalelse = new OpphørVedMaksdatoBekreftelse(
+                original.oppgaveReferanse(),
+                original.sluttdato(),
+                original.harUttalelse(),
+                "kommentar",
+                null);
         var medData = (OpphørVedMaksdatoBekreftelse) original.medDataBruktTilUtledning(new DataBruktTilUtledning());
 
         assertThat(original.getUttalelseFraBruker()).isNull();
         assertThat(original.getDataBruktTilUtledning()).isNull();
         assertThat(medUttalelse.getUttalelseFraBruker()).isEqualTo("kommentar");
         assertThat(medData.getDataBruktTilUtledning()).isNotNull();
+    }
+
+    @Test
+    void validering_feiler_når_harUttalelse_true_men_uttalelse_mangler() {
+        String json = """
+                {
+                  "type": "UNG_OPPHOR_VED_MAKSDATO",
+                  "oppgaveReferanse": "00000000-0000-0000-0000-000000000007",
+                  "sluttdato": "2026-05-12",
+                  "harUttalelse": true
+                }
+                """;
+        BekreftelseValideringTestUtil.assertManglendeUttalelseGirFeil(json);
+    }
+
+    @Test
+    void validering_ok_når_harUttalelse_true_og_uttalelse_satt() {
+        String json = """
+                {
+                  "type": "UNG_OPPHOR_VED_MAKSDATO",
+                  "oppgaveReferanse": "00000000-0000-0000-0000-000000000007",
+                  "sluttdato": "2026-05-12",
+                  "harUttalelse": true,
+                  "uttalelseFraBruker": "Jeg er enig"
+                }
+                """;
+
+        new TestValidator().verifyIngenFeil(JsonUtils.fromString(json, Bekreftelse.class));
     }
 }
