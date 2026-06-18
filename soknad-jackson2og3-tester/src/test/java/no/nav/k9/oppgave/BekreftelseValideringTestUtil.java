@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Felles testverktøy for {@link Bekreftelse}-implementasjoner: asserterer at
- * {@code @AssertTrue}-valideringen (isUttalelseFraBrukerSattVedHarUttalelse) kjøres etter parsing.
+ * {@code @AssertTrue}-valideringen (isUttalelseFraBrukerSattHvisHarUttalelse) kjøres etter parsing.
  */
 final class BekreftelseValideringTestUtil {
 

@@ -30,7 +30,7 @@ public record EndretPeriodeBekreftelse(
 
     @JsonIgnore
     @AssertTrue(message = "uttalelseFraBruker må være satt dersom harUttalelse er true")
-    public boolean isUttalelseFraBrukerSattVedHarUttalelse() {
+    public boolean isUttalelseFraBrukerSattHvisHarUttalelse() {
         if (harUttalelse) {
             return uttalelseFraBruker != null && !uttalelseFraBruker.isBlank();
         }
