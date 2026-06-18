@@ -1,9 +1,7 @@
 package no.nav.k9.oppgave.bekreftelse.ung.inntekt;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import no.nav.k9.konstant.Patterns;
@@ -42,6 +40,15 @@ public class InntektBekreftelse implements Bekreftelse {
 
     public static Builder builder() {
         return new Builder();
+    }
+
+    @JsonIgnore
+    @AssertTrue(message = "uttalelseFraBruker må være satt dersom harUttalelse er true")
+    public boolean isUttalelseFraBrukerSattHvisHarUttalelse() {
+        if (harUttalelse) {
+            return uttalelseFraBruker != null && !uttalelseFraBruker.isBlank();
+        }
+        return true;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package no.nav.k9.oppgave.bekreftelse.ung.opphor;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import no.nav.k9.konstant.Patterns;
@@ -31,6 +33,15 @@ public record OpphørVedMaksdatoBekreftelse(
 
     public OpphørVedMaksdatoBekreftelse(UUID oppgaveReferanse, LocalDate sluttdato, boolean harUttalelse) {
         this(oppgaveReferanse, sluttdato, harUttalelse, null, null);
+    }
+
+    @JsonIgnore
+    @AssertTrue(message = "uttalelseFraBruker må være satt dersom harUttalelse er true")
+    public boolean isUttalelseFraBrukerSattHvisHarUttalelse() {
+        if (harUttalelse) {
+            return uttalelseFraBruker != null && !uttalelseFraBruker.isBlank();
+        }
+        return true;
     }
 
     @Override
@@ -66,10 +77,6 @@ public record OpphørVedMaksdatoBekreftelse(
     // TODO(rydd): Vurder å gi denne metoden et mindre builder-liknende navn (f.eks. kloneMedDataBruktTilUtledning)
     // siden dette i record er en kopimetode ("wither") som returnerer ny instans, ikke en muterende setter.
     public Bekreftelse medDataBruktTilUtledning(DataBruktTilUtledning dataBruktTilUtledning) {
-        return new OpphørVedMaksdatoBekreftelse(oppgaveReferanse, sluttdato, harUttalelse, uttalelseFraBruker, dataBruktTilUtledning);
-    }
-
-    public Bekreftelse medUttalelseFraBruker(String uttalelseFraBruker) {
         return new OpphørVedMaksdatoBekreftelse(oppgaveReferanse, sluttdato, harUttalelse, uttalelseFraBruker, dataBruktTilUtledning);
     }
 }
