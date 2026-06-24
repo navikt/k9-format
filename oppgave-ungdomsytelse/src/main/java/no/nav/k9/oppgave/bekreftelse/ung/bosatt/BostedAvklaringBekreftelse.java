@@ -1,4 +1,4 @@
-package no.nav.k9.oppgave.bekreftelse.ung.inntekt;
+package no.nav.k9.oppgave.bekreftelse.ung.bosatt;
 
 import com.fasterxml.jackson.annotation.*;
 import jakarta.validation.constraints.AssertTrue;
@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
-public class InntektBekreftelse implements Bekreftelse {
+public class BostedAvklaringBekreftelse implements Bekreftelse {
 
     @JsonProperty("oppgaveReferanse")
     private final UUID oppgaveReferanse;
@@ -28,18 +28,13 @@ public class InntektBekreftelse implements Bekreftelse {
     @JsonProperty("dataBruktTilUtledning")
     private DataBruktTilUtledning dataBruktTilUtledning;
 
-
     @JsonCreator
-    public InntektBekreftelse(@JsonProperty("oppgaveReferanse") UUID oppgaveReferanse,
-                              @JsonProperty(value = "harUttalelse") boolean harUttalelse,
-                              @JsonProperty(value = "uttalelseFraBruker") String uttalelseFraBruker) {
-        this.uttalelseFraBruker = uttalelseFraBruker;
-        this.harUttalelse = harUttalelse;
+    public BostedAvklaringBekreftelse(@JsonProperty("oppgaveReferanse") UUID oppgaveReferanse,
+                                      @JsonProperty(value = "harUttalelse") boolean harUttalelse,
+                                      @JsonProperty(value = "uttalelseFraBruker") String uttalelseFraBruker) {
         this.oppgaveReferanse = oppgaveReferanse;
-    }
-
-    public static Builder builder() {
-        return new Builder();
+        this.harUttalelse = harUttalelse;
+        this.uttalelseFraBruker = uttalelseFraBruker;
     }
 
     @JsonIgnore
@@ -58,7 +53,7 @@ public class InntektBekreftelse implements Bekreftelse {
 
     @Override
     public Type getType() {
-        return Type.UNG_AVVIK_REGISTERINNTEKT;
+        return Type.AVP_BOSTED_AVKLARING;
     }
 
     @Override
@@ -81,34 +76,4 @@ public class InntektBekreftelse implements Bekreftelse {
     public boolean harUttalelse() {
         return harUttalelse;
     }
-
-    public static final class Builder {
-        private String uttalelseFraBruker;
-        private boolean harUttalelse;
-        private UUID oppgaveReferanse;
-
-        private Builder() {
-        }
-
-        public Builder medUttalelseFraBruker(String uttalelseFraBruker) {
-            this.uttalelseFraBruker = uttalelseFraBruker;
-            return this;
-        }
-
-        public Builder medHarUttalelse(boolean harUttalelse) {
-            this.harUttalelse = harUttalelse;
-            return this;
-        }
-
-        public Builder medOppgaveReferanse(UUID oppgaveReferanse) {
-            this.oppgaveReferanse = oppgaveReferanse;
-            return this;
-        }
-
-        public InntektBekreftelse build() {
-            return new InntektBekreftelse(oppgaveReferanse, harUttalelse, uttalelseFraBruker);
-        }
-    }
-
-
 }

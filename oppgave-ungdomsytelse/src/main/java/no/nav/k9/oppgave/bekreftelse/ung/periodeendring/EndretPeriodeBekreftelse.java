@@ -1,7 +1,8 @@
 package no.nav.k9.oppgave.bekreftelse.ung.periodeendring;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -12,35 +13,28 @@ import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 
 import java.util.UUID;
 
-public class EndretPeriodeBekreftelse implements Bekreftelse{
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record EndretPeriodeBekreftelse(
+        @NotNull UUID oppgaveReferanse,
+        Periode nyPeriode,
+        boolean harUttalelse,
+        @Pattern(regexp = Patterns.FRITEKST, message = "[ugyldigSyntaks] matcher ikke tillatt pattern [{regexp}]")
+        @Size(max = 4000)
+        String uttalelseFraBruker,
+        DataBruktTilUtledning dataBruktTilUtledning
+) implements Bekreftelse {
 
-    @NotNull
-    @JsonProperty("oppgaveReferanse")
-    private UUID oppgaveReferanse;
+    public EndretPeriodeBekreftelse(UUID oppgaveReferanse, Periode nyPeriode, boolean harUttalelse) {
+        this(oppgaveReferanse, nyPeriode, harUttalelse, null, null);
+    }
 
-    @JsonProperty("nyPeriode")
-    private Periode nyPeriode;
-
-    @NotNull
-    @JsonProperty("harUttalelse")
-    private boolean harUttalelse;
-
-    @JsonProperty("uttalelseFraBruker")
-    @Pattern(regexp = Patterns.FRITEKST, message = "[ugyldigSyntaks] matcher ikke tillatt pattern [{regexp}]")
-    @Size(max = 4000)
-    private String uttalelseFraBruker;
-
-    @JsonProperty("dataBruktTilUtledning")
-    private DataBruktTilUtledning dataBruktTilUtledning;
-
-    @JsonCreator
-    public EndretPeriodeBekreftelse(
-            @JsonProperty("oppgaveReferanse") UUID oppgaveReferanse,
-            @JsonProperty("nyPeriode") Periode nyPeriode,
-            @JsonProperty("harUttalelse") boolean harUttalelse) {
-        this.oppgaveReferanse = oppgaveReferanse;
-        this.nyPeriode = nyPeriode;
-        this.harUttalelse = harUttalelse;
+    @JsonIgnore
+    @AssertTrue(message = "uttalelseFraBruker må være satt dersom harUttalelse er true")
+    public boolean isUttalelseFraBrukerSattHvisHarUttalelse() {
+        if (harUttalelse) {
+            return uttalelseFraBruker != null && !uttalelseFraBruker.isBlank();
+        }
+        return true;
     }
 
     public Periode getNyPeriode() {
@@ -52,6 +46,7 @@ public class EndretPeriodeBekreftelse implements Bekreftelse{
         return oppgaveReferanse;
     }
 
+    @JsonIgnore
     @Override
     public Bekreftelse.Type getType() {
         return Bekreftelse.Type.UNG_ENDRET_PERIODE;
@@ -63,23 +58,14 @@ public class EndretPeriodeBekreftelse implements Bekreftelse{
     }
 
     @Override
+    // TODO(rydd): Vurder å gi denne metoden et mindre builder-liknende navn (f.eks. kloneMedDataBruktTilUtledning)
+    // siden dette i record er en kopimetode ("wither") som returnerer ny instans, ikke en muterende setter.
     public Bekreftelse medDataBruktTilUtledning(DataBruktTilUtledning dataBruktTilUtledning) {
-        this.dataBruktTilUtledning = dataBruktTilUtledning;
-        return this;
+        return new EndretPeriodeBekreftelse(oppgaveReferanse, nyPeriode, harUttalelse, uttalelseFraBruker, dataBruktTilUtledning);
     }
 
     @Override
     public String getUttalelseFraBruker() {
         return uttalelseFraBruker;
-    }
-
-    public Bekreftelse medUttalelseFraBruker(String uttalelseFraBruker) {
-        this.uttalelseFraBruker = uttalelseFraBruker;
-        return this;
-    }
-
-    @Override
-    public boolean harUttalelse() {
-        return harUttalelse;
     }
 }
