@@ -106,7 +106,7 @@ public class OmsorgspengerKroniskSyktBarnValidatorTest {
                     .medSøknadId("222e4a87-f471-4181-9d5b-7d67d046b031")
                     .medMottattDato(ZonedDateTime.now())
                     .medVersjon("1.0.0")
-                    .medSøker(new Søker(NorskIdentitetsnummer.of("02119970078")))
+                    .medSøker(new Søker(NorskIdentitetsnummer.of("24420167209")))
                     .medYtelse(new OmsorgspengerKroniskSyktBarn()
                             .medKroniskEllerFunksjonshemming(true)
                             .medBarn(barn));
@@ -118,7 +118,7 @@ public class OmsorgspengerKroniskSyktBarnValidatorTest {
                     .medSøknadId("222e4a87-f471-4181-9d5b-7d67d046b031")
                     .medMottattDato(ZonedDateTime.now())
                     .medVersjon("1.0.0")
-                    .medSøker(new Søker(NorskIdentitetsnummer.of("02119970078")))
+                    .medSøker(new Søker(NorskIdentitetsnummer.of("24420167209")))
                     .medYtelse(new OmsorgspengerKroniskSyktBarn(barn, true, true, beskrivelse));
         }
     }
