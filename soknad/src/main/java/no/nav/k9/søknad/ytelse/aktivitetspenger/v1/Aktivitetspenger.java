@@ -1,5 +1,6 @@
 package no.nav.k9.søknad.ytelse.aktivitetspenger.v1;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -8,27 +9,23 @@ import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
-import no.nav.k9.søknad.felles.validering.periode.LukketPeriode;
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 import no.nav.k9.søknad.ytelse.ung.v1.inntekt.OppgittInntekt;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class Aktivitetspenger implements Ytelse {
 
 
-    @Valid
-    @LukketPeriode
-    @JsonProperty("søknadsperiode")
-    private Periode søknadsperiode;
-
-    @Valid
-    @JsonProperty("søknadsperiodeFom")
-    private LocalDate søknadsperiodeFom;
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+    @JsonProperty(value = "søktFraDatoer", required = true)
+    @NotNull
+    private List<@Valid @NotNull LocalDate> søktFraDatoer = new ArrayList<>();
 
     @Valid
     @JsonProperty(value = "forutgåendeBosteder", required = true)
@@ -83,11 +80,12 @@ public class Aktivitetspenger implements Ytelse {
 
     @Override
     public Periode getSøknadsperiode() {
-        return søknadsperiode != null ? søknadsperiode : new Periode(søknadsperiodeFom, TidUtils.TIDENES_ENDE);
-    }
+        final var fom = søktFraDatoer
+                .stream()
+                .min(LocalDate::compareTo)
+                .orElseThrow();
 
-    public LocalDate getSøknadsperiodeFom() {
-        return søknadsperiodeFom;
+        return new Periode(fom, TidUtils.TIDENES_ENDE); // Deltakelse har ingen sluttdato
     }
 
     public Bosteder getForutgåendeBosteder() {
@@ -98,16 +96,19 @@ public class Aktivitetspenger implements Ytelse {
         return inntekter;
     }
 
-    public Aktivitetspenger medSøknadsperiode(Periode søknadsperiode) {
-        this.søknadsperiode = Objects.requireNonNull(søknadsperiode, "søknadsperiode");
+    public List<LocalDate> getStartdatoer() {
+        return søktFraDatoer;
+    }
+
+    public Aktivitetspenger medStartdatoer(List<LocalDate> startdatoer) {
+        this.søktFraDatoer.addAll(Objects.requireNonNull(startdatoer, "startdatoer"));
         return this;
     }
 
-    public Aktivitetspenger medSøknadsperiodeFom(LocalDate fom) {
-        this.søknadsperiodeFom = Objects.requireNonNull(fom, "søknadsperiodeFom");
+    public Aktivitetspenger medStartdato(LocalDate startdato) {
+        this.søktFraDatoer.add(Objects.requireNonNull(startdato, "startdato"));
         return this;
     }
-
 
     public Aktivitetspenger medForutgåendeBosteder(Bosteder bosteder) {
         this.forutgåendeBosteder = Objects.requireNonNull(bosteder, "bosteder");
