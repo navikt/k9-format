@@ -20,12 +20,6 @@ import java.util.Objects;
 
 public class Aktivitetspenger implements Ytelse {
 
-
-    @Valid
-    @LukketPeriode
-    @JsonProperty("søknadsperiode")
-    private Periode søknadsperiode;
-
     @Valid
     @JsonProperty("søknadsperiodeFom")
     private LocalDate søknadsperiodeFom;
@@ -83,7 +77,7 @@ public class Aktivitetspenger implements Ytelse {
 
     @Override
     public Periode getSøknadsperiode() {
-        return søknadsperiode != null ? søknadsperiode : new Periode(søknadsperiodeFom, TidUtils.TIDENES_ENDE);
+        return new Periode(søknadsperiodeFom, TidUtils.TIDENES_ENDE);
     }
 
     public LocalDate getSøknadsperiodeFom() {
@@ -98,16 +92,10 @@ public class Aktivitetspenger implements Ytelse {
         return inntekter;
     }
 
-    public Aktivitetspenger medSøknadsperiode(Periode søknadsperiode) {
-        this.søknadsperiode = Objects.requireNonNull(søknadsperiode, "søknadsperiode");
-        return this;
-    }
-
     public Aktivitetspenger medSøknadsperiodeFom(LocalDate fom) {
         this.søknadsperiodeFom = Objects.requireNonNull(fom, "søknadsperiodeFom");
         return this;
     }
-
 
     public Aktivitetspenger medForutgåendeBosteder(Bosteder bosteder) {
         this.forutgåendeBosteder = Objects.requireNonNull(bosteder, "bosteder");
