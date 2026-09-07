@@ -3,6 +3,7 @@ package no.nav.k9.søknad.ytelse.aktivitetspenger.v1;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import no.nav.k9.søknad.TidUtils;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.type.Periode;
@@ -13,17 +14,15 @@ import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
 import no.nav.k9.søknad.ytelse.ung.v1.inntekt.OppgittInntekt;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
 public class Aktivitetspenger implements Ytelse {
 
-
     @Valid
-    @NotNull
-    @LukketPeriode
-    @JsonProperty("søknadsperiode")
-    private Periode søknadsperiode;
+    @JsonProperty("søknadsperiodeFom")
+    private LocalDate søknadsperiodeFom;
 
     @Valid
     @JsonProperty(value = "forutgåendeBosteder", required = true)
@@ -78,7 +77,11 @@ public class Aktivitetspenger implements Ytelse {
 
     @Override
     public Periode getSøknadsperiode() {
-        return søknadsperiode;
+        return new Periode(søknadsperiodeFom, TidUtils.TIDENES_ENDE);
+    }
+
+    public LocalDate getSøknadsperiodeFom() {
+        return søknadsperiodeFom;
     }
 
     public Bosteder getForutgåendeBosteder() {
@@ -89,8 +92,8 @@ public class Aktivitetspenger implements Ytelse {
         return inntekter;
     }
 
-    public Aktivitetspenger medSøknadsperiode(Periode søknadsperiode) {
-        this.søknadsperiode = Objects.requireNonNull(søknadsperiode, "søknadsperiode");
+    public Aktivitetspenger medSøknadsperiodeFom(LocalDate fom) {
+        this.søknadsperiodeFom = Objects.requireNonNull(fom, "søknadsperiodeFom");
         return this;
     }
 
