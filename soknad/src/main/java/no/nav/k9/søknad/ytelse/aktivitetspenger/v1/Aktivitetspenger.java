@@ -2,16 +2,15 @@ package no.nav.k9.søknad.ytelse.aktivitetspenger.v1;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import no.nav.k9.søknad.TidUtils;
 import no.nav.k9.søknad.felles.Feil;
 import no.nav.k9.søknad.felles.Versjon;
 import no.nav.k9.søknad.felles.type.Periode;
 import no.nav.k9.søknad.felles.type.Person;
-import no.nav.k9.søknad.felles.validering.periode.LukketPeriode;
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 import no.nav.k9.søknad.ytelse.Ytelse;
 import no.nav.k9.søknad.ytelse.YtelseValidator;
+import no.nav.k9.søknad.ytelse.aktivitetspenger.v1.medlemskap.Medlemskap;
 import no.nav.k9.søknad.ytelse.ung.v1.inntekt.OppgittInntekt;
 
 import java.time.LocalDate;
@@ -25,8 +24,8 @@ public class Aktivitetspenger implements Ytelse {
     private LocalDate søknadsperiodeFom;
 
     @Valid
-    @JsonProperty(value = "forutgåendeBosteder", required = true)
-    private Bosteder forutgåendeBosteder = new Bosteder();
+    @JsonProperty(value = "medlemskap", required = true)
+    private Medlemskap medlemskap = new Medlemskap();
 
     @Valid
     @JsonProperty(value = "inntekter", required = false)
@@ -84,8 +83,8 @@ public class Aktivitetspenger implements Ytelse {
         return søknadsperiodeFom;
     }
 
-    public Bosteder getForutgåendeBosteder() {
-        return forutgåendeBosteder;
+    public Medlemskap getMedlemskap() {
+        return medlemskap;
     }
 
     public OppgittInntekt getInntekter() {
@@ -97,8 +96,8 @@ public class Aktivitetspenger implements Ytelse {
         return this;
     }
 
-    public Aktivitetspenger medForutgåendeBosteder(Bosteder bosteder) {
-        this.forutgåendeBosteder = Objects.requireNonNull(bosteder, "bosteder");
+    public Aktivitetspenger medMedlemskap(Medlemskap medlemskap) {
+        this.medlemskap = Objects.requireNonNull(medlemskap, "medlemskap");
         return this;
     }
 

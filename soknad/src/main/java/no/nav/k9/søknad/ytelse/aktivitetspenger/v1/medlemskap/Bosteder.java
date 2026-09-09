@@ -1,4 +1,4 @@
-package no.nav.k9.søknad.ytelse.aktivitetspenger.v1;
+package no.nav.k9.søknad.ytelse.aktivitetspenger.v1.medlemskap;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
