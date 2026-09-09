@@ -94,7 +94,6 @@ class OmsorgspengerUtbetalingValidator extends YtelseValidator {
             if (erSøknadForFrilanser || erSøknadForSN) {
                 feil.addAll(validerFrilanserOgSelvstendingNæringsdrivende(aktivitet.getSelvstendigNæringsdrivende(), aktivitet.getFrilanser()));
                 feil.addAll(validerSelvstendingNæringsdrivende(aktivitet.getSelvstendigNæringsdrivende()));
-                feil.addAll(validerFrilanser(aktivitet.getFrilanser()));
             }
         }
         return feil;
@@ -104,16 +103,6 @@ class OmsorgspengerUtbetalingValidator extends YtelseValidator {
         List<Feil> feil = new ArrayList<>();
         if (frilanser == null && (selvstendigeVirksomheter == null || selvstendigeVirksomheter.isEmpty())) {
             feil.add(lagFeil("frilanser & selvstendingNæringsdrivene", PÅKREVD, "Enten frilanser eller selvstendingNæringsdrivende må være satt i søknaden."));
-        }
-        return feil;
-    }
-
-    private List<Feil> validerFrilanser(Frilanser frilanser) {
-        List<Feil> feil = new ArrayList<>();
-        if (frilanser == null) return feil;
-
-        if (frilanser.getStartdato() != null && frilanser.getSluttdato() != null && frilanser.getStartdato().isAfter(frilanser.getSluttdato())) {
-            feil.add(lagFeil("frilanser.startdato", UGYLDIG_ARGUMENT, "'startdato' kan ikke være etter 'sluttdato'"));
         }
         return feil;
     }
