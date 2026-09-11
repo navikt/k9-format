@@ -1,16 +1,15 @@
 package no.nav.k9.innsyn;
 
-import java.util.Objects;
-
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE, creatorVisibility = JsonAutoDetect.Visibility.NONE)
@@ -21,14 +20,14 @@ public class Omsorg implements InnsynHendelseData {
     @Valid
     @NotNull
     @Size(max = 20)
-    @Pattern(regexp = "^\\d+$", message = "søkerAktørId [${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
+    @Pattern(regexp = "^\\d+$", message = "søkerAktørId matcher ikke tillatt pattern [{regexp}]")
     private String søkerAktørId;
     
     @JsonProperty(value = "pleietrengendeAktørId", required = true)
     @Valid
     @NotNull
     @Size(max = 20)
-    @Pattern(regexp = "^\\d+$", message = "pleietrengendeAktørId [${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
+    @Pattern(regexp = "^\\d+$", message = "pleietrengendeAktørId matcher ikke tillatt pattern [{regexp}]")
     private String pleietrengendeAktørId;
     
     @JsonProperty(value = "harOmsorgen", required = true)

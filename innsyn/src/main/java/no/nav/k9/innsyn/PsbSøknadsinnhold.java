@@ -1,11 +1,6 @@
 package no.nav.k9.innsyn;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-
+import com.fasterxml.jackson.annotation.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -37,14 +32,14 @@ public class PsbSøknadsinnhold implements InnsynHendelseData {
     @Valid
     @NotNull
     @Size(max = 20)
-    @Pattern(regexp = "^\\d+$", message = "søkerAktørId [${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
+    @Pattern(regexp = "^\\d+$", message = "søkerAktørId matcher ikke tillatt pattern [{regexp}]")
     private String søkerAktørId;
     
     @JsonProperty(value = "pleietrengendeAktørId", required = true)
     @Valid
     @NotNull
     @Size(max = 20)
-    @Pattern(regexp = "^\\d+$", message = "pleietrengendeAktørId [${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
+    @Pattern(regexp = "^\\d+$", message = "pleietrengendeAktørId matcher ikke tillatt pattern [{regexp}]")
     private String pleietrengendeAktørId;
     
     @JsonProperty(value = "søknad")
