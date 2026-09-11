@@ -13,6 +13,10 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>no.nav.k9</groupId>
+			<artifactId>konstant</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
 		</dependency>
