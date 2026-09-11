@@ -11,6 +11,6 @@ public record AktørId(
         @JsonValue
         @NotNull
         @Size(max = 20)
-        @Pattern(regexp = "^\\d+$", message = "AktørId [${validatedValue}] matcher ikke tillatt pattern [{regexp}]")
+        @Pattern(regexp = "^\\d+$", message = "AktørId matcher ikke tillatt pattern [{regexp}]")
         String id
 ) {}
