@@ -60,7 +60,7 @@ public record Utenlandsopphold(
 
             @Size(max = 50)
             @Pattern(regexp = Patterns.BEGRENSET_TEKST, message = "[ugyldigSyntaks] matcher ikke tillatt pattern '{regexp}'")
-            String identitetsnummer
+            String utenlandskNasjonalId
     ) {
 
         @Override

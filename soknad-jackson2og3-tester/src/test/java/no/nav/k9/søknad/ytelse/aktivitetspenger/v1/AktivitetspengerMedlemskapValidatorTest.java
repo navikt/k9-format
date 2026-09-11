@@ -105,7 +105,7 @@ class AktivitetspengerMedlemskapValidatorTest {
 
         List<Feil> feil = søknadValidator.valider(søknad(ytelse));
         assertThat(feil).hasSize(1);
-        assertThat(feil.get(0).getFelt()).isEqualTo("ytelse.medlemskap.utenlandsopphold.perioder['" + PERIODE.getIso8601() + "'].identitetsnummer");
+        assertThat(feil.get(0).getFelt()).isEqualTo("ytelse.medlemskap.utenlandsopphold.perioder['" + PERIODE.getIso8601() + "'].utenlandskNasjonalId");
     }
 
     @Test
@@ -115,7 +115,7 @@ class AktivitetspengerMedlemskapValidatorTest {
 
         List<Feil> feil = søknadValidator.valider(søknad(ytelse));
         assertThat(feil).hasSize(1);
-        assertThat(feil.get(0).getFelt()).isEqualTo("ytelse.medlemskap.utenlandsopphold.perioder['" + PERIODE.getIso8601() + "'].identitetsnummer");
+        assertThat(feil.get(0).getFelt()).isEqualTo("ytelse.medlemskap.utenlandsopphold.perioder['" + PERIODE.getIso8601() + "'].utenlandskNasjonalId");
     }
 
     @ParameterizedTest
