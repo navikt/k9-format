@@ -25,6 +25,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AktivitetspengerMedlemskapValidatorTest {
+    public static final String UTENLANDSK_NID = "010185-1234";
     private final LocalDate SØKNADSPERIODE_FOM = LocalDate.now();
     private final Periode PERIODE = new Periode(LocalDate.now().minusYears(1), LocalDate.now().minusMonths(6));
     private final Periode SENERE_PERIODE = new Periode(LocalDate.now().minusMonths(5), LocalDate.now().minusMonths(1));
@@ -35,7 +36,7 @@ class AktivitetspengerMedlemskapValidatorTest {
     void skalValidereOk() {
         Aktivitetspenger ytelse = ytelse(medlemskap(Map.of(
                 PERIODE, periodeInfo(Landkode.SVERIGE, false, null),
-                SENERE_PERIODE, periodeInfo(Landkode.DANMARK, true, "010185-1234"))));
+                SENERE_PERIODE, periodeInfo(Landkode.DANMARK, true, UTENLANDSK_NID))));
 
         List<Feil> feil = søknadValidator.valider(søknad(ytelse));
         assertThat(feil).isEmpty();
@@ -93,9 +94,9 @@ class AktivitetspengerMedlemskapValidatorTest {
 
     @Test
     void IdentitetsnummerSkalIkkeLekkeIToString() {
-        var periodeInfo = periodeInfo(Landkode.DANMARK, true, "010185-1234");
+        var periodeInfo = periodeInfo(Landkode.DANMARK, true, UTENLANDSK_NID);
 
-        assertThat(periodeInfo.toString()).doesNotContain("010185-1234");
+        assertThat(periodeInfo.toString()).doesNotContain(UTENLANDSK_NID);
     }
 
     @Test
@@ -120,9 +121,9 @@ class AktivitetspengerMedlemskapValidatorTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"19850101-1234", "QQ123456C", "12345678901", "ÅKE 123/45", "010185.1234"})
-    void UtenlandskeIdentitetsnummerformaterSkalValidereOk(String identitetsnummer) {
+    void UtenlandskeIdentitetsnummerformaterSkalValidereOk(String utenlandskNId) {
         Aktivitetspenger ytelse = ytelse(medlemskap(Map.of(
-                PERIODE, periodeInfo(Landkode.SVERIGE, true, identitetsnummer))));
+                PERIODE, periodeInfo(Landkode.SVERIGE, true, utenlandskNId))));
 
         assertThat(søknadValidator.valider(søknad(ytelse))).isEmpty();
     }
@@ -138,7 +139,7 @@ class AktivitetspengerMedlemskapValidatorTest {
     void SkalKunneSerialiseresOgDeserialiseres() {
         Søknad original = søknad(ytelse(medlemskap(Map.of(
                 PERIODE, periodeInfo(Landkode.SVERIGE, false, null),
-                SENERE_PERIODE, periodeInfo(Landkode.DANMARK, true, "010185-1234")))));
+                SENERE_PERIODE, periodeInfo(Landkode.DANMARK, true, UTENLANDSK_NID)))));
 
         Søknad rundtur = JsonUtils.fromString(JsonUtils.toString(original), Søknad.class);
 
@@ -146,7 +147,7 @@ class AktivitetspengerMedlemskapValidatorTest {
         Map<Periode, UtenlandsoppholdPeriodeInfo> perioder = ytelse.getMedlemskap().utenlandsopphold().perioder();
         assertThat(perioder).hasSize(2);
         assertThat(perioder.get(PERIODE)).isEqualTo(periodeInfo(Landkode.SVERIGE, false, null));
-        assertThat(perioder.get(SENERE_PERIODE)).isEqualTo(periodeInfo(Landkode.DANMARK, true, "010185-1234"));
+        assertThat(perioder.get(SENERE_PERIODE)).isEqualTo(periodeInfo(Landkode.DANMARK, true, UTENLANDSK_NID));
         assertThat(søknadValidator.valider(rundtur)).isEmpty();
     }
 
