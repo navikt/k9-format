@@ -29,10 +29,6 @@ public record Utenlandsopphold(
         perioder = unmodifiableMap(perioder == null ? new TreeMap<>() : new TreeMap<>(perioder));
     }
 
-    public static Utenlandsopphold tomt() {
-        return new Utenlandsopphold(null);
-    }
-
     @JsonIgnore
     @AssertTrue(message = "[ugyldigPeriodeInterval] Perioder for utenlandsopphold kan ikke overlappe")
     public boolean isHarIngenOverlappendePerioder() {

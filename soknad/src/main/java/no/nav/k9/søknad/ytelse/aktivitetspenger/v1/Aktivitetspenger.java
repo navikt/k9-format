@@ -25,7 +25,7 @@ public class Aktivitetspenger implements Ytelse {
 
     @Valid
     @JsonProperty(value = "medlemskap", required = true)
-    private Medlemskap medlemskap = Medlemskap.tomt();
+    private Medlemskap medlemskap;
 
     @Valid
     @JsonProperty(value = "inntekter", required = false)

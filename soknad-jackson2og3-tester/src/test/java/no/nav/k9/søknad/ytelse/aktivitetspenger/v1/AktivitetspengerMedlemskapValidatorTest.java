@@ -33,24 +33,65 @@ class AktivitetspengerMedlemskapValidatorTest {
     private final AktivitetspengerSøknadValidator søknadValidator = new AktivitetspengerSøknadValidator();
 
     @Test
-    void skalValidereOk() {
-        Aktivitetspenger ytelse = ytelse(medlemskap(Map.of(
-                PERIODE, periodeInfo(Landkode.SVERIGE, false, null),
-                SENERE_PERIODE, periodeInfo(Landkode.DANMARK, true, UTENLANDSK_NID))));
-
-        List<Feil> feil = søknadValidator.valider(søknad(ytelse));
-        assertThat(feil).isEmpty();
+    void boddINorgeOgJobbetUtenforNorgeSkalKreveUtenlandsopphold() {
+        assertThat(feilFor(medlemskapMedFlagg(true, null, true, true))).isEmpty();
     }
 
     @Test
-    void TomtMedlemskapSkalValidereOk() {
-        List<Feil> feil = søknadValidator.valider(søknad(ytelse(Medlemskap.tomt())));
-        assertThat(feil).isEmpty();
+    void boddINorgeOgIkkeJobbetUtenforNorgeSkalVæreGyldigUtenUtenlandsopphold() {
+        assertThat(feilFor(medlemskapMedFlagg(true, null, false, false))).isEmpty();
+    }
+
+    @Test
+    void ikkeBoddINorgeMenJobbetINorgeOgUtenforNorgeSkalKreveUtenlandsopphold() {
+        assertThat(feilFor(medlemskapMedFlagg(false, true, true, true))).isEmpty();
+    }
+
+    @Test
+    void ikkeBoddINorgeOgIkkeJobbetINorgeSkalKreveUtenlandsopphold() {
+        assertThat(feilFor(medlemskapMedFlagg(false, false, null, true))).isEmpty();
+    }
+
+    @Test
+    void ikkeBoddINorgeMenJobbetINorgeOgIkkeUtenforNorgeSkalVæreGyldigUtenUtenlandsopphold() {
+        assertThat(feilFor(medlemskapMedFlagg(false, true, false, false))).isEmpty();
+    }
+
+    // Ugyldige kombinasjoner: utenlandsopphold stemmer ikke med flaggene
+    @Test
+    void boddINorgeOgJobbetUtenforNorgeUtenUtenlandsoppholdSkalKasteFeil() {
+        assertThat(feilFor(medlemskapMedFlagg(true, null, true, false))).isNotEmpty();
+    }
+
+    @Test
+    void ikkeBoddINorgeOgIkkeJobbetINorgeUtenUtenlandsoppholdSkalKasteFeil() {
+        assertThat(feilFor(medlemskapMedFlagg(false, false, null, false))).isNotEmpty();
+    }
+
+    @Test
+    void ikkeBoddINorgeMenJobbetINorgeOgUtenforNorgeUtenUtenlandsoppholdSkalKasteFeil() {
+        assertThat(feilFor(medlemskapMedFlagg(false, true, true, false))).isNotEmpty();
+    }
+
+    @Test
+    void harBoddINorgeIkkeSattSkalKasteFeil() {
+        assertThat(feilFor(medlemskapMedFlagg(null, null, null, false))).isNotEmpty();
+    }
+
+    private List<Feil> feilFor(Medlemskap medlemskap) {
+        return søknadValidator.valider(søknad(ytelse(medlemskap)));
+    }
+
+    private Medlemskap medlemskapMedFlagg(Boolean harBoddINorge, Boolean harJobbetINorge, Boolean harJobbetUtenforNorge, boolean harUtenlandsopphold) {
+        Map<Periode, UtenlandsoppholdPeriodeInfo> perioder = harUtenlandsopphold
+                ? Map.of(PERIODE, periodeInfo(Landkode.SVERIGE, true, null))
+                : Map.of();
+        return new Medlemskap(harBoddINorge, harJobbetINorge, harJobbetUtenforNorge, new Utenlandsopphold(perioder));
     }
 
 
     @Test
-    void UtenlandsoppholdUtenLandSkalKasteFeil() {
+    void utenlandsoppholdUtenLandSkalKasteFeil() {
         Aktivitetspenger ytelse = ytelse(medlemskap(Map.of(
                 PERIODE, new UtenlandsoppholdPeriodeInfo(null, false, null))));
 
@@ -60,7 +101,7 @@ class AktivitetspengerMedlemskapValidatorTest {
     }
 
     @Test
-    void UtenlandsoppholdUtenJobbetIPeriodenSkalKasteFeil() {
+    void utenlandsoppholdUtenJobbetIPeriodenSkalKasteFeil() {
         Aktivitetspenger ytelse = ytelse(medlemskap(Map.of(
                 PERIODE, new UtenlandsoppholdPeriodeInfo(Landkode.SVERIGE, null, null))));
 
@@ -70,7 +111,7 @@ class AktivitetspengerMedlemskapValidatorTest {
     }
 
     @Test
-    void PeriodeUtenTilOgMedSkalKasteFeil() {
+    void periodeUtenTilOgMedSkalKasteFeil() {
         Periode åpenPeriode = new Periode(LocalDate.now().minusMonths(5), null);
         Aktivitetspenger ytelse = ytelse(medlemskap(Map.of(åpenPeriode, periodeInfo(Landkode.DANMARK, true, null))));
 
@@ -80,7 +121,7 @@ class AktivitetspengerMedlemskapValidatorTest {
     }
 
     @Test
-    void OverlappendePerioderSkalKasteFeil() {
+    void overlappendePerioderSkalKasteFeil() {
         var overlappende = new LinkedHashMap<Periode, UtenlandsoppholdPeriodeInfo>();
         overlappende.put(new Periode(LocalDate.of(2024, 1, 1), LocalDate.of(2024, 6, 30)),
                 periodeInfo(Landkode.SVERIGE, false, null));
@@ -93,14 +134,14 @@ class AktivitetspengerMedlemskapValidatorTest {
     }
 
     @Test
-    void IdentitetsnummerSkalIkkeLekkeIToString() {
+    void identitetsnummerSkalIkkeLekkeIToString() {
         var periodeInfo = periodeInfo(Landkode.DANMARK, true, UTENLANDSK_NID);
 
         assertThat(periodeInfo.toString()).doesNotContain(UTENLANDSK_NID);
     }
 
     @Test
-    void IdentitetsnummerMedLinjeskiftSkalKasteFeil() {
+    void identitetsnummerMedLinjeskiftSkalKasteFeil() {
         Aktivitetspenger ytelse = ytelse(medlemskap(Map.of(
                 PERIODE, periodeInfo(Landkode.SVERIGE, true, "19850101\n-1234"))));
 
@@ -110,7 +151,7 @@ class AktivitetspengerMedlemskapValidatorTest {
     }
 
     @Test
-    void ForLangtIdentitetsnummerSkalKasteFeil() {
+    void forLangtIdentitetsnummerSkalKasteFeil() {
         Aktivitetspenger ytelse = ytelse(medlemskap(Map.of(
                 PERIODE, periodeInfo(Landkode.SVERIGE, true, "1".repeat(51)))));
 
@@ -121,7 +162,7 @@ class AktivitetspengerMedlemskapValidatorTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"19850101-1234", "QQ123456C", "12345678901", "ÅKE 123/45", "010185.1234"})
-    void UtenlandskeIdentitetsnummerformaterSkalValidereOk(String utenlandskNId) {
+    void utenlandskeIdentitetsnummerformaterSkalValidereOk(String utenlandskNId) {
         Aktivitetspenger ytelse = ytelse(medlemskap(Map.of(
                 PERIODE, periodeInfo(Landkode.SVERIGE, true, utenlandskNId))));
 
@@ -129,14 +170,14 @@ class AktivitetspengerMedlemskapValidatorTest {
     }
 
     @Test
-    void ValideringsmetodeSkalIkkeSerialiseres() {
+    void valideringsmetodeSkalIkkeSerialiseres() {
         Søknad søknad = søknad(ytelse(medlemskap(Map.of(PERIODE, periodeInfo(Landkode.SVERIGE, false, null)))));
 
         assertThat(JsonUtils.toString(søknad)).doesNotContain("harIngenOverlappendePerioder");
     }
 
     @Test
-    void SkalKunneSerialiseresOgDeserialiseres() {
+    void skalKunneSerialiseresOgDeserialiseres() {
         Søknad original = søknad(ytelse(medlemskap(Map.of(
                 PERIODE, periodeInfo(Landkode.SVERIGE, false, null),
                 SENERE_PERIODE, periodeInfo(Landkode.DANMARK, true, UTENLANDSK_NID)))));
@@ -156,7 +197,7 @@ class AktivitetspengerMedlemskapValidatorTest {
     }
 
     private Medlemskap medlemskap(Map<Periode, UtenlandsoppholdPeriodeInfo> perioder) {
-        return new Medlemskap(new Utenlandsopphold(perioder));
+        return new Medlemskap(true, null, true, new Utenlandsopphold(perioder));
     }
 
     private Aktivitetspenger ytelse(Medlemskap medlemskap) {
