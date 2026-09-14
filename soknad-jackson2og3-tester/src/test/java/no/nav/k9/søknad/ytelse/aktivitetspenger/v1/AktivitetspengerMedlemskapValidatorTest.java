@@ -130,7 +130,8 @@ class AktivitetspengerMedlemskapValidatorTest {
 
         List<Feil> feil = søknadValidator.valider(søknad(ytelse(medlemskap(overlappende))));
         assertThat(feil).hasSize(1);
-        assertThat(feil.get(0).getFelt()).isEqualTo("ytelse.medlemskap.utenlandsopphold.harIngenOverlappendePerioder");
+        assertThat(feil.get(0).getFelt()).isEqualTo("ytelse.medlemskap.utenlandsopphold.perioder");
+        assertThat(feil.get(0).getFeilmelding()).contains("2024-01-01/2024-06-30").contains("2024-03-01/2024-05-31");
     }
 
     @Test
