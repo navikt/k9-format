@@ -47,6 +47,9 @@ class AktivitetAvklaringBekreftelseTest {
 
         String json = JsonUtils.toString(original);
         assertThat(json).contains("\"AVP_AKTIVITET_AVKLARING\"");
+        assertThat(BekreftelseSerialisertypeTest.antallForekomster(json, "\"type\""))
+                .as("type-feltet skal kun forekomme én gang i JSON")
+                .isEqualTo(1);
 
         var roundtrip = (AktivitetAvklaringBekreftelse) JsonUtils.fromString(json, Bekreftelse.class);
         assertThat(roundtrip).isEqualTo(original);
