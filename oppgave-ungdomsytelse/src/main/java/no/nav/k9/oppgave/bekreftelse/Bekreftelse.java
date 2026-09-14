@@ -5,7 +5,10 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.validation.Valid;
+import no.nav.k9.oppgave.bekreftelse.ung.aktivitet.AktivitetAvklaringBekreftelse;
+import no.nav.k9.oppgave.bekreftelse.ung.bistand.BistandsbehovAvklaringBekreftelse;
 import no.nav.k9.oppgave.bekreftelse.ung.bosatt.BostedAvklaringBekreftelse;
+import no.nav.k9.oppgave.bekreftelse.ung.livsopphold.AndreLivsoppholdsytelserAvklaringBekreftelse;
 import no.nav.k9.oppgave.bekreftelse.ung.inntekt.InntektBekreftelse;
 import no.nav.k9.oppgave.bekreftelse.ung.opphor.OpphørVedMaksdatoBekreftelse;
 import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretPeriodeBekreftelse;
@@ -25,6 +28,9 @@ import java.util.UUID;
         @JsonSubTypes.Type(name = Bekreftelse.UNG_FJERNET_PERIODE, value = FjernetPeriodeBekreftelse.class),
         @JsonSubTypes.Type(name = Bekreftelse.UNG_AVVIK_REGISTERINNTEKT, value = InntektBekreftelse.class),
         @JsonSubTypes.Type(name = Bekreftelse.AVP_BOSTED_AVKLARING, value = BostedAvklaringBekreftelse.class),
+        @JsonSubTypes.Type(name = Bekreftelse.AVP_BISTANDSBEHOV_AVKLARING, value = BistandsbehovAvklaringBekreftelse.class),
+        @JsonSubTypes.Type(name = Bekreftelse.AVP_ANDRE_LIVSOPPHOLDSYTELSER_AVKLARING, value = AndreLivsoppholdsytelserAvklaringBekreftelse.class),
+        @JsonSubTypes.Type(name = Bekreftelse.AVP_AKTIVITET_AVKLARING, value = AktivitetAvklaringBekreftelse.class),
         @JsonSubTypes.Type(name = Bekreftelse.UNG_OPPHOR_VED_MAKSDATO, value = OpphørVedMaksdatoBekreftelse.class),
 })
 public interface Bekreftelse {
@@ -35,6 +41,9 @@ public interface Bekreftelse {
     String UNG_FJERNET_PERIODE = "UNG_FJERNET_PERIODE";
     String UNG_AVVIK_REGISTERINNTEKT = "UNG_AVVIK_REGISTERINNTEKT";
     String AVP_BOSTED_AVKLARING = "AVP_BOSTED_AVKLARING";
+    String AVP_BISTANDSBEHOV_AVKLARING = "AVP_BISTAND_AVKLARING";
+    String AVP_ANDRE_LIVSOPPHOLDSYTELSER_AVKLARING = "AVP_ANDRE_LIVSOPPHOLDSYTELSER_AVKLARING";
+    String AVP_AKTIVITET_AVKLARING = "AVP_AKTIVITET_AVKLARING";
     String UNG_OPPHOR_VED_MAKSDATO = "UNG_OPPHOR_VED_MAKSDATO";
 
     /**
@@ -64,6 +73,9 @@ public interface Bekreftelse {
         UNG_FJERNET_PERIODE(Bekreftelse.UNG_FJERNET_PERIODE),
         UNG_AVVIK_REGISTERINNTEKT(Bekreftelse.UNG_AVVIK_REGISTERINNTEKT),
         AVP_BOSTED_AVKLARING(Bekreftelse.AVP_BOSTED_AVKLARING),
+        AVP_BISTANDSBEHOV_AVKLARING(Bekreftelse.AVP_BISTANDSBEHOV_AVKLARING),
+        AVP_ANDRE_LIVSOPPHOLDSYTELSER_AVKLARING(Bekreftelse.AVP_ANDRE_LIVSOPPHOLDSYTELSER_AVKLARING),
+        AVP_AKTIVITET_AVKLARING(Bekreftelse.AVP_AKTIVITET_AVKLARING),
         UNG_OPPHOR_VED_MAKSDATO(Bekreftelse.UNG_OPPHOR_VED_MAKSDATO);
 
 
