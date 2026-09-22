@@ -9,6 +9,7 @@ import no.nav.k9.søknad.felles.fravær.DelvisFravær;
 import no.nav.k9.søknad.felles.fravær.FraværPeriode;
 import no.nav.k9.søknad.felles.fravær.FraværÅrsak;
 import no.nav.k9.søknad.felles.fravær.SøknadÅrsak;
+import no.nav.k9.søknad.felles.opptjening.Frilanser;
 import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet;
 import no.nav.k9.søknad.felles.personopplysninger.Søker;
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer;
@@ -76,6 +77,21 @@ class OmsorgspengerUtbetalingValidatorTest {
 
         assertThat(feil).hasSize(1);
         feilInneholder(feil, "ytelse.fraværsperioder", "perioderOverFlereÅr");
+    }
+
+    @Test
+    void skal_returnere_felles_feil_for_frilanser_med_sluttdato_før_startdato() {
+        var fraværPeriode = new Periode(LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"));
+        var ytelse = byggOmsorgspengerUtbetalingSøknadBruker(
+                lagSøknadsperiode(orgnr1, fraværPeriode, null, AktivitetFravær.ARBEIDSTAKER));
+        ytelse.medAktivitet(new OpptjeningAktivitet().medFrilanser(new Frilanser()
+                .medStartdato(LocalDate.parse("2021-10-10"))
+                .medSluttdato(LocalDate.parse("2021-10-01"))));
+
+        List<Feil> feil = lagSøknadOgValider(ytelse);
+
+        assertThat(feil).hasSize(1);
+        feilInneholder(feil, "ytelse.aktivitet.frilanser.sluttdatoFørStartdato", "ugyldigPeriode", "Sluttdato kan ikke være før startdato.");
     }
 
     @Test

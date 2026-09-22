@@ -1,4 +1,4 @@
-package no.nav.k9.oppgave.bekreftelse.ung.bosatt;
+package no.nav.k9.oppgave.bekreftelse.ung.livsopphold;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -12,7 +12,7 @@ import no.nav.k9.søknad.ytelse.DataBruktTilUtledning;
 import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record BostedAvklaringBekreftelse(
+public record AndreLivsoppholdsytelserAvklaringBekreftelse(
         UUID oppgaveReferanse,
         boolean harUttalelse,
         @Pattern(regexp = Patterns.FRITEKST, message = "[ugyldigSyntaks] matcher ikke tillatt pattern [{regexp}]")
@@ -21,7 +21,7 @@ public record BostedAvklaringBekreftelse(
         DataBruktTilUtledning dataBruktTilUtledning
 ) implements Bekreftelse {
 
-    public BostedAvklaringBekreftelse(UUID oppgaveReferanse, boolean harUttalelse, String uttalelseFraBruker) {
+    public AndreLivsoppholdsytelserAvklaringBekreftelse(UUID oppgaveReferanse, boolean harUttalelse, String uttalelseFraBruker) {
         this(oppgaveReferanse, harUttalelse, uttalelseFraBruker, null);
     }
 
@@ -42,7 +42,7 @@ public record BostedAvklaringBekreftelse(
     @JsonIgnore
     @Override
     public Type getType() {
-        return Type.AVP_BOSTED_AVKLARING;
+        return Type.AVP_ANDRE_LIVSOPPHOLDSYTELSER_AVKLARING;
     }
 
     @Override
@@ -62,6 +62,6 @@ public record BostedAvklaringBekreftelse(
 
     @Override
     public Bekreftelse medDataBruktTilUtledning(DataBruktTilUtledning dataBruktTilUtledning) {
-        return new BostedAvklaringBekreftelse(oppgaveReferanse, harUttalelse, uttalelseFraBruker, dataBruktTilUtledning);
+        return new AndreLivsoppholdsytelserAvklaringBekreftelse(oppgaveReferanse, harUttalelse, uttalelseFraBruker, dataBruktTilUtledning);
     }
 }

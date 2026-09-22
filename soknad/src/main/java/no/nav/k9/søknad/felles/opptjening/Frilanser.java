@@ -3,6 +3,7 @@ package no.nav.k9.søknad.felles.opptjening;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import jakarta.validation.constraints.AssertFalse;
 import jakarta.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -45,4 +46,8 @@ public class Frilanser {
     }
     public LocalDate getSluttdato() { return sluttdato; }
 
+    @AssertFalse(message = "[ugyldigPeriode] Sluttdato kan ikke være før startdato.")
+    public boolean isSluttdatoFørStartdato() {
+        return startdato != null && sluttdato != null && sluttdato.isBefore(startdato);
+    }
 }

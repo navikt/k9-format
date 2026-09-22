@@ -111,7 +111,7 @@ class BekreftelseSerialisertypeTest {
         assertThat(bekreftelse.getOppgaveReferanse()).isEqualTo(UUID.fromString("00000000-0000-0000-0001-000000000002"));
     }
 
-    private static int antallForekomster(String tekst, String søk) {
+    static int antallForekomster(String tekst, String søk) {
         int count = 0;
         int idx = 0;
         while ((idx = tekst.indexOf(søk, idx)) != -1) {
