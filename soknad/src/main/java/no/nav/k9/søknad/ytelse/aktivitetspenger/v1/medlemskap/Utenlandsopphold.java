@@ -1,6 +1,7 @@
 package no.nav.k9.søknad.ytelse.aktivitetspenger.v1.medlemskap;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonRootName;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -18,6 +19,8 @@ import java.util.TreeMap;
 import static java.util.Collections.unmodifiableMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+// Unikt skjemanavn i OpenAPI (swagger-core bruker @JsonRootName); påvirker ikke JSON uten WRAP_ROOT_VALUE
+@JsonRootName("AktivitetspengerUtenlandsopphold")
 public record Utenlandsopphold(
         @GyldigePerioderMap(krevFomDato = true, krevTomDato = true, payload = {AvbrytendeValideringsfeil.class})
         @IngenOverlappendePerioder
@@ -29,6 +32,8 @@ public record Utenlandsopphold(
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
+    // Unikt skjemanavn i OpenAPI (swagger-core bruker @JsonRootName); påvirker ikke JSON uten WRAP_ROOT_VALUE
+    @JsonRootName("AktivitetspengerUtenlandsoppholdPeriodeInfo")
     public record UtenlandsoppholdPeriodeInfo(
             @NotNull
             @Valid
