@@ -1,7 +1,10 @@
 package no.nav.k9.innsyn.sak;
 
+import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+// Unikt skjemanavn i OpenAPI (swagger-core bruker @JsonRootName); påvirker ikke JSON uten WRAP_ROOT_VALUE
+@JsonRootName("InnsynFagsakYtelseType")
 public enum FagsakYtelseType {
 
     PLEIEPENGER_SYKT_BARN("PSB", "Pleiepenger sykt barn"),
