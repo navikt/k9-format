@@ -9,7 +9,6 @@ import static no.nav.k9.søknad.omsorgspenger.utbetaling.snf.TestUtils.komplettB
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.json.JSONException;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
@@ -21,6 +20,7 @@ public class OmsorgspengerUtbetalingSøknadTest {
         OmsorgspengerUtbetalingSøknad fraBuilder = komplettBuilder().build();
         JSONAssert.assertEquals(json, OmsorgspengerUtbetalingSøknad.SerDes.serialize(fraBuilder), true);
     }
+
     @Test
     public void serialiseringAvJsonUtenNæringsinntektOgBrukAvBuilderGirSammeResultat() throws JSONException {
         String json = jsonForKomplettSøknadUtenNæringsinntenkt();
@@ -28,12 +28,15 @@ public class OmsorgspengerUtbetalingSøknadTest {
         JSONAssert.assertEquals(json, OmsorgspengerUtbetalingSøknad.SerDes.serialize(fraBuilder), false);
     }
 
-    @Disabled
     @Test
-    public void serialiseringAvJsonMedBarnOgBrukAvBuilderGirSammeResultat() throws JSONException {
+    public void reserialiseringAvJsonMedBarnOgBrukAvBuilderGirSammeResultat_barnOversettesTilFosterbarnVedDeserialisering() throws JSONException {
         String json = jsonForKomplettSøknadMedBarn();
+        OmsorgspengerUtbetalingSøknad deserializedJson = OmsorgspengerUtbetalingSøknad.SerDes.deserialize(json);
+        String serializedJson = OmsorgspengerUtbetalingSøknad.SerDes.serialize(deserializedJson);
+
         OmsorgspengerUtbetalingSøknad fraBuilder = komplettBuilder().build();
-        JSONAssert.assertEquals(json, OmsorgspengerUtbetalingSøknad.SerDes.serialize(fraBuilder), true);
+        String serializedFraBuilder = OmsorgspengerUtbetalingSøknad.SerDes.serialize(fraBuilder);
+        JSONAssert.assertEquals(serializedJson, serializedFraBuilder, true);
     }
 
     @Test
