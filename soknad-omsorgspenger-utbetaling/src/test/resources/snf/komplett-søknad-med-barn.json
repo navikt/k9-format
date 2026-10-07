@@ -7,10 +7,12 @@
   },
   "barn": [{
     "norskIdentitetsnummer": "11111111113",
-    "fødselsdato": null
+    "fødselsdato": null,
+    "ukjent": false
   }, {
     "norskIdentitetsnummer": null,
-    "fødselsdato": "2000-01-01"
+    "fødselsdato": "2000-01-01",
+    "ukjent": false
   }],
   "selvstendigNæringsdrivende": [{
     "organisasjonsnummer":  "816338352",
@@ -18,7 +20,7 @@
     "perioder": {
       "2018-11-11/2018-11-30": {
         "virksomhetstyper":  [
-          "DAGMAMMA", "ENK", "FISKE", "FRILANSER", "JORDBRUK_SKOGBRUK", "ANNEN", "-"],
+          "DAGMAMMA", "FISKE", "JORDBRUK_SKOGBRUK", "ANNEN", "-"],
         "erFiskerPåBladB": true,
         "regnskapsførerNavn": "Regnskapsfører Svensen",
         "regnskapsførerTlf":  "12345678",
@@ -33,6 +35,7 @@
     }
   }],
   "frilanser": {
-    "startdato": "2019-01-01"
+    "startdato": "2019-01-01",
+    "sluttdato": "2020-01-01"
   }
 }
